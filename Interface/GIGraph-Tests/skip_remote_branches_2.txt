@@ -1,0 +1,18 @@
+# Test skipping commits stops when reaching a local branch 
+
+{
+  "skipRemoteBranchTips": true
+}
+
+##### NOTATION #####
+
+m0 - m1 - m2<master>
+      \
+      t1(m1) - t2<topic> - t3 - t4 - t5[origin/topic]
+
+##### GRAPH #####
+
+[0000] m2 t2
+[0001] (m1) t1
+[0002] m1
+[0003] m0

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7706"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="GIDiffViewController">
+            <connections>
+                <outlet property="contentsView" destination="gnd-mU-OFa" id="aua-gs-pD6"/>
+                <outlet property="filesView" destination="T7C-Lf-raW" id="mzB-kk-e11"/>
+                <outlet property="fromTextField" destination="rTO-aW-1zK" id="g6s-Zq-n3Z"/>
+                <outlet property="toTextField" destination="6Rg-tf-kE6" id="p8A-Hj-bpJ"/>
+                <outlet property="view" destination="Mge-gB-T5T" id="Dk7-8C-xIa"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <view translatesAutoresizingMaskIntoConstraints="NO" id="Mge-gB-T5T" userLabel="Main View" customClass="GIView">
+            <rect key="frame" x="0.0" y="0.0" width="1000" height="500"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <customView id="epl-1T-nOb" customClass="GIColorView">
+                    <rect key="frame" x="0.0" y="450" width="1000" height="50"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                    <subviews>
+                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="6Rg-tf-kE6">
+                            <rect key="frame" x="115" y="8" width="867" height="16"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                            <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingTail" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="left" title="&lt;TO&gt;" id="HMQ-oG-qAU">
+                                <font key="font" metaFont="cellTitle"/>
+                                <color key="textColor" white="0.25" alpha="1" colorSpace="custom" customColorSpace="deviceWhite"/>
+                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                            </textFieldCell>
+                        </textField>
+                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="91T-cI-Hho">
+                            <rect key="frame" x="16" y="29" width="99" height="16"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingTail" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="right" title="Diffing Commit:" id="ql5-Qs-m7L">
+                                <font key="font" metaFont="systemBold" size="12"/>
+                                <color key="textColor" white="0.25" alpha="1" colorSpace="custom" customColorSpace="deviceWhite"/>
+                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                            </textFieldCell>
+                        </textField>
+                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="mgY-Mx-FTc">
+                            <rect key="frame" x="28" y="8" width="87" height="16"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingTail" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="right" title="With Commit:" id="T63-CN-4FE">
+                                <font key="font" metaFont="systemBold" size="12"/>
+                                <color key="textColor" white="0.25" alpha="1" colorSpace="custom" customColorSpace="deviceWhite"/>
+                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                            </textFieldCell>
+                        </textField>
+                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="rTO-aW-1zK">
+                            <rect key="frame" x="115" y="29" width="867" height="16"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                            <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingTail" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="left" title="&lt;FROM&gt;" id="cuo-FZ-C63">
+                                <font key="font" metaFont="cellTitle"/>
+                                <color key="textColor" white="0.25" alpha="1" colorSpace="custom" customColorSpace="deviceWhite"/>
+                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                            </textFieldCell>
+                        </textField>
+                    </subviews>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="color" keyPath="backgroundColor">
+                            <color key="value" white="0.95000000000000007" alpha="1" colorSpace="deviceWhite"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                </customView>
+                <splitView autosaveName="" dividerStyle="thin" vertical="YES" id="E0I-P5-wti" customClass="GIDualSplitView">
+                    <rect key="frame" x="0.0" y="0.0" width="1000" height="450"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                    <subviews>
+                        <customView id="9b7-4Z-9qv">
+                            <rect key="frame" x="0.0" y="0.0" width="300" height="450"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                            <subviews>
+                                <customView id="T7C-Lf-raW">
+                                    <rect key="frame" x="0.0" y="0.0" width="300" height="450"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                </customView>
+                            </subviews>
+                        </customView>
+                        <customView id="BSo-CX-5eW">
+                            <rect key="frame" x="301" y="0.0" width="699" height="450"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                            <subviews>
+                                <customView id="gnd-mU-OFa">
+                                    <rect key="frame" x="0.0" y="0.0" width="699" height="450"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                </customView>
+                            </subviews>
+                        </customView>
+                    </subviews>
+                    <holdingPriorities>
+                        <real value="250"/>
+                        <real value="250"/>
+                    </holdingPriorities>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="minSize1">
+                            <real key="value" value="300"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="number" keyPath="minSize2">
+                            <real key="value" value="500"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                </splitView>
+            </subviews>
+        </view>
+    </objects>
+</document>

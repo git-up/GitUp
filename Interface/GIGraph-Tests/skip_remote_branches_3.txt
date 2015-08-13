@@ -1,0 +1,19 @@
+# Test skipping commits stops when reaching a local branch but does not resuscitate it
+# as a tip unless all children are skipped
+
+{
+  "skipRemoteBranchTips": true
+}
+
+##### NOTATION #####
+
+m0 - m1<topic> - m2 - m3<master>[origin/master]
+           \
+            t1(m1) - t2[origin/topic]
+            
+##### GRAPH #####
+
+[0000] m3
+[0001] m2
+[0002] m1
+[0003] m0

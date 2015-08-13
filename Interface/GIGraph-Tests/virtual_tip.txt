@@ -1,0 +1,15 @@
+# Test that a virtual tip is created for a branch that's not pointing to a tip-commit
+
+{
+  "showVirtualTips": true
+}
+
+##### NOTATION #####
+
+m0 - m1<master> - m2[origin/master]
+
+##### GRAPH #####
+
+[0000] m2 (m1)
+[0001] m1
+[0002] m0

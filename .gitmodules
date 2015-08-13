@@ -1,0 +1,3 @@
+[submodule "XLFacility"]
+	path = XLFacility
+	url = https://github.com/swisspol/XLFacility.git

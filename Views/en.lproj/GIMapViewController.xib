@@ -1,0 +1,596 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7706"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="GIMapViewController">
+            <connections>
+                <outlet property="checkoutMenuItem" destination="2F1-L6-WpO" id="cXl-ba-SBS"/>
+                <outlet property="contextualMenu" destination="NLF-6K-DvV" id="Wdc-M5-KXe"/>
+                <outlet property="createBranchButton" destination="W3U-R6-9yO" id="Pg7-R6-Pdv"/>
+                <outlet property="createBranchTextField" destination="CUj-FC-ARp" id="5TX-x5-BpX"/>
+                <outlet property="createBranchView" destination="ga8-vG-A68" id="IPI-Zz-gKm"/>
+                <outlet property="graphScrollView" destination="NEk-yz-xrB" id="hDz-hu-orw"/>
+                <outlet property="graphView" destination="7uX-6u-ejZ" id="BaV-UH-sbs"/>
+                <outlet property="messageButton" destination="ss3-Af-4aU" id="fZH-vS-lhE"/>
+                <outlet property="messageTextField" destination="Ukh-fa-YMw" id="qd2-50-p3r"/>
+                <outlet property="messageTextView" destination="leL-YY-uqs" id="IaF-HK-Tju"/>
+                <outlet property="messageView" destination="qvM-yB-KWz" id="WI3-9M-Oji"/>
+                <outlet property="renameBranchTextField" destination="fnf-HO-J16" id="1Pb-oX-6nk"/>
+                <outlet property="renameBranchView" destination="yK7-M9-F1T" id="00F-3k-QnC"/>
+                <outlet property="renameTagTextField" destination="0A5-t1-c3Z" id="NJo-x0-hC6"/>
+                <outlet property="renameTagView" destination="G2x-MY-zBs" id="ACV-GL-aBd"/>
+                <outlet property="separatorMenuItem" destination="4Gt-vH-kas" id="g5a-Xn-qUY"/>
+                <outlet property="tagMessageTextView" destination="l0i-wG-st7" id="u1P-fN-x9z"/>
+                <outlet property="tagNameTextField" destination="REx-8D-wmk" id="VYz-Qc-1uU"/>
+                <outlet property="tagView" destination="goU-jH-Ah6" id="8kl-rM-OHT"/>
+                <outlet property="view" destination="Mge-gB-T5T" id="Dk7-8C-xIa"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <view translatesAutoresizingMaskIntoConstraints="NO" id="Mge-gB-T5T" userLabel="Main View" customClass="GIView">
+            <rect key="frame" x="0.0" y="0.0" width="700" height="467"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" horizontalScrollElasticity="none" id="NEk-yz-xrB" userLabel="Scroll View - Graph View">
+                    <rect key="frame" x="0.0" y="0.0" width="700" height="467"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                    <clipView key="contentView" autoresizesSubviews="NO" id="MUH-N6-EF0">
+                        <rect key="frame" x="1" y="1" width="166" height="79"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view autoresizesSubviews="NO" id="7uX-6u-ejZ" customClass="GIGraphView">
+                                <rect key="frame" x="0.0" y="0.0" width="200" height="200"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="backgroundColor">
+                                        <color key="value" white="0.75" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </clipView>
+                    <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="IHE-nB-jmS">
+                        <rect key="frame" x="1" y="80" width="166" height="15"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </scroller>
+                    <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="ere-pq-pfo">
+                        <rect key="frame" x="167" y="1" width="15" height="79"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </scroller>
+                </scrollView>
+            </subviews>
+            <point key="canvasLocation" x="465" y="474.5"/>
+        </view>
+        <menu id="NLF-6K-DvV" userLabel="Contextual Menu">
+            <items>
+                <menuItem title="Quick View…" keyEquivalent=" " id="FjS-1C-CsA">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="quickViewSelectedCommit:" target="-2" id="zuO-7q-qyl"/>
+                    </connections>
+                </menuItem>
+                <menuItem title="External Diff with Main Parent…" alternate="YES" keyEquivalent=" " id="xQD-dD-5GI">
+                    <modifierMask key="keyEquivalentModifierMask" option="YES"/>
+                    <connections>
+                        <action selector="externalDiffSelectedCommit:" target="-2" id="Owa-kT-3Hq"/>
+                    </connections>
+                </menuItem>
+                <menuItem title="&lt;VIEW IN HOSTING SERVICE&gt;" alternate="YES" keyEquivalent=" " id="jG5-Cu-1Oh">
+                    <modifierMask key="keyEquivalentModifierMask" control="YES"/>
+                    <connections>
+                        <action selector="viewSelectedCommitInHostingService:" target="-2" id="Ivp-AH-d8R"/>
+                    </connections>
+                </menuItem>
+                <menuItem isSeparatorItem="YES" id="OTL-XM-MqA"/>
+                <menuItem title="Diff with HEAD…" keyEquivalent="i" id="s47-dA-Ka5">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="diffSelectedCommitWithHEAD:" target="-2" id="23i-LB-TI1"/>
+                    </connections>
+                </menuItem>
+                <menuItem title="External Diff with HEAD…" alternate="YES" keyEquivalent="i" id="9cn-WU-k15">
+                    <modifierMask key="keyEquivalentModifierMask" option="YES"/>
+                    <connections>
+                        <action selector="externalDiffWithHEAD:" target="-2" id="4P4-hx-f1o"/>
+                    </connections>
+                </menuItem>
+                <menuItem isSeparatorItem="YES" id="saS-05-Cal"/>
+                <menuItem title="Checkout" id="2F1-L6-WpO">
+                    <string key="keyEquivalent" base64-UTF8="YES">
+DQ
+</string>
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="checkoutSelectedCommit:" target="-2" id="15X-fF-QQ5"/>
+                    </connections>
+                </menuItem>
+                <menuItem isSeparatorItem="YES" id="cX5-lz-wXW"/>
+                <menuItem title="Edit Message…" keyEquivalent="e" id="o6c-I2-Rtl">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="editSelectedCommitMessage:" target="-2" id="PrK-v7-e6I"/>
+                    </connections>
+                </menuItem>
+                <menuItem title="Fixup with Parent" keyEquivalent="f" id="ss5-jL-Qe5">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="fixupSelectedCommit:" target="-2" id="Eb5-uo-07r"/>
+                    </connections>
+                </menuItem>
+                <menuItem title="Squash with Parent…" keyEquivalent="s" id="8nw-gg-IKk">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="squashSelectedCommit:" target="-2" id="vmj-VA-IDl"/>
+                    </connections>
+                </menuItem>
+                <menuItem title="Swap with Parent (Move Down)" keyEquivalent="d" id="Gok-Oq-MYm">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="swapSelectedCommitWithParent:" target="-2" id="izl-QO-CHI"/>
+                    </connections>
+                </menuItem>
+                <menuItem title="Swap with Child (Move Up)" keyEquivalent="u" id="gVz-76-ZEn">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="swapSelectedCommitWithChild:" target="-2" id="7ez-ll-Ppk"/>
+                    </connections>
+                </menuItem>
+                <menuItem title="Delete" id="bkU-ge-BZN">
+                    <string key="keyEquivalent" base64-UTF8="YES">
+CA
+</string>
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="deleteSelectedCommit:" target="-2" id="N4C-JG-Ca9"/>
+                    </connections>
+                </menuItem>
+                <menuItem isSeparatorItem="YES" id="xQH-sm-2Dm"/>
+                <menuItem title="Rewrite…" keyEquivalent="w" id="oN7-sO-Zxk">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="rewriteSelectedCommit:" target="-2" id="Ovb-us-c4j"/>
+                    </connections>
+                </menuItem>
+                <menuItem title="Split…" keyEquivalent="s" id="jfZ-QJ-fcb">
+                    <modifierMask key="keyEquivalentModifierMask" option="YES"/>
+                    <connections>
+                        <action selector="splitSelectedCommit:" target="-2" id="l3u-zi-MRS"/>
+                    </connections>
+                </menuItem>
+                <menuItem isSeparatorItem="YES" id="erI-b5-M78"/>
+                <menuItem title="Revert Against Current Branch…" keyEquivalent="r" id="cC0-Dd-nDb">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="revertSelectedCommit:" target="-2" id="K3a-au-6NS"/>
+                    </connections>
+                </menuItem>
+                <menuItem title="Cherry-Pick Against Current Branch…" keyEquivalent="c" id="vJV-aV-4oB">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="cherryPickSelectedCommit:" target="-2" id="crQ-cI-jzD"/>
+                    </connections>
+                </menuItem>
+                <menuItem title="Merge into Current Branch…" keyEquivalent="m" id="NGZ-gn-MWJ">
+                    <modifierMask key="keyEquivalentModifierMask" option="YES"/>
+                    <connections>
+                        <action selector="mergeSelectedCommit:" target="-2" id="din-qN-bOc"/>
+                    </connections>
+                </menuItem>
+                <menuItem title="Rebase Current Branch onto Here" keyEquivalent="r" id="T48-fo-FSX">
+                    <modifierMask key="keyEquivalentModifierMask" option="YES"/>
+                    <connections>
+                        <action selector="rebaseOntoSelectedCommit:" target="-2" id="xlv-Gm-2r8"/>
+                    </connections>
+                </menuItem>
+                <menuItem title="Set Tip of Current Branch Here" keyEquivalent="t" id="QGc-Mi-7bX">
+                    <modifierMask key="keyEquivalentModifierMask" option="YES"/>
+                    <connections>
+                        <action selector="setBranchTipToSelectedCommit:" target="-2" id="07X-Kb-9Uq"/>
+                    </connections>
+                </menuItem>
+                <menuItem title="Move Tip of Current Branch Here" alternate="YES" keyEquivalent="t" id="bh5-5N-bp1">
+                    <modifierMask key="keyEquivalentModifierMask" control="YES"/>
+                    <connections>
+                        <action selector="moveBranchTipToSelectedCommit:" target="-2" id="DgN-OS-dzj"/>
+                    </connections>
+                </menuItem>
+                <menuItem isSeparatorItem="YES" id="NnG-hS-RCm"/>
+                <menuItem title="Add Tag…" keyEquivalent="t" id="cct-Qc-k7X">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="createTagAtSelectedCommit:" target="-2" id="T8f-GX-JAM"/>
+                    </connections>
+                </menuItem>
+                <menuItem isSeparatorItem="YES" id="n1R-Zs-Whp"/>
+                <menuItem title="Create Branch…" keyEquivalent="b" id="nL6-8J-4u3">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="createBranchAtSelectedCommit:" target="-2" id="1aP-yM-UIn"/>
+                    </connections>
+                </menuItem>
+                <menuItem isSeparatorItem="YES" id="4Gt-vH-kas"/>
+            </items>
+            <point key="canvasLocation" x="-87.5" y="644.5"/>
+        </menu>
+        <customView id="goU-jH-Ah6" userLabel="Tag View">
+            <rect key="frame" x="0.0" y="0.0" width="433" height="207"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <textField verticalHuggingPriority="750" id="REx-8D-wmk">
+                    <rect key="frame" x="133" y="165" width="280" height="22"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" placeholderString="Required" drawsBackground="YES" id="vz0-21-YpX">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <outlet property="delegate" destination="-2" id="lRe-Bp-6pj"/>
+                    </connections>
+                </textField>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="4yU-fk-jQd">
+                    <rect key="frame" x="18" y="167" width="109" height="17"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="right" title="New tag name:" id="z3m-U3-57a">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="OiB-oe-wIs">
+                    <rect key="frame" x="18" y="140" width="109" height="17"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="right" title="Message:" id="MhN-Wm-sdU">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <scrollView autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="31a-qF-7cr">
+                    <rect key="frame" x="133" y="97" width="280" height="60"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <clipView key="contentView" id="K5e-oW-uzS">
+                        <rect key="frame" x="1" y="1" width="223" height="133"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textView importsGraphics="NO" richText="NO" findStyle="panel" allowsUndo="YES" verticallyResizable="YES" smartInsertDelete="YES" id="l0i-wG-st7" customClass="GICommitMessageView">
+                                <rect key="frame" x="0.0" y="75" width="278" height="58"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <size key="minSize" width="278" height="58"/>
+                                <size key="maxSize" width="463" height="10000000"/>
+                                <attributedString key="textStorage">
+                                    <fragment content="&lt;ANNOTATION&gt;">
+                                        <attributes>
+                                            <font key="NSFont" metaFont="smallSystem"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                        </attributes>
+                                    </fragment>
+                                </attributedString>
+                                <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                <size key="minSize" width="278" height="58"/>
+                                <size key="maxSize" width="463" height="10000000"/>
+                                <connections>
+                                    <outlet property="delegate" destination="-2" id="xEa-Zb-xrt"/>
+                                </connections>
+                            </textView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </clipView>
+                    <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="JUq-wH-Cde">
+                        <rect key="frame" x="-100" y="-100" width="87" height="18"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </scroller>
+                    <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="YEO-I1-z9t">
+                        <rect key="frame" x="224" y="1" width="15" height="133"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </scroller>
+                </scrollView>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" setsMaxLayoutWidthAtFirstLayout="YES" id="Nob-wT-MZi">
+                    <rect key="frame" x="131" y="61" width="284" height="28"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <textFieldCell key="cell" controlSize="small" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="left" title="Provide an optional message to create an annotated tag instead of a lightweight tag." id="5f2-fj-Z0Q">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <button verticalHuggingPriority="750" id="d34-tu-v8h">
+                    <rect key="frame" x="323" y="17" width="92" height="26"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <buttonCell key="cell" type="bevel" title="Create" bezelStyle="regularSquare" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="wP6-iD-CUg">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                        <string key="keyEquivalent" base64-UTF8="YES">
+DQ
+</string>
+                    </buttonCell>
+                    <connections>
+                        <action selector="finishModalView:" target="-2" id="9ml-Ih-wNC"/>
+                    </connections>
+                </button>
+                <button verticalHuggingPriority="750" id="w29-nc-RbK">
+                    <rect key="frame" x="221" y="17" width="92" height="26"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <buttonCell key="cell" type="bevel" title="Cancel" bezelStyle="regularSquare" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="l8x-Ez-Uuz">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                        <string key="keyEquivalent" base64-UTF8="YES">
+Gw
+</string>
+                    </buttonCell>
+                    <connections>
+                        <action selector="cancelModalView:" target="-2" id="tG0-5w-UrB"/>
+                    </connections>
+                </button>
+            </subviews>
+            <point key="canvasLocation" x="463.5" y="1480.5"/>
+        </customView>
+        <customView id="yK7-M9-F1T" userLabel="Rename Branch View">
+            <rect key="frame" x="0.0" y="0.0" width="384" height="101"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <textField verticalHuggingPriority="750" id="fnf-HO-J16">
+                    <rect key="frame" x="124" y="59" width="240" height="22"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" placeholderString="Required" drawsBackground="YES" id="tS2-TD-tB5">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <outlet property="delegate" destination="-2" id="xkW-S8-IhJ"/>
+                    </connections>
+                </textField>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="m4G-QU-XMh">
+                    <rect key="frame" x="18" y="61" width="100" height="17"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="right" title="Branch name:" id="fiz-vE-xUY">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <button verticalHuggingPriority="750" id="Lci-ng-5xc">
+                    <rect key="frame" x="274" y="17" width="92" height="26"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <buttonCell key="cell" type="bevel" title="Rename" bezelStyle="regularSquare" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="avr-T7-1eE">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                        <string key="keyEquivalent" base64-UTF8="YES">
+DQ
+</string>
+                    </buttonCell>
+                    <connections>
+                        <action selector="finishModalView:" target="-2" id="XO9-Id-evY"/>
+                    </connections>
+                </button>
+                <button verticalHuggingPriority="750" id="dMe-As-8cY">
+                    <rect key="frame" x="172" y="17" width="92" height="26"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <buttonCell key="cell" type="bevel" title="Cancel" bezelStyle="regularSquare" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="r4C-qF-UmE">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                        <string key="keyEquivalent" base64-UTF8="YES">
+Gw
+</string>
+                    </buttonCell>
+                    <connections>
+                        <action selector="cancelModalView:" target="-2" id="2Bb-H9-CzZ"/>
+                    </connections>
+                </button>
+            </subviews>
+            <point key="canvasLocation" x="433" y="1061.5"/>
+        </customView>
+        <customView id="G2x-MY-zBs" userLabel="Rename Tag View">
+            <rect key="frame" x="-5" y="0.0" width="360" height="101"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <textField verticalHuggingPriority="750" id="0A5-t1-c3Z">
+                    <rect key="frame" x="100" y="59" width="240" height="22"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" placeholderString="Required" drawsBackground="YES" id="hOm-T2-MUD">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <outlet property="delegate" destination="-2" id="J88-MG-Hwh"/>
+                    </connections>
+                </textField>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="1eh-qK-EgU">
+                    <rect key="frame" x="18" y="61" width="76" height="17"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="right" title="Tag name:" id="xvR-0J-9Ji">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <button verticalHuggingPriority="750" id="jvz-rp-toI">
+                    <rect key="frame" x="250" y="17" width="92" height="26"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <buttonCell key="cell" type="bevel" title="Rename" bezelStyle="regularSquare" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="iKU-RW-3rW">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                        <string key="keyEquivalent" base64-UTF8="YES">
+DQ
+</string>
+                    </buttonCell>
+                    <connections>
+                        <action selector="finishModalView:" target="-2" id="VlL-77-AMm"/>
+                    </connections>
+                </button>
+                <button verticalHuggingPriority="750" id="2JE-Xl-GmX">
+                    <rect key="frame" x="148" y="17" width="92" height="26"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <buttonCell key="cell" type="bevel" title="Cancel" bezelStyle="regularSquare" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="itp-cr-xr4">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                        <string key="keyEquivalent" base64-UTF8="YES">
+Gw
+</string>
+                    </buttonCell>
+                    <connections>
+                        <action selector="cancelModalView:" target="-2" id="las-TY-P38"/>
+                    </connections>
+                </button>
+            </subviews>
+            <point key="canvasLocation" x="427" y="899.5"/>
+        </customView>
+        <customView id="qvM-yB-KWz" userLabel="Message View">
+            <rect key="frame" x="0.0" y="-5" width="590" height="251"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <scrollView autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="MtR-30-oY5">
+                    <rect key="frame" x="20" y="61" width="550" height="150"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <clipView key="contentView" id="THQ-ht-MMy">
+                        <rect key="frame" x="1" y="1" width="223" height="133"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textView importsGraphics="NO" richText="NO" findStyle="panel" allowsUndo="YES" verticallyResizable="YES" smartInsertDelete="YES" id="leL-YY-uqs" customClass="GICommitMessageView">
+                                <rect key="frame" x="0.0" y="0.0" width="548" height="148"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <size key="minSize" width="548" height="148"/>
+                                <size key="maxSize" width="563" height="10000000"/>
+                                <attributedString key="textStorage">
+                                    <fragment content="&lt;MESSAGE&gt;">
+                                        <attributes>
+                                            <font key="NSFont" metaFont="smallSystem"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                        </attributes>
+                                    </fragment>
+                                </attributedString>
+                                <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                <size key="minSize" width="548" height="148"/>
+                                <size key="maxSize" width="563" height="10000000"/>
+                                <connections>
+                                    <outlet property="delegate" destination="-2" id="7yJ-Xw-bjd"/>
+                                </connections>
+                            </textView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </clipView>
+                    <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="Pfj-gG-gDJ">
+                        <rect key="frame" x="-100" y="-100" width="87" height="18"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </scroller>
+                    <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="Vc4-iM-C8X">
+                        <rect key="frame" x="224" y="1" width="15" height="133"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </scroller>
+                </scrollView>
+                <button verticalHuggingPriority="750" id="ss3-Af-4aU">
+                    <rect key="frame" x="450" y="17" width="122" height="26"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <buttonCell key="cell" type="bevel" title="&lt;BUTTON&gt;" bezelStyle="regularSquare" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ciE-fC-og6">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                        <string key="keyEquivalent" base64-UTF8="YES">
+DQ
+</string>
+                        <modifierMask key="keyEquivalentModifierMask" option="YES"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="finishModalView:" target="-2" id="DZ1-oQ-vNg"/>
+                    </connections>
+                </button>
+                <button verticalHuggingPriority="750" id="ggo-NX-oiy">
+                    <rect key="frame" x="350" y="17" width="92" height="26"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <buttonCell key="cell" type="bevel" title="Cancel" bezelStyle="regularSquare" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="o5d-4K-LgY">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                        <string key="keyEquivalent" base64-UTF8="YES">
+Gw
+</string>
+                    </buttonCell>
+                    <connections>
+                        <action selector="cancelModalView:" target="-2" id="9bR-ig-fZo"/>
+                    </connections>
+                </button>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="Ukh-fa-YMw">
+                    <rect key="frame" x="18" y="219" width="554" height="17"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="left" title="&lt;TITLE&gt;" id="pXD-VS-T9J">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+            </subviews>
+            <point key="canvasLocation" x="472" y="1770.5"/>
+        </customView>
+        <customView id="ga8-vG-A68" userLabel="Create Branch View">
+            <rect key="frame" x="-5" y="0.0" width="414" height="125"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <textField verticalHuggingPriority="750" id="CUj-FC-ARp">
+                    <rect key="frame" x="154" y="83" width="240" height="22"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" placeholderString="Required" drawsBackground="YES" id="F18-8s-TZU">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <outlet property="delegate" destination="-2" id="l0X-Nx-z2N"/>
+                    </connections>
+                </textField>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="5H0-9d-GEY">
+                    <rect key="frame" x="18" y="85" width="130" height="17"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="right" title="New branch name:" id="pez-mo-54a">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <button id="W3U-R6-9yO">
+                    <rect key="frame" x="152" y="59" width="185" height="18"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <buttonCell key="cell" type="check" title="Check Out Immediately" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="8fJ-Ia-klN">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                </button>
+                <button verticalHuggingPriority="750" id="0Hb-Gb-gmN">
+                    <rect key="frame" x="304" y="17" width="92" height="26"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <buttonCell key="cell" type="bevel" title="Create" bezelStyle="regularSquare" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ZVK-Ou-HSU">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                        <string key="keyEquivalent" base64-UTF8="YES">
+DQ
+</string>
+                    </buttonCell>
+                    <connections>
+                        <action selector="finishModalView:" target="-2" id="kdW-6J-3j9"/>
+                    </connections>
+                </button>
+                <button verticalHuggingPriority="750" id="2Ox-ed-G2C">
+                    <rect key="frame" x="202" y="17" width="92" height="26"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <buttonCell key="cell" type="bevel" title="Cancel" bezelStyle="regularSquare" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="vjc-QU-xVm">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                        <string key="keyEquivalent" base64-UTF8="YES">
+Gw
+</string>
+                    </buttonCell>
+                    <connections>
+                        <action selector="cancelModalView:" target="-2" id="J36-2s-3qk"/>
+                    </connections>
+                </button>
+            </subviews>
+            <point key="canvasLocation" x="433" y="1240.5"/>
+        </customView>
+    </objects>
+</document>

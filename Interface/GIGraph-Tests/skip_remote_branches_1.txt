@@ -1,0 +1,17 @@
+# Test skipping commits works when they start before the local branch
+
+{
+  "skipRemoteBranchTips": true
+}
+
+##### NOTATION #####
+
+m0 - m1 - m2<master>
+      \
+      t1(m1) - t2 - t3 - t4 - t5[origin/topic]
+
+##### GRAPH #####
+
+[0000] m2
+[0001] m1
+[0002] m0

@@ -1,0 +1,51 @@
+//  Copyright (C) 2015 Pierre-Olivier Latour <info@pol-online.net>
+//
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+"initial"                       = "Initial Snapshot";
+"clone"                         = "Clone";
+"open"                          = "Changed Outside GitUp";
+"automatic"                     = "Changed Outside GitUp";
+"commit"                        = "Created Commit";
+"amend"                         = "Amended Commit";
+"checkout_commit"               = "Checked Out Commit";
+"checkout_branch"               = "Checked Out '%@'";
+"create_tag"                    = "Created Tag '%@'";
+"edit_commit_message"           = "Edited Commit Message";
+"rewrite_commit"                = "Rewrote Commit";
+"split_commit"                  = "Split Commit";
+"revert_commit"                 = "Reverted Commit";
+"delete_commit"                 = "Deleted Commit";
+"fixup_commit"                  = "Fixed Up Commit";
+"squash_commit"                 = "Squashed Commit";
+"swap_commits"                  = "Swapped Commits";
+"cherry_pick_commit"            = "Cherry-Picked Commit";
+"fast_forward_merge_branch"     = "Fast-Forward Merged '%@'";
+"fast_forward_merge_commit"     = "Fast-Forward Merged Commit";
+"merge_branch"                  = "Merged '%@'";
+"merge_commit"                  = "Merged Commit";
+"rebase_branch"                 = "Rebased '%@' Branch";
+"set_branch_tip"                = "Set '%@' Branch Tip";
+"move_branch_tip"               = "Move '%@' Branch Tip";
+"create_branch"                 = "Created Branch '%@'";
+"delete_tag"                    = "Deleted Tag '%@'";
+"checkout_remote_branch"        = "Checked Out '%@'";
+"set_branch_upstream"           = "Set '%@' Upstream";
+"unset_branch_upstream"         = "Unset '%@' Upstream";
+"rename_branch"                 = "Renamed Branch '%@'";
+"delete_branch"                 = "Deleted Branch '%@'";
+"restore_snapshot"              = "Restored Snapshot";
+"restore_reflog_entry"          = "Restored Reflog Entry";
+"fetch_remote_tags"             = "Fetch Remote Tags";
+"rename_tag"                    = "Renamed Tag '%@'";

@@ -1,0 +1,15 @@
+# Test notation syntax
+
+##### NOTATION #####
+
+m0 - m1 - m2<master>
+ \
+ t1(m0) - t2 - t3 - t4<topic>
+
+##### GRAPH #####
+
+[0000] m2 t4
+[0001] m1 t3
+[0002] (m0) t2
+[0003] (m0) t1
+[0004] m0

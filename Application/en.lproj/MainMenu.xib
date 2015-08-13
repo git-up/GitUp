@@ -1,0 +1,1219 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7706"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="NSApplication">
+            <connections>
+                <outlet property="delegate" destination="Voe-Tx-rLC" id="GzC-gU-4Uq"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <window title="GitUp Preferences" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="preferences" animationBehavior="default" id="3qV-q4-a6k">
+            <windowStyleMask key="styleMask" titled="YES" closable="YES"/>
+            <rect key="contentRect" x="940" y="240" width="500" height="400"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1417"/>
+            <view key="contentView" id="uEJ-lO-PMl">
+                <rect key="frame" x="0.0" y="5" width="500" height="400"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <userGuides>
+                    <userLayoutGuide location="138" affinity="minX"/>
+                    <userLayoutGuide location="559" affinity="minY"/>
+                </userGuides>
+                <subviews>
+                    <tabView type="noTabsNoBorder" id="anN-jw-l7x">
+                        <rect key="frame" x="0.0" y="0.0" width="500" height="400"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <font key="font" metaFont="system"/>
+                        <tabViewItems>
+                            <tabViewItem label="{500, 328}" identifier="general" id="M8N-WY-xpP">
+                                <view key="view" id="ZJf-t1-iGB">
+                                    <rect key="frame" x="0.0" y="0.0" width="500" height="400"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="lyZ-cf-MT6">
+                                            <rect key="frame" x="12" y="224" width="120" height="17"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="right" title="Commits:" id="6J8-35-XZI">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <button id="CQY-oC-oQ8">
+                                            <rect key="frame" x="137" y="223" width="146" height="18"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="check" title="Use Simple mode" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="rMb-zc-NF1">
+                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <binding destination="AR1-cq-KNa" name="value" keyPath="values.SimpleCommit" id="ZTy-sO-lqh">
+                                                    <dictionary key="options">
+                                                        <bool key="NSAllowsEditingMultipleValuesSelection" value="NO"/>
+                                                        <bool key="NSConditionallySetsEnabled" value="NO"/>
+                                                        <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
+                                                    </dictionary>
+                                                </binding>
+                                            </connections>
+                                        </button>
+                                        <button id="T1B-3i-hRB">
+                                            <rect key="frame" x="137" y="133" width="191" height="18"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="check" title="Show invisible characters" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="omy-Qf-vg9">
+                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <binding destination="AR1-cq-KNa" name="value" keyPath="values.GICommitMessageViewUserDefaultKey_ShowInvisibleCharacters" id="50v-P6-D7W">
+                                                    <dictionary key="options">
+                                                        <bool key="NSAllowsEditingMultipleValuesSelection" value="NO"/>
+                                                        <bool key="NSConditionallySetsEnabled" value="NO"/>
+                                                        <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
+                                                    </dictionary>
+                                                </binding>
+                                            </connections>
+                                        </button>
+                                        <button id="SyF-mN-F3q">
+                                            <rect key="frame" x="137" y="113" width="270" height="18"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="check" title="Show margins at 50 and 72 characters" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="AMR-Ne-0QY">
+                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <binding destination="AR1-cq-KNa" name="value" keyPath="values.GICommitMessageViewUserDefaultKey_ShowMargins" id="7qn-Df-X8a">
+                                                    <dictionary key="options">
+                                                        <bool key="NSAllowsEditingMultipleValuesSelection" value="NO"/>
+                                                        <bool key="NSConditionallySetsEnabled" value="NO"/>
+                                                        <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
+                                                    </dictionary>
+                                                </binding>
+                                            </connections>
+                                        </button>
+                                        <button id="ag6-rb-zPH">
+                                            <rect key="frame" x="137" y="93" width="176" height="18"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="check" title="Enable spell checking" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="G82-Jf-2sb">
+                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <binding destination="AR1-cq-KNa" name="value" keyPath="values.GICommitMessageViewUserDefaultKey_EnableSpellChecking" id="DpY-KK-y7w">
+                                                    <dictionary key="options">
+                                                        <bool key="NSAllowsEditingMultipleValuesSelection" value="NO"/>
+                                                        <bool key="NSConditionallySetsEnabled" value="NO"/>
+                                                        <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
+                                                    </dictionary>
+                                                </binding>
+                                            </connections>
+                                        </button>
+                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="jee-vl-BUt">
+                                            <rect key="frame" x="137" y="161" width="345" height="56"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" id="v99-tx-ohB">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <string key="title">In "Simple" commit mode, GitUp unifies the working directory and index i.e. there is no staging area.
+You must close and reopen any opened repositories in GitUp after changing this setting.</string>
+                                                <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="YZU-dx-gjr">
+                                            <rect key="frame" x="12" y="295" width="120" height="17"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Diffs Layout:" id="B0V-bN-usw">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <matrix verticalHuggingPriority="750" allowsEmptySelection="NO" autorecalculatesCellSize="YES" id="pP3-w2-KOs">
+                                            <rect key="frame" x="139" y="255" width="289" height="58"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            <size key="cellSize" width="280" height="18"/>
+                                            <size key="intercellSpacing" width="4" height="2"/>
+                                            <buttonCell key="prototype" type="radio" title="Radio" imagePosition="left" alignment="left" inset="2" id="S4o-dE-O99">
+                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <cells>
+                                                <column>
+                                                    <buttonCell type="radio" title="Automatically use Unified or Side-by-Side" imagePosition="left" alignment="left" state="on" inset="2" id="nGb-E5-c6J">
+                                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                        <font key="font" metaFont="system"/>
+                                                    </buttonCell>
+                                                    <buttonCell type="radio" title="Always use Unified" imagePosition="left" alignment="left" tag="-1" inset="2" id="n2j-rM-ZmP">
+                                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                        <font key="font" metaFont="system"/>
+                                                    </buttonCell>
+                                                    <buttonCell type="radio" title="Always use Side-by-Side" imagePosition="left" alignment="left" tag="1" inset="2" id="cjL-Xv-AW0">
+                                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                        <font key="font" metaFont="system"/>
+                                                    </buttonCell>
+                                                </column>
+                                            </cells>
+                                            <connections>
+                                                <binding destination="AR1-cq-KNa" name="selectedTag" keyPath="values.GIDiffContentsViewController_DiffViewMode" id="puq-Zi-nYn">
+                                                    <dictionary key="options">
+                                                        <bool key="NSAllowsEditingMultipleValuesSelection" value="NO"/>
+                                                        <bool key="NSConditionallySetsEnabled" value="NO"/>
+                                                        <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
+                                                    </dictionary>
+                                                </binding>
+                                            </connections>
+                                        </matrix>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="mC1-sE-MTH">
+                                            <rect key="frame" x="12" y="134" width="120" height="17"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="right" title="Message Editor:" id="5Hr-DF-QKw">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="IO8-Wx-DRo">
+                                            <rect key="frame" x="12" y="369" width="120" height="17"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Diff Generation:" id="cxW-C3-fIQ">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <matrix verticalHuggingPriority="750" allowsEmptySelection="NO" autorecalculatesCellSize="YES" id="zwg-99-t9E">
+                                            <rect key="frame" x="139" y="329" width="289" height="58"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            <size key="cellSize" width="272" height="18"/>
+                                            <size key="intercellSpacing" width="4" height="2"/>
+                                            <buttonCell key="prototype" type="radio" title="Radio" imagePosition="left" alignment="left" inset="2" id="aRV-8E-fbW">
+                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <cells>
+                                                <column>
+                                                    <buttonCell type="radio" title="Include all whitespace" imagePosition="left" alignment="left" state="on" inset="2" id="XNc-qG-Kdm">
+                                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                        <font key="font" metaFont="system"/>
+                                                    </buttonCell>
+                                                    <buttonCell type="radio" title="Ignore changes in amount of whitespace" imagePosition="left" alignment="left" tag="1" inset="2" id="xK7-0C-Sk2">
+                                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                        <font key="font" metaFont="system"/>
+                                                    </buttonCell>
+                                                    <buttonCell type="radio" title="Ignore all whitespace" imagePosition="left" alignment="left" tag="2" inset="2" id="yJh-3Z-PBX">
+                                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                        <font key="font" metaFont="system"/>
+                                                    </buttonCell>
+                                                </column>
+                                            </cells>
+                                            <connections>
+                                                <binding destination="AR1-cq-KNa" name="selectedTag" keyPath="values.DiffWhitespaceMode" id="ObM-rX-4kL">
+                                                    <dictionary key="options">
+                                                        <bool key="NSAllowsEditingMultipleValuesSelection" value="NO"/>
+                                                        <bool key="NSConditionallySetsEnabled" value="NO"/>
+                                                        <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
+                                                    </dictionary>
+                                                </binding>
+                                            </connections>
+                                        </matrix>
+                                    </subviews>
+                                </view>
+                            </tabViewItem>
+                            <tabViewItem label="{500, 206}" identifier="advanced" id="Qdl-lQ-O4q">
+                                <view key="view" id="8CG-H0-Xhk">
+                                    <rect key="frame" x="0.0" y="0.0" width="500" height="400"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <popUpButton verticalHuggingPriority="750" id="7N4-S9-iWL">
+                                            <rect key="frame" x="136" y="248" width="200" height="26"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <popUpButtonCell key="cell" type="push" title="&lt;RELEASE CHANNEL&gt;" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" autoenablesItems="NO" selectedItem="xdx-IX-FK6" id="Sdr-Ep-kPW">
+                                                <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="menu"/>
+                                                <menu key="menu" autoenablesItems="NO" id="0Z3-9j-kDN">
+                                                    <items>
+                                                        <menuItem title="&lt;RELEASE CHANNEL&gt;" state="on" id="xdx-IX-FK6">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                    </items>
+                                                </menu>
+                                            </popUpButtonCell>
+                                            <connections>
+                                                <action selector="changeReleaseChannel:" target="Voe-Tx-rLC" id="qGn-WN-qQh"/>
+                                            </connections>
+                                        </popUpButton>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="mi3-Eg-51i">
+                                            <rect key="frame" x="12" y="254" width="120" height="17"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="right" title="Release Channel:" id="M0A-b6-dhN">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="b9G-MU-MDn">
+                                            <rect key="frame" x="12" y="295" width="120" height="17"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="right" title="Remotes:" id="LAp-ea-WLX">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="PtA-hG-Qmn">
+                                            <rect key="frame" x="137" y="210" width="345" height="34"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="The &quot;Continuous&quot; release channel installs builds directly from GitUp Continuous Integration. Use at your own risks!" id="qB2-E4-Yuu">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="w2N-io-xkS">
+                                            <rect key="frame" x="137" y="295" width="130" height="17"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="left" title="Automatically check" id="X1v-BK-dAQ">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <popUpButton verticalHuggingPriority="750" id="ZYX-Yt-1fl">
+                                            <rect key="frame" x="271" y="289" width="145" height="26"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <popUpButtonCell key="cell" type="push" title="Never" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" autoenablesItems="NO" altersStateOfSelectedItem="NO" selectedItem="KgR-3b-gT5" id="Pdg-S3-YXJ">
+                                                <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="menu"/>
+                                                <menu key="menu" autoenablesItems="NO" id="HS2-nT-ca7">
+                                                    <items>
+                                                        <menuItem title="Never" id="KgR-3b-gT5"/>
+                                                        <menuItem title="Every 5 Minutes" tag="300" id="fBn-HY-yBz"/>
+                                                        <menuItem title="Every 15 Minutes" tag="900" id="PJN-mz-oGX"/>
+                                                        <menuItem title="Every 30 Minutes" tag="1800" id="Nq9-k0-5s0"/>
+                                                    </items>
+                                                </menu>
+                                            </popUpButtonCell>
+                                            <connections>
+                                                <binding destination="AR1-cq-KNa" name="selectedTag" keyPath="values.CheckInterval" id="INB-f0-xdF">
+                                                    <dictionary key="options">
+                                                        <bool key="NSAllowsEditingMultipleValuesSelection" value="NO"/>
+                                                        <bool key="NSConditionallySetsEnabled" value="NO"/>
+                                                        <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
+                                                    </dictionary>
+                                                </binding>
+                                            </connections>
+                                        </popUpButton>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="vpU-gW-P72">
+                                            <rect key="frame" x="12" y="369" width="120" height="17"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="right" title="External Diff:" id="WZ7-h0-Fpb">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <popUpButton verticalHuggingPriority="750" id="mZX-yf-dtK">
+                                            <rect key="frame" x="136" y="363" width="165" height="26"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <popUpButtonCell key="cell" type="push" title="FileMerge" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" autoenablesItems="NO" altersStateOfSelectedItem="NO" selectedItem="szc-39-qmN" id="yfJ-9J-pbb">
+                                                <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="menu"/>
+                                                <menu key="menu" autoenablesItems="NO" id="bCl-N0-YZa">
+                                                    <items>
+                                                        <menuItem title="FileMerge" id="szc-39-qmN"/>
+                                                        <menuItem title="Kaleidoscope" id="EDr-i6-aAh"/>
+                                                        <menuItem title="Beyond Compare" id="cip-D6-GZD"/>
+                                                        <menuItem title="P4Merge" id="RNS-uQ-WHF"/>
+                                                        <menuItem isSeparatorItem="YES" id="XvM-0Z-bmM"/>
+                                                        <menuItem title="Git Tool" id="iEl-zc-obP"/>
+                                                    </items>
+                                                </menu>
+                                            </popUpButtonCell>
+                                            <connections>
+                                                <binding destination="AR1-cq-KNa" name="selectedValue" keyPath="values.GIViewController_DiffTool" id="zkX-wP-hGs">
+                                                    <dictionary key="options">
+                                                        <bool key="NSAllowsEditingMultipleValuesSelection" value="NO"/>
+                                                        <bool key="NSConditionallySetsEnabled" value="NO"/>
+                                                        <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
+                                                    </dictionary>
+                                                </binding>
+                                            </connections>
+                                        </popUpButton>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="2WJ-iR-f3R">
+                                            <rect key="frame" x="12" y="336" width="120" height="17"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="right" title="External Merge:" id="2DT-l7-dgY">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <popUpButton verticalHuggingPriority="750" id="Ud9-w0-9vK">
+                                            <rect key="frame" x="136" y="330" width="165" height="26"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <popUpButtonCell key="cell" type="push" title="FileMerge" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" autoenablesItems="NO" altersStateOfSelectedItem="NO" selectedItem="Zln-Lm-NeH" id="NHJ-tA-W14">
+                                                <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="menu"/>
+                                                <menu key="menu" autoenablesItems="NO" id="79m-3R-eaz">
+                                                    <items>
+                                                        <menuItem title="FileMerge" id="Zln-Lm-NeH"/>
+                                                        <menuItem title="Kaleidoscope" id="pqO-7b-B5J"/>
+                                                        <menuItem title="Beyond Compare" id="AaP-5A-YVD"/>
+                                                        <menuItem title="P4Merge" id="Uq1-pA-HzR"/>
+                                                        <menuItem isSeparatorItem="YES" id="opM-b3-5YC"/>
+                                                        <menuItem title="Git Tool" id="yyO-2T-uYr"/>
+                                                    </items>
+                                                </menu>
+                                            </popUpButtonCell>
+                                            <connections>
+                                                <binding destination="AR1-cq-KNa" name="selectedValue" keyPath="values.GIViewController_MergeTool" id="Tfs-Ms-Wgf">
+                                                    <dictionary key="options">
+                                                        <bool key="NSAllowsEditingMultipleValuesSelection" value="NO"/>
+                                                        <bool key="NSConditionallySetsEnabled" value="NO"/>
+                                                        <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
+                                                    </dictionary>
+                                                </binding>
+                                            </connections>
+                                        </popUpButton>
+                                    </subviews>
+                                </view>
+                            </tabViewItem>
+                        </tabViewItems>
+                    </tabView>
+                </subviews>
+            </view>
+            <toolbar key="toolbar" implicitIdentifier="4BB9AB3D-6CFE-44F9-AC58-EC5EB9EC6AD2" autosavesConfiguration="NO" allowsUserCustomization="NO" displayMode="iconAndLabel" sizeMode="regular" id="YkS-ea-UXD">
+                <allowedToolbarItems>
+                    <toolbarItem implicitItemIdentifier="0A993B67-8232-470B-93F2-918C139C4502" explicitItemIdentifier="general" label="General" paletteLabel="General" image="icon_general" autovalidates="NO" selectable="YES" id="Eco-Ip-wwc">
+                        <connections>
+                            <action selector="selectPreferencePane:" target="Voe-Tx-rLC" id="P2u-HV-YJ4"/>
+                        </connections>
+                    </toolbarItem>
+                    <toolbarItem implicitItemIdentifier="5E54574B-9F92-4881-8DD0-A99676EDDF56" explicitItemIdentifier="advanced" label="Advanced" paletteLabel="Advanced" image="icon_advanced" autovalidates="NO" selectable="YES" id="doU-9n-plE">
+                        <connections>
+                            <action selector="selectPreferencePane:" target="Voe-Tx-rLC" id="mFG-Gz-oyR"/>
+                        </connections>
+                    </toolbarItem>
+                </allowedToolbarItems>
+                <defaultToolbarItems>
+                    <toolbarItem reference="Eco-Ip-wwc"/>
+                    <toolbarItem reference="doU-9n-plE"/>
+                </defaultToolbarItems>
+            </toolbar>
+            <point key="canvasLocation" x="-106" y="1327"/>
+        </window>
+        <customObject id="Voe-Tx-rLC" customClass="AppDelegate">
+            <connections>
+                <outlet property="aboutPanel" destination="sHg-NM-pfN" id="nuH-JO-Zxx"/>
+                <outlet property="authenticationNameTextField" destination="ohd-U6-h7y" id="jfG-3a-a5h"/>
+                <outlet property="authenticationPasswordTextField" destination="Uio-D2-Dnt" id="nNT-Jn-Q9Y"/>
+                <outlet property="authenticationURLTextField" destination="fBP-U8-T31" id="JUd-Sw-FSA"/>
+                <outlet property="authenticationWindow" destination="mcM-YD-UN9" id="ZkH-zK-43f"/>
+                <outlet property="channelPopUpButton" destination="7N4-S9-iWL" id="Ols-8n-NyQ"/>
+                <outlet property="cloneRecursiveButton" destination="V3d-LG-L26" id="iSp-hX-Jc0"/>
+                <outlet property="cloneURLTextField" destination="KgY-GJ-dY0" id="qXq-61-cKm"/>
+                <outlet property="cloneWindow" destination="6SP-eN-0Kv" id="Bd8-7b-vpr"/>
+                <outlet property="copyrightTextField" destination="c4g-uo-jg9" id="l3W-uq-nyp"/>
+                <outlet property="forumsButton" destination="ozw-os-Nc4" id="DU4-lD-lmd"/>
+                <outlet property="preferencesTabView" destination="anN-jw-l7x" id="zP7-18-Z2X"/>
+                <outlet property="preferencesToolbar" destination="YkS-ea-UXD" id="eZX-nc-ex8"/>
+                <outlet property="preferencesWindow" destination="3qV-q4-a6k" id="yO6-yX-KBA"/>
+                <outlet property="recentPopUpButton" destination="rck-lm-gsz" id="mPQ-v1-bTW"/>
+                <outlet property="twitterButton" destination="5ht-7L-7AO" id="BT6-TN-i3z"/>
+                <outlet property="versionTextField" destination="HZC-36-Grr" id="qyt-nZ-xv3"/>
+                <outlet property="welcomeWindow" destination="mjY-As-hbN" id="qhN-UE-SS0"/>
+            </connections>
+        </customObject>
+        <menu title="Main Menu" systemMenu="main" id="AYu-sK-qS6">
+            <items>
+                <menuItem title="GitUp" id="1Xt-HY-uBw">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <menu key="submenu" title="GitUp" systemMenu="apple" id="uQy-DD-JDr">
+                        <items>
+                            <menuItem title="About GitUp" id="5kV-Vb-QxS">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="showAboutPanel:" target="Voe-Tx-rLC" id="uMT-pN-nex"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Check for Updates…" id="RvP-51-UEO">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="checkForUpdates:" target="Voe-Tx-rLC" id="Bx2-39-dyN"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="gLG-bh-eJk"/>
+                            <menuItem title="Install Command Line Tool…" id="f9m-On-7Ly">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="installTool:" target="Voe-Tx-rLC" id="vFd-eA-ejg"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="dst-2l-Azr"/>
+                            <menuItem title="Preferences…" keyEquivalent="," id="smQ-Fd-MMe">
+                                <connections>
+                                    <action selector="showPreferences:" target="Voe-Tx-rLC" id="9yT-OO-Nbb"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Reset Preferences" alternate="YES" keyEquivalent="," id="dZm-6K-3kX">
+                                <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
+                                <connections>
+                                    <action selector="resetPreferences:" target="Voe-Tx-rLC" id="JwZ-bh-dSY"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="VOq-y0-SEH"/>
+                            <menuItem title="Services" id="NMo-om-nkz">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" title="Services" systemMenu="services" id="hz9-B4-Xy5"/>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="4je-JR-u6R"/>
+                            <menuItem title="Hide GitUp" keyEquivalent="h" id="Olw-nP-bQN">
+                                <connections>
+                                    <action selector="hide:" target="-1" id="PnN-Uc-m68"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Hide Others" keyEquivalent="h" id="Vdr-fp-XzO">
+                                <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
+                                <connections>
+                                    <action selector="hideOtherApplications:" target="-1" id="VT4-aY-XCT"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Show All" id="Kd2-mp-pUS">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="unhideAllApplications:" target="-1" id="Dhg-Le-xox"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="kCx-OE-vgT"/>
+                            <menuItem title="Quit GitUp" keyEquivalent="q" id="4sb-4s-VLi">
+                                <connections>
+                                    <action selector="terminate:" target="-1" id="Te7-pn-YzF"/>
+                                </connections>
+                            </menuItem>
+                        </items>
+                    </menu>
+                </menuItem>
+                <menuItem title="File" id="F0U-Lj-vPf">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <menu key="submenu" title="File" id="kzM-ng-sJN">
+                        <items>
+                            <menuItem title="New…" keyEquivalent="n" id="0lt-Gn-H57">
+                                <connections>
+                                    <action selector="newRepository:" target="-1" id="db3-9D-pmN"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Clone from URL…" keyEquivalent="N" id="JBt-n3-4qR">
+                                <connections>
+                                    <action selector="cloneRepository:" target="-1" id="bkA-Xe-qM5"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="oKh-Tp-IyI"/>
+                            <menuItem title="Open…" keyEquivalent="o" id="mjB-qo-eTe">
+                                <connections>
+                                    <action selector="openDocument:" target="-1" id="FlH-np-HFe"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Open Recent" id="H69-uH-spF">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" title="Open Recent" systemMenu="recentDocuments" id="YgH-RV-NQr">
+                                    <items>
+                                        <menuItem title="Clear Menu" id="uud-zh-9PI">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="clearRecentDocuments:" target="-1" id="zY0-Cq-Hc6"/>
+                                            </connections>
+                                        </menuItem>
+                                    </items>
+                                </menu>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="Y7C-L0-883"/>
+                            <menuItem title="Close" keyEquivalent="w" id="mKu-98-YsN">
+                                <connections>
+                                    <action selector="performClose:" target="-1" id="13n-o7-RDS"/>
+                                </connections>
+                            </menuItem>
+                        </items>
+                    </menu>
+                </menuItem>
+                <menuItem title="Edit" id="5QF-Oa-p0T">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <menu key="submenu" title="Edit" id="W48-6f-4Dl">
+                        <items>
+                            <menuItem title="Undo" keyEquivalent="z" id="dRJ-4n-Yzg">
+                                <connections>
+                                    <action selector="undo:" target="-1" id="M6e-cu-g7V"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Redo" keyEquivalent="Z" id="6dh-zS-Vam">
+                                <connections>
+                                    <action selector="redo:" target="-1" id="oIA-Rs-6OD"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="WRV-NI-Exz"/>
+                            <menuItem title="Cut" keyEquivalent="x" id="uRl-iY-unG">
+                                <connections>
+                                    <action selector="cut:" target="-1" id="YJe-68-I9s"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Copy" keyEquivalent="c" id="x3v-GG-iWU">
+                                <connections>
+                                    <action selector="copy:" target="-1" id="G1f-GL-Joy"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Paste" keyEquivalent="v" id="gVA-U4-sdL">
+                                <connections>
+                                    <action selector="paste:" target="-1" id="UvS-8e-Qdg"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Delete" id="pa3-QI-u2k">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="delete:" target="-1" id="0Mk-Ml-PaM"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Select All" keyEquivalent="a" id="Ruw-6m-B2m">
+                                <connections>
+                                    <action selector="selectAll:" target="-1" id="VNm-Mi-diN"/>
+                                </connections>
+                            </menuItem>
+                        </items>
+                    </menu>
+                </menuItem>
+                <menuItem title="Repository" id="IeB-fo-e9u">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <menu key="submenu" title="Repository" id="01F-zn-dxL">
+                        <items>
+                            <menuItem title="Search…" keyEquivalent="f" id="lth-Rr-wEh">
+                                <connections>
+                                    <action selector="focusSearch:" target="-1" id="wfK-7B-jEI"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="qQz-Pc-UPf"/>
+                            <menuItem title="Browse HEAD Ancestors…" keyEquivalent="d" id="6tA-ab-KI4">
+                                <connections>
+                                    <action selector="toggleAncestors:" target="-1" id="4pv-4x-eNG"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Browse Tags…" keyEquivalent="t" id="E8v-6r-pcZ">
+                                <connections>
+                                    <action selector="toggleTags:" target="-1" id="Tf8-RI-fhK"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Browse Snapshots…" keyEquivalent="s" id="9fv-PJ-Qoe">
+                                <connections>
+                                    <action selector="toggleSnapshots:" target="-1" id="SQS-9R-rhi"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Browse Reflogs…" keyEquivalent="r" id="zIs-iq-Wdy">
+                                <connections>
+                                    <action selector="toggleReflog:" target="-1" id="XbL-Rv-YX4"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="KDb-mH-ipb"/>
+                            <menuItem title="Edit Git Configuration…" keyEquivalent="c" id="XYr-n2-fQb">
+                                <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
+                                <connections>
+                                    <action selector="editConfiguration:" target="-1" id="B43-hl-TNs"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="nab-O2-9Gu"/>
+                            <menuItem title="Reset to Checkout…" keyEquivalent="r" id="Fci-yP-3xA">
+                                <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
+                                <connections>
+                                    <action selector="resetHard:" target="-1" id="8Zh-UP-nFu"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="X6C-8X-2mS"/>
+                            <menuItem title="Open Submodule…" id="kGV-Xp-bvX">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" title="Open Submodule…" id="Er2-LJ-aKH">
+                                    <items>
+                                        <menuItem title="Item" id="ysw-cq-JDI">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                        </menuItem>
+                                    </items>
+                                </menu>
+                                <connections>
+                                    <action selector="openSubmoduleMenu:" target="-1" id="dQ5-s0-olJ"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="bk7-Le-0Rn"/>
+                            <menuItem title="Open in Terminal…" id="oLL-6T-jc5">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="openInTerminal:" target="-1" id="YJM-LA-kZX"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Open in Finder…" id="NQb-m5-0rE">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="openInFinder:" target="-1" id="Sxv-HV-LPD"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Open in Hosting Service…" id="f0F-In-We8">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="openInHostingService:" target="-1" id="k0x-uV-YHs"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="4we-2z-Bs2"/>
+                            <menuItem title="GitUp Settings…" id="7kJ-UG-u1b">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="editSettings:" target="-1" id="eKw-Pa-s3l"/>
+                                </connections>
+                            </menuItem>
+                        </items>
+                    </menu>
+                </menuItem>
+                <menuItem title="Remotes" id="gYS-kV-JJ3">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <menu key="submenu" title="Remotes" id="vM0-6s-Dhl">
+                        <items>
+                            <menuItem title="Fetch All Branches" keyEquivalent="F" id="dXI-oo-U5x">
+                                <connections>
+                                    <action selector="fetchAllRemoteBranches:" target="-1" id="Hb3-9s-czk"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Check All Branches" alternate="YES" keyEquivalent="f" id="BvD-QT-ga7">
+                                <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
+                                <connections>
+                                    <action selector="checkForChanges:" target="-1" id="P2O-oC-cy1"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Fetch All Tags" keyEquivalent="T" id="IS5-DF-rdU">
+                                <connections>
+                                    <action selector="fetchAllRemoteTags:" target="-1" id="neP-P8-wnr"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Fetch and Prune All Tags" alternate="YES" keyEquivalent="t" id="sBh-HC-lSN">
+                                <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
+                                <connections>
+                                    <action selector="fetchAndPruneAllRemoteTags:" target="-1" id="SkL-OA-5rC"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="0My-sc-aoR"/>
+                            <menuItem title="Pull Current Branch" keyEquivalent="p" id="SAd-Of-qJk">
+                                <connections>
+                                    <action selector="pullCurrentBranch:" target="-1" id="jwa-zo-piM"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Push Current Branch" keyEquivalent="P" id="Bcb-3R-qZY">
+                                <connections>
+                                    <action selector="pushCurrentBranch:" target="-1" id="eva-SW-zIe"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="lof-CG-6Ri"/>
+                            <menuItem title="Push All Branches…" id="XAj-bb-A2L">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="pushAllLocalBranches:" target="-1" id="UiC-1i-Cl2"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Push All Tags…" id="ugC-2m-5oa">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="pushAllTags:" target="-1" id="3Tv-hE-ttP"/>
+                                </connections>
+                            </menuItem>
+                        </items>
+                    </menu>
+                </menuItem>
+                <menuItem title="View" id="BRC-nV-aDa">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <menu key="submenu" title="View" id="g3q-9w-YbH">
+                        <items>
+                            <menuItem title="Map" keyEquivalent="1" id="kBm-SD-Nvi">
+                                <connections>
+                                    <action selector="switchMode:" target="-1" id="bWl-yS-LzY"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Commit" tag="1" keyEquivalent="2" id="Kgd-uV-TNM">
+                                <connections>
+                                    <action selector="switchMode:" target="-1" id="Kan-sp-8Sr"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Stashes" tag="2" keyEquivalent="3" id="7hW-f7-DkC">
+                                <connections>
+                                    <action selector="switchMode:" target="-1" id="6Ak-fk-95j"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="wBs-5b-oQz"/>
+                            <menuItem title="Enter Full Screen" keyEquivalent="f" id="AWl-Ry-evk">
+                                <modifierMask key="keyEquivalentModifierMask" control="YES" command="YES"/>
+                                <connections>
+                                    <action selector="toggleFullScreen:" target="-1" id="tD5-o0-gGH"/>
+                                </connections>
+                            </menuItem>
+                        </items>
+                    </menu>
+                </menuItem>
+                <menuItem title="Window" id="aUF-d1-5bR">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <menu key="submenu" title="Window" systemMenu="window" id="Td7-aD-5lo">
+                        <items>
+                            <menuItem title="Minimize" keyEquivalent="m" id="OY7-WF-poV">
+                                <connections>
+                                    <action selector="performMiniaturize:" target="-1" id="VwT-WD-YPe"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Zoom" id="R4o-n2-Eq4">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="performZoom:" target="-1" id="DIl-cC-cCs"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="w3m-cZ-nT9"/>
+                            <menuItem title="Bring All to Front" id="LE2-aR-0XJ">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="arrangeInFront:" target="-1" id="DRN-fu-gQh"/>
+                                </connections>
+                            </menuItem>
+                        </items>
+                    </menu>
+                </menuItem>
+                <menuItem title="Help" id="WBj-Hq-QYS">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <menu key="submenu" title="Help" systemMenu="help" id="jEp-qa-5kg">
+                        <items>
+                            <menuItem title="Documentation…" id="Ke5-jK-SAM">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="viewDocumentation:" target="Voe-Tx-rLC" id="erl-Tr-3gP"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Release Notes…" id="aLm-Bn-jpX">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="viewReleaseNotes:" target="Voe-Tx-rLC" id="Glr-e4-eNM"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="GitUp Forums…" id="fwj-0H-19c">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="visitForums:" target="-1" id="psH-UB-r2R"/>
+                                </connections>
+                            </menuItem>
+                        </items>
+                    </menu>
+                </menuItem>
+            </items>
+        </menu>
+        <window title="Clone Repository" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="6SP-eN-0Kv">
+            <windowStyleMask key="styleMask" titled="YES"/>
+            <rect key="contentRect" x="131" y="158" width="502" height="167"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
+            <view key="contentView" id="Msr-na-RRU">
+                <rect key="frame" x="0.0" y="6" width="502" height="167"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <textField verticalHuggingPriority="750" id="KgY-GJ-dY0">
+                        <rect key="frame" x="104" y="125" width="378" height="22"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" placeholderString="Required" drawsBackground="YES" id="QXH-ou-KWa">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="G2f-8q-uIU">
+                        <rect key="frame" x="18" y="127" width="80" height="17"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Clone URL:" id="1V7-UU-BXR">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="MbF-lm-4Vc">
+                        <rect key="frame" x="102" y="83" width="382" height="34"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="Enter a Git URL like &quot;https://example.com/repositories/example.git&quot; or &quot;git@example.com:repositories/example.git&quot;." id="EFG-t2-f6c">
+                            <font key="font" metaFont="smallSystem"/>
+                            <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <button id="V3d-LG-L26">
+                        <rect key="frame" x="102" y="59" width="320" height="18"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <buttonCell key="cell" type="check" title="Initialize and clone submodules automatically" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="X4y-Bk-C2g">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                    </button>
+                    <button verticalHuggingPriority="750" tag="1" id="nd4-Yg-sbG">
+                        <rect key="frame" x="388" y="13" width="100" height="32"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="push" title="Continue" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="dOr-TN-HvE">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                            <string key="keyEquivalent" base64-UTF8="YES">
+DQ
+</string>
+                        </buttonCell>
+                        <connections>
+                            <action selector="dimissModal:" target="Voe-Tx-rLC" id="cqL-Ba-uuR"/>
+                        </connections>
+                    </button>
+                    <button verticalHuggingPriority="750" id="KUn-Ed-CKb">
+                        <rect key="frame" x="298" y="13" width="90" height="32"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="CCL-f6-Fl1">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                            <string key="keyEquivalent" base64-UTF8="YES">
+Gw
+</string>
+                        </buttonCell>
+                        <connections>
+                            <action selector="dimissModal:" target="Voe-Tx-rLC" id="egF-uj-RfF"/>
+                        </connections>
+                    </button>
+                </subviews>
+            </view>
+            <point key="canvasLocation" x="-716" y="966.5"/>
+        </window>
+        <window title="Authentication Required" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="mcM-YD-UN9">
+            <windowStyleMask key="styleMask" titled="YES"/>
+            <rect key="contentRect" x="131" y="158" width="428" height="217"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
+            <view key="contentView" id="kmS-EA-B5p">
+                <rect key="frame" x="0.0" y="5" width="428" height="217"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="ThD-Fn-TeP">
+                        <rect key="frame" x="18" y="190" width="79" height="17"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="URL:" id="Lcy-ii-uLo">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="fBP-U8-T31">
+                        <rect key="frame" x="101" y="173" width="309" height="34"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" id="uaH-eN-Phr">
+                            <font key="font" metaFont="system"/>
+                            <string key="title">&lt;URL&gt;
+&lt;URL&gt;</string>
+                            <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="52z-zf-JFB">
+                        <rect key="frame" x="18" y="145" width="79" height="17"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Username:" id="a3l-9j-hXd">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField verticalHuggingPriority="750" id="ohd-U6-h7y">
+                        <rect key="frame" x="103" y="143" width="305" height="22"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="y3C-g4-ftz">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="NTA-z4-ARY">
+                        <rect key="frame" x="18" y="113" width="79" height="17"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Password:" id="z1m-H0-8Xh">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <secureTextField verticalHuggingPriority="750" id="Uio-D2-Dnt">
+                        <rect key="frame" x="103" y="111" width="305" height="22"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <secureTextFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" usesSingleLineMode="YES" id="LyY-DF-jhs">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                            <allowedInputSourceLocales>
+                                <string>NSAllRomanInputSourcesLocaleIdentifier</string>
+                            </allowedInputSourceLocales>
+                        </secureTextFieldCell>
+                    </secureTextField>
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="GxU-Nd-4Zh">
+                        <rect key="frame" x="101" y="61" width="309" height="42"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" id="Q8S-4w-Dwm">
+                            <font key="font" metaFont="smallSystem"/>
+                            <string key="title">If authenticating with GitHub and two-factor authentication is enabled on your account, be sure to use a personal access token instead of your password.</string>
+                            <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <button verticalHuggingPriority="750" tag="1" id="ps9-6a-vUW">
+                        <rect key="frame" x="318" y="13" width="96" height="32"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="push" title="Continue" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="3tB-eD-9dS">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                            <string key="keyEquivalent" base64-UTF8="YES">
+DQ
+</string>
+                        </buttonCell>
+                        <connections>
+                            <action selector="dimissModal:" target="Voe-Tx-rLC" id="iXQ-nd-NFS"/>
+                        </connections>
+                    </button>
+                    <button verticalHuggingPriority="750" id="r7V-iS-tJ3">
+                        <rect key="frame" x="235" y="13" width="83" height="32"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="C2F-M3-Mzn">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                            <string key="keyEquivalent" base64-UTF8="YES">
+Gw
+</string>
+                        </buttonCell>
+                        <connections>
+                            <action selector="dimissModal:" target="Voe-Tx-rLC" id="rtP-Y5-fRe"/>
+                        </connections>
+                    </button>
+                </subviews>
+            </view>
+            <point key="canvasLocation" x="-709" y="619.5"/>
+        </window>
+        <window title="About GitUp" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="about" animationBehavior="default" id="sHg-NM-pfN" userLabel="About" customClass="NSPanel">
+            <windowStyleMask key="styleMask" titled="YES" closable="YES"/>
+            <rect key="contentRect" x="612" y="242" width="276" height="363"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
+            <view key="contentView" id="3kP-0M-wu8">
+                <rect key="frame" x="0.0" y="6" width="276" height="363"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" id="AhE-7e-PYf">
+                        <rect key="frame" x="74" y="204" width="128" height="128"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="NSApplicationIcon" id="T7r-iI-qVo"/>
+                    </imageView>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="IyS-21-Jxl">
+                        <rect key="frame" x="86" y="166" width="104" height="17"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="center" title="GitUp" id="T8z-Ql-Nrv">
+                            <font key="font" metaFont="systemBold"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="HZC-36-Grr">
+                        <rect key="frame" x="76" y="141" width="124" height="17"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="center" title="&lt;VERSION&gt;" id="yn6-7n-hPc">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" setsMaxLayoutWidthAtFirstLayout="YES" id="d1d-Xw-Yrr">
+                        <rect key="frame" x="18" y="83" width="240" height="28"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="center" id="J3Y-wR-GFR">
+                            <font key="font" metaFont="smallSystem"/>
+                            <string key="title">Concept &amp; code by Pierre-Olivier Latour
+UI design by Wayne Fan</string>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" setsMaxLayoutWidthAtFirstLayout="YES" id="c4g-uo-jg9">
+                        <rect key="frame" x="26" y="40" width="224" height="28"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="center" title="&lt;COPYRIGHT&gt;" id="LbE-vT-Rsk">
+                            <font key="font" metaFont="smallSystem"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" setsMaxLayoutWidthAtFirstLayout="YES" id="mcm-my-4sq">
+                        <rect key="frame" x="18" y="20" width="240" height="12"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="center" title="libgit2 is Copyright © the libgit2 contributors" id="tT8-4H-E7b">
+                            <font key="font" metaFont="miniSystem"/>
+                            <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                </subviews>
+            </view>
+            <point key="canvasLocation" x="114" y="441.5"/>
+        </window>
+        <window allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="mjY-As-hbN" userLabel="Welcome">
+            <rect key="contentRect" x="131" y="158" width="280" height="349"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1417"/>
+            <view key="contentView" id="36m-6r-JT2" customClass="WelcomeView">
+                <rect key="frame" x="0.0" y="7" width="280" height="349"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <button id="Fwx-IU-wXQ">
+                        <rect key="frame" x="9" y="327" width="12" height="15"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="icon_nav_closetip_dark" imagePosition="overlaps" alignment="center" alternateImage="icon_nav_closetip_dark_pressed" inset="2" id="9ia-bK-Ohr">
+                            <behavior key="behavior" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="closeWelcomeWindow:" target="Voe-Tx-rLC" id="xWF-ok-YMZ"/>
+                        </connections>
+                    </button>
+                    <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" id="Apd-kA-Fr2">
+                        <rect key="frame" x="76" y="180" width="128" height="128"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="NSApplicationIcon" id="hqR-yy-x5J"/>
+                    </imageView>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="jwH-EW-hhE">
+                        <rect key="frame" x="58" y="145" width="164" height="17"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="center" title="Welcome to GitUp" id="mWe-61-l7s">
+                            <font key="font" metaFont="systemBold"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <box verticalHuggingPriority="750" title="Box" boxType="separator" titlePosition="noTitle" id="zd1-ko-kkJ">
+                        <rect key="frame" x="0.0" y="121" width="280" height="5"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
+                        <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <font key="titleFont" metaFont="system"/>
+                    </box>
+                    <box autoresizesSubviews="NO" title="Box" boxType="custom" borderType="none" titlePosition="noTitle" id="Yk1-Lc-GjF">
+                        <rect key="frame" x="0.0" y="88" width="280" height="35"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <view key="contentView">
+                            <rect key="frame" x="0.0" y="0.0" width="280" height="35"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <subviews>
+                                <customView id="edN-Xy-LJd" customClass="GILinkButton">
+                                    <rect key="frame" x="50" y="7" width="180" height="20"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                    <userDefinedRuntimeAttributes>
+                                        <userDefinedRuntimeAttribute type="color" keyPath="linkColor">
+                                            <color key="value" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        </userDefinedRuntimeAttribute>
+                                        <userDefinedRuntimeAttribute type="color" keyPath="alternateLinkColor">
+                                            <color key="value" red="0.0" green="0.0" blue="0.0" alpha="0.5" colorSpace="calibratedRGB"/>
+                                        </userDefinedRuntimeAttribute>
+                                        <userDefinedRuntimeAttribute type="string" keyPath="link" value="Open a Git Repository…"/>
+                                    </userDefinedRuntimeAttributes>
+                                    <connections>
+                                        <action selector="openDocument:" target="-1" id="PnG-74-JXS"/>
+                                    </connections>
+                                </customView>
+                            </subviews>
+                        </view>
+                        <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
+                        <color key="fillColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </box>
+                    <box verticalHuggingPriority="750" title="Box" boxType="separator" titlePosition="noTitle" id="FXE-km-lcD">
+                        <rect key="frame" x="0.0" y="85" width="280" height="5"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
+                        <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <font key="titleFont" metaFont="system"/>
+                    </box>
+                    <box autoresizesSubviews="NO" title="Box" boxType="custom" borderType="none" titlePosition="noTitle" id="ll1-UT-nBS">
+                        <rect key="frame" x="0.0" y="52" width="280" height="35"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <view key="contentView">
+                            <rect key="frame" x="0.0" y="0.0" width="280" height="35"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <subviews>
+                                <popUpButton id="rck-lm-gsz">
+                                    <rect key="frame" x="65" y="7" width="150" height="21"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                    <popUpButtonCell key="cell" type="bevel" title="Recently Opened…" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" pullsDown="YES" autoenablesItems="NO" altersStateOfSelectedItem="NO" selectedItem="BnD-OX-t50" id="TkZ-yA-jfp">
+                                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                        <font key="font" metaFont="menu"/>
+                                        <menu key="menu" autoenablesItems="NO" id="SuZ-b2-YNW">
+                                            <items>
+                                                <menuItem title="Recently Opened…" state="on" hidden="YES" id="BnD-OX-t50"/>
+                                            </items>
+                                        </menu>
+                                    </popUpButtonCell>
+                                </popUpButton>
+                            </subviews>
+                        </view>
+                        <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
+                        <color key="fillColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </box>
+                    <box verticalHuggingPriority="750" title="Box" boxType="separator" titlePosition="noTitle" id="3Ya-QW-NlZ">
+                        <rect key="frame" x="0.0" y="49" width="280" height="5"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
+                        <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <font key="titleFont" metaFont="system"/>
+                    </box>
+                    <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" id="TgX-Ty-AUa">
+                        <rect key="frame" x="45" y="20" width="12" height="12"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="icon_twitter" id="4p0-VD-kVJ"/>
+                    </imageView>
+                    <customView id="5ht-7L-7AO" customClass="GILinkButton">
+                        <rect key="frame" x="60" y="13" width="75" height="20"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="color" keyPath="linkColor">
+                                <color key="value" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="color" keyPath="alternateLinkColor">
+                                <color key="value" red="0.0" green="0.0" blue="0.0" alpha="0.5" colorSpace="calibratedRGB"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="string" keyPath="link" value="@gitupapp"/>
+                        </userDefinedRuntimeAttributes>
+                        <connections>
+                            <action selector="openTwitter:" target="Voe-Tx-rLC" id="CcB-Tp-tMx"/>
+                        </connections>
+                    </customView>
+                    <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" id="3gN-gU-6Rk">
+                        <rect key="frame" x="154" y="20" width="12" height="12"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="icon_forum" id="3Om-2j-ETN"/>
+                    </imageView>
+                    <customView id="ozw-os-Nc4" customClass="GILinkButton">
+                        <rect key="frame" x="169" y="13" width="75" height="20"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="color" keyPath="linkColor">
+                                <color key="value" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="color" keyPath="alternateLinkColor">
+                                <color key="value" red="0.0" green="0.0" blue="0.0" alpha="0.5" colorSpace="calibratedRGB"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="string" keyPath="link" value="Forums"/>
+                        </userDefinedRuntimeAttributes>
+                        <connections>
+                            <action selector="openForums:" target="Voe-Tx-rLC" id="fjQ-4x-1Gd"/>
+                        </connections>
+                    </customView>
+                </subviews>
+            </view>
+            <point key="canvasLocation" x="-216" y="699.5"/>
+        </window>
+        <userDefaultsController representsSharedInstance="YES" id="AR1-cq-KNa"/>
+    </objects>
+    <resources>
+        <image name="NSApplicationIcon" width="128" height="128"/>
+        <image name="icon_advanced" width="32" height="32"/>
+        <image name="icon_forum" width="12" height="12"/>
+        <image name="icon_general" width="32" height="32"/>
+        <image name="icon_nav_closetip_dark" width="12" height="12"/>
+        <image name="icon_nav_closetip_dark_pressed" width="12" height="12"/>
+        <image name="icon_twitter" width="12" height="12"/>
+    </resources>
+</document>
