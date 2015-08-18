@@ -3,6 +3,7 @@ set -ex
 
 PRODUCT_NAME="GitUp"
 APPCAST_NAME="appcast.xml"
+XCODE_SCHEME="Application"
 XCODE_SYMROOT="/tmp/$PRODUCT_NAME"
 
 ##### Count LOC
@@ -12,12 +13,12 @@ $CLOC_PATH --by-file --xml --out=cloc.xml "Application" "Components" "Core" "Ext
 ##### Analyze
 
 rm -rf "$XCODE_SYMROOT"
-xcodebuild analyze -scheme "Bot" "SYMROOT=$XCODE_SYMROOT"
+xcodebuild analyze -scheme "$XCODE_SCHEME" "SYMROOT=$XCODE_SYMROOT"
 
 ##### Run unit tests
 
 rm -rf "$XCODE_SYMROOT"
-xcodebuild test -scheme "Bot" "SYMROOT=$XCODE_SYMROOT"
+xcodebuild test -scheme "$XCODE_SCHEME" "SYMROOT=$XCODE_SYMROOT"
 
 ##### Tag build
 
@@ -38,7 +39,7 @@ defaults write "$INFO_PLIST_PATH" "GitSHA1" "$GIT_SHA1"
 
 ##### Archive and export app
 
-xcodebuild archive -scheme "Bot" -archivePath "build/$PRODUCT_NAME.xcarchive"  # SYMROOT is ignored?
+xcodebuild archive -scheme "$XCODE_SCHEME" -archivePath "build/$PRODUCT_NAME.xcarchive"  # SYMROOT is ignored?
 xcodebuild -exportArchive -archivePath "build/$PRODUCT_NAME.xcarchive" -exportPath "build/$PRODUCT_NAME"  # SYMROOT is ignored?
 ditto -c -k --keepParent "build/$PRODUCT_NAME.xcarchive" "build/$PRODUCT_NAME.xcarchive.zip"
 
