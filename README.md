@@ -1,18 +1,36 @@
-[![Build Status](https://travis-ci.org/git-up/GitUp.svg)](https://travis-ci.org/git-up/GitUp)
+GitUp
+=====
+
+**Work quickly, safely, and without headaches. The Git interface you've been missing all your life has finally arrived.**
+
+<p align="center">
+<img src="http://i.imgur.com/t6iC9TC.png">
+</p>
+
+Git recently celebrated its 10 years anniversary, but most engineers are still confused by its intricacy (3 of the [top 5 questions of all time](http://stackoverflow.com/questions?sort=votes) on Stack Overflow are Git related). Since Git turns even simple actions into mystifying commands (“git add” to stage versus “git reset HEAD” to unstage anyone?), it’s no surprise users waste time, get frustrated, distract the rest of their team for help, or worse, screw up their repo!
+
+GitUp is a bet to invent a new Git interaction model that lets engineers work quickly, safely, and without headaches. It's unlike any other Git client out there from the way it’s built (it interacts directly with the Git database on disk), to the way it works (you manipulate the repository graph instead of manipulating commits).
+
+With GitUp, you get a truly efficient Git client for Mac:
+- A live and interactive repo graph (edit, reorder, fixup, merge commits…),
+- Unlimited undo / redo of almost all operations (even rebases and merges),
+- Time Machine like snapshots for 1-click rollbacks to previous repo states,
+- Features that don’t even exist natively in Git like a visual commit splitter or a unified reflog browser,
+- Instant search across the entire repo including diff contents, 
+- A ridiculously fast UI, often faster than the command line.
+
+*GitUp was created by [@swisspol](https://github.com/swisspol) in late 2014. After several months of work, it was made available in pre-release early 2015 and reached the [top of Hacker News](https://news.ycombinator.com/item?id=9653978) along with being [featured by Product Hunt](http://www.producthunt.com/tech/gitup-1) and [Daring Fireball](http://daringfireball.net/linked/2015/06/04/gitup). 30,000 lines of code later, GitUp reached 1.0 mid-August 2015 and was released open source as a gift to the developer community.*
 
 Getting Started
 ===============
 
-**Learn about GitUp and download the latest stable version for Mac OS X 10.8+ from http://gitup.co.**
+**Learn all about GitUp and download the latest stable release for Mac OS X 10.8+ from http://gitup.co.**
 
 Read the [docs](http://forums.gitup.co/c/docs) and visit the [community forums](http://forums.gitup.co/) for support & feedback.
 
 Releases notes are available at https://github.com/git-up/GitUp/releases. Builds tagged a `v` e.g. `v1.2.3` are released on the "Stable" channel while builds tagged with a `b` e.g. `b1234` are only released on the "Continuous" channel. You can change the update channel used by GitUp in the app preferences.
 
-Checking Out and Building GitUp
-===============================
-
-Simply run these commands in Terminal:
+To build GitUp yourself, simply run these commands in Terminal:
 
 1. `git clone https://github.com/git-up/GitUp.git`
 2. `cd GitUp`
@@ -23,9 +41,9 @@ Then open the `GitUp.xcodeproj` Xcode project.
 Credits
 =======
 
-- [@swisspol](https://github.com/swisspol) for concept and code
-- [@wwayneee](https://github.com/wwayneee) for help with user interface
-- [@jayeb](https://github.com/jayeb) for website
+- [@swisspol](https://github.com/swisspol): concept and code
+- [@wwayneee](https://github.com/wwayneee): UI design
+- [@jayeb](https://github.com/jayeb): website
 
 License
 =======
