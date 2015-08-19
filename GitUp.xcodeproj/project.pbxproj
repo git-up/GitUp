@@ -1023,7 +1023,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [ \"$CONFIGURATION\" == \"Debug\" ]; then\n  echo \"Skipping Crashlytics in Debug configuration\"\nelif [ \"$RUN_CLANG_STATIC_ANALYZER\" != \"\" ]; then\n  echo \"Skipping Crashlytics for Clang Static Analyzer\"\nelse\n  ./Crashlytics.framework/run 946dcb56f0db1be8f0c52df6e7d392202a2cc9b2 f28ac00033414b7f28707ab10fc43b008b96dd8cf081d4fb462294c811397108\nfi\n";
+			shellScript = "if [ \"$RUN_CLANG_STATIC_ANALYZER\" != \"\" ]; then\n  echo \"Skipping Crashlytics for Clang Static Analyzer\"\nelif [ \"$CONFIGURATION\" == \"Distribution\" ]; then\n  ./Crashlytics.framework/run 946dcb56f0db1be8f0c52df6e7d392202a2cc9b2 f28ac00033414b7f28707ab10fc43b008b96dd8cf081d4fb462294c811397108\nelse\n  echo \"Skipping Crashlytics in $CONFIGURATION configuration\"\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		E2A5BE711A815196008DD47F /* Validate Info.plist */ = {
