@@ -1,2 +1,3 @@
 language: objective-c
 script: ./travis-build.sh
+osx_image: xcode6.4
