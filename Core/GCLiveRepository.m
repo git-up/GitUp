@@ -221,7 +221,7 @@ static void _StreamCallback(ConstFSEventStreamRef streamRef, void* clientCallBac
     _state = [super state];
     
     CFAbsoluteTime time = CFAbsoluteTimeGetCurrent();
-    _history = [self loadHistoryUsingSorting:[[self class] historySorting] error:error];
+    _history = [self loadHistoryUsingSorting:[self.class historySorting] error:error];
     if (_history == nil) {
       return nil;
     }
