@@ -184,8 +184,7 @@
     return (_tableView.selectedRow >= 0);
   }
   
-  XLOG_DEBUG_UNREACHABLE();
-  return YES;
+  return NO;
 }
 
 - (IBAction)copy:(id)sender {

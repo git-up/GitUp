@@ -190,12 +190,12 @@ const char* GIDiffViewMissingNewlinePlaceholder = "🚫\n";
 }
 
 - (BOOL)validateUserInterfaceItem:(id<NSValidatedUserInterfaceItem>)item {
+  
   if (item.action == @selector(copy:)) {
     return [self hasSelection];
   }
   
-  XLOG_DEBUG_UNREACHABLE();
-  return YES;
+  return NO;
 }
 
 - (void)copy:(id)sender {

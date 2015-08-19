@@ -181,12 +181,12 @@ static const void* _associatedObjectDataKey = &_associatedObjectDataKey;
 #pragma mark - Actions
 
 - (BOOL)validateUserInterfaceItem:(id<NSValidatedUserInterfaceItem>)item {
+  
   if (item.action == @selector(copy:)) {
     return _selectedNode ? YES : NO;
   }
   
-  XLOG_DEBUG_UNREACHABLE();
-  return YES;
+  return NO;
 }
 
 - (void)copy:(id)sender {

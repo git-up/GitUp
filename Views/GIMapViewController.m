@@ -724,7 +724,7 @@ static NSColor* _patternColor = nil;
     return !self.repository.history.HEADDetached && ![self.repository.history.HEADCommit isEqualToCommit:commit];
   }
   
-  return YES;
+  return [self respondsToSelector:item.action];
 }
 
 #pragma mark - Public Actions
