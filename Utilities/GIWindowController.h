@@ -30,6 +30,7 @@ typedef NS_ENUM(NSUInteger, GIOverlayStyle) {
 
 @interface GIWindow : NSWindow
 #pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wproperty-attribute-mismatch"
 #pragma clang diagnostic ignored "-Wincompatible-property-type"
 @property(nonatomic, readonly) GIWindowController* windowController;  // Redeclare superclass property
 #pragma clang diagnostic pop
