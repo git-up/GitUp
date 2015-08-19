@@ -124,6 +124,9 @@
   [self assertContentsOfFileAtPath:@"hello_world.txt" equalsString:@"1\n"];
 }
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wformat-nonliteral"
+
 - (void)testBare_ResolveConflicts {
   // Make commits
   GCCommit* commit1 = [self makeCommitWithUpdatedFileAtPath:@"hello_world.txt" string:@"1\n" message:@"1"];
@@ -143,11 +146,8 @@
   
   // Merge topic branch (don't resolve conflict)
   XCTAssertNil([self.repository mergeCommit:commit2 intoCommit:commit1 withAncestorCommit:self.initialCommit message:@"MERGE" conflictHandler:^GCCommit*(GCIndex* index, GCCommit* ourCommit, GCCommit* theirCommit, NSArray* parentCommits, NSString* message, NSError** outError) {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wformat-nonliteral"
     BOOL success = [self.repository checkoutIndex:index withOptions:0 error:NULL];
     XCTAssertEqual(success, YES);  // Why is XCTAssertTrue() not working here?
-#pragma clang diagnostic pop
     return [self.repository createCommitFromHEADAndOtherParent:parentCommits[1] withMessage:message error:NULL];
   } error:NULL]);
   
@@ -156,8 +156,6 @@
   
   // Merge topic branch (don't resolve conflict)
   XCTAssertNotNil([self.repository mergeCommit:commit2 intoCommit:commit1 withAncestorCommit:self.initialCommit message:@"MERGE" conflictHandler:^GCCommit*(GCIndex* index, GCCommit* ourCommit, GCCommit* theirCommit, NSArray* parentCommits, NSString* message, NSError** outError) {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wformat-nonliteral"
     XCTAssertEqual(parentCommits.count, 2);
     XCTAssertEqualObjects(parentCommits[0], commit1);
     XCTAssertEqualObjects(parentCommits[1], commit2);
@@ -165,10 +163,11 @@
       && [self.repository checkoutIndex:index withOptions:0 error:NULL]
       && [self.repository addAllFilesToIndex:NULL];
     XCTAssertEqual(success, YES);  // Why is XCTAssertTrue() not working here?
-#pragma clang diagnostic pop
     return [self.repository createCommitFromHEADAndOtherParent:parentCommits[1] withMessage:message error:NULL];
   } error:NULL]);
 }
+
+#pragma clang diagnostic pop
 
 @end
 
