@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		51DB5BBB1B8456E900153587 /* gitup-completion.sh in Copy Tool */ = {isa = PBXBuildFile; fileRef = 51DB5BBA1B84568F00153587 /* gitup-completion.sh */; };
 		E200A3B91B02DDA100C4E39D /* GCPrivate.m in Sources */ = {isa = PBXBuildFile; fileRef = E200A3B81B02DDA100C4E39D /* GCPrivate.m */; };
 		E200A3BA1B02DDA100C4E39D /* GCPrivate.m in Sources */ = {isa = PBXBuildFile; fileRef = E200A3B81B02DDA100C4E39D /* GCPrivate.m */; };
 		E20EB08B19FC75CA0031A075 /* GCRepository+Reset.m in Sources */ = {isa = PBXBuildFile; fileRef = E20EB08A19FC75CA0031A075 /* GCRepository+Reset.m */; };
@@ -224,6 +225,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 12;
 			files = (
+				51DB5BBB1B8456E900153587 /* gitup-completion.sh in Copy Tool */,
 				E21DCAF31B253919006424E8 /* gitup in Copy Tool */,
 				E21DCAF51B254117006424E8 /* install.sh in Copy Tool */,
 			);
@@ -244,6 +246,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		51DB5BBA1B84568F00153587 /* gitup-completion.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = "gitup-completion.sh"; sourceTree = "<group>"; };
 		E200A3B81B02DDA100C4E39D /* GCPrivate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCPrivate.m; sourceTree = "<group>"; };
 		E20EB08919FC75CA0031A075 /* GCRepository+Reset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GCRepository+Reset.h"; sourceTree = "<group>"; };
 		E20EB08A19FC75CA0031A075 /* GCRepository+Reset.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GCRepository+Reset.m"; sourceTree = "<group>"; };
@@ -580,6 +583,7 @@
 		E21DCAE91B253847006424E8 /* Tool */ = {
 			isa = PBXGroup;
 			children = (
+				51DB5BBA1B84568F00153587 /* gitup-completion.sh */,
 				E21DCAF41B254112006424E8 /* install.sh */,
 				E21DCAEA1B253847006424E8 /* main.m */,
 			);
