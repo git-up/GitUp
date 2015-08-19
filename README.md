@@ -46,7 +46,7 @@ GitUp Architecture
 GitUp is built as 3 cleanly separated layers communicating only through the use of public APIs:
 
 **Foundation Layer (depends on Foundation only)**
-- `Core/`: wrapper around the minimally required functionality of [libgit2](https://github.com/libgit2/libgit2), on top of which is then implemented all the Git functionality required by GitUp (note that GitUp uses a [slightly customized fork](https://github.com/git-up/libgit2/tree/gitup) of libgit2)
+- `Core/`: wrapper around the required minimal functionality of [libgit2](https://github.com/libgit2/libgit2), on top of which is then implemented all the Git functionality required by GitUp (note that GitUp uses a [slightly customized fork](https://github.com/git-up/libgit2/tree/gitup) of libgit2)
 - `Extensions/`: categories on the `Core` classes to add convenience features implemented only using the public APIs
 
 **UI Layer (depends on AppKit)**
@@ -84,6 +84,22 @@ GIAdvancedCommitViewController* vc = [[GIAdvancedCommitViewController alloc] ini
 [<WINDOW>.contentView addSubview:vc.view];
 ```
 
+Contributing
+============
+
+[Pull requests](https://github.com/git-up/GitUp/pulls) are welcome but be aware that GitUp is used for production work by many thousands of developers around the world, so the bar is very high. The last thing we want is letting the code quality slip or introducing a regression.
+
+The following is a list of absolute requirements for PRs (not following them would result in immediate rejection):
+- The coding style of GitUp MUST be followed
+- Additions to `Core/` MUST have associated unit tests
+- Commit messages MUST have:
+ - A capitalized clear and concise title e.g. "Changed app bundle ID to com.example.gitup" not "updated bundle id"
+ - A detailed summary explaining the change unless it is trivial (no need to wrap at 80 characters but keep lines to a reasonnable length)
+- The pull request MUST contain as few commits as need MUST NOT contain fixup or revert commits (flatten 
+- The pull request MUST be rebased on latest `master` when sent
+
+**Be aware that GitUp is under [GPL v3 license](http://www.gnu.org/licenses/gpl-3.0.txt), so any contribution you make will be GPL'ed.**
+
 Credits
 =======
 
@@ -99,8 +115,3 @@ License
 GitUp is copyright 2015 Pierre-Olivier Latour and available under [GPL v3 license](http://www.gnu.org/licenses/gpl-3.0.txt). See the [LICENSE](LICENSE) file in the project for more information.
 
 **IMPORTANT:** GitUp includes some other open-source projects and such projects remain under their own license.
-
-Contributors Welcome - Maintainers Needed
-=========================================
-
-Congratulations, you made it this far! GitUp is a very modern and quite large open source app used by thousands of developers around the world. May we interest you in becoming a contributor (send a PR) or, even better, a maintainer (reach out to help@gitup.co)?
