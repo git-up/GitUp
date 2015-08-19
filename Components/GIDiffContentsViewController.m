@@ -185,6 +185,13 @@ static NSColor* _deletedBackgroundColor = nil;
 static NSColor* _renamedBackgroundColor = nil;
 static NSColor* _untrackedBackgroundColor = nil;
 
+static NSImage* _conflictImage = nil;
+static NSImage* _addedImage = nil;
+static NSImage* _modifiedImage = nil;
+static NSImage* _deletedImage = nil;
+static NSImage* _renamedImage = nil;
+static NSImage* _untrackedImage = nil;
+
 @implementation GIDiffContentsViewController {
   NSMutableArray* _data;
   CGFloat _headerViewHeight;
@@ -209,6 +216,13 @@ static NSColor* _DimColor(NSColor* color) {
   _deletedBackgroundColor = _DimColor([NSColor colorWithDeviceRed:(241.0 / 255.0) green:(115.0 / 255.0) blue:(116.0 / 255.0) alpha:1.0]);
   _renamedBackgroundColor = _DimColor([NSColor colorWithDeviceRed:(133.0 / 255.0) green:(96.0 / 255.0) blue:(168.0 / 255.0) alpha:1.0]);
   _untrackedBackgroundColor = [NSColor colorWithDeviceRed:0.75 green:0.75 blue:0.75 alpha:1.0];
+  
+  _conflictImage = [[NSBundle bundleForClass:[GIDiffContentsViewController class]] imageForResource:@"icon_file_conflict"];
+  _addedImage = [[NSBundle bundleForClass:[GIDiffContentsViewController class]] imageForResource:@"icon_file_a"];
+  _modifiedImage = [[NSBundle bundleForClass:[GIDiffContentsViewController class]] imageForResource:@"icon_file_m"];
+  _deletedImage = [[NSBundle bundleForClass:[GIDiffContentsViewController class]] imageForResource:@"icon_file_d"];
+  _renamedImage = [[NSBundle bundleForClass:[GIDiffContentsViewController class]] imageForResource:@"icon_file_r"];
+  _untrackedImage = [[NSBundle bundleForClass:[GIDiffContentsViewController class]] imageForResource:@"icon_file_u"];
 }
 
 - (instancetype)initWithRepository:(GCLiveRepository*)repository {
@@ -533,30 +547,30 @@ static inline NSString* _StringFromFileMode(GCFileMode mode) {
   NSString* label = data.delta.canonicalPath;
   if (data.conflict) {
     view.backgroundColor = _conflictBackgroundColor;
-    view.imageView.image = [NSImage imageNamed:@"icon_file_conflict"];
+    view.imageView.image = _conflictImage;
   } else {
     switch (delta.change) {
       
       case kGCFileDiffChange_Added:
         view.backgroundColor = _addedBackgroundColor;
-        view.imageView.image = [NSImage imageNamed:@"icon_file_a"];
+        view.imageView.image = _addedImage;
         break;
       
       case kGCFileDiffChange_Deleted:
         view.backgroundColor = _deletedBackgroundColor;
-        view.imageView.image = [NSImage imageNamed:@"icon_file_d"];
+        view.imageView.image = _deletedImage;
         break;
       
       case kGCFileDiffChange_Modified:
         view.backgroundColor = _modifiedBackgroundColor;
-        view.imageView.image = [NSImage imageNamed:@"icon_file_m"];
+        view.imageView.image = _modifiedImage;
         break;
       
       case kGCFileDiffChange_Renamed: {
         NSString* oldPath = delta.oldFile.path;
         NSString* newPath = delta.newFile.path;
         view.backgroundColor = _renamedBackgroundColor;
-        view.imageView.image = [NSImage imageNamed:@"icon_file_r"];
+        view.imageView.image = _renamedImage;
         label = [NSString stringWithFormat:@"%@ ▶ %@", oldPath, newPath];  // TODO: Handle truncation
         GIComputeModifiedRanges(oldPath, &oldPathRange, newPath, &newPathRange);
         newPathRange.location += oldPath.length + 3;
@@ -566,10 +580,10 @@ static inline NSString* _StringFromFileMode(GCFileMode mode) {
       case kGCFileDiffChange_Untracked:
         if (_showsUntrackedAsAdded) {
           view.backgroundColor = _addedBackgroundColor;
-          view.imageView.image = [NSImage imageNamed:@"icon_file_a"];
+          view.imageView.image = _addedImage;
         } else {
           view.backgroundColor = _untrackedBackgroundColor;
-          view.imageView.image = [NSImage imageNamed:@"icon_file_u"];
+          view.imageView.image = _untrackedImage;
         }
         break;
       

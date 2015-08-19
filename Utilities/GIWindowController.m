@@ -195,7 +195,7 @@ static void _TimerCallBack(CFRunLoopTimerRef timer, void* info) {
 
 - (instancetype)initWithWindow:(NSWindow*)window {
   if ((self = [super initWithWindow:window])) {
-    [[NSBundle mainBundle] loadNibNamed:@"GIWindowController" owner:self topLevelObjects:NULL];
+    [[NSBundle bundleForClass:[GIWindowController class]] loadNibNamed:@"GIWindowController" owner:self topLevelObjects:NULL];
     XLOG_DEBUG_CHECK(_overlayView);
     
     _area = [[NSTrackingArea alloc] initWithRect:NSZeroRect options:(NSTrackingInVisibleRect | NSTrackingActiveAlways | NSTrackingMouseEnteredAndExited) owner:self userInfo:nil];

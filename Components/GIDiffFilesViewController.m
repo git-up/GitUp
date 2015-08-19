@@ -124,8 +124,24 @@
 
 @end
 
+static NSImage* _conflictImage = nil;
+static NSImage* _addedImage = nil;
+static NSImage* _modifiedImage = nil;
+static NSImage* _deletedImage = nil;
+static NSImage* _renamedImage = nil;
+static NSImage* _untrackedImage = nil;
+
 @implementation GIDiffFilesViewController {
   NSMutableArray* _data;
+}
+
++ (void)initialize {
+  _conflictImage = [[NSBundle bundleForClass:[GIDiffFilesViewController class]] imageForResource:@"icon_file_conflict"];
+  _addedImage = [[NSBundle bundleForClass:[GIDiffFilesViewController class]] imageForResource:@"icon_file_a"];
+  _modifiedImage = [[NSBundle bundleForClass:[GIDiffFilesViewController class]] imageForResource:@"icon_file_m"];
+  _deletedImage = [[NSBundle bundleForClass:[GIDiffFilesViewController class]] imageForResource:@"icon_file_d"];
+  _renamedImage = [[NSBundle bundleForClass:[GIDiffFilesViewController class]] imageForResource:@"icon_file_r"];
+  _untrackedImage = [[NSBundle bundleForClass:[GIDiffFilesViewController class]] imageForResource:@"icon_file_u"];
 }
 
 - (void)loadView {
@@ -284,31 +300,31 @@
   GIFileCellView* view = [_tableView makeViewWithIdentifier:tableColumn.identifier owner:self];
   view.textField.stringValue = data.delta.canonicalPath;
   if (data.conflict) {
-    view.imageView.image = [NSImage imageNamed:@"icon_file_conflict"];
+    view.imageView.image = _conflictImage;
   } else {
     switch (data.delta.change) {
       
       case kGCFileDiffChange_Added:
-        view.imageView.image = [NSImage imageNamed:@"icon_file_a"];
+        view.imageView.image = _addedImage;
         break;
       
       case kGCFileDiffChange_Deleted:
-        view.imageView.image = [NSImage imageNamed:@"icon_file_d"];
+        view.imageView.image = _deletedImage;
         break;
       
       case kGCFileDiffChange_Modified:
-        view.imageView.image = [NSImage imageNamed:@"icon_file_m"];
+        view.imageView.image = _modifiedImage;
         break;
       
       case kGCFileDiffChange_Renamed:
-        view.imageView.image = [NSImage imageNamed:@"icon_file_r"];
+        view.imageView.image = _renamedImage;
         break;
       
       case kGCFileDiffChange_Untracked:
         if (_showsUntrackedAsAdded) {
-          view.imageView.image = [NSImage imageNamed:@"icon_file_a"];
+          view.imageView.image = _addedImage;
         } else {
-          view.imageView.image = [NSImage imageNamed:@"icon_file_u"];
+          view.imageView.image = _untrackedImage;
         }
         break;
       

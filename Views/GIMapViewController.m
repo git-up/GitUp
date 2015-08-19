@@ -72,7 +72,7 @@ static NSColor* _patternColor = nil;
 }
 
 + (void)initialize {
-  _patternColor = [NSColor colorWithPatternImage:[NSImage imageNamed:@"background_pattern"]];
+  _patternColor = [NSColor colorWithPatternImage:[[NSBundle bundleForClass:[GIMapViewController class]] imageForResource:@"background_pattern"]];
 }
 
 - (instancetype)initWithRepository:(GCLiveRepository*)repository {

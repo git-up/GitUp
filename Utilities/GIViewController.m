@@ -91,7 +91,7 @@
 @dynamic view;
 
 - (instancetype)initWithRepository:(GCLiveRepository*)repository {
-  if ((self = [super initWithNibName:NSStringFromClass([self class]) bundle:[NSBundle mainBundle]])) {
+  if ((self = [super initWithNibName:NSStringFromClass(self.class) bundle:[NSBundle bundleForClass:self.class]])) {
     _repository = repository;
     _textViewUndoManager = [[NSUndoManager alloc] init];
     

@@ -67,9 +67,9 @@ static NSColor* _separatorColor = nil;
 
 - (void)setType:(GIAlertType)type {
   switch (type) {
-    case kGIAlertType_Note: self.icon = [NSImage imageNamed:@"icon_alert_note"]; break;
-    case kGIAlertType_Caution: self.icon = [NSImage imageNamed:@"icon_alert_caution"]; break;
-    case kGIAlertType_Stop: self.icon = [NSImage imageNamed:@"icon_alert_stop"]; break;
+    case kGIAlertType_Note: self.icon = [[NSBundle bundleForClass:[GILayoutManager class]] imageForResource:@"icon_alert_note"]; break;  // TODO: Image is not cached
+    case kGIAlertType_Caution: self.icon = [[NSBundle bundleForClass:[GILayoutManager class]] imageForResource:@"icon_alert_caution"]; break;  // TODO: Image is not cached
+    case kGIAlertType_Stop: self.icon = [[NSBundle bundleForClass:[GILayoutManager class]] imageForResource:@"icon_alert_stop"]; break;  // TODO: Image is not cached
   }
 }
 
