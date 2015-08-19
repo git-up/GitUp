@@ -36,7 +36,7 @@
   
   // Save stash
   GCStash* stash1 = [self.repository saveStashWithMessage:@"Just testing" keepIndex:NO includeUntracked:NO error:NULL];
-  XCTAssertTrue([stash1.message containsString:@"Just testing"]);
+  XCTAssertTrue([stash1.message rangeOfString:@"Just testing"].location != NSNotFound);
   XCTAssertEqualObjects(stash1.baseCommit, commit);
   XCTAssertNotNil(stash1.indexCommit);
   XCTAssertNil(stash1.untrackedCommit);

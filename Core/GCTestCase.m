@@ -31,8 +31,8 @@ static const void* _associatedObjectKey = &_associatedObjectKey;
 - (void)setUp {
   [super setUp];
   
-  // Figure out if running as Xcode Server bot
-  _botMode = [NSUserName() isEqualToString:@"_xcsbuildd"];
+  // Figure out if running as Xcode Server bot or under Travis CI
+  _botMode = [NSUserName() isEqualToString:@"_xcsbuildd"] || getenv("TRAVIS");
 }
 
 - (GCRepository*)createLocalRepositoryAtPath:(NSString*)path bare:(BOOL)bare {
@@ -110,7 +110,7 @@ static const void* _associatedObjectKey = &_associatedObjectKey;
   va_start(arguments, command);
   NSString* result = [self _runGitCLTWithRepository:repository command:command arguments:arguments];
   va_end(arguments);
-  XCTAssertTrue([result containsString:string]);
+  XCTAssertTrue([result rangeOfString:string].location != NSNotFound);  // -containsString: doesn't exist pre-10.10
 }
 
 - (void)assertGitCLTOutputEndsWithString:(NSString*)string withRepository:(GCRepository*)repository command:(NSString*)command, ... {
