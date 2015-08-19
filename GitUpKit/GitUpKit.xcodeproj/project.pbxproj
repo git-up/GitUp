@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		743BF1841B871C0200E1CA49 /* GCOrderedSet.h in Headers */ = {isa = PBXBuildFile; fileRef = 74EDB5D01B84D4C400F00E79 /* GCOrderedSet.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		749335CA1B9B7FF200225513 /* GCOrderedSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 74EDB5D11B84D4C400F00E79 /* GCOrderedSet.m */; };
+		749786941B85AAB10065BD55 /* GCOrderedSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 74EDB5D11B84D4C400F00E79 /* GCOrderedSet.m */; };
+		74EDB5D61B84E06500F00E79 /* GCOrderedSet-Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 74EDB5D51B84E06500F00E79 /* GCOrderedSet-Tests.m */; };
+		74EDB5D71B8517F500F00E79 /* GCOrderedSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 74EDB5D11B84D4C400F00E79 /* GCOrderedSet.m */; };
 		E200A3BA1B02DDA100C4E39D /* GCPrivate.m in Sources */ = {isa = PBXBuildFile; fileRef = E200A3B81B02DDA100C4E39D /* GCPrivate.m */; };
 		E20EB08C19FC75CA0031A075 /* GCRepository+Reset.m in Sources */ = {isa = PBXBuildFile; fileRef = E20EB08A19FC75CA0031A075 /* GCRepository+Reset.m */; };
 		E20EB09019FC76160031A075 /* GCRepository+Status.m in Sources */ = {isa = PBXBuildFile; fileRef = E20EB08E19FC76160031A075 /* GCRepository+Status.m */; };
@@ -411,6 +416,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		74EDB5D01B84D4C400F00E79 /* GCOrderedSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCOrderedSet.h; sourceTree = "<group>"; };
+		74EDB5D11B84D4C400F00E79 /* GCOrderedSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCOrderedSet.m; sourceTree = "<group>"; };
+		74EDB5D51B84E06500F00E79 /* GCOrderedSet-Tests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GCOrderedSet-Tests.m"; sourceTree = "<group>"; };
 		E200A3B81B02DDA100C4E39D /* GCPrivate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCPrivate.m; sourceTree = "<group>"; };
 		E20EB08919FC75CA0031A075 /* GCRepository+Reset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GCRepository+Reset.h"; sourceTree = "<group>"; };
 		E20EB08A19FC75CA0031A075 /* GCRepository+Reset.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GCRepository+Reset.m"; sourceTree = "<group>"; };
@@ -925,6 +933,9 @@
 				E244538F1A70CDA200E61DE7 /* GCMacros.h */,
 				E2146C8C1A57F3BC00F4550B /* GCObject.h */,
 				E2146C8D1A57F3BC00F4550B /* GCObject.m */,
+				74EDB5D01B84D4C400F00E79 /* GCOrderedSet.h */,
+				74EDB5D11B84D4C400F00E79 /* GCOrderedSet.m */,
+				74EDB5D51B84E06500F00E79 /* GCOrderedSet-Tests.m */,
 				E2C338DF19F85C8600063D95 /* GCPrivate.h */,
 				E200A3B81B02DDA100C4E39D /* GCPrivate.m */,
 				E2C338E019F85C8600063D95 /* GCReference.h */,
@@ -1125,6 +1136,7 @@
 				E267E2091B84DB4200BAB377 /* GIBranch.h in Headers */,
 				E267E20A1B84DB4200BAB377 /* GIConstants.h in Headers */,
 				E267E20B1B84DB4200BAB377 /* GIDiffView.h in Headers */,
+				743BF1841B871C0200E1CA49 /* GCOrderedSet.h in Headers */,
 				E267E20C1B84DB4200BAB377 /* GIFunctions.h in Headers */,
 				E267E20D1B84DB4200BAB377 /* GIGraph.h in Headers */,
 				E267E20E1B84DB4200BAB377 /* GIGraphView.h in Headers */,
@@ -1374,6 +1386,7 @@
 				E217536C1B91634C00BE234A /* GCHistory.m in Sources */,
 				E217536D1B91634C00BE234A /* GCIndex.m in Sources */,
 				E217536F1B91634C00BE234A /* GCObject.m in Sources */,
+				749335CA1B9B7FF200225513 /* GCOrderedSet.m in Sources */,
 				E21753701B91634C00BE234A /* GCPrivate.m in Sources */,
 				E21753711B91634C00BE234A /* GCReference.m in Sources */,
 				E21753721B91634C00BE234A /* GCReferenceTransform.m in Sources */,
@@ -1427,6 +1440,7 @@
 				E267E1D81B84D83100BAB377 /* GCIndex.m in Sources */,
 				E267E1D91B84D83100BAB377 /* GCLiveRepository.m in Sources */,
 				E267E1DA1B84D83100BAB377 /* GCObject.m in Sources */,
+				749786941B85AAB10065BD55 /* GCOrderedSet.m in Sources */,
 				E267E1DB1B84D83100BAB377 /* GCPrivate.m in Sources */,
 				E267E1DC1B84D83100BAB377 /* GCReference.m in Sources */,
 				E267E1DD1B84D83100BAB377 /* GCReferenceTransform.m in Sources */,
@@ -1518,6 +1532,8 @@
 				E24509031A9A50F3003E602D /* GCRepository+Config-Tests.m in Sources */,
 				E2B1BF361A85C5ED00A999DF /* GIFunctions-Tests.m in Sources */,
 				E299D0141A749C26005035F7 /* GCRepository+Mock.m in Sources */,
+				74EDB5D71B8517F500F00E79 /* GCOrderedSet.m in Sources */,
+				74EDB5D61B84E06500F00E79 /* GCOrderedSet-Tests.m in Sources */,
 				E27E43031A74A96000D04ED1 /* GIBranch.m in Sources */,
 				E27E43081A74A96000D04ED1 /* GINode.m in Sources */,
 				E299D0161A749D27005035F7 /* GCRepository+Mock-Tests.m in Sources */,
