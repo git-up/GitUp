@@ -40,6 +40,43 @@ To build GitUp yourself, simply run these commands in Terminal:
 
 Then open the `GitUp.xcodeproj` Xcode project.
 
+GitUp Architecture
+==================
+
+GitUp is built as 3 cleanly separated layers communicating only through the use of public APIs:
+
+**Foundation Layer (depends on Foundation only)**
+- `Core/`: wrapper around the minimally required functionality of [libgit2](https://github.com/libgit2/libgit2), on top of which is then implemented all the Git functionality required by GitUp
+- `Extensions/`: categories on the `Core` classes to add convenience features implemented only using the public APIs
+
+**UI Layer (depends on AppKit)**
+- `Interface/`: low-level view classes e.g. `GIGraphView` to render the GitUp Map view
+- `Utilities/`: interface utility classes e.g. the base view controller class `GIViewController`
+- `Components/`: reusable single-view view controllers e.g. `GIDiffContentsViewController` to render a diff
+- `Views/`: high-level reusable multi-views view controllers e.g. `GIAdvancedCommitViewController` to implement the entire GitUp Advanced Commit view
+
+**Application Layer**
+- `Application/`: essentially the "glue code" connecting all the above layers together into an actual app (and therefore not really clean code contrary to the rest of GitUp)
+
+**The Foundation and UI layer are for all intents and purposes an SDK, with which it should be quite easy to build other Git tools or even entire apps.**
+
+For instance, here's the pseudo-code to display a diff view between a commit and its parent:
+```objc
+GCRepository* repo = [[GCRepository alloc] initWithExistingLocalRepository:<PATH> error:NULL];
+GCCommit* c1 = [repo findCommitWithSHA1:<SHA1> error:NULL];
+GCCommit* c2 = [[repo lookupParentsForCommit:c1 error:NULL] firstObject];  // Follow main line
+GIDiffViewController* vc = [[GIDiffViewController alloc] initWithRepository:repo];
+[vc setCommit:c1 withParentCommit:c2];
+[<WINDOW>.contentView addSubview:vc.view];
+```
+
+And here's the pseudo-code to display a live-updating Advanced Commit view:
+```objc
+GCLiveRepository* repo = [[GCLiveRepository alloc] initWithExistingLocalRepository:<PATH> error:NULL];
+GIAdvancedCommitViewController* vc = [[GIAdvancedCommitViewController alloc] initWithRepository:repo];
+[<WINDOW>.contentView addSubview:vc.view];
+```
+
 Credits
 =======
 
@@ -54,7 +91,7 @@ License
 
 GitUp is copyright 2015 Pierre-Olivier Latour and available under [GPL v3 license](http://www.gnu.org/licenses/gpl-3.0.txt). See the [LICENSE](LICENSE) file in the project for more information.
 
-IMPORTANT: GitUp includes some other open-source projects and such projects remain under their own license.
+**IMPORTANT:** GitUp includes some other open-source projects and such projects remain under their own license.
 
 Contributors Welcome - Maintainers Needed
 =========================================
