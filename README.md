@@ -46,7 +46,7 @@ GitUp Architecture
 GitUp is built as 3 cleanly separated layers communicating only through the use of public APIs:
 
 **Foundation Layer (depends on Foundation only)**
-- `Core/`: wrapper around the minimally required functionality of [libgit2](https://github.com/libgit2/libgit2), on top of which is then implemented all the Git functionality required by GitUp
+- `Core/`: wrapper around the minimally required functionality of [libgit2](https://github.com/libgit2/libgit2), on top of which is then implemented all the Git functionality required by GitUp (note that GitUp uses a [slightly customized fork](https://github.com/git-up/libgit2/tree/gitup) of libgit2)
 - `Extensions/`: categories on the `Core` classes to add convenience features implemented only using the public APIs
 
 **UI Layer (depends on AppKit)**
@@ -58,11 +58,18 @@ GitUp is built as 3 cleanly separated layers communicating only through the use 
 **Application Layer**
 - `Application/`: essentially the "glue code" connecting all the above layers together into an actual app (and therefore not really clean code contrary to the rest of GitUp)
 
-**The Foundation and UI layer are for all intents and purposes an SDK, with which it should be quite easy to build other Git tools or even entire apps.**
+**The Foundation and UI layer are for all intents and purposes an SDK, with which it should be quite easy to build other Git tools or even entire apps:**
 
-For instance, here's the pseudo-code to display a diff view between a commit and its parent:
+Here's the pseudo-code to display a live-updating GitUp stash view:
 ```objc
-GCRepository* repo = [[GCRepository alloc] initWithExistingLocalRepository:<PATH> error:NULL];
+GCRepository* repo = [[GCLiveRepository alloc] initWithExistingLocalRepository:<PATH> error:NULL];
+GIDiffViewController* vc = [[GIStashListViewController alloc] initWithRepository:repo];
+[<WINDOW>.contentView addSubview:vc.view];
+```
+
+Here's the pseudo-code to display a diff view between a commit and its parent:
+```objc
+GCRepository* repo = [[GCLiveRepository alloc] initWithExistingLocalRepository:<PATH> error:NULL];
 GCCommit* c1 = [repo findCommitWithSHA1:<SHA1> error:NULL];
 GCCommit* c2 = [[repo lookupParentsForCommit:c1 error:NULL] firstObject];  // Follow main line
 GIDiffViewController* vc = [[GIDiffViewController alloc] initWithRepository:repo];
@@ -70,7 +77,7 @@ GIDiffViewController* vc = [[GIDiffViewController alloc] initWithRepository:repo
 [<WINDOW>.contentView addSubview:vc.view];
 ```
 
-And here's the pseudo-code to display a live-updating Advanced Commit view:
+Here's the pseudo-code to display a live-updating Advanced Commit view:
 ```objc
 GCLiveRepository* repo = [[GCLiveRepository alloc] initWithExistingLocalRepository:<PATH> error:NULL];
 GIAdvancedCommitViewController* vc = [[GIAdvancedCommitViewController alloc] initWithRepository:repo];
