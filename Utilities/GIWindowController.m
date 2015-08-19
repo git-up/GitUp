@@ -333,6 +333,7 @@ static void _TimerCallBack(CFRunLoopTimerRef timer, void* info) {
 }
 
 - (void)runModalView:(NSView*)view withInitialFirstResponder:(NSResponder*)responder completionHandler:(void (^)(BOOL success))handler {
+  XLOG_DEBUG_CHECK(_modalView);
   XLOG_DEBUG_CHECK(!_handler);
   
   _previousResponder = self.window.firstResponder;
