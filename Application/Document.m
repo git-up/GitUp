@@ -20,22 +20,7 @@
 #import "Common.h"
 #import "AppDelegate.h"
 
-#import "GCRepository+Utilities.h"
-#import "GIInterface.h"
-#import "GIMapViewController.h"
-#import "GISnapshotListViewController.h"
-#import "GIUnifiedReflogViewController.h"
-#import "GICommitListViewController.h"
-#import "GIQuickViewController.h"
-#import "GISimpleCommitViewController.h"
-#import "GIAdvancedCommitViewController.h"
-#import "GICommitRewriterViewController.h"
-#import "GICommitSplitterViewController.h"
-#import "GIConflictResolverViewController.h"
-#import "GIStashListViewController.h"
-#import "GIConfigViewController.h"
-#import "GIDiffViewController.h"
-#import "XLFacilityMacros.h"
+#import <GitUpKit/XLFacilityMacros.h>
 
 #define kWindowModeString_Map @"map"
 #define kWindowModeString_Map_QuickView @"quickview"

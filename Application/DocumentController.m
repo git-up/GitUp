@@ -17,8 +17,7 @@
 #import "AppDelegate.h"
 #import "Common.h"
 
-#import "GCCore.h"
-#import "XLFacilityMacros.h"
+#import <GitUpKit/XLFacilityMacros.h>
 
 @implementation DocumentController
 

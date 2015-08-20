@@ -6,6 +6,8 @@ APPCAST_NAME="appcast.xml"
 XCODE_SCHEME="Application"
 XCODE_SYMROOT="/tmp/$PRODUCT_NAME"
 
+GIT_SHA1=`git rev-parse HEAD`
+
 ##### Count LOC
 
 $CLOC_PATH --by-file --xml --out=cloc.xml "Application" "Components" "Core" "Extensions" "Interface" "Utilities" "Views"
@@ -22,24 +24,15 @@ xcodebuild test -scheme "$XCODE_SCHEME" "SYMROOT=$XCODE_SYMROOT"
 
 ##### Tag build
 
-GIT_SHA1=`git rev-parse HEAD`
-
 MAX_VERSION=`git tag -l "b*" | sed 's/b//g' | sort -nr | head -n 1`
 VERSION=$((MAX_VERSION + 1))
 
 git tag -f "b$VERSION"
 git push -f origin "b$VERSION"
 
-##### Patch Info.plist to set "CFBundleVersion" and "GitSHA1"
-
-INFO_PLIST_PATH="$WORKSPACE/Application/Info.plist"  # Must be full path
-
-defaults write "$INFO_PLIST_PATH" "CFBundleVersion" "$VERSION"
-defaults write "$INFO_PLIST_PATH" "GitSHA1" "$GIT_SHA1"
-
 ##### Archive and export app
 
-xcodebuild archive -scheme "$XCODE_SCHEME" -archivePath "build/$PRODUCT_NAME.xcarchive"  # SYMROOT is ignored?
+xcodebuild archive -scheme "$XCODE_SCHEME" -archivePath "build/$PRODUCT_NAME.xcarchive" "GIT_SHA1=$GIT_SHA1" "BUNDLE_VERSION=$VERSION" # SYMROOT is ignored?
 xcodebuild -exportArchive -archivePath "build/$PRODUCT_NAME.xcarchive" -exportPath "build/$PRODUCT_NAME"  # SYMROOT is ignored?
 ditto -c -k --keepParent "build/$PRODUCT_NAME.xcarchive" "build/$PRODUCT_NAME.xcarchive.zip"
 

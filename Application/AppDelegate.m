@@ -17,12 +17,7 @@
 #import <Crashlytics/Crashlytics.h>
 #import <Sparkle/Sparkle.h>
 
-#import "XLFacilityMacros.h"
-#import "XLFunctions.h"
-#import "GIFunctions.h"
-#import "GILinkButton.h"
-#import "GIAppKit.h"
-#import "GIViewController+Utilities.h"
+#import <GitUpKit/XLFacilityMacros.h>
 
 #import "AppDelegate.h"
 #import "DocumentController.h"

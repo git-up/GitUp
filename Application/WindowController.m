@@ -16,10 +16,6 @@
 #import "WindowController.h"
 #import "Document.h"
 
-#import "GIInterface.h"
-
-#import "XLFacilityMacros.h"
-
 @implementation WindowController
 
 - (void)dealloc {
