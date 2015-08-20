@@ -61,14 +61,20 @@ GitUp source code is organized as 3 independent layers communicating only throug
 GitUpKit
 ========
 
-GitUp is built on top of a reusable generic Git toolkit called GitUpKit, which is simply the Foundation and UI layers described above combined into a standalone framework.
+**GitUp is built on top of a reusable generic Git toolkit called GitUpKit, which is simply the Foundation and UI layers described above combined into a standalone framework. This means that with GitUpKit you can build your very own Git UI!**
 
-There's an example mini-app called [GitDown](GitDown) built with GitUpKit that prompts the user for a repo and displays a live-updating stash view.
+There's an example mini-app called [GitDown](GitDown) that prompts the user for a repo and displays a live-updating stash view (all in ~20 lines of code):
+
+<p align="center">
+<img src="http://i.imgur.com/ZfxM7su.png">
+</p>
+
+Through GitUpKit, this mini-app also gets for free unlimited undo/redo, unified and side-by-side diffs, keyboard shortcuts, etc...
 
 Contributing
 ============
 
-[Pull requests](https://github.com/git-up/GitUp/pulls) are welcome but be aware that GitUp is used for production work by many thousands of developers around the world, so the bar is very high. The last thing we want is letting the code quality slip or introducing a regression.
+**[Pull requests](https://github.com/git-up/GitUp/pulls) are welcome but be aware that GitUp is used for production work by many thousands of developers around the world, so the bar is very high. The last thing we want is letting the code quality slip or introducing a regression.**
 
 The following is a list of absolute requirements for PRs (not following them would result in immediate rejection):
 - The coding style of GitUp MUST be followed exactly
