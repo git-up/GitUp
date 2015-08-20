@@ -71,6 +71,72 @@ There's an example mini-app called [GitDown](GitDown) that prompts the user for 
 
 Through GitUpKit, this mini-app also gets for free unlimited undo/redo, unified and side-by-side diffs, text selection and copy, keyboard shortcuts, etc...
 
+GitUpKit is very different from [ObjectiveGit](https://github.com/libgit2/objective-git) which offers raw bindings to [libgit2](https://github.com/libgit2/libgit2). GitUpKit only uses a minimal subset of libgit2 and reimplements everything else on top of it (it has its own "rebase engine" for instance). This results in a very tight and consistent API, that completely follows Obj-C conventions. It hides away the libgit2 complexity and sometimes inconsistencies, while adding a number of exclusive and powerful features.
+
+Using the API should be pretty straightforward since it is organized by functionality (e.g. repository, branches, commits, interface components, etc...) and a best effort has been made to name functions clearly. For all the "Core" APIs, the best way to learn them is to look at the associated unit tests - for instance see [the branch tests](Core/GCBranch-Tests.m) for the branch API.
+
+Here are some simplified sample code to get you started (error handling is left as an exercise to the reader):
+
+**Opening and browsing a repository:**
+```objc
+// Open repo
+GCRepository* repo = [[GCRepository alloc] initWithExistingLocalRepository:<PATH> error:NULL];
+
+// Make sure repo is clean
+assert([repo checkClean:kGCCleanCheckOption_IgnoreUntrackedFiles error:NULL]);
+
+// List all branches
+NSArray* branches = [repo listAllBranches:NULL];
+NSLog(@"%@", branches);
+
+// Lookup HEAD
+GCLocalBranch* headBranch;  // This would be nil if the HEAD is detached
+GCCommit* headCommit;
+[repo lookupHEADCurrentCommit:&headCommit branch:&headBranch error:NULL];
+NSLog(@"%@ = %@", headBranch, headCommit);
+
+// Load the *entire* repo history in memory for fast access, including all commits, branches and tags
+GCHistory* history = [repo loadHistoryUsingSorting:kGCHistorySorting_ReverseChronological error:NULL];
+assert(history);
+NSLog(@"%lu commits total", history.allCommits.count);
+NSLog(@"%@\n%@", history.rootCommits, history.leafCommits);
+```
+
+**Modifying a repository:**
+```objc
+// Take a snapshot of the repo
+GCSnapshot* snapshot = [repo takeSnapshot:NULL];
+
+// Create a new branch and check it out
+GCLocalBranch* newBranch = [repo createLocalBranchFromCommit:headCommit withName:@"temp" force:NO error:NULL];
+NSLog(@"%@", newBranch);
+assert([repo checkoutLocalBranch:newBranch options:0 error:NULL]);
+
+// Add a file to the index
+[[NSData data] writeToFile:[repo.workingDirectoryPath stringByAppendingPathComponent:@"empty.data"] atomically:YES];
+assert([repo addFileToIndex:@"empty.data" error:NULL]);
+
+// Check index status
+GCDiff* diff = [repo diffRepositoryIndexWithHEAD:nil options:0 maxInterHunkLines:0 maxContextLines:0 error:NULL];
+assert(diff.deltas.count == 1);
+NSLog(@"%@", diff);
+
+// Create a commit
+GCCommit* newCommit = [repo createCommitFromHEADWithMessage:@"Added file" error:NULL];
+assert(newCommit);
+NSLog(@"%@", newCommit);
+
+// Restore repo to saved snapshot before topic branch and commit were created
+BOOL success = [repo restoreSnapshot:snapshot withOptions:kGCSnapshotOption_IncludeAll reflogMessage:@"Rolled back" didUpdateReferences:NULL error:NULL];
+assert(success);
+  
+// Make sure topic branch is gone
+assert([repo findLocalBranchWithName:@"temp" error:NULL] == nil);
+  
+// Update workdir and index to match HEAD
+assert([repo resetToHEAD:kGCResetMode_Hard error:NULL]);
+```
+
 Contributing
 ============
 
