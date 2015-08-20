@@ -83,7 +83,7 @@ The following is a list of absolute requirements for PRs (not following them wou
 - Each commit MUST be self-contained i.e. GitUp builds and remains functional if only building this commit and not its descendants
 - Commit messages MUST have:
  - A clear and concise title that starts with an uppercase and doesn't end with a period e.g. "Changed app bundle ID to com.example.gitup" not "updated bundle id."
- - A detailed summary explaining the change unless it is trivial using full sentences with punctuation (no need to wrap at 80 characters but keep lines to a reasonnable length)
+ - A detailed summary explaining the change unless it is trivial using full sentences with punctuation (no need to wrap at 80 characters but keep lines to a reasonable length)
 - The pull request MUST contain as few commits as needed
 - The pull request MUST NOT contain fixup or revert commits (flatten them beforehand using GitUp!)
 - The pull request MUST be rebased on latest `master` when sent
