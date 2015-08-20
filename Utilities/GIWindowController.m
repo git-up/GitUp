@@ -33,8 +33,7 @@
 @interface GIWindowController ()
 @property(nonatomic, strong) IBOutlet GIColorView* overlayView;
 @property(nonatomic, weak) IBOutlet NSTextField* overlayTextField;
-
-@property(nonatomic, readonly) GIModalView* modalView;
+- (GIModalView*)modalViewIfVisible;
 @end
 
 @interface GIFieldEditor : NSTextView
@@ -116,14 +115,14 @@ static void _WalkViewTree(NSView* view, NSMutableArray* array) {
 
 - (void)_selectKeyView:(NSInteger)delta {
   NSMutableArray* array = [[NSMutableArray alloc] init];
-  GIModalView* modalView = self.windowController.modalView;
-  if (modalView.hidden) {
+  GIModalView* modalView = [self.windowController modalViewIfVisible];
+  if (modalView) {
+    _WalkViewTree(modalView, array);
+  } else {
     _WalkViewTree(self.contentView, array);
     for (NSToolbarItem* item in self.toolbar.items) {
       _WalkViewTree(item.view, array);
     }
-  } else {
-    _WalkViewTree(modalView, array);
   }
   if (array.count) {
     NSUInteger index = [array indexOfObjectIdenticalTo:self.firstResponder];
@@ -153,8 +152,8 @@ static void _WalkViewTree(NSView* view, NSMutableArray* array) {
 }
 
 - (BOOL)performKeyEquivalent:(NSEvent*)event {
-  GIModalView* modalView = self.windowController.modalView;
-  return modalView.hidden ? [super performKeyEquivalent:event] : [modalView performKeyEquivalent:event];
+  GIModalView* modalView = [self.windowController modalViewIfVisible];
+  return modalView ? [modalView performKeyEquivalent:event] : [super performKeyEquivalent:event];
 }
 
 - (void)sendEvent:(NSEvent*)event {
@@ -172,6 +171,7 @@ static NSColor* _informationalColor = nil;
 static NSColor* _warningColor = nil;
 
 @implementation GIWindowController {
+  GIModalView* _modalView;
   void (^_handler)(BOOL);
   NSResponder* _previousResponder;
   NSTrackingArea* _area;
@@ -201,6 +201,9 @@ static void _TimerCallBack(CFRunLoopTimerRef timer, void* info) {
     _area = [[NSTrackingArea alloc] initWithRect:NSZeroRect options:(NSTrackingInVisibleRect | NSTrackingActiveAlways | NSTrackingMouseEnteredAndExited) owner:self userInfo:nil];
     [_overlayView addTrackingArea:_area];
     
+    _modalView = [[GIModalView alloc] initWithFrame:NSZeroRect];
+    _modalView.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
+    
     CFRunLoopTimerContext context = {0, (__bridge void*)self, NULL, NULL, NULL};
     _overlayTimer = CFRunLoopTimerCreate(kCFAllocatorDefault, HUGE_VALF, HUGE_VALF, 0, 0, _TimerCallBack, &context);
     CFRunLoopAddTimer(CFRunLoopGetMain(), _overlayTimer, kCFRunLoopCommonModes);
@@ -213,19 +216,8 @@ static void _TimerCallBack(CFRunLoopTimerRef timer, void* info) {
   CFRelease(_overlayTimer);
 }
 
-- (void)windowDidLoad {
-  [super windowDidLoad];
-  
-  _modalView = [[GIModalView alloc] initWithFrame:[(NSView*)self.window.contentView bounds]];
-  _modalView.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
-  _modalView.hidden = YES;
-  [self.window.contentView addSubview:_modalView];
-  _overlayView.hidden = YES;
-  [self.window.contentView addSubview:_overlayView];
-}
-
 - (BOOL)isOverlayVisible {
-  return !_overlayView.hidden;
+  return (_overlayView.superview != nil);
 }
 
 - (void)showOverlayWithStyle:(GIOverlayStyle)style format:(NSString*)format, ... {
@@ -238,9 +230,6 @@ static void _TimerCallBack(CFRunLoopTimerRef timer, void* info) {
 }
 
 - (void)showOverlayWithStyle:(GIOverlayStyle)style message:(NSString*)message {
-  NSRect bounds = [self.window.contentView bounds];
-  NSRect frame = _overlayView.frame;
-  _overlayView.frame = NSMakeRect(0, bounds.size.height - frame.size.height, bounds.size.width, frame.size.height);
   switch (style) {
     
     case kGIOverlayStyle_Help:
@@ -260,7 +249,14 @@ static void _TimerCallBack(CFRunLoopTimerRef timer, void* info) {
     
   }
   
-  if (_overlayView.hidden) {
+  if (_overlayView.superview == nil) {
+    NSRect bounds = [self.window.contentView bounds];
+    NSRect frame = _overlayView.frame;
+    _overlayView.frame = NSMakeRect(0, bounds.size.height - frame.size.height, bounds.size.width, frame.size.height);
+    [self.window.contentView addSubview:_overlayView];  // Must be above everything else
+    _overlayView.hidden = YES;
+    [CATransaction flush];
+    
     _overlayTextField.stringValue = message;
     [NSAnimationContext beginGrouping];
     [[NSAnimationContext currentContext] setDuration:kOverlayAnimationInDuration];
@@ -297,7 +293,7 @@ static void _TimerCallBack(CFRunLoopTimerRef timer, void* info) {
     [[NSAnimationContext currentContext] setDuration:kOverlayAnimationOutDuration];
     [[NSAnimationContext currentContext] setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut]];
     [[NSAnimationContext currentContext] setCompletionHandler:^{
-      _overlayView.hidden = YES;
+      [_overlayView removeFromSuperview];
     }];
     [_overlayView.animator setFrame:newFrame];
     [NSAnimationContext endGrouping];
@@ -328,8 +324,12 @@ static void _TimerCallBack(CFRunLoopTimerRef timer, void* info) {
   }
 }
 
+- (GIModalView*)modalViewIfVisible {
+  return _modalView.superview ? _modalView : nil;
+}
+
 - (BOOL)hasModalView {
-  return !_modalView.hidden;
+  return (_modalView.superview != nil);
 }
 
 - (void)runModalView:(NSView*)view withInitialFirstResponder:(NSResponder*)responder completionHandler:(void (^)(BOOL success))handler {
@@ -345,7 +345,12 @@ static void _TimerCallBack(CFRunLoopTimerRef timer, void* info) {
   [self.window disableCursorRects];  // TODO: Looks like cursor rects are automatically re-enabled when resizing the window?!
   [[NSCursor arrowCursor] set];
   
-  _modalView.hidden = NO;
+  _modalView.frame = [self.window.contentView bounds];
+  if (_overlayView.superview) {  // Must be above everything else except overlay view
+    [self.window.contentView addSubview:_modalView positioned:NSWindowBelow relativeTo:_overlayView];
+  } else {
+    [self.window.contentView addSubview:_modalView];
+  }
   [_delegate windowControllerDidChangeHasModalView:self];
   
   [_modalView presentContentView:view withCompletionHandler:NULL];
@@ -363,7 +368,7 @@ static void _TimerCallBack(CFRunLoopTimerRef timer, void* info) {
   
   [_modalView dismissContentViewWithCompletionHandler:^{
     
-    _modalView.hidden = YES;
+    [_modalView removeFromSuperview];
     [_delegate windowControllerDidChangeHasModalView:self];
     
     [self.window enableCursorRects];  // TODO: This hides the cursor until it moves again?!
