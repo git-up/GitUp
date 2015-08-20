@@ -1672,6 +1672,7 @@
 		E21DCAEC1B253847006424E8 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_DYNAMIC_NO_PIC = YES;
 				PRODUCT_NAME = gitup;
 				SKIP_INSTALL = YES;
 			};
@@ -1680,6 +1681,7 @@
 		E21DCAED1B253847006424E8 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_DYNAMIC_NO_PIC = YES;
 				PRODUCT_NAME = gitup;
 				SKIP_INSTALL = YES;
 			};
@@ -1688,6 +1690,7 @@
 		E21DCAEE1B253847006424E8 /* Distribution */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_DYNAMIC_NO_PIC = YES;
 				PRODUCT_NAME = gitup;
 				SKIP_INSTALL = YES;
 			};
@@ -1826,7 +1829,6 @@
 					libgit2/include,
 					libsqlite3/include,
 				);
-				LD_NO_PIE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				OTHER_LDFLAGS = (
 					libssh2/lib/libssh2.a,
@@ -1852,6 +1854,7 @@
 					"$(SRCROOT)",
 					"$(PROJECT_DIR)",
 				);
+				GCC_DYNAMIC_NO_PIC = YES;
 				INFOPLIST_FILE = Application/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				OTHER_LDFLAGS = "-Wl,-rpath,@loader_path/../Frameworks";
@@ -1869,6 +1872,7 @@
 					"$(SRCROOT)",
 					"$(PROJECT_DIR)",
 				);
+				GCC_DYNAMIC_NO_PIC = YES;
 				INFOPLIST_FILE = Application/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				OTHER_LDFLAGS = "-Wl,-rpath,@loader_path/../Frameworks";
@@ -1932,7 +1936,6 @@
 					libgit2/include,
 					libsqlite3/include,
 				);
-				LD_NO_PIE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				OTHER_LDFLAGS = (
 					libssh2/lib/libssh2.a,
@@ -1958,6 +1961,7 @@
 					"$(SRCROOT)",
 					"$(PROJECT_DIR)",
 				);
+				GCC_DYNAMIC_NO_PIC = YES;
 				INFOPLIST_FILE = Application/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				OTHER_LDFLAGS = "-Wl,-rpath,@loader_path/../Frameworks";
