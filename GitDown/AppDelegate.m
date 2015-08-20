@@ -21,11 +21,11 @@
 @property(nonatomic, weak) IBOutlet GIWindow* window;
 @end
 
+// GIDiffContentsViewController is a view controller that displays the contents of an arbitrary diff
+// This subclass automatically sets the diff to the one between HEAD and workdir (like 'git diff HEAD') and live updates it
 @interface LiveDiffViewController : GIDiffContentsViewController
 @end
 
-// GIDiffContentsViewController is a view controller that displays the contents of an arbitrary diff
-// This subclass automatically sets the diff to the one between HEAD and workdir (like 'git diff HEAD') and live updates it
 @implementation LiveDiffViewController
 
 - (instancetype)initWithRepository:(GCLiveRepository*)repository {
@@ -101,10 +101,10 @@
   _windowController = [[GIWindowController alloc] initWithWindow:_window];
   
   // Create the view controller and add its view to the window
-#if 0
-  _viewController = [[GIAdvancedCommitViewController alloc] initWithRepository:_repository];
-#elif 0
+#if 1
   _viewController = [[GIStashListViewController alloc] initWithRepository:_repository];
+#elif 0
+  _viewController = [[GIAdvancedCommitViewController alloc] initWithRepository:_repository];
 #else
   _viewController = [[LiveDiffViewController alloc] initWithRepository:_repository];
 #endif
