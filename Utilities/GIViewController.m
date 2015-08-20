@@ -91,7 +91,11 @@
 @dynamic view;
 
 - (instancetype)initWithRepository:(GCLiveRepository*)repository {
-  if ((self = [super initWithNibName:NSStringFromClass(self.class) bundle:[NSBundle bundleForClass:self.class]])) {
+  Class nibClass = self.class;
+  while (nibClass.superclass != [GIViewController class]) {
+    nibClass = nibClass.superclass;  // Use the immediate subclass of GIViewController for the nib name
+  }
+  if ((self = [super initWithNibName:NSStringFromClass(nibClass) bundle:[NSBundle bundleForClass:nibClass]])) {
     _repository = repository;
     _textViewUndoManager = [[NSUndoManager alloc] init];
     
