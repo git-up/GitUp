@@ -69,7 +69,7 @@ There's an example mini-app called [GitDown](GitDown) that prompts the user for 
 <img src="http://i.imgur.com/ZfxM7su.png">
 </p>
 
-Through GitUpKit, this mini-app also gets for free unlimited undo/redo, unified and side-by-side diffs, keyboard shortcuts, etc...
+Through GitUpKit, this mini-app also gets for free unlimited undo/redo, unified and side-by-side diffs, text selection and copy, keyboard shortcuts, etc...
 
 Contributing
 ============
@@ -84,7 +84,8 @@ The following is a list of absolute requirements for PRs (not following them wou
 - Commit messages MUST have:
  - A capitalized clear and concise title e.g. "Changed app bundle ID to com.example.gitup" not "updated bundle id"
  - A detailed summary explaining the change unless it is trivial (no need to wrap at 80 characters but keep lines to a reasonnable length)
-- The pull request MUST contain as few commits as need MUST NOT contain fixup or revert commits (flatten 
+- The pull request MUST contain as few commits as needed
+- The pull request MUST NOT contain fixup or revert commits (flatten them beforehand using GitUp!)
 - The pull request MUST be rebased on latest `master` when sent
 
 **Be aware that GitUp is under [GPL v3 license](http://www.gnu.org/licenses/gpl-3.0.txt), so any contribution you make will be GPL'ed.**
