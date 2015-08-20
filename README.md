@@ -26,7 +26,7 @@ With GitUp, you get a truly efficient Git client for Mac:
 Getting Started
 ===============
 
-**Learn all about GitUp and download the latest stable release for Mac OS X 10.8+ from http://gitup.co.**
+**Learn all about GitUp and download the latest release from http://gitup.co.**
 
 **Read the [docs](http://forums.gitup.co/c/docs) and visit the [community forums](http://forums.gitup.co/) for support & feedback.**
 
