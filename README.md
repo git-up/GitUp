@@ -71,8 +71,6 @@ There's an example mini-app called [GitDown](GitDown) that prompts the user for 
 
 Through GitUpKit, this mini-app also gets for free unlimited undo/redo, unified and side-by-side diffs, text selection and copy, keyboard shortcuts, etc...
 
-GitUpKit is very different from [ObjectiveGit](https://github.com/libgit2/objective-git) which offers raw bindings to [libgit2](https://github.com/libgit2/libgit2). GitUpKit only uses a minimal subset of libgit2 and reimplements everything else on top of it (it has its own "rebase engine" for instance). This results in a very tight and consistent API, that completely follows Obj-C conventions. It hides away the libgit2 complexity and sometimes inconsistencies, while adding a number of exclusive and powerful features.
-
 Using the API should be pretty straightforward since it is organized by functionality (e.g. repository, branches, commits, interface components, etc...) and a best effort has been made to name functions clearly. For all the "Core" APIs, the best way to learn them is to look at the associated unit tests - for instance see [the branch tests](Core/GCBranch-Tests.m) for the branch API.
 
 Here are some simplified sample code to get you started (error handling is left as an exercise to the reader):
@@ -136,6 +134,8 @@ assert([repo findLocalBranchWithName:@"temp" error:NULL] == nil);
 // Update workdir and index to match HEAD
 assert([repo resetToHEAD:kGCResetMode_Hard error:NULL]);
 ```
+
+*In case you are familiar with it, GitUpKit has a very different goal than [ObjectiveGit](https://github.com/libgit2/objective-git). Instead of offering extensive raw bindings to [libgit2](https://github.com/libgit2/libgit2), GitUpKit only uses a minimal subset of libgit2 and reimplements everything else on top of it (it has its own "rebase engine" for instance). This allows it to expose a very tight and consistent API, that completely follows Obj-C conventions and hides away the libgit2 complexity and sometimes inconsistencies. GitUpKit adds on top of that a number of exclusive and powerful features, from undo/redo and Time Machine like snapshots, to entire drop-in UI components.*
 
 Contributing
 ============
