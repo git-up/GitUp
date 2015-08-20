@@ -486,7 +486,7 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
     if (!_abortIndexing) {  // If indexing has been aborted, this means the document has already been closed, so don't attempt to do *anything*
       if (success) {
         _searchReady = YES;
-        [(NSTextFieldCell*)_searchField.cell setPlaceholderString:NSLocalizedString(@"Search Repository…", nil)];
+        [(NSTextFieldCell*)_searchField.cell setPlaceholderString:NSLocalizedString(@"Search", nil)];
         _searchField.enabled = YES;
       } else {
         [(NSTextFieldCell*)_searchField.cell setPlaceholderString:NSLocalizedString(@"Search Unavailable", nil)];
