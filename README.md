@@ -63,13 +63,15 @@ GitUpKit
 
 **GitUp is built on top of a reusable generic Git toolkit called GitUpKit, which is simply the Foundation and UI layers described above combined into a standalone framework. This means that with GitUpKit you can build your very own Git UI!**
 
-There's an example mini-app called [GitDown](GitDown) that prompts the user for a repo and displays a live-updating stash view (all in ~20 lines of code):
+There's an example mini-app called [GitDown](GitDown) that prompts the user for a repo and displays an interactive and live-updating list of its stashes (all with ~20 lines of code in `-[AppDelegate applicationDidFinishLaunching:]`):
 
 <p align="center">
 <img src="http://i.imgur.com/ZfxM7su.png">
 </p>
 
 Through GitUpKit, this mini-app also gets for free unlimited undo/redo, unified and side-by-side diffs, text selection and copy, keyboard shortcuts, etc...
+
+The GitDown source code also demonstrates how to use some other GitUpKit view controllers as well as building a customized one.
 
 Using the API should be pretty straightforward since it is organized by functionality (e.g. repository, branches, commits, interface components, etc...) and a best effort has been made to name functions clearly. For all the "Core" APIs, the best way to learn them is to look at the associated unit tests - for instance see [the branch tests](Core/GCBranch-Tests.m) for the branch API.
 
