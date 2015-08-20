@@ -145,13 +145,14 @@ Contributing
 **[Pull requests](https://github.com/git-up/GitUp/pulls) are welcome but be aware that GitUp is used for production work by many thousands of developers around the world, so the bar is very high. The last thing we want is letting the code quality slip or introducing a regression.**
 
 The following is a list of absolute requirements for PRs (not following them would result in immediate rejection):
-- The coding style of GitUp MUST be followed exactly
+- You MUST use 2-spaces for indentation instead of tabs
+- The coding style MUST be followed exactly (there is no style guide available but you can figure out from browsing the source)
 - Additions to `Core/` MUST have associated unit tests
 - Each commit MUST be a single change (e.g. adding a function or fixing a bug, but not both at once)
-- Each commit MUST be self-contained i.e. GitUp builds and remains functional if only building this commit and not its descendants
+- Each commit MUST be self-contained i.e. GitUp builds and remains fully functional when building it at this very commit
 - Commit messages MUST have:
  - A clear and concise title that starts with an uppercase and doesn't end with a period e.g. "Changed app bundle ID to com.example.gitup" not "updated bundle id."
- - A detailed summary explaining the change unless it is trivial using full sentences with punctuation (no need to wrap at 80 characters but keep lines to a reasonable length)
+ - Unless it is trivial, a detailed summary explaining the change using full sentences and with punctuation (no need to wrap at 80 characters but keep lines to a reasonable length)
 - The pull request MUST contain as few commits as needed
 - The pull request MUST NOT contain fixup or revert commits (flatten them beforehand using GitUp!)
 - The pull request MUST be rebased on latest `master` when sent
