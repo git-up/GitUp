@@ -40,10 +40,10 @@ To build GitUp yourself, simply run these commands in Terminal:
 
 Then open the `GitUp.xcodeproj` Xcode project.
 
-GitUp Architecture
-==================
+Source Layout
+=============
 
-GitUp is built as 3 cleanly separated layers communicating only through the use of public APIs:
+GitUp source code is organized as 3 independent layers communicating only through the use of public APIs:
 
 **Foundation Layer (depends on Foundation only)**
 - `Core/`: wrapper around the required minimal functionality of [libgit2](https://github.com/libgit2/libgit2), on top of which is then implemented all the Git functionality required by GitUp (note that GitUp uses a [slightly customized fork](https://github.com/git-up/libgit2/tree/gitup) of libgit2)
@@ -58,31 +58,12 @@ GitUp is built as 3 cleanly separated layers communicating only through the use 
 **Application Layer**
 - `Application/`: essentially the "glue code" connecting all the above layers together into an actual app (and therefore not really clean code contrary to the rest of GitUp)
 
-**The Foundation and UI layer are for all intents and purposes an SDK, with which it should be quite easy to build other Git tools or even entire apps:**
+GitUpKit
+========
 
-Here's the pseudo-code to display a live-updating GitUp stash view:
-```objc
-GCRepository* repo = [[GCLiveRepository alloc] initWithExistingLocalRepository:<PATH> error:NULL];
-GIDiffViewController* vc = [[GIStashListViewController alloc] initWithRepository:repo];
-[<WINDOW>.contentView addSubview:vc.view];
-```
+GitUp is built on top of a reusable generic Git toolkit called GitUpKit, which is simply the Foundation and UI layers described above combined into a standalone framework.
 
-Here's the pseudo-code to display a diff view between a commit and its parent:
-```objc
-GCRepository* repo = [[GCLiveRepository alloc] initWithExistingLocalRepository:<PATH> error:NULL];
-GCCommit* c1 = [repo findCommitWithSHA1:<SHA1> error:NULL];
-GCCommit* c2 = [[repo lookupParentsForCommit:c1 error:NULL] firstObject];  // Follow main line
-GIDiffViewController* vc = [[GIDiffViewController alloc] initWithRepository:repo];
-[vc setCommit:c1 withParentCommit:c2];
-[<WINDOW>.contentView addSubview:vc.view];
-```
-
-Here's the pseudo-code to display a live-updating Advanced Commit view:
-```objc
-GCLiveRepository* repo = [[GCLiveRepository alloc] initWithExistingLocalRepository:<PATH> error:NULL];
-GIAdvancedCommitViewController* vc = [[GIAdvancedCommitViewController alloc] initWithRepository:repo];
-[<WINDOW>.contentView addSubview:vc.view];
-```
+There's an example mini-app called [GitDown](GitDown) built with GitUpKit that prompts the user for a repo and displays a live-updating stash view.
 
 Contributing
 ============
@@ -90,8 +71,10 @@ Contributing
 [Pull requests](https://github.com/git-up/GitUp/pulls) are welcome but be aware that GitUp is used for production work by many thousands of developers around the world, so the bar is very high. The last thing we want is letting the code quality slip or introducing a regression.
 
 The following is a list of absolute requirements for PRs (not following them would result in immediate rejection):
-- The coding style of GitUp MUST be followed
+- The coding style of GitUp MUST be followed exactly
 - Additions to `Core/` MUST have associated unit tests
+- Each commit MUST be a single change (e.g. adding a function or fixing a bug, but not both at once)
+- Each commit MUST be self-contained i.e. GitUp builds and remains functional if only building this commit and not its descendants
 - Commit messages MUST have:
  - A capitalized clear and concise title e.g. "Changed app bundle ID to com.example.gitup" not "updated bundle id"
  - A detailed summary explaining the change unless it is trivial (no need to wrap at 80 characters but keep lines to a reasonnable length)
