@@ -14,11 +14,12 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #import <Foundation/Foundation.h>
+#import <libgen.h>
+
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdocumentation"
 #import <git2.h>
 #pragma clang diagnostic pop
-#import <libgen.h>
 
 #import "ToolProtocol.h"
 

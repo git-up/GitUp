@@ -1,0 +1,6 @@
+#include "Base"
+
+GCC_PREPROCESSOR_DEFINITIONS = NS_BLOCK_ASSERTIONS
+WARNING_CFLAGS = -Wall -Wno-nonnull -Wno-property-attribute-mismatch
+
+GCC_TREAT_WARNINGS_AS_ERRORS = YES

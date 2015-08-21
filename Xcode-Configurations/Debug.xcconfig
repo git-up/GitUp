@@ -1,0 +1,9 @@
+#include "Base"
+
+GCC_PREPROCESSOR_DEFINITIONS = DEBUG=1
+WARNING_CFLAGS = -Wall -Weverything -Wshadow -Wshorten-64-to-32 -Wbool-conversion -Wconstant-conversion -Wundeclared-selector -Wno-pedantic -Wno-padded -Wno-direct-ivar-access -Wno-documentation-unknown-command -Wno-objc-missing-property-synthesis -Wno-implicit-retain-self -Wno-explicit-ownership-type -Wno-assign-enum -Wno-cast-align -Wno-switch-enum -Wno-gnu-statement-expression -Wno-cstring-format-directive -Wno-cast-qual -Wno-nullable-to-nonnull-conversion -Wno-reserved-id-macro -Wno-nonnull -Wno-property-attribute-mismatch
+
+ONLY_ACTIVE_ARCH = YES
+DEBUG_INFORMATION_FORMAT = dwarf
+GCC_OPTIMIZATION_LEVEL = 0
+COPY_PHASE_STRIP = NO
