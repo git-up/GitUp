@@ -502,7 +502,7 @@
 		E2B14B5D1A8A764400003E64 /* GCDiff.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCDiff.m; sourceTree = "<group>"; };
 		E2B1BF311A85923800A999DF /* GIFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GIFunctions.h; sourceTree = "<group>"; };
 		E2B1BF321A85923800A999DF /* GIFunctions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GIFunctions.m; sourceTree = "<group>"; };
-		E2B1BF351A85C5ED00A999DF /* GIFunctions-Tests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "GIFunctions-Tests.m"; path = "Interface/GIFunctions-Tests.m"; sourceTree = SOURCE_ROOT; };
+		E2B1BF351A85C5ED00A999DF /* GIFunctions-Tests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GIFunctions-Tests.m"; sourceTree = "<group>"; };
 		E2B25A571B7C56FD00FA546C /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		E2BDA0681AD47A2F00E69729 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = en; path = en.lproj/Help.plist; sourceTree = "<group>"; };
 		E2BDA06A1AD5AF2F00E69729 /* GIViewController+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GIViewController+Utilities.h"; sourceTree = "<group>"; };
