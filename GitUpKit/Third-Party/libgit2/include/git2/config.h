@@ -701,6 +701,24 @@ GIT_EXTERN(int) git_config_backend_foreach_match(
 	void *payload);
 
 
+/**
+ * Lock the backend with the highest priority
+ *
+ * Locking disallows anybody else from writing to that backend. Any
+ * updates made after locking will not be visible to a reader until
+ * the file is unlocked.
+ *
+ * You can apply the changes by calling `git_transaction_commit()`
+ * before freeing the transaction. Either of these actions will unlock
+ * the config.
+ *
+ * @param tx the resulting transaction, use this to commit or undo the
+ * changes
+ * @param cfg the configuration in which to lock
+ * @return 0 or an error code
+ */
+GIT_EXTERN(int) git_config_lock(git_transaction **tx, git_config *cfg);
+
 /** @} */
 GIT_END_DECL
 #endif

@@ -307,6 +307,17 @@ GIT_EXTERN(int) git_cred_ssh_key_memory_new(
 	const char *privatekey,
 	const char *passphrase);
 
+
+/**
+ * Free a credential.
+ *
+ * This is only necessary if you own the object; that is, if you are a
+ * transport.
+ *
+ * @param cred the object to free
+ */
+GIT_EXTERN(void) git_cred_free(git_cred *cred);
+
 /**
  * Signature of a function which acquires a credential object.
  *
