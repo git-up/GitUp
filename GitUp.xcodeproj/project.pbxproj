@@ -677,7 +677,8 @@
 				E21A88F61A97172D00255AC3 /* GIUnifiedReflogViewController.m */,
 				E21A88F81A97173300255AC3 /* GIUnifiedReflogViewController.xib */,
 			);
-			path = Components;
+			name = Components;
+			path = GitUpKit/Components;
 			sourceTree = "<group>";
 		};
 		E21DCAE91B253847006424E8 /* Tool */ = {
@@ -709,7 +710,8 @@
 				E22941DD1AC11E4E000A83AF /* GIWindowController.m */,
 				E22941DE1AC11E4E000A83AF /* GIWindowController.xib */,
 			);
-			path = Utilities;
+			name = Utilities;
+			path = GitUpKit/Utilities;
 			sourceTree = "<group>";
 		};
 		E22941E61AC11F56000A83AF /* Views */ = {
@@ -752,7 +754,8 @@
 				E22942081AC11F56000A83AF /* GIStashListViewController.m */,
 				E22941F51AC11F56000A83AF /* GIStashListViewController.xib */,
 			);
-			path = Views;
+			name = Views;
+			path = GitUpKit/Views;
 			sourceTree = "<group>";
 		};
 		E267E1A91B84D6C500BAB377 /* GitUpKit */ = {
@@ -812,7 +815,8 @@
 				E218A58C1A56706600DFF1DF /* GCRepository+Utilities.h */,
 				E218A58D1A56706600DFF1DF /* GCRepository+Utilities.m */,
 			);
-			path = Extensions;
+			name = Extensions;
+			path = GitUpKit/Extensions;
 			sourceTree = "<group>";
 		};
 		E2C338A219F8562F00063D95 = {
@@ -954,7 +958,8 @@
 				E259C2C31A64C8EA0079616B /* GCTestCase.h */,
 				E259C2C41A64C8EA0079616B /* GCTestCase.m */,
 			);
-			path = Core;
+			name = Core;
+			path = GitUpKit/Core;
 			sourceTree = "<group>";
 		};
 		E2C338FB19F85CC500063D95 /* XLFacility */ = {
@@ -997,7 +1002,8 @@
 				E2C9FF861AA510170051B2AE /* GIUnifiedDiffView.h */,
 				E2C9FF871AA510170051B2AE /* GIUnifiedDiffView.m */,
 			);
-			path = Interface;
+			name = Interface;
+			path = GitUpKit/Interface;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
