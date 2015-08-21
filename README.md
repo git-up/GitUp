@@ -40,40 +40,34 @@ To build GitUp yourself, simply run these commands in Terminal:
 
 Then open the `GitUp/GitUp.xcodeproj` Xcode project and hit Run.
 
-Source Layout
-=============
+GitUpKit
+========
 
-GitUp source code is organized as 3 independent layers communicating only through the use of public APIs:
+**GitUp is built as a thin layer on top of a reusable generic Git toolkit called "GitUpKit". This means that you can use that same GitUpKit framework to build your very own Git UI!**
 
-**Foundation Layer (depends on Foundation only)**
+Architecture
+------------
+
+The GitUpKit source code is organized as 2 independent layers communicating only through the use of public APIs:
+
+**Base Layer (depends on Foundation only)**
 - `Core/`: wrapper around the required minimal functionality of [libgit2](https://github.com/libgit2/libgit2), on top of which is then implemented all the Git functionality required by GitUp (note that GitUp uses a [slightly customized fork](https://github.com/git-up/libgit2/tree/gitup) of libgit2)
 - `Extensions/`: categories on the `Core` classes to add convenience features implemented only using the public APIs
 
-**UI Layer (depends on AppKit)**
+**UI Layer (depends on Foundation and AppKit)**
 - `Interface/`: low-level view classes e.g. `GIGraphView` to render the GitUp Map view
 - `Utilities/`: interface utility classes e.g. the base view controller class `GIViewController`
 - `Components/`: reusable single-view view controllers e.g. `GIDiffContentsViewController` to render a diff
 - `Views/`: high-level reusable multi-views view controllers e.g. `GIAdvancedCommitViewController` to implement the entire GitUp Advanced Commit view
 
-**Application Layer**
-- `Application/`: essentially the "glue code" connecting all the above layers together into an actual app (and therefore not really clean code contrary to the rest of GitUp)
+*GitUpKit has a very different goal than [ObjectiveGit](https://github.com/libgit2/objective-git). Instead of offering extensive raw bindings to [libgit2](https://github.com/libgit2/libgit2), GitUpKit only uses a minimal subset of libgit2 and reimplements everything else on top of it (it has its own "rebase engine" for instance). This allows it to expose a very tight and consistent API, that completely follows Obj-C conventions and hides away the libgit2 complexity and sometimes inconsistencies. GitUpKit adds on top of that a number of exclusive and powerful features, from undo/redo and Time Machine like snapshots, to entire drop-in UI components.*
 
-GitUpKit
-========
+API Sample Code
+---------------
 
-**GitUp is built on top of a reusable generic Git toolkit called GitUpKit, which is simply the Foundation and UI layers described above combined into a standalone framework. This means that with GitUpKit you can build your very own Git UI!**
+Using the API should be pretty straightforward since it is organized by functionality (e.g. repository, branches, commits, interface components, etc...) and a best effort has been made to name functions clearly.
 
-There's an example mini-app called [GitDown](Examples/GitDown) that prompts the user for a repo and displays an interactive and live-updating list of its stashes (all with ~20 lines of code in `-[AppDelegate applicationDidFinishLaunching:]`):
-
-<p align="center">
-<img src="http://i.imgur.com/ZfxM7su.png">
-</p>
-
-Through GitUpKit, this mini-app also gets for free unlimited undo/redo, unified and side-by-side diffs, text selection and copy, keyboard shortcuts, etc...
-
-The GitDown source code also demonstrates how to use some other GitUpKit view controllers as well as building a customized one.
-
-Using the API should be pretty straightforward since it is organized by functionality (e.g. repository, branches, commits, interface components, etc...) and a best effort has been made to name functions clearly. For all the "Core" APIs, the best way to learn them is to look at the associated unit tests - for instance see [the branch tests](GitUpKit/Core/GCBranch-Tests.m) for the branch API.
+For all the "Core" APIs, the best way to learn them is to look at the associated unit tests - for instance see [the branch tests](GitUpKit/Core/GCBranch-Tests.m) for the branch API.
 
 Here are some simplified sample code to get you started (error handling is left as an exercise to the reader):
 
@@ -137,7 +131,18 @@ assert([repo findLocalBranchWithName:@"temp" error:NULL] == nil);
 assert([repo resetToHEAD:kGCResetMode_Hard error:NULL]);
 ```
 
-*In case you are familiar with it, GitUpKit has a very different goal than [ObjectiveGit](https://github.com/libgit2/objective-git). Instead of offering extensive raw bindings to [libgit2](https://github.com/libgit2/libgit2), GitUpKit only uses a minimal subset of libgit2 and reimplements everything else on top of it (it has its own "rebase engine" for instance). This allows it to expose a very tight and consistent API, that completely follows Obj-C conventions and hides away the libgit2 complexity and sometimes inconsistencies. GitUpKit adds on top of that a number of exclusive and powerful features, from undo/redo and Time Machine like snapshots, to entire drop-in UI components.*
+Advanced Examples
+-----------------
+
+There's an example mini-app called [GitDown](Examples/GitDown) that prompts the user for a repo and displays an interactive and live-updating list of its stashes (all with ~20 lines of code in `-[AppDelegate applicationDidFinishLaunching:]`):
+
+<p align="center">
+<img src="http://i.imgur.com/ZfxM7su.png">
+</p>
+
+Through GitUpKit, this mini-app also gets for free unlimited undo/redo, unified and side-by-side diffs, text selection and copy, keyboard shortcuts, etc...
+
+The GitDown source code also demonstrates how to use some other GitUpKit view controllers as well as building a customized one.
 
 Contributing
 ============
