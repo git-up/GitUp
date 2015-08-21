@@ -9,42 +9,29 @@
 /* Begin PBXBuildFile section */
 		E267E2841B84EF1700BAB377 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E267E2831B84EF1700BAB377 /* AppDelegate.m */; };
 		E267E2871B84EF1700BAB377 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E267E2861B84EF1700BAB377 /* main.m */; };
-		E2EA19F91B8567AB00EAE7B7 /* GitUpKit.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = E2EA19F41B85679000EAE7B7 /* GitUpKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		E26F7C4E1B86EBE300119563 /* GitUpKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E26F7C491B86EBBE00119563 /* GitUpKit.framework */; };
+		E26F7C4F1B86EBE900119563 /* GitUpKit.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = E26F7C491B86EBBE00119563 /* GitUpKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E2EA19FC1B85684B00EAE7B7 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = E2EA19FA1B85684B00EAE7B7 /* MainMenu.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		E2EA19EF1B85679000EAE7B7 /* PBXContainerItemProxy */ = {
+		E26F7C481B86EBBE00119563 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = E2EA19E81B85679000EAE7B7 /* GitUp.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = E2C338AB19F8562F00063D95;
-			remoteInfo = Application;
-		};
-		E2EA19F11B85679000EAE7B7 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E2EA19E81B85679000EAE7B7 /* GitUp.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = E21DCAE81B253847006424E8;
-			remoteInfo = Tool;
-		};
-		E2EA19F31B85679000EAE7B7 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E2EA19E81B85679000EAE7B7 /* GitUp.xcodeproj */;
+			containerPortal = E26F7C431B86EBBE00119563 /* GitUpKit.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = E267E1A81B84D6C500BAB377;
 			remoteInfo = GitUpKit;
 		};
-		E2EA19F51B85679000EAE7B7 /* PBXContainerItemProxy */ = {
+		E26F7C4A1B86EBBE00119563 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = E2EA19E81B85679000EAE7B7 /* GitUp.xcodeproj */;
+			containerPortal = E26F7C431B86EBBE00119563 /* GitUpKit.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = E2C338C419F8562F00063D95;
 			remoteInfo = Tests;
 		};
-		E2EA19F71B85679B00EAE7B7 /* PBXContainerItemProxy */ = {
+		E26F7C4C1B86EBD700119563 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = E2EA19E81B85679000EAE7B7 /* GitUp.xcodeproj */;
+			containerPortal = E26F7C431B86EBBE00119563 /* GitUpKit.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = E267E1A71B84D6C500BAB377;
 			remoteInfo = GitUpKit;
@@ -58,7 +45,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				E2EA19F91B8567AB00EAE7B7 /* GitUpKit.framework in Copy Frameworks */,
+				E26F7C4F1B86EBE900119563 /* GitUpKit.framework in Copy Frameworks */,
 			);
 			name = "Copy Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -71,7 +58,7 @@
 		E267E2831B84EF1700BAB377 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		E267E2861B84EF1700BAB377 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		E267E28D1B84EF1700BAB377 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		E2EA19E81B85679000EAE7B7 /* GitUp.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GitUp.xcodeproj; path = ../GitUp.xcodeproj; sourceTree = "<group>"; };
+		E26F7C431B86EBBE00119563 /* GitUpKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GitUpKit.xcodeproj; path = ../GitUpKit/GitUpKit.xcodeproj; sourceTree = "<group>"; };
 		E2EA19FB1B85684B00EAE7B7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
@@ -80,6 +67,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E26F7C4E1B86EBE300119563 /* GitUpKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -89,7 +77,7 @@
 		E267E2761B84EF1700BAB377 = {
 			isa = PBXGroup;
 			children = (
-				E2EA19E81B85679000EAE7B7 /* GitUp.xcodeproj */,
+				E26F7C431B86EBBE00119563 /* GitUpKit.xcodeproj */,
 				E2EA19FD1B85687F00EAE7B7 /* Source */,
 				E267E2801B84EF1700BAB377 /* Products */,
 			);
@@ -103,13 +91,11 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		E2EA19E91B85679000EAE7B7 /* Products */ = {
+		E26F7C441B86EBBE00119563 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				E2EA19F01B85679000EAE7B7 /* GitUp.app */,
-				E2EA19F21B85679000EAE7B7 /* gitup */,
-				E2EA19F41B85679000EAE7B7 /* GitUpKit.framework */,
-				E2EA19F61B85679000EAE7B7 /* GitUpTests.xctest */,
+				E26F7C491B86EBBE00119563 /* GitUpKit.framework */,
+				E26F7C4B1B86EBBE00119563 /* GitUpTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -141,7 +127,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				E2EA19F81B85679B00EAE7B7 /* PBXTargetDependency */,
+				E26F7C4D1B86EBD700119563 /* PBXTargetDependency */,
 			);
 			name = GitDown;
 			productName = TEST;
@@ -175,8 +161,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = E2EA19E91B85679000EAE7B7 /* Products */;
-					ProjectRef = E2EA19E81B85679000EAE7B7 /* GitUp.xcodeproj */;
+					ProductGroup = E26F7C441B86EBBE00119563 /* Products */;
+					ProjectRef = E26F7C431B86EBBE00119563 /* GitUpKit.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -187,32 +173,18 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		E2EA19F01B85679000EAE7B7 /* GitUp.app */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.application;
-			path = GitUp.app;
-			remoteRef = E2EA19EF1B85679000EAE7B7 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		E2EA19F21B85679000EAE7B7 /* gitup */ = {
-			isa = PBXReferenceProxy;
-			fileType = "compiled.mach-o.executable";
-			path = gitup;
-			remoteRef = E2EA19F11B85679000EAE7B7 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		E2EA19F41B85679000EAE7B7 /* GitUpKit.framework */ = {
+		E26F7C491B86EBBE00119563 /* GitUpKit.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = GitUpKit.framework;
-			remoteRef = E2EA19F31B85679000EAE7B7 /* PBXContainerItemProxy */;
+			remoteRef = E26F7C481B86EBBE00119563 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		E2EA19F61B85679000EAE7B7 /* GitUpTests.xctest */ = {
+		E26F7C4B1B86EBBE00119563 /* GitUpTests.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = GitUpTests.xctest;
-			remoteRef = E2EA19F51B85679000EAE7B7 /* PBXContainerItemProxy */;
+			remoteRef = E26F7C4A1B86EBBE00119563 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -241,10 +213,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		E2EA19F81B85679B00EAE7B7 /* PBXTargetDependency */ = {
+		E26F7C4D1B86EBD700119563 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = GitUpKit;
-			targetProxy = E2EA19F71B85679B00EAE7B7 /* PBXContainerItemProxy */;
+			targetProxy = E26F7C4C1B86EBD700119563 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 

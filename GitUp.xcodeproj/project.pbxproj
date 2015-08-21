@@ -7,287 +7,29 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E200A3BA1B02DDA100C4E39D /* GCPrivate.m in Sources */ = {isa = PBXBuildFile; fileRef = E200A3B81B02DDA100C4E39D /* GCPrivate.m */; };
-		E20EB08C19FC75CA0031A075 /* GCRepository+Reset.m in Sources */ = {isa = PBXBuildFile; fileRef = E20EB08A19FC75CA0031A075 /* GCRepository+Reset.m */; };
-		E20EB09019FC76160031A075 /* GCRepository+Status.m in Sources */ = {isa = PBXBuildFile; fileRef = E20EB08E19FC76160031A075 /* GCRepository+Status.m */; };
-		E20F10F41A043E2100076AAC /* GCHistory.m in Sources */ = {isa = PBXBuildFile; fileRef = E20F10F21A043E2100076AAC /* GCHistory.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		E2146C8F1A57F3BC00F4550B /* GCObject.m in Sources */ = {isa = PBXBuildFile; fileRef = E2146C8D1A57F3BC00F4550B /* GCObject.m */; };
-		E21739F41A4FE39E00EC6777 /* GCFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = E21739F21A4FE39E00EC6777 /* GCFunctions.m */; };
 		E21739F71A5080DD00EC6777 /* DocumentController.m in Sources */ = {isa = PBXBuildFile; fileRef = E21739F61A5080DD00EC6777 /* DocumentController.m */; };
-		E21739FF1A51FA6200EC6777 /* GCSubmodule.m in Sources */ = {isa = PBXBuildFile; fileRef = E21739FD1A51FA6200EC6777 /* GCSubmodule.m */; };
-		E218A58B1A566F6A00DFF1DF /* GCReferenceTransform.m in Sources */ = {isa = PBXBuildFile; fileRef = E218A5891A566F6A00DFF1DF /* GCReferenceTransform.m */; };
-		E218A58F1A56706600DFF1DF /* GCRepository+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = E218A58D1A56706600DFF1DF /* GCRepository+Utilities.m */; };
-		E21A88F41A9471B300255AC3 /* GIPrivate.m in Sources */ = {isa = PBXBuildFile; fileRef = E21A88F21A9471B300255AC3 /* GIPrivate.m */; };
 		E21DCAEB1B253847006424E8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E21DCAEA1B253847006424E8 /* main.m */; };
 		E21DCAF31B253919006424E8 /* gitup in Copy Tool */ = {isa = PBXBuildFile; fileRef = E21DCAE81B253847006424E8 /* gitup */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		E21DCAF51B254117006424E8 /* install.sh in Copy Tool */ = {isa = PBXBuildFile; fileRef = E21DCAF41B254112006424E8 /* install.sh */; };
 		E21DCAF61B254F33006424E8 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2C338D819F85C3400063D95 /* Foundation.framework */; };
 		E21DCAF71B254F53006424E8 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E28200AC1A7D71EE00DA4096 /* CoreServices.framework */; };
 		E21DCAF81B255471006424E8 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E2C3394419F85D4B00063D95 /* libz.dylib */; };
-		E23C1A8C1A9019610060F6AD /* GCLiveRepository.m in Sources */ = {isa = PBXBuildFile; fileRef = E23C1A8A1A9019610060F6AD /* GCLiveRepository.m */; };
-		E24509031A9A50F3003E602D /* GCRepository+Config-Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = E24509021A9A50F3003E602D /* GCRepository+Config-Tests.m */; };
-		E24509041A9A5F1D003E602D /* GCRepository+Config.m in Sources */ = {isa = PBXBuildFile; fileRef = E24508FF1A9A50EA003E602D /* GCRepository+Config.m */; };
-		E259C2C51A64C8EA0079616B /* GCTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = E259C2C41A64C8EA0079616B /* GCTestCase.m */; };
-		E259C2C71A64C9980079616B /* GCRepository-Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = E259C2C61A64C9980079616B /* GCRepository-Tests.m */; };
-		E259C2C91A64CAB30079616B /* GCSubmodule-Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = E259C2C81A64CAB30079616B /* GCSubmodule-Tests.m */; };
-		E259C2CB1A64D27F0079616B /* GCTag-Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = E259C2CA1A64D27F0079616B /* GCTag-Tests.m */; };
-		E259C2CD1A64D30A0079616B /* GCStash-Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = E259C2CC1A64D30A0079616B /* GCStash-Tests.m */; };
-		E259C2CF1A64F7D00079616B /* GCBranch-Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = E259C2CE1A64F7D00079616B /* GCBranch-Tests.m */; };
-		E259C2D11A64F9050079616B /* GCRemote-Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = E259C2D01A64F9050079616B /* GCRemote-Tests.m */; };
-		E259C2D31A64F9FF0079616B /* GCHistory-Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = E259C2D21A64F9FF0079616B /* GCHistory-Tests.m */; };
-		E259C2D51A64FAA40079616B /* GCHistory+Rewrite-Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = E259C2D41A64FAA40079616B /* GCHistory+Rewrite-Tests.m */; };
-		E259C2D71A64FAEA0079616B /* GCRepository+Utilities-Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = E259C2D61A64FAEA0079616B /* GCRepository+Utilities-Tests.m */; };
-		E259C2D91A64FD640079616B /* GCRepository+Bare-Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = E259C2D81A64FD640079616B /* GCRepository+Bare-Tests.m */; };
-		E259C2DB1A64FDA60079616B /* GCDiff-Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = E259C2DA1A64FDA60079616B /* GCDiff-Tests.m */; };
-		E259C2DD1A64FDD00079616B /* GCRepository+HEAD-Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = E259C2DC1A64FDD00079616B /* GCRepository+HEAD-Tests.m */; };
-		E259C2E11A64FE4C0079616B /* GCRepository+Status-Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = E259C2E01A64FE4C0079616B /* GCRepository+Status-Tests.m */; };
-		E259C2E31A64FE710079616B /* GCRepository+Reset-Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = E259C2E21A64FE710079616B /* GCRepository+Reset-Tests.m */; };
-		E259C2E51A6624DC0079616B /* GCCommit-Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = E259C2E41A6624DC0079616B /* GCCommit-Tests.m */; };
 		E25EBCEB1AA3F8B700D3AF44 /* Application.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E25EBCEA1AA3F8B700D3AF44 /* Application.xcassets */; };
 		E2653D251A5B2FBD006A9871 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2653D241A5B2FBD006A9871 /* Sparkle.framework */; };
-		E267E1AB1B84D6C500BAB377 /* GitUpKit.h in Headers */ = {isa = PBXBuildFile; fileRef = E267E1AA1B84D6C500BAB377 /* GitUpKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E267E1B51B84D7D200BAB377 /* GCTag.h in Headers */ = {isa = PBXBuildFile; fileRef = E2C338E819F85C8600063D95 /* GCTag.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E267E1B61B84D7D500BAB377 /* GCSubmodule.h in Headers */ = {isa = PBXBuildFile; fileRef = E21739FC1A51FA6200EC6777 /* GCSubmodule.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E267E1B71B84D7D800BAB377 /* GCStash.h in Headers */ = {isa = PBXBuildFile; fileRef = E2C338E619F85C8600063D95 /* GCStash.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E267E1B81B84D7DE00BAB377 /* GCSQLiteRepository.h in Headers */ = {isa = PBXBuildFile; fileRef = E299D00D1A71F937005035F7 /* GCSQLiteRepository.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E267E1B91B84D7E100BAB377 /* GCSnapshot.h in Headers */ = {isa = PBXBuildFile; fileRef = E2F5C27C1A8171C900C30739 /* GCSnapshot.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E267E1BA1B84D80500BAB377 /* GCBranch.h in Headers */ = {isa = PBXBuildFile; fileRef = E2C338DB19F85C8600063D95 /* GCBranch.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E267E1BB1B84D80500BAB377 /* GCCommit.h in Headers */ = {isa = PBXBuildFile; fileRef = E2C338DD19F85C8600063D95 /* GCCommit.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E267E1BC1B84D80500BAB377 /* GCCommitDatabase.h in Headers */ = {isa = PBXBuildFile; fileRef = E2FEED441AEAA6AD00CBED80 /* GCCommitDatabase.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E267E1BD1B84D80500BAB377 /* GCCore.h in Headers */ = {isa = PBXBuildFile; fileRef = E20EB09519FC76AE0031A075 /* GCCore.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E267E1BE1B84D80500BAB377 /* GCDiff.h in Headers */ = {isa = PBXBuildFile; fileRef = E2B14B5C1A8A764400003E64 /* GCDiff.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E267E1BF1B84D80500BAB377 /* GCFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = E2790D401ACB1B1100965A98 /* GCFoundation.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E267E1C01B84D80500BAB377 /* GCFunctions.h in Headers */ = {isa = PBXBuildFile; fileRef = E21739F11A4FE39E00EC6777 /* GCFunctions.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E267E1C11B84D80500BAB377 /* GCHistory.h in Headers */ = {isa = PBXBuildFile; fileRef = E20F10F11A043E2100076AAC /* GCHistory.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E267E1C21B84D80500BAB377 /* GCIndex.h in Headers */ = {isa = PBXBuildFile; fileRef = E2790D4B1ACF130A00965A98 /* GCIndex.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E267E1C31B84D80500BAB377 /* GCLiveRepository.h in Headers */ = {isa = PBXBuildFile; fileRef = E23C1A891A9019610060F6AD /* GCLiveRepository.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E267E1C41B84D80500BAB377 /* GCObject.h in Headers */ = {isa = PBXBuildFile; fileRef = E2146C8C1A57F3BC00F4550B /* GCObject.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E267E1C51B84D80500BAB377 /* GCReference.h in Headers */ = {isa = PBXBuildFile; fileRef = E2C338E019F85C8600063D95 /* GCReference.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E267E1C61B84D80500BAB377 /* GCReferenceTransform.h in Headers */ = {isa = PBXBuildFile; fileRef = E218A5881A566F6A00DFF1DF /* GCReferenceTransform.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E267E1C71B84D80500BAB377 /* GCReflogMessages.h in Headers */ = {isa = PBXBuildFile; fileRef = E2146C911A58D83100F4550B /* GCReflogMessages.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E267E1C81B84D80500BAB377 /* GCRemote.h in Headers */ = {isa = PBXBuildFile; fileRef = E2C338E219F85C8600063D95 /* GCRemote.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E267E1C91B84D80500BAB377 /* GCRepository.h in Headers */ = {isa = PBXBuildFile; fileRef = E2C338E419F85C8600063D95 /* GCRepository.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E267E1CA1B84D80500BAB377 /* GCRepository+Bare.h in Headers */ = {isa = PBXBuildFile; fileRef = E2C3AA5919FF0B0600BA89F3 /* GCRepository+Bare.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E267E1CB1B84D80500BAB377 /* GCRepository+Config.h in Headers */ = {isa = PBXBuildFile; fileRef = E24508FE1A9A50EA003E602D /* GCRepository+Config.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E267E1CC1B84D80500BAB377 /* GCRepository+HEAD.h in Headers */ = {isa = PBXBuildFile; fileRef = E27F9B721A549097009C9B3D /* GCRepository+HEAD.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E267E1CD1B84D80500BAB377 /* GCRepository+Mock.h in Headers */ = {isa = PBXBuildFile; fileRef = E299D0111A749C26005035F7 /* GCRepository+Mock.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E267E1CE1B84D80500BAB377 /* GCRepository+Reflog.h in Headers */ = {isa = PBXBuildFile; fileRef = E27B6D641A84451900D05452 /* GCRepository+Reflog.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E267E1CF1B84D80500BAB377 /* GCRepository+Reset.h in Headers */ = {isa = PBXBuildFile; fileRef = E20EB08919FC75CA0031A075 /* GCRepository+Reset.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E267E1D01B84D80500BAB377 /* GCRepository+Status.h in Headers */ = {isa = PBXBuildFile; fileRef = E20EB08D19FC76160031A075 /* GCRepository+Status.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E267E1D11B84D83100BAB377 /* GCBranch.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C338DC19F85C8600063D95 /* GCBranch.m */; };
-		E267E1D21B84D83100BAB377 /* GCCommit.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C338DE19F85C8600063D95 /* GCCommit.m */; };
-		E267E1D31B84D83100BAB377 /* GCCommitDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = E2FEED451AEAA6AD00CBED80 /* GCCommitDatabase.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		E267E1D41B84D83100BAB377 /* GCDiff.m in Sources */ = {isa = PBXBuildFile; fileRef = E2B14B5D1A8A764400003E64 /* GCDiff.m */; };
-		E267E1D51B84D83100BAB377 /* GCFoundation.m in Sources */ = {isa = PBXBuildFile; fileRef = E2790D411ACB1B1100965A98 /* GCFoundation.m */; };
-		E267E1D61B84D83100BAB377 /* GCFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = E21739F21A4FE39E00EC6777 /* GCFunctions.m */; };
-		E267E1D71B84D83100BAB377 /* GCHistory.m in Sources */ = {isa = PBXBuildFile; fileRef = E20F10F21A043E2100076AAC /* GCHistory.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		E267E1D81B84D83100BAB377 /* GCIndex.m in Sources */ = {isa = PBXBuildFile; fileRef = E2790D4C1ACF130A00965A98 /* GCIndex.m */; };
-		E267E1D91B84D83100BAB377 /* GCLiveRepository.m in Sources */ = {isa = PBXBuildFile; fileRef = E23C1A8A1A9019610060F6AD /* GCLiveRepository.m */; };
-		E267E1DA1B84D83100BAB377 /* GCObject.m in Sources */ = {isa = PBXBuildFile; fileRef = E2146C8D1A57F3BC00F4550B /* GCObject.m */; };
-		E267E1DB1B84D83100BAB377 /* GCPrivate.m in Sources */ = {isa = PBXBuildFile; fileRef = E200A3B81B02DDA100C4E39D /* GCPrivate.m */; };
-		E267E1DC1B84D83100BAB377 /* GCReference.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C338E119F85C8600063D95 /* GCReference.m */; };
-		E267E1DD1B84D83100BAB377 /* GCReferenceTransform.m in Sources */ = {isa = PBXBuildFile; fileRef = E218A5891A566F6A00DFF1DF /* GCReferenceTransform.m */; };
-		E267E1DF1B84D83100BAB377 /* GCRemote.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C338E319F85C8600063D95 /* GCRemote.m */; };
-		E267E1E01B84D83100BAB377 /* GCRepository.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C338E519F85C8600063D95 /* GCRepository.m */; };
-		E267E1E11B84D83100BAB377 /* GCRepository+Bare.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C3AA5A19FF0B0600BA89F3 /* GCRepository+Bare.m */; };
-		E267E1E21B84D83100BAB377 /* GCRepository+Config.m in Sources */ = {isa = PBXBuildFile; fileRef = E24508FF1A9A50EA003E602D /* GCRepository+Config.m */; };
-		E267E1E31B84D83100BAB377 /* GCRepository+HEAD.m in Sources */ = {isa = PBXBuildFile; fileRef = E27F9B731A549097009C9B3D /* GCRepository+HEAD.m */; };
-		E267E1E41B84D83100BAB377 /* GCRepository+Mock.m in Sources */ = {isa = PBXBuildFile; fileRef = E299D0121A749C26005035F7 /* GCRepository+Mock.m */; };
-		E267E1E51B84D83100BAB377 /* GCRepository+Reflog.m in Sources */ = {isa = PBXBuildFile; fileRef = E27B6D651A84451900D05452 /* GCRepository+Reflog.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		E267E1E61B84D83100BAB377 /* GCRepository+Reset.m in Sources */ = {isa = PBXBuildFile; fileRef = E20EB08A19FC75CA0031A075 /* GCRepository+Reset.m */; };
-		E267E1E71B84D83100BAB377 /* GCRepository+Status.m in Sources */ = {isa = PBXBuildFile; fileRef = E20EB08E19FC76160031A075 /* GCRepository+Status.m */; };
-		E267E1E81B84D83100BAB377 /* GCSnapshot.m in Sources */ = {isa = PBXBuildFile; fileRef = E2F5C27D1A8171C900C30739 /* GCSnapshot.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		E267E1E91B84D83100BAB377 /* GCSQLiteRepository.m in Sources */ = {isa = PBXBuildFile; fileRef = E299D00A1A71F0E9005035F7 /* GCSQLiteRepository.m */; };
-		E267E1EA1B84D83100BAB377 /* GCStash.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C338E719F85C8600063D95 /* GCStash.m */; };
-		E267E1EB1B84D83100BAB377 /* GCSubmodule.m in Sources */ = {isa = PBXBuildFile; fileRef = E21739FD1A51FA6200EC6777 /* GCSubmodule.m */; };
-		E267E1EC1B84D83100BAB377 /* GCTag.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C338E919F85C8600063D95 /* GCTag.m */; };
-		E267E1ED1B84D84900BAB377 /* GCHistory+Rewrite.m in Sources */ = {isa = PBXBuildFile; fileRef = E2D4148A1A02D68700B99634 /* GCHistory+Rewrite.m */; };
-		E267E1EE1B84D84900BAB377 /* GCRepository+Index.m in Sources */ = {isa = PBXBuildFile; fileRef = E2790D461ACF12E200965A98 /* GCRepository+Index.m */; };
-		E267E1EF1B84D84900BAB377 /* GCRepository+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = E218A58D1A56706600DFF1DF /* GCRepository+Utilities.m */; };
-		E267E1F01B84D85500BAB377 /* GCHistory+Rewrite.h in Headers */ = {isa = PBXBuildFile; fileRef = E2D414891A02D68700B99634 /* GCHistory+Rewrite.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E267E1F11B84D85500BAB377 /* GCRepository+Index.h in Headers */ = {isa = PBXBuildFile; fileRef = E2790D451ACF12E200965A98 /* GCRepository+Index.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E267E1F21B84D85500BAB377 /* GCRepository+Utilities.h in Headers */ = {isa = PBXBuildFile; fileRef = E218A58C1A56706600DFF1DF /* GCRepository+Utilities.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E267E1F31B84D93300BAB377 /* Sparkle.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = E2653D241A5B2FBD006A9871 /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		E267E1F41B84D95B00BAB377 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E2C3394419F85D4B00063D95 /* libz.dylib */; };
-		E267E1F51B84D95E00BAB377 /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E2C3393E19F85D2A00063D95 /* libiconv.dylib */; };
-		E267E1F61B84D99400BAB377 /* libcrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E2C3394219F85D4000063D95 /* libcrypto.dylib */; };
-		E267E1F91B84DA3F00BAB377 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2B14B561A88102C00003E64 /* Security.framework */; };
-		E267E1FB1B84DA7600BAB377 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2C338D619F85C2E00063D95 /* Cocoa.framework */; };
-		E267E2091B84DB4200BAB377 /* GIBranch.h in Headers */ = {isa = PBXBuildFile; fileRef = E2D4DEAD1A4D592000B6AF66 /* GIBranch.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E267E20A1B84DB4200BAB377 /* GIConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = E23186031B139CB900A93CCF /* GIConstants.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E267E20B1B84DB4200BAB377 /* GIDiffView.h in Headers */ = {isa = PBXBuildFile; fileRef = E2891AB41AE1684A00E58C77 /* GIDiffView.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E267E20C1B84DB4200BAB377 /* GIFunctions.h in Headers */ = {isa = PBXBuildFile; fileRef = E2B1BF311A85923800A999DF /* GIFunctions.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E267E20D1B84DB4200BAB377 /* GIGraph.h in Headers */ = {isa = PBXBuildFile; fileRef = E2D4DEA01A4D562300B6AF66 /* GIGraph.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E267E20E1B84DB4200BAB377 /* GIGraphView.h in Headers */ = {isa = PBXBuildFile; fileRef = E2D4DEA21A4D562300B6AF66 /* GIGraphView.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E267E20F1B84DB4200BAB377 /* GIInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = E2D4DEB31A4D5AC600B6AF66 /* GIInterface.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E267E2101B84DB4200BAB377 /* GILayer.h in Headers */ = {isa = PBXBuildFile; fileRef = E2D4DEB01A4D599200B6AF66 /* GILayer.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E267E2111B84DB4200BAB377 /* GILine.h in Headers */ = {isa = PBXBuildFile; fileRef = E2D4DEAA1A4D587800B6AF66 /* GILine.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E267E2121B84DB4200BAB377 /* GINode.h in Headers */ = {isa = PBXBuildFile; fileRef = E2D4DEA61A4D57AA00B6AF66 /* GINode.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E267E2131B84DB4200BAB377 /* GISplitDiffView.h in Headers */ = {isa = PBXBuildFile; fileRef = E2891AB11AE15BB600E58C77 /* GISplitDiffView.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E267E2141B84DB4200BAB377 /* GIUnifiedDiffView.h in Headers */ = {isa = PBXBuildFile; fileRef = E2C9FF861AA510170051B2AE /* GIUnifiedDiffView.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E267E2151B84DB6E00BAB377 /* GIBranch.m in Sources */ = {isa = PBXBuildFile; fileRef = E2D4DEAE1A4D592000B6AF66 /* GIBranch.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		E267E2161B84DB6E00BAB377 /* GIDiffView.m in Sources */ = {isa = PBXBuildFile; fileRef = E2891AB51AE1684A00E58C77 /* GIDiffView.m */; };
-		E267E2171B84DB6E00BAB377 /* GIFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = E2B1BF321A85923800A999DF /* GIFunctions.m */; };
-		E267E2181B84DB6E00BAB377 /* GIGraph.m in Sources */ = {isa = PBXBuildFile; fileRef = E2D4DEA11A4D562300B6AF66 /* GIGraph.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		E267E2191B84DB6E00BAB377 /* GIGraphView.m in Sources */ = {isa = PBXBuildFile; fileRef = E2D4DEA31A4D562300B6AF66 /* GIGraphView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		E267E21A1B84DB6E00BAB377 /* GILayer.m in Sources */ = {isa = PBXBuildFile; fileRef = E2D4DEB11A4D599200B6AF66 /* GILayer.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		E267E21B1B84DB6E00BAB377 /* GILine.m in Sources */ = {isa = PBXBuildFile; fileRef = E2D4DEAB1A4D587800B6AF66 /* GILine.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		E267E21C1B84DB6E00BAB377 /* GINode.m in Sources */ = {isa = PBXBuildFile; fileRef = E2D4DEA71A4D57AA00B6AF66 /* GINode.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		E267E21D1B84DB6E00BAB377 /* GIPrivate.m in Sources */ = {isa = PBXBuildFile; fileRef = E21A88F21A9471B300255AC3 /* GIPrivate.m */; };
-		E267E21E1B84DB6E00BAB377 /* GISplitDiffView.m in Sources */ = {isa = PBXBuildFile; fileRef = E2891AB21AE15BB600E58C77 /* GISplitDiffView.m */; };
-		E267E21F1B84DB6E00BAB377 /* GIUnifiedDiffView.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C9FF871AA510170051B2AE /* GIUnifiedDiffView.m */; };
-		E267E2201B84DBD600BAB377 /* Utilities.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E22941E11AC11E79000A83AF /* Utilities.xcassets */; };
-		E267E2211B84DBD900BAB377 /* GIWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E22941DE1AC11E4E000A83AF /* GIWindowController.xib */; };
-		E267E2221B84DBE700BAB377 /* GIAppKit.h in Headers */ = {isa = PBXBuildFile; fileRef = E22941D31AC11E31000A83AF /* GIAppKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E267E2231B84DBE700BAB377 /* GIColorView.h in Headers */ = {isa = PBXBuildFile; fileRef = E22942251AC12E5C000A83AF /* GIColorView.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E267E2241B84DBE700BAB377 /* GILinkButton.h in Headers */ = {isa = PBXBuildFile; fileRef = E22941E31AC11EBB000A83AF /* GILinkButton.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E267E2251B84DBE700BAB377 /* GIModalView.h in Headers */ = {isa = PBXBuildFile; fileRef = E22941D51AC11E31000A83AF /* GIModalView.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E267E2261B84DBE700BAB377 /* GIViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = E22941D71AC11E31000A83AF /* GIViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E267E2271B84DBE700BAB377 /* GIViewController+Utilities.h in Headers */ = {isa = PBXBuildFile; fileRef = E2BDA06A1AD5AF2F00E69729 /* GIViewController+Utilities.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E267E2281B84DBE700BAB377 /* GIWindowController.h in Headers */ = {isa = PBXBuildFile; fileRef = E22941DC1AC11E4E000A83AF /* GIWindowController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E267E2291B84DBF800BAB377 /* GIAppKit.m in Sources */ = {isa = PBXBuildFile; fileRef = E22941D41AC11E31000A83AF /* GIAppKit.m */; };
-		E267E22A1B84DBF800BAB377 /* GIColorView.m in Sources */ = {isa = PBXBuildFile; fileRef = E22942261AC12E5C000A83AF /* GIColorView.m */; };
-		E267E22B1B84DBF800BAB377 /* GILinkButton.m in Sources */ = {isa = PBXBuildFile; fileRef = E22941E41AC11EBB000A83AF /* GILinkButton.m */; };
-		E267E22C1B84DBF800BAB377 /* GIModalView.m in Sources */ = {isa = PBXBuildFile; fileRef = E22941D61AC11E31000A83AF /* GIModalView.m */; };
-		E267E22D1B84DBF800BAB377 /* GIViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E22941D81AC11E31000A83AF /* GIViewController.m */; };
-		E267E22E1B84DBF800BAB377 /* GIViewController+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = E2BDA06B1AD5AF2F00E69729 /* GIViewController+Utilities.m */; };
-		E267E22F1B84DBF800BAB377 /* GIWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = E22941DD1AC11E4E000A83AF /* GIWindowController.m */; };
-		E267E2301B84DC0900BAB377 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E284D66B1AAAD6660038C176 /* QuartzCore.framework */; };
-		E267E2311B84DC2600BAB377 /* GICommitListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E230DEEC1AA11CF7006EE09F /* GICommitListViewController.m */; };
-		E267E2321B84DC2600BAB377 /* GIDiffContentsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2D5AB331AA502E000BE9FFC /* GIDiffContentsViewController.m */; };
-		E267E2331B84DC2600BAB377 /* GIDiffFilesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2E4CA1A1AB0F3F000D225D3 /* GIDiffFilesViewController.m */; };
-		E267E2341B84DC2600BAB377 /* GISnapshotListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E21A88FC1A97A67900255AC3 /* GISnapshotListViewController.m */; };
-		E267E2351B84DC2600BAB377 /* GIUnifiedReflogViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E21A88F61A97172D00255AC3 /* GIUnifiedReflogViewController.m */; };
-		E267E2361B84DC3900BAB377 /* GICommitListViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = E230DEEB1AA11CF7006EE09F /* GICommitListViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E267E2371B84DC3900BAB377 /* GIDiffContentsViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = E2D5AB321AA502E000BE9FFC /* GIDiffContentsViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E267E2381B84DC3900BAB377 /* GIDiffFilesViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = E2E4CA191AB0F3F000D225D3 /* GIDiffFilesViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E267E2391B84DC3900BAB377 /* GISnapshotListViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = E21A88FB1A97A67900255AC3 /* GISnapshotListViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E267E23A1B84DC3900BAB377 /* GIUnifiedReflogViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = E21A88F51A97172D00255AC3 /* GIUnifiedReflogViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E267E23B1B84DC4B00BAB377 /* Components.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E2D899991AA411430081FE66 /* Components.xcassets */; };
-		E267E23C1B84DC4B00BAB377 /* Reasons.strings in Resources */ = {isa = PBXBuildFile; fileRef = E22942281AC2160E000A83AF /* Reasons.strings */; };
-		E267E23D1B84DC4B00BAB377 /* GICommitListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E230DEE81AA11CE9006EE09F /* GICommitListViewController.xib */; };
-		E267E23E1B84DC4B00BAB377 /* GIDiffContentsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E2D5AB2F1AA502D400BE9FFC /* GIDiffContentsViewController.xib */; };
-		E267E23F1B84DC4B00BAB377 /* GIDiffFilesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E2E4CA1C1AB0F3F500D225D3 /* GIDiffFilesViewController.xib */; };
-		E267E2401B84DC4B00BAB377 /* GISnapshotListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E21A88FE1A97A67E00255AC3 /* GISnapshotListViewController.xib */; };
-		E267E2411B84DC4B00BAB377 /* GIUnifiedReflogViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E21A88F81A97173300255AC3 /* GIUnifiedReflogViewController.xib */; };
-		E267E2421B84DC6300BAB377 /* Views.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E229421A1AC11FF6000A83AF /* Views.xcassets */; };
-		E267E2431B84DC6300BAB377 /* GIAdvancedCommitViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E22941E71AC11F56000A83AF /* GIAdvancedCommitViewController.xib */; };
-		E267E2441B84DC6400BAB377 /* GICommitRewriterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E229421C1AC120A8000A83AF /* GICommitRewriterViewController.xib */; };
-		E267E2451B84DC6400BAB377 /* GICommitSplitterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E229421E1AC120A8000A83AF /* GICommitSplitterViewController.xib */; };
-		E267E2461B84DC6400BAB377 /* GIConfigViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E22941EB1AC11F56000A83AF /* GIConfigViewController.xib */; };
-		E267E2471B84DC6400BAB377 /* GIConflictResolverViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E2BDA0731AD5B98A00E69729 /* GIConflictResolverViewController.xib */; };
-		E267E2481B84DC6400BAB377 /* GIDiffViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E22941ED1AC11F56000A83AF /* GIDiffViewController.xib */; };
-		E267E2491B84DC6400BAB377 /* GIMapViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E22941EF1AC11F56000A83AF /* GIMapViewController.xib */; };
-		E267E24A1B84DC6400BAB377 /* GIQuickViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E22941F11AC11F56000A83AF /* GIQuickViewController.xib */; };
-		E267E24B1B84DC6400BAB377 /* GISimpleCommitViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E22941F31AC11F56000A83AF /* GISimpleCommitViewController.xib */; };
-		E267E24C1B84DC6400BAB377 /* GIStashListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E22941F51AC11F56000A83AF /* GIStashListViewController.xib */; };
-		E267E24D1B84DC7D00BAB377 /* GIAdvancedCommitViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = E22941F71AC11F56000A83AF /* GIAdvancedCommitViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E267E24E1B84DC7D00BAB377 /* GICommitRewriterViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = E22942221AC12145000A83AF /* GICommitRewriterViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E267E24F1B84DC7D00BAB377 /* GICommitSplitterViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = E229D8F61ACF313E00D5F0AC /* GICommitSplitterViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E267E2501B84DC7D00BAB377 /* GICommitViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = E22941F91AC11F56000A83AF /* GICommitViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E267E2511B84DC7D00BAB377 /* GIConfigViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = E22941FB1AC11F56000A83AF /* GIConfigViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E267E2521B84DC7D00BAB377 /* GIConflictResolverViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = E2BDA0701AD5B97B00E69729 /* GIConflictResolverViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E267E2531B84DC7D00BAB377 /* GIDiffViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = E22941FD1AC11F56000A83AF /* GIDiffViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E267E2541B84DC7D00BAB377 /* GIMapViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = E22942011AC11F56000A83AF /* GIMapViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E267E2551B84DC7D00BAB377 /* GIMapViewController+Operations.h in Headers */ = {isa = PBXBuildFile; fileRef = E22941FF1AC11F56000A83AF /* GIMapViewController+Operations.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E267E2561B84DC7D00BAB377 /* GIQuickViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = E22942031AC11F56000A83AF /* GIQuickViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E267E2571B84DC7D00BAB377 /* GISimpleCommitViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = E22942051AC11F56000A83AF /* GISimpleCommitViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E267E2581B84DC7D00BAB377 /* GIStashListViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = E22942071AC11F56000A83AF /* GIStashListViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E267E2591B84DCA100BAB377 /* GIAdvancedCommitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E22941F81AC11F56000A83AF /* GIAdvancedCommitViewController.m */; };
-		E267E25A1B84DCA100BAB377 /* GICommitRewriterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E22942231AC12145000A83AF /* GICommitRewriterViewController.m */; };
-		E267E25B1B84DCA100BAB377 /* GICommitSplitterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E229D8F71ACF313E00D5F0AC /* GICommitSplitterViewController.m */; };
-		E267E25C1B84DCA100BAB377 /* GICommitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E22941FA1AC11F56000A83AF /* GICommitViewController.m */; };
-		E267E25D1B84DCA100BAB377 /* GIConfigViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E22941FC1AC11F56000A83AF /* GIConfigViewController.m */; };
-		E267E25E1B84DCA100BAB377 /* GIConflictResolverViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2BDA0711AD5B97B00E69729 /* GIConflictResolverViewController.m */; };
-		E267E25F1B84DCA100BAB377 /* GIDiffViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E22941FE1AC11F56000A83AF /* GIDiffViewController.m */; };
-		E267E2601B84DCA100BAB377 /* GIMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E22942021AC11F56000A83AF /* GIMapViewController.m */; };
-		E267E2611B84DCA100BAB377 /* GIMapViewController+Operations.m in Sources */ = {isa = PBXBuildFile; fileRef = E22942001AC11F56000A83AF /* GIMapViewController+Operations.m */; };
-		E267E2621B84DCA100BAB377 /* GIQuickViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E22942041AC11F56000A83AF /* GIQuickViewController.m */; };
-		E267E2631B84DCA100BAB377 /* GISimpleCommitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E22942061AC11F56000A83AF /* GISimpleCommitViewController.m */; };
-		E267E2641B84DCA100BAB377 /* GIStashListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E22942081AC11F56000A83AF /* GIStashListViewController.m */; };
-		E267E2651B84DCA700BAB377 /* GIConfigViewController-Help.txt in Resources */ = {isa = PBXBuildFile; fileRef = E22941E91AC11F56000A83AF /* GIConfigViewController-Help.txt */; };
-		E267E2691B84DF8A00BAB377 /* GitUpKit.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = E267E1A81B84D6C500BAB377 /* GitUpKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		E267E26A1B84DF9300BAB377 /* GitUpKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E267E1A81B84D6C500BAB377 /* GitUpKit.framework */; };
 		E267E26B1B84E07E00BAB377 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2B14B561A88102C00003E64 /* Security.framework */; };
 		E267E2741B84E42A00BAB377 /* Help.plist in Resources */ = {isa = PBXBuildFile; fileRef = E2BDA0671AD47A2F00E69729 /* Help.plist */; };
-		E267E2A61B84F02A00BAB377 /* GCError.h in Headers */ = {isa = PBXBuildFile; fileRef = E2146C901A58849F00F4550B /* GCError.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E267E2A71B84F03600BAB377 /* GCMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = E244538F1A70CDA200E61DE7 /* GCMacros.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E267E2CB1B84F29F00BAB377 /* XLASLLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = E267E2AD1B84F27800BAB377 /* XLASLLogger.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		E267E2CC1B84F29F00BAB377 /* XLCallbackLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = E267E2AF1B84F27800BAB377 /* XLCallbackLogger.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		E267E2CD1B84F29F00BAB377 /* XLFacility.h in Headers */ = {isa = PBXBuildFile; fileRef = E267E2B11B84F27800BAB377 /* XLFacility.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		E267E2CE1B84F29F00BAB377 /* XLFacilityCMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = E267E2B31B84F27800BAB377 /* XLFacilityCMacros.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		E267E2CF1B84F29F00BAB377 /* XLFacilityMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = E267E2B41B84F27800BAB377 /* XLFacilityMacros.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		E267E2D01B84F29F00BAB377 /* XLFileLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = E267E2B61B84F27800BAB377 /* XLFileLogger.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		E267E2D11B84F29F00BAB377 /* XLFunctions.h in Headers */ = {isa = PBXBuildFile; fileRef = E267E2B81B84F27800BAB377 /* XLFunctions.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		E267E2D21B84F29F00BAB377 /* XLLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = E267E2BA1B84F27800BAB377 /* XLLogger.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		E267E2D31B84F29F00BAB377 /* XLLogRecord.h in Headers */ = {isa = PBXBuildFile; fileRef = E267E2BC1B84F27800BAB377 /* XLLogRecord.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		E267E2D41B84F29F00BAB377 /* XLStandardLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = E267E2BE1B84F27800BAB377 /* XLStandardLogger.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		E267E2D51B84F29F00BAB377 /* XLDatabaseLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = E267E2C11B84F27800BAB377 /* XLDatabaseLogger.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		E267E2D61B84F2BE00BAB377 /* XLASLLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = E267E2AE1B84F27800BAB377 /* XLASLLogger.m */; };
-		E267E2D71B84F2BE00BAB377 /* XLCallbackLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = E267E2B01B84F27800BAB377 /* XLCallbackLogger.m */; };
-		E267E2D81B84F2BE00BAB377 /* XLFacility.m in Sources */ = {isa = PBXBuildFile; fileRef = E267E2B21B84F27800BAB377 /* XLFacility.m */; };
-		E267E2D91B84F2BE00BAB377 /* XLFileLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = E267E2B71B84F27800BAB377 /* XLFileLogger.m */; };
-		E267E2DA1B84F2BE00BAB377 /* XLFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = E267E2B91B84F27800BAB377 /* XLFunctions.m */; };
-		E267E2DB1B84F2BE00BAB377 /* XLLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = E267E2BB1B84F27800BAB377 /* XLLogger.m */; };
-		E267E2DC1B84F2BE00BAB377 /* XLLogRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = E267E2BD1B84F27800BAB377 /* XLLogRecord.m */; };
-		E267E2DD1B84F2BE00BAB377 /* XLStandardLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = E267E2BF1B84F27800BAB377 /* XLStandardLogger.m */; };
-		E267E2DE1B84F2BE00BAB377 /* XLDatabaseLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = E267E2C21B84F27800BAB377 /* XLDatabaseLogger.m */; };
-		E267E2DF1B84F32000BAB377 /* XLFacility.m in Sources */ = {isa = PBXBuildFile; fileRef = E267E2B21B84F27800BAB377 /* XLFacility.m */; };
-		E267E2E01B84F33000BAB377 /* XLFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = E267E2B91B84F27800BAB377 /* XLFunctions.m */; };
-		E267E2E11B84F33300BAB377 /* XLStandardLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = E267E2BF1B84F27800BAB377 /* XLStandardLogger.m */; };
-		E267E2E21B84F33600BAB377 /* XLLogRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = E267E2BD1B84F27800BAB377 /* XLLogRecord.m */; };
-		E267E2E31B84F36500BAB377 /* XLFileLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = E267E2B71B84F27800BAB377 /* XLFileLogger.m */; };
-		E267E2E41B84F37500BAB377 /* XLLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = E267E2BB1B84F27800BAB377 /* XLLogger.m */; };
-		E2790D431ACB1B1100965A98 /* GCFoundation.m in Sources */ = {isa = PBXBuildFile; fileRef = E2790D411ACB1B1100965A98 /* GCFoundation.m */; };
-		E2790D481ACF12E200965A98 /* GCRepository+Index-Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = E2790D441ACF12E200965A98 /* GCRepository+Index-Tests.m */; };
-		E2790D4A1ACF12E200965A98 /* GCRepository+Index.m in Sources */ = {isa = PBXBuildFile; fileRef = E2790D461ACF12E200965A98 /* GCRepository+Index.m */; };
-		E2790D4E1ACF130A00965A98 /* GCIndex.m in Sources */ = {isa = PBXBuildFile; fileRef = E2790D4C1ACF130A00965A98 /* GCIndex.m */; };
-		E27B6D671A84451900D05452 /* GCRepository+Reflog.m in Sources */ = {isa = PBXBuildFile; fileRef = E27B6D651A84451900D05452 /* GCRepository+Reflog.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		E27E43021A74A94700D04ED1 /* GIGraph-Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = E27E43011A74A94700D04ED1 /* GIGraph-Tests.m */; };
-		E27E43031A74A96000D04ED1 /* GIBranch.m in Sources */ = {isa = PBXBuildFile; fileRef = E2D4DEAE1A4D592000B6AF66 /* GIBranch.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		E27E43041A74A96000D04ED1 /* GIGraph.m in Sources */ = {isa = PBXBuildFile; fileRef = E2D4DEA11A4D562300B6AF66 /* GIGraph.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		E27E43061A74A96000D04ED1 /* GILayer.m in Sources */ = {isa = PBXBuildFile; fileRef = E2D4DEB11A4D599200B6AF66 /* GILayer.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		E27E43071A74A96000D04ED1 /* GILine.m in Sources */ = {isa = PBXBuildFile; fileRef = E2D4DEAB1A4D587800B6AF66 /* GILine.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		E27E43081A74A96000D04ED1 /* GINode.m in Sources */ = {isa = PBXBuildFile; fileRef = E2D4DEA71A4D57AA00B6AF66 /* GINode.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		E27F9B751A549097009C9B3D /* GCRepository+HEAD.m in Sources */ = {isa = PBXBuildFile; fileRef = E27F9B731A549097009C9B3D /* GCRepository+HEAD.m */; };
-		E28200AE1A7D720000DA4096 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E28200AC1A7D71EE00DA4096 /* CoreServices.framework */; };
-		E284D6711AAC004F0038C176 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E284D6701AAC004F0038C176 /* CoreGraphics.framework */; };
-		E299D00C1A71F0E9005035F7 /* GCSQLiteRepository.m in Sources */ = {isa = PBXBuildFile; fileRef = E299D00A1A71F0E9005035F7 /* GCSQLiteRepository.m */; };
-		E299D00F1A7206E7005035F7 /* GCSQLiteRepository-Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = E299D00E1A7206E7005035F7 /* GCSQLiteRepository-Tests.m */; };
-		E299D0141A749C26005035F7 /* GCRepository+Mock.m in Sources */ = {isa = PBXBuildFile; fileRef = E299D0121A749C26005035F7 /* GCRepository+Mock.m */; };
-		E299D0161A749D27005035F7 /* GCRepository+Mock-Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = E299D0151A749D27005035F7 /* GCRepository+Mock-Tests.m */; };
+		E26F7C5B1B86ECA300119563 /* GitUpKit.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = E26F7C561B86EC8500119563 /* GitUpKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		E26F7C5C1B86ECB500119563 /* GitUpKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E26F7C561B86EC8500119563 /* GitUpKit.framework */; };
 		E2A5BE701A814970008DD47F /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E2A5BE6E1A814970008DD47F /* Localizable.strings */; };
-		E2B14B5F1A8A764400003E64 /* GCDiff.m in Sources */ = {isa = PBXBuildFile; fileRef = E2B14B5D1A8A764400003E64 /* GCDiff.m */; };
-		E2B1BF341A85923800A999DF /* GIFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = E2B1BF321A85923800A999DF /* GIFunctions.m */; };
-		E2B1BF361A85C5ED00A999DF /* GIFunctions-Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = E2B1BF351A85C5ED00A999DF /* GIFunctions-Tests.m */; };
 		E2C338B219F8562F00063D95 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C338B119F8562F00063D95 /* AppDelegate.m */; };
 		E2C338B419F8562F00063D95 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C338B319F8562F00063D95 /* main.m */; };
 		E2C338B719F8562F00063D95 /* Document.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C338B619F8562F00063D95 /* Document.m */; };
 		E2C338BA19F8562F00063D95 /* Document.xib in Resources */ = {isa = PBXBuildFile; fileRef = E2C338B819F8562F00063D95 /* Document.xib */; };
 		E2C338BF19F8562F00063D95 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = E2C338BD19F8562F00063D95 /* MainMenu.xib */; };
 		E2C338D719F85C2E00063D95 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2C338D619F85C2E00063D95 /* Cocoa.framework */; };
-		E2C338D919F85C3400063D95 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2C338D819F85C3400063D95 /* Foundation.framework */; };
-		E2C338EC19F85C8600063D95 /* GCBranch.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C338DC19F85C8600063D95 /* GCBranch.m */; };
-		E2C338EE19F85C8600063D95 /* GCCommit.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C338DE19F85C8600063D95 /* GCCommit.m */; };
-		E2C338F019F85C8600063D95 /* GCReference.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C338E119F85C8600063D95 /* GCReference.m */; };
-		E2C338F219F85C8600063D95 /* GCRemote.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C338E319F85C8600063D95 /* GCRemote.m */; };
-		E2C338F419F85C8600063D95 /* GCRepository.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C338E519F85C8600063D95 /* GCRepository.m */; };
-		E2C338F619F85C8600063D95 /* GCStash.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C338E719F85C8600063D95 /* GCStash.m */; };
-		E2C338F819F85C8600063D95 /* GCTag.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C338E919F85C8600063D95 /* GCTag.m */; };
-		E2C3394819F85D8700063D95 /* libheimdal-asn1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E2C3394619F85D5100063D95 /* libheimdal-asn1.dylib */; };
-		E2C3394919F85D8700063D95 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E2C3394419F85D4B00063D95 /* libz.dylib */; };
-		E2C3394A19F85D8700063D95 /* libcrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E2C3394219F85D4000063D95 /* libcrypto.dylib */; };
-		E2C3394C19F85D8700063D95 /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E2C3393E19F85D2A00063D95 /* libiconv.dylib */; };
-		E2C3AA5C19FF0B0600BA89F3 /* GCRepository+Bare.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C3AA5A19FF0B0600BA89F3 /* GCRepository+Bare.m */; };
 		E2C5672D1A6D98BC00ECFE07 /* WindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C5672C1A6D98BC00ECFE07 /* WindowController.m */; };
-		E2D4148C1A02D68700B99634 /* GCHistory+Rewrite.m in Sources */ = {isa = PBXBuildFile; fileRef = E2D4148A1A02D68700B99634 /* GCHistory+Rewrite.m */; };
-		E2F5C27F1A8171C900C30739 /* GCSnapshot.m in Sources */ = {isa = PBXBuildFile; fileRef = E2F5C27D1A8171C900C30739 /* GCSnapshot.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		E2F5C2811A8186C200C30739 /* GCSnapshot-Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = E2F5C2801A8186C200C30739 /* GCSnapshot-Tests.m */; };
-		E2F5C2831A81C53A00C30739 /* GCRepository+Reflog-Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = E2F5C2821A81C53A00C30739 /* GCRepository+Reflog-Tests.m */; };
 		E2F6AA0A1A7EED89002DBF56 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2F6AA091A7EED74002DBF56 /* Crashlytics.framework */; };
-		E2FEED491AEAA6B500CBED80 /* GCCommitDatabase-Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = E2FEED481AEAA6B500CBED80 /* GCCommitDatabase-Tests.m */; };
-		E2FEED4A1AEAA75F00CBED80 /* GCCommitDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = E2FEED451AEAA6AD00CBED80 /* GCCommitDatabase.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		E2FEED6C1AEF7B8300CBED80 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2B14B561A88102C00003E64 /* Security.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -298,9 +40,23 @@
 			remoteGlobalIDString = E21DCAE71B253847006424E8;
 			remoteInfo = Tool;
 		};
-		E267E2661B84DF5B00BAB377 /* PBXContainerItemProxy */ = {
+		E26F7C551B86EC8500119563 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = E2C338A319F8562F00063D95 /* Project object */;
+			containerPortal = E26F7C501B86EC8500119563 /* GitUpKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = E267E1A81B84D6C500BAB377;
+			remoteInfo = GitUpKit;
+		};
+		E26F7C571B86EC8500119563 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E26F7C501B86EC8500119563 /* GitUpKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = E2C338C419F8562F00063D95;
+			remoteInfo = Tests;
+		};
+		E26F7C591B86EC9600119563 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E26F7C501B86EC8500119563 /* GitUpKit.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = E267E1A71B84D6C500BAB377;
 			remoteInfo = GitUpKit;
@@ -326,7 +82,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				E267E2691B84DF8A00BAB377 /* GitUpKit.framework in Copy Frameworks */,
+				E26F7C5B1B86ECA300119563 /* GitUpKit.framework in Copy Frameworks */,
 				E267E1F31B84D93300BAB377 /* Sparkle.framework in Copy Frameworks */,
 			);
 			name = "Copy Frameworks";
@@ -335,181 +91,20 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		E200A3B81B02DDA100C4E39D /* GCPrivate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCPrivate.m; sourceTree = "<group>"; };
-		E20EB08919FC75CA0031A075 /* GCRepository+Reset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GCRepository+Reset.h"; sourceTree = "<group>"; };
-		E20EB08A19FC75CA0031A075 /* GCRepository+Reset.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GCRepository+Reset.m"; sourceTree = "<group>"; };
-		E20EB08D19FC76160031A075 /* GCRepository+Status.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GCRepository+Status.h"; sourceTree = "<group>"; };
-		E20EB08E19FC76160031A075 /* GCRepository+Status.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GCRepository+Status.m"; sourceTree = "<group>"; };
-		E20EB09519FC76AE0031A075 /* GCCore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GCCore.h; sourceTree = "<group>"; };
-		E20F10F11A043E2100076AAC /* GCHistory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCHistory.h; sourceTree = "<group>"; };
-		E20F10F21A043E2100076AAC /* GCHistory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCHistory.m; sourceTree = "<group>"; };
-		E2146C8C1A57F3BC00F4550B /* GCObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCObject.h; sourceTree = "<group>"; };
-		E2146C8D1A57F3BC00F4550B /* GCObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCObject.m; sourceTree = "<group>"; };
-		E2146C901A58849F00F4550B /* GCError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GCError.h; sourceTree = "<group>"; };
-		E2146C911A58D83100F4550B /* GCReflogMessages.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GCReflogMessages.h; sourceTree = "<group>"; };
-		E21739F11A4FE39E00EC6777 /* GCFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCFunctions.h; sourceTree = "<group>"; };
-		E21739F21A4FE39E00EC6777 /* GCFunctions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCFunctions.m; sourceTree = "<group>"; };
 		E21739F51A5080DD00EC6777 /* DocumentController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DocumentController.h; sourceTree = "<group>"; };
 		E21739F61A5080DD00EC6777 /* DocumentController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DocumentController.m; sourceTree = "<group>"; };
-		E21739FC1A51FA6200EC6777 /* GCSubmodule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCSubmodule.h; sourceTree = "<group>"; };
-		E21739FD1A51FA6200EC6777 /* GCSubmodule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCSubmodule.m; sourceTree = "<group>"; };
-		E218A5881A566F6A00DFF1DF /* GCReferenceTransform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCReferenceTransform.h; sourceTree = "<group>"; };
-		E218A5891A566F6A00DFF1DF /* GCReferenceTransform.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCReferenceTransform.m; sourceTree = "<group>"; };
-		E218A58C1A56706600DFF1DF /* GCRepository+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GCRepository+Utilities.h"; sourceTree = "<group>"; };
-		E218A58D1A56706600DFF1DF /* GCRepository+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GCRepository+Utilities.m"; sourceTree = "<group>"; };
-		E21A88F21A9471B300255AC3 /* GIPrivate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GIPrivate.m; sourceTree = "<group>"; };
-		E21A88F51A97172D00255AC3 /* GIUnifiedReflogViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GIUnifiedReflogViewController.h; sourceTree = "<group>"; };
-		E21A88F61A97172D00255AC3 /* GIUnifiedReflogViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GIUnifiedReflogViewController.m; sourceTree = "<group>"; };
-		E21A88F91A97173300255AC3 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/GIUnifiedReflogViewController.xib; sourceTree = "<group>"; };
-		E21A88FB1A97A67900255AC3 /* GISnapshotListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GISnapshotListViewController.h; sourceTree = "<group>"; };
-		E21A88FC1A97A67900255AC3 /* GISnapshotListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GISnapshotListViewController.m; sourceTree = "<group>"; };
-		E21A88FF1A97A67E00255AC3 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/GISnapshotListViewController.xib; sourceTree = "<group>"; };
 		E21DCAE81B253847006424E8 /* gitup */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = gitup; sourceTree = BUILT_PRODUCTS_DIR; };
 		E21DCAEA1B253847006424E8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		E21DCAF41B254112006424E8 /* install.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = install.sh; sourceTree = "<group>"; };
-		E22941D31AC11E31000A83AF /* GIAppKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GIAppKit.h; sourceTree = "<group>"; };
-		E22941D41AC11E31000A83AF /* GIAppKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GIAppKit.m; sourceTree = "<group>"; };
-		E22941D51AC11E31000A83AF /* GIModalView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GIModalView.h; sourceTree = "<group>"; };
-		E22941D61AC11E31000A83AF /* GIModalView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GIModalView.m; sourceTree = "<group>"; };
-		E22941D71AC11E31000A83AF /* GIViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GIViewController.h; sourceTree = "<group>"; };
-		E22941D81AC11E31000A83AF /* GIViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GIViewController.m; sourceTree = "<group>"; };
-		E22941DC1AC11E4E000A83AF /* GIWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GIWindowController.h; sourceTree = "<group>"; };
-		E22941DD1AC11E4E000A83AF /* GIWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GIWindowController.m; sourceTree = "<group>"; };
-		E22941DE1AC11E4E000A83AF /* GIWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GIWindowController.xib; sourceTree = "<group>"; };
-		E22941E11AC11E79000A83AF /* Utilities.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Utilities.xcassets; sourceTree = "<group>"; };
-		E22941E31AC11EBB000A83AF /* GILinkButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GILinkButton.h; sourceTree = "<group>"; };
-		E22941E41AC11EBB000A83AF /* GILinkButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GILinkButton.m; sourceTree = "<group>"; };
-		E22941E81AC11F56000A83AF /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/GIAdvancedCommitViewController.xib; sourceTree = "<group>"; };
-		E22941EA1AC11F56000A83AF /* en */ = {isa = PBXFileReference; lastKnownFileType = text; name = en; path = "en.lproj/GIConfigViewController-Help.txt"; sourceTree = "<group>"; };
-		E22941EC1AC11F56000A83AF /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/GIConfigViewController.xib; sourceTree = "<group>"; };
-		E22941EE1AC11F56000A83AF /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/GIDiffViewController.xib; sourceTree = "<group>"; };
-		E22941F01AC11F56000A83AF /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/GIMapViewController.xib; sourceTree = "<group>"; };
-		E22941F21AC11F56000A83AF /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/GIQuickViewController.xib; sourceTree = "<group>"; };
-		E22941F41AC11F56000A83AF /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/GISimpleCommitViewController.xib; sourceTree = "<group>"; };
-		E22941F61AC11F56000A83AF /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/GIStashListViewController.xib; sourceTree = "<group>"; };
-		E22941F71AC11F56000A83AF /* GIAdvancedCommitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GIAdvancedCommitViewController.h; sourceTree = "<group>"; };
-		E22941F81AC11F56000A83AF /* GIAdvancedCommitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GIAdvancedCommitViewController.m; sourceTree = "<group>"; };
-		E22941F91AC11F56000A83AF /* GICommitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GICommitViewController.h; sourceTree = "<group>"; };
-		E22941FA1AC11F56000A83AF /* GICommitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GICommitViewController.m; sourceTree = "<group>"; };
-		E22941FB1AC11F56000A83AF /* GIConfigViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GIConfigViewController.h; sourceTree = "<group>"; };
-		E22941FC1AC11F56000A83AF /* GIConfigViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GIConfigViewController.m; sourceTree = "<group>"; };
-		E22941FD1AC11F56000A83AF /* GIDiffViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GIDiffViewController.h; sourceTree = "<group>"; };
-		E22941FE1AC11F56000A83AF /* GIDiffViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GIDiffViewController.m; sourceTree = "<group>"; };
-		E22941FF1AC11F56000A83AF /* GIMapViewController+Operations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GIMapViewController+Operations.h"; sourceTree = "<group>"; };
-		E22942001AC11F56000A83AF /* GIMapViewController+Operations.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GIMapViewController+Operations.m"; sourceTree = "<group>"; };
-		E22942011AC11F56000A83AF /* GIMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GIMapViewController.h; sourceTree = "<group>"; };
-		E22942021AC11F56000A83AF /* GIMapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GIMapViewController.m; sourceTree = "<group>"; };
-		E22942031AC11F56000A83AF /* GIQuickViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GIQuickViewController.h; sourceTree = "<group>"; };
-		E22942041AC11F56000A83AF /* GIQuickViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GIQuickViewController.m; sourceTree = "<group>"; };
-		E22942051AC11F56000A83AF /* GISimpleCommitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GISimpleCommitViewController.h; sourceTree = "<group>"; };
-		E22942061AC11F56000A83AF /* GISimpleCommitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GISimpleCommitViewController.m; sourceTree = "<group>"; };
-		E22942071AC11F56000A83AF /* GIStashListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GIStashListViewController.h; sourceTree = "<group>"; };
-		E22942081AC11F56000A83AF /* GIStashListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GIStashListViewController.m; sourceTree = "<group>"; };
-		E229421A1AC11FF6000A83AF /* Views.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Views.xcassets; sourceTree = "<group>"; };
-		E229421D1AC120A8000A83AF /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/GICommitRewriterViewController.xib; sourceTree = "<group>"; };
-		E229421F1AC120A8000A83AF /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/GICommitSplitterViewController.xib; sourceTree = "<group>"; };
-		E22942221AC12145000A83AF /* GICommitRewriterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GICommitRewriterViewController.h; sourceTree = "<group>"; };
-		E22942231AC12145000A83AF /* GICommitRewriterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GICommitRewriterViewController.m; sourceTree = "<group>"; };
-		E22942251AC12E5C000A83AF /* GIColorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GIColorView.h; sourceTree = "<group>"; };
-		E22942261AC12E5C000A83AF /* GIColorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GIColorView.m; sourceTree = "<group>"; };
-		E22942291AC2160E000A83AF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Reasons.strings; sourceTree = "<group>"; };
-		E229D8F61ACF313E00D5F0AC /* GICommitSplitterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GICommitSplitterViewController.h; sourceTree = "<group>"; };
-		E229D8F71ACF313E00D5F0AC /* GICommitSplitterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GICommitSplitterViewController.m; sourceTree = "<group>"; };
-		E230DEE91AA11CE9006EE09F /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/GICommitListViewController.xib; sourceTree = "<group>"; };
-		E230DEEB1AA11CF7006EE09F /* GICommitListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GICommitListViewController.h; sourceTree = "<group>"; };
-		E230DEEC1AA11CF7006EE09F /* GICommitListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GICommitListViewController.m; sourceTree = "<group>"; };
-		E23186031B139CB900A93CCF /* GIConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GIConstants.h; sourceTree = "<group>"; };
-		E23C1A891A9019610060F6AD /* GCLiveRepository.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCLiveRepository.h; sourceTree = "<group>"; };
-		E23C1A8A1A9019610060F6AD /* GCLiveRepository.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCLiveRepository.m; sourceTree = "<group>"; };
 		E24306981B276D0B00CE8CCB /* ToolProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ToolProtocol.h; sourceTree = "<group>"; };
-		E244538F1A70CDA200E61DE7 /* GCMacros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GCMacros.h; sourceTree = "<group>"; };
-		E24508FE1A9A50EA003E602D /* GCRepository+Config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GCRepository+Config.h"; sourceTree = "<group>"; };
-		E24508FF1A9A50EA003E602D /* GCRepository+Config.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GCRepository+Config.m"; sourceTree = "<group>"; };
-		E24509021A9A50F3003E602D /* GCRepository+Config-Tests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GCRepository+Config-Tests.m"; sourceTree = "<group>"; };
-		E259C2C31A64C8EA0079616B /* GCTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCTestCase.h; sourceTree = "<group>"; };
-		E259C2C41A64C8EA0079616B /* GCTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCTestCase.m; sourceTree = "<group>"; };
-		E259C2C61A64C9980079616B /* GCRepository-Tests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GCRepository-Tests.m"; sourceTree = "<group>"; };
-		E259C2C81A64CAB30079616B /* GCSubmodule-Tests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GCSubmodule-Tests.m"; sourceTree = "<group>"; };
-		E259C2CA1A64D27F0079616B /* GCTag-Tests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GCTag-Tests.m"; sourceTree = "<group>"; };
-		E259C2CC1A64D30A0079616B /* GCStash-Tests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GCStash-Tests.m"; sourceTree = "<group>"; };
-		E259C2CE1A64F7D00079616B /* GCBranch-Tests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GCBranch-Tests.m"; sourceTree = "<group>"; };
-		E259C2D01A64F9050079616B /* GCRemote-Tests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GCRemote-Tests.m"; sourceTree = "<group>"; };
-		E259C2D21A64F9FF0079616B /* GCHistory-Tests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GCHistory-Tests.m"; sourceTree = "<group>"; };
-		E259C2D41A64FAA40079616B /* GCHistory+Rewrite-Tests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GCHistory+Rewrite-Tests.m"; sourceTree = "<group>"; };
-		E259C2D61A64FAEA0079616B /* GCRepository+Utilities-Tests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GCRepository+Utilities-Tests.m"; sourceTree = "<group>"; };
-		E259C2D81A64FD640079616B /* GCRepository+Bare-Tests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GCRepository+Bare-Tests.m"; sourceTree = "<group>"; };
-		E259C2DA1A64FDA60079616B /* GCDiff-Tests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GCDiff-Tests.m"; sourceTree = "<group>"; };
-		E259C2DC1A64FDD00079616B /* GCRepository+HEAD-Tests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GCRepository+HEAD-Tests.m"; sourceTree = "<group>"; };
-		E259C2E01A64FE4C0079616B /* GCRepository+Status-Tests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GCRepository+Status-Tests.m"; sourceTree = "<group>"; };
-		E259C2E21A64FE710079616B /* GCRepository+Reset-Tests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GCRepository+Reset-Tests.m"; sourceTree = "<group>"; };
-		E259C2E41A6624DC0079616B /* GCCommit-Tests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GCCommit-Tests.m"; sourceTree = "<group>"; };
 		E25EBCEA1AA3F8B700D3AF44 /* Application.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Application.xcassets; sourceTree = "<group>"; };
 		E2653D241A5B2FBD006A9871 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = SOURCE_ROOT; };
-		E267E1A81B84D6C500BAB377 /* GitUpKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = GitUpKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		E267E1AA1B84D6C500BAB377 /* GitUpKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GitUpKit.h; sourceTree = "<group>"; };
-		E267E1AC1B84D6C500BAB377 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		E267E2AD1B84F27800BAB377 /* XLASLLogger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XLASLLogger.h; sourceTree = "<group>"; };
-		E267E2AE1B84F27800BAB377 /* XLASLLogger.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XLASLLogger.m; sourceTree = "<group>"; };
-		E267E2AF1B84F27800BAB377 /* XLCallbackLogger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XLCallbackLogger.h; sourceTree = "<group>"; };
-		E267E2B01B84F27800BAB377 /* XLCallbackLogger.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XLCallbackLogger.m; sourceTree = "<group>"; };
-		E267E2B11B84F27800BAB377 /* XLFacility.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XLFacility.h; sourceTree = "<group>"; };
-		E267E2B21B84F27800BAB377 /* XLFacility.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XLFacility.m; sourceTree = "<group>"; };
-		E267E2B31B84F27800BAB377 /* XLFacilityCMacros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XLFacilityCMacros.h; sourceTree = "<group>"; };
-		E267E2B41B84F27800BAB377 /* XLFacilityMacros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XLFacilityMacros.h; sourceTree = "<group>"; };
-		E267E2B51B84F27800BAB377 /* XLFacilityPrivate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XLFacilityPrivate.h; sourceTree = "<group>"; };
-		E267E2B61B84F27800BAB377 /* XLFileLogger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XLFileLogger.h; sourceTree = "<group>"; };
-		E267E2B71B84F27800BAB377 /* XLFileLogger.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XLFileLogger.m; sourceTree = "<group>"; };
-		E267E2B81B84F27800BAB377 /* XLFunctions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XLFunctions.h; sourceTree = "<group>"; };
-		E267E2B91B84F27800BAB377 /* XLFunctions.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XLFunctions.m; sourceTree = "<group>"; };
-		E267E2BA1B84F27800BAB377 /* XLLogger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XLLogger.h; sourceTree = "<group>"; };
-		E267E2BB1B84F27800BAB377 /* XLLogger.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XLLogger.m; sourceTree = "<group>"; };
-		E267E2BC1B84F27800BAB377 /* XLLogRecord.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XLLogRecord.h; sourceTree = "<group>"; };
-		E267E2BD1B84F27800BAB377 /* XLLogRecord.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XLLogRecord.m; sourceTree = "<group>"; };
-		E267E2BE1B84F27800BAB377 /* XLStandardLogger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XLStandardLogger.h; sourceTree = "<group>"; };
-		E267E2BF1B84F27800BAB377 /* XLStandardLogger.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XLStandardLogger.m; sourceTree = "<group>"; };
-		E267E2C11B84F27800BAB377 /* XLDatabaseLogger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XLDatabaseLogger.h; sourceTree = "<group>"; };
-		E267E2C21B84F27800BAB377 /* XLDatabaseLogger.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XLDatabaseLogger.m; sourceTree = "<group>"; };
-		E2790D401ACB1B1100965A98 /* GCFoundation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCFoundation.h; sourceTree = "<group>"; };
-		E2790D411ACB1B1100965A98 /* GCFoundation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCFoundation.m; sourceTree = "<group>"; };
-		E2790D441ACF12E200965A98 /* GCRepository+Index-Tests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GCRepository+Index-Tests.m"; sourceTree = "<group>"; };
-		E2790D451ACF12E200965A98 /* GCRepository+Index.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GCRepository+Index.h"; sourceTree = "<group>"; };
-		E2790D461ACF12E200965A98 /* GCRepository+Index.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GCRepository+Index.m"; sourceTree = "<group>"; };
-		E2790D4B1ACF130A00965A98 /* GCIndex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCIndex.h; sourceTree = "<group>"; };
-		E2790D4C1ACF130A00965A98 /* GCIndex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCIndex.m; sourceTree = "<group>"; };
-		E27B6D641A84451900D05452 /* GCRepository+Reflog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GCRepository+Reflog.h"; sourceTree = "<group>"; };
-		E27B6D651A84451900D05452 /* GCRepository+Reflog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GCRepository+Reflog.m"; sourceTree = "<group>"; };
-		E27E43011A74A94700D04ED1 /* GIGraph-Tests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GIGraph-Tests.m"; sourceTree = "<group>"; };
-		E27F9B721A549097009C9B3D /* GCRepository+HEAD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GCRepository+HEAD.h"; sourceTree = "<group>"; };
-		E27F9B731A549097009C9B3D /* GCRepository+HEAD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GCRepository+HEAD.m"; sourceTree = "<group>"; };
+		E26F7C501B86EC8500119563 /* GitUpKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GitUpKit.xcodeproj; path = GitUpKit/GitUpKit.xcodeproj; sourceTree = "<group>"; };
 		E28200AC1A7D71EE00DA4096 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = System/Library/Frameworks/CoreServices.framework; sourceTree = SDKROOT; };
-		E284D66B1AAAD6660038C176 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		E284D6701AAC004F0038C176 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		E2891AB11AE15BB600E58C77 /* GISplitDiffView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GISplitDiffView.h; sourceTree = "<group>"; };
-		E2891AB21AE15BB600E58C77 /* GISplitDiffView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GISplitDiffView.m; sourceTree = "<group>"; };
-		E2891AB41AE1684A00E58C77 /* GIDiffView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GIDiffView.h; sourceTree = "<group>"; };
-		E2891AB51AE1684A00E58C77 /* GIDiffView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GIDiffView.m; sourceTree = "<group>"; };
-		E299D00A1A71F0E9005035F7 /* GCSQLiteRepository.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCSQLiteRepository.m; sourceTree = "<group>"; };
-		E299D00D1A71F937005035F7 /* GCSQLiteRepository.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GCSQLiteRepository.h; sourceTree = "<group>"; };
-		E299D00E1A7206E7005035F7 /* GCSQLiteRepository-Tests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GCSQLiteRepository-Tests.m"; sourceTree = "<group>"; };
-		E299D0111A749C26005035F7 /* GCRepository+Mock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GCRepository+Mock.h"; sourceTree = "<group>"; };
-		E299D0121A749C26005035F7 /* GCRepository+Mock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GCRepository+Mock.m"; sourceTree = "<group>"; };
-		E299D0151A749D27005035F7 /* GCRepository+Mock-Tests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GCRepository+Mock-Tests.m"; sourceTree = "<group>"; };
 		E2A5BE6C1A80E560008DD47F /* Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Common.h; sourceTree = "<group>"; };
 		E2A5BE6F1A814970008DD47F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
-		E2ACEC911A7F23F9006A5CBE /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		E2B14B561A88102C00003E64 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
-		E2B14B5C1A8A764400003E64 /* GCDiff.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCDiff.h; sourceTree = "<group>"; };
-		E2B14B5D1A8A764400003E64 /* GCDiff.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCDiff.m; sourceTree = "<group>"; };
-		E2B1BF311A85923800A999DF /* GIFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GIFunctions.h; sourceTree = "<group>"; };
-		E2B1BF321A85923800A999DF /* GIFunctions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GIFunctions.m; sourceTree = "<group>"; };
-		E2B1BF351A85C5ED00A999DF /* GIFunctions-Tests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GIFunctions-Tests.m"; sourceTree = "<group>"; };
-		E2B25A571B7C56FD00FA546C /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		E2BDA0681AD47A2F00E69729 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = en; path = en.lproj/Help.plist; sourceTree = "<group>"; };
-		E2BDA06A1AD5AF2F00E69729 /* GIViewController+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GIViewController+Utilities.h"; sourceTree = "<group>"; };
-		E2BDA06B1AD5AF2F00E69729 /* GIViewController+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GIViewController+Utilities.m"; sourceTree = "<group>"; };
-		E2BDA0701AD5B97B00E69729 /* GIConflictResolverViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GIConflictResolverViewController.h; sourceTree = "<group>"; };
-		E2BDA0711AD5B97B00E69729 /* GIConflictResolverViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GIConflictResolverViewController.m; sourceTree = "<group>"; };
-		E2BDA0741AD5B98A00E69729 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/GIConflictResolverViewController.xib; sourceTree = "<group>"; };
 		E2C338AB19F8562F00063D95 /* GitUp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GitUp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E2C338AF19F8562F00063D95 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E2C338B019F8562F00063D95 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -517,68 +112,14 @@
 		E2C338B319F8562F00063D95 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		E2C338B519F8562F00063D95 /* Document.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Document.h; sourceTree = "<group>"; };
 		E2C338B619F8562F00063D95 /* Document.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Document.m; sourceTree = "<group>"; };
-		E2C338C419F8562F00063D95 /* GitUpTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GitUpTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E2C338D619F85C2E00063D95 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		E2C338D819F85C3400063D95 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		E2C338DB19F85C8600063D95 /* GCBranch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCBranch.h; sourceTree = "<group>"; };
-		E2C338DC19F85C8600063D95 /* GCBranch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCBranch.m; sourceTree = "<group>"; };
-		E2C338DD19F85C8600063D95 /* GCCommit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCCommit.h; sourceTree = "<group>"; };
-		E2C338DE19F85C8600063D95 /* GCCommit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCCommit.m; sourceTree = "<group>"; };
-		E2C338DF19F85C8600063D95 /* GCPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCPrivate.h; sourceTree = "<group>"; };
-		E2C338E019F85C8600063D95 /* GCReference.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCReference.h; sourceTree = "<group>"; };
-		E2C338E119F85C8600063D95 /* GCReference.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCReference.m; sourceTree = "<group>"; };
-		E2C338E219F85C8600063D95 /* GCRemote.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCRemote.h; sourceTree = "<group>"; };
-		E2C338E319F85C8600063D95 /* GCRemote.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCRemote.m; sourceTree = "<group>"; };
-		E2C338E419F85C8600063D95 /* GCRepository.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCRepository.h; sourceTree = "<group>"; };
-		E2C338E519F85C8600063D95 /* GCRepository.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCRepository.m; sourceTree = "<group>"; };
-		E2C338E619F85C8600063D95 /* GCStash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCStash.h; sourceTree = "<group>"; };
-		E2C338E719F85C8600063D95 /* GCStash.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCStash.m; sourceTree = "<group>"; };
-		E2C338E819F85C8600063D95 /* GCTag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCTag.h; sourceTree = "<group>"; };
-		E2C338E919F85C8600063D95 /* GCTag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCTag.m; sourceTree = "<group>"; };
-		E2C3393E19F85D2A00063D95 /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = usr/lib/libiconv.dylib; sourceTree = SDKROOT; };
-		E2C3394019F85D3C00063D95 /* libssl.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libssl.dylib; path = usr/lib/libssl.dylib; sourceTree = SDKROOT; };
-		E2C3394219F85D4000063D95 /* libcrypto.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcrypto.dylib; path = usr/lib/libcrypto.dylib; sourceTree = SDKROOT; };
 		E2C3394419F85D4B00063D95 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
-		E2C3394619F85D5100063D95 /* libheimdal-asn1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libheimdal-asn1.dylib"; path = "usr/lib/libheimdal-asn1.dylib"; sourceTree = SDKROOT; };
-		E2C3AA5919FF0B0600BA89F3 /* GCRepository+Bare.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GCRepository+Bare.h"; sourceTree = "<group>"; };
-		E2C3AA5A19FF0B0600BA89F3 /* GCRepository+Bare.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GCRepository+Bare.m"; sourceTree = "<group>"; };
 		E2C5672B1A6D98BC00ECFE07 /* WindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WindowController.h; sourceTree = "<group>"; };
 		E2C5672C1A6D98BC00ECFE07 /* WindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WindowController.m; sourceTree = "<group>"; };
 		E2C8C91519FABC5100DA54AA /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/Document.xib; sourceTree = "<group>"; };
 		E2C8C91619FABC5100DA54AA /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
-		E2C9FF861AA510170051B2AE /* GIUnifiedDiffView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GIUnifiedDiffView.h; sourceTree = "<group>"; };
-		E2C9FF871AA510170051B2AE /* GIUnifiedDiffView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GIUnifiedDiffView.m; sourceTree = "<group>"; };
-		E2D414891A02D68700B99634 /* GCHistory+Rewrite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GCHistory+Rewrite.h"; sourceTree = "<group>"; };
-		E2D4148A1A02D68700B99634 /* GCHistory+Rewrite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GCHistory+Rewrite.m"; sourceTree = "<group>"; };
-		E2D4DEA01A4D562300B6AF66 /* GIGraph.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GIGraph.h; sourceTree = "<group>"; };
-		E2D4DEA11A4D562300B6AF66 /* GIGraph.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GIGraph.m; sourceTree = "<group>"; };
-		E2D4DEA21A4D562300B6AF66 /* GIGraphView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GIGraphView.h; sourceTree = "<group>"; };
-		E2D4DEA31A4D562300B6AF66 /* GIGraphView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GIGraphView.m; sourceTree = "<group>"; };
-		E2D4DEA61A4D57AA00B6AF66 /* GINode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GINode.h; sourceTree = "<group>"; };
-		E2D4DEA71A4D57AA00B6AF66 /* GINode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GINode.m; sourceTree = "<group>"; };
-		E2D4DEA91A4D581600B6AF66 /* GIPrivate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GIPrivate.h; sourceTree = "<group>"; };
-		E2D4DEAA1A4D587800B6AF66 /* GILine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GILine.h; sourceTree = "<group>"; };
-		E2D4DEAB1A4D587800B6AF66 /* GILine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GILine.m; sourceTree = "<group>"; };
-		E2D4DEAD1A4D592000B6AF66 /* GIBranch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GIBranch.h; sourceTree = "<group>"; };
-		E2D4DEAE1A4D592000B6AF66 /* GIBranch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GIBranch.m; sourceTree = "<group>"; };
-		E2D4DEB01A4D599200B6AF66 /* GILayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GILayer.h; sourceTree = "<group>"; };
-		E2D4DEB11A4D599200B6AF66 /* GILayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GILayer.m; sourceTree = "<group>"; };
-		E2D4DEB31A4D5AC600B6AF66 /* GIInterface.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GIInterface.h; sourceTree = "<group>"; };
-		E2D5AB301AA502D400BE9FFC /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/GIDiffContentsViewController.xib; sourceTree = "<group>"; };
-		E2D5AB321AA502E000BE9FFC /* GIDiffContentsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GIDiffContentsViewController.h; sourceTree = "<group>"; };
-		E2D5AB331AA502E000BE9FFC /* GIDiffContentsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GIDiffContentsViewController.m; sourceTree = "<group>"; };
-		E2D899991AA411430081FE66 /* Components.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Components.xcassets; sourceTree = "<group>"; };
-		E2E4CA191AB0F3F000D225D3 /* GIDiffFilesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GIDiffFilesViewController.h; sourceTree = "<group>"; };
-		E2E4CA1A1AB0F3F000D225D3 /* GIDiffFilesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GIDiffFilesViewController.m; sourceTree = "<group>"; };
-		E2E4CA1D1AB0F3F500D225D3 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/GIDiffFilesViewController.xib; sourceTree = "<group>"; };
-		E2F5C27C1A8171C900C30739 /* GCSnapshot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCSnapshot.h; sourceTree = "<group>"; };
-		E2F5C27D1A8171C900C30739 /* GCSnapshot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCSnapshot.m; sourceTree = "<group>"; };
-		E2F5C2801A8186C200C30739 /* GCSnapshot-Tests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GCSnapshot-Tests.m"; sourceTree = "<group>"; };
-		E2F5C2821A81C53A00C30739 /* GCRepository+Reflog-Tests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GCRepository+Reflog-Tests.m"; sourceTree = "<group>"; };
 		E2F6AA091A7EED74002DBF56 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = SOURCE_ROOT; };
-		E2FEED441AEAA6AD00CBED80 /* GCCommitDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCCommitDatabase.h; sourceTree = "<group>"; };
-		E2FEED451AEAA6AD00CBED80 /* GCCommitDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCCommitDatabase.m; sourceTree = "<group>"; };
-		E2FEED481AEAA6B500CBED80 /* GCCommitDatabase-Tests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GCCommitDatabase-Tests.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -592,43 +133,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		E267E1A41B84D6C500BAB377 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				E267E1FB1B84DA7600BAB377 /* Cocoa.framework in Frameworks */,
-				E267E2301B84DC0900BAB377 /* QuartzCore.framework in Frameworks */,
-				E267E1F91B84DA3F00BAB377 /* Security.framework in Frameworks */,
-				E267E1F41B84D95B00BAB377 /* libz.dylib in Frameworks */,
-				E267E1F61B84D99400BAB377 /* libcrypto.dylib in Frameworks */,
-				E267E1F51B84D95E00BAB377 /* libiconv.dylib in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		E2C338A819F8562F00063D95 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E267E26A1B84DF9300BAB377 /* GitUpKit.framework in Frameworks */,
-				E2653D251A5B2FBD006A9871 /* Sparkle.framework in Frameworks */,
-				E2F6AA0A1A7EED89002DBF56 /* Crashlytics.framework in Frameworks */,
 				E2C338D719F85C2E00063D95 /* Cocoa.framework in Frameworks */,
 				E267E26B1B84E07E00BAB377 /* Security.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		E2C338C119F8562F00063D95 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				E2C338D919F85C3400063D95 /* Foundation.framework in Frameworks */,
-				E28200AE1A7D720000DA4096 /* CoreServices.framework in Frameworks */,
-				E284D6711AAC004F0038C176 /* CoreGraphics.framework in Frameworks */,
-				E2FEED6C1AEF7B8300CBED80 /* Security.framework in Frameworks */,
-				E2C3394819F85D8700063D95 /* libheimdal-asn1.dylib in Frameworks */,
-				E2C3394919F85D8700063D95 /* libz.dylib in Frameworks */,
-				E2C3394A19F85D8700063D95 /* libcrypto.dylib in Frameworks */,
-				E2C3394C19F85D8700063D95 /* libiconv.dylib in Frameworks */,
+				E26F7C5C1B86ECB500119563 /* GitUpKit.framework in Frameworks */,
+				E2653D251A5B2FBD006A9871 /* Sparkle.framework in Frameworks */,
+				E2F6AA0A1A7EED89002DBF56 /* Crashlytics.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -642,43 +155,11 @@
 				E2C338D819F85C3400063D95 /* Foundation.framework */,
 				E28200AC1A7D71EE00DA4096 /* CoreServices.framework */,
 				E2B14B561A88102C00003E64 /* Security.framework */,
-				E284D66B1AAAD6660038C176 /* QuartzCore.framework */,
-				E284D6701AAC004F0038C176 /* CoreGraphics.framework */,
-				E2ACEC911A7F23F9006A5CBE /* IOKit.framework */,
 				E2653D241A5B2FBD006A9871 /* Sparkle.framework */,
 				E2F6AA091A7EED74002DBF56 /* Crashlytics.framework */,
-				E2C3394619F85D5100063D95 /* libheimdal-asn1.dylib */,
 				E2C3394419F85D4B00063D95 /* libz.dylib */,
-				E2C3394219F85D4000063D95 /* libcrypto.dylib */,
-				E2C3394019F85D3C00063D95 /* libssl.dylib */,
-				E2C3393E19F85D2A00063D95 /* libiconv.dylib */,
 			);
 			name = "Framework and Libraries";
-			sourceTree = "<group>";
-		};
-		E21A88DC1A942CCA00255AC3 /* Components */ = {
-			isa = PBXGroup;
-			children = (
-				E2D899991AA411430081FE66 /* Components.xcassets */,
-				E22942281AC2160E000A83AF /* Reasons.strings */,
-				E230DEEB1AA11CF7006EE09F /* GICommitListViewController.h */,
-				E230DEEC1AA11CF7006EE09F /* GICommitListViewController.m */,
-				E230DEE81AA11CE9006EE09F /* GICommitListViewController.xib */,
-				E2D5AB321AA502E000BE9FFC /* GIDiffContentsViewController.h */,
-				E2D5AB331AA502E000BE9FFC /* GIDiffContentsViewController.m */,
-				E2D5AB2F1AA502D400BE9FFC /* GIDiffContentsViewController.xib */,
-				E2E4CA191AB0F3F000D225D3 /* GIDiffFilesViewController.h */,
-				E2E4CA1A1AB0F3F000D225D3 /* GIDiffFilesViewController.m */,
-				E2E4CA1C1AB0F3F500D225D3 /* GIDiffFilesViewController.xib */,
-				E21A88FB1A97A67900255AC3 /* GISnapshotListViewController.h */,
-				E21A88FC1A97A67900255AC3 /* GISnapshotListViewController.m */,
-				E21A88FE1A97A67E00255AC3 /* GISnapshotListViewController.xib */,
-				E21A88F51A97172D00255AC3 /* GIUnifiedReflogViewController.h */,
-				E21A88F61A97172D00255AC3 /* GIUnifiedReflogViewController.m */,
-				E21A88F81A97173300255AC3 /* GIUnifiedReflogViewController.xib */,
-			);
-			name = Components;
-			path = GitUpKit/Components;
 			sourceTree = "<group>";
 		};
 		E21DCAE91B253847006424E8 /* Tool */ = {
@@ -690,150 +171,22 @@
 			path = Tool;
 			sourceTree = "<group>";
 		};
-		E22941D21AC11E31000A83AF /* Utilities */ = {
+		E26F7C511B86EC8500119563 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				E22941E11AC11E79000A83AF /* Utilities.xcassets */,
-				E22941D31AC11E31000A83AF /* GIAppKit.h */,
-				E22941D41AC11E31000A83AF /* GIAppKit.m */,
-				E22942251AC12E5C000A83AF /* GIColorView.h */,
-				E22942261AC12E5C000A83AF /* GIColorView.m */,
-				E22941E31AC11EBB000A83AF /* GILinkButton.h */,
-				E22941E41AC11EBB000A83AF /* GILinkButton.m */,
-				E22941D51AC11E31000A83AF /* GIModalView.h */,
-				E22941D61AC11E31000A83AF /* GIModalView.m */,
-				E22941D71AC11E31000A83AF /* GIViewController.h */,
-				E22941D81AC11E31000A83AF /* GIViewController.m */,
-				E2BDA06A1AD5AF2F00E69729 /* GIViewController+Utilities.h */,
-				E2BDA06B1AD5AF2F00E69729 /* GIViewController+Utilities.m */,
-				E22941DC1AC11E4E000A83AF /* GIWindowController.h */,
-				E22941DD1AC11E4E000A83AF /* GIWindowController.m */,
-				E22941DE1AC11E4E000A83AF /* GIWindowController.xib */,
+				E26F7C561B86EC8500119563 /* GitUpKit.framework */,
+				E26F7C581B86EC8500119563 /* GitUpTests.xctest */,
 			);
-			name = Utilities;
-			path = GitUpKit/Utilities;
-			sourceTree = "<group>";
-		};
-		E22941E61AC11F56000A83AF /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				E229421A1AC11FF6000A83AF /* Views.xcassets */,
-				E22941F71AC11F56000A83AF /* GIAdvancedCommitViewController.h */,
-				E22941F81AC11F56000A83AF /* GIAdvancedCommitViewController.m */,
-				E22941E71AC11F56000A83AF /* GIAdvancedCommitViewController.xib */,
-				E22942221AC12145000A83AF /* GICommitRewriterViewController.h */,
-				E22942231AC12145000A83AF /* GICommitRewriterViewController.m */,
-				E229421C1AC120A8000A83AF /* GICommitRewriterViewController.xib */,
-				E229D8F61ACF313E00D5F0AC /* GICommitSplitterViewController.h */,
-				E229D8F71ACF313E00D5F0AC /* GICommitSplitterViewController.m */,
-				E229421E1AC120A8000A83AF /* GICommitSplitterViewController.xib */,
-				E22941F91AC11F56000A83AF /* GICommitViewController.h */,
-				E22941FA1AC11F56000A83AF /* GICommitViewController.m */,
-				E22941FB1AC11F56000A83AF /* GIConfigViewController.h */,
-				E22941FC1AC11F56000A83AF /* GIConfigViewController.m */,
-				E22941EB1AC11F56000A83AF /* GIConfigViewController.xib */,
-				E22941E91AC11F56000A83AF /* GIConfigViewController-Help.txt */,
-				E2BDA0701AD5B97B00E69729 /* GIConflictResolverViewController.h */,
-				E2BDA0711AD5B97B00E69729 /* GIConflictResolverViewController.m */,
-				E2BDA0731AD5B98A00E69729 /* GIConflictResolverViewController.xib */,
-				E22941FD1AC11F56000A83AF /* GIDiffViewController.h */,
-				E22941FE1AC11F56000A83AF /* GIDiffViewController.m */,
-				E22941ED1AC11F56000A83AF /* GIDiffViewController.xib */,
-				E22942011AC11F56000A83AF /* GIMapViewController.h */,
-				E22942021AC11F56000A83AF /* GIMapViewController.m */,
-				E22941FF1AC11F56000A83AF /* GIMapViewController+Operations.h */,
-				E22942001AC11F56000A83AF /* GIMapViewController+Operations.m */,
-				E22941EF1AC11F56000A83AF /* GIMapViewController.xib */,
-				E22942031AC11F56000A83AF /* GIQuickViewController.h */,
-				E22942041AC11F56000A83AF /* GIQuickViewController.m */,
-				E22941F11AC11F56000A83AF /* GIQuickViewController.xib */,
-				E22942051AC11F56000A83AF /* GISimpleCommitViewController.h */,
-				E22942061AC11F56000A83AF /* GISimpleCommitViewController.m */,
-				E22941F31AC11F56000A83AF /* GISimpleCommitViewController.xib */,
-				E22942071AC11F56000A83AF /* GIStashListViewController.h */,
-				E22942081AC11F56000A83AF /* GIStashListViewController.m */,
-				E22941F51AC11F56000A83AF /* GIStashListViewController.xib */,
-			);
-			name = Views;
-			path = GitUpKit/Views;
-			sourceTree = "<group>";
-		};
-		E267E1A91B84D6C500BAB377 /* GitUpKit */ = {
-			isa = PBXGroup;
-			children = (
-				E267E1AA1B84D6C500BAB377 /* GitUpKit.h */,
-				E267E1AC1B84D6C500BAB377 /* Info.plist */,
-			);
-			path = GitUpKit;
-			sourceTree = "<group>";
-		};
-		E267E2AC1B84F27800BAB377 /* Core */ = {
-			isa = PBXGroup;
-			children = (
-				E267E2AD1B84F27800BAB377 /* XLASLLogger.h */,
-				E267E2AE1B84F27800BAB377 /* XLASLLogger.m */,
-				E267E2AF1B84F27800BAB377 /* XLCallbackLogger.h */,
-				E267E2B01B84F27800BAB377 /* XLCallbackLogger.m */,
-				E267E2B11B84F27800BAB377 /* XLFacility.h */,
-				E267E2B21B84F27800BAB377 /* XLFacility.m */,
-				E267E2B31B84F27800BAB377 /* XLFacilityCMacros.h */,
-				E267E2B41B84F27800BAB377 /* XLFacilityMacros.h */,
-				E267E2B51B84F27800BAB377 /* XLFacilityPrivate.h */,
-				E267E2B61B84F27800BAB377 /* XLFileLogger.h */,
-				E267E2B71B84F27800BAB377 /* XLFileLogger.m */,
-				E267E2B81B84F27800BAB377 /* XLFunctions.h */,
-				E267E2B91B84F27800BAB377 /* XLFunctions.m */,
-				E267E2BA1B84F27800BAB377 /* XLLogger.h */,
-				E267E2BB1B84F27800BAB377 /* XLLogger.m */,
-				E267E2BC1B84F27800BAB377 /* XLLogRecord.h */,
-				E267E2BD1B84F27800BAB377 /* XLLogRecord.m */,
-				E267E2BE1B84F27800BAB377 /* XLStandardLogger.h */,
-				E267E2BF1B84F27800BAB377 /* XLStandardLogger.m */,
-			);
-			path = Core;
-			sourceTree = "<group>";
-		};
-		E267E2C01B84F27800BAB377 /* Extensions */ = {
-			isa = PBXGroup;
-			children = (
-				E267E2C11B84F27800BAB377 /* XLDatabaseLogger.h */,
-				E267E2C21B84F27800BAB377 /* XLDatabaseLogger.m */,
-			);
-			path = Extensions;
-			sourceTree = "<group>";
-		};
-		E2735B2119FF763300ED0CC4 /* Extensions */ = {
-			isa = PBXGroup;
-			children = (
-				E259C2D41A64FAA40079616B /* GCHistory+Rewrite-Tests.m */,
-				E2D414891A02D68700B99634 /* GCHistory+Rewrite.h */,
-				E2D4148A1A02D68700B99634 /* GCHistory+Rewrite.m */,
-				E2790D441ACF12E200965A98 /* GCRepository+Index-Tests.m */,
-				E2790D451ACF12E200965A98 /* GCRepository+Index.h */,
-				E2790D461ACF12E200965A98 /* GCRepository+Index.m */,
-				E259C2D61A64FAEA0079616B /* GCRepository+Utilities-Tests.m */,
-				E218A58C1A56706600DFF1DF /* GCRepository+Utilities.h */,
-				E218A58D1A56706600DFF1DF /* GCRepository+Utilities.m */,
-			);
-			name = Extensions;
-			path = GitUpKit/Extensions;
+			name = Products;
 			sourceTree = "<group>";
 		};
 		E2C338A219F8562F00063D95 = {
 			isa = PBXGroup;
 			children = (
-				E2B25A571B7C56FD00FA546C /* LICENSE */,
+				E26F7C501B86EC8500119563 /* GitUpKit.xcodeproj */,
 				E24306981B276D0B00CE8CCB /* ToolProtocol.h */,
 				E21DCAE91B253847006424E8 /* Tool */,
 				E2C338AD19F8562F00063D95 /* Application */,
-				E267E1A91B84D6C500BAB377 /* GitUpKit */,
-				E22941E61AC11F56000A83AF /* Views */,
-				E21A88DC1A942CCA00255AC3 /* Components */,
-				E22941D21AC11E31000A83AF /* Utilities */,
-				E2D4DE9F1A4D562300B6AF66 /* Interface */,
-				E2735B2119FF763300ED0CC4 /* Extensions */,
-				E2C338DA19F85C8600063D95 /* Core */,
-				E2C338FB19F85CC500063D95 /* XLFacility */,
 				E20A52341A80D1BF003546C3 /* Framework and Libraries */,
 				E2C338AC19F8562F00063D95 /* Products */,
 			);
@@ -845,9 +198,7 @@
 			isa = PBXGroup;
 			children = (
 				E2C338AB19F8562F00063D95 /* GitUp.app */,
-				E2C338C419F8562F00063D95 /* GitUpTests.xctest */,
 				E21DCAE81B253847006424E8 /* gitup */,
-				E267E1A81B84D6C500BAB377 /* GitUpKit.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -875,229 +226,7 @@
 			path = Application;
 			sourceTree = "<group>";
 		};
-		E2C338DA19F85C8600063D95 /* Core */ = {
-			isa = PBXGroup;
-			children = (
-				E259C2CE1A64F7D00079616B /* GCBranch-Tests.m */,
-				E2C338DB19F85C8600063D95 /* GCBranch.h */,
-				E2C338DC19F85C8600063D95 /* GCBranch.m */,
-				E259C2E41A6624DC0079616B /* GCCommit-Tests.m */,
-				E2C338DD19F85C8600063D95 /* GCCommit.h */,
-				E2C338DE19F85C8600063D95 /* GCCommit.m */,
-				E2FEED441AEAA6AD00CBED80 /* GCCommitDatabase.h */,
-				E2FEED451AEAA6AD00CBED80 /* GCCommitDatabase.m */,
-				E2FEED481AEAA6B500CBED80 /* GCCommitDatabase-Tests.m */,
-				E20EB09519FC76AE0031A075 /* GCCore.h */,
-				E259C2DA1A64FDA60079616B /* GCDiff-Tests.m */,
-				E2B14B5C1A8A764400003E64 /* GCDiff.h */,
-				E2B14B5D1A8A764400003E64 /* GCDiff.m */,
-				E2146C901A58849F00F4550B /* GCError.h */,
-				E2790D401ACB1B1100965A98 /* GCFoundation.h */,
-				E2790D411ACB1B1100965A98 /* GCFoundation.m */,
-				E21739F11A4FE39E00EC6777 /* GCFunctions.h */,
-				E21739F21A4FE39E00EC6777 /* GCFunctions.m */,
-				E259C2D21A64F9FF0079616B /* GCHistory-Tests.m */,
-				E20F10F11A043E2100076AAC /* GCHistory.h */,
-				E20F10F21A043E2100076AAC /* GCHistory.m */,
-				E2790D4B1ACF130A00965A98 /* GCIndex.h */,
-				E2790D4C1ACF130A00965A98 /* GCIndex.m */,
-				E23C1A891A9019610060F6AD /* GCLiveRepository.h */,
-				E23C1A8A1A9019610060F6AD /* GCLiveRepository.m */,
-				E244538F1A70CDA200E61DE7 /* GCMacros.h */,
-				E2146C8C1A57F3BC00F4550B /* GCObject.h */,
-				E2146C8D1A57F3BC00F4550B /* GCObject.m */,
-				E2C338DF19F85C8600063D95 /* GCPrivate.h */,
-				E200A3B81B02DDA100C4E39D /* GCPrivate.m */,
-				E2C338E019F85C8600063D95 /* GCReference.h */,
-				E2C338E119F85C8600063D95 /* GCReference.m */,
-				E218A5881A566F6A00DFF1DF /* GCReferenceTransform.h */,
-				E218A5891A566F6A00DFF1DF /* GCReferenceTransform.m */,
-				E2146C911A58D83100F4550B /* GCReflogMessages.h */,
-				E259C2D01A64F9050079616B /* GCRemote-Tests.m */,
-				E2C338E219F85C8600063D95 /* GCRemote.h */,
-				E2C338E319F85C8600063D95 /* GCRemote.m */,
-				E259C2C61A64C9980079616B /* GCRepository-Tests.m */,
-				E2C338E419F85C8600063D95 /* GCRepository.h */,
-				E2C338E519F85C8600063D95 /* GCRepository.m */,
-				E259C2D81A64FD640079616B /* GCRepository+Bare-Tests.m */,
-				E2C3AA5919FF0B0600BA89F3 /* GCRepository+Bare.h */,
-				E2C3AA5A19FF0B0600BA89F3 /* GCRepository+Bare.m */,
-				E24509021A9A50F3003E602D /* GCRepository+Config-Tests.m */,
-				E24508FE1A9A50EA003E602D /* GCRepository+Config.h */,
-				E24508FF1A9A50EA003E602D /* GCRepository+Config.m */,
-				E259C2DC1A64FDD00079616B /* GCRepository+HEAD-Tests.m */,
-				E27F9B721A549097009C9B3D /* GCRepository+HEAD.h */,
-				E27F9B731A549097009C9B3D /* GCRepository+HEAD.m */,
-				E299D0151A749D27005035F7 /* GCRepository+Mock-Tests.m */,
-				E299D0111A749C26005035F7 /* GCRepository+Mock.h */,
-				E299D0121A749C26005035F7 /* GCRepository+Mock.m */,
-				E2F5C2821A81C53A00C30739 /* GCRepository+Reflog-Tests.m */,
-				E27B6D641A84451900D05452 /* GCRepository+Reflog.h */,
-				E27B6D651A84451900D05452 /* GCRepository+Reflog.m */,
-				E259C2E21A64FE710079616B /* GCRepository+Reset-Tests.m */,
-				E20EB08919FC75CA0031A075 /* GCRepository+Reset.h */,
-				E20EB08A19FC75CA0031A075 /* GCRepository+Reset.m */,
-				E259C2E01A64FE4C0079616B /* GCRepository+Status-Tests.m */,
-				E20EB08D19FC76160031A075 /* GCRepository+Status.h */,
-				E20EB08E19FC76160031A075 /* GCRepository+Status.m */,
-				E2F5C2801A8186C200C30739 /* GCSnapshot-Tests.m */,
-				E2F5C27C1A8171C900C30739 /* GCSnapshot.h */,
-				E2F5C27D1A8171C900C30739 /* GCSnapshot.m */,
-				E299D00E1A7206E7005035F7 /* GCSQLiteRepository-Tests.m */,
-				E299D00D1A71F937005035F7 /* GCSQLiteRepository.h */,
-				E299D00A1A71F0E9005035F7 /* GCSQLiteRepository.m */,
-				E259C2CC1A64D30A0079616B /* GCStash-Tests.m */,
-				E2C338E619F85C8600063D95 /* GCStash.h */,
-				E2C338E719F85C8600063D95 /* GCStash.m */,
-				E259C2C81A64CAB30079616B /* GCSubmodule-Tests.m */,
-				E21739FC1A51FA6200EC6777 /* GCSubmodule.h */,
-				E21739FD1A51FA6200EC6777 /* GCSubmodule.m */,
-				E259C2CA1A64D27F0079616B /* GCTag-Tests.m */,
-				E2C338E819F85C8600063D95 /* GCTag.h */,
-				E2C338E919F85C8600063D95 /* GCTag.m */,
-				E259C2C31A64C8EA0079616B /* GCTestCase.h */,
-				E259C2C41A64C8EA0079616B /* GCTestCase.m */,
-			);
-			name = Core;
-			path = GitUpKit/Core;
-			sourceTree = "<group>";
-		};
-		E2C338FB19F85CC500063D95 /* XLFacility */ = {
-			isa = PBXGroup;
-			children = (
-				E267E2AC1B84F27800BAB377 /* Core */,
-				E267E2C01B84F27800BAB377 /* Extensions */,
-			);
-			name = XLFacility;
-			path = XLFacility/XLFacility;
-			sourceTree = "<group>";
-		};
-		E2D4DE9F1A4D562300B6AF66 /* Interface */ = {
-			isa = PBXGroup;
-			children = (
-				E2D4DEAD1A4D592000B6AF66 /* GIBranch.h */,
-				E2D4DEAE1A4D592000B6AF66 /* GIBranch.m */,
-				E23186031B139CB900A93CCF /* GIConstants.h */,
-				E2891AB41AE1684A00E58C77 /* GIDiffView.h */,
-				E2891AB51AE1684A00E58C77 /* GIDiffView.m */,
-				E2B1BF351A85C5ED00A999DF /* GIFunctions-Tests.m */,
-				E2B1BF311A85923800A999DF /* GIFunctions.h */,
-				E2B1BF321A85923800A999DF /* GIFunctions.m */,
-				E27E43011A74A94700D04ED1 /* GIGraph-Tests.m */,
-				E2D4DEA01A4D562300B6AF66 /* GIGraph.h */,
-				E2D4DEA11A4D562300B6AF66 /* GIGraph.m */,
-				E2D4DEA21A4D562300B6AF66 /* GIGraphView.h */,
-				E2D4DEA31A4D562300B6AF66 /* GIGraphView.m */,
-				E2D4DEB31A4D5AC600B6AF66 /* GIInterface.h */,
-				E2D4DEB01A4D599200B6AF66 /* GILayer.h */,
-				E2D4DEB11A4D599200B6AF66 /* GILayer.m */,
-				E2D4DEAA1A4D587800B6AF66 /* GILine.h */,
-				E2D4DEAB1A4D587800B6AF66 /* GILine.m */,
-				E2D4DEA61A4D57AA00B6AF66 /* GINode.h */,
-				E2D4DEA71A4D57AA00B6AF66 /* GINode.m */,
-				E2D4DEA91A4D581600B6AF66 /* GIPrivate.h */,
-				E21A88F21A9471B300255AC3 /* GIPrivate.m */,
-				E2891AB11AE15BB600E58C77 /* GISplitDiffView.h */,
-				E2891AB21AE15BB600E58C77 /* GISplitDiffView.m */,
-				E2C9FF861AA510170051B2AE /* GIUnifiedDiffView.h */,
-				E2C9FF871AA510170051B2AE /* GIUnifiedDiffView.m */,
-			);
-			name = Interface;
-			path = GitUpKit/Interface;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
-
-/* Begin PBXHeadersBuildPhase section */
-		E267E1A51B84D6C500BAB377 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				E267E1AB1B84D6C500BAB377 /* GitUpKit.h in Headers */,
-				E267E1B51B84D7D200BAB377 /* GCTag.h in Headers */,
-				E267E1B61B84D7D500BAB377 /* GCSubmodule.h in Headers */,
-				E267E1B71B84D7D800BAB377 /* GCStash.h in Headers */,
-				E267E1B81B84D7DE00BAB377 /* GCSQLiteRepository.h in Headers */,
-				E267E1B91B84D7E100BAB377 /* GCSnapshot.h in Headers */,
-				E267E1BA1B84D80500BAB377 /* GCBranch.h in Headers */,
-				E267E1BB1B84D80500BAB377 /* GCCommit.h in Headers */,
-				E267E1BC1B84D80500BAB377 /* GCCommitDatabase.h in Headers */,
-				E267E1BD1B84D80500BAB377 /* GCCore.h in Headers */,
-				E267E1BE1B84D80500BAB377 /* GCDiff.h in Headers */,
-				E267E2A61B84F02A00BAB377 /* GCError.h in Headers */,
-				E267E1BF1B84D80500BAB377 /* GCFoundation.h in Headers */,
-				E267E1C01B84D80500BAB377 /* GCFunctions.h in Headers */,
-				E267E1C11B84D80500BAB377 /* GCHistory.h in Headers */,
-				E267E1C21B84D80500BAB377 /* GCIndex.h in Headers */,
-				E267E1C31B84D80500BAB377 /* GCLiveRepository.h in Headers */,
-				E267E2A71B84F03600BAB377 /* GCMacros.h in Headers */,
-				E267E1C41B84D80500BAB377 /* GCObject.h in Headers */,
-				E267E1C51B84D80500BAB377 /* GCReference.h in Headers */,
-				E267E1C61B84D80500BAB377 /* GCReferenceTransform.h in Headers */,
-				E267E1C71B84D80500BAB377 /* GCReflogMessages.h in Headers */,
-				E267E1C81B84D80500BAB377 /* GCRemote.h in Headers */,
-				E267E1C91B84D80500BAB377 /* GCRepository.h in Headers */,
-				E267E1CA1B84D80500BAB377 /* GCRepository+Bare.h in Headers */,
-				E267E1CB1B84D80500BAB377 /* GCRepository+Config.h in Headers */,
-				E267E1CC1B84D80500BAB377 /* GCRepository+HEAD.h in Headers */,
-				E267E1CD1B84D80500BAB377 /* GCRepository+Mock.h in Headers */,
-				E267E1CE1B84D80500BAB377 /* GCRepository+Reflog.h in Headers */,
-				E267E1CF1B84D80500BAB377 /* GCRepository+Reset.h in Headers */,
-				E267E1D01B84D80500BAB377 /* GCRepository+Status.h in Headers */,
-				E267E1F01B84D85500BAB377 /* GCHistory+Rewrite.h in Headers */,
-				E267E1F11B84D85500BAB377 /* GCRepository+Index.h in Headers */,
-				E267E2091B84DB4200BAB377 /* GIBranch.h in Headers */,
-				E267E20A1B84DB4200BAB377 /* GIConstants.h in Headers */,
-				E267E20B1B84DB4200BAB377 /* GIDiffView.h in Headers */,
-				E267E20C1B84DB4200BAB377 /* GIFunctions.h in Headers */,
-				E267E20D1B84DB4200BAB377 /* GIGraph.h in Headers */,
-				E267E20E1B84DB4200BAB377 /* GIGraphView.h in Headers */,
-				E267E20F1B84DB4200BAB377 /* GIInterface.h in Headers */,
-				E267E2101B84DB4200BAB377 /* GILayer.h in Headers */,
-				E267E2111B84DB4200BAB377 /* GILine.h in Headers */,
-				E267E2121B84DB4200BAB377 /* GINode.h in Headers */,
-				E267E2131B84DB4200BAB377 /* GISplitDiffView.h in Headers */,
-				E267E2141B84DB4200BAB377 /* GIUnifiedDiffView.h in Headers */,
-				E267E1F21B84D85500BAB377 /* GCRepository+Utilities.h in Headers */,
-				E267E2221B84DBE700BAB377 /* GIAppKit.h in Headers */,
-				E267E2231B84DBE700BAB377 /* GIColorView.h in Headers */,
-				E267E2241B84DBE700BAB377 /* GILinkButton.h in Headers */,
-				E267E2251B84DBE700BAB377 /* GIModalView.h in Headers */,
-				E267E2261B84DBE700BAB377 /* GIViewController.h in Headers */,
-				E267E2271B84DBE700BAB377 /* GIViewController+Utilities.h in Headers */,
-				E267E2281B84DBE700BAB377 /* GIWindowController.h in Headers */,
-				E267E2361B84DC3900BAB377 /* GICommitListViewController.h in Headers */,
-				E267E2371B84DC3900BAB377 /* GIDiffContentsViewController.h in Headers */,
-				E267E2381B84DC3900BAB377 /* GIDiffFilesViewController.h in Headers */,
-				E267E2391B84DC3900BAB377 /* GISnapshotListViewController.h in Headers */,
-				E267E23A1B84DC3900BAB377 /* GIUnifiedReflogViewController.h in Headers */,
-				E267E24D1B84DC7D00BAB377 /* GIAdvancedCommitViewController.h in Headers */,
-				E267E24E1B84DC7D00BAB377 /* GICommitRewriterViewController.h in Headers */,
-				E267E24F1B84DC7D00BAB377 /* GICommitSplitterViewController.h in Headers */,
-				E267E2501B84DC7D00BAB377 /* GICommitViewController.h in Headers */,
-				E267E2511B84DC7D00BAB377 /* GIConfigViewController.h in Headers */,
-				E267E2521B84DC7D00BAB377 /* GIConflictResolverViewController.h in Headers */,
-				E267E2531B84DC7D00BAB377 /* GIDiffViewController.h in Headers */,
-				E267E2541B84DC7D00BAB377 /* GIMapViewController.h in Headers */,
-				E267E2551B84DC7D00BAB377 /* GIMapViewController+Operations.h in Headers */,
-				E267E2561B84DC7D00BAB377 /* GIQuickViewController.h in Headers */,
-				E267E2571B84DC7D00BAB377 /* GISimpleCommitViewController.h in Headers */,
-				E267E2581B84DC7D00BAB377 /* GIStashListViewController.h in Headers */,
-				E267E2CB1B84F29F00BAB377 /* XLASLLogger.h in Headers */,
-				E267E2CC1B84F29F00BAB377 /* XLCallbackLogger.h in Headers */,
-				E267E2CD1B84F29F00BAB377 /* XLFacility.h in Headers */,
-				E267E2CE1B84F29F00BAB377 /* XLFacilityCMacros.h in Headers */,
-				E267E2CF1B84F29F00BAB377 /* XLFacilityMacros.h in Headers */,
-				E267E2D01B84F29F00BAB377 /* XLFileLogger.h in Headers */,
-				E267E2D11B84F29F00BAB377 /* XLFunctions.h in Headers */,
-				E267E2D21B84F29F00BAB377 /* XLLogger.h in Headers */,
-				E267E2D31B84F29F00BAB377 /* XLLogRecord.h in Headers */,
-				E267E2D41B84F29F00BAB377 /* XLStandardLogger.h in Headers */,
-				E267E2D51B84F29F00BAB377 /* XLDatabaseLogger.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
 		E21DCAE71B253847006424E8 /* Tool */ = {
@@ -1116,25 +245,6 @@
 			productReference = E21DCAE81B253847006424E8 /* gitup */;
 			productType = "com.apple.product-type.tool";
 		};
-		E267E1A71B84D6C500BAB377 /* GitUpKit */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = E267E1B41B84D6C500BAB377 /* Build configuration list for PBXNativeTarget "GitUpKit" */;
-			buildPhases = (
-				E267E1A31B84D6C500BAB377 /* Sources */,
-				E267E1A41B84D6C500BAB377 /* Frameworks */,
-				E267E1A51B84D6C500BAB377 /* Headers */,
-				E267E1A61B84D6C500BAB377 /* Resources */,
-				E267E2751B84EC0700BAB377 /* Validate Info.plist */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = GitUpKit;
-			productName = GitUpKit;
-			productReference = E267E1A81B84D6C500BAB377 /* GitUpKit.framework */;
-			productType = "com.apple.product-type.framework";
-		};
 		E2C338AA19F8562F00063D95 /* Application */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = E2C338CE19F8562F00063D95 /* Build configuration list for PBXNativeTarget "Application" */;
@@ -1150,29 +260,13 @@
 			buildRules = (
 			);
 			dependencies = (
-				E267E2671B84DF5B00BAB377 /* PBXTargetDependency */,
+				E26F7C5A1B86EC9600119563 /* PBXTargetDependency */,
 				E21DCAF11B2538C5006424E8 /* PBXTargetDependency */,
 			);
 			name = Application;
 			productName = GitUp;
 			productReference = E2C338AB19F8562F00063D95 /* GitUp.app */;
 			productType = "com.apple.product-type.application";
-		};
-		E2C338C319F8562F00063D95 /* Tests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = E2C338D119F8562F00063D95 /* Build configuration list for PBXNativeTarget "Tests" */;
-			buildPhases = (
-				E2C338C019F8562F00063D95 /* Sources */,
-				E2C338C119F8562F00063D95 /* Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = Tests;
-			productName = GitUpTests;
-			productReference = E2C338C419F8562F00063D95 /* GitUpTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -1186,17 +280,9 @@
 					E21DCAE71B253847006424E8 = {
 						CreatedOnToolsVersion = 6.3.2;
 					};
-					E267E1A71B84D6C500BAB377 = {
-						CreatedOnToolsVersion = 7.0;
-						DevelopmentTeam = 88W3E55T4B;
-					};
 					E2C338AA19F8562F00063D95 = {
 						CreatedOnToolsVersion = 6.1;
 						DevelopmentTeam = 88W3E55T4B;
-					};
-					E2C338C319F8562F00063D95 = {
-						CreatedOnToolsVersion = 6.1;
-						TestTargetID = E2C338AA19F8562F00063D95;
 					};
 				};
 			};
@@ -1210,45 +296,38 @@
 			mainGroup = E2C338A219F8562F00063D95;
 			productRefGroup = E2C338AC19F8562F00063D95 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = E26F7C511B86EC8500119563 /* Products */;
+					ProjectRef = E26F7C501B86EC8500119563 /* GitUpKit.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				E2C338AA19F8562F00063D95 /* Application */,
 				E21DCAE71B253847006424E8 /* Tool */,
-				E267E1A71B84D6C500BAB377 /* GitUpKit */,
-				E2C338C319F8562F00063D95 /* Tests */,
 			);
 		};
 /* End PBXProject section */
 
-/* Begin PBXResourcesBuildPhase section */
-		E267E1A61B84D6C500BAB377 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				E267E2201B84DBD600BAB377 /* Utilities.xcassets in Resources */,
-				E267E2211B84DBD900BAB377 /* GIWindowController.xib in Resources */,
-				E267E23B1B84DC4B00BAB377 /* Components.xcassets in Resources */,
-				E267E23C1B84DC4B00BAB377 /* Reasons.strings in Resources */,
-				E267E23D1B84DC4B00BAB377 /* GICommitListViewController.xib in Resources */,
-				E267E23E1B84DC4B00BAB377 /* GIDiffContentsViewController.xib in Resources */,
-				E267E23F1B84DC4B00BAB377 /* GIDiffFilesViewController.xib in Resources */,
-				E267E2401B84DC4B00BAB377 /* GISnapshotListViewController.xib in Resources */,
-				E267E2411B84DC4B00BAB377 /* GIUnifiedReflogViewController.xib in Resources */,
-				E267E2421B84DC6300BAB377 /* Views.xcassets in Resources */,
-				E267E2431B84DC6300BAB377 /* GIAdvancedCommitViewController.xib in Resources */,
-				E267E2441B84DC6400BAB377 /* GICommitRewriterViewController.xib in Resources */,
-				E267E2451B84DC6400BAB377 /* GICommitSplitterViewController.xib in Resources */,
-				E267E2461B84DC6400BAB377 /* GIConfigViewController.xib in Resources */,
-				E267E2651B84DCA700BAB377 /* GIConfigViewController-Help.txt in Resources */,
-				E267E2471B84DC6400BAB377 /* GIConflictResolverViewController.xib in Resources */,
-				E267E2481B84DC6400BAB377 /* GIDiffViewController.xib in Resources */,
-				E267E2491B84DC6400BAB377 /* GIMapViewController.xib in Resources */,
-				E267E24A1B84DC6400BAB377 /* GIQuickViewController.xib in Resources */,
-				E267E24B1B84DC6400BAB377 /* GISimpleCommitViewController.xib in Resources */,
-				E267E24C1B84DC6400BAB377 /* GIStashListViewController.xib in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
+/* Begin PBXReferenceProxy section */
+		E26F7C561B86EC8500119563 /* GitUpKit.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = GitUpKit.framework;
+			remoteRef = E26F7C551B86EC8500119563 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		E26F7C581B86EC8500119563 /* GitUpTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = GitUpTests.xctest;
+			remoteRef = E26F7C571B86EC8500119563 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXResourcesBuildPhase section */
 		E2C338A919F8562F00063D95 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1279,21 +358,6 @@
 			shellScript = "if [ \"$RUN_CLANG_STATIC_ANALYZER\" != \"\" ]; then\n  echo \"Skipping Crashlytics for Clang Static Analyzer\"\nelif [ \"$CONFIGURATION\" == \"Distribution\" ]; then\n  ./Crashlytics.framework/run 946dcb56f0db1be8f0c52df6e7d392202a2cc9b2 f28ac00033414b7f28707ab10fc43b008b96dd8cf081d4fb462294c811397108\nelse\n  echo \"Skipping Crashlytics in $CONFIGURATION configuration\"\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		E267E2751B84EC0700BAB377 /* Validate Info.plist */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Validate Info.plist";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "if [ \"$CONFIGURATION\" == \"Distribution\" ]; then\n  INFO_PLIST_PATH=\"$CONFIGURATION_BUILD_DIR/$INFOPLIST_PATH\"\n  GIT_SHA1=`defaults read \"$INFO_PLIST_PATH\" \"GitSHA1\"`\n  if [ \"$GIT_SHA1\" == \"\" ]; then\n    echo \"Info.plist does not have 'GitSHA1' set\"\n    exit 1\n  else\n    echo \"Info.plist has 'GitSHA1' set to '$GIT_SHA1'\"\n  fi\nfi\n";
-			showEnvVarsInLog = 0;
-		};
 		E2A5BE711A815196008DD47F /* Validate Info.plist */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1320,87 +384,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		E267E1A31B84D6C500BAB377 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				E267E1D11B84D83100BAB377 /* GCBranch.m in Sources */,
-				E267E1D21B84D83100BAB377 /* GCCommit.m in Sources */,
-				E267E1D31B84D83100BAB377 /* GCCommitDatabase.m in Sources */,
-				E267E1D41B84D83100BAB377 /* GCDiff.m in Sources */,
-				E267E1D51B84D83100BAB377 /* GCFoundation.m in Sources */,
-				E267E1D61B84D83100BAB377 /* GCFunctions.m in Sources */,
-				E267E1D71B84D83100BAB377 /* GCHistory.m in Sources */,
-				E267E1D81B84D83100BAB377 /* GCIndex.m in Sources */,
-				E267E1D91B84D83100BAB377 /* GCLiveRepository.m in Sources */,
-				E267E1DA1B84D83100BAB377 /* GCObject.m in Sources */,
-				E267E1DB1B84D83100BAB377 /* GCPrivate.m in Sources */,
-				E267E1DC1B84D83100BAB377 /* GCReference.m in Sources */,
-				E267E1DD1B84D83100BAB377 /* GCReferenceTransform.m in Sources */,
-				E267E1DF1B84D83100BAB377 /* GCRemote.m in Sources */,
-				E267E1E01B84D83100BAB377 /* GCRepository.m in Sources */,
-				E267E1E11B84D83100BAB377 /* GCRepository+Bare.m in Sources */,
-				E267E1E21B84D83100BAB377 /* GCRepository+Config.m in Sources */,
-				E267E1E31B84D83100BAB377 /* GCRepository+HEAD.m in Sources */,
-				E267E1E41B84D83100BAB377 /* GCRepository+Mock.m in Sources */,
-				E267E1E51B84D83100BAB377 /* GCRepository+Reflog.m in Sources */,
-				E267E1E61B84D83100BAB377 /* GCRepository+Reset.m in Sources */,
-				E267E1E71B84D83100BAB377 /* GCRepository+Status.m in Sources */,
-				E267E1E81B84D83100BAB377 /* GCSnapshot.m in Sources */,
-				E267E1E91B84D83100BAB377 /* GCSQLiteRepository.m in Sources */,
-				E267E1EA1B84D83100BAB377 /* GCStash.m in Sources */,
-				E267E1EB1B84D83100BAB377 /* GCSubmodule.m in Sources */,
-				E267E1EC1B84D83100BAB377 /* GCTag.m in Sources */,
-				E267E1ED1B84D84900BAB377 /* GCHistory+Rewrite.m in Sources */,
-				E267E1EE1B84D84900BAB377 /* GCRepository+Index.m in Sources */,
-				E267E1EF1B84D84900BAB377 /* GCRepository+Utilities.m in Sources */,
-				E267E2151B84DB6E00BAB377 /* GIBranch.m in Sources */,
-				E267E2161B84DB6E00BAB377 /* GIDiffView.m in Sources */,
-				E267E2171B84DB6E00BAB377 /* GIFunctions.m in Sources */,
-				E267E2181B84DB6E00BAB377 /* GIGraph.m in Sources */,
-				E267E2191B84DB6E00BAB377 /* GIGraphView.m in Sources */,
-				E267E21A1B84DB6E00BAB377 /* GILayer.m in Sources */,
-				E267E21B1B84DB6E00BAB377 /* GILine.m in Sources */,
-				E267E21C1B84DB6E00BAB377 /* GINode.m in Sources */,
-				E267E21D1B84DB6E00BAB377 /* GIPrivate.m in Sources */,
-				E267E21E1B84DB6E00BAB377 /* GISplitDiffView.m in Sources */,
-				E267E21F1B84DB6E00BAB377 /* GIUnifiedDiffView.m in Sources */,
-				E267E2291B84DBF800BAB377 /* GIAppKit.m in Sources */,
-				E267E22A1B84DBF800BAB377 /* GIColorView.m in Sources */,
-				E267E22B1B84DBF800BAB377 /* GILinkButton.m in Sources */,
-				E267E22C1B84DBF800BAB377 /* GIModalView.m in Sources */,
-				E267E22D1B84DBF800BAB377 /* GIViewController.m in Sources */,
-				E267E22E1B84DBF800BAB377 /* GIViewController+Utilities.m in Sources */,
-				E267E22F1B84DBF800BAB377 /* GIWindowController.m in Sources */,
-				E267E2311B84DC2600BAB377 /* GICommitListViewController.m in Sources */,
-				E267E2321B84DC2600BAB377 /* GIDiffContentsViewController.m in Sources */,
-				E267E2331B84DC2600BAB377 /* GIDiffFilesViewController.m in Sources */,
-				E267E2341B84DC2600BAB377 /* GISnapshotListViewController.m in Sources */,
-				E267E2351B84DC2600BAB377 /* GIUnifiedReflogViewController.m in Sources */,
-				E267E2591B84DCA100BAB377 /* GIAdvancedCommitViewController.m in Sources */,
-				E267E25A1B84DCA100BAB377 /* GICommitRewriterViewController.m in Sources */,
-				E267E25B1B84DCA100BAB377 /* GICommitSplitterViewController.m in Sources */,
-				E267E25C1B84DCA100BAB377 /* GICommitViewController.m in Sources */,
-				E267E25D1B84DCA100BAB377 /* GIConfigViewController.m in Sources */,
-				E267E25E1B84DCA100BAB377 /* GIConflictResolverViewController.m in Sources */,
-				E267E25F1B84DCA100BAB377 /* GIDiffViewController.m in Sources */,
-				E267E2601B84DCA100BAB377 /* GIMapViewController.m in Sources */,
-				E267E2611B84DCA100BAB377 /* GIMapViewController+Operations.m in Sources */,
-				E267E2621B84DCA100BAB377 /* GIQuickViewController.m in Sources */,
-				E267E2631B84DCA100BAB377 /* GISimpleCommitViewController.m in Sources */,
-				E267E2641B84DCA100BAB377 /* GIStashListViewController.m in Sources */,
-				E267E2D61B84F2BE00BAB377 /* XLASLLogger.m in Sources */,
-				E267E2D71B84F2BE00BAB377 /* XLCallbackLogger.m in Sources */,
-				E267E2D81B84F2BE00BAB377 /* XLFacility.m in Sources */,
-				E267E2D91B84F2BE00BAB377 /* XLFileLogger.m in Sources */,
-				E267E2DA1B84F2BE00BAB377 /* XLFunctions.m in Sources */,
-				E267E2DB1B84F2BE00BAB377 /* XLLogger.m in Sources */,
-				E267E2DC1B84F2BE00BAB377 /* XLLogRecord.m in Sources */,
-				E267E2DD1B84F2BE00BAB377 /* XLStandardLogger.m in Sources */,
-				E267E2DE1B84F2BE00BAB377 /* XLDatabaseLogger.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		E2C338A719F8562F00063D95 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1413,81 +396,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		E2C338C019F8562F00063D95 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				E259C2CF1A64F7D00079616B /* GCBranch-Tests.m in Sources */,
-				E2FEED4A1AEAA75F00CBED80 /* GCCommitDatabase.m in Sources */,
-				E259C2CB1A64D27F0079616B /* GCTag-Tests.m in Sources */,
-				E20EB09019FC76160031A075 /* GCRepository+Status.m in Sources */,
-				E27B6D671A84451900D05452 /* GCRepository+Reflog.m in Sources */,
-				E2C338F819F85C8600063D95 /* GCTag.m in Sources */,
-				E23C1A8C1A9019610060F6AD /* GCLiveRepository.m in Sources */,
-				E24509041A9A5F1D003E602D /* GCRepository+Config.m in Sources */,
-				E259C2D11A64F9050079616B /* GCRemote-Tests.m in Sources */,
-				E2C3AA5C19FF0B0600BA89F3 /* GCRepository+Bare.m in Sources */,
-				E27E43071A74A96000D04ED1 /* GILine.m in Sources */,
-				E259C2E31A64FE710079616B /* GCRepository+Reset-Tests.m in Sources */,
-				E259C2D51A64FAA40079616B /* GCHistory+Rewrite-Tests.m in Sources */,
-				E2790D4E1ACF130A00965A98 /* GCIndex.m in Sources */,
-				E2790D4A1ACF12E200965A98 /* GCRepository+Index.m in Sources */,
-				E27E43021A74A94700D04ED1 /* GIGraph-Tests.m in Sources */,
-				E259C2C71A64C9980079616B /* GCRepository-Tests.m in Sources */,
-				E24509031A9A50F3003E602D /* GCRepository+Config-Tests.m in Sources */,
-				E2B1BF361A85C5ED00A999DF /* GIFunctions-Tests.m in Sources */,
-				E299D0141A749C26005035F7 /* GCRepository+Mock.m in Sources */,
-				E27E43031A74A96000D04ED1 /* GIBranch.m in Sources */,
-				E27E43081A74A96000D04ED1 /* GINode.m in Sources */,
-				E299D0161A749D27005035F7 /* GCRepository+Mock-Tests.m in Sources */,
-				E2D4148C1A02D68700B99634 /* GCHistory+Rewrite.m in Sources */,
-				E2146C8F1A57F3BC00F4550B /* GCObject.m in Sources */,
-				E2C338F419F85C8600063D95 /* GCRepository.m in Sources */,
-				E2F5C2811A8186C200C30739 /* GCSnapshot-Tests.m in Sources */,
-				E218A58F1A56706600DFF1DF /* GCRepository+Utilities.m in Sources */,
-				E2C338F019F85C8600063D95 /* GCReference.m in Sources */,
-				E259C2DD1A64FDD00079616B /* GCRepository+HEAD-Tests.m in Sources */,
-				E259C2C51A64C8EA0079616B /* GCTestCase.m in Sources */,
-				E259C2E51A6624DC0079616B /* GCCommit-Tests.m in Sources */,
-				E299D00C1A71F0E9005035F7 /* GCSQLiteRepository.m in Sources */,
-				E2C338F619F85C8600063D95 /* GCStash.m in Sources */,
-				E2F5C2831A81C53A00C30739 /* GCRepository+Reflog-Tests.m in Sources */,
-				E2B1BF341A85923800A999DF /* GIFunctions.m in Sources */,
-				E259C2E11A64FE4C0079616B /* GCRepository+Status-Tests.m in Sources */,
-				E27E43041A74A96000D04ED1 /* GIGraph.m in Sources */,
-				E21A88F41A9471B300255AC3 /* GIPrivate.m in Sources */,
-				E2B14B5F1A8A764400003E64 /* GCDiff.m in Sources */,
-				E2F5C27F1A8171C900C30739 /* GCSnapshot.m in Sources */,
-				E218A58B1A566F6A00DFF1DF /* GCReferenceTransform.m in Sources */,
-				E259C2DB1A64FDA60079616B /* GCDiff-Tests.m in Sources */,
-				E21739FF1A51FA6200EC6777 /* GCSubmodule.m in Sources */,
-				E27F9B751A549097009C9B3D /* GCRepository+HEAD.m in Sources */,
-				E2C338EE19F85C8600063D95 /* GCCommit.m in Sources */,
-				E200A3BA1B02DDA100C4E39D /* GCPrivate.m in Sources */,
-				E259C2D71A64FAEA0079616B /* GCRepository+Utilities-Tests.m in Sources */,
-				E2FEED491AEAA6B500CBED80 /* GCCommitDatabase-Tests.m in Sources */,
-				E20F10F41A043E2100076AAC /* GCHistory.m in Sources */,
-				E259C2CD1A64D30A0079616B /* GCStash-Tests.m in Sources */,
-				E2790D481ACF12E200965A98 /* GCRepository+Index-Tests.m in Sources */,
-				E259C2D91A64FD640079616B /* GCRepository+Bare-Tests.m in Sources */,
-				E259C2C91A64CAB30079616B /* GCSubmodule-Tests.m in Sources */,
-				E2C338EC19F85C8600063D95 /* GCBranch.m in Sources */,
-				E299D00F1A7206E7005035F7 /* GCSQLiteRepository-Tests.m in Sources */,
-				E2790D431ACB1B1100965A98 /* GCFoundation.m in Sources */,
-				E20EB08C19FC75CA0031A075 /* GCRepository+Reset.m in Sources */,
-				E259C2D31A64F9FF0079616B /* GCHistory-Tests.m in Sources */,
-				E27E43061A74A96000D04ED1 /* GILayer.m in Sources */,
-				E2C338F219F85C8600063D95 /* GCRemote.m in Sources */,
-				E21739F41A4FE39E00EC6777 /* GCFunctions.m in Sources */,
-				E267E2DF1B84F32000BAB377 /* XLFacility.m in Sources */,
-				E267E2E01B84F33000BAB377 /* XLFunctions.m in Sources */,
-				E267E2E41B84F37500BAB377 /* XLLogger.m in Sources */,
-				E267E2E21B84F33600BAB377 /* XLLogRecord.m in Sources */,
-				E267E2E31B84F36500BAB377 /* XLFileLogger.m in Sources */,
-				E267E2E11B84F33300BAB377 /* XLStandardLogger.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -1496,126 +404,14 @@
 			target = E21DCAE71B253847006424E8 /* Tool */;
 			targetProxy = E21DCAF01B2538C5006424E8 /* PBXContainerItemProxy */;
 		};
-		E267E2671B84DF5B00BAB377 /* PBXTargetDependency */ = {
+		E26F7C5A1B86EC9600119563 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = E267E1A71B84D6C500BAB377 /* GitUpKit */;
-			targetProxy = E267E2661B84DF5B00BAB377 /* PBXContainerItemProxy */;
+			name = GitUpKit;
+			targetProxy = E26F7C591B86EC9600119563 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		E21A88F81A97173300255AC3 /* GIUnifiedReflogViewController.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				E21A88F91A97173300255AC3 /* en */,
-			);
-			name = GIUnifiedReflogViewController.xib;
-			sourceTree = "<group>";
-		};
-		E21A88FE1A97A67E00255AC3 /* GISnapshotListViewController.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				E21A88FF1A97A67E00255AC3 /* en */,
-			);
-			name = GISnapshotListViewController.xib;
-			sourceTree = "<group>";
-		};
-		E22941E71AC11F56000A83AF /* GIAdvancedCommitViewController.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				E22941E81AC11F56000A83AF /* en */,
-			);
-			name = GIAdvancedCommitViewController.xib;
-			sourceTree = "<group>";
-		};
-		E22941E91AC11F56000A83AF /* GIConfigViewController-Help.txt */ = {
-			isa = PBXVariantGroup;
-			children = (
-				E22941EA1AC11F56000A83AF /* en */,
-			);
-			name = "GIConfigViewController-Help.txt";
-			sourceTree = "<group>";
-		};
-		E22941EB1AC11F56000A83AF /* GIConfigViewController.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				E22941EC1AC11F56000A83AF /* en */,
-			);
-			name = GIConfigViewController.xib;
-			sourceTree = "<group>";
-		};
-		E22941ED1AC11F56000A83AF /* GIDiffViewController.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				E22941EE1AC11F56000A83AF /* en */,
-			);
-			name = GIDiffViewController.xib;
-			sourceTree = "<group>";
-		};
-		E22941EF1AC11F56000A83AF /* GIMapViewController.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				E22941F01AC11F56000A83AF /* en */,
-			);
-			name = GIMapViewController.xib;
-			sourceTree = "<group>";
-		};
-		E22941F11AC11F56000A83AF /* GIQuickViewController.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				E22941F21AC11F56000A83AF /* en */,
-			);
-			name = GIQuickViewController.xib;
-			sourceTree = "<group>";
-		};
-		E22941F31AC11F56000A83AF /* GISimpleCommitViewController.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				E22941F41AC11F56000A83AF /* en */,
-			);
-			name = GISimpleCommitViewController.xib;
-			sourceTree = "<group>";
-		};
-		E22941F51AC11F56000A83AF /* GIStashListViewController.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				E22941F61AC11F56000A83AF /* en */,
-			);
-			name = GIStashListViewController.xib;
-			sourceTree = "<group>";
-		};
-		E229421C1AC120A8000A83AF /* GICommitRewriterViewController.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				E229421D1AC120A8000A83AF /* en */,
-			);
-			name = GICommitRewriterViewController.xib;
-			sourceTree = "<group>";
-		};
-		E229421E1AC120A8000A83AF /* GICommitSplitterViewController.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				E229421F1AC120A8000A83AF /* en */,
-			);
-			name = GICommitSplitterViewController.xib;
-			sourceTree = "<group>";
-		};
-		E22942281AC2160E000A83AF /* Reasons.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				E22942291AC2160E000A83AF /* en */,
-			);
-			name = Reasons.strings;
-			sourceTree = "<group>";
-		};
-		E230DEE81AA11CE9006EE09F /* GICommitListViewController.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				E230DEE91AA11CE9006EE09F /* en */,
-			);
-			name = GICommitListViewController.xib;
-			sourceTree = "<group>";
-		};
 		E2A5BE6E1A814970008DD47F /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -1632,14 +428,6 @@
 			name = Help.plist;
 			sourceTree = "<group>";
 		};
-		E2BDA0731AD5B98A00E69729 /* GIConflictResolverViewController.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				E2BDA0741AD5B98A00E69729 /* en */,
-			);
-			name = GIConflictResolverViewController.xib;
-			sourceTree = "<group>";
-		};
 		E2C338B819F8562F00063D95 /* Document.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -1654,22 +442,6 @@
 				E2C8C91619FABC5100DA54AA /* en */,
 			);
 			name = MainMenu.xib;
-			sourceTree = "<group>";
-		};
-		E2D5AB2F1AA502D400BE9FFC /* GIDiffContentsViewController.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				E2D5AB301AA502D400BE9FFC /* en */,
-			);
-			name = GIDiffContentsViewController.xib;
-			sourceTree = "<group>";
-		};
-		E2E4CA1C1AB0F3F500D225D3 /* GIDiffFilesViewController.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				E2E4CA1D1AB0F3F500D225D3 /* en */,
-			);
-			name = GIDiffFilesViewController.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -1698,51 +470,6 @@
 			buildSettings = {
 				GCC_DYNAMIC_NO_PIC = YES;
 				PRODUCT_NAME = gitup;
-				SKIP_INSTALL = YES;
-			};
-			name = Distribution;
-		};
-		E267E1B11B84D6C500BAB377 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_ID = co.gitup.kit;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = GitUpKit/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-			};
-			name = Debug;
-		};
-		E267E1B21B84D6C500BAB377 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_ID = co.gitup.kit;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = GitUpKit/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-			};
-			name = Release;
-		};
-		E267E1B31B84D6C500BAB377 /* Distribution */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_ID = co.gitup.kit;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = GitUpKit/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
 			name = Distribution;
@@ -1886,38 +613,6 @@
 			};
 			name = Release;
 		};
-		E2C338D219F8562F00063D95 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COMBINE_HIDPI_IMAGES = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-					"$(inherited)",
-				);
-				GCC_PREPROCESSOR_DEFINITIONS_NOT_USED_IN_PRECOMPS = (
-					"$(inherited)",
-					"__GI_HAS_APPKIT__=0",
-				);
-				PRODUCT_NAME = GitUpTests;
-			};
-			name = Debug;
-		};
-		E2C338D319F8562F00063D95 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COMBINE_HIDPI_IMAGES = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-					"$(inherited)",
-				);
-				GCC_PREPROCESSOR_DEFINITIONS_NOT_USED_IN_PRECOMPS = (
-					"$(inherited)",
-					"__GI_HAS_APPKIT__=0",
-				);
-				PRODUCT_NAME = GitUpTests;
-			};
-			name = Release;
-		};
 		E2DC61F61A5A694E0091BC03 /* Distribution */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1975,22 +670,6 @@
 			};
 			name = Distribution;
 		};
-		E2DC61F81A5A694E0091BC03 /* Distribution */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COMBINE_HIDPI_IMAGES = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-					"$(inherited)",
-				);
-				GCC_PREPROCESSOR_DEFINITIONS_NOT_USED_IN_PRECOMPS = (
-					"$(inherited)",
-					"__GI_HAS_APPKIT__=0",
-				);
-				PRODUCT_NAME = GitUpTests;
-			};
-			name = Distribution;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -2000,16 +679,6 @@
 				E21DCAEC1B253847006424E8 /* Debug */,
 				E21DCAED1B253847006424E8 /* Release */,
 				E21DCAEE1B253847006424E8 /* Distribution */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		E267E1B41B84D6C500BAB377 /* Build configuration list for PBXNativeTarget "GitUpKit" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				E267E1B11B84D6C500BAB377 /* Debug */,
-				E267E1B21B84D6C500BAB377 /* Release */,
-				E267E1B31B84D6C500BAB377 /* Distribution */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -2030,16 +699,6 @@
 				E2C338CF19F8562F00063D95 /* Debug */,
 				E2C338D019F8562F00063D95 /* Release */,
 				E2DC61F71A5A694E0091BC03 /* Distribution */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		E2C338D119F8562F00063D95 /* Build configuration list for PBXNativeTarget "Tests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				E2C338D219F8562F00063D95 /* Debug */,
-				E2C338D319F8562F00063D95 /* Release */,
-				E2DC61F81A5A694E0091BC03 /* Distribution */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

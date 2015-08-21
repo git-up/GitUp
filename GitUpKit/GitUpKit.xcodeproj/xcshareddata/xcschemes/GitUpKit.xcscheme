@@ -8,7 +8,7 @@
       <BuildActionEntries>
          <BuildActionEntry
             buildForTesting = "NO"
-            buildForRunning = "YES"
+            buildForRunning = "NO"
             buildForProfiling = "NO"
             buildForArchiving = "YES"
             buildForAnalyzing = "YES">
@@ -17,7 +17,7 @@
                BlueprintIdentifier = "E267E1A71B84D6C500BAB377"
                BuildableName = "GitUpKit.framework"
                BlueprintName = "GitUpKit"
-               ReferencedContainer = "container:GitUp.xcodeproj">
+               ReferencedContainer = "container:GitUpKit.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -26,19 +26,26 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "YES">
+      shouldUseLaunchSchemeArgsEnv = "NO"
+      enableAddressSanitizer = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E2C338C319F8562F00063D95"
+               BuildableName = "GitUpTests.xctest"
+               BlueprintName = "Tests"
+               ReferencedContainer = "container:GitUpKit.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "E267E1A71B84D6C500BAB377"
-            BuildableName = "GitUpKit.framework"
-            BlueprintName = "GitUpKit"
-            ReferencedContainer = "container:GitUp.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
       <AdditionalOptions>
+         <AdditionalOption
+            key = "NSZombieEnabled"
+            value = "YES"
+            isEnabled = "YES">
+         </AdditionalOption>
       </AdditionalOptions>
    </TestAction>
    <LaunchAction
@@ -51,15 +58,6 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "E267E1A71B84D6C500BAB377"
-            BuildableName = "GitUpKit.framework"
-            BlueprintName = "GitUpKit"
-            ReferencedContainer = "container:GitUp.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>

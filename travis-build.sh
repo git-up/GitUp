@@ -1,9 +1,9 @@
 #!/bin/bash -ex
 
-XCODE_SCHEME="Application"
+# Run GitUpKit unit tests
+pushd "GitUpKit"
+xcodebuild test -scheme "GitUpKit"  # We can't use xctool here because customized GIGraphTests
+popd
 
-# Run unit tests
-xcodebuild test -scheme "$XCODE_SCHEME"
-
-# Build app without signing
-xcodebuild build -scheme "$XCODE_SCHEME" -configuration "Release" "CODE_SIGN_IDENTITY="
+# Build GitUp without signing
+xctool build -scheme "Application" -configuration "Release" "CODE_SIGN_IDENTITY="
