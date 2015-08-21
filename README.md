@@ -73,7 +73,7 @@ Through GitUpKit, this mini-app also gets for free unlimited undo/redo, unified 
 
 The GitDown source code also demonstrates how to use some other GitUpKit view controllers as well as building a customized one.
 
-Using the API should be pretty straightforward since it is organized by functionality (e.g. repository, branches, commits, interface components, etc...) and a best effort has been made to name functions clearly. For all the "Core" APIs, the best way to learn them is to look at the associated unit tests - for instance see [the branch tests](Core/GCBranch-Tests.m) for the branch API.
+Using the API should be pretty straightforward since it is organized by functionality (e.g. repository, branches, commits, interface components, etc...) and a best effort has been made to name functions clearly. For all the "Core" APIs, the best way to learn them is to look at the associated unit tests - for instance see [the branch tests](GitUpKit/Core/GCBranch-Tests.m) for the branch API.
 
 Here are some simplified sample code to get you started (error handling is left as an exercise to the reader):
 
