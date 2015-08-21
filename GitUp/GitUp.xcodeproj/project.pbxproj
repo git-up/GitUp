@@ -271,7 +271,6 @@
 				E2C338A919F8562F00063D95 /* Resources */,
 				E2653D271A5B3298006A9871 /* Copy Frameworks */,
 				E21DCAF21B2538FB006424E8 /* Copy Tool */,
-				E2A5BE711A815196008DD47F /* Validate Info.plist */,
 				E219D0381A5B2A5F00E1FEB8 /* Run Crashlytics */,
 			);
 			buildRules = (
@@ -373,21 +372,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "if [ \"$RUN_CLANG_STATIC_ANALYZER\" != \"\" ]; then\n  echo \"Skipping Crashlytics for Clang Static Analyzer\"\nelif [ \"$CONFIGURATION\" == \"Distribution\" ]; then\n  ./Crashlytics.framework/run 946dcb56f0db1be8f0c52df6e7d392202a2cc9b2 f28ac00033414b7f28707ab10fc43b008b96dd8cf081d4fb462294c811397108\nelse\n  echo \"Skipping Crashlytics in $CONFIGURATION configuration\"\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		E2A5BE711A815196008DD47F /* Validate Info.plist */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Validate Info.plist";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "if [ \"$CONFIGURATION\" == \"Distribution\" ]; then\n  INFO_PLIST_PATH=\"$CONFIGURATION_BUILD_DIR/$INFOPLIST_PATH\"\n  GIT_SHA1=`defaults read \"$INFO_PLIST_PATH\" \"GitSHA1\"`\n  if [ \"$GIT_SHA1\" == \"\" ]; then\n    echo \"Info.plist does not have 'GitSHA1' set\"\n    exit 1\n  else\n    echo \"Info.plist has 'GitSHA1' set to '$GIT_SHA1'\"\n  fi\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -515,13 +499,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				BUNDLE_ID = "co.gitup.mac-debug";
+				BUNDLE_VERSION = 0;
+				BUNDLE_VERSION_STRING = 1.0;
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)";
 				GCC_DYNAMIC_NO_PIC = YES;
 				INFOPLIST_FILE = Application/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				OTHER_LDFLAGS = "-Wl,-rpath,@loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "co.gitup.mac-debug";
 				PRODUCT_NAME = GitUp;
 			};
 			name = Debug;
@@ -530,13 +516,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				BUNDLE_ID = co.gitup.mac;
+				BUNDLE_VERSION = 0;
+				BUNDLE_VERSION_STRING = 1.0;
 				CODE_SIGN_IDENTITY = "Developer ID Application";
 				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)";
 				GCC_DYNAMIC_NO_PIC = YES;
 				INFOPLIST_FILE = Application/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				OTHER_LDFLAGS = "-Wl,-rpath,@loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = co.gitup.mac;
 				PRODUCT_NAME = GitUp;
 			};
 			name = Release;
@@ -552,13 +540,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				BUNDLE_ID = co.gitup.mac;
+				BUNDLE_VERSION = 0;
+				BUNDLE_VERSION_STRING = 1.0;
 				CODE_SIGN_IDENTITY = "Developer ID Application";
 				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)";
 				GCC_DYNAMIC_NO_PIC = YES;
 				INFOPLIST_FILE = Application/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				OTHER_LDFLAGS = "-Wl,-rpath,@loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = co.gitup.mac;
 				PRODUCT_NAME = GitUp;
 			};
 			name = Distribution;

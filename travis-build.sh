@@ -2,7 +2,7 @@
 
 # Run GitUpKit unit tests
 pushd "GitUpKit"
-xcodebuild test -scheme "GitUpKit"  # We can't use xctool here because customized GIGraphTests
+xcodebuild test -scheme "GitUpKit"  # We can't use xctool here because of customized GIGraphTests
 popd
 
 # Build GitUp without signing

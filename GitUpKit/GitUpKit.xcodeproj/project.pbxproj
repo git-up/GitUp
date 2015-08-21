@@ -954,7 +954,7 @@
 				E267E1A41B84D6C500BAB377 /* Frameworks */,
 				E267E1A51B84D6C500BAB377 /* Headers */,
 				E267E1A61B84D6C500BAB377 /* Resources */,
-				E267E2751B84EC0700BAB377 /* Validate Info.plist */,
+				E267E2751B84EC0700BAB377 /* Set 'GitSHA1' Key in Info.plist */,
 			);
 			buildRules = (
 			);
@@ -1050,19 +1050,19 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		E267E2751B84EC0700BAB377 /* Validate Info.plist */ = {
+		E267E2751B84EC0700BAB377 /* Set 'GitSHA1' Key in Info.plist */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Validate Info.plist";
+			name = "Set 'GitSHA1' Key in Info.plist";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "if [ \"$CONFIGURATION\" == \"Distribution\" ]; then\n  INFO_PLIST_PATH=\"$CONFIGURATION_BUILD_DIR/$INFOPLIST_PATH\"\n  GIT_SHA1=`defaults read \"$INFO_PLIST_PATH\" \"GitSHA1\"`\n  if [ \"$GIT_SHA1\" == \"\" ]; then\n    echo \"Info.plist does not have 'GitSHA1' set\"\n    exit 1\n  else\n    echo \"Info.plist has 'GitSHA1' set to '$GIT_SHA1'\"\n  fi\nfi\n";
+			shellPath = "/bin/bash -ex";
+			shellScript = "GIT_SHA1=`git rev-parse HEAD`\n\nINFO_PLIST_PATH=\"$CONFIGURATION_BUILD_DIR/$INFOPLIST_PATH\"\n\ndefaults write \"$INFO_PLIST_PATH\" \"GitSHA1\" -string \"$GIT_SHA1\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -1369,13 +1369,13 @@
 		E267E1B11B84D6C500BAB377 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_ID = co.gitup.kit;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = co.gitup.kit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
@@ -1384,13 +1384,13 @@
 		E267E1B21B84D6C500BAB377 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_ID = co.gitup.kit;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = co.gitup.kit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
@@ -1399,13 +1399,13 @@
 		E267E1B31B84D6C500BAB377 /* Distribution */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_ID = co.gitup.kit;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = co.gitup.kit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};

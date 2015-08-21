@@ -5,8 +5,6 @@ PRODUCT_NAME="GitUp"
 APPCAST_NAME="appcast.xml"
 XCODE_SYMROOT="/tmp/$PRODUCT_NAME"
 
-GIT_SHA1=`git rev-parse HEAD`
-
 ##### Count LOC
 
 $CLOC_PATH --by-file --xml --out=cloc.xml "GitUp/Application" "GitUpKit/Components" "GitUpKit/Core" "GitUpKit/Extensions" "GitUpKit/Interface" "GitUpKit/Utilities" "GitUpKit/Views"
@@ -29,7 +27,7 @@ git push -f origin "b$VERSION"
 ##### Archive and export app
 
 pushd "GitUpKit"
-xcodebuild archive -scheme "Application" -archivePath "../build/$PRODUCT_NAME.xcarchive" "GIT_SHA1=$GIT_SHA1" "BUNDLE_VERSION=$VERSION" # SYMROOT is ignored?
+xcodebuild archive -scheme "Application" -archivePath "../build/$PRODUCT_NAME.xcarchive" "BUNDLE_VERSION=$VERSION" # SYMROOT is ignored?
 xcodebuild -exportArchive -archivePath "../build/$PRODUCT_NAME.xcarchive" -exportPath "../build/$PRODUCT_NAME"  # SYMROOT is ignored?
 ditto -c -k --keepParent "../build/$PRODUCT_NAME.xcarchive" "../build/$PRODUCT_NAME.xcarchive.zip"
 popd "GitUpKit"
