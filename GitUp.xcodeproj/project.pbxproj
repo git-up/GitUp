@@ -1764,16 +1764,16 @@
 				);
 				GIT_SHA1 = "";
 				HEADER_SEARCH_PATHS = (
-					libssh2/include,
-					libgit2/include,
-					libsqlite3/include,
+					"GitUpKit/Third-Party/libssh2/include",
+					"GitUpKit/Third-Party/libgit2/include",
+					"GitUpKit/Third-Party/libsqlite3/include",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
-					libssh2/lib/libssh2.a,
-					libgit2/lib/libgit2.a,
-					libsqlite3/lib/libsqlite3.a,
+					"GitUpKit/Third-Party/libssh2/lib/libssh2.a",
+					"GitUpKit/Third-Party/libgit2/lib/libgit2.a",
+					"GitUpKit/Third-Party/libsqlite3/lib/libsqlite3.a",
 				);
 				SDKROOT = macosx;
 				WARNING_CFLAGS = (
@@ -1825,15 +1825,15 @@
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GIT_SHA1 = "";
 				HEADER_SEARCH_PATHS = (
-					libssh2/include,
-					libgit2/include,
-					libsqlite3/include,
+					"GitUpKit/Third-Party/libssh2/include",
+					"GitUpKit/Third-Party/libgit2/include",
+					"GitUpKit/Third-Party/libsqlite3/include",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				OTHER_LDFLAGS = (
-					libssh2/lib/libssh2.a,
-					libgit2/lib/libgit2.a,
-					libsqlite3/lib/libsqlite3.a,
+					"GitUpKit/Third-Party/libssh2/lib/libssh2.a",
+					"GitUpKit/Third-Party/libgit2/lib/libgit2.a",
+					"GitUpKit/Third-Party/libsqlite3/lib/libsqlite3.a",
 				);
 				SDKROOT = macosx;
 				WARNING_CFLAGS = (
@@ -1932,15 +1932,15 @@
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GIT_SHA1 = "";
 				HEADER_SEARCH_PATHS = (
-					libssh2/include,
-					libgit2/include,
-					libsqlite3/include,
+					"GitUpKit/Third-Party/libssh2/include",
+					"GitUpKit/Third-Party/libgit2/include",
+					"GitUpKit/Third-Party/libsqlite3/include",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				OTHER_LDFLAGS = (
-					libssh2/lib/libssh2.a,
-					libgit2/lib/libgit2.a,
-					libsqlite3/lib/libsqlite3.a,
+					"GitUpKit/Third-Party/libssh2/lib/libssh2.a",
+					"GitUpKit/Third-Party/libgit2/lib/libgit2.a",
+					"GitUpKit/Third-Party/libsqlite3/lib/libsqlite3.a",
 				);
 				SDKROOT = macosx;
 				WARNING_CFLAGS = (
