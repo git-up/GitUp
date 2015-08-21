@@ -816,7 +816,7 @@
 				E267E2C01B84F27800BAB377 /* Extensions */,
 			);
 			name = XLFacility;
-			path = ../XLFacility/XLFacility;
+			path = "Third-Party/XLFacility/XLFacility";
 			sourceTree = "<group>";
 		};
 		E2D4DE9F1A4D562300B6AF66 /* Interface */ = {
