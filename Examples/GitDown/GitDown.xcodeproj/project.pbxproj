@@ -9,27 +9,27 @@
 /* Begin PBXBuildFile section */
 		E267E2841B84EF1700BAB377 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E267E2831B84EF1700BAB377 /* AppDelegate.m */; };
 		E267E2871B84EF1700BAB377 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E267E2861B84EF1700BAB377 /* main.m */; };
-		E26F7C4E1B86EBE300119563 /* GitUpKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E26F7C491B86EBBE00119563 /* GitUpKit.framework */; };
-		E26F7C4F1B86EBE900119563 /* GitUpKit.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = E26F7C491B86EBBE00119563 /* GitUpKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		E27E37691B87012F000A551A /* GitUpKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E27E37611B8700F8000A551A /* GitUpKit.framework */; };
+		E27E376A1B870131000A551A /* GitUpKit.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = E27E37611B8700F8000A551A /* GitUpKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E2EA19FC1B85684B00EAE7B7 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = E2EA19FA1B85684B00EAE7B7 /* MainMenu.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		E26F7C481B86EBBE00119563 /* PBXContainerItemProxy */ = {
+		E27E37601B8700F8000A551A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = E26F7C431B86EBBE00119563 /* GitUpKit.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = E267E1A81B84D6C500BAB377;
 			remoteInfo = GitUpKit;
 		};
-		E26F7C4A1B86EBBE00119563 /* PBXContainerItemProxy */ = {
+		E27E37621B8700F8000A551A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = E26F7C431B86EBBE00119563 /* GitUpKit.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = E2C338C419F8562F00063D95;
 			remoteInfo = Tests;
 		};
-		E26F7C4C1B86EBD700119563 /* PBXContainerItemProxy */ = {
+		E27E37651B87012C000A551A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = E26F7C431B86EBBE00119563 /* GitUpKit.xcodeproj */;
 			proxyType = 1;
@@ -45,7 +45,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				E26F7C4F1B86EBE900119563 /* GitUpKit.framework in Copy Frameworks */,
+				E27E376A1B870131000A551A /* GitUpKit.framework in Copy Frameworks */,
 			);
 			name = "Copy Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -58,7 +58,7 @@
 		E267E2831B84EF1700BAB377 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		E267E2861B84EF1700BAB377 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		E267E28D1B84EF1700BAB377 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		E26F7C431B86EBBE00119563 /* GitUpKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GitUpKit.xcodeproj; path = ../GitUpKit/GitUpKit.xcodeproj; sourceTree = "<group>"; };
+		E26F7C431B86EBBE00119563 /* GitUpKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GitUpKit.xcodeproj; path = ../../GitUpKit/GitUpKit.xcodeproj; sourceTree = "<group>"; };
 		E2EA19FB1B85684B00EAE7B7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
@@ -67,7 +67,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E26F7C4E1B86EBE300119563 /* GitUpKit.framework in Frameworks */,
+				E27E37691B87012F000A551A /* GitUpKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -91,11 +91,11 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		E26F7C441B86EBBE00119563 /* Products */ = {
+		E27E375C1B8700F8000A551A /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				E26F7C491B86EBBE00119563 /* GitUpKit.framework */,
-				E26F7C4B1B86EBBE00119563 /* GitUpTests.xctest */,
+				E27E37611B8700F8000A551A /* GitUpKit.framework */,
+				E27E37631B8700F8000A551A /* GitUpTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -127,7 +127,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				E26F7C4D1B86EBD700119563 /* PBXTargetDependency */,
+				E27E37661B87012C000A551A /* PBXTargetDependency */,
 			);
 			name = GitDown;
 			productName = TEST;
@@ -161,7 +161,7 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = E26F7C441B86EBBE00119563 /* Products */;
+					ProductGroup = E27E375C1B8700F8000A551A /* Products */;
 					ProjectRef = E26F7C431B86EBBE00119563 /* GitUpKit.xcodeproj */;
 				},
 			);
@@ -173,18 +173,18 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		E26F7C491B86EBBE00119563 /* GitUpKit.framework */ = {
+		E27E37611B8700F8000A551A /* GitUpKit.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = GitUpKit.framework;
-			remoteRef = E26F7C481B86EBBE00119563 /* PBXContainerItemProxy */;
+			remoteRef = E27E37601B8700F8000A551A /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		E26F7C4B1B86EBBE00119563 /* GitUpTests.xctest */ = {
+		E27E37631B8700F8000A551A /* GitUpTests.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = GitUpTests.xctest;
-			remoteRef = E26F7C4A1B86EBBE00119563 /* PBXContainerItemProxy */;
+			remoteRef = E27E37621B8700F8000A551A /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -213,10 +213,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		E26F7C4D1B86EBD700119563 /* PBXTargetDependency */ = {
+		E27E37661B87012C000A551A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = GitUpKit;
-			targetProxy = E26F7C4C1B86EBD700119563 /* PBXContainerItemProxy */;
+			targetProxy = E27E37651B87012C000A551A /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 

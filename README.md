@@ -63,7 +63,7 @@ GitUpKit
 
 **GitUp is built on top of a reusable generic Git toolkit called GitUpKit, which is simply the Foundation and UI layers described above combined into a standalone framework. This means that with GitUpKit you can build your very own Git UI!**
 
-There's an example mini-app called [GitDown](GitDown) that prompts the user for a repo and displays an interactive and live-updating list of its stashes (all with ~20 lines of code in `-[AppDelegate applicationDidFinishLaunching:]`):
+There's an example mini-app called [GitDown](Examples/GitDown) that prompts the user for a repo and displays an interactive and live-updating list of its stashes (all with ~20 lines of code in `-[AppDelegate applicationDidFinishLaunching:]`):
 
 <p align="center">
 <img src="http://i.imgur.com/ZfxM7su.png">
