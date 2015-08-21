@@ -78,8 +78,6 @@
     GICommitMessageViewUserDefaultKey_ShowInvisibleCharacters: @(YES),
     GICommitMessageViewUserDefaultKey_ShowMargins: @(YES),
     GICommitMessageViewUserDefaultKey_EnableSpellChecking: @(YES),
-    GIViewController_DiffTool: GIViewControllerTool_FileMerge,
-    GIViewController_MergeTool: GIViewControllerTool_FileMerge,
     kUserDefaultsKey_ReleaseChannel: kReleaseChannel_Stable,
     kUserDefaultsKey_CheckInterval: @(15 * 60),
     kUserDefaultsKey_FirstLaunch: @(YES),
