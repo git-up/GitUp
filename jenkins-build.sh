@@ -3,24 +3,20 @@ set -ex
 
 PRODUCT_NAME="GitUp"
 APPCAST_NAME="appcast.xml"
-XCODE_SCHEME="Application"
 XCODE_SYMROOT="/tmp/$PRODUCT_NAME"
 
 GIT_SHA1=`git rev-parse HEAD`
 
 ##### Count LOC
 
-$CLOC_PATH --by-file --xml --out=cloc.xml "Application" "Components" "Core" "Extensions" "Interface" "Utilities" "Views"
-
-##### Analyze
-
-rm -rf "$XCODE_SYMROOT"
-xcodebuild analyze -scheme "$XCODE_SCHEME" "SYMROOT=$XCODE_SYMROOT"
+$CLOC_PATH --by-file --xml --out=cloc.xml "GitUp/Application" "GitUpKit/Components" "GitUpKit/Core" "GitUpKit/Extensions" "GitUpKit/Interface" "GitUpKit/Utilities" "GitUpKit/Views"
 
 ##### Run unit tests
 
+pushd "GitUpKit"
 rm -rf "$XCODE_SYMROOT"
-xcodebuild test -scheme "$XCODE_SCHEME" "SYMROOT=$XCODE_SYMROOT"
+xcodebuild test -scheme "GitUpKit" "SYMROOT=$XCODE_SYMROOT"
+popd
 
 ##### Tag build
 
@@ -32,9 +28,11 @@ git push -f origin "b$VERSION"
 
 ##### Archive and export app
 
-xcodebuild archive -scheme "$XCODE_SCHEME" -archivePath "build/$PRODUCT_NAME.xcarchive" "GIT_SHA1=$GIT_SHA1" "BUNDLE_VERSION=$VERSION" # SYMROOT is ignored?
-xcodebuild -exportArchive -archivePath "build/$PRODUCT_NAME.xcarchive" -exportPath "build/$PRODUCT_NAME"  # SYMROOT is ignored?
-ditto -c -k --keepParent "build/$PRODUCT_NAME.xcarchive" "build/$PRODUCT_NAME.xcarchive.zip"
+pushd "GitUpKit"
+xcodebuild archive -scheme "Application" -archivePath "../build/$PRODUCT_NAME.xcarchive" "GIT_SHA1=$GIT_SHA1" "BUNDLE_VERSION=$VERSION" # SYMROOT is ignored?
+xcodebuild -exportArchive -archivePath "../build/$PRODUCT_NAME.xcarchive" -exportPath "../build/$PRODUCT_NAME"  # SYMROOT is ignored?
+ditto -c -k --keepParent "../build/$PRODUCT_NAME.xcarchive" "../build/$PRODUCT_NAME.xcarchive.zip"
+popd "GitUpKit"
 
 ##### Upload to S3 and update Appcast
 
@@ -52,7 +50,7 @@ ARCHIVE_URL="https://s3-us-west-2.amazonaws.com/gitup-builds/$CHANNEL/$ARCHIVE_N
 BACKUP_ARCHIVE_URL="https://s3-us-west-2.amazonaws.com/gitup-builds/$CHANNEL/$BACKUP_ARCHIVE_NAME"
 
 ARCHIVE_PATH="$TMPDIR/$ARCHIVE_NAME"
-APPCAST_PATH="$WORKSPACE/SparkleAppcast.xml"
+APPCAST_PATH="$WORKSPACE/GitUp/SparkleAppcast.xml"
 
 /usr/bin/ditto -c -k --keepParent "$PRODUCT_PATH" "$ARCHIVE_PATH"
 

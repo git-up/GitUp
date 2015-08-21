@@ -38,7 +38,7 @@ To build GitUp yourself, simply run these commands in Terminal:
 2. `cd GitUp`
 3. `git submodule update --init --recursive`
 
-Then open the `GitUp.xcodeproj` Xcode project.
+Then open the `GitUp/GitUp.xcodeproj` Xcode project and hit Run.
 
 Source Layout
 =============

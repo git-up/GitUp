@@ -20,7 +20,7 @@ ARCHIVE_URL="https://s3-us-west-2.amazonaws.com/gitup-builds/$CHANNEL/$ARCHIVE_N
 
 ARCHIVE_PATH="$TMPDIR/$ARCHIVE_NAME"
 PAYLOAD_PATH="$TMPDIR/payload"
-APPCAST_PATH="SparkleAppcast.xml"
+APPCAST_PATH="GitUp/SparkleAppcast.xml"
 
 ##### Download build
 

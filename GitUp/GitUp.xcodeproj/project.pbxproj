@@ -19,8 +19,8 @@
 		E267E1F31B84D93300BAB377 /* Sparkle.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = E2653D241A5B2FBD006A9871 /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E267E26B1B84E07E00BAB377 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2B14B561A88102C00003E64 /* Security.framework */; };
 		E267E2741B84E42A00BAB377 /* Help.plist in Resources */ = {isa = PBXBuildFile; fileRef = E2BDA0671AD47A2F00E69729 /* Help.plist */; };
-		E26F7C5B1B86ECA300119563 /* GitUpKit.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = E26F7C561B86EC8500119563 /* GitUpKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		E26F7C5C1B86ECB500119563 /* GitUpKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E26F7C561B86EC8500119563 /* GitUpKit.framework */; };
+		E28A16E51B87023200218332 /* GitUpKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E28A16E01B87021600218332 /* GitUpKit.framework */; };
+		E28A16E61B87023C00218332 /* GitUpKit.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = E28A16E01B87021600218332 /* GitUpKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E2A5BE701A814970008DD47F /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E2A5BE6E1A814970008DD47F /* Localizable.strings */; };
 		E2C338B219F8562F00063D95 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C338B119F8562F00063D95 /* AppDelegate.m */; };
 		E2C338B419F8562F00063D95 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C338B319F8562F00063D95 /* main.m */; };
@@ -40,23 +40,23 @@
 			remoteGlobalIDString = E21DCAE71B253847006424E8;
 			remoteInfo = Tool;
 		};
-		E26F7C551B86EC8500119563 /* PBXContainerItemProxy */ = {
+		E28A16DF1B87021600218332 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = E26F7C501B86EC8500119563 /* GitUpKit.xcodeproj */;
+			containerPortal = E28A16DA1B87021600218332 /* GitUpKit.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = E267E1A81B84D6C500BAB377;
 			remoteInfo = GitUpKit;
 		};
-		E26F7C571B86EC8500119563 /* PBXContainerItemProxy */ = {
+		E28A16E11B87021600218332 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = E26F7C501B86EC8500119563 /* GitUpKit.xcodeproj */;
+			containerPortal = E28A16DA1B87021600218332 /* GitUpKit.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = E2C338C419F8562F00063D95;
 			remoteInfo = Tests;
 		};
-		E26F7C591B86EC9600119563 /* PBXContainerItemProxy */ = {
+		E28A16E31B87022000218332 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = E26F7C501B86EC8500119563 /* GitUpKit.xcodeproj */;
+			containerPortal = E28A16DA1B87021600218332 /* GitUpKit.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = E267E1A71B84D6C500BAB377;
 			remoteInfo = GitUpKit;
@@ -82,8 +82,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				E26F7C5B1B86ECA300119563 /* GitUpKit.framework in Copy Frameworks */,
 				E267E1F31B84D93300BAB377 /* Sparkle.framework in Copy Frameworks */,
+				E28A16E61B87023C00218332 /* GitUpKit.framework in Copy Frameworks */,
 			);
 			name = "Copy Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -99,12 +99,12 @@
 		E24306981B276D0B00CE8CCB /* ToolProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ToolProtocol.h; sourceTree = "<group>"; };
 		E25EBCEA1AA3F8B700D3AF44 /* Application.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Application.xcassets; sourceTree = "<group>"; };
 		E2653D241A5B2FBD006A9871 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = SOURCE_ROOT; };
-		E26F7C501B86EC8500119563 /* GitUpKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GitUpKit.xcodeproj; path = GitUpKit/GitUpKit.xcodeproj; sourceTree = "<group>"; };
 		E27E37561B86F670000A551A /* Base.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Base.xcconfig; sourceTree = "<group>"; };
 		E27E37571B86F670000A551A /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		E27E37581B86F670000A551A /* Distribution.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Distribution.xcconfig; sourceTree = "<group>"; };
 		E27E37591B86F670000A551A /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		E28200AC1A7D71EE00DA4096 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = System/Library/Frameworks/CoreServices.framework; sourceTree = SDKROOT; };
+		E28A16DA1B87021600218332 /* GitUpKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GitUpKit.xcodeproj; path = ../GitUpKit/GitUpKit.xcodeproj; sourceTree = "<group>"; };
 		E2A5BE6C1A80E560008DD47F /* Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Common.h; sourceTree = "<group>"; };
 		E2A5BE6F1A814970008DD47F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E2B14B561A88102C00003E64 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
@@ -143,9 +143,9 @@
 			files = (
 				E2C338D719F85C2E00063D95 /* Cocoa.framework in Frameworks */,
 				E267E26B1B84E07E00BAB377 /* Security.framework in Frameworks */,
-				E26F7C5C1B86ECB500119563 /* GitUpKit.framework in Frameworks */,
 				E2653D251A5B2FBD006A9871 /* Sparkle.framework in Frameworks */,
 				E2F6AA0A1A7EED89002DBF56 /* Crashlytics.framework in Frameworks */,
+				E28A16E51B87023200218332 /* GitUpKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -175,15 +175,6 @@
 			path = Tool;
 			sourceTree = "<group>";
 		};
-		E26F7C511B86EC8500119563 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				E26F7C561B86EC8500119563 /* GitUpKit.framework */,
-				E26F7C581B86EC8500119563 /* GitUpTests.xctest */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		E27E37551B86F670000A551A /* Xcode-Configurations */ = {
 			isa = PBXGroup;
 			children = (
@@ -192,13 +183,23 @@
 				E27E37581B86F670000A551A /* Distribution.xcconfig */,
 				E27E37591B86F670000A551A /* Release.xcconfig */,
 			);
-			path = "Xcode-Configurations";
+			name = "Xcode-Configurations";
+			path = "../Xcode-Configurations";
+			sourceTree = "<group>";
+		};
+		E28A16DB1B87021600218332 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E28A16E01B87021600218332 /* GitUpKit.framework */,
+				E28A16E21B87021600218332 /* GitUpTests.xctest */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		E2C338A219F8562F00063D95 = {
 			isa = PBXGroup;
 			children = (
-				E26F7C501B86EC8500119563 /* GitUpKit.xcodeproj */,
+				E28A16DA1B87021600218332 /* GitUpKit.xcodeproj */,
 				E24306981B276D0B00CE8CCB /* ToolProtocol.h */,
 				E21DCAE91B253847006424E8 /* Tool */,
 				E2C338AD19F8562F00063D95 /* Application */,
@@ -276,8 +277,8 @@
 			buildRules = (
 			);
 			dependencies = (
-				E26F7C5A1B86EC9600119563 /* PBXTargetDependency */,
 				E21DCAF11B2538C5006424E8 /* PBXTargetDependency */,
+				E28A16E41B87022000218332 /* PBXTargetDependency */,
 			);
 			name = Application;
 			productName = GitUp;
@@ -314,8 +315,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = E26F7C511B86EC8500119563 /* Products */;
-					ProjectRef = E26F7C501B86EC8500119563 /* GitUpKit.xcodeproj */;
+					ProductGroup = E28A16DB1B87021600218332 /* Products */;
+					ProjectRef = E28A16DA1B87021600218332 /* GitUpKit.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -327,18 +328,18 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		E26F7C561B86EC8500119563 /* GitUpKit.framework */ = {
+		E28A16E01B87021600218332 /* GitUpKit.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = GitUpKit.framework;
-			remoteRef = E26F7C551B86EC8500119563 /* PBXContainerItemProxy */;
+			remoteRef = E28A16DF1B87021600218332 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		E26F7C581B86EC8500119563 /* GitUpTests.xctest */ = {
+		E28A16E21B87021600218332 /* GitUpTests.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = GitUpTests.xctest;
-			remoteRef = E26F7C571B86EC8500119563 /* PBXContainerItemProxy */;
+			remoteRef = E28A16E11B87021600218332 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -420,10 +421,10 @@
 			target = E21DCAE71B253847006424E8 /* Tool */;
 			targetProxy = E21DCAF01B2538C5006424E8 /* PBXContainerItemProxy */;
 		};
-		E26F7C5A1B86EC9600119563 /* PBXTargetDependency */ = {
+		E28A16E41B87022000218332 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = GitUpKit;
-			targetProxy = E26F7C591B86EC9600119563 /* PBXContainerItemProxy */;
+			targetProxy = E28A16E31B87022000218332 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -467,8 +468,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_DYNAMIC_NO_PIC = YES;
-				HEADER_SEARCH_PATHS = "GitUpKit/Third-Party/libgit2/include";
-				OTHER_LDFLAGS = "GitUpKit/Third-Party/libgit2/lib/libgit2.a";
+				HEADER_SEARCH_PATHS = "../GitUpKit/Third-Party/libgit2/include";
+				OTHER_LDFLAGS = "../GitUpKit/Third-Party/libgit2/lib/libgit2.a";
 				PRODUCT_NAME = gitup;
 				SKIP_INSTALL = YES;
 			};
@@ -478,8 +479,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_DYNAMIC_NO_PIC = YES;
-				HEADER_SEARCH_PATHS = "GitUpKit/Third-Party/libgit2/include";
-				OTHER_LDFLAGS = "GitUpKit/Third-Party/libgit2/lib/libgit2.a";
+				HEADER_SEARCH_PATHS = "../GitUpKit/Third-Party/libgit2/include";
+				OTHER_LDFLAGS = "../GitUpKit/Third-Party/libgit2/lib/libgit2.a";
 				PRODUCT_NAME = gitup;
 				SKIP_INSTALL = YES;
 			};
@@ -489,8 +490,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_DYNAMIC_NO_PIC = YES;
-				HEADER_SEARCH_PATHS = "GitUpKit/Third-Party/libgit2/include";
-				OTHER_LDFLAGS = "GitUpKit/Third-Party/libgit2/lib/libgit2.a";
+				HEADER_SEARCH_PATHS = "../GitUpKit/Third-Party/libgit2/include";
+				OTHER_LDFLAGS = "../GitUpKit/Third-Party/libgit2/lib/libgit2.a";
 				PRODUCT_NAME = gitup;
 				SKIP_INSTALL = YES;
 			};
