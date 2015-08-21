@@ -77,27 +77,6 @@
   return [super fieldEditor:createFlag forObject:anObject];
 }
 
-#if DEBUG
-
-- (BOOL)makeFirstResponder:(NSResponder*)responder {
-  if (![super makeFirstResponder:responder]) {
-    XLOG_DEBUG(@"FAILED CHANGING FIRST RESPONDER TO %@", responder);
-    return NO;
-  }
-  NSMutableString* string = [[NSMutableString alloc] init];
-  while (responder) {
-    if (string.length) {
-      [string appendString:@" -> "];
-    }
-    [string appendFormat:@"%@", responder.class];
-    responder = responder.nextResponder;
-  }
-  XLOG_DEBUG(@"FIRST RESPONDER CHAIN UPDATED: %@", string.length ? string : nil);
-  return YES;
-}
-
-#endif
-
 static void _WalkViewTree(NSView* view, NSMutableArray* array) {
   for (NSView* subview in view.subviews) {
     if (!subview.hidden) {
