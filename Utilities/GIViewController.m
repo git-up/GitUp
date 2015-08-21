@@ -91,11 +91,7 @@
 @dynamic view;
 
 - (instancetype)initWithRepository:(GCLiveRepository*)repository {
-  Class nibClass = self.class;
-  while (nibClass.superclass != [GIViewController class]) {
-    nibClass = nibClass.superclass;  // Use the immediate subclass of GIViewController for the nib name
-  }
-  if ((self = [super initWithNibName:NSStringFromClass(nibClass) bundle:[NSBundle bundleForClass:nibClass]])) {
+  if ((self = [super initWithNibName:nil bundle:nil])) {
     _repository = repository;
     _textViewUndoManager = [[NSUndoManager alloc] init];
     
@@ -150,6 +146,18 @@
   if (OVERRIDES_METHOD(repositorySnapshotsDidUpdate)) {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:GCLiveRepositorySnapshotsDidUpdateNotification object:self.repository];
   }
+}
+
+- (void)loadView {
+  XLOG_DEBUG_CHECK(!self.nibBundle && !self.nibName);
+  Class nibClass = self.class;
+  while (nibClass) {
+    if ([[NSBundle bundleForClass:nibClass] loadNibNamed:NSStringFromClass(nibClass) owner:self topLevelObjects:NULL]) {
+      break;
+    }
+    nibClass = nibClass.superclass;
+  }
+  XLOG_DEBUG_CHECK(self.view);
 }
 
 // Override super method so that the NSUndoManager is guaranteed to be the same and always around even when view is not visible
