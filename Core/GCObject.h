@@ -15,6 +15,8 @@
 
 #import <Foundation/Foundation.h>
 
+@class GCRepository;
+
 @interface GCObject : NSObject <NSCopying>
 @property(nonatomic, readonly) GCRepository* repository;  // NOT RETAINED
 @property(nonatomic, readonly) NSString* SHA1;
