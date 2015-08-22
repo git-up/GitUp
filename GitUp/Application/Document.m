@@ -845,7 +845,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
                                      defaultButton:NSLocalizedString(@"Close", nil)
                                    alternateButton:NSLocalizedString(@"Cancel", nil)
                                        otherButton:nil
-                         informativeTextWithFormat:NSLocalizedString(@"The repository \"%@\" is still being prepared for search. This can take up to a few minutes for large repositories.", nil), self.displayName];
+                         informativeTextWithFormat:NSLocalizedString(@"The repository “%@” is still being prepared for search. This can take up to a few minutes for large repositories.", nil), self.displayName];
     alert.type = kGIAlertType_Caution;
     if ([alert runModal] == NSAlertAlternateReturn) {
       return NO;
@@ -1379,7 +1379,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
     if (![headBranch isEqualToBranch:_lastHEADBranch]) {
       if (!_helpHEADDisabled) {
         if ([headBranch isKindOfClass:[GCHistoryLocalBranch class]]) {
-          [_windowController showOverlayWithStyle:kGIOverlayStyle_Informational format:NSLocalizedString(@"You are now on branch \"%@\"", nil), [headBranch name]];
+          [_windowController showOverlayWithStyle:kGIOverlayStyle_Informational format:NSLocalizedString(@"You are now on branch “%@”", nil), [headBranch name]];
         } else if ((headBranch != [NSNull null]) && (_lastHEADBranch != [NSNull null])) {
           [_windowController showOverlayWithStyle:kGIOverlayStyle_Informational message:NSLocalizedString(@"You are not on any branch anymore", nil)];
         }

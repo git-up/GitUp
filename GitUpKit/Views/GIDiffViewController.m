@@ -79,8 +79,8 @@
       [_diffContentsViewController setDeltas:diff.deltas usingConflicts:nil];
       [_diffFilesViewController setDeltas:diff.deltas usingConflicts:nil];
       
-      _fromTextField.stringValue = [NSString localizedStringWithFormat:@"\"%@\" <%@> (%@)", _commit.summary, _commit.shortSHA1, [_dateFormatter stringFromDate:_commit.date]];
-      _toTextField.stringValue = [NSString localizedStringWithFormat:@"\"%@\" <%@> (%@)", _parentCommit.summary, _parentCommit.shortSHA1, [_dateFormatter stringFromDate:_parentCommit.date]];
+      _fromTextField.stringValue = [NSString localizedStringWithFormat:@"“%@” <%@> (%@)", _commit.summary, _commit.shortSHA1, [_dateFormatter stringFromDate:_commit.date]];
+      _toTextField.stringValue = [NSString localizedStringWithFormat:@"“%@” <%@> (%@)", _parentCommit.summary, _parentCommit.shortSHA1, [_dateFormatter stringFromDate:_parentCommit.date]];
     } else {
       [_diffContentsViewController setDeltas:nil usingConflicts:nil];
       [_diffFilesViewController setDeltas:nil usingConflicts:nil];

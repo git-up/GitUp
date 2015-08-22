@@ -7,7 +7,7 @@
 		<key>contents</key>
 		<array>
 			<string>The GitUp Map view lets you visualize the entire history of your repository and reflects its changes in real-time.
-You can customize what is shown in the Map using the &quot;Show&quot; menu at the bottom of the window.</string>
+You can customize what is shown in the Map using the “Show” menu at the bottom of the window.</string>
 			<string>GitUp lets you instantaneously view the detailed information and diff of any commit with Quick View.
 Select a commit in the Map and then press [Spacebar] to enter Quick View.</string>
 			<string>Branch and commit operations that used to be complex with the command line becomes intuitive, faster and safer with GitUp.
@@ -22,7 +22,7 @@ Right-click on a commit to see all editing operations. You can undo / redo your 
 	<dict>
 		<key>contents</key>
 		<array>
-			<string>The GitUp Commit view is where you create new commits in your repository - it has an &quot;Advanced&quot; mode and a &quot;Simple&quot; mode.
+			<string>The GitUp Commit view is where you create new commits in your repository - it has an “Advanced” mode and a “Simple” mode.
 The Simple mode uses a unified index and workdir and you can enable it in GitUp preferences.</string>
 			<string>The Advanced Commit view has intuitive keyboard shortcuts that let you prepare your commits very fast.
 You can stage or unstage selected lines (click on line numbers), or selected files, just by pressing [Return].</string>
@@ -105,7 +105,7 @@ Select an ancestor commit to jump to it in the Map view or press [Spacebar] to e
 		<key>contents</key>
 		<array>
 			<string>Snaphots are like Time Machine for Git: they automatically capture the state of your repository before any significant change.
-Select a Snapshot to preview the state of the repository at that time and then click &quot;Restore&quot; to roll back to it.</string>
+Select a Snapshot to preview the state of the repository at that time and then click “Restore” to roll back to it.</string>
 		</array>
 		<key>link</key>
 		<string>http://forums.gitup.co/t/using-gitup-snapshots/18/1</string>
@@ -115,7 +115,7 @@ Select a Snapshot to preview the state of the repository at that time and then c
 		<key>contents</key>
 		<array>
 			<string>GitUp shows the reflogs of the repository as a single deduplicated list of all the entries.
-Unreachable commits are indicated in darker text and can be made reachable again by clicking on &quot;Restore&quot;.</string>
+Unreachable commits are indicated in darker text and can be made reachable again by clicking on “Restore”.</string>
 		</array>
 		<key>link</key>
 		<string>http://forums.gitup.co/t/using-gitup-reflog/19/1</string>
@@ -125,7 +125,7 @@ Unreachable commits are indicated in darker text and can be made reachable again
 		<key>contents</key>
 		<array>
 			<string>Your repository has been rolled back to the commit to rewrite, and the files in the working directory are now as they were in that commit.
-Add, remove or edit files in the working directory as you would normally do, then click &quot;Continue&quot;.</string>
+Add, remove or edit files in the working directory as you would normally do, then click “Continue”.</string>
 		</array>
 		<key>link</key>
 		<string>http://forums.gitup.co/t/rewriting-commits-with-gitup/39/1</string>
@@ -134,8 +134,8 @@ Add, remove or edit files in the working directory as you would normally do, the
 	<dict>
 		<key>contents</key>
 		<array>
-			<string>You are now splitting an existing commit by moving its changes between an &quot;old&quot; commit and a &quot;new&quot; one.
-Changes can only be moved, not removed or added. Use the diff area to review the moved changes, then click &quot;Continue&quot; when done.</string>
+			<string>You are now splitting an existing commit by moving its changes between an “old” commit and a “new” one.
+Changes can only be moved, not removed or added. Use the diff area to review the moved changes, then click “Continue” when done.</string>
 		</array>
 		<key>link</key>
 		<string>http://forums.gitup.co/t/splitting-commits-with-gitup/40/1</string>
@@ -145,7 +145,7 @@ Changes can only be moved, not removed or added. Use the diff area to review the
 		<key>contents</key>
 		<array>
 			<string>Resolve the files with merge conflicts by opening them with their usual editors, fixing the conflicts, then marking them as resolved.
-Once you have resolved all the conflicts, click &quot;Commit&quot; to complete the editing operation.</string>
+Once you have resolved all the conflicts, click “Commit” to complete the editing operation.</string>
 		</array>
 		<key>link</key>
 		<string>http://forums.gitup.co/t/handling-merge-conflicts-in-gitup/36/1</string>

@@ -124,7 +124,7 @@ static inline NSString* _CleanedUpCommitMessage(NSString* message) {
 // This will preemptively abort on conflicts in workdir or index so there's no need to require a clean repo
 - (void)checkoutLocalBranch:(GCHistoryLocalBranch*)branch {
   NSError* error;
-  [self.repository setUndoActionName:[NSString stringWithFormat:NSLocalizedString(@"Checkout Branch \"%@\"", nil), branch.name]];
+  [self.repository setUndoActionName:[NSString stringWithFormat:NSLocalizedString(@"Checkout Branch “%@”", nil), branch.name]];
   if (![self.repository performOperationWithReason:@"checkout_branch"
                                           argument:branch.name
                                 skipCheckoutOnUndo:NO
@@ -141,7 +141,7 @@ static inline NSString* _CleanedUpCommitMessage(NSString* message) {
 // This will abort on conflicts in workdir or index so there's no need to require a clean repo
 - (void)checkoutRemoteBranch:(GCHistoryRemoteBranch*)remoteBranch {
   NSError* error;
-  [self.repository setUndoActionName:[NSString stringWithFormat:NSLocalizedString(@"Checkout Remote Branch \"%@\"", nil), remoteBranch.name]];
+  [self.repository setUndoActionName:[NSString stringWithFormat:NSLocalizedString(@"Checkout Remote Branch “%@”", nil), remoteBranch.name]];
   if (![self.repository performOperationWithReason:@"checkout_remote_branch"
                                           argument:remoteBranch.name
                                 skipCheckoutOnUndo:NO
@@ -338,13 +338,13 @@ static inline NSString* _CleanedUpCommitMessage(NSString* message) {
     case kGCCommitRelation_Descendant:
     case kGCCommitRelation_Cousin:
     case kGCCommitRelation_Unrelated:
-      [self.windowController showOverlayWithStyle:kGIOverlayStyle_Warning format:NSLocalizedString(@"The commit is not on the \"%@\" branch", nil), branch.name];
+      [self.windowController showOverlayWithStyle:kGIOverlayStyle_Warning format:NSLocalizedString(@"The commit is not on the “%@” branch", nil), branch.name];
       break;
     
     case kGCCommitRelation_Identical:
     case kGCCommitRelation_Ancestor: {
       if ([self checkCleanRepositoryForOperationOnBranch:branch]) {
-        [self _promptForCommitMessage:[NSString stringWithFormat:NSLocalizedString(@"Revert \"%@\"\n\n%@", nil), commit.summary, commit.SHA1]
+        [self _promptForCommitMessage:[NSString stringWithFormat:NSLocalizedString(@"Revert “%@”\n\n%@", nil), commit.summary, commit.SHA1]
                             withTitle:NSLocalizedString(@"Reverted commit message:", nil)
                                button:NSLocalizedString(@"Revert", nil)
                                 block:^(NSString* message) {
@@ -417,7 +417,7 @@ static inline NSString* _CleanedUpCommitMessage(NSString* message) {
 // This will abort on conflicts in workdir or index so there's no need to require a clean repo
 - (void)createLocalBranchAtCommit:(GCHistoryCommit*)commit withName:(NSString*)name checkOut:(BOOL)checkOut {
   NSError* error;
-  [self.repository setUndoActionName:[NSString stringWithFormat:NSLocalizedString(@"Create Branch \"%@\"", nil), name]];
+  [self.repository setUndoActionName:[NSString stringWithFormat:NSLocalizedString(@"Create Branch “%@”", nil), name]];
   if (![self.repository performOperationWithReason:@"create_branch"
                                           argument:name
                                 skipCheckoutOnUndo:NO
@@ -443,7 +443,7 @@ static inline NSString* _CleanedUpCommitMessage(NSString* message) {
 - (void)deleteLocalBranch:(GCHistoryLocalBranch*)branch {
   GCHistoryRemoteBranch* upstream = (GCHistoryRemoteBranch*)branch.upstream;  // Must be retained *before* deleting the local branch
   NSError* error;
-  [self.repository setUndoActionName:[NSString stringWithFormat:NSLocalizedString(@"Delete Branch \"%@\"", nil), branch.name]];
+  [self.repository setUndoActionName:[NSString stringWithFormat:NSLocalizedString(@"Delete Branch “%@”", nil), branch.name]];
   if ([self.repository performOperationWithReason:@"delete_branch"
                                          argument:branch.name
                                skipCheckoutOnUndo:YES
@@ -455,7 +455,7 @@ static inline NSString* _CleanedUpCommitMessage(NSString* message) {
   }]) {
     if ([upstream isKindOfClass:[GCHistoryRemoteBranch class]]) {
       [self confirmUserActionWithAlertType:kGIAlertType_Stop
-                                     title:[NSString stringWithFormat:NSLocalizedString(@"Do you also want to delete the upstream remote branch \"%@\" from its remote?", nil), upstream.name]
+                                     title:[NSString stringWithFormat:NSLocalizedString(@"Do you also want to delete the upstream remote branch “%@” from its remote?", nil), upstream.name]
                                    message:NSLocalizedString(@"This action cannot be undone.", nil)
                                     button:NSLocalizedString(@"Delete Remote Branch", nil)
                  suppressionUserDefaultKey:nil
@@ -473,7 +473,7 @@ static inline NSString* _CleanedUpCommitMessage(NSString* message) {
 // No checkout should happen here as HEAD tree should not change so there's no need to require a clean repo
 - (void)setName:(NSString*)name forLocalBranch:(GCHistoryLocalBranch*)branch {
   NSError* error;
-  [self.repository setUndoActionName:[NSString stringWithFormat:NSLocalizedString(@"Rename Branch \"%@\"", nil), branch.name]];
+  [self.repository setUndoActionName:[NSString stringWithFormat:NSLocalizedString(@"Rename Branch “%@”", nil), branch.name]];
   if (![self.repository performOperationWithReason:@"rename_branch"
                                           argument:branch.name
                                 skipCheckoutOnUndo:YES
@@ -490,7 +490,7 @@ static inline NSString* _CleanedUpCommitMessage(NSString* message) {
 - (void)setTipCommit:(GCHistoryCommit*)commit forLocalBranch:(GCHistoryLocalBranch*)branch {
   if ([self checkCleanRepositoryForOperationOnBranch:branch]) {
     NSError* error;
-    [self.repository setUndoActionName:[NSString stringWithFormat:NSLocalizedString(@"Set \"%@\" Branch Tip", nil), branch.name]];
+    [self.repository setUndoActionName:[NSString stringWithFormat:NSLocalizedString(@"Set “%@” Branch Tip", nil), branch.name]];
     if (![self.repository performReferenceTransformWithReason:@"set_branch_tip"
                                                      argument:branch.name
                                                         error:&error
@@ -509,7 +509,7 @@ static inline NSString* _CleanedUpCommitMessage(NSString* message) {
 // No checkout happens here so there's no need to require a clean repo
 - (void)moveTipCommit:(GCHistoryCommit*)commit forLocalBranch:(GCHistoryLocalBranch*)branch {
   NSError* error;
-  [self.repository setUndoActionName:[NSString stringWithFormat:NSLocalizedString(@"Move \"%@\" Branch Tip", nil), branch.name]];
+  [self.repository setUndoActionName:[NSString stringWithFormat:NSLocalizedString(@"Move “%@” Branch Tip", nil), branch.name]];
   if (![self.repository performOperationWithReason:@"move_branch_tip"
                                           argument:branch.name
                                 skipCheckoutOnUndo:YES
@@ -529,7 +529,7 @@ static inline NSString* _CleanedUpCommitMessage(NSString* message) {
 - (void)setUpstream:(GCBranch*)upstream forLocalBranch:(GCLocalBranch*)branch {
   NSError* error;
   if (upstream) {
-    [self.repository setUndoActionName:[NSString stringWithFormat:NSLocalizedString(@"Set Upstream For \"%@\"", nil), branch.name]];
+    [self.repository setUndoActionName:[NSString stringWithFormat:NSLocalizedString(@"Set Upstream For “%@”", nil), branch.name]];
     if (![self.repository performOperationWithReason:@"set_branch_upstream"
                                             argument:branch.name
                                   skipCheckoutOnUndo:YES
@@ -542,7 +542,7 @@ static inline NSString* _CleanedUpCommitMessage(NSString* message) {
       [self presentError:error];
     }
   } else {
-    [self.repository setUndoActionName:[NSString stringWithFormat:NSLocalizedString(@"Unset Upstream For \"%@\"", nil), branch.name]];
+    [self.repository setUndoActionName:[NSString stringWithFormat:NSLocalizedString(@"Unset Upstream For “%@”", nil), branch.name]];
     if (![self.repository performOperationWithReason:@"unset_branch_upstream"
                                             argument:branch.name
                                   skipCheckoutOnUndo:YES
@@ -585,7 +585,7 @@ static inline NSString* _CleanedUpCommitMessage(NSString* message) {
 // No checkout should happen here as HEAD tree should not change so there's no need to require a clean repo
 - (void)setName:(NSString*)name forTag:(GCHistoryTag*)tag {
   NSError* error;
-  [self.repository setUndoActionName:[NSString stringWithFormat:NSLocalizedString(@"Rename Tag \"%@\"", nil), tag.name]];
+  [self.repository setUndoActionName:[NSString stringWithFormat:NSLocalizedString(@"Rename Tag “%@”", nil), tag.name]];
   if (![self.repository performOperationWithReason:@"rename_tag"
                                           argument:tag.name
                                 skipCheckoutOnUndo:YES
@@ -602,7 +602,7 @@ static inline NSString* _CleanedUpCommitMessage(NSString* message) {
 // No checkout should happen here as HEAD tree should not change so there's no need to require a clean repo
 - (void)deleteTag:(GCHistoryTag*)tag {
   NSError* error;
-  [self.repository setUndoActionName:[NSString stringWithFormat:NSLocalizedString(@"Delete Tag \"%@\"", nil), tag.name]];
+  [self.repository setUndoActionName:[NSString stringWithFormat:NSLocalizedString(@"Delete Tag “%@”", nil), tag.name]];
   if (![self.repository performOperationWithReason:@"delete_tag"
                                           argument:tag.name
                                 skipCheckoutOnUndo:YES
@@ -624,9 +624,9 @@ static inline NSString* _CleanedUpCommitMessage(NSString* message) {
     GCHistoryCommit* commit = isBranch ? [commitOrBranch tipCommit] : commitOrBranch;
     NSError* error;
     if (isBranch) {
-      [self.repository setUndoActionName:[NSString stringWithFormat:NSLocalizedString(@"Fast-Forward \"%@\" Branch to \"%@\" Branch", nil), branch.name, [commitOrBranch name]]];
+      [self.repository setUndoActionName:[NSString stringWithFormat:NSLocalizedString(@"Fast-Forward \"%@\" Branch to “%@” Branch", nil), branch.name, [commitOrBranch name]]];
     } else {
-      [self.repository setUndoActionName:[NSString stringWithFormat:NSLocalizedString(@"Fast-Forward \"%@\" Branch to Commit", nil), branch.name]];
+      [self.repository setUndoActionName:[NSString stringWithFormat:NSLocalizedString(@"Fast-Forward “%@” Branch to Commit", nil), branch.name]];
     }
     if ([self.repository performReferenceTransformWithReason:(isBranch ? @"fast_forward_merge_branch" : @"fast_forward_merge_commit")
                                                     argument:(isBranch ? [commitOrBranch name] : [commitOrBranch SHA1])
@@ -659,9 +659,9 @@ static inline NSString* _CleanedUpCommitMessage(NSString* message) {
       NSError* error;
       __block GCCommit* newCommit = nil;
       if (isBranch) {
-        [self.repository setUndoActionName:[NSString stringWithFormat:NSLocalizedString(@"Merge Branch \"%@\" Into \"%@\" Branch", nil), [commitOrBranch name], branch.name]];
+        [self.repository setUndoActionName:[NSString stringWithFormat:NSLocalizedString(@"Merge Branch \"%@\" Into “%@” Branch", nil), [commitOrBranch name], branch.name]];
       } else {
-        [self.repository setUndoActionName:[NSString stringWithFormat:NSLocalizedString(@"Merge Commit Into \"%@\" Branch", nil), branch.name]];
+        [self.repository setUndoActionName:[NSString stringWithFormat:NSLocalizedString(@"Merge Commit Into “%@” Branch", nil), branch.name]];
       }
       if ([self.repository performReferenceTransformWithReason:(isBranch ? @"merge_branch" : @"merge_commit")
                                                       argument:(isBranch ? [commitOrBranch name] : [commitOrBranch SHA1])
@@ -692,7 +692,7 @@ static inline NSString* _CleanedUpCommitMessage(NSString* message) {
   if ([self checkCleanRepositoryForOperationOnBranch:branch]) {
     [self.repository suspendHistoryUpdates];  // We need to suspend history updates to prevent history to change during replay if conflict handler is called
     __block GCCommit* newCommit = nil;
-    [self.repository setUndoActionName:[NSString stringWithFormat:NSLocalizedString(@"Rebase \"%@\" Branch", nil), branch.name]];
+    [self.repository setUndoActionName:[NSString stringWithFormat:NSLocalizedString(@"Rebase “%@” Branch", nil), branch.name]];
     BOOL success = [self.repository performReferenceTransformWithReason:@"rebase_branch"
                                                                argument:branch.name
                                                                   error:&error
@@ -730,9 +730,9 @@ static inline NSString* _CleanedUpCommitMessage(NSString* message) {
     
     case kGCMergeAnalysisResult_UpToDate: {
       if (isBranch) {
-        [self.windowController showOverlayWithStyle:kGIOverlayStyle_Warning format:NSLocalizedString(@"The \"%@\" branch was already merged into the \"%@\" branch", nil), [commitOrBranch name], intoBranch.name];
+        [self.windowController showOverlayWithStyle:kGIOverlayStyle_Warning format:NSLocalizedString(@"The \"%@\" branch was already merged into the “%@” branch", nil), [commitOrBranch name], intoBranch.name];
       } else {
-        [self.windowController showOverlayWithStyle:kGIOverlayStyle_Warning format:NSLocalizedString(@"The commit is already on the \"%@\" branch", nil), intoBranch.name];
+        [self.windowController showOverlayWithStyle:kGIOverlayStyle_Warning format:NSLocalizedString(@"The commit is already on the “%@” branch", nil), intoBranch.name];
       }
       break;
     }
@@ -775,7 +775,7 @@ static inline NSString* _CleanedUpCommitMessage(NSString* message) {
       GCHistoryCommit* parentCommit = branch.tipCommit.parents.firstObject;
       while (parentCommit) {
         if ([parentCommit isEqualToCommit:commit]) {
-          [self.windowController showOverlayWithStyle:kGIOverlayStyle_Warning format:NSLocalizedString(@"The \"%@\" branch cannot be rebased onto one of its commits", nil), branch.name];
+          [self.windowController showOverlayWithStyle:kGIOverlayStyle_Warning format:NSLocalizedString(@"The “%@” branch cannot be rebased onto one of its commits", nil), branch.name];
           return;
         }
         if (parentCommit.children.count > 1) {
@@ -798,7 +798,7 @@ static inline NSString* _CleanedUpCommitMessage(NSString* message) {
 - (void)fetchRemoteBranch:(GCHistoryRemoteBranch*)branch {
   __block NSUInteger updatedTips;
   [self confirmUserActionWithAlertType:kGIAlertType_Caution
-                                 title:[NSString stringWithFormat:NSLocalizedString(@"Are you sure you want to fetch the remote branch \"%@\"?", nil), branch.name]
+                                 title:[NSString stringWithFormat:NSLocalizedString(@"Are you sure you want to fetch the remote branch “%@”?", nil), branch.name]
                                message:NSLocalizedString(@"This action cannot be undone.", nil)
                                 button:NSLocalizedString(@"Fetch Branch", nil)
              suppressionUserDefaultKey:kUserDefaultsKey_SkipFetchRemoteBranchWarning
@@ -904,8 +904,8 @@ static inline NSString* _CleanedUpCommitMessage(NSString* message) {
         if (updatedBranch && remoteBranch) {
           if (![updatedBranch.upstream isEqualToBranch:remoteBranch]) {
             [self confirmUserActionWithAlertType:kGIAlertType_Note
-                                           title:[NSString stringWithFormat:NSLocalizedString(@"Do you want to set the upstream for \"%@\"?", nil), updatedBranch.name]
-                                         message:[NSString stringWithFormat:NSLocalizedString(@"This will configure the local branch \"%@\" to track the remote branch \"%@\" you just pushed to.", nil), updatedBranch.name, remoteBranch.name]
+                                           title:[NSString stringWithFormat:NSLocalizedString(@"Do you want to set the upstream for “%@”?", nil), updatedBranch.name]
+                                         message:[NSString stringWithFormat:NSLocalizedString(@"This will configure the local branch \"%@\" to track the remote branch “%@” you just pushed to.", nil), updatedBranch.name, remoteBranch.name]
                                           button:NSLocalizedString(@"Set Upstream", nil)
                        suppressionUserDefaultKey:nil
                                            block:^{
@@ -918,12 +918,12 @@ static inline NSString* _CleanedUpCommitMessage(NSString* message) {
           [self presentError:localError];
         }
       } else {
-        [self.windowController showOverlayWithStyle:kGIOverlayStyle_Informational format:NSLocalizedString(@"The branch \"%@\" was pushed to the remote \"%@\" successfully!", nil), branch.name, remote ? remote.name : upstreamRemote.name];
+        [self.windowController showOverlayWithStyle:kGIOverlayStyle_Informational format:NSLocalizedString(@"The branch \"%@\" was pushed to the remote “%@” successfully!", nil), branch.name, remote ? remote.name : upstreamRemote.name];
       }
       
     } else if (!force && [error.domain isEqualToString:GCErrorDomain] && (error.code == kGCErrorCode_NonFastForward)) {
       [self confirmUserActionWithAlertType:kGIAlertType_Stop
-                                     title:[NSString stringWithFormat:NSLocalizedString(@"The branch \"%@\" could not be fast-forwarded on the remote \"%@\". Do you want to attempt to force push?", nil), branch.name, remote ? remote.name : upstreamRemote.name]
+                                     title:[NSString stringWithFormat:NSLocalizedString(@"The branch \"%@\" could not be fast-forwarded on the remote “%@”. Do you want to attempt to force push?", nil), branch.name, remote ? remote.name : upstreamRemote.name]
                                    message:NSLocalizedString(@"This action cannot be undone.", nil)
                                     button:NSLocalizedString(@"Force Push", nil)
                  suppressionUserDefaultKey:nil
@@ -941,7 +941,7 @@ static inline NSString* _CleanedUpCommitMessage(NSString* message) {
 
 - (void)pushLocalBranch:(GCHistoryLocalBranch*)branch toRemote:(GCRemote*)remote {
   [self confirmUserActionWithAlertType:kGIAlertType_Caution
-                                 title:[NSString stringWithFormat:NSLocalizedString(@"Are you sure you want to push \"%@\" to the remote \"%@\"?", nil), branch.name, remote.name]
+                                 title:[NSString stringWithFormat:NSLocalizedString(@"Are you sure you want to push \"%@\" to the remote “%@”?", nil), branch.name, remote.name]
                                message:NSLocalizedString(@"This action cannot be undone.", nil)
                                 button:NSLocalizedString(@"Push Branch", nil)
              suppressionUserDefaultKey:kUserDefaultsKey_SkipPushLocalBranchToRemoteWarning
@@ -955,8 +955,8 @@ static inline NSString* _CleanedUpCommitMessage(NSString* message) {
 - (void)pushLocalBranchToUpstream:(GCHistoryLocalBranch*)branch {
   GCHistoryRemoteBranch* upstream = (GCHistoryRemoteBranch*)branch.upstream;
   [self confirmUserActionWithAlertType:kGIAlertType_Caution
-                                 title:[NSString stringWithFormat:NSLocalizedString(@"Are you sure you want to push the branch \"%@\" to its upstream?", nil), branch.name]
-                               message:[NSString stringWithFormat:NSLocalizedString(@"This will push to the remote branch \"%@\" which cannot be undone.", nil), upstream.name]
+                                 title:[NSString stringWithFormat:NSLocalizedString(@"Are you sure you want to push the branch “%@” to its upstream?", nil), branch.name]
+                               message:[NSString stringWithFormat:NSLocalizedString(@"This will push to the remote branch “%@” which cannot be undone.", nil), upstream.name]
                                 button:NSLocalizedString(@"Push Branch", nil)
              suppressionUserDefaultKey:kUserDefaultsKey_SkipPushBranchWarning
                                  block:^{
@@ -974,10 +974,10 @@ static inline NSString* _CleanedUpCommitMessage(NSString* message) {
   } completionBlock:^(BOOL success, NSError* error) {
     
     if (success) {
-      [self.windowController showOverlayWithStyle:kGIOverlayStyle_Informational format:NSLocalizedString(@"All branches were pushed to the remote \"%@\" successfully!", nil), remote.name];
+      [self.windowController showOverlayWithStyle:kGIOverlayStyle_Informational format:NSLocalizedString(@"All branches were pushed to the remote “%@” successfully!", nil), remote.name];
     } else if ([error.domain isEqualToString:GCErrorDomain] && (error.code == kGCErrorCode_NonFastForward)) {
       [self confirmUserActionWithAlertType:kGIAlertType_Stop
-                                     title:[NSString stringWithFormat:NSLocalizedString(@"Some branches could not be fast-forwarded on the remote \"%@\". Do you want to attempt to force push?", nil), remote.name]
+                                     title:[NSString stringWithFormat:NSLocalizedString(@"Some branches could not be fast-forwarded on the remote “%@”. Do you want to attempt to force push?", nil), remote.name]
                                    message:NSLocalizedString(@"This action cannot be undone.", nil)
                                     button:NSLocalizedString(@"Force Push", nil)
                  suppressionUserDefaultKey:nil
@@ -999,7 +999,7 @@ static inline NSString* _CleanedUpCommitMessage(NSString* message) {
   if (remotes.count <= 1) {
     GCRemote* remote = remotes[0];
     [self confirmUserActionWithAlertType:kGIAlertType_Stop
-                                   title:[NSString stringWithFormat:NSLocalizedString(@"Are you sure you want to push all branches to the remote \"%@\"?", nil), remote.name]
+                                   title:[NSString stringWithFormat:NSLocalizedString(@"Are you sure you want to push all branches to the remote “%@”?", nil), remote.name]
                                  message:NSLocalizedString(@"This action cannot be undone.", nil)
                                   button:NSLocalizedString(@"Push All Branches", nil)
                suppressionUserDefaultKey:nil
@@ -1026,7 +1026,7 @@ static inline NSString* _CleanedUpCommitMessage(NSString* message) {
   } completionBlock:^(BOOL success, NSError* error) {
     
     if (success) {
-      [self.windowController showOverlayWithStyle:kGIOverlayStyle_Informational format:NSLocalizedString(@"The tag \"%@\" was pushed to the remote \"%@\" successfully!", nil), tag.name, remote.name];
+      [self.windowController showOverlayWithStyle:kGIOverlayStyle_Informational format:NSLocalizedString(@"The tag \"%@\" was pushed to the remote “%@” successfully!", nil), tag.name, remote.name];
     } else {
       [self presentError:error];
     }
@@ -1037,7 +1037,7 @@ static inline NSString* _CleanedUpCommitMessage(NSString* message) {
 // IMPORTANT: See comment above
 - (void)pushTag:(GCHistoryTag*)tag toRemote:(GCRemote*)remote {
   [self confirmUserActionWithAlertType:kGIAlertType_Caution
-                                 title:[NSString stringWithFormat:NSLocalizedString(@"Are you sure you want to push the tag \"%@\" to the remote \"%@\"?", nil), tag.name, remote.name]
+                                 title:[NSString stringWithFormat:NSLocalizedString(@"Are you sure you want to push the tag \"%@\" to the remote “%@”?", nil), tag.name, remote.name]
                                message:NSLocalizedString(@"This action cannot be undone.", nil)
                                 button:NSLocalizedString(@"Push Tag", nil)
              suppressionUserDefaultKey:kUserDefaultsKey_SkipPushTagWarning
@@ -1055,7 +1055,7 @@ static inline NSString* _CleanedUpCommitMessage(NSString* message) {
   if (remotes.count <= 1) {
     GCRemote* remote = remotes[0];
     [self confirmUserActionWithAlertType:kGIAlertType_Stop
-                                   title:[NSString stringWithFormat:NSLocalizedString(@"Are you sure you want to push all tags to the remote \"%@\"?", nil), remote.name]
+                                   title:[NSString stringWithFormat:NSLocalizedString(@"Are you sure you want to push all tags to the remote “%@”?", nil), remote.name]
                                  message:NSLocalizedString(@"This action cannot be undone.", nil)
                                   button:NSLocalizedString(@"Push All Tags", nil)
                suppressionUserDefaultKey:nil
@@ -1068,7 +1068,7 @@ static inline NSString* _CleanedUpCommitMessage(NSString* message) {
       } completionBlock:^(BOOL success, NSError* error) {
         
         if (success) {
-          [self.windowController showOverlayWithStyle:kGIOverlayStyle_Informational format:NSLocalizedString(@"All tags were pushed to the remote \"%@\" successfully!", nil), remote.name];
+          [self.windowController showOverlayWithStyle:kGIOverlayStyle_Informational format:NSLocalizedString(@"All tags were pushed to the remote “%@” successfully!", nil), remote.name];
         } else {
           [self presentError:error];
         }
@@ -1102,7 +1102,7 @@ static inline NSString* _CleanedUpCommitMessage(NSString* message) {
 // TODO: Delete upstream(s) in config if needed and put on undo stack
 - (void)deleteRemoteBranch:(GCHistoryRemoteBranch*)branch {
   [self confirmUserActionWithAlertType:kGIAlertType_Stop
-                                 title:[NSString stringWithFormat:NSLocalizedString(@"Are you sure you want to delete the remote branch \"%@\" from its remote?", nil), branch.name]
+                                 title:[NSString stringWithFormat:NSLocalizedString(@"Are you sure you want to delete the remote branch “%@” from its remote?", nil), branch.name]
                                message:NSLocalizedString(@"This action cannot be undone.", nil)
                                 button:NSLocalizedString(@"Delete Branch", nil)
              suppressionUserDefaultKey:nil
@@ -1115,7 +1115,7 @@ static inline NSString* _CleanedUpCommitMessage(NSString* message) {
 
 - (void)deleteTagFromAllRemotes:(GCHistoryTag*)tag {
   [self confirmUserActionWithAlertType:kGIAlertType_Stop
-                                 title:[NSString stringWithFormat:NSLocalizedString(@"Are you sure you want to delete the tag \"%@\" from all remotes?", nil), tag.name]
+                                 title:[NSString stringWithFormat:NSLocalizedString(@"Are you sure you want to delete the tag “%@” from all remotes?", nil), tag.name]
                                message:NSLocalizedString(@"This action cannot be undone.", nil)
                                 button:NSLocalizedString(@"Delete Tag", nil)
              suppressionUserDefaultKey:nil
@@ -1154,8 +1154,8 @@ static inline NSString* _CleanedUpCommitMessage(NSString* message) {
 - (void)pullLocalBranchFromUpstream:(GCHistoryLocalBranch*)branch {
   __block GCHistoryRemoteBranch* upstream = (GCHistoryRemoteBranch*)branch.upstream;
   [self confirmUserActionWithAlertType:kGIAlertType_Caution
-                                 title:[NSString stringWithFormat:NSLocalizedString(@"Are you sure you want to pull the branch \"%@\" from its upstream?", nil), branch.name]
-                               message:[NSString stringWithFormat:NSLocalizedString(@"This will first fetch the remote branch \"%@\" which cannot be undone.", nil), upstream.name]
+                                 title:[NSString stringWithFormat:NSLocalizedString(@"Are you sure you want to pull the branch “%@” from its upstream?", nil), branch.name]
+                               message:[NSString stringWithFormat:NSLocalizedString(@"This will first fetch the remote branch “%@” which cannot be undone.", nil), upstream.name]
                                 button:NSLocalizedString(@"Pull Branch", nil)
              suppressionUserDefaultKey:kUserDefaultsKey_SkipPullBranchWarning
                                  block:^{
@@ -1179,19 +1179,19 @@ static inline NSString* _CleanedUpCommitMessage(NSString* message) {
             break;
           
           case kGCMergeAnalysisResult_UpToDate:
-            [self.windowController showOverlayWithStyle:kGIOverlayStyle_Informational format:NSLocalizedString(@"The branch \"%@\" is already up-to-date with its upstream!", nil), branch.name];
+            [self.windowController showOverlayWithStyle:kGIOverlayStyle_Informational format:NSLocalizedString(@"The branch “%@” is already up-to-date with its upstream!", nil), branch.name];
             break;
           
           case kGCMergeAnalysisResult_FastForward:
-            [self fastForwardLocalBranch:branch toCommitOrBranch:upstream withUserMessage:[NSString stringWithFormat:NSLocalizedString(@"The branch \"%@\" was fast-forwarded to its upstream!", nil), branch.name]];
+            [self fastForwardLocalBranch:branch toCommitOrBranch:upstream withUserMessage:[NSString stringWithFormat:NSLocalizedString(@"The branch “%@” was fast-forwarded to its upstream!", nil), branch.name]];
             break;
           
           case kGCMergeAnalysisResult_Normal: {
-            NSAlert* alert = [NSAlert alertWithMessageText:[NSString stringWithFormat:NSLocalizedString(@"Do you want to merge or rebase the branch \"%@\"?", nil), branch.name]
+            NSAlert* alert = [NSAlert alertWithMessageText:[NSString stringWithFormat:NSLocalizedString(@"Do you want to merge or rebase the branch “%@”?", nil), branch.name]
                                              defaultButton:NSLocalizedString(@"Rebase", nil)
                                            alternateButton:NSLocalizedString(@"Cancel", nil)
                                                otherButton:NSLocalizedString(@"Merge", nil)
-                                 informativeTextWithFormat:NSLocalizedString(@"The branch \"%@\" has diverged from its upstream and cannot be fast-forwarded.", nil), branch.name];
+                                 informativeTextWithFormat:NSLocalizedString(@"The branch “%@” has diverged from its upstream and cannot be fast-forwarded.", nil), branch.name];
             alert.type = kGIAlertType_Note;
             [self presentAlert:alert completionHandler:^(NSModalResponse returnCode) {
               
