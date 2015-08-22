@@ -18,7 +18,7 @@
 #import "AppDelegate.h"
 
 @interface AppDelegate ()
-@property(nonatomic, weak) IBOutlet GIWindow* window;
+@property(nonatomic, strong) IBOutlet GIWindow* window;
 @end
 
 // GIDiffContentsViewController is a view controller that displays the contents of an arbitrary diff
