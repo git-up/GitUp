@@ -318,4 +318,57 @@
   [self destroyLocalRepository:repo];
 }
 
+- (void)testRenameSubmodule {
+  NSArray* submodules;
+  GCSubmodule* submodule;
+  
+  // Add submodule
+  NSString* output1 = [self runGitCLTWithRepository:self.repository command:@"submodule", @"add", @"https://github.com/git-up/test-repo-base.git", nil];
+  XCTAssertNotNil(output1);
+  
+  // Verify name & path
+  submodules = [self.repository listSubmodules:NULL];
+  XCTAssertEqual(submodules.count, 1);
+  submodule = submodules.firstObject;
+  XCTAssertEqualObjects(submodule.name, @"test-repo-base");
+  XCTAssertEqualObjects(submodule.path, @"test-repo-base");
+  
+  // Commit submodule
+  GCCommit* commit1 = [self.repository createCommitFromHEADWithMessage:@"Added submodule" error:NULL];
+  XCTAssertNotNil(commit1);
+  XCTAssertFalse([self.repository checkRepositoryDirty:NO]);
+  
+  // Verify name & path
+  submodules = [self.repository listSubmodules:NULL];
+  XCTAssertEqual(submodules.count, 1);
+  submodule = submodules.firstObject;
+  XCTAssertEqualObjects(submodule.name, @"test-repo-base");
+  XCTAssertEqualObjects(submodule.path, @"test-repo-base");
+  
+  // Move submodule
+  NSString* output2 = [self runGitCLTWithRepository:self.repository command:@"mv", @"test-repo-base", @"base", nil];
+  XCTAssertNotNil(output2);
+  
+#if 0
+  // Verify name & path
+  submodules = [self.repository listSubmodules:NULL];
+  XCTAssertEqual(submodules.count, 1);
+  submodule = submodules.firstObject;
+  XCTAssertEqualObjects(submodule.name, @"test-repo-base");
+  XCTAssertEqualObjects(submodule.path, @"test-repo-base");
+#endif
+  
+  // Commit submodule
+  GCCommit* commit2 = [self.repository createCommitFromHEADWithMessage:@"Moved submodule" error:NULL];
+  XCTAssertNotNil(commit2);
+  XCTAssertFalse([self.repository checkRepositoryDirty:NO]);
+  
+  // Verify name & path
+  submodules = [self.repository listSubmodules:NULL];
+  XCTAssertEqual(submodules.count, 1);
+  submodule = submodules.firstObject;
+  XCTAssertEqualObjects(submodule.name, @"test-repo-base");
+  XCTAssertEqualObjects(submodule.path, @"base");
+}
+
 @end
