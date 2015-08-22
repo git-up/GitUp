@@ -26,11 +26,11 @@ git push -f origin "b$VERSION"
 
 ##### Archive and export app
 
-pushd "GitUpKit"
+pushd "GitUp"
 xcodebuild archive -scheme "Application" -archivePath "../build/$PRODUCT_NAME.xcarchive" "BUNDLE_VERSION=$VERSION" # SYMROOT is ignored?
 xcodebuild -exportArchive -archivePath "../build/$PRODUCT_NAME.xcarchive" -exportPath "../build/$PRODUCT_NAME"  # SYMROOT is ignored?
 ditto -c -k --keepParent "../build/$PRODUCT_NAME.xcarchive" "../build/$PRODUCT_NAME.xcarchive.zip"
-popd "GitUpKit"
+popd "GitUp"
 
 ##### Upload to S3 and update Appcast
 
