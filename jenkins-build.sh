@@ -5,6 +5,9 @@ PRODUCT_NAME="GitUp"
 APPCAST_NAME="appcast.xml"
 XCODE_SYMROOT="/tmp/$PRODUCT_NAME"
 
+MAX_VERSION=`git tag -l "b*" | sed 's/b//g' | sort -nr | head -n 1`
+VERSION=$((MAX_VERSION + 1))
+
 ##### Count LOC
 
 $CLOC_PATH --by-file --xml --out=cloc.xml "GitUp/Application" "GitUpKit/Components" "GitUpKit/Core" "GitUpKit/Extensions" "GitUpKit/Interface" "GitUpKit/Utilities" "GitUpKit/Views"
@@ -16,14 +19,6 @@ rm -rf "$XCODE_SYMROOT"
 xcodebuild test -scheme "GitUpKit" "SYMROOT=$XCODE_SYMROOT"
 popd
 
-##### Tag build
-
-MAX_VERSION=`git tag -l "b*" | sed 's/b//g' | sort -nr | head -n 1`
-VERSION=$((MAX_VERSION + 1))
-
-git tag -f "b$VERSION"
-git push -f origin "b$VERSION"
-
 ##### Archive and export app
 
 pushd "GitUp"
@@ -31,6 +26,11 @@ xcodebuild archive -scheme "Application" -archivePath "../build/$PRODUCT_NAME.xc
 xcodebuild -exportArchive -archivePath "../build/$PRODUCT_NAME.xcarchive" -exportPath "../build/$PRODUCT_NAME"  # SYMROOT is ignored?
 ditto -c -k --keepParent "../build/$PRODUCT_NAME.xcarchive" "../build/$PRODUCT_NAME.xcarchive.zip"
 popd "GitUp"
+
+##### Tag build
+
+git tag -f "b$VERSION"
+git push -f origin "b$VERSION"
 
 ##### Upload to S3 and update Appcast
 
