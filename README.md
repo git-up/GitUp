@@ -11,7 +11,7 @@ GitUp
 
 Git recently celebrated its 10 years anniversary, but most engineers are still confused by its intricacy (3 of the [top 5 questions of all time](http://stackoverflow.com/questions?sort=votes) on Stack Overflow are Git related). Since Git turns even simple actions into mystifying commands (“git add” to stage versus “git reset HEAD” to unstage anyone?), it’s no surprise users waste time, get frustrated, distract the rest of their team for help, or worse, screw up their repo!
 
-GitUp is a bet to invent a new Git interaction model that lets engineers work quickly, safely, and without headaches. It's unlike any other Git client out there from the way it’s built (it interacts directly with the Git database on disk), to the way it works (you manipulate the repository graph instead of manipulating commits).
+GitUp is a bet to invent a new Git interaction model that lets engineers of all levels work quickly, safely, and without headaches. It's unlike any other Git client out there from the way it’s built (it interacts directly with the Git database on disk), to the way it works (you manipulate the repository graph instead of manipulating commits).
 
 With GitUp, you get a truly efficient Git client for Mac:
 - A live and interactive repo graph (edit, reorder, fixup, merge commits…),
@@ -45,6 +45,9 @@ GitUpKit
 
 **GitUp is built as a thin layer on top of a reusable generic Git toolkit called "GitUpKit". This means that you can use that same GitUpKit framework to build your very own Git UI!**
 
+*GitUpKit has a very different goal than [ObjectiveGit](https://github.com/libgit2/objective-git). Instead of offering extensive raw bindings to [libgit2](https://github.com/libgit2/libgit2), GitUpKit only uses a minimal subset of libgit2 and reimplements everything else on top of it (it has its own "rebase engine" for instance).
+This allows it to expose a very tight and consistent API, that completely follows Obj-C conventions and hides away the libgit2 complexity and sometimes inconsistencies. GitUpKit adds on top of that a number of exclusive and powerful features, from undo/redo and Time Machine like snapshots, to entire drop-in UI components.*
+
 Architecture
 ------------
 
@@ -60,16 +63,16 @@ The GitUpKit source code is organized as 2 independent layers communicating only
 - `Components/`: reusable single-view view controllers e.g. `GIDiffContentsViewController` to render a diff
 - `Views/`: high-level reusable multi-views view controllers e.g. `GIAdvancedCommitViewController` to implement the entire GitUp Advanced Commit view
 
-*GitUpKit has a very different goal than [ObjectiveGit](https://github.com/libgit2/objective-git). Instead of offering extensive raw bindings to [libgit2](https://github.com/libgit2/libgit2), GitUpKit only uses a minimal subset of libgit2 and reimplements everything else on top of it (it has its own "rebase engine" for instance). This allows it to expose a very tight and consistent API, that completely follows Obj-C conventions and hides away the libgit2 complexity and sometimes inconsistencies. GitUpKit adds on top of that a number of exclusive and powerful features, from undo/redo and Time Machine like snapshots, to entire drop-in UI components.*
+**IMPORTANT**: If the preprocessor constant `DEBUG` is defined to a non-zero value when building GitUpKit (this is the default when building in "Debug" configuration), a number of extra consistency checks are enabled at run time as well as extra logging. Be aware that this overhead can significantly affect performance.
 
-API Sample Code
----------------
+GitUpKit API
+------------
 
-Using the API should be pretty straightforward since it is organized by functionality (e.g. repository, branches, commits, interface components, etc...) and a best effort has been made to name functions clearly.
+Using the GitUpKit API should be pretty straightforward since it is organized by functionality (e.g. repository, branches, commits, interface components, etc...) and a best effort has been made to name functions clearly.
 
-For all the "Core" APIs, the best way to learn them is to look at the associated unit tests - for instance see [the branch tests](GitUpKit/Core/GCBranch-Tests.m) for the branch API.
+Regarding the "Core" APIs, the best way to learn them is to peruse the associated unit tests - for instance see [the branch tests](GitUpKit/Core/GCBranch-Tests.m) for the branch API.
 
-Here are some simplified sample code to get you started (error handling is left as an exercise to the reader):
+Here is some sample code to get you started (error handling is left as an exercise to the reader):
 
 **Opening and browsing a repository:**
 ```objc
@@ -131,18 +134,27 @@ assert([repo findLocalBranchWithName:@"temp" error:NULL] == nil);
 assert([repo resetToHEAD:kGCResetMode_Hard error:NULL]);
 ```
 
-Advanced Examples
------------------
+Complete Example #1: GitDown
+----------------------------
 
-There's an example mini-app called [GitDown](Examples/GitDown) that prompts the user for a repo and displays an interactive and live-updating list of its stashes (all with ~20 lines of code in `-[AppDelegate applicationDidFinishLaunching:]`):
+[GitDown](Examples/GitDown) is a very basic app that prompts the user for a repo and displays an interactive and live-updating list of its stashes (all with ~20 lines of code in `-[AppDelegate applicationDidFinishLaunching:]`):
 
 <p align="center">
 <img src="http://i.imgur.com/ZfxM7su.png">
 </p>
 
-Through GitUpKit, this mini-app also gets for free unlimited undo/redo, unified and side-by-side diffs, text selection and copy, keyboard shortcuts, etc...
+Through GitUpKit, this basic app also gets for free unlimited undo/redo, unified and side-by-side diffs, text selection and copy, keyboard shortcuts, etc...
 
-The GitDown source code also demonstrates how to use some other GitUpKit view controllers as well as building a customized one.
+This source code also demonstrates how to use some other GitUpKit view controllers as well as building a customized one.
+
+Complete Example #2: GitY
+-------------------------
+
+[GitY](Examples/GitY) is a [GitX](http://gitx.frim.nl/) clone built using GitUpKit and less than 200 lines of code:
+
+<p align="center">
+<img src="http://i.imgur.com/6cuPcT4.png">
+</p>
 
 Contributing
 ============
