@@ -299,14 +299,14 @@ static NSColor* _DimColor(NSColor* color) {
     [self _updateDiffViews];
     [NSAnimationContext beginGrouping];
     [[NSAnimationContext currentContext] setDuration:0.0];  // Prevent animations in case the view is actually not on screen yet (e.g. in a hidden tab)
-    [_tableView noteHeightOfRowsWithIndexesChanged:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, 2 * _data.count)]];
+    [_tableView noteHeightOfRowsWithIndexesChanged:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [self numberOfRowsInTableView:_tableView])]];
     [NSAnimationContext endGrouping];
   }
 }
 
 - (void)viewDidFinishLiveResize {
   [self _updateDiffViews];
-  [_tableView noteHeightOfRowsWithIndexesChanged:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, 2 * _data.count)]];
+  [_tableView noteHeightOfRowsWithIndexesChanged:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [self numberOfRowsInTableView:_tableView])]];
 }
 
 // WARNING: This is called *several* times when the default has been changed
@@ -410,6 +410,9 @@ static NSColor* _DimColor(NSColor* color) {
 - (GCDiffDelta*)topVisibleDelta:(CGFloat*)offset {
   NSClipView* clipView = (NSClipView*)_tableView.superview;
   NSInteger row = [_tableView rowAtPoint:clipView.bounds.origin];
+  if (_headerView) {
+    row -= 1;
+  }
   if (row >= 0) {
     if (offset) {
       NSRect rect = [_tableView rectOfRow:(2 * (row / 2))];
@@ -422,7 +425,7 @@ static NSColor* _DimColor(NSColor* color) {
 }
 
 - (void)setTopVisibleDelta:(GCDiffDelta*)delta offset:(CGFloat)offset {
-  NSInteger row = 0;
+  NSInteger row = _headerView ? 1 : 0;
   for (GIDiffContentData* data in _data) {
     if ([data.delta.canonicalPath isEqualToString:delta.canonicalPath]) {  // Don't use -isEqualToDelta:
       NSRect rect = [_tableView rectOfRow:row];
@@ -450,12 +453,18 @@ static NSColor* _DimColor(NSColor* color) {
 #pragma mark - NSTableViewDataSource
 
 - (NSInteger)numberOfRowsInTableView:(NSTableView*)tableView {
-  return 2 * _data.count;
+  return (_headerView ? 1 : 0) + 2 * _data.count;
 }
 
 #pragma mark - NSTableViewDelegate
 
 - (BOOL)tableView:(NSTableView*)tableView isGroupRow:(NSInteger)row {
+  if (_headerView) {
+    if (row == 0) {
+      return NO;
+    }
+    row -= 1;
+  }
   return row % 2 == 0;
 }
 
@@ -464,6 +473,9 @@ static NSColor* _DimColor(NSColor* color) {
 }
 
 - (void)tableView:(NSTableView *)tableView didRemoveRowView:(NSTableRowView*)rowView forRow:(NSInteger)row {
+  if (_headerView) {
+    row -= 1;
+  }
   if (row % 2) {
     GITextDiffCellView* view = [rowView viewAtColumn:0];
     if ([view isKindOfClass:[GITextDiffCellView class]]) {
@@ -486,6 +498,13 @@ static inline NSString* _StringFromFileMode(GCFileMode mode) {
 }
 
 - (NSView*)tableView:(NSTableView*)tableView viewForTableColumn:(NSTableColumn*)tableColumn row:(NSInteger)row {
+  if (_headerView) {
+    if (row == 0) {
+      return _headerView;
+    }
+    row -= 1;
+  }
+  
   GIDiffContentData* data = _data[row / 2];
   GCDiffDelta* delta = data.delta;
   
@@ -618,6 +637,15 @@ static inline NSString* _StringFromFileMode(GCFileMode mode) {
 }
 
 - (CGFloat)tableView:(NSTableView*)tableView heightOfRow:(NSInteger)row {
+  if (_headerView) {
+    if (row == 0) {
+      if ([_delegate respondsToSelector:@selector(diffContentsViewController:headerViewHeightForWidth:)]) {
+        return [_delegate diffContentsViewController:self headerViewHeightForWidth:[_tableView.tableColumns[0] width]];
+      }
+      return _headerView.frame.size.height;
+    }
+    row -= 1;
+  }
   if (row % 2) {
     GIDiffContentData* data = _data[row / 2];
     GCDiffDelta* delta = data.delta;
@@ -644,10 +672,10 @@ static inline NSString* _StringFromFileMode(GCFileMode mode) {
 
 // TODO: Avoid scanning all data
 - (void)diffViewDidChangeSelection:(GIDiffView*)view {
-  NSUInteger row = 0;
+  NSUInteger row = _headerView ? 1 : 0;
   for (GIDiffContentData* data in _data) {
     if (data.diffView == view) {
-      GIHeaderDiffCellView* headerView = [_tableView viewAtColumn:0 row:(2 * row) makeIfNecessary:NO];
+      GIHeaderDiffCellView* headerView = [_tableView viewAtColumn:0 row:row makeIfNecessary:NO];
       if (headerView) {
         if (!headerView.actionButton.hidden) {
           [headerView setActionButtonLabel:[_delegate diffContentsViewController:self actionButtonLabelForDelta:data.delta conflict:data.conflict]];
@@ -657,7 +685,7 @@ static inline NSString* _StringFromFileMode(GCFileMode mode) {
       }
       break;
     }
-    ++row;
+    row += 2;
   }
   if ([_delegate respondsToSelector:@selector(diffContentsViewControllerDidChangeSelection:)]) {
     [_delegate diffContentsViewControllerDidChangeSelection:self];

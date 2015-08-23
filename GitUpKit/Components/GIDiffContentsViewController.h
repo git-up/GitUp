@@ -23,6 +23,7 @@ extern NSString* const GIDiffContentsViewControllerUserDefaultKey_DiffViewMode; 
 
 @protocol GIDiffContentsViewControllerDelegate <NSObject>
 @optional
+- (CGFloat)diffContentsViewController:(GIDiffContentsViewController*)controller headerViewHeightForWidth:(CGFloat)width;
 - (void)diffContentsViewControllerDidScroll:(GIDiffContentsViewController*)controller;
 - (void)diffContentsViewControllerDidChangeSelection:(GIDiffContentsViewController*)controller;
 - (BOOL)diffContentsViewController:(GIDiffContentsViewController*)controller handleKeyDownEvent:(NSEvent*)event;
@@ -35,6 +36,7 @@ extern NSString* const GIDiffContentsViewControllerUserDefaultKey_DiffViewMode; 
 @property(nonatomic, assign) id<GIDiffContentsViewControllerDelegate> delegate;
 @property(nonatomic) BOOL showsUntrackedAsAdded;  // Default is NO
 @property(nonatomic, copy) NSString* emptyLabel;
+@property(nonatomic, strong) NSView* headerView;
 
 @property(nonatomic, readonly) NSArray* deltas;
 @property(nonatomic, readonly) NSDictionary* conflicts;
