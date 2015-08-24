@@ -7,20 +7,96 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E200A3BA1B02DDA100C4E39D /* GCPrivate.m in Sources */ = {isa = PBXBuildFile; fileRef = E200A3B81B02DDA100C4E39D /* GCPrivate.m */; };
-		E20EB08C19FC75CA0031A075 /* GCRepository+Reset.m in Sources */ = {isa = PBXBuildFile; fileRef = E20EB08A19FC75CA0031A075 /* GCRepository+Reset.m */; };
-		E20EB09019FC76160031A075 /* GCRepository+Status.m in Sources */ = {isa = PBXBuildFile; fileRef = E20EB08E19FC76160031A075 /* GCRepository+Status.m */; };
-		E20F10F41A043E2100076AAC /* GCHistory.m in Sources */ = {isa = PBXBuildFile; fileRef = E20F10F21A043E2100076AAC /* GCHistory.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		E2146C8F1A57F3BC00F4550B /* GCObject.m in Sources */ = {isa = PBXBuildFile; fileRef = E2146C8D1A57F3BC00F4550B /* GCObject.m */; };
-		E21739F41A4FE39E00EC6777 /* GCFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = E21739F21A4FE39E00EC6777 /* GCFunctions.m */; };
-		E21739FF1A51FA6200EC6777 /* GCSubmodule.m in Sources */ = {isa = PBXBuildFile; fileRef = E21739FD1A51FA6200EC6777 /* GCSubmodule.m */; };
-		E218A58B1A566F6A00DFF1DF /* GCReferenceTransform.m in Sources */ = {isa = PBXBuildFile; fileRef = E218A5891A566F6A00DFF1DF /* GCReferenceTransform.m */; };
-		E218A58F1A56706600DFF1DF /* GCRepository+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = E218A58D1A56706600DFF1DF /* GCRepository+Utilities.m */; };
-		E21A88F41A9471B300255AC3 /* GIPrivate.m in Sources */ = {isa = PBXBuildFile; fileRef = E21A88F21A9471B300255AC3 /* GIPrivate.m */; };
-		E23C1A8C1A9019610060F6AD /* GCLiveRepository.m in Sources */ = {isa = PBXBuildFile; fileRef = E23C1A8A1A9019610060F6AD /* GCLiveRepository.m */; };
+		C6D9F5C91B8B061300695231 /* GCBranch.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C338DC19F85C8600063D95 /* GCBranch.m */; };
+		C6D9F5CA1B8B061300695231 /* GCCommit.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C338DE19F85C8600063D95 /* GCCommit.m */; };
+		C6D9F5CB1B8B061300695231 /* GCCommitDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = E2FEED451AEAA6AD00CBED80 /* GCCommitDatabase.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		C6D9F5CC1B8B061300695231 /* GCDiff.m in Sources */ = {isa = PBXBuildFile; fileRef = E2B14B5D1A8A764400003E64 /* GCDiff.m */; };
+		C6D9F5CD1B8B061300695231 /* GCFoundation.m in Sources */ = {isa = PBXBuildFile; fileRef = E2790D411ACB1B1100965A98 /* GCFoundation.m */; };
+		C6D9F5CE1B8B061300695231 /* GCFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = E21739F21A4FE39E00EC6777 /* GCFunctions.m */; };
+		C6D9F5CF1B8B061300695231 /* GCHistory.m in Sources */ = {isa = PBXBuildFile; fileRef = E20F10F21A043E2100076AAC /* GCHistory.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		C6D9F5D01B8B061300695231 /* GCIndex.m in Sources */ = {isa = PBXBuildFile; fileRef = E2790D4C1ACF130A00965A98 /* GCIndex.m */; };
+		C6D9F5D11B8B061300695231 /* GCLiveRepository.m in Sources */ = {isa = PBXBuildFile; fileRef = E23C1A8A1A9019610060F6AD /* GCLiveRepository.m */; };
+		C6D9F5D21B8B061300695231 /* GCObject.m in Sources */ = {isa = PBXBuildFile; fileRef = E2146C8D1A57F3BC00F4550B /* GCObject.m */; };
+		C6D9F5D31B8B061300695231 /* GCPrivate.m in Sources */ = {isa = PBXBuildFile; fileRef = E200A3B81B02DDA100C4E39D /* GCPrivate.m */; };
+		C6D9F5D41B8B061300695231 /* GCReference.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C338E119F85C8600063D95 /* GCReference.m */; };
+		C6D9F5D51B8B063A00695231 /* GCHistory+Rewrite.m in Sources */ = {isa = PBXBuildFile; fileRef = E2D4148A1A02D68700B99634 /* GCHistory+Rewrite.m */; };
+		C6D9F5D61B8B063A00695231 /* GCRepository+Index.m in Sources */ = {isa = PBXBuildFile; fileRef = E2790D461ACF12E200965A98 /* GCRepository+Index.m */; };
+		C6D9F5D71B8B063A00695231 /* GCRepository+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = E218A58D1A56706600DFF1DF /* GCRepository+Utilities.m */; };
+		C6D9F5D81B8B063A00695231 /* GCReferenceTransform.m in Sources */ = {isa = PBXBuildFile; fileRef = E218A5891A566F6A00DFF1DF /* GCReferenceTransform.m */; };
+		C6D9F5D91B8B063A00695231 /* GCRemote.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C338E319F85C8600063D95 /* GCRemote.m */; };
+		C6D9F5DA1B8B063A00695231 /* GCRepository.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C338E519F85C8600063D95 /* GCRepository.m */; };
+		C6D9F5DB1B8B063A00695231 /* GCRepository+Bare.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C3AA5A19FF0B0600BA89F3 /* GCRepository+Bare.m */; };
+		C6D9F5DC1B8B063A00695231 /* GCRepository+Config.m in Sources */ = {isa = PBXBuildFile; fileRef = E24508FF1A9A50EA003E602D /* GCRepository+Config.m */; };
+		C6D9F5DD1B8B063A00695231 /* GCRepository+HEAD.m in Sources */ = {isa = PBXBuildFile; fileRef = E27F9B731A549097009C9B3D /* GCRepository+HEAD.m */; };
+		C6D9F5DE1B8B063A00695231 /* GCRepository+Mock.m in Sources */ = {isa = PBXBuildFile; fileRef = E299D0121A749C26005035F7 /* GCRepository+Mock.m */; };
+		C6D9F5DF1B8B063A00695231 /* GCRepository+Reflog.m in Sources */ = {isa = PBXBuildFile; fileRef = E27B6D651A84451900D05452 /* GCRepository+Reflog.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		C6D9F5E01B8B063A00695231 /* GCRepository+Reset.m in Sources */ = {isa = PBXBuildFile; fileRef = E20EB08A19FC75CA0031A075 /* GCRepository+Reset.m */; };
+		C6D9F5E11B8B063A00695231 /* GCRepository+Status.m in Sources */ = {isa = PBXBuildFile; fileRef = E20EB08E19FC76160031A075 /* GCRepository+Status.m */; };
+		C6D9F5E21B8B063A00695231 /* GCSnapshot.m in Sources */ = {isa = PBXBuildFile; fileRef = E2F5C27D1A8171C900C30739 /* GCSnapshot.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		C6D9F5E31B8B063A00695231 /* GCSQLiteRepository.m in Sources */ = {isa = PBXBuildFile; fileRef = E299D00A1A71F0E9005035F7 /* GCSQLiteRepository.m */; };
+		C6D9F5E41B8B063A00695231 /* GCStash.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C338E719F85C8600063D95 /* GCStash.m */; };
+		C6D9F5E51B8B063A00695231 /* GCSubmodule.m in Sources */ = {isa = PBXBuildFile; fileRef = E21739FD1A51FA6200EC6777 /* GCSubmodule.m */; };
+		C6D9F5E61B8B063A00695231 /* GCTag.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C338E919F85C8600063D95 /* GCTag.m */; };
+		C6D9F5E71B8B064B00695231 /* GCHistory+Rewrite.h in Headers */ = {isa = PBXBuildFile; fileRef = E2D414891A02D68700B99634 /* GCHistory+Rewrite.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C6D9F5E81B8B064B00695231 /* GCRepository+Index.h in Headers */ = {isa = PBXBuildFile; fileRef = E2790D451ACF12E200965A98 /* GCRepository+Index.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C6D9F5E91B8B064B00695231 /* GCRepository+Utilities.h in Headers */ = {isa = PBXBuildFile; fileRef = E218A58C1A56706600DFF1DF /* GCRepository+Utilities.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C6D9F5EA1B8B064B00695231 /* GCBranch.h in Headers */ = {isa = PBXBuildFile; fileRef = E2C338DB19F85C8600063D95 /* GCBranch.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C6D9F5EB1B8B064B00695231 /* GCCommit.h in Headers */ = {isa = PBXBuildFile; fileRef = E2C338DD19F85C8600063D95 /* GCCommit.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C6D9F5EC1B8B064B00695231 /* GCCommitDatabase.h in Headers */ = {isa = PBXBuildFile; fileRef = E2FEED441AEAA6AD00CBED80 /* GCCommitDatabase.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C6D9F5ED1B8B064B00695231 /* GCCore.h in Headers */ = {isa = PBXBuildFile; fileRef = E20EB09519FC76AE0031A075 /* GCCore.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C6D9F5EE1B8B064B00695231 /* GCDiff.h in Headers */ = {isa = PBXBuildFile; fileRef = E2B14B5C1A8A764400003E64 /* GCDiff.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C6D9F5EF1B8B064B00695231 /* GCError.h in Headers */ = {isa = PBXBuildFile; fileRef = E2146C901A58849F00F4550B /* GCError.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C6D9F5F01B8B064B00695231 /* GCFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = E2790D401ACB1B1100965A98 /* GCFoundation.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C6D9F5F11B8B064B00695231 /* GCFunctions.h in Headers */ = {isa = PBXBuildFile; fileRef = E21739F11A4FE39E00EC6777 /* GCFunctions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C6D9F5F21B8B064B00695231 /* GCHistory.h in Headers */ = {isa = PBXBuildFile; fileRef = E20F10F11A043E2100076AAC /* GCHistory.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C6D9F5F31B8B064B00695231 /* GCIndex.h in Headers */ = {isa = PBXBuildFile; fileRef = E2790D4B1ACF130A00965A98 /* GCIndex.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C6D9F5F41B8B064B00695231 /* GCLiveRepository.h in Headers */ = {isa = PBXBuildFile; fileRef = E23C1A891A9019610060F6AD /* GCLiveRepository.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C6D9F5F51B8B064B00695231 /* GCMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = E244538F1A70CDA200E61DE7 /* GCMacros.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C6D9F5F61B8B064B00695231 /* GCObject.h in Headers */ = {isa = PBXBuildFile; fileRef = E2146C8C1A57F3BC00F4550B /* GCObject.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C6D9F5F71B8B064B00695231 /* GCPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = E2C338DF19F85C8600063D95 /* GCPrivate.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C6D9F5F81B8B064B00695231 /* GCReference.h in Headers */ = {isa = PBXBuildFile; fileRef = E2C338E019F85C8600063D95 /* GCReference.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C6D9F5F91B8B064B00695231 /* GCReferenceTransform.h in Headers */ = {isa = PBXBuildFile; fileRef = E218A5881A566F6A00DFF1DF /* GCReferenceTransform.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C6D9F5FA1B8B064B00695231 /* GCReflogMessages.h in Headers */ = {isa = PBXBuildFile; fileRef = E2146C911A58D83100F4550B /* GCReflogMessages.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C6D9F5FB1B8B064B00695231 /* GCRemote.h in Headers */ = {isa = PBXBuildFile; fileRef = E2C338E219F85C8600063D95 /* GCRemote.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C6D9F5FC1B8B064B00695231 /* GCRepository.h in Headers */ = {isa = PBXBuildFile; fileRef = E2C338E419F85C8600063D95 /* GCRepository.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C6D9F5FD1B8B064B00695231 /* GCRepository+Bare.h in Headers */ = {isa = PBXBuildFile; fileRef = E2C3AA5919FF0B0600BA89F3 /* GCRepository+Bare.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C6D9F5FE1B8B064B00695231 /* GCRepository+Config.h in Headers */ = {isa = PBXBuildFile; fileRef = E24508FE1A9A50EA003E602D /* GCRepository+Config.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C6D9F5FF1B8B064B00695231 /* GCRepository+HEAD.h in Headers */ = {isa = PBXBuildFile; fileRef = E27F9B721A549097009C9B3D /* GCRepository+HEAD.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C6D9F6001B8B064B00695231 /* GCRepository+Mock.h in Headers */ = {isa = PBXBuildFile; fileRef = E299D0111A749C26005035F7 /* GCRepository+Mock.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C6D9F6011B8B064B00695231 /* GCRepository+Reflog.h in Headers */ = {isa = PBXBuildFile; fileRef = E27B6D641A84451900D05452 /* GCRepository+Reflog.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C6D9F6021B8B064B00695231 /* GCRepository+Reset.h in Headers */ = {isa = PBXBuildFile; fileRef = E20EB08919FC75CA0031A075 /* GCRepository+Reset.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C6D9F6031B8B064B00695231 /* GCRepository+Status.h in Headers */ = {isa = PBXBuildFile; fileRef = E20EB08D19FC76160031A075 /* GCRepository+Status.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C6D9F6041B8B064B00695231 /* GCSnapshot.h in Headers */ = {isa = PBXBuildFile; fileRef = E2F5C27C1A8171C900C30739 /* GCSnapshot.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C6D9F6051B8B064B00695231 /* GCSQLiteRepository.h in Headers */ = {isa = PBXBuildFile; fileRef = E299D00D1A71F937005035F7 /* GCSQLiteRepository.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C6D9F6061B8B064B00695231 /* GCStash.h in Headers */ = {isa = PBXBuildFile; fileRef = E2C338E619F85C8600063D95 /* GCStash.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C6D9F6071B8B064B00695231 /* GCSubmodule.h in Headers */ = {isa = PBXBuildFile; fileRef = E21739FC1A51FA6200EC6777 /* GCSubmodule.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C6D9F6081B8B064B00695231 /* GCTag.h in Headers */ = {isa = PBXBuildFile; fileRef = E2C338E819F85C8600063D95 /* GCTag.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C6D9F6481B8B06B300695231 /* XLASLLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = E267E2AE1B84F27800BAB377 /* XLASLLogger.m */; };
+		C6D9F6491B8B06B300695231 /* XLCallbackLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = E267E2B01B84F27800BAB377 /* XLCallbackLogger.m */; };
+		C6D9F64A1B8B06B300695231 /* XLFacility.m in Sources */ = {isa = PBXBuildFile; fileRef = E267E2B21B84F27800BAB377 /* XLFacility.m */; };
+		C6D9F64B1B8B06B300695231 /* XLFileLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = E267E2B71B84F27800BAB377 /* XLFileLogger.m */; };
+		C6D9F64C1B8B06B300695231 /* XLFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = E267E2B91B84F27800BAB377 /* XLFunctions.m */; };
+		C6D9F64D1B8B06B300695231 /* XLLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = E267E2BB1B84F27800BAB377 /* XLLogger.m */; };
+		C6D9F64E1B8B06B300695231 /* XLLogRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = E267E2BD1B84F27800BAB377 /* XLLogRecord.m */; };
+		C6D9F64F1B8B06B300695231 /* XLStandardLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = E267E2BF1B84F27800BAB377 /* XLStandardLogger.m */; };
+		C6D9F6501B8B06B300695231 /* XLDatabaseLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = E267E2C21B84F27800BAB377 /* XLDatabaseLogger.m */; };
+		C6D9F6511B8B06C400695231 /* XLASLLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = E267E2AD1B84F27800BAB377 /* XLASLLogger.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C6D9F6521B8B06C400695231 /* XLCallbackLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = E267E2AF1B84F27800BAB377 /* XLCallbackLogger.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C6D9F6531B8B06C400695231 /* XLFacility.h in Headers */ = {isa = PBXBuildFile; fileRef = E267E2B11B84F27800BAB377 /* XLFacility.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C6D9F6541B8B06C400695231 /* XLFacilityCMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = E267E2B31B84F27800BAB377 /* XLFacilityCMacros.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C6D9F6551B8B06C400695231 /* XLFacilityMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = E267E2B41B84F27800BAB377 /* XLFacilityMacros.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C6D9F6561B8B06C400695231 /* XLFacilityPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = E267E2B51B84F27800BAB377 /* XLFacilityPrivate.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C6D9F6571B8B06C400695231 /* XLFileLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = E267E2B61B84F27800BAB377 /* XLFileLogger.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C6D9F6581B8B06C400695231 /* XLFunctions.h in Headers */ = {isa = PBXBuildFile; fileRef = E267E2B81B84F27800BAB377 /* XLFunctions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C6D9F6591B8B06C400695231 /* XLLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = E267E2BA1B84F27800BAB377 /* XLLogger.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C6D9F65A1B8B06C400695231 /* XLLogRecord.h in Headers */ = {isa = PBXBuildFile; fileRef = E267E2BC1B84F27800BAB377 /* XLLogRecord.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C6D9F65B1B8B06C400695231 /* XLStandardLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = E267E2BE1B84F27800BAB377 /* XLStandardLogger.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C6D9F65C1B8B06C400695231 /* XLDatabaseLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = E267E2C11B84F27800BAB377 /* XLDatabaseLogger.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C6D9F65D1B8B079100695231 /* libGitUpKitBase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C6D9F5B01B8B05D000695231 /* libGitUpKitBase.a */; };
+		C6D9F65E1B8B079100695231 /* libXLFacility.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C6D9F62F1B8B069200695231 /* libXLFacility.a */; };
+		C6D9F6661B8B088400695231 /* GCTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = E259C2C41A64C8EA0079616B /* GCTestCase.m */; };
+		C6D9F66D1B8B089800695231 /* GitUpKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E267E1A81B84D6C500BAB377 /* GitUpKit.framework */; };
 		E24509031A9A50F3003E602D /* GCRepository+Config-Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = E24509021A9A50F3003E602D /* GCRepository+Config-Tests.m */; };
-		E24509041A9A5F1D003E602D /* GCRepository+Config.m in Sources */ = {isa = PBXBuildFile; fileRef = E24508FF1A9A50EA003E602D /* GCRepository+Config.m */; };
-		E259C2C51A64C8EA0079616B /* GCTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = E259C2C41A64C8EA0079616B /* GCTestCase.m */; };
 		E259C2C71A64C9980079616B /* GCRepository-Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = E259C2C61A64C9980079616B /* GCRepository-Tests.m */; };
 		E259C2C91A64CAB30079616B /* GCSubmodule-Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = E259C2C81A64CAB30079616B /* GCSubmodule-Tests.m */; };
 		E259C2CB1A64D27F0079616B /* GCTag-Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = E259C2CA1A64D27F0079616B /* GCTag-Tests.m */; };
@@ -65,36 +141,6 @@
 		E267E1CE1B84D80500BAB377 /* GCRepository+Reflog.h in Headers */ = {isa = PBXBuildFile; fileRef = E27B6D641A84451900D05452 /* GCRepository+Reflog.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E267E1CF1B84D80500BAB377 /* GCRepository+Reset.h in Headers */ = {isa = PBXBuildFile; fileRef = E20EB08919FC75CA0031A075 /* GCRepository+Reset.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E267E1D01B84D80500BAB377 /* GCRepository+Status.h in Headers */ = {isa = PBXBuildFile; fileRef = E20EB08D19FC76160031A075 /* GCRepository+Status.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E267E1D11B84D83100BAB377 /* GCBranch.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C338DC19F85C8600063D95 /* GCBranch.m */; };
-		E267E1D21B84D83100BAB377 /* GCCommit.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C338DE19F85C8600063D95 /* GCCommit.m */; };
-		E267E1D31B84D83100BAB377 /* GCCommitDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = E2FEED451AEAA6AD00CBED80 /* GCCommitDatabase.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		E267E1D41B84D83100BAB377 /* GCDiff.m in Sources */ = {isa = PBXBuildFile; fileRef = E2B14B5D1A8A764400003E64 /* GCDiff.m */; };
-		E267E1D51B84D83100BAB377 /* GCFoundation.m in Sources */ = {isa = PBXBuildFile; fileRef = E2790D411ACB1B1100965A98 /* GCFoundation.m */; };
-		E267E1D61B84D83100BAB377 /* GCFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = E21739F21A4FE39E00EC6777 /* GCFunctions.m */; };
-		E267E1D71B84D83100BAB377 /* GCHistory.m in Sources */ = {isa = PBXBuildFile; fileRef = E20F10F21A043E2100076AAC /* GCHistory.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		E267E1D81B84D83100BAB377 /* GCIndex.m in Sources */ = {isa = PBXBuildFile; fileRef = E2790D4C1ACF130A00965A98 /* GCIndex.m */; };
-		E267E1D91B84D83100BAB377 /* GCLiveRepository.m in Sources */ = {isa = PBXBuildFile; fileRef = E23C1A8A1A9019610060F6AD /* GCLiveRepository.m */; };
-		E267E1DA1B84D83100BAB377 /* GCObject.m in Sources */ = {isa = PBXBuildFile; fileRef = E2146C8D1A57F3BC00F4550B /* GCObject.m */; };
-		E267E1DB1B84D83100BAB377 /* GCPrivate.m in Sources */ = {isa = PBXBuildFile; fileRef = E200A3B81B02DDA100C4E39D /* GCPrivate.m */; };
-		E267E1DC1B84D83100BAB377 /* GCReference.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C338E119F85C8600063D95 /* GCReference.m */; };
-		E267E1DD1B84D83100BAB377 /* GCReferenceTransform.m in Sources */ = {isa = PBXBuildFile; fileRef = E218A5891A566F6A00DFF1DF /* GCReferenceTransform.m */; };
-		E267E1DF1B84D83100BAB377 /* GCRemote.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C338E319F85C8600063D95 /* GCRemote.m */; };
-		E267E1E01B84D83100BAB377 /* GCRepository.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C338E519F85C8600063D95 /* GCRepository.m */; };
-		E267E1E11B84D83100BAB377 /* GCRepository+Bare.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C3AA5A19FF0B0600BA89F3 /* GCRepository+Bare.m */; };
-		E267E1E21B84D83100BAB377 /* GCRepository+Config.m in Sources */ = {isa = PBXBuildFile; fileRef = E24508FF1A9A50EA003E602D /* GCRepository+Config.m */; };
-		E267E1E31B84D83100BAB377 /* GCRepository+HEAD.m in Sources */ = {isa = PBXBuildFile; fileRef = E27F9B731A549097009C9B3D /* GCRepository+HEAD.m */; };
-		E267E1E41B84D83100BAB377 /* GCRepository+Mock.m in Sources */ = {isa = PBXBuildFile; fileRef = E299D0121A749C26005035F7 /* GCRepository+Mock.m */; };
-		E267E1E51B84D83100BAB377 /* GCRepository+Reflog.m in Sources */ = {isa = PBXBuildFile; fileRef = E27B6D651A84451900D05452 /* GCRepository+Reflog.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		E267E1E61B84D83100BAB377 /* GCRepository+Reset.m in Sources */ = {isa = PBXBuildFile; fileRef = E20EB08A19FC75CA0031A075 /* GCRepository+Reset.m */; };
-		E267E1E71B84D83100BAB377 /* GCRepository+Status.m in Sources */ = {isa = PBXBuildFile; fileRef = E20EB08E19FC76160031A075 /* GCRepository+Status.m */; };
-		E267E1E81B84D83100BAB377 /* GCSnapshot.m in Sources */ = {isa = PBXBuildFile; fileRef = E2F5C27D1A8171C900C30739 /* GCSnapshot.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		E267E1E91B84D83100BAB377 /* GCSQLiteRepository.m in Sources */ = {isa = PBXBuildFile; fileRef = E299D00A1A71F0E9005035F7 /* GCSQLiteRepository.m */; };
-		E267E1EA1B84D83100BAB377 /* GCStash.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C338E719F85C8600063D95 /* GCStash.m */; };
-		E267E1EB1B84D83100BAB377 /* GCSubmodule.m in Sources */ = {isa = PBXBuildFile; fileRef = E21739FD1A51FA6200EC6777 /* GCSubmodule.m */; };
-		E267E1EC1B84D83100BAB377 /* GCTag.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C338E919F85C8600063D95 /* GCTag.m */; };
-		E267E1ED1B84D84900BAB377 /* GCHistory+Rewrite.m in Sources */ = {isa = PBXBuildFile; fileRef = E2D4148A1A02D68700B99634 /* GCHistory+Rewrite.m */; };
-		E267E1EE1B84D84900BAB377 /* GCRepository+Index.m in Sources */ = {isa = PBXBuildFile; fileRef = E2790D461ACF12E200965A98 /* GCRepository+Index.m */; };
-		E267E1EF1B84D84900BAB377 /* GCRepository+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = E218A58D1A56706600DFF1DF /* GCRepository+Utilities.m */; };
 		E267E1F01B84D85500BAB377 /* GCHistory+Rewrite.h in Headers */ = {isa = PBXBuildFile; fileRef = E2D414891A02D68700B99634 /* GCHistory+Rewrite.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E267E1F11B84D85500BAB377 /* GCRepository+Index.h in Headers */ = {isa = PBXBuildFile; fileRef = E2790D451ACF12E200965A98 /* GCRepository+Index.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E267E1F21B84D85500BAB377 /* GCRepository+Utilities.h in Headers */ = {isa = PBXBuildFile; fileRef = E218A58C1A56706600DFF1DF /* GCRepository+Utilities.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -209,65 +255,51 @@
 		E267E2D31B84F29F00BAB377 /* XLLogRecord.h in Headers */ = {isa = PBXBuildFile; fileRef = E267E2BC1B84F27800BAB377 /* XLLogRecord.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		E267E2D41B84F29F00BAB377 /* XLStandardLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = E267E2BE1B84F27800BAB377 /* XLStandardLogger.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		E267E2D51B84F29F00BAB377 /* XLDatabaseLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = E267E2C11B84F27800BAB377 /* XLDatabaseLogger.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		E267E2D61B84F2BE00BAB377 /* XLASLLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = E267E2AE1B84F27800BAB377 /* XLASLLogger.m */; };
-		E267E2D71B84F2BE00BAB377 /* XLCallbackLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = E267E2B01B84F27800BAB377 /* XLCallbackLogger.m */; };
-		E267E2D81B84F2BE00BAB377 /* XLFacility.m in Sources */ = {isa = PBXBuildFile; fileRef = E267E2B21B84F27800BAB377 /* XLFacility.m */; };
-		E267E2D91B84F2BE00BAB377 /* XLFileLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = E267E2B71B84F27800BAB377 /* XLFileLogger.m */; };
-		E267E2DA1B84F2BE00BAB377 /* XLFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = E267E2B91B84F27800BAB377 /* XLFunctions.m */; };
-		E267E2DB1B84F2BE00BAB377 /* XLLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = E267E2BB1B84F27800BAB377 /* XLLogger.m */; };
-		E267E2DC1B84F2BE00BAB377 /* XLLogRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = E267E2BD1B84F27800BAB377 /* XLLogRecord.m */; };
-		E267E2DD1B84F2BE00BAB377 /* XLStandardLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = E267E2BF1B84F27800BAB377 /* XLStandardLogger.m */; };
-		E267E2DE1B84F2BE00BAB377 /* XLDatabaseLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = E267E2C21B84F27800BAB377 /* XLDatabaseLogger.m */; };
-		E267E2DF1B84F32000BAB377 /* XLFacility.m in Sources */ = {isa = PBXBuildFile; fileRef = E267E2B21B84F27800BAB377 /* XLFacility.m */; };
-		E267E2E01B84F33000BAB377 /* XLFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = E267E2B91B84F27800BAB377 /* XLFunctions.m */; };
-		E267E2E11B84F33300BAB377 /* XLStandardLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = E267E2BF1B84F27800BAB377 /* XLStandardLogger.m */; };
-		E267E2E21B84F33600BAB377 /* XLLogRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = E267E2BD1B84F27800BAB377 /* XLLogRecord.m */; };
-		E267E2E31B84F36500BAB377 /* XLFileLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = E267E2B71B84F27800BAB377 /* XLFileLogger.m */; };
-		E267E2E41B84F37500BAB377 /* XLLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = E267E2BB1B84F27800BAB377 /* XLLogger.m */; };
-		E2790D431ACB1B1100965A98 /* GCFoundation.m in Sources */ = {isa = PBXBuildFile; fileRef = E2790D411ACB1B1100965A98 /* GCFoundation.m */; };
 		E2790D481ACF12E200965A98 /* GCRepository+Index-Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = E2790D441ACF12E200965A98 /* GCRepository+Index-Tests.m */; };
-		E2790D4A1ACF12E200965A98 /* GCRepository+Index.m in Sources */ = {isa = PBXBuildFile; fileRef = E2790D461ACF12E200965A98 /* GCRepository+Index.m */; };
-		E2790D4E1ACF130A00965A98 /* GCIndex.m in Sources */ = {isa = PBXBuildFile; fileRef = E2790D4C1ACF130A00965A98 /* GCIndex.m */; };
-		E27B6D671A84451900D05452 /* GCRepository+Reflog.m in Sources */ = {isa = PBXBuildFile; fileRef = E27B6D651A84451900D05452 /* GCRepository+Reflog.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		E27E43021A74A94700D04ED1 /* GIGraph-Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = E27E43011A74A94700D04ED1 /* GIGraph-Tests.m */; };
-		E27E43031A74A96000D04ED1 /* GIBranch.m in Sources */ = {isa = PBXBuildFile; fileRef = E2D4DEAE1A4D592000B6AF66 /* GIBranch.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		E27E43041A74A96000D04ED1 /* GIGraph.m in Sources */ = {isa = PBXBuildFile; fileRef = E2D4DEA11A4D562300B6AF66 /* GIGraph.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		E27E43061A74A96000D04ED1 /* GILayer.m in Sources */ = {isa = PBXBuildFile; fileRef = E2D4DEB11A4D599200B6AF66 /* GILayer.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		E27E43071A74A96000D04ED1 /* GILine.m in Sources */ = {isa = PBXBuildFile; fileRef = E2D4DEAB1A4D587800B6AF66 /* GILine.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		E27E43081A74A96000D04ED1 /* GINode.m in Sources */ = {isa = PBXBuildFile; fileRef = E2D4DEA71A4D57AA00B6AF66 /* GINode.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		E27F9B751A549097009C9B3D /* GCRepository+HEAD.m in Sources */ = {isa = PBXBuildFile; fileRef = E27F9B731A549097009C9B3D /* GCRepository+HEAD.m */; };
 		E28200AE1A7D720000DA4096 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E28200AC1A7D71EE00DA4096 /* CoreServices.framework */; };
 		E284D6711AAC004F0038C176 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E284D6701AAC004F0038C176 /* CoreGraphics.framework */; };
-		E299D00C1A71F0E9005035F7 /* GCSQLiteRepository.m in Sources */ = {isa = PBXBuildFile; fileRef = E299D00A1A71F0E9005035F7 /* GCSQLiteRepository.m */; };
 		E299D00F1A7206E7005035F7 /* GCSQLiteRepository-Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = E299D00E1A7206E7005035F7 /* GCSQLiteRepository-Tests.m */; };
-		E299D0141A749C26005035F7 /* GCRepository+Mock.m in Sources */ = {isa = PBXBuildFile; fileRef = E299D0121A749C26005035F7 /* GCRepository+Mock.m */; };
 		E299D0161A749D27005035F7 /* GCRepository+Mock-Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = E299D0151A749D27005035F7 /* GCRepository+Mock-Tests.m */; };
-		E2B14B5F1A8A764400003E64 /* GCDiff.m in Sources */ = {isa = PBXBuildFile; fileRef = E2B14B5D1A8A764400003E64 /* GCDiff.m */; };
-		E2B1BF341A85923800A999DF /* GIFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = E2B1BF321A85923800A999DF /* GIFunctions.m */; };
 		E2B1BF361A85C5ED00A999DF /* GIFunctions-Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = E2B1BF351A85C5ED00A999DF /* GIFunctions-Tests.m */; };
 		E2C338D919F85C3400063D95 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2C338D819F85C3400063D95 /* Foundation.framework */; };
-		E2C338EC19F85C8600063D95 /* GCBranch.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C338DC19F85C8600063D95 /* GCBranch.m */; };
-		E2C338EE19F85C8600063D95 /* GCCommit.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C338DE19F85C8600063D95 /* GCCommit.m */; };
-		E2C338F019F85C8600063D95 /* GCReference.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C338E119F85C8600063D95 /* GCReference.m */; };
-		E2C338F219F85C8600063D95 /* GCRemote.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C338E319F85C8600063D95 /* GCRemote.m */; };
-		E2C338F419F85C8600063D95 /* GCRepository.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C338E519F85C8600063D95 /* GCRepository.m */; };
-		E2C338F619F85C8600063D95 /* GCStash.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C338E719F85C8600063D95 /* GCStash.m */; };
-		E2C338F819F85C8600063D95 /* GCTag.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C338E919F85C8600063D95 /* GCTag.m */; };
 		E2C3394819F85D8700063D95 /* libheimdal-asn1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E2C3394619F85D5100063D95 /* libheimdal-asn1.dylib */; };
 		E2C3394919F85D8700063D95 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E2C3394419F85D4B00063D95 /* libz.dylib */; };
 		E2C3394A19F85D8700063D95 /* libcrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E2C3394219F85D4000063D95 /* libcrypto.dylib */; };
 		E2C3394C19F85D8700063D95 /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E2C3393E19F85D2A00063D95 /* libiconv.dylib */; };
-		E2C3AA5C19FF0B0600BA89F3 /* GCRepository+Bare.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C3AA5A19FF0B0600BA89F3 /* GCRepository+Bare.m */; };
-		E2D4148C1A02D68700B99634 /* GCHistory+Rewrite.m in Sources */ = {isa = PBXBuildFile; fileRef = E2D4148A1A02D68700B99634 /* GCHistory+Rewrite.m */; };
-		E2F5C27F1A8171C900C30739 /* GCSnapshot.m in Sources */ = {isa = PBXBuildFile; fileRef = E2F5C27D1A8171C900C30739 /* GCSnapshot.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		E2F5C2811A8186C200C30739 /* GCSnapshot-Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = E2F5C2801A8186C200C30739 /* GCSnapshot-Tests.m */; };
 		E2F5C2831A81C53A00C30739 /* GCRepository+Reflog-Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = E2F5C2821A81C53A00C30739 /* GCRepository+Reflog-Tests.m */; };
 		E2FEED491AEAA6B500CBED80 /* GCCommitDatabase-Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = E2FEED481AEAA6B500CBED80 /* GCCommitDatabase-Tests.m */; };
-		E2FEED4A1AEAA75F00CBED80 /* GCCommitDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = E2FEED451AEAA6AD00CBED80 /* GCCommitDatabase.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		E2FEED6C1AEF7B8300CBED80 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2B14B561A88102C00003E64 /* Security.framework */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		C642177A1B8C35B9008F582C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E2C338A319F8562F00063D95 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C6D9F5AF1B8B05D000695231;
+			remoteInfo = GitUpKitBase;
+		};
+		C642177C1B8C35B9008F582C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E2C338A319F8562F00063D95 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C6D9F62E1B8B069200695231;
+			remoteInfo = XLFacility;
+		};
+		C6D9F6671B8B089200695231 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E2C338A319F8562F00063D95 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E267E1A71B84D6C500BAB377;
+			remoteInfo = GitUpKit;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
+		C6D9F5B01B8B05D000695231 /* libGitUpKitBase.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libGitUpKitBase.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		C6D9F62F1B8B069200695231 /* libXLFacility.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libXLFacility.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		E200A3B81B02DDA100C4E39D /* GCPrivate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCPrivate.m; sourceTree = "<group>"; };
 		E20EB08919FC75CA0031A075 /* GCRepository+Reset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GCRepository+Reset.h"; sourceTree = "<group>"; };
 		E20EB08A19FC75CA0031A075 /* GCRepository+Reset.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GCRepository+Reset.m"; sourceTree = "<group>"; };
@@ -493,10 +525,26 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		C6D9F5AD1B8B05D000695231 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C6D9F62C1B8B069200695231 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E267E1A41B84D6C500BAB377 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C6D9F65D1B8B079100695231 /* libGitUpKitBase.a in Frameworks */,
+				C6D9F65E1B8B079100695231 /* libXLFacility.a in Frameworks */,
 				E267E1FB1B84DA7600BAB377 /* Cocoa.framework in Frameworks */,
 				E267E2301B84DC0900BAB377 /* QuartzCore.framework in Frameworks */,
 				E267E1F91B84DA3F00BAB377 /* Security.framework in Frameworks */,
@@ -510,6 +558,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C6D9F66D1B8B089800695231 /* GitUpKit.framework in Frameworks */,
 				E2C338D919F85C3400063D95 /* Foundation.framework in Frameworks */,
 				E28200AE1A7D720000DA4096 /* CoreServices.framework in Frameworks */,
 				E284D6711AAC004F0038C176 /* CoreGraphics.framework in Frameworks */,
@@ -719,6 +768,8 @@
 			children = (
 				E2C338C419F8562F00063D95 /* GitUpTests.xctest */,
 				E267E1A81B84D6C500BAB377 /* GitUpKit.framework */,
+				C6D9F5B01B8B05D000695231 /* libGitUpKitBase.a */,
+				C6D9F62F1B8B069200695231 /* libXLFacility.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -855,6 +906,66 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
+		C6D9F5AE1B8B05D000695231 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C6D9F5E71B8B064B00695231 /* GCHistory+Rewrite.h in Headers */,
+				C6D9F5E81B8B064B00695231 /* GCRepository+Index.h in Headers */,
+				C6D9F5E91B8B064B00695231 /* GCRepository+Utilities.h in Headers */,
+				C6D9F5EA1B8B064B00695231 /* GCBranch.h in Headers */,
+				C6D9F5EB1B8B064B00695231 /* GCCommit.h in Headers */,
+				C6D9F5EC1B8B064B00695231 /* GCCommitDatabase.h in Headers */,
+				C6D9F5ED1B8B064B00695231 /* GCCore.h in Headers */,
+				C6D9F5EE1B8B064B00695231 /* GCDiff.h in Headers */,
+				C6D9F5EF1B8B064B00695231 /* GCError.h in Headers */,
+				C6D9F5F01B8B064B00695231 /* GCFoundation.h in Headers */,
+				C6D9F5F11B8B064B00695231 /* GCFunctions.h in Headers */,
+				C6D9F5F21B8B064B00695231 /* GCHistory.h in Headers */,
+				C6D9F5F31B8B064B00695231 /* GCIndex.h in Headers */,
+				C6D9F5F41B8B064B00695231 /* GCLiveRepository.h in Headers */,
+				C6D9F5F51B8B064B00695231 /* GCMacros.h in Headers */,
+				C6D9F5F61B8B064B00695231 /* GCObject.h in Headers */,
+				C6D9F5F71B8B064B00695231 /* GCPrivate.h in Headers */,
+				C6D9F5F81B8B064B00695231 /* GCReference.h in Headers */,
+				C6D9F5F91B8B064B00695231 /* GCReferenceTransform.h in Headers */,
+				C6D9F5FA1B8B064B00695231 /* GCReflogMessages.h in Headers */,
+				C6D9F5FB1B8B064B00695231 /* GCRemote.h in Headers */,
+				C6D9F5FC1B8B064B00695231 /* GCRepository.h in Headers */,
+				C6D9F5FD1B8B064B00695231 /* GCRepository+Bare.h in Headers */,
+				C6D9F5FE1B8B064B00695231 /* GCRepository+Config.h in Headers */,
+				C6D9F5FF1B8B064B00695231 /* GCRepository+HEAD.h in Headers */,
+				C6D9F6001B8B064B00695231 /* GCRepository+Mock.h in Headers */,
+				C6D9F6011B8B064B00695231 /* GCRepository+Reflog.h in Headers */,
+				C6D9F6021B8B064B00695231 /* GCRepository+Reset.h in Headers */,
+				C6D9F6031B8B064B00695231 /* GCRepository+Status.h in Headers */,
+				C6D9F6041B8B064B00695231 /* GCSnapshot.h in Headers */,
+				C6D9F6051B8B064B00695231 /* GCSQLiteRepository.h in Headers */,
+				C6D9F6061B8B064B00695231 /* GCStash.h in Headers */,
+				C6D9F6071B8B064B00695231 /* GCSubmodule.h in Headers */,
+				C6D9F6081B8B064B00695231 /* GCTag.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C6D9F62D1B8B069200695231 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C6D9F6511B8B06C400695231 /* XLASLLogger.h in Headers */,
+				C6D9F6521B8B06C400695231 /* XLCallbackLogger.h in Headers */,
+				C6D9F6531B8B06C400695231 /* XLFacility.h in Headers */,
+				C6D9F6541B8B06C400695231 /* XLFacilityCMacros.h in Headers */,
+				C6D9F6551B8B06C400695231 /* XLFacilityMacros.h in Headers */,
+				C6D9F6561B8B06C400695231 /* XLFacilityPrivate.h in Headers */,
+				C6D9F6571B8B06C400695231 /* XLFileLogger.h in Headers */,
+				C6D9F6581B8B06C400695231 /* XLFunctions.h in Headers */,
+				C6D9F6591B8B06C400695231 /* XLLogger.h in Headers */,
+				C6D9F65A1B8B06C400695231 /* XLLogRecord.h in Headers */,
+				C6D9F65B1B8B06C400695231 /* XLStandardLogger.h in Headers */,
+				C6D9F65C1B8B06C400695231 /* XLDatabaseLogger.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E267E1A51B84D6C500BAB377 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -946,6 +1057,40 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		C6D9F5AF1B8B05D000695231 /* GitUpKitBase */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C6D9F5C71B8B05D000695231 /* Build configuration list for PBXNativeTarget "GitUpKitBase" */;
+			buildPhases = (
+				C6D9F5AC1B8B05D000695231 /* Sources */,
+				C6D9F5AD1B8B05D000695231 /* Frameworks */,
+				C6D9F5AE1B8B05D000695231 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = GitUpKitBase;
+			productName = GitUpKitBase;
+			productReference = C6D9F5B01B8B05D000695231 /* libGitUpKitBase.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		C6D9F62E1B8B069200695231 /* XLFacility */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C6D9F6401B8B069200695231 /* Build configuration list for PBXNativeTarget "XLFacility" */;
+			buildPhases = (
+				C6D9F62B1B8B069200695231 /* Sources */,
+				C6D9F62C1B8B069200695231 /* Frameworks */,
+				C6D9F62D1B8B069200695231 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = XLFacility;
+			productName = XLFacility;
+			productReference = C6D9F62F1B8B069200695231 /* libXLFacility.a */;
+			productType = "com.apple.product-type.library.static";
+		};
 		E267E1A71B84D6C500BAB377 /* GitUpKit */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = E267E1B41B84D6C500BAB377 /* Build configuration list for PBXNativeTarget "GitUpKit" */;
@@ -959,6 +1104,8 @@
 			buildRules = (
 			);
 			dependencies = (
+				C642177B1B8C35B9008F582C /* PBXTargetDependency */,
+				C642177D1B8C35B9008F582C /* PBXTargetDependency */,
 			);
 			name = GitUpKit;
 			productName = GitUpKit;
@@ -975,6 +1122,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				C6D9F6681B8B089200695231 /* PBXTargetDependency */,
 			);
 			name = Tests;
 			productName = GitUpTests;
@@ -990,6 +1138,12 @@
 				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = "";
 				TargetAttributes = {
+					C6D9F5AF1B8B05D000695231 = {
+						CreatedOnToolsVersion = 6.4;
+					};
+					C6D9F62E1B8B069200695231 = {
+						CreatedOnToolsVersion = 6.4;
+					};
 					E267E1A71B84D6C500BAB377 = {
 						CreatedOnToolsVersion = 7.0;
 						DevelopmentTeam = 88W3E55T4B;
@@ -1013,7 +1167,9 @@
 			projectRoot = "";
 			targets = (
 				E267E1A71B84D6C500BAB377 /* GitUpKit */,
+				C6D9F5AF1B8B05D000695231 /* GitUpKitBase */,
 				E2C338C319F8562F00063D95 /* Tests */,
+				C6D9F62E1B8B069200695231 /* XLFacility */,
 			);
 		};
 /* End PBXProject section */
@@ -1068,40 +1224,63 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		C6D9F5AC1B8B05D000695231 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C6D9F5D51B8B063A00695231 /* GCHistory+Rewrite.m in Sources */,
+				C6D9F5D61B8B063A00695231 /* GCRepository+Index.m in Sources */,
+				C6D9F5D71B8B063A00695231 /* GCRepository+Utilities.m in Sources */,
+				C6D9F5D81B8B063A00695231 /* GCReferenceTransform.m in Sources */,
+				C6D9F5D91B8B063A00695231 /* GCRemote.m in Sources */,
+				C6D9F5DA1B8B063A00695231 /* GCRepository.m in Sources */,
+				C6D9F5DB1B8B063A00695231 /* GCRepository+Bare.m in Sources */,
+				C6D9F5DC1B8B063A00695231 /* GCRepository+Config.m in Sources */,
+				C6D9F5DD1B8B063A00695231 /* GCRepository+HEAD.m in Sources */,
+				C6D9F5DE1B8B063A00695231 /* GCRepository+Mock.m in Sources */,
+				C6D9F5DF1B8B063A00695231 /* GCRepository+Reflog.m in Sources */,
+				C6D9F5E01B8B063A00695231 /* GCRepository+Reset.m in Sources */,
+				C6D9F5E11B8B063A00695231 /* GCRepository+Status.m in Sources */,
+				C6D9F5E21B8B063A00695231 /* GCSnapshot.m in Sources */,
+				C6D9F5E31B8B063A00695231 /* GCSQLiteRepository.m in Sources */,
+				C6D9F5E41B8B063A00695231 /* GCStash.m in Sources */,
+				C6D9F5E51B8B063A00695231 /* GCSubmodule.m in Sources */,
+				C6D9F5E61B8B063A00695231 /* GCTag.m in Sources */,
+				C6D9F5C91B8B061300695231 /* GCBranch.m in Sources */,
+				C6D9F5CA1B8B061300695231 /* GCCommit.m in Sources */,
+				C6D9F5CB1B8B061300695231 /* GCCommitDatabase.m in Sources */,
+				C6D9F5CC1B8B061300695231 /* GCDiff.m in Sources */,
+				C6D9F5CD1B8B061300695231 /* GCFoundation.m in Sources */,
+				C6D9F5CE1B8B061300695231 /* GCFunctions.m in Sources */,
+				C6D9F5CF1B8B061300695231 /* GCHistory.m in Sources */,
+				C6D9F5D01B8B061300695231 /* GCIndex.m in Sources */,
+				C6D9F5D11B8B061300695231 /* GCLiveRepository.m in Sources */,
+				C6D9F5D21B8B061300695231 /* GCObject.m in Sources */,
+				C6D9F5D31B8B061300695231 /* GCPrivate.m in Sources */,
+				C6D9F5D41B8B061300695231 /* GCReference.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C6D9F62B1B8B069200695231 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C6D9F6481B8B06B300695231 /* XLASLLogger.m in Sources */,
+				C6D9F6491B8B06B300695231 /* XLCallbackLogger.m in Sources */,
+				C6D9F64A1B8B06B300695231 /* XLFacility.m in Sources */,
+				C6D9F64B1B8B06B300695231 /* XLFileLogger.m in Sources */,
+				C6D9F64C1B8B06B300695231 /* XLFunctions.m in Sources */,
+				C6D9F64D1B8B06B300695231 /* XLLogger.m in Sources */,
+				C6D9F64E1B8B06B300695231 /* XLLogRecord.m in Sources */,
+				C6D9F64F1B8B06B300695231 /* XLStandardLogger.m in Sources */,
+				C6D9F6501B8B06B300695231 /* XLDatabaseLogger.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E267E1A31B84D6C500BAB377 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E267E1D11B84D83100BAB377 /* GCBranch.m in Sources */,
-				E267E1D21B84D83100BAB377 /* GCCommit.m in Sources */,
-				E267E1D31B84D83100BAB377 /* GCCommitDatabase.m in Sources */,
-				E267E1D41B84D83100BAB377 /* GCDiff.m in Sources */,
-				E267E1D51B84D83100BAB377 /* GCFoundation.m in Sources */,
-				E267E1D61B84D83100BAB377 /* GCFunctions.m in Sources */,
-				E267E1D71B84D83100BAB377 /* GCHistory.m in Sources */,
-				E267E1D81B84D83100BAB377 /* GCIndex.m in Sources */,
-				E267E1D91B84D83100BAB377 /* GCLiveRepository.m in Sources */,
-				E267E1DA1B84D83100BAB377 /* GCObject.m in Sources */,
-				E267E1DB1B84D83100BAB377 /* GCPrivate.m in Sources */,
-				E267E1DC1B84D83100BAB377 /* GCReference.m in Sources */,
-				E267E1DD1B84D83100BAB377 /* GCReferenceTransform.m in Sources */,
-				E267E1DF1B84D83100BAB377 /* GCRemote.m in Sources */,
-				E267E1E01B84D83100BAB377 /* GCRepository.m in Sources */,
-				E267E1E11B84D83100BAB377 /* GCRepository+Bare.m in Sources */,
-				E267E1E21B84D83100BAB377 /* GCRepository+Config.m in Sources */,
-				E267E1E31B84D83100BAB377 /* GCRepository+HEAD.m in Sources */,
-				E267E1E41B84D83100BAB377 /* GCRepository+Mock.m in Sources */,
-				E267E1E51B84D83100BAB377 /* GCRepository+Reflog.m in Sources */,
-				E267E1E61B84D83100BAB377 /* GCRepository+Reset.m in Sources */,
-				E267E1E71B84D83100BAB377 /* GCRepository+Status.m in Sources */,
-				E267E1E81B84D83100BAB377 /* GCSnapshot.m in Sources */,
-				E267E1E91B84D83100BAB377 /* GCSQLiteRepository.m in Sources */,
-				E267E1EA1B84D83100BAB377 /* GCStash.m in Sources */,
-				E267E1EB1B84D83100BAB377 /* GCSubmodule.m in Sources */,
-				E267E1EC1B84D83100BAB377 /* GCTag.m in Sources */,
-				E267E1ED1B84D84900BAB377 /* GCHistory+Rewrite.m in Sources */,
-				E267E1EE1B84D84900BAB377 /* GCRepository+Index.m in Sources */,
-				E267E1EF1B84D84900BAB377 /* GCRepository+Utilities.m in Sources */,
 				E267E2151B84DB6E00BAB377 /* GIBranch.m in Sources */,
 				E267E2161B84DB6E00BAB377 /* GIDiffView.m in Sources */,
 				E267E2171B84DB6E00BAB377 /* GIFunctions.m in Sources */,
@@ -1137,15 +1316,6 @@
 				E267E2621B84DCA100BAB377 /* GIQuickViewController.m in Sources */,
 				E267E2631B84DCA100BAB377 /* GISimpleCommitViewController.m in Sources */,
 				E267E2641B84DCA100BAB377 /* GIStashListViewController.m in Sources */,
-				E267E2D61B84F2BE00BAB377 /* XLASLLogger.m in Sources */,
-				E267E2D71B84F2BE00BAB377 /* XLCallbackLogger.m in Sources */,
-				E267E2D81B84F2BE00BAB377 /* XLFacility.m in Sources */,
-				E267E2D91B84F2BE00BAB377 /* XLFileLogger.m in Sources */,
-				E267E2DA1B84F2BE00BAB377 /* XLFunctions.m in Sources */,
-				E267E2DB1B84F2BE00BAB377 /* XLLogger.m in Sources */,
-				E267E2DC1B84F2BE00BAB377 /* XLLogRecord.m in Sources */,
-				E267E2DD1B84F2BE00BAB377 /* XLStandardLogger.m in Sources */,
-				E267E2DE1B84F2BE00BAB377 /* XLDatabaseLogger.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1153,78 +1323,53 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C6D9F6661B8B088400695231 /* GCTestCase.m in Sources */,
 				E259C2CF1A64F7D00079616B /* GCBranch-Tests.m in Sources */,
-				E2FEED4A1AEAA75F00CBED80 /* GCCommitDatabase.m in Sources */,
 				E259C2CB1A64D27F0079616B /* GCTag-Tests.m in Sources */,
-				E20EB09019FC76160031A075 /* GCRepository+Status.m in Sources */,
-				E27B6D671A84451900D05452 /* GCRepository+Reflog.m in Sources */,
-				E2C338F819F85C8600063D95 /* GCTag.m in Sources */,
-				E23C1A8C1A9019610060F6AD /* GCLiveRepository.m in Sources */,
-				E24509041A9A5F1D003E602D /* GCRepository+Config.m in Sources */,
 				E259C2D11A64F9050079616B /* GCRemote-Tests.m in Sources */,
-				E2C3AA5C19FF0B0600BA89F3 /* GCRepository+Bare.m in Sources */,
-				E27E43071A74A96000D04ED1 /* GILine.m in Sources */,
 				E259C2E31A64FE710079616B /* GCRepository+Reset-Tests.m in Sources */,
 				E259C2D51A64FAA40079616B /* GCHistory+Rewrite-Tests.m in Sources */,
-				E2790D4E1ACF130A00965A98 /* GCIndex.m in Sources */,
-				E2790D4A1ACF12E200965A98 /* GCRepository+Index.m in Sources */,
 				E27E43021A74A94700D04ED1 /* GIGraph-Tests.m in Sources */,
 				E259C2C71A64C9980079616B /* GCRepository-Tests.m in Sources */,
 				E24509031A9A50F3003E602D /* GCRepository+Config-Tests.m in Sources */,
 				E2B1BF361A85C5ED00A999DF /* GIFunctions-Tests.m in Sources */,
-				E299D0141A749C26005035F7 /* GCRepository+Mock.m in Sources */,
-				E27E43031A74A96000D04ED1 /* GIBranch.m in Sources */,
-				E27E43081A74A96000D04ED1 /* GINode.m in Sources */,
 				E299D0161A749D27005035F7 /* GCRepository+Mock-Tests.m in Sources */,
-				E2D4148C1A02D68700B99634 /* GCHistory+Rewrite.m in Sources */,
-				E2146C8F1A57F3BC00F4550B /* GCObject.m in Sources */,
-				E2C338F419F85C8600063D95 /* GCRepository.m in Sources */,
 				E2F5C2811A8186C200C30739 /* GCSnapshot-Tests.m in Sources */,
-				E218A58F1A56706600DFF1DF /* GCRepository+Utilities.m in Sources */,
-				E2C338F019F85C8600063D95 /* GCReference.m in Sources */,
 				E259C2DD1A64FDD00079616B /* GCRepository+HEAD-Tests.m in Sources */,
-				E259C2C51A64C8EA0079616B /* GCTestCase.m in Sources */,
 				E259C2E51A6624DC0079616B /* GCCommit-Tests.m in Sources */,
-				E299D00C1A71F0E9005035F7 /* GCSQLiteRepository.m in Sources */,
-				E2C338F619F85C8600063D95 /* GCStash.m in Sources */,
 				E2F5C2831A81C53A00C30739 /* GCRepository+Reflog-Tests.m in Sources */,
-				E2B1BF341A85923800A999DF /* GIFunctions.m in Sources */,
 				E259C2E11A64FE4C0079616B /* GCRepository+Status-Tests.m in Sources */,
-				E27E43041A74A96000D04ED1 /* GIGraph.m in Sources */,
-				E21A88F41A9471B300255AC3 /* GIPrivate.m in Sources */,
-				E2B14B5F1A8A764400003E64 /* GCDiff.m in Sources */,
-				E2F5C27F1A8171C900C30739 /* GCSnapshot.m in Sources */,
-				E218A58B1A566F6A00DFF1DF /* GCReferenceTransform.m in Sources */,
 				E259C2DB1A64FDA60079616B /* GCDiff-Tests.m in Sources */,
-				E21739FF1A51FA6200EC6777 /* GCSubmodule.m in Sources */,
-				E27F9B751A549097009C9B3D /* GCRepository+HEAD.m in Sources */,
-				E2C338EE19F85C8600063D95 /* GCCommit.m in Sources */,
-				E200A3BA1B02DDA100C4E39D /* GCPrivate.m in Sources */,
 				E259C2D71A64FAEA0079616B /* GCRepository+Utilities-Tests.m in Sources */,
 				E2FEED491AEAA6B500CBED80 /* GCCommitDatabase-Tests.m in Sources */,
-				E20F10F41A043E2100076AAC /* GCHistory.m in Sources */,
 				E259C2CD1A64D30A0079616B /* GCStash-Tests.m in Sources */,
 				E2790D481ACF12E200965A98 /* GCRepository+Index-Tests.m in Sources */,
 				E259C2D91A64FD640079616B /* GCRepository+Bare-Tests.m in Sources */,
 				E259C2C91A64CAB30079616B /* GCSubmodule-Tests.m in Sources */,
-				E2C338EC19F85C8600063D95 /* GCBranch.m in Sources */,
 				E299D00F1A7206E7005035F7 /* GCSQLiteRepository-Tests.m in Sources */,
-				E2790D431ACB1B1100965A98 /* GCFoundation.m in Sources */,
-				E20EB08C19FC75CA0031A075 /* GCRepository+Reset.m in Sources */,
 				E259C2D31A64F9FF0079616B /* GCHistory-Tests.m in Sources */,
-				E27E43061A74A96000D04ED1 /* GILayer.m in Sources */,
-				E2C338F219F85C8600063D95 /* GCRemote.m in Sources */,
-				E21739F41A4FE39E00EC6777 /* GCFunctions.m in Sources */,
-				E267E2DF1B84F32000BAB377 /* XLFacility.m in Sources */,
-				E267E2E01B84F33000BAB377 /* XLFunctions.m in Sources */,
-				E267E2E41B84F37500BAB377 /* XLLogger.m in Sources */,
-				E267E2E21B84F33600BAB377 /* XLLogRecord.m in Sources */,
-				E267E2E31B84F36500BAB377 /* XLFileLogger.m in Sources */,
-				E267E2E11B84F33300BAB377 /* XLStandardLogger.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		C642177B1B8C35B9008F582C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C6D9F5AF1B8B05D000695231 /* GitUpKitBase */;
+			targetProxy = C642177A1B8C35B9008F582C /* PBXContainerItemProxy */;
+		};
+		C642177D1B8C35B9008F582C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C6D9F62E1B8B069200695231 /* XLFacility */;
+			targetProxy = C642177C1B8C35B9008F582C /* PBXContainerItemProxy */;
+		};
+		C6D9F6681B8B089200695231 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E267E1A71B84D6C500BAB377 /* GitUpKit */;
+			targetProxy = C6D9F6671B8B089200695231 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		E21A88F81A97173300255AC3 /* GIUnifiedReflogViewController.xib */ = {
@@ -1366,6 +1511,66 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		C6D9F5C11B8B05D000695231 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				EXECUTABLE_PREFIX = lib;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos macosx";
+				VALID_ARCHS = "i386 x86_64 arm64 armv7s armv7";
+			};
+			name = Debug;
+		};
+		C6D9F5C21B8B05D000695231 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				EXECUTABLE_PREFIX = lib;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos macosx";
+				VALID_ARCHS = "i386 x86_64 arm64 armv7s armv7";
+			};
+			name = Release;
+		};
+		C6D9F5C31B8B05D000695231 /* Distribution */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				EXECUTABLE_PREFIX = lib;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos macosx";
+				VALID_ARCHS = "i386 x86_64 arm64 armv7s armv7";
+			};
+			name = Distribution;
+		};
+		C6D9F6411B8B069200695231 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				EXECUTABLE_PREFIX = lib;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		C6D9F6421B8B069200695231 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				EXECUTABLE_PREFIX = lib;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		C6D9F6431B8B069200695231 /* Distribution */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				EXECUTABLE_PREFIX = lib;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Distribution;
+		};
 		E267E1B11B84D6C500BAB377 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1424,6 +1629,7 @@
 					"Third-Party/libssh2/lib/libssh2.a",
 					"Third-Party/libgit2/lib/libgit2.a",
 					"Third-Party/libsqlite3/lib/libsqlite3.a",
+					"-ObjC",
 				);
 			};
 			name = Debug;
@@ -1441,6 +1647,7 @@
 					"Third-Party/libssh2/lib/libssh2.a",
 					"Third-Party/libgit2/lib/libgit2.a",
 					"Third-Party/libsqlite3/lib/libsqlite3.a",
+					"-ObjC",
 				);
 			};
 			name = Release;
@@ -1488,6 +1695,7 @@
 					"Third-Party/libssh2/lib/libssh2.a",
 					"Third-Party/libgit2/lib/libgit2.a",
 					"Third-Party/libsqlite3/lib/libsqlite3.a",
+					"-ObjC",
 				);
 			};
 			name = Distribution;
@@ -1510,6 +1718,26 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		C6D9F5C71B8B05D000695231 /* Build configuration list for PBXNativeTarget "GitUpKitBase" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C6D9F5C11B8B05D000695231 /* Debug */,
+				C6D9F5C21B8B05D000695231 /* Release */,
+				C6D9F5C31B8B05D000695231 /* Distribution */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C6D9F6401B8B069200695231 /* Build configuration list for PBXNativeTarget "XLFacility" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C6D9F6411B8B069200695231 /* Debug */,
+				C6D9F6421B8B069200695231 /* Release */,
+				C6D9F6431B8B069200695231 /* Distribution */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		E267E1B41B84D6C500BAB377 /* Build configuration list for PBXNativeTarget "GitUpKit" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
