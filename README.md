@@ -34,9 +34,8 @@ Releases notes are available at https://github.com/git-up/GitUp/releases. Builds
 
 To build GitUp yourself, simply run these commands in Terminal:
 
-1. `git clone https://github.com/git-up/GitUp.git`
-2. `cd GitUp`
-3. `git submodule update --init --recursive`
+    git clone --recursive --depth=1 https://github.com/git-up/GitUp.git
+    cd GitUp
 
 Then open the `GitUp/GitUp.xcodeproj` Xcode project and hit Run.
 
