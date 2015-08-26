@@ -40,6 +40,12 @@ To build GitUp yourself, simply run these commands in Terminal:
 
 Then open the `GitUp/GitUp.xcodeproj` Xcode project and hit Run.
 
+**IMPORTANT:** If you do not have an Apple ID with a developer account for code signing Mac apps, the build  will fail with a code signing error. Simply delete the "Code Signing Identity" build setting of the "Application" target to work around the issue:
+
+<p align="center">
+<img src="http://i.imgur.com/dWpJExk.png">
+</p>
+
 GitUpKit
 ========
 
