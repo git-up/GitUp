@@ -53,10 +53,10 @@ m0 - m1<master> - m2 - m3[origin/master] \n\
   
   // Check local branches
   XCTAssertEqual(history.localBranches.count, 2);
-  GCHistoryRemoteBranch* masterBranch = history.localBranches[0];
+  GCHistoryLocalBranch* masterBranch = history.localBranches[0];
   XCTAssertEqualObjects(masterBranch.name, @"master");
   XCTAssertEqualObjects(masterBranch.tipCommit.message, @"m1");
-  GCHistoryRemoteBranch* topicBranch = history.localBranches[1];
+  GCHistoryLocalBranch* topicBranch = history.localBranches[1];
   XCTAssertEqualObjects(topicBranch.name, @"topic");
   XCTAssertEqualObjects(topicBranch.tipCommit.message, @"t4");
   
