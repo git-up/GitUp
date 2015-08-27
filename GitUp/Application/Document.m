@@ -1758,6 +1758,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 
 - (void)_reloadAncestorsView {
   NSMutableArray* commits = [[NSMutableArray alloc] init];
+  [commits addObject:_repository.history.HEADCommit];
   [_repository.history walkAncestorsOfCommits:@[_repository.history.HEADCommit] usingBlock:^(GCHistoryCommit* commit, BOOL* stop) {
     [commits addObject:commit];
     if (commits.count == kMaxAncestorCommits) {
