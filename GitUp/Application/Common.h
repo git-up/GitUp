@@ -35,6 +35,6 @@
 
 #define kURL_Forums @"http://forums.gitup.co/"
 #define kURL_Documentation @"http://forums.gitup.co/c/docs"
-#define kURL_ReleaseNotes @"http://forums.gitup.co/t/gitup-release-notes/16/1"
+#define kURL_ReleaseNotes @"https://github.com/git-up/GitUp/releases"
 
 #define kURL_Twitter @"https://twitter.com/GitUpApp"
