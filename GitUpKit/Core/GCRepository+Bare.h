@@ -63,6 +63,11 @@ typedef GCCommit* (^GCConflictHandler)(GCIndex* index, GCCommit* ourCommit, GCCo
          conflictHandler:(GCConflictHandler)handler  // May be NULL
                    error:(NSError**)error;
 
+- (GCCommit*)createCommitFromIndex:(GCIndex*)index
+                       withParents:(NSArray*)parents
+                           message:(NSString*)message
+                             error:(NSError**)error;
+
 - (GCCommit*)copyCommit:(GCCommit*)copyCommit
      withUpdatedMessage:(NSString*)message
          updatedParents:(NSArray*)parents

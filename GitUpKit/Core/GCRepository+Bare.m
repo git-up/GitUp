@@ -198,6 +198,21 @@ cleanup:
                            error:error];
 }
 
+- (GCCommit*)createCommitFromIndex:(GCIndex*)index
+                       withParents:(NSArray*)parents
+                           message:(NSString*)message
+                             error:(NSError**)error {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wvla"
+  const git_commit* commits[parents.count];
+#pragma clang diagnostic pop
+  NSUInteger count = 0;
+  for (GCCommit* parent in parents) {
+    commits[count++] = parent.private;
+  }
+  return [self createCommitFromIndex:index.private withParents:commits count:count message:message error:error];
+}
+
 - (GCCommit*)copyCommit:(GCCommit*)copyCommit
      withUpdatedMessage:(NSString*)message
          updatedParents:(NSArray*)parents
