@@ -22,6 +22,7 @@ typedef BOOL (^GCIndexLineFilter)(GCLineDiffChange change, NSUInteger oldLineNum
 @property(nonatomic, readonly, getter=isInMemory) BOOL inMemory;
 @property(nonatomic, readonly, getter=isEmpty) BOOL empty;
 - (NSString*)SHA1ForFile:(NSString*)path mode:(GCFileMode*)mode;  // Returns nil if file is not in index
+- (void)enumerateFilesUsingBlock:(void (^)(NSString* path, GCFileMode mode, NSString* sha1, BOOL* stop))block;
 @end
 
 @interface GCRepository (GCIndex)

@@ -64,6 +64,20 @@ extern void git_index_entry__init_from_stat(git_index_entry *entry, struct stat 
   return GCGitOIDToSHA1(&entry->id);
 }
 
+- (void)enumerateFilesUsingBlock:(void (^)(NSString* path, GCFileMode mode, NSString* sha1, BOOL* stop))block {
+  size_t count = git_index_entrycount(_private);
+  for (size_t i = 0; i < count; ++i) {
+    const git_index_entry* entry = git_index_get_byindex(_private, i);
+    if (git_index_entry_stage(entry) == 0) {
+      BOOL stop = NO;
+      block(GCFileSystemPathFromGitPath(entry->path), GCFileModeFromMode(entry->mode), GCGitOIDToSHA1(&entry->id), &stop);
+      if (stop) {
+        break;
+      }
+    }
+  }
+}
+
 - (NSString*)description {
   size_t count = git_index_entrycount(_private);
   NSMutableString* string = [[NSMutableString alloc] initWithFormat:@"%@ (%lu entries)", self.class, count];
