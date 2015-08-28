@@ -23,15 +23,15 @@ typedef NS_ENUM(NSUInteger, GCHistorySorting) {
   kGCHistorySorting_ReverseChronological
 };
 
-@class GCSearchIndex, GCSnapshot;
+@class GCHistoryLocalBranch, GCHistoryRemoteBranch, GCHistoryTag, GCSearchIndex, GCSnapshot;
 
 @interface GCHistoryCommit : GCCommit
 @property(nonatomic, readonly) NSUInteger autoIncrementID;  // Uniquely increasing ID for each GCHistoryCommit instantiated for a GCHistory (can be used for LUTs)
-@property(nonatomic, readonly) NSArray* parents;  // Sorting is defined by hierarchy
-@property(nonatomic, readonly) NSArray* children;  // Sorting is arbitrary and not guaranteed to be stable
-@property(nonatomic, readonly) NSArray* localBranches;
-@property(nonatomic, readonly) NSArray* remoteBranches;
-@property(nonatomic, readonly) NSArray* tags;
+@property(nonatomic, readonly) NSArray<GCHistoryCommit*>* parents;  // Sorting is defined by hierarchy
+@property(nonatomic, readonly) NSArray<GCHistoryCommit*>* children;  // Sorting is arbitrary and not guaranteed to be stable
+@property(nonatomic, readonly) NSArray<GCHistoryLocalBranch*>* localBranches;
+@property(nonatomic, readonly) NSArray<GCHistoryRemoteBranch*>* remoteBranches;
+@property(nonatomic, readonly) NSArray<GCHistoryTag*>* tags;
 @property(nonatomic, readonly, getter=isRoot) BOOL root;
 @property(nonatomic, readonly, getter=isLeaf) BOOL leaf;
 @property(nonatomic, readonly) BOOL hasReferences;
@@ -55,15 +55,15 @@ typedef NS_ENUM(NSUInteger, GCHistorySorting) {
 @property(nonatomic, readonly) GCRepository* repository;  // NOT RETAINED
 @property(nonatomic, readonly) GCHistorySorting sorting;
 @property(nonatomic, readonly, getter=isEmpty) BOOL empty;  // Convenience method
-@property(nonatomic, readonly) NSArray* allCommits;
-@property(nonatomic, readonly) NSArray* rootCommits;
-@property(nonatomic, readonly) NSArray* leafCommits;
+@property(nonatomic, readonly) NSArray<GCHistoryCommit*>* allCommits;
+@property(nonatomic, readonly) NSArray<GCHistoryCommit*>* rootCommits;
+@property(nonatomic, readonly) NSArray<GCHistoryCommit*>* leafCommits;
 @property(nonatomic, readonly) GCHistoryCommit* HEADCommit;  // nil if HEAD is unborn
 @property(nonatomic, readonly) GCHistoryLocalBranch* HEADBranch;  // nil if HEAD is detached
 @property(nonatomic, readonly, getter=isHEADDetached) BOOL HEADDetached;  // Convenience method
-@property(nonatomic, readonly) NSArray* tags;  // Always sorted alphabetically
-@property(nonatomic, readonly) NSArray* localBranches;  // Always sorted alphabetically
-@property(nonatomic, readonly) NSArray* remoteBranches;  // Always sorted alphabetically
+@property(nonatomic, readonly) NSArray<GCHistoryTag*>* tags;  // Always sorted alphabetically
+@property(nonatomic, readonly) NSArray<GCHistoryLocalBranch*>* localBranches;  // Always sorted alphabetically
+@property(nonatomic, readonly) NSArray<GCHistoryRemoteBranch*>* remoteBranches;  // Always sorted alphabetically
 @property(nonatomic, readonly) NSUInteger nextAutoIncrementID;  // See @autoIncrementID on GCHistoryCommit
 - (GCHistoryCommit*)historyCommitWithSHA1:(NSString*)sha1;
 - (GCHistoryCommit*)historyCommitForCommit:(GCCommit*)commit;
@@ -80,21 +80,21 @@ typedef NS_ENUM(NSUInteger, GCHistorySorting) {
 @end
 
 @interface GCHistory (GCHistoryWalker)
-- (void)walkAncestorsOfCommits:(NSArray*)commits usingBlock:(void (^)(GCHistoryCommit* commit, BOOL* stop))block;  // Commits are walked so that parents are guaranteed not to be called before all their children have been called (however the order between siblings is undefined)
-- (void)walkDescendantsOfCommits:(NSArray*)commits usingBlock:(void (^)(GCHistoryCommit* commit, BOOL* stop))block;  // Commits are walked so that children are guaranteed not to be called before all their parents have been called (however the order between siblings is undefined)
+- (void)walkAncestorsOfCommits:(NSArray<GCHistoryCommit*>*)commits usingBlock:(void (^)(GCHistoryCommit* commit, BOOL* stop))block;  // Commits are walked so that parents are guaranteed not to be called before all their children have been called (however the order between siblings is undefined)
+- (void)walkDescendantsOfCommits:(NSArray<GCHistoryCommit*>*)commits usingBlock:(void (^)(GCHistoryCommit* commit, BOOL* stop))block;  // Commits are walked so that children are guaranteed not to be called before all their parents have been called (however the order between siblings is undefined)
 
 - (void)walkAllCommitsFromLeavesUsingBlock:(void (^)(GCHistoryCommit* commit, BOOL* stop))block;  // Convenience wrapper for walking all ancestors from the history leaves
 - (void)walkAllCommitsFromRootsUsingBlock:(void (^)(GCHistoryCommit* commit, BOOL* stop))block;  // Convenience wrapper for walking all descendants from the history roots
 
-- (GCHistoryWalker*)walkerForAncestorsOfCommits:(NSArray*)commits;  // Low-level API - DO NOT update the history while iterating the walker
-- (GCHistoryWalker*)walkerForDescendantsOfCommits:(NSArray*)commits;  // Low-level API - DO NOT update the history while iterating the walker
+- (GCHistoryWalker*)walkerForAncestorsOfCommits:(NSArray<GCHistoryCommit*>*)commits;  // Low-level API - DO NOT update the history while iterating the walker
+- (GCHistoryWalker*)walkerForDescendantsOfCommits:(NSArray<GCHistoryCommit*>*)commits;  // Low-level API - DO NOT update the history while iterating the walker
 @end
 
 @interface GCRepository (GCHistory)
 - (GCHistory*)loadHistoryUsingSorting:(GCHistorySorting)sorting error:(NSError**)error;  // git log {--all}
-- (BOOL)reloadHistory:(GCHistory*)history referencesDidChange:(BOOL*)referencesDidChange addedCommits:(NSArray**)addedCommits removedCommits:(NSArray**)removedCommits error:(NSError**)error;
+- (BOOL)reloadHistory:(GCHistory*)history referencesDidChange:(BOOL*)referencesDidChange addedCommits:(NSArray<GCHistoryCommit*>**)addedCommits removedCommits:(NSArray<GCHistoryCommit*>**)removedCommits error:(NSError**)error;
 
 - (GCHistory*)loadHistoryFromSnapshot:(GCSnapshot*)snapshot usingSorting:(GCHistorySorting)sorting error:(NSError**)error;
 
-- (NSArray*)lookupCommitsForFile:(NSString*)path followRenames:(BOOL)follow error:(NSError**)error;  // git log {--follow} -p {file}
+- (NSArray<GCCommit*>*)lookupCommitsForFile:(NSString*)path followRenames:(BOOL)follow error:(NSError**)error;  // git log {--follow} -p {file}
 @end

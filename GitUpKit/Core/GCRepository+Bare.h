@@ -65,7 +65,7 @@ typedef GCCommit* (^GCConflictHandler)(GCIndex* index, GCCommit* ourCommit, GCCo
 
 - (GCCommit*)copyCommit:(GCCommit*)copyCommit
      withUpdatedMessage:(NSString*)message
-         updatedParents:(NSArray*)parents
+         updatedParents:(NSArray<__kindof GCCommit*>*)parents
    updatedTreeFromIndex:(GCIndex*)index
         updateCommitter:(BOOL)updateCommitter
                   error:(NSError**)error;
@@ -74,7 +74,7 @@ typedef GCCommit* (^GCConflictHandler)(GCIndex* index, GCCommit* ourCommit, GCCo
                ontoCommit:(GCCommit*)ontoCommit
        withAncestorCommit:(GCCommit*)ancestorCommit  // Typically a parent of "replayCommit" (the first one to use the main line)
            updatedMessage:(NSString*)message
-           updatedParents:(NSArray*)parents
+           updatedParents:(NSArray<__kindof GCCommit*>*)parents
           updateCommitter:(BOOL)updateCommitter
             skipIdentical:(BOOL)skipIdentical
           conflictHandler:(GCConflictHandler)handler

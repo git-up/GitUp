@@ -41,7 +41,7 @@
 + (BOOL)isValidTagName:(NSString*)name;
 
 - (GCTag*)findTagWithName:(NSString*)name error:(NSError**)error;
-- (NSArray*)listTags:(NSError**)error;  // git tag
+- (NSArray<GCTag*>*)listTags:(NSError**)error;  // git tag
 
 - (GCCommit*)lookupCommitForTag:(GCTag*)tag annotation:(GCTagAnnotation**)annotation error:(NSError**)error;  // git show-ref {tag}
 

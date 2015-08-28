@@ -19,7 +19,7 @@
 
 @interface GILine : NSObject
 @property(nonatomic, readonly) GIBranch* branch;  // NOT RETAINED
-@property(nonatomic, readonly) NSArray* nodes;  // NOT RETAINED
+@property(nonatomic, readonly) NSArray<GINode*>* nodes;  // NOT RETAINED
 
 // Computed properties
 @property(nonatomic, readonly, getter=isVirtual) BOOL virtual;

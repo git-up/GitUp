@@ -41,6 +41,6 @@
 - (NSString*)computeUniqueShortSHA1ForCommit:(GCCommit*)commit error:(NSError**)error;  // (?)
 - (GCCommit*)findCommitWithSHA1:(NSString*)sha1 error:(NSError**)error;  // (?)
 - (GCCommit*)findCommitWithSHA1Prefix:(NSString*)prefix error:(NSError**)error;  // (?)
-- (NSArray*)lookupParentsForCommit:(GCCommit*)commit error:(NSError**)error;  // git log -n 1 {commit_id}
+- (NSArray<GCCommit*>*)lookupParentsForCommit:(GCCommit*)commit error:(NSError**)error;  // git log -n 1 {commit_id}
 - (NSString*)checkTreeForCommit:(GCCommit*)commit containsFile:(NSString*)path error:(NSError**)error;  // (?) - Returns SHA1 if present
 @end

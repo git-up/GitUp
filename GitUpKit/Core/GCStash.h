@@ -26,7 +26,7 @@
 
 @interface GCRepository (GCStash)
 - (GCStash*)saveStashWithMessage:(NSString*)message keepIndex:(BOOL)keepIndex includeUntracked:(BOOL)includeUntracked error:(NSError**)error;  // git stash {-k} {-u}
-- (NSArray*)listStashes:(NSError**)error;  // git stash list
+- (NSArray<GCStash*>*)listStashes:(NSError**)error;  // git stash list
 - (BOOL)applyStash:(GCStash*)stash restoreIndex:(BOOL)restoreIndex error:(NSError**)error;  // git stash apply {--index} {stash}
 - (BOOL)dropStash:(GCStash*)stash error:(NSError**)error;  // git stash drop {stash}
 - (BOOL)popStash:(GCStash*)stash restoreIndex:(BOOL)restoreIndex error:(NSError**)error;  // git stash pop {--index} {stash}

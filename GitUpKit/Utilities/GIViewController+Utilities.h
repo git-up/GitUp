@@ -56,7 +56,7 @@ extern NSString* const GIViewController_MergeTool;
 
 - (void)openFileWithDefaultEditor:(NSString*)path;
 - (void)openSubmoduleWithApp:(NSString*)path;
-- (void)viewDeltasInDiffTool:(NSArray*)deltas;
+- (void)viewDeltasInDiffTool:(NSArray<GCDiffDelta*>*)deltas;
 - (void)resolveConflictInMergeTool:(GCIndexConflict*)conflict;
 - (void)markConflictAsResolved:(GCIndexConflict*)conflict;
 
@@ -64,12 +64,12 @@ extern NSString* const GIViewController_MergeTool;
                                     index:(GCIndex*)index
                                 ourCommit:(GCCommit*)ourCommit
                               theirCommit:(GCCommit*)theirCommit
-                            parentCommits:(NSArray*)parentCommits
+                            parentCommits:(NSArray<__kindof GCCommit*>*)parentCommits
                                   message:(NSString*)message
                                     error:(NSError**)error;
 
 - (NSMenu*)contextualMenuForDelta:(GCDiffDelta*)delta withConflict:(GCIndexConflict*)conflict allowOpen:(BOOL)allowOpen;
-- (BOOL)handleKeyDownEvent:(NSEvent*)event forSelectedDeltas:(NSArray*)deltas withConflicts:(NSDictionary*)conflicts allowOpen:(BOOL)allowOpen;
+- (BOOL)handleKeyDownEvent:(NSEvent*)event forSelectedDeltas:(NSArray<GCDiffDelta*>*)deltas withConflicts:(NSDictionary<NSString*, GCIndexConflict*>*)conflicts allowOpen:(BOOL)allowOpen;
 
 - (void)launchDiffToolWithCommit:(GCCommit*)commit otherCommit:(GCCommit*)otherCommit;
 @end

@@ -76,5 +76,5 @@ typedef NS_ENUM(NSUInteger, GCFileMode) {
 - (BOOL)exportBlobWithSHA1:(NSString*)sha1 toPath:(NSString*)path error:(NSError**)error;
 
 - (NSString*)pathForHookWithName:(NSString*)name;  // Returns nil if hook doesn't exist
-- (BOOL)runHookWithName:(NSString*)name arguments:(NSArray*)arguments standardInput:(NSString*)standardInput error:(NSError**)error;  // Silently ignores non-existing hooks
+- (BOOL)runHookWithName:(NSString*)name arguments:(NSArray<NSString*>*)arguments standardInput:(NSString*)standardInput error:(NSError**)error;  // Silently ignores non-existing hooks
 @end

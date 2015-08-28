@@ -41,9 +41,9 @@
 
 - (GCLocalBranch*)findLocalBranchWithName:(NSString*)name error:(NSError**)error;
 - (GCRemoteBranch*)findRemoteBranchWithName:(NSString*)name error:(NSError**)error;
-- (NSArray*)listLocalBranches:(NSError**)error;  // git branch
-- (NSArray*)listRemoteBranches:(NSError**)error;  // git branch -r
-- (NSArray*)listAllBranches:(NSError**)error;  // git branch -a
+- (NSArray<GCLocalBranch*>*)listLocalBranches:(NSError**)error;  // git branch
+- (NSArray<GCRemoteBranch*>*)listRemoteBranches:(NSError**)error;  // git branch -r
+- (NSArray<__kindof GCBranch*>*)listAllBranches:(NSError**)error;  // git branch -a
 
 - (GCCommit*)lookupTipCommitForBranch:(GCBranch*)branch error:(NSError**)error;  // git show-ref {branch}
 

@@ -110,7 +110,7 @@ typedef void (^GCDiffEndHunkHandler)();
 @property(nonatomic, readonly) NSUInteger maxContextLines;
 @property(nonatomic, readonly, getter=isModified) BOOL modified;  // Ignores unmodified files
 @property(nonatomic, readonly) BOOL hasChanges;  // Ignores unmodified and untracked files
-@property(nonatomic, readonly) NSArray* deltas;
+@property(nonatomic, readonly) NSArray<GCDiffDelta*>* deltas;
 @end
 
 @interface GCDiff (Extensions)

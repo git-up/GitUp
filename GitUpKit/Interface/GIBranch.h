@@ -22,8 +22,8 @@
 
 // Computed properties
 @property(nonatomic, readonly) GINode* tipNode;
-@property(nonatomic, readonly) NSArray* localBranches;
-@property(nonatomic, readonly) NSArray* remoteBranches;
-@property(nonatomic, readonly) NSArray* tags;
+@property(nonatomic, readonly) NSArray<GCLocalBranch*>* localBranches;
+@property(nonatomic, readonly) NSArray<GCRemoteBranch*>* remoteBranches;
+@property(nonatomic, readonly) NSArray<GCTag*>* tags;
 @property(nonatomic, readonly) GIBranch* parentBranch;
 @end

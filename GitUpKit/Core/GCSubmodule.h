@@ -57,7 +57,7 @@ typedef NS_ENUM(NSUInteger, GCSubmoduleUpdateMode) {
 - (BOOL)initializeAllSubmodules:(BOOL)recursive error:(NSError**)error;  // git submodule update --init {--recursive} - This will skip already initialized submodules
 
 - (GCSubmodule*)lookupSubmoduleWithName:(NSString*)name error:(NSError**)error;  // git submodule
-- (NSArray*)listSubmodules:(NSError**)error;  // git submodule
+- (NSArray<GCSubmodule*>*)listSubmodules:(NSError**)error;  // git submodule
 - (BOOL)updateSubmodule:(GCSubmodule*)submodule force:(BOOL)force error:(NSError**)error;  // git submodule update {--force} {submodule}
 - (BOOL)updateAllSubmodulesResursively:(BOOL)force error:(NSError**)error;  // git submodule update --recursive {--force} (except this does not fetch) - This will skip uninitialized submodules
 

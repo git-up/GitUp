@@ -33,5 +33,5 @@ extern NSString* const SQLiteErrorDomain;
 @property(nonatomic, readonly) GCCommitDatabaseOptions options;
 - (instancetype)initWithRepository:(GCRepository*)repository databasePath:(NSString*)path options:(GCCommitDatabaseOptions)options error:(NSError**)error;
 - (BOOL)updateWithProgressHandler:(GCCommitDatabaseProgressHandler)handler error:(NSError**)error;  // Handler can be NULL - Return NO from handler to cancel
-- (NSArray*)findCommitsMatching:(NSString*)match error:(NSError**)error;  // Search commit messages, authors and committers and orders results from newest to oldest - Returns nil on error
+- (NSArray<__kindof GCCommit*>*)findCommitsMatching:(NSString*)match error:(NSError**)error;  // Search commit messages, authors and committers and orders results from newest to oldest - Returns nil on error
 @end

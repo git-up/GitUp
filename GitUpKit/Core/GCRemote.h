@@ -39,7 +39,7 @@ typedef NS_OPTIONS(NSUInteger, GCRemoteCheckOptions) {
 @end
 
 @interface GCRepository (GCRemote)
-- (NSArray*)listRemotes:(NSError**)error;  // git remote -v
+- (NSArray<GCRemote*>*)listRemotes:(NSError**)error;  // git remote -v
 - (GCRemote*)lookupRemoteWithName:(NSString*)name error:(NSError**)error;  // git remote -v
 
 - (GCRemote*)addRemoteWithName:(NSString*)name url:(NSURL*)url error:(NSError**)error;  // git remote add {name} {url}
@@ -50,14 +50,14 @@ typedef NS_OPTIONS(NSUInteger, GCRemoteCheckOptions) {
 
 - (BOOL)checkForChangesInRemote:(GCRemote*)remote
                     withOptions:(GCRemoteCheckOptions)options
-                addedReferences:(NSDictionary**)addedReferences  // Full-names / SHA1s
-             modifiedReferences:(NSDictionary**)modifiedReferences  // Full-names / SHA1s
-              deletedReferences:(NSDictionary**)deletedReferences  // Full-names / SHA1s
+                addedReferences:(NSDictionary<NSString*, NSString*>**)addedReferences  // Full-names / SHA1s
+             modifiedReferences:(NSDictionary<NSString*, NSString*>**)modifiedReferences  // Full-names / SHA1s
+              deletedReferences:(NSDictionary<NSString*, NSString*>**)deletedReferences  // Full-names / SHA1s
                           error:(NSError**)error;
 
 - (BOOL)fetchRemoteBranch:(GCRemoteBranch*)branch tagMode:(GCFetchTagMode)mode updatedTips:(NSUInteger*)updatedTips error:(NSError**)error;  // git fetch {-n|-t} {-p} {remote} 'refs/heads/{branch}:refs/remotes/{remote}/{branch}'
 - (BOOL)fetchDefaultRemoteBranchesFromRemote:(GCRemote*)remote tagMode:(GCFetchTagMode)mode prune:(BOOL)prune updatedTips:(NSUInteger*)updatedTips error:(NSError**)error;  // git fetch {-n|-t} {-p} {remote}
-- (NSArray*)fetchTagsFromRemote:(GCRemote*)remote prune:(BOOL)prune updatedTips:(NSUInteger*)updatedTips error:(NSError**)error;  // git fetch {remote} 'refs/tags/*:refs/tags/*' - Returns the tags in the remote
+- (NSArray<__kindof GCTag*>*)fetchTagsFromRemote:(GCRemote*)remote prune:(BOOL)prune updatedTips:(NSUInteger*)updatedTips error:(NSError**)error;  // git fetch {remote} 'refs/tags/*:refs/tags/*' - Returns the tags in the remote
 
 - (BOOL)pushLocalBranchToUpstream:(GCLocalBranch*)branch force:(BOOL)force usedRemote:(GCRemote**)usedRemote error:(NSError**)error;  // git push
 - (BOOL)pushLocalBranch:(GCLocalBranch*)branch toRemote:(GCRemote*)remote force:(BOOL)force setUpstream:(BOOL)setUpstream error:(NSError**)error;  // git push {-f} {-u} {remote} 'refs/heads/{branch}:refs/heads/{branch}'

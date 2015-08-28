@@ -132,7 +132,7 @@ extern int git_submodule_foreach_block(git_repository* repo, int (^block)(git_su
 @interface GCTask : NSObject
 @property(nonatomic, readonly) NSString* executablePath;
 @property(nonatomic) NSTimeInterval executionTimeOut;  // Default is 0.0 i.e. no timeout
-@property(nonatomic, copy) NSDictionary* additionalEnvironment;
+@property(nonatomic, copy) NSDictionary<NSString*, NSString*>* additionalEnvironment;
 @property(nonatomic, copy) NSString* currentDirectoryPath;
 - (instancetype)initWithExecutablePath:(NSString*)path;
 - (BOOL)runWithArguments:(NSArray*)arguments stdin:(NSData*)stdin stdout:(NSData**)stdout stderr:(NSData**)stderr exitStatus:(int*)exitStatus error:(NSError**)error;  // Returns NO if "exitStatus" is NULL and executable exits with a non-zero status
@@ -214,8 +214,8 @@ extern int git_submodule_foreach_block(git_repository* repo, int (^block)(git_su
 @end
 
 @interface GCSnapshot ()
-@property(nonatomic, readonly) NSDictionary* config;
-@property(nonatomic, readonly) NSArray* serializedReferences;
+@property(nonatomic, readonly) NSDictionary<NSString*, NSString*>* config;
+@property(nonatomic, readonly) NSArray<GCSerializedReference*>* serializedReferences;
 - (id)initWithRepository:(GCRepository*)repository error:(NSError**)error;
 - (GCSerializedReference*)serializedReferenceWithName:(const char*)name;
 @end
@@ -260,7 +260,7 @@ extern int git_submodule_foreach_block(git_repository* repo, int (^block)(git_su
 @end
 
 @interface GCCommitDatabase ()
-- (NSArray*)findCommitsUsingHistory:(GCHistory*)history matching:(NSString*)match error:(NSError**)error;
+- (NSArray<__kindof GCCommit*>*)findCommitsUsingHistory:(GCHistory*)history matching:(NSString*)match error:(NSError**)error;
 #if DEBUG
 - (NSUInteger)countCommits;  // Returns NSNotFound on error
 - (NSUInteger)countTips;  // Returns NSNotFound on error
@@ -279,14 +279,14 @@ extern int git_submodule_foreach_block(git_repository* repo, int (^block)(git_su
 - (GCCommit*)createCommitFromCommit:(git_commit*)commit
                           withIndex:(git_index*)index
                      updatedMessage:(NSString*)message
-                     updatedParents:(NSArray*)parents
+                     updatedParents:(NSArray<__kindof GCCommit*>*)parents
                     updateCommitter:(BOOL)updateCommitter
                               error:(NSError**)error;
 
 - (GCCommit*)createCommitFromCommit:(git_commit*)commit
                            withTree:(git_tree*)tree
                      updatedMessage:(NSString*)message
-                     updatedParents:(NSArray*)parents
+                     updatedParents:(NSArray<__kindof GCCommit*>*)parents
                     updateCommitter:(BOOL)updateCommitter
                               error:(NSError**)error;
 @end

@@ -39,7 +39,7 @@
 */
 
 @interface GCRepository (Mock)
-- (NSArray*)createMockCommitHierarchyFromNotation:(NSString*)notation force:(BOOL)force error:(NSError**)error;
+- (NSArray<GCCommit*>*)createMockCommitHierarchyFromNotation:(NSString*)notation force:(BOOL)force error:(NSError**)error;
 @end
 
 @interface GCHistory (Mock)
