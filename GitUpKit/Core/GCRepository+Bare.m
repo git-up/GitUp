@@ -338,19 +338,15 @@ cleanup:
 
 @implementation GCRepository (Bare_Private)
 
-- (GCCommit*)createCommitFromIndex:(git_index*)index
-                       withParents:(const git_commit**)parents
-                             count:(NSUInteger)count
-                           message:(NSString*)message
-                             error:(NSError**)error {
+- (GCCommit*)createCommitFromTree:(git_tree*)tree
+                      withParents:(const git_commit**)parents
+                            count:(NSUInteger)count
+                          message:(NSString*)message
+                            error:(NSError**)error {
   GCCommit* commit = nil;
-  git_tree* tree = NULL;
   git_signature* signature = NULL;
   
   git_oid oid;
-  CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_index_write_tree_to, &oid, index, self.private);
-  CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_tree_lookup, &tree, self.private, &oid);
-  
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_signature_default, &signature, self.private);
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_commit_create, &oid, self.private, NULL, signature, signature, NULL, GCCleanedUpCommitMessage(message).bytes, tree, count, parents);
   git_commit* newCommit = NULL;
@@ -359,6 +355,24 @@ cleanup:
   
 cleanup:
   git_signature_free(signature);
+  return commit;
+}
+
+- (GCCommit*)createCommitFromIndex:(git_index*)index
+                       withParents:(const git_commit**)parents
+                             count:(NSUInteger)count
+                           message:(NSString*)message
+                             error:(NSError**)error {
+  GCCommit* commit = nil;
+  git_tree* tree = NULL;
+  
+  git_oid oid;
+  CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_index_write_tree_to, &oid, index, self.private);
+  CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_tree_lookup, &tree, self.private, &oid);
+  
+  commit = [self createCommitFromTree:tree withParents:parents count:count message:message error:error];
+  
+cleanup:
   git_tree_free(tree);
   return commit;
 }

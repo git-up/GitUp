@@ -270,6 +270,12 @@ extern int git_submodule_foreach_block(git_repository* repo, int (^block)(git_su
 @end
 
 @interface GCRepository (Bare_Private)
+- (GCCommit*)createCommitFromTree:(git_tree*)tree
+                      withParents:(const git_commit**)parents
+                            count:(NSUInteger)count
+                          message:(NSString*)message
+                            error:(NSError**)error;
+
 - (GCCommit*)createCommitFromIndex:(git_index*)index
                        withParents:(const git_commit**)parents
                              count:(NSUInteger)count
