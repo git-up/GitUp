@@ -59,11 +59,11 @@ Architecture
 
 The GitUpKit source code is organized as 2 independent layers communicating only through the use of public APIs:
 
-**Base Layer (depends on Foundation only)**
+**Base Layer (depends on Foundation only and is compatible with OS X and iOS)**
 - `Core/`: wrapper around the required minimal functionality of [libgit2](https://github.com/libgit2/libgit2), on top of which is then implemented all the Git functionality required by GitUp (note that GitUp uses a [slightly customized fork](https://github.com/git-up/libgit2/tree/gitup) of libgit2)
 - `Extensions/`: categories on the `Core` classes to add convenience features implemented only using the public APIs
 
-**UI Layer (depends on Foundation and AppKit)**
+**UI Layer (depends on AppKit and is compatible with OS X only)**
 - `Interface/`: low-level view classes e.g. `GIGraphView` to render the GitUp Map view
 - `Utilities/`: interface utility classes e.g. the base view controller class `GIViewController`
 - `Components/`: reusable single-view view controllers e.g. `GIDiffContentsViewController` to render a diff
@@ -161,6 +161,11 @@ Complete Example #2: GitY
 <p align="center">
 <img src="http://i.imgur.com/6cuPcT4.png">
 </p>
+
+Complete Example #2: iGit
+-------------------------
+
+[iGit](Examples/iGit) is test iOS that simply uses GitUpKit to clone a GitHub repo and perform a commit.
 
 Contributing
 ============
