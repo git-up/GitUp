@@ -531,7 +531,7 @@ cleanup:
     
     layer.y = layer.index;
   }
-  _size = NSMakeSize(maxX, CFArrayGetCount(_layers) - 1);
+  _size = CGSizeMake(maxX, CFArrayGetCount(_layers) - 1);
 }
 
 #if __GI_HAS_APPKIT__

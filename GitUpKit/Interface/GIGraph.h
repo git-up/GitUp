@@ -14,6 +14,7 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #import <Foundation/Foundation.h>
+#import <CoreGraphics/CoreGraphics.h>
 
 @class GCHistory, GCHistoryCommit, GILayer, GINode;
 
@@ -38,7 +39,7 @@ typedef NS_OPTIONS(NSUInteger, GIGraphOptions) {
 
 @property(nonatomic, readonly) NSUInteger numberOfDummyNodes;
 @property(nonatomic, readonly) NSArray* nodesWithReferences;
-@property(nonatomic, readonly) NSSize size;
+@property(nonatomic, readonly) CGSize size;
 
 - (GINode*)nodeForCommit:(GCHistoryCommit*)commit;
 
