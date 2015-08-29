@@ -16,7 +16,7 @@ $CLOC_PATH --by-file --xml --out=cloc.xml "GitUp/Application" "GitUpKit/Componen
 
 pushd "GitUpKit"
 rm -rf "$XCODE_SYMROOT"
-xcodebuild test -scheme "GitUpKit" "SYMROOT=$XCODE_SYMROOT"
+xcodebuild test -scheme "GitUpKit (OSX)" "SYMROOT=$XCODE_SYMROOT"
 popd
 
 ##### Archive and export app
