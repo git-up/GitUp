@@ -820,7 +820,7 @@ cleanup:
   NSMutableString* description = [[NSMutableString alloc] initWithString:[super description]];
   for (CFIndex i = 0, count = CFArrayGetCount(_layers); i < count; ++i) {
     GILayer* layer = CFArrayGetValueAtIndex(_layers, i);
-    [description appendFormat:@"\nLayer %lu", layer.index];
+    [description appendFormat:@"\nLayer %lu", (unsigned long)layer.index];
     for (GINode* node in layer.nodes) {
       [description appendFormat:@"\n [%c] %@ \"%@\" (%@)", node.dummy ? ' ' : 'X', node.commit.shortSHA1, node.commit.summary, node.alternateCommit.shortSHA1];
     }

@@ -129,6 +129,8 @@ extern int git_revwalk_add_hide_block(git_revwalk* walk, int (^block)(const git_
 extern int git_stash_foreach_block(git_repository* repo, int (^block)(size_t index, const char* message, const git_oid* stash_id));
 extern int git_submodule_foreach_block(git_repository* repo, int (^block)(git_submodule* submodule, const char* name));
 
+#if !TARGET_OS_IPHONE
+
 @interface GCTask : NSObject
 @property(nonatomic, readonly) NSString* executablePath;
 @property(nonatomic) NSTimeInterval executionTimeOut;  // Default is 0.0 i.e. no timeout
@@ -137,6 +139,8 @@ extern int git_submodule_foreach_block(git_repository* repo, int (^block)(git_su
 - (instancetype)initWithExecutablePath:(NSString*)path;
 - (BOOL)runWithArguments:(NSArray*)arguments stdin:(NSData*)stdin stdout:(NSData**)stdout stderr:(NSData**)stderr exitStatus:(int*)exitStatus error:(NSError**)error;  // Returns NO if "exitStatus" is NULL and executable exits with a non-zero status
 @end
+
+#endif
 
 @interface GCObject () {
 @public

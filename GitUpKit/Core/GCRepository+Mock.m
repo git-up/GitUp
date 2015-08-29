@@ -138,7 +138,7 @@ static const git_oid* _CommitParentCallback(size_t idx, void* payload) {
         if (range.location != NSNotFound) {
           NSInteger index = [[message substringFromIndex:range.location] integerValue];
           if (index) {
-            [parents addObject:[NSString stringWithFormat:@"%@%li", [message substringToIndex:range.location], index - 1]];
+            [parents addObject:[NSString stringWithFormat:@"%@%li", [message substringToIndex:range.location], (long)(index - 1)]];
           }
         }
       }

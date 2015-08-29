@@ -19,6 +19,8 @@
 
 #import "GCPrivate.h"
 
+#if !TARGET_OS_IPHONE
+
 @implementation NSFileManager (GCFoundation)
 
 - (BOOL)moveItemAtPathToTrash:(NSString*)path error:(NSError**)error {
@@ -38,3 +40,5 @@
 }
 
 @end
+
+#endif

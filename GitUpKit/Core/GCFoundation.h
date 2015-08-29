@@ -15,6 +15,10 @@
 
 #import <Foundation/Foundation.h>
 
+#if !TARGET_OS_IPHONE
+
 @interface NSFileManager (GCFoundation)
 - (BOOL)moveItemAtPathToTrash:(NSString*)path error:(NSError**)error;
 @end
+
+#endif

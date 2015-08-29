@@ -47,7 +47,7 @@
   GINode* firstNode = _mainLine.nodes.firstObject;
   GINode* lastNode = _mainLine.nodes.lastObject;
   GCHistoryCommit* tipCommit = self.tipNode.commit;
-  return [NSString stringWithFormat:@"[%@] Range=%li-%li TIP=%@", self.class, firstNode.layer.index, lastNode.layer.index, tipCommit];
+  return [NSString stringWithFormat:@"[%@] Range=%lu-%lu TIP=%@", self.class, (unsigned long)firstNode.layer.index, (unsigned long)lastNode.layer.index, tipCommit];
 }
 
 @end

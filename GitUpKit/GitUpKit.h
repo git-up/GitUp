@@ -24,6 +24,8 @@
 // Interface
 #import <GitUpKit/GIInterface.h>
 
+#if __GI_HAS_APPKIT__
+
 // Utilities
 #import <GitUpKit/GIAppKit.h>
 #import <GitUpKit/GIColorView.h>
@@ -53,3 +55,5 @@
 #import <GitUpKit/GIQuickViewController.h>
 #import <GitUpKit/GISimpleCommitViewController.h>
 #import <GitUpKit/GIStashListViewController.h>
+
+#endif

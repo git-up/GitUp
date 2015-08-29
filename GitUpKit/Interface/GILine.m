@@ -74,7 +74,7 @@
 - (NSString*)description {
   GINode* firstNode = self.nodes.firstObject;
   GINode* lastNode = self.nodes.lastObject;
-  return [NSString stringWithFormat:@"[%@] Range=%li-%li Nodes=%lu", self.class, firstNode.layer.index, lastNode.layer.index, self.nodes.count];
+  return [NSString stringWithFormat:@"[%@] Range=%lu-%lu Nodes=%lu", self.class, (unsigned long)firstNode.layer.index, (unsigned long)lastNode.layer.index, (unsigned long)self.nodes.count];
 }
 
 @end

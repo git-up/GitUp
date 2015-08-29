@@ -58,7 +58,7 @@
 }
 
 - (NSString*)description {
-  return [NSString stringWithFormat:@"[%@] Index=%lu Y=%g Nodes=%lu Lines=%lu", self.class, _index, _y, self.nodes.count, self.lines.count];
+  return [NSString stringWithFormat:@"[%@] Index=%lu Y=%g Nodes=%lu Lines=%lu", self.class, (unsigned long)_index, _y, (unsigned long)self.nodes.count, (unsigned long)self.lines.count];
 }
 
 @end

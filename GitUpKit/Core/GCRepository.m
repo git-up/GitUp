@@ -187,7 +187,11 @@ static int _ReferenceForEachCallback(const char* refname, void* payload) {
 }
 
 - (BOOL)safeDeleteFile:(NSString*)path error:(NSError**)error {
+#if TARGET_OS_IPHONE
+  return [[NSFileManager defaultManager] removeItemAtPath:[self absolutePathForFile:path] error:error];
+#else
   return [[NSFileManager defaultManager] moveItemAtPathToTrash:[self absolutePathForFile:path] error:error];
+#endif
 }
 
 - (NSString*)privateAppDirectoryPath {
@@ -225,6 +229,8 @@ static int _ReferenceForEachCallback(const char* refname, void* payload) {
   }
   return [self exportBlobWithOID:&oid toPath:path error:error];
 }
+
+#if !TARGET_OS_IPHONE
 
 - (NSString*)pathForHookWithName:(NSString*)name {
   NSString* path = [[self.repositoryPath stringByAppendingPathComponent:@"hooks"] stringByAppendingPathComponent:name];
@@ -272,6 +278,8 @@ static int _ReferenceForEachCallback(const char* refname, void* payload) {
   }
   return YES;
 }
+
+#endif
 
 #if DEBUG
 
@@ -453,6 +461,7 @@ static int _PushUpdateReferenceCallback(const char* refspec, const char* message
 
 // Called when pushing only
 static int _PushNegotiationCallback(git_remote* remote, const git_push_update** updates, size_t len, void* payload) {
+#if !TARGET_OS_IPHONE
   GCRepository* repository = (__bridge GCRepository*)payload;
   if ([repository pathForHookWithName:@"pre-push"]) {
     NSMutableString* string = [[NSMutableString alloc] init];  // Format is "<local ref> SP <local sha1> SP <remote ref> SP <remote sha1> LF"
@@ -488,6 +497,7 @@ static int _PushNegotiationCallback(git_remote* remote, const git_push_update** 
       return GIT_ERROR;
     }
   }
+#endif
   return GIT_OK;
 }
 
@@ -519,7 +529,7 @@ static int _PushNegotiationCallback(git_remote* remote, const git_push_update** 
 - (NSData*)exportBlobWithOID:(const git_oid*)oid error:(NSError**)error {
   git_blob* blob;
   CALL_LIBGIT2_FUNCTION_RETURN(nil, git_blob_lookup, &blob, self.private, oid);
-  NSData* data = [[NSData alloc] initWithBytes:git_blob_rawcontent(blob) length:git_blob_rawsize(blob)];
+  NSData* data = [[NSData alloc] initWithBytes:git_blob_rawcontent(blob) length:(NSUInteger)git_blob_rawsize(blob)];
   git_blob_free(blob);
   return data;
 }
@@ -532,7 +542,7 @@ static int _PushNegotiationCallback(git_remote* remote, const git_push_update** 
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_blob_lookup, &blob, self.private, oid);
   fd = open(path.fileSystemRepresentation, O_CREAT | O_WRONLY | O_TRUNC, S_IRUSR | S_IWUSR);
   CHECK_POSIX_FUNCTION_CALL(goto cleanup, fd, >= 0);
-  if (write(fd, git_blob_rawcontent(blob), git_blob_rawsize(blob)) == git_blob_rawsize(blob)) {
+  if (write(fd, git_blob_rawcontent(blob), (size_t)git_blob_rawsize(blob)) == git_blob_rawsize(blob)) {
     success = YES;
   } else {
     GC_SET_GENERIC_ERROR(@"%s", strerror(errno));

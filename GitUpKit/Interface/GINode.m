@@ -75,7 +75,7 @@
 }
 
 - (NSString*)description {
-  return [NSString stringWithFormat:@"%c%04li%c %@", _dummy ? '(' : ' ', _layer.index, _dummy ? ')' : ' ', _commit];
+  return [NSString stringWithFormat:@"%c%04lu%c %@", _dummy ? '(' : ' ', (unsigned long)_layer.index, _dummy ? ')' : ' ', _commit];
 }
 
 @end

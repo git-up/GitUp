@@ -19,6 +19,8 @@
 
 #import "GCPrivate.h"
 
+#if !TARGET_OS_IPHONE
+
 @implementation GCTask {
   NSFileHandle* _outFileHandle;
   NSMutableData* _outData;
@@ -169,3 +171,5 @@ cleanup:
 }
 
 @end
+
+#endif

@@ -22,7 +22,9 @@
 #import "GCFunctions.h"
 #import "GCHistory.h"
 #import "GCIndex.h"
+#if !TARGET_OS_IPHONE
 #import "GCLiveRepository.h"
+#endif
 #import "GCMacros.h"
 #import "GCObject.h"
 #import "GCReference.h"

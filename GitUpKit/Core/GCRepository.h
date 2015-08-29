@@ -69,12 +69,14 @@ typedef NS_ENUM(NSUInteger, GCFileMode) {
 
 - (NSString*)absolutePathForFile:(NSString*)path;
 
-- (BOOL)safeDeleteFile:(NSString*)path error:(NSError**)error;  // Moves file to Trash
+- (BOOL)safeDeleteFile:(NSString*)path error:(NSError**)error;  // Moves file to Trash (OS X only)
 
 - (NSString*)privateAppDirectoryPath;  // May return nil e.g. if repository is read-only
 
 - (BOOL)exportBlobWithSHA1:(NSString*)sha1 toPath:(NSString*)path error:(NSError**)error;
 
+#if !TARGET_OS_IPHONE
 - (NSString*)pathForHookWithName:(NSString*)name;  // Returns nil if hook doesn't exist
 - (BOOL)runHookWithName:(NSString*)name arguments:(NSArray*)arguments standardInput:(NSString*)standardInput error:(NSError**)error;  // Silently ignores non-existing hooks
+#endif
 @end

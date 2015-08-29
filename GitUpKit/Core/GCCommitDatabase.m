@@ -383,7 +383,7 @@ static int _CaseInsensitiveUTF8Compare(void* context, int length1, const void* b
         }
         sqlite3_close(_database);
         _database = NULL;
-        XLOG_WARNING(@"Commit database for \"%@\" has an incompatible version (%li) and must be regenerated", _repository.repositoryPath, currentVersion);
+        XLOG_WARNING(@"Commit database for \"%@\" has an incompatible version (%li) and must be regenerated", _repository.repositoryPath, (long)currentVersion);
         if (![[NSFileManager defaultManager] removeItemAtPath:path error:error] || ![self _initializeDatabase:path error:error] || ![self _initializeSchema:version error:error]) {
           [self release];
           return nil;
@@ -1127,7 +1127,7 @@ cleanup:
   }
   
   // We're done
-  XLOG_VERBOSE(@"Commit database for \"%@\" %s in %.3f seconds (%lu added, %lu removed)", _repository.repositoryPath, _ready ? "updated" : "initialized", CFAbsoluteTimeGetCurrent() - time, addedCommits, removedCommits);
+  XLOG_VERBOSE(@"Commit database for \"%@\" %s in %.3f seconds (%lu added, %lu removed)", _repository.repositoryPath, _ready ? "updated" : "initialized", CFAbsoluteTimeGetCurrent() - time, (unsigned long)addedCommits, (unsigned long)removedCommits);
   _ready = YES;
   success = YES;
   
