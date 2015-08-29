@@ -17,17 +17,17 @@
 
 #import "GCDiff.h"
 
-@class GIDiffFilesViewController;
+@class GCIndexConflict, GIDiffFilesViewController;
 
 @protocol GIDiffFilesViewControllerDelegate <NSObject>
 @optional
 - (void)diffFilesViewControllerDidBecomeFirstResponder:(GIDiffFilesViewController*)controller;
 - (void)diffFilesViewControllerDidChangeSelection:(GIDiffFilesViewController*)controller;
-- (void)diffFilesViewController:(GIDiffFilesViewController*)controller didDoubleClickDeltas:(NSArray*)deltas;
+- (void)diffFilesViewController:(GIDiffFilesViewController*)controller didDoubleClickDeltas:(NSArray<GCDiffDelta*>*)deltas;
 - (BOOL)diffFilesViewController:(GIDiffFilesViewController*)controller handleKeyDownEvent:(NSEvent*)event;
 - (void)diffFilesViewController:(GIDiffFilesViewController*)controller willSelectDelta:(GCDiffDelta*)delta;
 - (BOOL)diffFilesViewControllerShouldAcceptDeltas:(GIDiffFilesViewController*)controller fromOtherController:(GIDiffFilesViewController*)otherController;
-- (BOOL)diffFilesViewController:(GIDiffFilesViewController*)controller didReceiveDeltas:(NSArray*)deltas fromOtherController:(GIDiffFilesViewController*)otherController;
+- (BOOL)diffFilesViewController:(GIDiffFilesViewController*)controller didReceiveDeltas:(NSArray<GCDiffDelta*>*)deltas fromOtherController:(GIDiffFilesViewController*)otherController;
 @end
 
 @interface GIDiffFilesViewController : GIViewController
@@ -36,10 +36,10 @@
 @property(nonatomic, copy) NSString* emptyLabel;
 @property(nonatomic) BOOL allowsMultipleSelection;  // Default is NO
 
-@property(nonatomic, readonly) NSArray* deltas;
-@property(nonatomic, readonly) NSDictionary* conflicts;
-- (void)setDeltas:(NSArray*)deltas usingConflicts:(NSDictionary*)conflicts;
+@property(nonatomic, readonly) NSArray<GCDiffDelta*>* deltas;
+@property(nonatomic, readonly) NSDictionary<NSString*, GCIndexConflict*>* conflicts;
+- (void)setDeltas:(NSArray<GCDiffDelta*>*)deltas usingConflicts:(NSDictionary<NSString*, GCIndexConflict*>*)conflicts;
 
 @property(nonatomic, assign) GCDiffDelta* selectedDelta;
-@property(nonatomic, assign) NSArray* selectedDeltas;
+@property(nonatomic, assign) NSArray<GCDiffDelta*>* selectedDeltas;
 @end

@@ -35,6 +35,6 @@ typedef NS_ENUM(NSUInteger, GCConfigLevel) {
 - (GCConfigOption*)readConfigOptionForLevel:(GCConfigLevel)level variable:(NSString*)variable error:(NSError**)error;
 - (BOOL)writeConfigOptionForLevel:(GCConfigLevel)level variable:(NSString*)variable withValue:(NSString*)value error:(NSError**)error;  // Pass a nil value to delete the option
 
-- (NSArray*)readConfigForLevel:(GCConfigLevel)level error:(NSError**)error;
-- (NSArray*)readAllConfigs:(NSError**)error;  // Does not de-duplicate variables
+- (NSArray<GCConfigOption*>*)readConfigForLevel:(GCConfigLevel)level error:(NSError**)error;
+- (NSArray<GCConfigOption*>*)readAllConfigs:(NSError**)error;  // Does not de-duplicate variables
 @end

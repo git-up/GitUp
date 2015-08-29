@@ -38,9 +38,9 @@ extern NSString* const GIDiffContentsViewControllerUserDefaultKey_DiffViewMode; 
 @property(nonatomic, copy) NSString* emptyLabel;
 @property(nonatomic, strong) NSView* headerView;
 
-@property(nonatomic, readonly) NSArray* deltas;
-@property(nonatomic, readonly) NSDictionary* conflicts;
-- (void)setDeltas:(NSArray*)deltas usingConflicts:(NSDictionary*)conflicts;
+@property(nonatomic, readonly) NSArray<GCDiffDelta*>* deltas;
+@property(nonatomic, readonly) NSDictionary<NSString*, GCIndexConflict*>* conflicts;
+- (void)setDeltas:(NSArray<GCDiffDelta*>*)deltas usingConflicts:(NSDictionary<NSString*, GCIndexConflict*>*)conflicts;
 
 - (GCDiffDelta*)topVisibleDelta:(CGFloat*)offset;
 - (void)setTopVisibleDelta:(GCDiffDelta*)delta offset:(CGFloat)offset;

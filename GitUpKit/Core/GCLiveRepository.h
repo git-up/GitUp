@@ -43,7 +43,7 @@ extern NSString* const GCLiveRepositorySearchDidUpdateNotification;
 extern NSString* const GCLiveRepositoryCommitOperationReason;
 extern NSString* const GCLiveRepositoryAmendOperationReason;
 
-@class GCLiveRepository, GCDiff, GCReferenceTransform;
+@class GCLiveRepository, GCDiff, GCReferenceTransform, GCStash;
 
 @protocol GCLiveRepositoryDelegate <GCRepositoryDelegate>
 @optional
@@ -87,7 +87,7 @@ extern NSString* const GCLiveRepositoryAmendOperationReason;
 
 @property(nonatomic, getter=areSnapshotsEnabled) BOOL snapshotsEnabled;  // Default is NO - Should be enabled *after* setting delegate so any error can be received
 @property(nonatomic, getter=areAutomaticSnapshotsEnabled) BOOL automaticSnapshotsEnabled;  // Requires @snapshotsEnabled to be YES
-@property(nonatomic, readonly) NSArray* snapshots;  // Nil if snapshots are disabled
+@property(nonatomic, readonly) NSArray<GCSnapshot*>* snapshots;  // Nil if snapshots are disabled
 
 @property(nonatomic) GCLiveRepositoryDiffWhitespaceMode diffWhitespaceMode;  // Default is kGCLiveRepositoryDiffWhitespaceMode_Normal
 @property(nonatomic) NSUInteger diffMaxInterHunkLines;  // Default is 0
@@ -98,10 +98,10 @@ extern NSString* const GCLiveRepositoryAmendOperationReason;
 @property(nonatomic, readonly) GCDiff* unifiedStatus;  // Nil on error
 @property(nonatomic, readonly) GCDiff* workingDirectoryStatus;  // Nil on error
 @property(nonatomic, readonly) GCDiff* indexStatus;  // Nil on error
-@property(nonatomic, readonly) NSDictionary* indexConflicts;  // Nil on error
+@property(nonatomic, readonly) NSDictionary<NSString*, GCIndexConflict*>* indexConflicts;  // Nil on error
 
 @property(nonatomic, getter=areStashesEnabled) BOOL stashesEnabled;  // Default is NO - Should be enabled *after* setting delegate so any error can be received
-@property(nonatomic, readonly) NSArray* stashes;  // Nil on error
+@property(nonatomic, readonly) NSArray<GCStash*>* stashes;  // Nil on error
 
 @property(nonatomic, strong) NSUndoManager* undoManager;  // Default is nil
 - (void)setUndoActionName:(NSString*)name;  // Wrapper for -[NSUndoManager setActionName:] that doesn't open an undo block

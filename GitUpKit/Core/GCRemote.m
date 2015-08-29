@@ -244,9 +244,9 @@ cleanup:
 // Inspired from git_remote_prune()
 - (BOOL)checkForChangesInRemote:(GCRemote*)remote
                     withOptions:(GCRemoteCheckOptions)options
-                addedReferences:(NSDictionary**)addedReferences
-             modifiedReferences:(NSDictionary**)modifiedReferences
-              deletedReferences:(NSDictionary**)deletedReferences
+                addedReferences:(NSDictionary<NSString*, NSString*>**)addedReferences
+             modifiedReferences:(NSDictionary<NSString*, NSString*>**)modifiedReferences
+              deletedReferences:(NSDictionary<NSString*, NSString*>**)deletedReferences
                           error:(NSError**)error {
   BOOL success = NO;
   CFDictionaryKeyCallBacks keyCallbacks = {0, GCCStringCopyCallBack, GCFreeReleaseCallBack, NULL, GCCStringEqualCallBack, GCCStringHashCallBack};

@@ -46,8 +46,8 @@ typedef NS_OPTIONS(NSUInteger, GCReflogActions) {
 @property(nonatomic, readonly) NSTimeZone* timeZone;
 @property(nonatomic, readonly) NSString* committerName;
 @property(nonatomic, readonly) NSString* committerEmail;
-@property(nonatomic, readonly) NSArray* references;  // Matches @messages
-@property(nonatomic, readonly) NSArray* messages;  // Matches @references
+@property(nonatomic, readonly) NSArray<GCReference*>* references;  // Matches @messages
+@property(nonatomic, readonly) NSArray<NSString*>* messages;  // Matches @references
 @property(nonatomic, readonly) GCReflogActions actions;  // Guessed from messages (might not be reliable)
 @end
 
@@ -56,6 +56,6 @@ typedef NS_OPTIONS(NSUInteger, GCReflogActions) {
 @end
 
 @interface GCRepository (Reflog)
-- (NSArray*)loadReflogEntriesForReference:(GCReference*)reference error:(NSError**)error;  // git reflog {reference}
-- (NSArray*)loadAllReflogEntries:(NSError**)error;  // This deduplicate entries
+- (NSArray<GCReflogEntry*>*)loadReflogEntriesForReference:(GCReference*)reference error:(NSError**)error;  // git reflog {reference}
+- (NSArray<GCReflogEntry*>*)loadAllReflogEntries:(NSError**)error;  // This deduplicate entries
 @end

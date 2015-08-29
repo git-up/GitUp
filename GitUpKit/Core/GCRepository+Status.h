@@ -47,7 +47,7 @@ typedef NS_OPTIONS(NSUInteger, GCCleanCheckOptions) {
 @end
 
 @interface GCRepository (Status)
-- (NSDictionary*)checkConflicts:(NSError**)error;
+- (NSDictionary<NSString*, GCIndexConflict*>*)checkConflicts:(NSError**)error;
 
 - (BOOL)checkClean:(GCCleanCheckOptions)options error:(NSError**)error;  // git status
 @end
