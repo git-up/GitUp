@@ -33,6 +33,20 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		E21753051B9150AE00BE234A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E28A16DA1B87021600218332 /* GitUpKit.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = E267E1A71B84D6C500BAB377;
+			remoteInfo = GitUpKit;
+		};
+		E217538A1B91641F00BE234A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E28A16DA1B87021600218332 /* GitUpKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = E217531B1B91613300BE234A;
+			remoteInfo = "GitUpKit (iOS)";
+		};
 		E21DCAF01B2538C5006424E8 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = E2C338A319F8562F00063D95 /* Project object */;
@@ -53,13 +67,6 @@
 			proxyType = 2;
 			remoteGlobalIDString = E2C338C419F8562F00063D95;
 			remoteInfo = Tests;
-		};
-		E28A16E31B87022000218332 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E28A16DA1B87021600218332 /* GitUpKit.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = E267E1A71B84D6C500BAB377;
-			remoteInfo = GitUpKit;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -191,6 +198,7 @@
 			isa = PBXGroup;
 			children = (
 				E28A16E01B87021600218332 /* GitUpKit.framework */,
+				E217538B1B91641F00BE234A /* GitUpKit.framework */,
 				E28A16E21B87021600218332 /* GitUpTests.xctest */,
 			);
 			name = Products;
@@ -256,6 +264,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				E21753061B9150AE00BE234A /* PBXTargetDependency */,
 			);
 			name = Tool;
 			productName = Tool;
@@ -277,7 +286,6 @@
 			);
 			dependencies = (
 				E21DCAF11B2538C5006424E8 /* PBXTargetDependency */,
-				E28A16E41B87022000218332 /* PBXTargetDependency */,
 			);
 			name = Application;
 			productName = GitUp;
@@ -327,6 +335,13 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		E217538B1B91641F00BE234A /* GitUpKit.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = GitUpKit.framework;
+			remoteRef = E217538A1B91641F00BE234A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		E28A16E01B87021600218332 /* GitUpKit.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
@@ -400,15 +415,15 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		E21753061B9150AE00BE234A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = GitUpKit;
+			targetProxy = E21753051B9150AE00BE234A /* PBXContainerItemProxy */;
+		};
 		E21DCAF11B2538C5006424E8 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = E21DCAE71B253847006424E8 /* Tool */;
 			targetProxy = E21DCAF01B2538C5006424E8 /* PBXContainerItemProxy */;
-		};
-		E28A16E41B87022000218332 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = GitUpKit;
-			targetProxy = E28A16E31B87022000218332 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -453,7 +468,7 @@
 			buildSettings = {
 				GCC_DYNAMIC_NO_PIC = YES;
 				HEADER_SEARCH_PATHS = "../GitUpKit/Third-Party/libgit2/include";
-				OTHER_LDFLAGS = "../GitUpKit/Third-Party/libgit2/lib/libgit2.a";
+				OTHER_LDFLAGS = "$(BUILD_DIR)/$(CONFIGURATION)/libgit2.a";
 				PRODUCT_NAME = gitup;
 				SKIP_INSTALL = YES;
 			};
@@ -464,7 +479,7 @@
 			buildSettings = {
 				GCC_DYNAMIC_NO_PIC = YES;
 				HEADER_SEARCH_PATHS = "../GitUpKit/Third-Party/libgit2/include";
-				OTHER_LDFLAGS = "../GitUpKit/Third-Party/libgit2/lib/libgit2.a";
+				OTHER_LDFLAGS = "$(BUILD_DIR)/$(CONFIGURATION)/libgit2.a";
 				PRODUCT_NAME = gitup;
 				SKIP_INSTALL = YES;
 			};
@@ -475,7 +490,7 @@
 			buildSettings = {
 				GCC_DYNAMIC_NO_PIC = YES;
 				HEADER_SEARCH_PATHS = "../GitUpKit/Third-Party/libgit2/include";
-				OTHER_LDFLAGS = "../GitUpKit/Third-Party/libgit2/lib/libgit2.a";
+				OTHER_LDFLAGS = "$(BUILD_DIR)/$(CONFIGURATION)/libgit2.a";
 				PRODUCT_NAME = gitup;
 				SKIP_INSTALL = YES;
 			};
@@ -485,6 +500,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E27E37571B86F670000A551A /* Debug.xcconfig */;
 			buildSettings = {
+				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
@@ -492,6 +508,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E27E37591B86F670000A551A /* Release.xcconfig */;
 			buildSettings = {
+				SDKROOT = macosx;
 			};
 			name = Release;
 		};
@@ -518,7 +535,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				BUNDLE_VERSION = 0;
 				BUNDLE_VERSION_STRING = 1.0.1;
-				CODE_SIGN_IDENTITY = "Developer ID Application";
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)";
 				GCC_DYNAMIC_NO_PIC = YES;
 				INFOPLIST_FILE = Application/Info.plist;
@@ -533,6 +550,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E27E37581B86F670000A551A /* Distribution.xcconfig */;
 			buildSettings = {
+				SDKROOT = macosx;
 			};
 			name = Distribution;
 		};

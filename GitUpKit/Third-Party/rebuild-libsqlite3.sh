@@ -1,8 +1,9 @@
 #!/bin/sh
 set -ex
 
-VERSION="3080900"
-DESTINATION="`pwd`/libsqlite3"
+VERSION="3081101"
+
+source "rebuild-functions.sh"
 
 # Download source
 rm -f "sqlite-autoconf-$VERSION.tar.gz"
@@ -17,18 +18,13 @@ tar -xvf "sqlite-autoconf-$VERSION.tar.gz"
 /bin/mv -f "sqlite-autoconf-$VERSION/configure~" "sqlite-autoconf-$VERSION/configure"
 chmod a+x "sqlite-autoconf-$VERSION/configure"
 
-# Build
-rm -rf "$DESTINATION"
+# Build library
 pushd "sqlite-autoconf-$VERSION"
-export MACOSX_DEPLOYMENT_TARGET=10.8
-./configure --prefix="$DESTINATION" --enable-static --disable-shared CFLAGS="-DSQLITE_ENABLE_FTS3 -DSQLITE_ENABLE_FTS3_PARENTHESIS"
-make -j4
-make install
+EXTRA_CFLAGS="-DSQLITE_ENABLE_FTS3 -DSQLITE_ENABLE_FTS3_PARENTHESIS"
+build_library_macosx "libsqlite3" "`pwd`/.."
+build_library_iphonesimulator "libsqlite3" "`pwd`/.."
+build_library_iphoneos "libsqlite3" "`pwd`/.."
 popd
-rm -rf "$DESTINATION/bin"
-rm -rf "$DESTINATION/share"
-rm -rf "$DESTINATION/lib/libsqlite3.la"
-rm -rf "$DESTINATION/lib/pkgconfig"
 
 # Clean up
 rm -rf "sqlite-autoconf-$VERSION"

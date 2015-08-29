@@ -45,8 +45,13 @@ static inline BOOL _IsDirectoryWritable(const char* path) {
 // We can't guarantee XLFacility has been initialized yet as +load method can be called in arbitrary order
 + (void)load {
   assert(pthread_main_np());
+  
+  assert(git_libgit2_features() & GIT_FEATURE_THREADS);
+  assert(git_libgit2_features() & GIT_FEATURE_HTTPS);
+  assert(git_libgit2_features() & GIT_FEATURE_SSH);
   assert(git_libgit2_init() >= 1);
   assert(libssh2_init(0) == 0);  // We can't have libgit2 using libssh2_session_init() and in turn calling this function on an arbitrary thread later on
+  assert(git_openssl_set_locking() == -1);
 }
 
 - (instancetype)initWithRepository:(git_repository*)repository error:(NSError**)error {

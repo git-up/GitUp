@@ -2,7 +2,8 @@
 set -ex
 
 VERSION="1.5.0"
-DESTINATION="`pwd`/libssh2"
+
+source "rebuild-functions.sh"
 
 # Download source
 rm -f "libssh2-$VERSION.tar.gz"
@@ -12,17 +13,14 @@ curl -O "http://www.libssh2.org/download/libssh2-$VERSION.tar.gz"
 rm -rf "libssh2-$VERSION"
 tar -xvf "libssh2-$VERSION.tar.gz"
 
-# Build
-rm -rf "$DESTINATION"
+# Build library
 pushd "libssh2-$VERSION"
-export MACOSX_DEPLOYMENT_TARGET=10.8
-./configure --prefix="$DESTINATION" --disable-debug --with-openssl --with-libz --enable-static --disable-shared
-make -j4
-make install
+EXTRA_CONFIGURE_OPTIONS="--disable-debug --with-openssl --with-libz"
+build_library_macosx "libssh2" "`pwd`/.."
+EXTRA_CONFIGURE_OPTIONS="$EXTRA_CONFIGURE_OPTIONS --with-libssl-prefix=`pwd`/../libopenssl"  # Use local libssl on iOS
+build_library_iphonesimulator "libssh2" "`pwd`/.."
+build_library_iphoneos "libssh2" "`pwd`/.."
 popd
-rm -rf "$DESTINATION/share"
-rm -rf "$DESTINATION/lib/libssh2.la"
-rm -rf "$DESTINATION/lib/pkgconfig"
 
 # Clean up
 rm -rf "libssh2-$VERSION"
