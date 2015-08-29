@@ -162,10 +162,10 @@ Complete Example #2: GitY
 <img src="http://i.imgur.com/6cuPcT4.png">
 </p>
 
-Complete Example #2: iGit
+Complete Example #3: iGit
 -------------------------
 
-[iGit](Examples/iGit) is test iOS that simply uses GitUpKit to clone a GitHub repo and perform a commit.
+[iGit](Examples/iGit) is a test iOS app that simply uses GitUpKit to clone a GitHub repo and perform a commit.
 
 Contributing
 ============
