@@ -401,7 +401,7 @@ cleanup:
   
   const git_remote_head** headList;
   size_t headCount;
-  CALL_LIBGIT2_FUNCTION_RETURN(NO, git_remote_ls, &headList, &headCount, remote.private);
+  CALL_LIBGIT2_FUNCTION_RETURN(nil, git_remote_ls, &headList, &headCount, remote.private);
   NSMutableArray* array = [[NSMutableArray alloc] init];
   for (size_t i = 0; i < headCount; ++i) {
     const git_remote_head* head = headList[i];

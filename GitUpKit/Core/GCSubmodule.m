@@ -217,7 +217,7 @@ cleanup:
     [submodules addObject:[[GCSubmodule alloc] initWithRepository:self submodule:submodule]];
     return GIT_OK;
   });
-  CHECK_LIBGIT2_FUNCTION_CALL(return NO, status, == GIT_OK);
+  CHECK_LIBGIT2_FUNCTION_CALL(return nil, status, == GIT_OK);
   return submodules;
 }
 

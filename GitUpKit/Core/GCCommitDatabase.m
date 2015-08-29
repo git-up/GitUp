@@ -147,7 +147,7 @@ static void _SQLiteLog(void* unused, int error, const char* message) {
 
 static int _CaseInsensitiveUTF8Compare(void* context, int length1, const void* bytes1, int length2, const void* bytes2) {
   CFStringRef string1 = CFStringCreateWithBytesNoCopy(kCFAllocatorDefault, bytes1, length1, kCFStringEncodingUTF8, false, kCFAllocatorNull);
-  CFStringRef string2 = CFStringCreateWithBytesNoCopy(kCFAllocatorDefault, bytes2, length2, kCFStringEncodingUTF8, false, kCFAllocatorNull);;
+  CFStringRef string2 = CFStringCreateWithBytesNoCopy(kCFAllocatorDefault, bytes2, length2, kCFStringEncodingUTF8, false, kCFAllocatorNull);
   CFComparisonResult result;
   if (string1 && string2) {
     result = CFStringCompare(string1, string2, kCFCompareCaseInsensitive);
