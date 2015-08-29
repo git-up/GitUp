@@ -92,7 +92,15 @@
 			isa = PBXGroup;
 			children = (
 				E21753E21B916ACB00BE234A /* GitUpKit.xcodeproj */,
-				E21753A71B9168D300BE234A /* iGit */,
+				E21753D21B9169DD00BE234A /* AppDelegate.h */,
+				E21753D31B9169DD00BE234A /* AppDelegate.m */,
+				E21753D41B9169DD00BE234A /* ViewController.h */,
+				E21753D51B9169DD00BE234A /* ViewController.m */,
+				E21753DE1B9169F900BE234A /* Images.xcassets */,
+				E21753DA1B9169EE00BE234A /* Main.storyboard */,
+				E21753D81B9169EE00BE234A /* LaunchScreen.xib */,
+				E2B987831B916F620097629D /* Info.plist */,
+				E2B987841B916F620097629D /* main.m */,
 				E21753A61B9168D300BE234A /* Products */,
 			);
 			sourceTree = "<group>";
@@ -103,22 +111,6 @@
 				E21753A51B9168D300BE234A /* iGit.app */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		E21753A71B9168D300BE234A /* iGit */ = {
-			isa = PBXGroup;
-			children = (
-				E21753D21B9169DD00BE234A /* AppDelegate.h */,
-				E21753D31B9169DD00BE234A /* AppDelegate.m */,
-				E21753D41B9169DD00BE234A /* ViewController.h */,
-				E21753D51B9169DD00BE234A /* ViewController.m */,
-				E21753DE1B9169F900BE234A /* Images.xcassets */,
-				E21753DA1B9169EE00BE234A /* Main.storyboard */,
-				E21753D81B9169EE00BE234A /* LaunchScreen.xib */,
-				E2B987831B916F620097629D /* Info.plist */,
-				E2B987841B916F620097629D /* main.m */,
-			);
-			path = iGit;
 			sourceTree = "<group>";
 		};
 		E21753E31B916ACB00BE234A /* Products */ = {
@@ -255,6 +247,7 @@
 				E21753D91B9169EE00BE234A /* Base */,
 			);
 			name = LaunchScreen.xib;
+			path = iGit;
 			sourceTree = "<group>";
 		};
 		E21753DA1B9169EE00BE234A /* Main.storyboard */ = {
@@ -263,6 +256,7 @@
 				E21753DB1B9169EE00BE234A /* Base */,
 			);
 			name = Main.storyboard;
+			path = iGit;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
