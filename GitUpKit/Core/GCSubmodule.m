@@ -161,17 +161,9 @@ cleanup:
   
   git_submodule_update_options options = GIT_SUBMODULE_UPDATE_OPTIONS_INIT;
   [self setRemoteCallbacks:&options.fetch_opts.callbacks];
-  if ([self.delegate respondsToSelector:@selector(repository:willStartTransferWithURL:)]) {
-    dispatch_async(dispatch_get_main_queue(), ^{
-      [self.delegate repository:self willStartTransferWithURL:submodule.URL];
-    });
-  }
+  [self willStartRemoteTransferWithURL:submodule.URL];
   int status = git_submodule_update(submodule.private, true, &options);  // This actually does a clone if the submodule is not initialized
-  if ([self.delegate respondsToSelector:@selector(repository:didFinishTransferWithURL:success:)]) {
-    dispatch_async(dispatch_get_main_queue(), ^{
-      [self.delegate repository:self didFinishTransferWithURL:submodule.URL success:(status == GIT_OK)];
-    });
-  }
+  [self didFinishRemoteTransferWithURL:submodule.URL success:(status == GIT_OK)];
   CHECK_LIBGIT2_FUNCTION_CALL(return NO, status, == GIT_OK);
   
   if (recursive) {

@@ -333,6 +333,30 @@ static int _ReferenceForEachCallback(const char* refname, void* payload) {
 
 #pragma mark Remote Callbacks
 
+- (void)willStartRemoteTransferWithURL:(NSURL*)url {
+  if ([_delegate respondsToSelector:@selector(repository:willStartTransferWithURL:)]) {
+    if ([NSThread isMainThread]) {
+      [_delegate repository:self willStartTransferWithURL:url];
+    } else {
+      dispatch_async(dispatch_get_main_queue(), ^{
+        [_delegate repository:self willStartTransferWithURL:url];
+      });
+    }
+  }
+}
+
+- (void)didFinishRemoteTransferWithURL:(NSURL*)url success:(BOOL)success {
+  if ([_delegate respondsToSelector:@selector(repository:didFinishTransferWithURL:success:)]) {
+    if ([NSThread isMainThread]) {
+      [_delegate repository:self didFinishTransferWithURL:url success:success];
+    } else {
+      dispatch_async(dispatch_get_main_queue(), ^{
+        [_delegate repository:self didFinishTransferWithURL:url success:success];
+      });
+    }
+  }
+}
+
 static int _CredentialsCallback(git_cred** cred, const char* url, const char* user, unsigned int allowed_types, void* payload) {
   GCRepository* repository = (__bridge GCRepository*)payload;
   if (allowed_types & GIT_CREDTYPE_SSH_KEY) {
@@ -378,10 +402,15 @@ static int _CredentialsCallback(git_cred** cred, const char* url, const char* us
     __block NSString* passphrase = nil;
     __block BOOL success;
     if ([repository.delegate respondsToSelector:@selector(repository:requiresSSHAuthenticationForURL:user:username:publicKeyPath:privateKeyPath:passphrase:)]) {  // Must use sync dispatch
-      dispatch_sync(dispatch_get_main_queue(), ^{
+      if ([NSThread isMainThread]) {
         success = [repository.delegate repository:repository requiresSSHAuthenticationForURL:GCURLFromGitURL([NSString stringWithUTF8String:url]) user:[NSString stringWithUTF8String:user]
                                          username:&username publicKeyPath:&publicPath privateKeyPath:&privatePath passphrase:&passphrase];
-      });
+      } else {
+        dispatch_sync(dispatch_get_main_queue(), ^{
+          success = [repository.delegate repository:repository requiresSSHAuthenticationForURL:GCURLFromGitURL([NSString stringWithUTF8String:url]) user:[NSString stringWithUTF8String:user]
+                                           username:&username publicKeyPath:&publicPath privateKeyPath:&privatePath passphrase:&passphrase];
+        });
+      }
       if (success) {
         return git_cred_ssh_key_new(cred, username.UTF8String, publicPath.fileSystemRepresentation, privatePath.fileSystemRepresentation, passphrase.UTF8String);
       }
@@ -393,10 +422,15 @@ static int _CredentialsCallback(git_cred** cred, const char* url, const char* us
       __block NSString* username = nil;
       __block NSString* password = nil;
       __block BOOL success;
-      dispatch_sync(dispatch_get_main_queue(), ^{
-        success = [repository.delegate repository:repository requiresPlainTextAuthenticationForURL:GCURLFromGitURL([NSString stringWithUTF8String:url]) user:(user ? [NSString stringWithUTF8String:user] : nil)
-                                         username:&username password:&password];
-      });
+      if ([NSThread isMainThread]) {
+          success = [repository.delegate repository:repository requiresPlainTextAuthenticationForURL:GCURLFromGitURL([NSString stringWithUTF8String:url]) user:(user ? [NSString stringWithUTF8String:user] : nil)
+                                           username:&username password:&password];
+      } else {
+        dispatch_sync(dispatch_get_main_queue(), ^{
+          success = [repository.delegate repository:repository requiresPlainTextAuthenticationForURL:GCURLFromGitURL([NSString stringWithUTF8String:url]) user:(user ? [NSString stringWithUTF8String:user] : nil)
+                                           username:&username password:&password];
+        });
+      }
       if (success) {
         return git_cred_userpass_plaintext_new(cred, username.UTF8String, password.UTF8String);
       }
@@ -419,9 +453,13 @@ static int _FetchTransferProgressCallback(const git_transfer_progress* stats, vo
   if (repository->_hasFetchProgressDelegate) {
     float progress = roundf(100.0 * (float)(stats->received_objects + stats->indexed_objects) / (float)(2 * stats->total_objects));
     if (progress > repository->_lastFetchProgress) {
-      dispatch_async(dispatch_get_main_queue(), ^{
+      if ([NSThread isMainThread]) {
         [repository.delegate repository:repository updateTransferProgress:(progress / 100.0) transferredBytes:stats->received_bytes];
-      });
+      } else {
+        dispatch_async(dispatch_get_main_queue(), ^{
+          [repository.delegate repository:repository updateTransferProgress:(progress / 100.0) transferredBytes:stats->received_bytes];
+        });
+      }
       repository->_lastFetchProgress = progress;
     }
   }
@@ -451,9 +489,13 @@ static int _PushTransferProgressCallback(unsigned int current, unsigned int tota
   if (repository->_hasPushProgressDelegate) {
     float progress = roundf(100.0 * (float)current / (float)total);
     if (progress > repository->_lastPushProgress) {
-      dispatch_async(dispatch_get_main_queue(), ^{
+      if ([NSThread isMainThread]) {
         [repository.delegate repository:repository updateTransferProgress:(progress / 100.0) transferredBytes:bytes];
-      });
+      } else {
+        dispatch_async(dispatch_get_main_queue(), ^{
+          [repository.delegate repository:repository updateTransferProgress:(progress / 100.0) transferredBytes:bytes];
+        });
+      }
       repository->_lastPushProgress = progress;
     }
   }

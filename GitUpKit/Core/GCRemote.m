@@ -171,11 +171,7 @@ cleanup:
   NSUInteger updatedTips = NSNotFound;
   const char* remoteURL = git_remote_url(remote);
   NSURL* url = remoteURL ? GCURLFromGitURL([NSString stringWithUTF8String:remoteURL]) : nil;
-  if ([self.delegate respondsToSelector:@selector(repository:willStartTransferWithURL:)]) {
-    dispatch_async(dispatch_get_main_queue(), ^{
-      [self.delegate repository:self willStartTransferWithURL:url];
-    });
-  }
+  [self willStartRemoteTransferWithURL:url];
   
   git_remote_callbacks callbacks = GIT_REMOTE_CALLBACKS_INIT;
   [self setRemoteCallbacks:&callbacks];
@@ -230,11 +226,7 @@ cleanup:
   
 cleanup:
   git_remote_disconnect(remote);  // Ignore error
-  if ([self.delegate respondsToSelector:@selector(repository:didFinishTransferWithURL:success:)]) {
-    dispatch_async(dispatch_get_main_queue(), ^{
-      [self.delegate repository:self didFinishTransferWithURL:url success:(updatedTips != NSNotFound)];
-    });
-  }
+  [self didFinishRemoteTransferWithURL:url success:(updatedTips != NSNotFound)];
   return updatedTips;
 }
 
@@ -636,11 +628,7 @@ cleanup:
 }
 
 - (BOOL)cloneUsingRemote:(GCRemote*)remote recursive:(BOOL)recursive error:(NSError**)error {
-  if ([self.delegate respondsToSelector:@selector(repository:willStartTransferWithURL:)]) {
-    dispatch_async(dispatch_get_main_queue(), ^{
-      [self.delegate repository:self willStartTransferWithURL:remote.URL];
-    });
-  }
+  [self willStartRemoteTransferWithURL:remote.URL];
   
   git_fetch_options fetchOptions = GIT_FETCH_OPTIONS_INIT;
   [self setRemoteCallbacks:&fetchOptions.callbacks];
@@ -648,11 +636,7 @@ cleanup:
   checkoutOptions.checkout_strategy = GIT_CHECKOUT_SAFE;
   int status = git_clone_into(self.private, remote.private, &fetchOptions, &checkoutOptions, NULL);  // This will fail if the repository is not empty
   
-  if ([self.delegate respondsToSelector:@selector(repository:didFinishTransferWithURL:success:)]) {
-    dispatch_async(dispatch_get_main_queue(), ^{
-      [self.delegate repository:self didFinishTransferWithURL:remote.URL success:(status == GIT_OK)];
-    });
-  }
+  [self didFinishRemoteTransferWithURL:remote.URL success:(status == GIT_OK)];
   CHECK_LIBGIT2_FUNCTION_CALL(return NO, status, == GIT_OK);
   
   return recursive ? [self initializeAllSubmodules:YES error:error] : YES;

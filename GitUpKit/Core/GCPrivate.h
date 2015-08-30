@@ -254,6 +254,8 @@ extern int git_submodule_foreach_block(git_repository* repo, int (^block)(git_su
 - (BOOL)checkRepositoryDirty:(BOOL)includeUntracked;
 - (instancetype)initWithClonedRepositoryFromURL:(NSURL*)url toPath:(NSString*)path usingDelegate:(id<GCRepositoryDelegate>)delegate recursive:(BOOL)recursive error:(NSError**)error;
 #endif
+- (void)willStartRemoteTransferWithURL:(NSURL*)url;
+- (void)didFinishRemoteTransferWithURL:(NSURL*)url success:(BOOL)success;
 - (void)setRemoteCallbacks:(git_remote_callbacks*)callbacks;
 - (NSData*)exportBlobWithOID:(const git_oid*)oid error:(NSError**)error;
 - (BOOL)exportBlobWithOID:(const git_oid*)oid toPath:(NSString*)path error:(NSError**)error;
