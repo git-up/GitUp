@@ -44,7 +44,7 @@ static inline BOOL _IsDirectoryWritable(const char* path) {
 
 // We can't guarantee XLFacility has been initialized yet as +load method can be called in arbitrary order
 + (void)load {
-  assert(pthread_main_np());
+  assert(pthread_main_np() > 0);
   
   assert(git_libgit2_features() & GIT_FEATURE_THREADS);
   assert(git_libgit2_features() & GIT_FEATURE_HTTPS);
