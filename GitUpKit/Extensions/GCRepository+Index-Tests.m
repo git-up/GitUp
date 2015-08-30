@@ -28,6 +28,13 @@
   XCTAssertTrue([self.repository addFileToIndex:@"hello_world.txt" error:NULL]);
   [self assertGitCLTOutputEqualsString:@"M  hello_world.txt\n" withRepository:self.repository command:@"status", @"--ignored", @"--porcelain", nil];
   
+  // Read back file from index
+  GCIndex* index = [self.repository readRepositoryIndex:NULL];
+  XCTAssertNotNil(index);
+  XCTAssertNil([self.repository readContentsForFile:@"hello-world.txt" inIndex:index error:NULL]);
+  NSData* data = [self.repository readContentsForFile:@"hello_world.txt" inIndex:index error:NULL];
+  XCTAssertEqualObjects(data, [@"Bonjour le monde!\n" dataUsingEncoding:NSUTF8StringEncoding]);
+  
   // Remove file from index
   XCTAssertTrue([self.repository removeFileFromIndex:@"hello_world.txt" error:NULL]);
   [self assertGitCLTOutputEqualsString:@"D  hello_world.txt\n?? hello_world.txt\n" withRepository:self.repository command:@"status", @"--ignored", @"--porcelain", nil];

@@ -131,6 +131,15 @@ cleanup:
   return YES;
 }
 
+- (NSData*)readContentsForFile:(NSString*)path inIndex:(GCIndex*)index error:(NSError**)error {
+  const git_index_entry* entry = git_index_get_bypath(index.private, GCGitPathFromFileSystemPath(path), 0);
+  if ((entry == NULL) || ((entry->mode != GIT_FILEMODE_BLOB) && (entry->mode != GIT_FILEMODE_BLOB_EXECUTABLE))) {
+    GC_SET_GENERIC_ERROR(@"File not found");
+    return nil;
+  }
+  return [self exportBlobWithOID:&entry->id error:error];
+}
+
 // Like git_index_add_frombuffer() but works with memory indexes and doesn't clear any conflict at path
 - (BOOL)_addEntry:(const git_index_entry*)entry toIndex:(git_index*)index withData:(NSData*)data error:(NSError**)error {
   git_oid oid;
