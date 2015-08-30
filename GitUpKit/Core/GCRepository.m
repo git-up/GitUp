@@ -32,9 +32,11 @@ static inline BOOL _IsDirectoryWritable(const char* path) {
 }
 
 @implementation GCRepository {
+#if !TARGET_OS_IPHONE
   BOOL _didTrySSHAgent;
   NSMutableArray* _privateKeyList;
   NSUInteger _privateKeyIndex;
+#endif
   
   BOOL _hasFetchProgressDelegate;
   float _lastFetchProgress;
@@ -334,11 +336,14 @@ static int _ReferenceForEachCallback(const char* refname, void* payload) {
 static int _CredentialsCallback(git_cred** cred, const char* url, const char* user, unsigned int allowed_types, void* payload) {
   GCRepository* repository = (__bridge GCRepository*)payload;
   if (allowed_types & GIT_CREDTYPE_SSH_KEY) {
+#if !TARGET_OS_IPHONE
     if (!repository->_didTrySSHAgent) {
       repository->_didTrySSHAgent = YES;
       return git_cred_ssh_key_from_agent(cred, user);
     }
+#endif
     
+#if !TARGET_OS_IPHONE
     if (repository->_privateKeyList == nil) {
       XLOG_WARNING(@"SSH Agent did not find any key for \"%s\"", url);
       NSMutableArray* array = [[NSMutableArray alloc] init];
@@ -365,6 +370,7 @@ static int _CredentialsCallback(git_cred** cred, const char* url, const char* us
       XLOG_VERBOSE(@"Trying SSH key \"%s\" for \"%s\"", path, url);
       return git_cred_ssh_key_new(cred, user, NULL, path, NULL);  // TODO: Handle passphrases
     }
+#endif
     
     __block NSString* username = nil;
     __block NSString* publicPath = nil;
@@ -519,9 +525,11 @@ static int _PushNegotiationCallback(git_remote* remote, const git_push_update** 
   callbacks->push_negotiation = _PushNegotiationCallback;
   callbacks->payload = (__bridge void*)self;
   
+#if !TARGET_OS_IPHONE
   _didTrySSHAgent = NO;
   _privateKeyList = nil;
   _privateKeyIndex = 0;
+#endif
   
   _hasFetchProgressDelegate = [_delegate respondsToSelector:@selector(repository:updateTransferProgress:transferredBytes:)];
   _lastFetchProgress = -1.0;
