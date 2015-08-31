@@ -87,7 +87,7 @@
   XLOG_DEBUG_CHECK(_commit);
   [super viewWillShow];
   
-  _titleTextField.stringValue = [NSString stringWithFormat:@"\"%@\" <%@>", _commit.summary, _commit.shortSHA1];
+  _titleTextField.stringValue = [NSString localizedStringWithFormat:@"“%@” <%@>", _commit.summary, _commit.shortSHA1];
   
   self.messageTextView.string = _commit.message;
   self.otherMessageTextView.string = _commit.message;

@@ -122,7 +122,7 @@ static NSString* _diffTemporaryDirectoryPath = nil;
 
 - (void)discardSubmoduleAtPath:(NSString*)path resetIndex:(BOOL)resetIndex {
   [self confirmUserActionWithAlertType:kGIAlertType_Stop
-                                 title:[NSString stringWithFormat:NSLocalizedString(@"Are you sure you want to discard changes in the submodule \"%@\"?", nil), path.lastPathComponent]
+                                 title:[NSString stringWithFormat:NSLocalizedString(@"Are you sure you want to discard changes in the submodule “%@”?", nil), path.lastPathComponent]
                                message:NSLocalizedString(@"This action cannot be undone.", nil)
                                 button:NSLocalizedString(@"Discard", nil)
              suppressionUserDefaultKey:nil
@@ -213,7 +213,7 @@ static NSString* _diffTemporaryDirectoryPath = nil;
 
 - (void)discardAllChangesForFile:(NSString*)path resetIndex:(BOOL)resetIndex {
   [self confirmUserActionWithAlertType:kGIAlertType_Stop
-                                 title:[NSString stringWithFormat:NSLocalizedString(@"Are you sure you want to discard all changes from the file \"%@\"?", nil), path.lastPathComponent]
+                                 title:[NSString stringWithFormat:NSLocalizedString(@"Are you sure you want to discard all changes from the file “%@”?", nil), path.lastPathComponent]
                                message:NSLocalizedString(@"This action cannot be undone.", nil)
                                 button:NSLocalizedString(@"Discard", nil)
              suppressionUserDefaultKey:nil
@@ -247,7 +247,7 @@ static NSString* _diffTemporaryDirectoryPath = nil;
 
 - (void)discardSelectedChangesForFile:(NSString*)path oldLines:(NSIndexSet*)oldLines newLines:(NSIndexSet*)newLines resetIndex:(BOOL)resetIndex {
   [self confirmUserActionWithAlertType:kGIAlertType_Stop
-                                 title:[NSString stringWithFormat:NSLocalizedString(@"Are you sure you want to discard selected changed lines from the file \"%@\"?", nil), path.lastPathComponent]
+                                 title:[NSString stringWithFormat:NSLocalizedString(@"Are you sure you want to discard selected changed lines from the file “%@”?", nil), path.lastPathComponent]
                                message:NSLocalizedString(@"This action cannot be undone.", nil)
                                 button:NSLocalizedString(@"Discard", nil)
              suppressionUserDefaultKey:nil
@@ -264,7 +264,7 @@ static NSString* _diffTemporaryDirectoryPath = nil;
 
 - (void)deleteUntrackedFile:(NSString*)path {
   [self confirmUserActionWithAlertType:kGIAlertType_Stop
-                                 title:[NSString stringWithFormat:NSLocalizedString(@"Are you sure you want to delete the file \"%@\"?", nil), path.lastPathComponent]
+                                 title:[NSString stringWithFormat:NSLocalizedString(@"Are you sure you want to delete the file “%@”?", nil), path.lastPathComponent]
                                message:NSLocalizedString(@"This action cannot be undone.", nil)
                                 button:NSLocalizedString(@"Delete", nil)
              suppressionUserDefaultKey:nil
@@ -282,7 +282,7 @@ static NSString* _diffTemporaryDirectoryPath = nil;
 
 - (void)restoreFile:(NSString*)path toCommit:(GCCommit*)commit {
   [self confirmUserActionWithAlertType:kGIAlertType_Stop
-                                 title:[NSString stringWithFormat:NSLocalizedString(@"Are you sure you want to restore the file \"%@\" to the version from this commit?", nil), path.lastPathComponent]
+                                 title:[NSString stringWithFormat:NSLocalizedString(@"Are you sure you want to restore the file “%@” to the version from this commit?", nil), path.lastPathComponent]
                                message:NSLocalizedString(@"Any local changes will be overwritten. This action cannot be undone.", nil)
                                 button:NSLocalizedString(@"Restore", nil)
              suppressionUserDefaultKey:nil
@@ -317,7 +317,7 @@ static NSString* _diffTemporaryDirectoryPath = nil;
         
       }];
     } else if ([error.domain isEqualToString:GCErrorDomain] && (error.code == kGCErrorCode_NotFound)) {
-      [self.windowController showOverlayWithStyle:kGIOverlayStyle_Warning format:NSLocalizedString(@"Submodule \"%@\" is not initialized", nil), submodule.name];
+      [self.windowController showOverlayWithStyle:kGIOverlayStyle_Warning format:NSLocalizedString(@"Submodule “%@” is not initialized", nil), submodule.name];
     } else {
       [self presentError:error];
     }

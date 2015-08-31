@@ -61,8 +61,8 @@
   XLOG_DEBUG_CHECK(self.repository.statusMode == kGCLiveRepositoryStatusMode_Disabled);
   self.repository.statusMode = kGCLiveRepositoryStatusMode_Unified;
   
-  _oursTextField.stringValue = [NSString stringWithFormat:@"\"%@\" <%@>", _ourCommit.summary, _ourCommit.shortSHA1];
-  _theirsTextField.stringValue = [NSString stringWithFormat:@"\"%@\" <%@>", _theirCommit.summary, _theirCommit.shortSHA1];
+  _oursTextField.stringValue = [NSString localizedStringWithFormat:@"“%@” <%@>", _ourCommit.summary, _ourCommit.shortSHA1];
+  _theirsTextField.stringValue = [NSString localizedStringWithFormat:@"“%@” <%@>", _theirCommit.summary, _theirCommit.shortSHA1];
   
   [self _reloadContents];
 }

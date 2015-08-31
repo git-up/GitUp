@@ -230,7 +230,7 @@ CA
                 <button id="gS5-gJ-uvH">
                     <rect key="frame" x="91" y="62" width="193" height="18"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <buttonCell key="cell" type="check" title="Don't reset the index" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="Thq-wo-bXn">
+                    <buttonCell key="cell" type="check" title="Don’t reset the index" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="Thq-wo-bXn">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
