@@ -19,145 +19,18 @@
 
 #import "GCPrivate.h"
 
-@implementation GCIndexConflict {
-  git_oid _ancestorOID;
-  git_oid _ourOID;
-  git_oid _theirOID;
-}
-
-- (id)initWithAncestor:(const git_index_entry*)ancestor our:(const git_index_entry*)our their:(const git_index_entry*)their {
-  if ((self = [super init])) {
-    if (our && their) {
-      XLOG_DEBUG_CHECK(!strcmp(our->path, their->path));
-      _status = ancestor ? kGCIndexConflictStatus_BothModified : kGCIndexConflictStatus_BothAdded;
-      
-      git_oid_cpy(&_ourOID, &our->id);
-      XLOG_DEBUG_CHECK((our->mode == GIT_FILEMODE_BLOB) || (our->mode == GIT_FILEMODE_BLOB_EXECUTABLE) || (our->mode == GIT_FILEMODE_LINK));
-      _ourFileMode = GCFileModeFromMode(our->mode);
-      
-      git_oid_cpy(&_theirOID, &their->id);
-      XLOG_DEBUG_CHECK((their->mode == GIT_FILEMODE_BLOB) || (their->mode == GIT_FILEMODE_BLOB_EXECUTABLE) || (their->mode == GIT_FILEMODE_LINK));
-      _theirFileMode = GCFileModeFromMode(their->mode);
-    } else if (our) {
-      XLOG_DEBUG_CHECK(!strcmp(our->path, ancestor->path));
-      _status = kGCIndexConflictStatus_DeletedByThem;
-      
-      git_oid_cpy(&_ourOID, &our->id);
-      XLOG_DEBUG_CHECK((our->mode == GIT_FILEMODE_BLOB) || (our->mode == GIT_FILEMODE_BLOB_EXECUTABLE) || (our->mode == GIT_FILEMODE_LINK));
-      _ourFileMode = GCFileModeFromMode(our->mode);
-    } else if (their) {
-      XLOG_DEBUG_CHECK(!strcmp(their->path, ancestor->path));
-      _status = kGCIndexConflictStatus_DeletedByUs;
-      
-      git_oid_cpy(&_theirOID, &their->id);
-      XLOG_DEBUG_CHECK((their->mode == GIT_FILEMODE_BLOB) || (their->mode == GIT_FILEMODE_BLOB_EXECUTABLE) || (their->mode == GIT_FILEMODE_LINK));
-      _theirFileMode = GCFileModeFromMode(their->mode);
-    } else {
-      XLOG_DEBUG_UNREACHABLE();
-    }
-    if (ancestor) {
-      git_oid_cpy(&_ancestorOID, &ancestor->id);
-      XLOG_DEBUG_CHECK((ancestor->mode == GIT_FILEMODE_BLOB) || (ancestor->mode == GIT_FILEMODE_BLOB_EXECUTABLE) || (ancestor->mode == GIT_FILEMODE_LINK));
-      _ancestorFileMode = GCFileModeFromMode(ancestor->mode);
-    }
-    if (our) {
-      _path = GCFileSystemPathFromGitPath(our->path);
-    } else if (their) {
-      _path = GCFileSystemPathFromGitPath(their->path);
-    } else if (ancestor) {
-      _path = GCFileSystemPathFromGitPath(ancestor->path);
-    } else {
-      XLOG_DEBUG_UNREACHABLE();
-      return nil;
-    }
-  }
-  return self;
-}
-
-- (const git_oid*)ancestorOID {
-  return &_ancestorOID;
-}
-
-- (NSString*)ancestorBlobSHA1 {
-  return GCGitOIDToSHA1(&_ancestorOID);
-}
-
-- (const git_oid*)ourOID {
-  return &_ourOID;
-}
-
-- (NSString*)ourBlobSHA1 {
-  return GCGitOIDToSHA1(&_ourOID);
-}
-
-- (const git_oid*)theirOID {
-  return &_theirOID;
-}
-
-- (NSString*)theirBlobSHA1 {
-  return GCGitOIDToSHA1(&_theirOID);
-}
-
-static inline BOOL _EqualConflicts(GCIndexConflict* conflict1, GCIndexConflict* conflict2) {
-  if (conflict1->_status != conflict2->_status) {
-    return NO;
-  }
-  return [conflict1->_path isEqualToString:conflict2->_path];
-}
-
-- (BOOL)isEqualToIndexConflict:(GCIndexConflict*)conflict {
-  return (self == conflict) || _EqualConflicts(self, conflict);
-}
-
-- (BOOL)isEqual:(id)object {
-  if (![object isKindOfClass:[GCIndexConflict class]]) {
-    return NO;
-  }
-  return [self isEqualToIndexConflict:object];
-}
-
-- (NSString*)description {
-  const char* statuses[] = {"None", "Both Modified", "Both Added", "Deleted By Us", "Deleted By Them"};
-  return [NSString stringWithFormat:@"%@ %s \"%@\"\n  Ancestor: %@\n  Ours: %@\n  Theirs: %@", self.class, statuses[_status], _path, self.ancestorBlobSHA1, self.ourBlobSHA1, self.theirBlobSHA1];
-}
-
-@end
-
 @implementation GCRepository (Status)
 
 - (NSDictionary*)checkConflicts:(NSError**)error {
-  BOOL success = NO;
+  GCIndex* index = [self readRepositoryIndex:error];
+  if (index == nil) {
+    return nil;
+  }
   NSMutableDictionary* result = [[NSMutableDictionary alloc] init];
-  git_index_conflict_iterator* iterator = NULL;
-  
-  git_index* index = [self reloadRepositoryIndex:error];
-  if (index == NULL) {
-    goto cleanup;
-  }
-  CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_index_conflict_iterator_new, &iterator, index);
-  while (1) {
-    const git_index_entry* ancestor;
-    const git_index_entry* our;
-    const git_index_entry* their;
-    int output = git_index_conflict_next(&ancestor, &our, &their, iterator);
-    if (output == GIT_ITEROVER) {
-      break;
-    }
-    CHECK_LIBGIT2_FUNCTION_CALL(goto cleanup, output, == GIT_OK);
-    GCIndexConflict* conflict = [[GCIndexConflict alloc] initWithAncestor:ancestor our:our their:their];
-    if (conflict) {
-      [result setObject:conflict forKey:conflict.path];
-    } else {
-      XLOG_WARNING(@"Invalid status conflict generated in repository \"%@\"", self.repositoryPath);
-      XLOG_DEBUG_UNREACHABLE();
-    }
-  }
-  success = YES;
-  
-cleanup:
-  git_index_conflict_iterator_free(iterator);
-  git_index_free(index);
-  return success ? result : nil;
+  [index enumerateConflictsUsingBlock:^(GCIndexConflict* conflict, BOOL* stop) {
+    [result setObject:conflict forKey:conflict.path];
+  }];
+  return result;
 }
 
 // Because we don't set GIT_DIFF_ENABLE_FAST_UNTRACKED_DIRS, the callback can still be called when poking inside an untracked dir that may actually only contain ignored files

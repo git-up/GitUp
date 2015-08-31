@@ -15,14 +15,37 @@
 
 #import "GCDiff.h"
 
+// The cases "Both Deleted", "Added by Us" and "Added by Them" are not possible in practice as they are automatically resolved by the trivial merge machinery
+// http://permalink.gmane.org/gmane.comp.version-control.git/245661
+typedef NS_ENUM(NSUInteger, GCIndexConflictStatus) {
+  kGCIndexConflictStatus_None = 0,
+  kGCIndexConflictStatus_BothModified,
+  kGCIndexConflictStatus_BothAdded,
+  kGCIndexConflictStatus_DeletedByUs,
+  kGCIndexConflictStatus_DeletedByThem
+};
+
 typedef BOOL (^GCIndexLineFilter)(GCLineDiffChange change, NSUInteger oldLineNumber, NSUInteger newLineNumber);
+
+@interface GCIndexConflict : NSObject
+@property(nonatomic, readonly) NSString* path;
+@property(nonatomic, readonly) GCIndexConflictStatus status;
+@property(nonatomic, readonly) NSString* ancestorBlobSHA1;  // May be nil
+@property(nonatomic, readonly) GCFileMode ancestorFileMode;
+@property(nonatomic, readonly) NSString* ourBlobSHA1;  // May be nil
+@property(nonatomic, readonly) GCFileMode ourFileMode;
+@property(nonatomic, readonly) NSString* theirBlobSHA1;  // May be nil
+@property(nonatomic, readonly) GCFileMode theirFileMode;
+@end
 
 @interface GCIndex : NSObject
 @property(nonatomic, readonly) GCRepository* repository;  // NOT RETAINED - nil if in-memory index
 @property(nonatomic, readonly, getter=isInMemory) BOOL inMemory;
 @property(nonatomic, readonly, getter=isEmpty) BOOL empty;
+@property(nonatomic, readonly) BOOL hasConflicts;
 - (NSString*)SHA1ForFile:(NSString*)path mode:(GCFileMode*)mode;  // Returns nil if file is not in index
 - (void)enumerateFilesUsingBlock:(void (^)(NSString* path, GCFileMode mode, NSString* sha1, BOOL* stop))block;
+- (void)enumerateConflictsUsingBlock:(void (^)(GCIndexConflict* conflict, BOOL* stop))block;
 @end
 
 @interface GCRepository (GCIndex)

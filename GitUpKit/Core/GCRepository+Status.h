@@ -15,18 +15,6 @@
 
 #import "GCRepository.h"
 
-@class GCDiff;
-
-// The cases "Both Deleted", "Added by Us" and "Added by Them" are not possible in practice as they are automatically resolved by the trivial merge machinery
-// http://permalink.gmane.org/gmane.comp.version-control.git/245661
-typedef NS_ENUM(NSUInteger, GCIndexConflictStatus) {
-  kGCIndexConflictStatus_None = 0,
-  kGCIndexConflictStatus_BothModified,
-  kGCIndexConflictStatus_BothAdded,
-  kGCIndexConflictStatus_DeletedByUs,
-  kGCIndexConflictStatus_DeletedByThem
-};
-
 typedef NS_OPTIONS(NSUInteger, GCCleanCheckOptions) {
   kGCCleanCheckOption_IgnoreState = (1 << 0),
   kGCCleanCheckOption_IgnoreIndexConflicts = (1 << 1),
@@ -35,19 +23,8 @@ typedef NS_OPTIONS(NSUInteger, GCCleanCheckOptions) {
   kGCCleanCheckOption_IgnoreUntrackedFiles = (1 << 4)
 };
 
-@interface GCIndexConflict : NSObject
-@property(nonatomic, readonly) NSString* path;
-@property(nonatomic, readonly) GCIndexConflictStatus status;
-@property(nonatomic, readonly) NSString* ancestorBlobSHA1;  // May be nil
-@property(nonatomic, readonly) GCFileMode ancestorFileMode;
-@property(nonatomic, readonly) NSString* ourBlobSHA1;  // May be nil
-@property(nonatomic, readonly) GCFileMode ourFileMode;
-@property(nonatomic, readonly) NSString* theirBlobSHA1;  // May be nil
-@property(nonatomic, readonly) GCFileMode theirFileMode;
-@end
-
 @interface GCRepository (Status)
-- (NSDictionary*)checkConflicts:(NSError**)error;
+- (NSDictionary*)checkConflicts:(NSError**)error;  // Keys are paths and values are GCIndexConflicts
 
 - (BOOL)checkClean:(GCCleanCheckOptions)options error:(NSError**)error;  // git status
 @end

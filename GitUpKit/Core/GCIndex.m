@@ -26,6 +26,110 @@
 // libgit2 SPI
 extern void git_index_entry__init_from_stat(git_index_entry *entry, struct stat *st, bool trust_mode);
 
+@implementation GCIndexConflict {
+  git_oid _ancestorOID;
+  git_oid _ourOID;
+  git_oid _theirOID;
+}
+
+- (id)initWithAncestor:(const git_index_entry*)ancestor our:(const git_index_entry*)our their:(const git_index_entry*)their {
+  if ((self = [super init])) {
+    if (our && their) {
+      XLOG_DEBUG_CHECK(!strcmp(our->path, their->path));
+      _status = ancestor ? kGCIndexConflictStatus_BothModified : kGCIndexConflictStatus_BothAdded;
+      
+      git_oid_cpy(&_ourOID, &our->id);
+      XLOG_DEBUG_CHECK((our->mode == GIT_FILEMODE_BLOB) || (our->mode == GIT_FILEMODE_BLOB_EXECUTABLE) || (our->mode == GIT_FILEMODE_LINK));
+      _ourFileMode = GCFileModeFromMode(our->mode);
+      
+      git_oid_cpy(&_theirOID, &their->id);
+      XLOG_DEBUG_CHECK((their->mode == GIT_FILEMODE_BLOB) || (their->mode == GIT_FILEMODE_BLOB_EXECUTABLE) || (their->mode == GIT_FILEMODE_LINK));
+      _theirFileMode = GCFileModeFromMode(their->mode);
+    } else if (our) {
+      XLOG_DEBUG_CHECK(!strcmp(our->path, ancestor->path));
+      _status = kGCIndexConflictStatus_DeletedByThem;
+      
+      git_oid_cpy(&_ourOID, &our->id);
+      XLOG_DEBUG_CHECK((our->mode == GIT_FILEMODE_BLOB) || (our->mode == GIT_FILEMODE_BLOB_EXECUTABLE) || (our->mode == GIT_FILEMODE_LINK));
+      _ourFileMode = GCFileModeFromMode(our->mode);
+    } else if (their) {
+      XLOG_DEBUG_CHECK(!strcmp(their->path, ancestor->path));
+      _status = kGCIndexConflictStatus_DeletedByUs;
+      
+      git_oid_cpy(&_theirOID, &their->id);
+      XLOG_DEBUG_CHECK((their->mode == GIT_FILEMODE_BLOB) || (their->mode == GIT_FILEMODE_BLOB_EXECUTABLE) || (their->mode == GIT_FILEMODE_LINK));
+      _theirFileMode = GCFileModeFromMode(their->mode);
+    } else {
+      XLOG_DEBUG_UNREACHABLE();
+    }
+    if (ancestor) {
+      git_oid_cpy(&_ancestorOID, &ancestor->id);
+      XLOG_DEBUG_CHECK((ancestor->mode == GIT_FILEMODE_BLOB) || (ancestor->mode == GIT_FILEMODE_BLOB_EXECUTABLE) || (ancestor->mode == GIT_FILEMODE_LINK));
+      _ancestorFileMode = GCFileModeFromMode(ancestor->mode);
+    }
+    if (our) {
+      _path = GCFileSystemPathFromGitPath(our->path);
+    } else if (their) {
+      _path = GCFileSystemPathFromGitPath(their->path);
+    } else if (ancestor) {
+      _path = GCFileSystemPathFromGitPath(ancestor->path);
+    } else {
+      XLOG_DEBUG_UNREACHABLE();
+      return nil;
+    }
+  }
+  return self;
+}
+
+- (const git_oid*)ancestorOID {
+  return &_ancestorOID;
+}
+
+- (NSString*)ancestorBlobSHA1 {
+  return GCGitOIDToSHA1(&_ancestorOID);
+}
+
+- (const git_oid*)ourOID {
+  return &_ourOID;
+}
+
+- (NSString*)ourBlobSHA1 {
+  return GCGitOIDToSHA1(&_ourOID);
+}
+
+- (const git_oid*)theirOID {
+  return &_theirOID;
+}
+
+- (NSString*)theirBlobSHA1 {
+  return GCGitOIDToSHA1(&_theirOID);
+}
+
+static inline BOOL _EqualConflicts(GCIndexConflict* conflict1, GCIndexConflict* conflict2) {
+  if (conflict1->_status != conflict2->_status) {
+    return NO;
+  }
+  return [conflict1->_path isEqualToString:conflict2->_path];
+}
+
+- (BOOL)isEqualToIndexConflict:(GCIndexConflict*)conflict {
+  return (self == conflict) || _EqualConflicts(self, conflict);
+}
+
+- (BOOL)isEqual:(id)object {
+  if (![object isKindOfClass:[GCIndexConflict class]]) {
+    return NO;
+  }
+  return [self isEqualToIndexConflict:object];
+}
+
+- (NSString*)description {
+  const char* statuses[] = {"None", "Both Modified", "Both Added", "Deleted By Us", "Deleted By Them"};
+  return [NSString stringWithFormat:@"%@ %s \"%@\"\n  Ancestor: %@\n  Ours: %@\n  Theirs: %@", self.class, statuses[_status], _path, self.ancestorBlobSHA1, self.ourBlobSHA1, self.theirBlobSHA1];
+}
+
+@end
+
 @implementation GCIndex
 
 - (instancetype)initWithRepository:(GCRepository*)repository index:(git_index*)index {
@@ -76,6 +180,40 @@ extern void git_index_entry__init_from_stat(git_index_entry *entry, struct stat 
       }
     }
   }
+}
+
+- (BOOL)hasConflicts {
+  return git_index_has_conflicts(_private) ? YES : NO;
+}
+
+- (void)enumerateConflictsUsingBlock:(void (^)(GCIndexConflict* conflict, BOOL* stop))block {
+  git_index_conflict_iterator* iterator;
+  int status = git_index_conflict_iterator_new(&iterator, _private);  // This cannot fail in practice
+  if (status < 0) {
+    XLOG_DEBUG_UNREACHABLE();
+    return;
+  }
+  while (1) {
+    const git_index_entry* ancestor;
+    const git_index_entry* our;
+    const git_index_entry* their;
+    status = git_index_conflict_next(&ancestor, &our, &their, iterator);  // This cannot fail in practice
+    if (status < 0) {
+      XLOG_DEBUG_CHECK(status == GIT_ITEROVER);
+      break;
+    }
+    GCIndexConflict* conflict = [[GCIndexConflict alloc] initWithAncestor:ancestor our:our their:their];
+    if (conflict) {
+      BOOL stop = NO;
+      block(conflict, &stop);
+      if (stop) {
+        break;
+      }
+    } else {
+      XLOG_DEBUG_UNREACHABLE();
+    }
+  }
+  git_index_conflict_iterator_free(iterator);
 }
 
 - (NSString*)description {
