@@ -278,14 +278,14 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
   if (_unifiedToolbar) {
     _mainWindow.titleVisibility = NSWindowTitleHidden;
   }
-  _containerView.wantsLayer = YES;
+  _mapContainerView.wantsLayer = YES;
   
   _mapViewController = [[GIMapViewController alloc] initWithRepository:_repository];
   _mapViewController.delegate = self;
   [_mapControllerView replaceWithView:_mapViewController.view];
-  _mapView.frame = _containerView.bounds;
-  [_containerView addSubview:_mapView];
-  XLOG_DEBUG_CHECK(_containerView.subviews.firstObject == _mapView);
+  _mapView.frame = _mapContainerView.bounds;
+  [_mapContainerView addSubview:_mapView];
+  XLOG_DEBUG_CHECK(_mapContainerView.subviews.firstObject == _mapView);
   [self _updateStatusBar];
   
   _tagsViewController = [[GICommitListViewController alloc] initWithRepository:_repository];
@@ -1661,13 +1661,13 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 }
 
 - (void)_addSideView:(NSView*)view withIdentifier:(NSString*)identifier completion:(dispatch_block_t)completion {
-  NSRect contentFrame = _containerView.bounds;
+  NSRect contentFrame = _mapContainerView.bounds;
   NSRect mapFrame = _mapView.frame;
   NSRect viewFrame = view.frame;
   NSRect newMapFrame = NSMakeRect(0, mapFrame.origin.y, contentFrame.size.width - viewFrame.size.width, mapFrame.size.height);
   NSRect newViewFrame = NSMakeRect(contentFrame.size.width - viewFrame.size.width, mapFrame.origin.y, viewFrame.size.width, mapFrame.size.height);
   view.frame = NSOffsetRect(newViewFrame, viewFrame.size.width, 0);
-  [_containerView addSubview:view positioned:NSWindowAbove relativeTo:_mapView];
+  [_mapContainerView addSubview:view positioned:NSWindowAbove relativeTo:_mapView];
   
   [NSAnimationContext beginGrouping];
   [[NSAnimationContext currentContext] setDuration:kSideViewAnimationDuration];
@@ -1685,7 +1685,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 }
 
 - (void)_removeSideView:(NSView*)view completion:(dispatch_block_t)completion {
-  NSRect contentFrame = _containerView.bounds;
+  NSRect contentFrame = _mapContainerView.bounds;
   NSRect mapFrame = _mapView.frame;
   NSRect newMapFrame = NSMakeRect(0, mapFrame.origin.y, contentFrame.size.width, mapFrame.size.height);
   NSRect viewFrame = view.frame;
