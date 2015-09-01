@@ -17,7 +17,7 @@
 
 #import "GCRepository.h"
 
-@class GIMapViewController, GIGraphView, GIGraph, GINode, GCHistory, GCHistoryCommit, GCCommit;
+@class GIMapViewController, GIGraph, GINode, GCHistory, GCHistoryCommit, GCCommit;
 
 @protocol GIMapViewControllerDelegate <GIMergeConflictResolver>
 - (void)mapViewControllerDidReloadGraph:(GIMapViewController*)controller;
