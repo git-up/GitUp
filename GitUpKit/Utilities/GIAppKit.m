@@ -347,6 +347,7 @@ static NSColor* _separatorColor = nil;
   return (splitView.vertical ? splitView.bounds.size.width : splitView.bounds.size.height) - _minSize2;
 }
 
+// See http://stackoverflow.com/a/30494691/463432
 - (void)splitView:(NSSplitView*)splitView resizeSubviewsWithOldSize:(NSSize)oldSize {
   [splitView adjustSubviews];
   NSView* view = splitView.subviews.firstObject;
