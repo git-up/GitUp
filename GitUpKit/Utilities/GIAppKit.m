@@ -84,6 +84,14 @@ static NSColor* _separatorColor = nil;
   [self.superview replaceSubview:self with:view];
 }
 
+- (NSImage*)takeSnapshot {
+  NSBitmapImageRep* rep = [self bitmapImageRepForCachingDisplayInRect:self.bounds];
+  [self cacheDisplayInRect:self.bounds toBitmapImageRep:rep];
+  NSImage* image = [[NSImage alloc] initWithSize:rep.size];
+  [image addRepresentation:rep];
+  return image;
+}
+
 @end
 
 @implementation NSMenu (GIAppKit)

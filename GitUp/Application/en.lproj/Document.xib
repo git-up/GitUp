@@ -9,6 +9,7 @@
             <connections>
                 <outlet property="ancestorsControllerView" destination="4Od-pU-cwC" id="rKi-Xf-O9z"/>
                 <outlet property="ancestorsView" destination="Yj4-Sl-8P8" id="uNx-x0-4Kg"/>
+                <outlet property="contentView" destination="gIp-Ho-8D9" id="BwU-UD-4Je"/>
                 <outlet property="exitButton" destination="FEG-0e-0JW" id="VpC-s7-grz"/>
                 <outlet property="helpContinueButton" destination="W0y-nq-maS" id="tO3-ij-oea"/>
                 <outlet property="helpDismissButton" destination="etB-ce-0PB" id="iMt-Ga-rPE"/>

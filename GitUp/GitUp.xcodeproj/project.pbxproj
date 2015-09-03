@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		165C32B61B95739700D2F894 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 165C32B51B95739700D2F894 /* QuartzCore.framework */; };
 		E212A6DE1B92100E00F62B18 /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E212A6DD1B92100E00F62B18 /* libiconv.dylib */; };
 		E21739F71A5080DD00EC6777 /* DocumentController.m in Sources */ = {isa = PBXBuildFile; fileRef = E21739F61A5080DD00EC6777 /* DocumentController.m */; };
 		E21DCAEB1B253847006424E8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E21DCAEA1B253847006424E8 /* main.m */; };
@@ -101,6 +102,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		165C32B51B95739700D2F894 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		E212A6DD1B92100E00F62B18 /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = usr/lib/libiconv.dylib; sourceTree = SDKROOT; };
 		E21739F51A5080DD00EC6777 /* DocumentController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DocumentController.h; sourceTree = "<group>"; };
 		E21739F61A5080DD00EC6777 /* DocumentController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DocumentController.m; sourceTree = "<group>"; };
@@ -156,6 +158,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				165C32B61B95739700D2F894 /* QuartzCore.framework in Frameworks */,
 				E2C338D719F85C2E00063D95 /* Cocoa.framework in Frameworks */,
 				E267E26B1B84E07E00BAB377 /* Security.framework in Frameworks */,
 				E2653D251A5B2FBD006A9871 /* Sparkle.framework in Frameworks */,
@@ -173,6 +176,7 @@
 				E2C338D619F85C2E00063D95 /* Cocoa.framework */,
 				E2C338D819F85C3400063D95 /* Foundation.framework */,
 				E28200AC1A7D71EE00DA4096 /* CoreServices.framework */,
+				165C32B51B95739700D2F894 /* QuartzCore.framework */,
 				E2B14B561A88102C00003E64 /* Security.framework */,
 				E2653D241A5B2FBD006A9871 /* Sparkle.framework */,
 				E2F6AA091A7EED74002DBF56 /* Crashlytics.framework */,

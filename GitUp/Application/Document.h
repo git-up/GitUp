@@ -29,6 +29,7 @@ typedef NS_ENUM(NSUInteger, WindowModeID) {
 
 @interface Document : NSDocument <NSUserInterfaceValidations>
 @property(nonatomic, strong) IBOutlet NSWindow* mainWindow;
+@property(nonatomic, strong) IBOutlet NSView* contentView;
 
 @property(nonatomic, strong) IBOutlet NSToolbar* toolbar;
 

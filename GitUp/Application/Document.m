@@ -45,6 +45,10 @@
 #define kRestorableStateKey_WindowMode @"windowMode"
 
 #define kSideViewAnimationDuration 0.15  // seconds
+#define kQuickViewAnimationDuration 0.25  // seconds
+
+#define kAnimationKey_ID @"animationID"
+#define kAnimationID_QuickViewSnapshot @"snapshotAnimation"
 
 #define kMaxAncestorCommits 1000
 
@@ -105,6 +109,8 @@ static inline WindowModeID _WindowModeIDFromString(NSString* mode) {
   BOOL _unifiedToolbar;
   NSNumberFormatter* _numberFormatter;
   NSDateFormatter* _dateFormatter;
+  CALayer* _fixedSnapshotLayer;
+  CALayer* _animatingSnapshotLayer;
   NSMutableArray* _quickViewCommits;
   GCHistoryWalker* _quickViewAncestors;
   GCHistoryWalker* _quickViewDescendants;
@@ -278,7 +284,13 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
   if (_unifiedToolbar) {
     _mainWindow.titleVisibility = NSWindowTitleHidden;
   }
-  _mapContainerView.wantsLayer = YES;
+  _contentView.wantsLayer = YES;
+  
+  // Text fields must be drawn on an opaque background to avoid subpixel antialiasing issues during animation.
+  for (NSTextField* field in @[_infoTextField1, _infoTextField2, _progressTextField]) {
+    field.drawsBackground = YES;
+    field.backgroundColor = _mainWindow.backgroundColor;
+  }
   
   _mapViewController = [[GIMapViewController alloc] initWithRepository:_repository];
   _mapViewController.delegate = self;
@@ -880,11 +892,11 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
     XLOG_DEBUG_UNREACHABLE();
   }
   if (showHelp) {
-    NSRect contentBounds = [_mainWindow.contentView bounds];
+    NSRect contentBounds = _contentView.bounds;
     _helpView.hidden = NO;
     _mainTabView.frame = NSMakeRect(contentBounds.origin.x, contentBounds.origin.y, contentBounds.size.width, contentBounds.size.height - _helpView.frame.size.height);
   } else if (!_helpView.hidden) {
-    _mainTabView.frame = [_mainWindow.contentView bounds];
+    _mainTabView.frame = _contentView.bounds;
     _helpView.hidden = YES;
   }
 }
@@ -936,7 +948,110 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
   }
   
   _quickViewController.commit = commit;
-  [self _setWindowMode:kWindowModeString_Map_QuickView];
+  
+  [self _animateQuickViewForCommit:commit appearing:YES transition:^{
+    [self _setWindowMode:kWindowModeString_Map_QuickView];
+  }];
+}
+
+- (void)_animateQuickViewForCommit:(GCHistoryCommit*)commit appearing:(BOOL)appearing transition:(void (^)(void))transitionBlock {
+  if (![[NSUserDefaults standardUserDefaults] boolForKey:kUserDefaultsKey_EnableVisualEffects]) {
+    transitionBlock();
+    return;
+  }
+  
+  [CATransaction flush];
+  [CATransaction begin];
+  [CATransaction setDisableActions:YES];
+  
+  BOOL animationInFlight = YES;
+  if (!_fixedSnapshotLayer) {
+    animationInFlight = NO;
+    _fixedSnapshotLayer = [CALayer layer];
+    _fixedSnapshotLayer.backgroundColor = _mainWindow.backgroundColor.CGColor;
+    _animatingSnapshotLayer = [CALayer layer];
+    _animatingSnapshotLayer.backgroundColor = _mainWindow.backgroundColor.CGColor;
+    _animatingSnapshotLayer.shadowOpacity = 0.2;
+    _animatingSnapshotLayer.shadowRadius = 30;
+  }
+  
+  if (animationInFlight) {
+    transitionBlock();
+  } else if (appearing) {
+    _fixedSnapshotLayer.contents = [_contentView takeSnapshot];
+    transitionBlock();
+    _animatingSnapshotLayer.contents = [_contentView takeSnapshot];
+  } else {
+    _animatingSnapshotLayer.contents = [_contentView takeSnapshot];
+    transitionBlock();
+    _fixedSnapshotLayer.contents = [_contentView takeSnapshot];
+  }
+  
+  [_contentView.layer addSublayer:_fixedSnapshotLayer];
+  [_contentView.layer addSublayer:_animatingSnapshotLayer];
+  
+  _fixedSnapshotLayer.frame = _contentView.layer.bounds;
+  
+  CALayer* fromLayer = nil;
+  if (animationInFlight) {
+    fromLayer = _animatingSnapshotLayer.presentationLayer;
+  }
+  
+  if (!fromLayer) {
+    fromLayer = _animatingSnapshotLayer;
+  }
+  
+  CABasicAnimation* position = [CABasicAnimation animationWithKeyPath:@"position"];
+  CABasicAnimation* transform = [CABasicAnimation animationWithKeyPath:@"transform"];
+  
+  [self _configureAnimatingSnapshotLayerForCommit:appearing ? commit : nil];
+  position.fromValue = [fromLayer valueForKey:@"position"];
+  transform.fromValue = [fromLayer valueForKey:@"transform"];
+  
+  [self _configureAnimatingSnapshotLayerForCommit:appearing ? nil : commit];
+  position.toValue = [_animatingSnapshotLayer valueForKey:@"position"];
+  transform.toValue = [_animatingSnapshotLayer valueForKey:@"transform"];
+  
+  CAAnimationGroup* group = [CAAnimationGroup animation];
+  group.animations = @[position, transform];
+  group.delegate = self;
+  [group setValue:kAnimationID_QuickViewSnapshot forKey:kAnimationKey_ID];
+  
+  [CATransaction setAnimationDuration:kQuickViewAnimationDuration];
+  [CATransaction setAnimationTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionDefault]];
+  [_animatingSnapshotLayer addAnimation:group forKey:kAnimationID_QuickViewSnapshot];
+  
+  [CATransaction commit];
+}
+
+- (void)animationDidStop:(CAAnimation*)anim finished:(BOOL)flag {
+  if ([[anim valueForKey:kAnimationKey_ID] isEqual:kAnimationID_QuickViewSnapshot] && flag) {
+    [_fixedSnapshotLayer removeFromSuperlayer];
+    [_animatingSnapshotLayer removeFromSuperlayer];
+    _fixedSnapshotLayer = nil;
+    _animatingSnapshotLayer = nil;
+  }
+}
+
+- (void)_configureAnimatingSnapshotLayerForCommit:(GCHistoryCommit*)commit {
+  if (commit) {
+    NSPoint commitPoint = [_contentView convertPoint:[_mapViewController positionInViewForCommit:commit] fromView:_mapViewController.view];
+    if (NSPointInRect(commitPoint, _contentView.bounds)) {
+      _animatingSnapshotLayer.bounds = _contentView.layer.bounds;
+      _animatingSnapshotLayer.position = [_contentView convertPointToLayer:commitPoint];
+    } else {
+      _animatingSnapshotLayer.frame = _contentView.layer.bounds;
+    }
+    // Shrink the snapshot so it appears at the location of the commit.
+    // (0 is too small and causes the animation to behave incorrectly.)
+    _animatingSnapshotLayer.transform = CATransform3DMakeScale(0.0001, 0.0001, 1);
+  } else {
+    _animatingSnapshotLayer.transform = CATransform3DIdentity;
+    _animatingSnapshotLayer.frame = _contentView.layer.bounds;
+  }
+  CGPathRef path = CGPathCreateWithRect(_animatingSnapshotLayer.bounds, NULL);
+  _animatingSnapshotLayer.shadowPath = path;
+  CGPathRelease(path);
 }
 
 - (BOOL)_hasPreviousQuickView {
@@ -984,7 +1099,9 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
   
   [_repository resumeHistoryUpdates];
   
-  [self _setWindowMode:kWindowModeString_Map];
+  [self _animateQuickViewForCommit:_quickViewController.commit appearing:NO transition:^{
+    [self _setWindowMode:kWindowModeString_Map];
+  }];
 }
 
 #pragma mark - Diff
