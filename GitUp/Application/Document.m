@@ -285,6 +285,9 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
     _mainWindow.titleVisibility = NSWindowTitleHidden;
   }
   _contentView.wantsLayer = YES;
+  _leftView.wantsLayer = YES;
+  _titleView.wantsLayer = YES;
+  _rightView.wantsLayer = YES;
   
   // Text fields must be drawn on an opaque background to avoid subpixel antialiasing issues during animation.
   for (NSTextField* field in @[_infoTextField1, _infoTextField2, _progressTextField]) {
@@ -963,6 +966,8 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
   [CATransaction flush];
   [CATransaction begin];
   [CATransaction setDisableActions:YES];
+  [CATransaction setAnimationDuration:kQuickViewAnimationDuration];
+  [CATransaction setAnimationTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionDefault]];
   
   BOOL animationInFlight = YES;
   if (!_fixedSnapshotLayer) {
@@ -1001,24 +1006,37 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
     fromLayer = _animatingSnapshotLayer;
   }
   
+  // Calculating the startProgress to use when reversing an in-flight transition is nontrivial (for a nonlinear timing function).
+  // But we can make Core Animation do it for us by animating a dummy property (zPosition) between 0 and 1 along with the real animations, and using that as the startProgress.
+  
+  // Animate the title/toolbar updates alongside the snapshot zoom animation.
+  CATransition* transition = [CATransition animation];
+  transition.type = kCATransitionPush;
+  transition.subtype = appearing ? kCATransitionFromBottom : kCATransitionFromTop;
+  transition.startProgress = fromLayer.zPosition;
+  [_rightView.layer addAnimation:transition forKey:kCATransition];
+  [_titleView.layer addAnimation:transition forKey:kCATransition];
+  [_leftView.layer addAnimation:transition forKey:kCATransition];
+  
   CABasicAnimation* position = [CABasicAnimation animationWithKeyPath:@"position"];
   CABasicAnimation* transform = [CABasicAnimation animationWithKeyPath:@"transform"];
+  CABasicAnimation* zPosition = [CABasicAnimation animationWithKeyPath:@"zPosition"];
   
   [self _configureAnimatingSnapshotLayerForCommit:appearing ? commit : nil];
   position.fromValue = [fromLayer valueForKey:@"position"];
   transform.fromValue = [fromLayer valueForKey:@"transform"];
+  zPosition.fromValue = @(1 - fromLayer.zPosition);
   
   [self _configureAnimatingSnapshotLayerForCommit:appearing ? nil : commit];
   position.toValue = [_animatingSnapshotLayer valueForKey:@"position"];
   transform.toValue = [_animatingSnapshotLayer valueForKey:@"transform"];
+  zPosition.toValue = @0;
   
   CAAnimationGroup* group = [CAAnimationGroup animation];
-  group.animations = @[position, transform];
+  group.animations = @[position, transform, zPosition];
   group.delegate = self;
   [group setValue:kAnimationID_QuickViewSnapshot forKey:kAnimationKey_ID];
   
-  [CATransaction setAnimationDuration:kQuickViewAnimationDuration];
-  [CATransaction setAnimationTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionDefault]];
   [_animatingSnapshotLayer addAnimation:group forKey:kAnimationID_QuickViewSnapshot];
   
   [CATransaction commit];
