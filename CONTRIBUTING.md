@@ -2,6 +2,8 @@
 
 **If you are unsure your contribution would be valuable to GitUp, or are looking for contributions to work on, check out the [dedicated topics](http://forums.gitup.co/c/contributions) in the GitUp community forums.**
 
+**You must accept the terms of the [GitUp Contributor License Agreement](http://forums.gitup.co/t/gitup-contributor-license-agreement/323) before your pull request can be merged into upstream.**
+
 The following is a list of absolute requirements for PRs (not following them would result in immediate rejection):
 
 1. The coding style MUST be followed exactly (there is no style guide available but you can figure out from browsing the source)
@@ -18,5 +20,3 @@ The following is a list of absolute requirements for PRs (not following them wou
 8. The pull request MUST contain as few commits as needed
 9. The pull request MUST NOT contain fixup or revert commits (flatten them beforehand using GitUp!)
 10. The pull request MUST be rebased on latest `master` when sent
-
-**Be aware that GitUp is under [GPL v3 license](http://www.gnu.org/licenses/gpl-3.0.txt), so any contribution you make will be GPL'ed.**
