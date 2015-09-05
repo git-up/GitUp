@@ -317,6 +317,7 @@
 		E267E2E21B84F33600BAB377 /* XLLogRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = E267E2BD1B84F27800BAB377 /* XLLogRecord.m */; };
 		E267E2E31B84F36500BAB377 /* XLFileLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = E267E2B71B84F27800BAB377 /* XLFileLogger.m */; };
 		E267E2E41B84F37500BAB377 /* XLLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = E267E2BB1B84F27800BAB377 /* XLLogger.m */; };
+		E26CDF261B9B86250050C920 /* GCOrderedSet.h in Headers */ = {isa = PBXBuildFile; fileRef = 74EDB5D01B84D4C400F00E79 /* GCOrderedSet.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E2790D431ACB1B1100965A98 /* GCFoundation.m in Sources */ = {isa = PBXBuildFile; fileRef = E2790D411ACB1B1100965A98 /* GCFoundation.m */; };
 		E2790D481ACF12E200965A98 /* GCRepository+Index-Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = E2790D441ACF12E200965A98 /* GCRepository+Index-Tests.m */; };
 		E2790D4A1ACF12E200965A98 /* GCRepository+Index.m in Sources */ = {isa = PBXBuildFile; fileRef = E2790D461ACF12E200965A98 /* GCRepository+Index.m */; };
@@ -1074,6 +1075,7 @@
 				E217535F1B91626C00BE234A /* GCTag.h in Headers */,
 				E21753621B9162B600BE234A /* GCRepository+Utilities.h in Headers */,
 				E21753601B9162B600BE234A /* GCHistory+Rewrite.h in Headers */,
+				E26CDF261B9B86250050C920 /* GCOrderedSet.h in Headers */,
 				E2B987961B9172470097629D /* GIBranch.h in Headers */,
 				E2B987971B9172470097629D /* GIConstants.h in Headers */,
 				E2B987981B9172470097629D /* GIFunctions.h in Headers */,
@@ -1133,10 +1135,10 @@
 				E267E1D01B84D80500BAB377 /* GCRepository+Status.h in Headers */,
 				E267E1F01B84D85500BAB377 /* GCHistory+Rewrite.h in Headers */,
 				E267E1F11B84D85500BAB377 /* GCRepository+Index.h in Headers */,
+				743BF1841B871C0200E1CA49 /* GCOrderedSet.h in Headers */,
 				E267E2091B84DB4200BAB377 /* GIBranch.h in Headers */,
 				E267E20A1B84DB4200BAB377 /* GIConstants.h in Headers */,
 				E267E20B1B84DB4200BAB377 /* GIDiffView.h in Headers */,
-				743BF1841B871C0200E1CA49 /* GCOrderedSet.h in Headers */,
 				E267E20C1B84DB4200BAB377 /* GIFunctions.h in Headers */,
 				E267E20D1B84DB4200BAB377 /* GIGraph.h in Headers */,
 				E267E20E1B84DB4200BAB377 /* GIGraphView.h in Headers */,
