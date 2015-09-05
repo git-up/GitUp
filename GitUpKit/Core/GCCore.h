@@ -27,6 +27,7 @@
 #endif
 #import "GCMacros.h"
 #import "GCObject.h"
+#import "GCOrderedSet.h"
 #import "GCReference.h"
 #import "GCSnapshot.h"
 #import "GCReferenceTransform.h"

@@ -109,7 +109,7 @@ static void _ReleaseCallBack(CFAllocatorRef allocator, const void* value) {
 
 - (void)_generateGraph {
   NSTimeInterval staleTime = [NSDate timeIntervalSinceReferenceDate] - kStaleBranchInterval;
-  NSMutableArray* tips = [[NSMutableArray alloc] init];
+  GCOrderedSet* tips = [[GCOrderedSet alloc] init];
   NSMutableSet* upstreamTips = [[NSMutableSet alloc] init];
   GC_POINTER_LIST_ALLOCATE(skipList, 32);
   GC_POINTER_LIST_ALLOCATE(newSkipList, 32);
@@ -133,33 +133,31 @@ static void _ReleaseCallBack(CFAllocatorRef allocator, const void* value) {
       GCHistoryCommit* upstreamTip = [(GCHistoryLocalBranch*)branch.upstream tipCommit];
       if (upstreamTip && ((_options & kGIGraphOption_ShowVirtualTips) || upstreamTip.leaf)) {
         [upstreamTips addObject:upstreamTip];
-        if (![tips containsObject:upstreamTip]) {
-          [tips addObject:upstreamTip];
-        }
+        [tips addObject:upstreamTip];
       }
     }
     
-    if (((_options & kGIGraphOption_ShowVirtualTips) || branch.tipCommit.leaf) && ![tips containsObject:branch.tipCommit]) {
+    if (((_options & kGIGraphOption_ShowVirtualTips) || branch.tipCommit.leaf)) {
       [tips addObject:branch.tipCommit];
     }
   }
   
   // Add remote branches to tips
   for (GCHistoryRemoteBranch* branch in _history.remoteBranches) {
-    if (((_options & kGIGraphOption_ShowVirtualTips) || branch.tipCommit.leaf) && ![tips containsObject:branch.tipCommit]) {
+    if (((_options & kGIGraphOption_ShowVirtualTips) || branch.tipCommit.leaf)) {
       [tips addObject:branch.tipCommit];
     }
   }
   
   // Add leaf tags
   for (GCHistoryTag* tag in _history.tags) {
-    if (tag.commit.leaf && ![tips containsObject:tag.commit]) {
+    if (tag.commit.leaf) {
       [tips addObject:tag.commit];
     }
   }
   
   // Verify all leaves are included in tips
-  XLOG_DEBUG_CHECK([[NSSet setWithArray:_history.leafCommits] isSubsetOfSet:[NSSet setWithArray:tips]]);
+  XLOG_DEBUG_CHECK([[NSSet setWithArray:_history.leafCommits] isSubsetOfSet:[NSSet setWithArray:tips.objects]]);
   
   // Remove stale branch tips if needed
   if (_options & kGIGraphOption_SkipStaleBranchTips) {
@@ -234,9 +232,7 @@ static void _ReleaseCallBack(CFAllocatorRef allocator, const void* value) {
           if (updateTips) {
             XLOG_DEBUG_CHECK(!parent.leaf);
             if ([headCommit isEqualToCommit:parent]) {
-              if (![tips containsObject:parent]) {
-                [tips addObject:parent];
-              }
+              [tips addObject:parent];
               continue;
             }
             if (!(_options & kGIGraphOption_SkipStaleBranchTips) || (parent.timeIntervalSinceReferenceDate >= staleTime)) {
@@ -249,9 +245,7 @@ static void _ReleaseCallBack(CFAllocatorRef allocator, const void* value) {
                   }
                 }
                 if (resuscitate) {
-                  if (![tips containsObject:parent]) {
-                    [tips addObject:parent];
-                  }
+                  [tips addObject:parent];
                   continue;
                 }
               }
@@ -264,9 +258,7 @@ static void _ReleaseCallBack(CFAllocatorRef allocator, const void* value) {
                   }
                 }
                 if (resuscitate) {
-                  if (![tips containsObject:parent]) {
-                    [tips addObject:parent];
-                  }
+                  [tips addObject:parent];
                   continue;
                 }
               }
@@ -312,20 +304,22 @@ static void _ReleaseCallBack(CFAllocatorRef allocator, const void* value) {
     skipBlock(YES);
   }
   
+  NSArray* tipsArray = tips.objects;
+  
   // Make sure we have some tips left
-  if (tips.count == 0) {
+  if (tipsArray.count == 0) {
     goto cleanup;
   }
   
   // Re-sort all tips in descending chronological order (this ensures virtual tips will be on the rightside of the tips descending from the same commits)
   if (_options & kGIGraphOption_ShowVirtualTips) {
-    [tips sortUsingSelector:@selector(reverseTimeCompare:)];
+    tipsArray = [tipsArray sortedArrayUsingSelector:@selector(reverseTimeCompare:)];
   }
   
   // Create initial layer made of tips
   GILayer* layer = [[GILayer alloc] initWithIndex:CFArrayGetCount(_layers)];
   @autoreleasepool {
-    for (GCHistoryCommit* commit in tips) {
+    for (GCHistoryCommit* commit in tipsArray) {
       // Create new branch
       GIBranch* branch = [[GIBranch alloc] init];
       CFArrayAppendValue(_branches, branch);
