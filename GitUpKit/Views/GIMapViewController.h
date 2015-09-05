@@ -37,6 +37,7 @@
 @property(nonatomic) BOOL forceShowAllTips;
 - (BOOL)selectCommit:(GCCommit*)commit;  // Also scrolls if needed to ensure commit is visible - Returns YES if commit was selected
 - (GINode*)nodeForCommit:(GCCommit*)commit;
+- (NSPoint)positionInViewForCommit:(GCCommit*)commit;
 
 - (IBAction)toggleTagLabels:(id)sender;
 - (IBAction)toggleBranchLabels:(id)sender;

@@ -9,7 +9,7 @@
             <connections>
                 <outlet property="ancestorsControllerView" destination="4Od-pU-cwC" id="rKi-Xf-O9z"/>
                 <outlet property="ancestorsView" destination="Yj4-Sl-8P8" id="uNx-x0-4Kg"/>
-                <outlet property="containerView" destination="KTA-UW-CKM" id="CLJ-vA-fY3"/>
+                <outlet property="contentView" destination="gIp-Ho-8D9" id="BwU-UD-4Je"/>
                 <outlet property="exitButton" destination="FEG-0e-0JW" id="VpC-s7-grz"/>
                 <outlet property="helpContinueButton" destination="W0y-nq-maS" id="tO3-ij-oea"/>
                 <outlet property="helpDismissButton" destination="etB-ce-0PB" id="iMt-Ga-rPE"/>
@@ -24,6 +24,7 @@
                 <outlet property="leftView" destination="d4D-Mc-I9O" id="Lqi-IU-ziC"/>
                 <outlet property="mainTabView" destination="8LX-i4-RBG" id="CKf-8g-erJ"/>
                 <outlet property="mainWindow" destination="xOd-HO-29H" id="YqJ-z0-2YQ"/>
+                <outlet property="mapContainerView" destination="KTA-UW-CKM" id="8sn-Xg-Vjz"/>
                 <outlet property="mapControllerView" destination="399-bl-TuH" id="cZj-7k-l5R"/>
                 <outlet property="mapView" destination="p3q-Tt-mR8" id="Qym-7v-5bw"/>
                 <outlet property="modeControl" destination="RvM-Rz-Je8" id="rYt-Pf-y7Q"/>

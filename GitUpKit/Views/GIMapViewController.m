@@ -204,6 +204,12 @@ static NSColor* _patternColor = nil;
   return historyCommit ? [_graphView.graph nodeForCommit:historyCommit] : nil;
 }
 
+- (NSPoint)positionInViewForCommit:(GCCommit*)commit {
+  GINode* node = [self nodeForCommit:commit];
+  XLOG_DEBUG_CHECK(node);
+  return node ? [self.view convertPoint:[_graphView positionForNode:node] fromView:_graphView] : NSZeroPoint;
+}
+
 - (void)setShowsVirtualTips:(BOOL)flag {
   if (flag != _showsVirtualTips) {
     _showsVirtualTips = flag;

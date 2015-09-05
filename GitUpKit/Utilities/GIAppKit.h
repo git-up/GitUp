@@ -36,6 +36,7 @@ extern NSString* const GICommitMessageViewUserDefaultKey_EnableSpellChecking;
 
 @interface NSView (GIAppKit)
 - (void)replaceWithView:(NSView*)view;  // Preserves frame and autoresizing mask
+- (NSImage*)takeSnapshot;
 @end
 
 @interface NSMenu (GIAppKit)

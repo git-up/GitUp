@@ -84,6 +84,14 @@ static NSColor* _separatorColor = nil;
   [self.superview replaceSubview:self with:view];
 }
 
+- (NSImage*)takeSnapshot {
+  NSBitmapImageRep* rep = [self bitmapImageRepForCachingDisplayInRect:self.bounds];
+  [self cacheDisplayInRect:self.bounds toBitmapImageRep:rep];
+  NSImage* image = [[NSImage alloc] initWithSize:rep.size];
+  [image addRepresentation:rep];
+  return image;
+}
+
 @end
 
 @implementation NSMenu (GIAppKit)
@@ -350,8 +358,25 @@ static NSColor* _separatorColor = nil;
 // See http://stackoverflow.com/a/30494691/463432
 - (void)splitView:(NSSplitView*)splitView resizeSubviewsWithOldSize:(NSSize)oldSize {
   [splitView adjustSubviews];
-  NSView* view = splitView.subviews.firstObject;
-  [splitView setPosition:(splitView.vertical ? view.frame.size.width : view.frame.size.height) ofDividerAtIndex:0];
+  // Take the min size constraints into account.
+  // Using -setPosition:ofDividerAtIndex: from inside this method confuses Core Animation on 10.8.
+  if (kCFCoreFoundationVersionNumber >= kCFCoreFoundationVersionNumber10_9) {
+    NSView* view = splitView.subviews.firstObject;
+    [splitView setPosition:(splitView.vertical ? view.frame.size.width : view.frame.size.height) ofDividerAtIndex:0];
+  } else {
+    NSView* view1 = splitView.subviews[0];
+    NSView* view2 = splitView.subviews[1];
+    NSSize splitViewSize = splitView.bounds.size;
+    if (splitView.vertical) {
+      CGFloat splitPosition = MAX(view1.bounds.size.width, _minSize1);
+      view1.frame = NSMakeRect(0, 0, splitPosition, splitViewSize.height);
+      view2.frame = NSMakeRect(splitPosition + splitView.dividerThickness, 0, splitViewSize.width - splitPosition - splitView.dividerThickness, splitViewSize.height);
+    } else {
+      CGFloat splitPosition = MAX(view1.bounds.size.height, _minSize1);
+      view1.frame = NSMakeRect(0, 0, splitViewSize.width, splitPosition);
+      view2.frame = NSMakeRect(0, splitPosition + splitView.dividerThickness, splitViewSize.width, splitViewSize.height - splitPosition - splitView.dividerThickness);
+    }
+  }
 }
 
 @end
