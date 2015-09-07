@@ -1,4 +1,4 @@
-**[Pull requests](https://github.com/git-up/GitUp/pulls) are welcome but be aware that GitUp is used for production work by many thousands of developers around the world, so the bar is very high. The last thing we want is letting the code quality slip or introducing a regression.**
+**[Pull requests](https://github.com/git-up/GitUp/pulls?q=is%3Apr) are welcome but be aware that GitUp is used for production work by many thousands of developers around the world, so the bar is very high. The last thing we want is letting the code quality slip or introducing a regression.**
 
 **If you are unsure your contribution would be valuable to GitUp, or are looking for contributions to work on, check out the [dedicated topics](http://forums.gitup.co/c/contributions) in the GitUp community forums.**
 
