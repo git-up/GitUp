@@ -6,7 +6,8 @@
 
 The following is a list of absolute requirements for PRs (not following them would result in immediate rejection):
 
-1. The coding style MUST be followed exactly (there is no style guide available but you can figure out from browsing the source)
+1. The coding style MUST be followed exactly
+ - There is no style guide available yet but you can figure out from browsing the source
 2. You MUST use 2-spaces for indentation instead of tabs
 3. Additions to `Core/` MUST have associated unit tests
 4. Each commit MUST be a single change (e.g. adding a function or fixing a bug, but not both at once)
