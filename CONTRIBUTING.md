@@ -12,7 +12,7 @@ The following is a list of absolute requirements for PRs (not following them wou
 3. Additions to `Core/` MUST have associated unit tests
 4. Each commit MUST be a single change (e.g. adding a function or fixing a bug, but not both at once)
 5. Each commit MUST be self-contained i.e. GitUp builds and remains fully functional when building it at this very commit
-6. Commits MUST NOT change dozens or hundreds of files at once (outside of absolutely trivial changes likes updating the copyright year)
+6. Commits MUST NOT change dozens or hundreds of files at once (outside of absolutely trivial changes like updating the copyright year)
  - Properly reviewing such a diff is close to impossible and there's a fair chance of a hidden regression sneaking in only to be discovered weeks later
  - Find a way to break the change into a series of logical changes affecting only a subset of the files each
 7. Commit messages MUST have:
