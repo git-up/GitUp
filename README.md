@@ -32,13 +32,7 @@ Getting Started
 
 Releases notes are available at https://github.com/git-up/GitUp/releases. Builds tagged with a `v` (e.g. `v1.2.3`) are released on the "Stable" channel, while builds tagged with a `b` (e.g. `b1234`) are only released on the "Continuous" channel. You can change the update channel used by GitUp in the app preferences.
 
-To build GitUp yourself, simply run these commands in Terminal:
-
-1. `git clone https://github.com/git-up/GitUp.git`
-2. `cd GitUp`
-3. `git submodule update --init --recursive`
-
-Then open the `GitUp/GitUp.xcodeproj` Xcode project and hit Run.
+To build GitUp yourself, simply run the command `git clone --recursive https://github.com/git-up/GitUp.git` in Terminal, then open the `GitUp/GitUp.xcodeproj` Xcode project and hit Run.
 
 **IMPORTANT:** If you do not have an Apple ID with a developer account for code signing Mac apps, the build  will fail with a code signing error. Simply delete the "Code Signing Identity" build setting of the "Application" target to work around the issue:
 
