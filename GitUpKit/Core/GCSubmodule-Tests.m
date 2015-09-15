@@ -349,14 +349,12 @@
   NSString* output2 = [self runGitCLTWithRepository:self.repository command:@"mv", @"test-repo-base", @"base", nil];
   XCTAssertNotNil(output2);
   
-#if 0
   // Verify name & path
   submodules = [self.repository listSubmodules:NULL];
   XCTAssertEqual(submodules.count, 1);
   submodule = submodules.firstObject;
   XCTAssertEqualObjects(submodule.name, @"test-repo-base");
-  XCTAssertEqualObjects(submodule.path, @"test-repo-base");
-#endif
+  XCTAssertEqualObjects(submodule.path, @"base");
   
   // Commit submodule
   GCCommit* commit2 = [self.repository createCommitFromHEADWithMessage:@"Moved submodule" error:NULL];
