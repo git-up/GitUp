@@ -338,7 +338,6 @@
 		E21753C91B9168D300BE234A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = co.gitup.i;
@@ -349,7 +348,6 @@
 		E21753CA1B9168D300BE234A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = co.gitup.i;
