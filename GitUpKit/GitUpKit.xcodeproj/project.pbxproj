@@ -1759,7 +1759,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
-					"Third-Party/Libraries/openssl/lib/libcrypto.a",
+					"Third-Party/Libraries/libssl/$(PLATFORM_NAME)/lib/libcrypto.a",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = co.gitup.kit;
 				PRODUCT_NAME = GitUpKit;
@@ -1780,7 +1780,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
-					"Third-Party/Libraries/openssl/lib/libcrypto.a",
+					"Third-Party/Libraries/libssl/$(PLATFORM_NAME)/lib/libcrypto.a",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = co.gitup.kit;
 				PRODUCT_NAME = GitUpKit;
@@ -1801,7 +1801,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
-					"Third-Party/Libraries/openssl/lib/libcrypto.a",
+					"Third-Party/Libraries/libssl/$(PLATFORM_NAME)/lib/libcrypto.a",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = co.gitup.kit;
 				PRODUCT_NAME = GitUpKit;
