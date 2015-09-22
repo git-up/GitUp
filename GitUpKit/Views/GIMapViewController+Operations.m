@@ -225,7 +225,9 @@ static inline NSString* _CleanedUpCommitMessage(NSString* message) {
 
 - (void)squashCommitWithParent:(GCHistoryCommit*)commit {
   if ([self checkCleanRepositoryForOperationOnCommit:commit]) {
-    [self _promptForCommitMessage:_CleanedUpCommitMessage(commit.message)
+    GCHistoryCommit* parentCommit = commit.parents.firstObject;
+    NSString* mergedMessage = [NSString stringWithFormat:NSLocalizedString(@"%@\n\n%@", nil), _CleanedUpCommitMessage(parentCommit.message), _CleanedUpCommitMessage(commit.message)];
+    [self _promptForCommitMessage:mergedMessage
                         withTitle:NSLocalizedString(@"Squashed commit message:", nil)
                            button:NSLocalizedString(@"Squash", nil)
                             block:^(NSString* message) {
