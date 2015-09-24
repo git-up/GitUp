@@ -63,10 +63,8 @@ static inline NSString* _ConvertMessage(GCCommit* commit, const char* message, s
   return _ConvertMessage(self, summary, strlen(summary), git_commit_message_encoding((git_commit*)_private));
 }
 
-// Reimplementation of git_commit_time()
 - (NSDate*)date {
-  const git_signature* signature = git_commit_committer((git_commit*)_private);
-  return [NSDate dateWithTimeIntervalSince1970:signature->when.time];
+  return self.committerDate;
 }
 
 // Reimplementation of git_commit_time_offset()
@@ -85,6 +83,11 @@ static inline NSString* _ConvertMessage(GCCommit* commit, const char* message, s
   return [NSString stringWithUTF8String:signature->email];
 }
 
+- (NSDate*)authorDate {
+  const git_signature* signature = git_commit_author((git_commit*)_private);
+  return [NSDate dateWithTimeIntervalSince1970:signature->when.time];
+}
+
 - (NSString*)committerName {
   const git_signature* signature = git_commit_committer((git_commit*)_private);
   return [NSString stringWithUTF8String:signature->name];
@@ -93,6 +96,12 @@ static inline NSString* _ConvertMessage(GCCommit* commit, const char* message, s
 - (NSString*)committerEmail {
   const git_signature* signature = git_commit_committer((git_commit*)_private);
   return [NSString stringWithUTF8String:signature->email];
+}
+
+// Reimplementation of git_commit_time()
+- (NSDate*)committerDate {
+  const git_signature* signature = git_commit_committer((git_commit*)_private);
+  return [NSDate dateWithTimeIntervalSince1970:signature->when.time];
 }
 
 - (NSString*)treeSHA1 {
