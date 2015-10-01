@@ -14,6 +14,9 @@ popd
 pushd "Examples/GitDown"
 xctool build -scheme "GitDown" -sdk "macosx" -configuration "Release"
 popd
+pushd "Examples/GitDiff"
+xctool build -scheme "GitDiff" -sdk "macosx" -configuration "Release"
+popd
 pushd "Examples/GitY"
 xctool build -scheme "GitY" -sdk "macosx" -configuration "Release"
 popd

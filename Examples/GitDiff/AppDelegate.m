@@ -21,6 +21,53 @@
 @property(nonatomic, strong) IBOutlet GIWindow* window;
 @end
 
+// GIDiffContentsViewController is a view controller that displays the contents of an arbitrary diff
+// This subclass automatically sets the diff to the one between HEAD and workdir (like 'git diff HEAD') and live updates it
+@interface LiveDiffViewController : GIDiffContentsViewController
+@end
+
+@implementation LiveDiffViewController
+
+- (instancetype)initWithRepository:(GCLiveRepository*)repository {
+  if ((self = [super initWithRepository:repository])) {
+    // Customize the text displayed when the diff is empty
+    self.emptyLabel = NSLocalizedString(@"Working directory and index are clean", nil);
+  }
+  return self;
+}
+
+- (void)viewWillShow {
+  // Configure the repo to automatically compute the HEAD to workdir diff (aka "unified status")
+  self.repository.statusMode = kGCLiveRepositoryStatusMode_Unified;
+  
+  // Refresh contents immediately
+  [self _reloadContents];
+}
+
+- (void)viewDidHide {
+  // Unload the diff to save memory
+  [self setDeltas:nil usingConflicts:nil];
+  
+  // Stop watching the repo status as it's not needed anymore
+  self.repository.statusMode = kGCLiveRepositoryStatusMode_Disabled;
+}
+
+- (void)_reloadContents {
+  // Simply set the diff to display to the unified status one, taking into account any conflicts
+  GCDiff* status = self.repository.unifiedStatus;
+  NSDictionary* conflicts = self.repository.indexConflicts;
+  [self setDeltas:status.deltas usingConflicts:conflicts];
+}
+
+- (void)repositoryStatusDidUpdate {
+  // Refresh the diff if the repo status has been updated
+  if (self.viewVisible) {
+    [self _reloadContents];
+  }
+}
+
+@end
+
 @implementation AppDelegate {
   GCLiveRepository* _repository;
   GIWindowController* _windowController;
@@ -54,11 +101,7 @@
   _windowController = [[GIWindowController alloc] initWithWindow:_window];
   
   // Create the view controller and add its view to the window
-#if 1
-  _viewController = [[GIStashListViewController alloc] initWithRepository:_repository];
-#else
-  _viewController = [[GIAdvancedCommitViewController alloc] initWithRepository:_repository];
-#endif
+  _viewController = [[LiveDiffViewController alloc] initWithRepository:_repository];
   _viewController.view.frame = [_window.contentView bounds];
   [_window.contentView addSubview:_viewController.view];
   

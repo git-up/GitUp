@@ -147,7 +147,16 @@ Through GitUpKit, this basic app also gets for free unlimited undo/redo, unified
 
 This source code also demonstrates how to use some other GitUpKit view controllers as well as building a customized one.
 
-Complete Example #2: GitY
+Complete Example #2: GitDiff
+----------------------------
+
+[GitDiff](Examples/GitDiff) demonstrates how to create a view controller that displays a live updating diff between `HEAD` and the workdir à la `git diff HEAD`:
+
+<p align="center">
+<img src="http://i.imgur.com/29hxDcJ.png">
+</p>
+
+Complete Example #3: GitY
 -------------------------
 
 [GitY](Examples/GitY) is a [GitX](http://gitx.frim.nl/) clone built using GitUpKit and less than 200 lines of code:
@@ -156,7 +165,7 @@ Complete Example #2: GitY
 <img src="http://i.imgur.com/6cuPcT4.png">
 </p>
 
-Complete Example #3: iGit
+Complete Example #4: iGit
 -------------------------
 
 [iGit](Examples/iGit) is a test iOS app that simply uses GitUpKit to clone a GitHub repo and perform a commit.
