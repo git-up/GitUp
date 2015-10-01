@@ -145,19 +145,28 @@ static NSString* _CleanUpCommitMessage(NSString* message) {
       [committer endEditing];
       _committerTextField.attributedStringValue = committer;
       
-      NSError* error;
-      _diff = [self.repository diffCommit:_commit
-                               withCommit:_commit.parents.firstObject  // Use main line
-                              filePattern:nil
-                                  options:(self.repository.diffBaseOptions | kGCDiffOption_FindRenames)
-                        maxInterHunkLines:self.repository.diffMaxInterHunkLines
-                          maxContextLines:self.repository.diffMaxContextLines
-                                    error:&error];
-      if (!_diff) {
-        [self presentError:error];
-      }
-      [_diffContentsViewController setDeltas:_diff.deltas usingConflicts:nil];
-      [_diffFilesViewController setDeltas:_diff.deltas usingConflicts:nil];
+      GCCommit* newCommit = _commit;
+      GCCommit* oldCommit = _commit.parents.firstObject; // Use main line
+      GCDiffOptions options = (self.repository.diffBaseOptions | kGCDiffOption_FindRenames);
+      NSUInteger maxInterHunkLines = self.repository.diffMaxInterHunkLines;
+      NSUInteger maxContextLines = self.repository.diffMaxContextLines;
+      __weak typeof(self) welf = self;
+      dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSError* error;
+        GCDiff *diff = [self.repository diffCommit:newCommit
+                                        withCommit:oldCommit
+                                       filePattern:nil
+                                           options:options
+                                 maxInterHunkLines:maxInterHunkLines
+                                   maxContextLines:maxContextLines
+                                             error:&error];
+        dispatch_async(dispatch_get_main_queue(), ^{
+          [welf updateInterfaceFor:newCommit withDiff:diff orError:error];
+        });
+      });
+      [_diffContentsViewController setDeltas:nil usingConflicts:nil];
+      [_diffFilesViewController setDeltas:nil usingConflicts:nil];
+      _diffContentsViewController.emptyLabel = NSLocalizedString(@"Loading…", nil);
     } else {
       _sha1TextField.stringValue = @"";
       _authorTextField.stringValue = @"";
@@ -169,8 +178,22 @@ static NSString* _CleanUpCommitMessage(NSString* message) {
       _diff = nil;
       [_diffContentsViewController setDeltas:nil usingConflicts:nil];
       [_diffFilesViewController setDeltas:nil usingConflicts:nil];
+      _diffContentsViewController.emptyLabel = NSLocalizedString(@"No differences", nil);
     }
   }
+}
+
+- (void)updateInterfaceFor:(GCCommit *)commit withDiff:(GCDiff *)diff orError:(NSError *)error {
+  if (_commit != commit) {
+    return;
+  }
+  _diffContentsViewController.emptyLabel = NSLocalizedString(@"No differences", nil);
+
+  if (!diff) {
+    [self presentError:error];
+  }
+  [_diffContentsViewController setDeltas:diff.deltas usingConflicts:nil];
+  [_diffFilesViewController setDeltas:diff.deltas usingConflicts:nil];
 }
 
 #pragma mark - GIDiffContentsViewControllerDelegate
