@@ -23,8 +23,10 @@
 @property(nonatomic, readonly) NSTimeZone* timeZone;
 @property(nonatomic, readonly) NSString* authorName;
 @property(nonatomic, readonly) NSString* authorEmail;
+@property(nonatomic, readonly) NSDate* authorDate;
 @property(nonatomic, readonly) NSString* committerName;
 @property(nonatomic, readonly) NSString* committerEmail;
+@property(nonatomic, readonly) NSDate* committerDate;
 @property(nonatomic, readonly) NSString* treeSHA1;
 @end
 
