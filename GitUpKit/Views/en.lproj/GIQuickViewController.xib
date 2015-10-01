@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="8191" systemVersion="14F27" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7706"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="8191"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="GIQuickViewController">
             <connections>
+                <outlet property="authorDateTextField" destination="NMY-tY-Mrh" id="cJd-Hg-sbc"/>
                 <outlet property="authorTextField" destination="Men-K8-VwT" id="LJG-fX-aM1"/>
+                <outlet property="committerDateTextField" destination="p8J-vi-dDp" id="rnb-jG-CSk"/>
                 <outlet property="committerTextField" destination="5Yv-8b-x0c" id="RhJ-im-KYY"/>
                 <outlet property="contentsView" destination="gnd-mU-OFa" id="aua-gs-pD6"/>
-                <outlet property="dateTextField" destination="1k6-eF-els" id="BVt-4X-eK9"/>
                 <outlet property="filesView" destination="T7C-Lf-raW" id="mzB-kk-e11"/>
                 <outlet property="infoScrollView" destination="A0F-jI-s4n" id="bGh-0w-P8p"/>
                 <outlet property="infoView" destination="Bpc-ZA-3gm" id="hGF-hw-1ve"/>
@@ -49,15 +50,15 @@
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
                                                             <view id="Bpc-ZA-3gm" customClass="GIFlippedView">
-                                                                <rect key="frame" x="0.0" y="0.0" width="300" height="100"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="300" height="130"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <subviews>
                                                                     <customView id="aKy-Bi-5hY">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="300" height="100"/>
+                                                                        <rect key="frame" x="0.0" y="0.0" width="300" height="130"/>
                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                         <subviews>
                                                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="9bU-TV-AfR">
-                                                                                <rect key="frame" x="8" y="80" width="60" height="14"/>
+                                                                                <rect key="frame" x="8" y="110" width="278" height="14"/>
                                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                                 <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="left" title="&lt;SHA1&gt;" id="Tsu-dV-mjp">
                                                                                     <font key="font" metaFont="smallSystem"/>
@@ -65,17 +66,8 @@
                                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                                 </textFieldCell>
                                                                             </textField>
-                                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="1k6-eF-els">
-                                                                                <rect key="frame" x="72" y="80" width="218" height="14"/>
-                                                                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                                                                <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="right" title="&lt;DATE&gt;" id="iv2-j9-9i9">
-                                                                                    <font key="font" metaFont="smallSystem"/>
-                                                                                    <color key="textColor" white="0.25" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                                                                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                                                </textFieldCell>
-                                                                            </textField>
                                                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" setsMaxLayoutWidthAtFirstLayout="YES" id="CIg-ZV-lYt">
-                                                                                <rect key="frame" x="8" y="54" width="282" height="14"/>
+                                                                                <rect key="frame" x="8" y="84" width="282" height="14"/>
                                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
                                                                                 <textFieldCell key="cell" controlSize="small" selectable="YES" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="left" title="&lt;MESSAGE&gt;" id="fqu-LQ-wKF">
                                                                                     <font key="font" metaFont="smallSystem"/>
@@ -84,12 +76,12 @@
                                                                                 </textFieldCell>
                                                                             </textField>
                                                                             <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" id="LRK-cU-aip">
-                                                                                <rect key="frame" x="10" y="34" width="10" height="10"/>
+                                                                                <rect key="frame" x="10" y="57" width="10" height="10"/>
                                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                                                 <imageCell key="cell" refusesFirstResponder="YES" alignment="left" image="icon_author" id="a14-H7-Quo"/>
                                                                             </imageView>
                                                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="Men-K8-VwT">
-                                                                                <rect key="frame" x="21" y="32" width="269" height="14"/>
+                                                                                <rect key="frame" x="21" y="55" width="269" height="14"/>
                                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                                                 <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingTail" truncatesLastVisibleLine="YES" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="left" title="&lt;AUTHOR&gt;" id="11W-Hl-yV0">
                                                                                     <font key="font" metaFont="smallSystem"/>
@@ -97,15 +89,33 @@
                                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                                 </textFieldCell>
                                                                             </textField>
+                                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="NMY-tY-Mrh">
+                                                                                <rect key="frame" x="21" y="41" width="269" height="14"/>
+                                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                                                <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingTail" truncatesLastVisibleLine="YES" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="left" title="&lt;AUTHOR_DATE&gt;" id="ESf-oA-sr2">
+                                                                                    <font key="font" metaFont="smallSystem"/>
+                                                                                    <color key="textColor" white="0.5" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                                                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                                                </textFieldCell>
+                                                                            </textField>
                                                                             <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" id="WZG-3V-AFB">
-                                                                                <rect key="frame" x="10" y="12" width="10" height="10"/>
+                                                                                <rect key="frame" x="10" y="21" width="10" height="10"/>
                                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                                                 <imageCell key="cell" refusesFirstResponder="YES" alignment="left" image="icon_committer" id="BIg-uL-lng"/>
                                                                             </imageView>
                                                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="5Yv-8b-x0c">
-                                                                                <rect key="frame" x="21" y="10" width="269" height="14"/>
+                                                                                <rect key="frame" x="21" y="19" width="269" height="14"/>
                                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                                                 <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingTail" truncatesLastVisibleLine="YES" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="left" title="&lt;COMMITTER&gt;" id="4Tl-BB-pru">
+                                                                                    <font key="font" metaFont="smallSystem"/>
+                                                                                    <color key="textColor" white="0.5" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                                                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                                                </textFieldCell>
+                                                                            </textField>
+                                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="p8J-vi-dDp">
+                                                                                <rect key="frame" x="21" y="7" width="269" height="14"/>
+                                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                                                <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingTail" truncatesLastVisibleLine="YES" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="left" title="&lt;COMMITTER_DATE&gt;" id="Dbg-2h-APW">
                                                                                     <font key="font" metaFont="smallSystem"/>
                                                                                     <color key="textColor" white="0.5" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>

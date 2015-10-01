@@ -29,10 +29,11 @@
 @property(nonatomic, weak) IBOutlet NSView* infoView;
 @property(nonatomic, weak) IBOutlet NSScrollView* infoScrollView;
 @property(nonatomic, weak) IBOutlet NSTextField* sha1TextField;
-@property(nonatomic, weak) IBOutlet NSTextField* dateTextField;
 @property(nonatomic, weak) IBOutlet NSTextField* messageTextField;
 @property(nonatomic, weak) IBOutlet NSTextField* authorTextField;
+@property(nonatomic, weak) IBOutlet NSTextField* authorDateTextField;
 @property(nonatomic, weak) IBOutlet NSTextField* committerTextField;
+@property(nonatomic, weak) IBOutlet NSTextField* committerDateTextField;
 @property(nonatomic, weak) IBOutlet NSView* contentsView;
 @property(nonatomic, weak) IBOutlet NSView* filesView;
 @property(nonatomic, weak) IBOutlet NSBox* separatorBox;
@@ -121,9 +122,10 @@ static NSString* _CleanUpCommitMessage(NSString* message) {
       CGFloat delta = ceil(size.height) - _messageTextField.frame.size.height;
       _infoView.frame = NSMakeRect(0, 0, frame.size.width, frame.size.height + delta);
       
-      _sha1TextField.stringValue = _commit.shortSHA1;
+      _sha1TextField.stringValue = _commit.SHA1;
       
-      _dateTextField.stringValue = [NSString stringWithFormat:@"%@ (%@)", [_dateFormatter stringFromDate:_commit.date], GIFormatDateRelativelyFromNow(_commit.date, NO)];
+      _authorDateTextField.stringValue = [NSString stringWithFormat:@"%@ (%@)", [_dateFormatter stringFromDate:_commit.authorDate], GIFormatDateRelativelyFromNow(_commit.authorDate, NO)];
+      _committerDateTextField.stringValue = [NSString stringWithFormat:@"%@ (%@)", [_dateFormatter stringFromDate:_commit.committerDate], GIFormatDateRelativelyFromNow(_commit.committerDate, NO)];
       
       CGFloat authorFontSize = _authorTextField.font.pointSize;
       NSMutableAttributedString* author = [[NSMutableAttributedString alloc] init];
@@ -158,9 +160,10 @@ static NSString* _CleanUpCommitMessage(NSString* message) {
       [_diffFilesViewController setDeltas:_diff.deltas usingConflicts:nil];
     } else {
       _sha1TextField.stringValue = @"";
-      _dateTextField.stringValue = @"";
       _authorTextField.stringValue = @"";
+      _authorDateTextField.stringValue = @"";
       _committerTextField.stringValue = @"";
+      _committerDateTextField.stringValue = @"";
       _messageTextField.stringValue = @"";
       
       _diff = nil;
