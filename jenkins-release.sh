@@ -37,9 +37,8 @@ INFO_PLIST_PATH="$PAYLOAD_PATH/$FULL_PRODUCT_NAME/Contents/Info.plist"
 VERSION_ID=`defaults read "$INFO_PLIST_PATH" "CFBundleVersion"`
 VERSION_STRING=`defaults read "$INFO_PLIST_PATH" "CFBundleShortVersionString"`
 MIN_OS=`defaults read "$INFO_PLIST_PATH" "LSMinimumSystemVersion"`
-GIT_SHA1=`defaults read "$INFO_PLIST_PATH" "GitSHA1"`
 
-if [ "$VERSION_ID" != "$VERSION" ] || [ "$GIT_SHA1" == "" ]; then
+if [ "$VERSION_ID" != "$VERSION" ]; then
   exit 1
 fi
 
