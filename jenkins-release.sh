@@ -37,8 +37,13 @@ INFO_PLIST_PATH="$PAYLOAD_PATH/$FULL_PRODUCT_NAME/Contents/Info.plist"
 VERSION_ID=`defaults read "$INFO_PLIST_PATH" "CFBundleVersion"`
 VERSION_STRING=`defaults read "$INFO_PLIST_PATH" "CFBundleShortVersionString"`
 MIN_OS=`defaults read "$INFO_PLIST_PATH" "LSMinimumSystemVersion"`
-
 if [ "$VERSION_ID" != "$VERSION" ]; then
+  exit 1
+fi
+
+INFO_PLIST_PATH="$PAYLOAD_PATH/$FULL_PRODUCT_NAME/Contents/Frameworks/GitUpKit.framework/Versions/A/Resources/Info.plist"
+GIT_SHA1=`defaults read "$INFO_PLIST_PATH" "GitSHA1"`
+if [ "$GIT_SHA1" == "" ]; then
   exit 1
 fi
 
