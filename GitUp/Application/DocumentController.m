@@ -23,9 +23,10 @@
 
 // Patch method to allow selecting folders
 - (void)beginOpenPanel:(NSOpenPanel*)openPanel forTypes:(NSArray*)inTypes completionHandler:(void (^)(NSInteger result))completionHandler {
-  XLOG_DEBUG_CHECK([inTypes isEqualToArray:@[@"public.folder"]]);
+  XLOG_DEBUG_CHECK([inTypes isEqualToArray:@[@"public.directory"]]);
   openPanel.canChooseFiles = NO;
   openPanel.canChooseDirectories = YES;
+  openPanel.treatsFilePackagesAsDirectories = YES;
   [super beginOpenPanel:openPanel forTypes:inTypes completionHandler:completionHandler];
 }
 

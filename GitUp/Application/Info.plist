@@ -13,7 +13,7 @@
 			<string>Editor</string>
 			<key>LSItemContentTypes</key>
 			<array>
-				<string>public.folder</string>
+				<string>public.directory</string>
 			</array>
 			<key>NSDocumentClass</key>
 			<string>Document</string>
