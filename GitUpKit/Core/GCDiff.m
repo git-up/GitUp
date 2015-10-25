@@ -19,7 +19,7 @@
 
 #import "GCPrivate.h"
 
-#define kMaxFileSizeForTextDiff (32 * 1024 * 1024)  // libgit2 default is 512 MiB
+#define kMaxFileSizeForTextDiff (8 * 1024 * 1024)  // libgit2 default is 512 MiB
 
 static inline GCFileDiffChange _FileDiffChangeFromStatus(git_delta_t status) {
   switch (status) {
