@@ -1604,15 +1604,19 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 
 - (void)commitListViewControllerDidChangeSelection:(GICommitListViewController*)controller {
   if (!_preventSelectionLoopback) {
-    _preventSelectionLoopback = YES;
+    GCHistoryCommit* commit = nil;
     if (_searchView.superview) {
-      [_mapViewController selectCommit:_searchResultsViewController.selectedCommit];
+      commit = _searchResultsViewController.selectedCommit;
     } else if (_tagsView.superview) {
-      [_mapViewController selectCommit:_tagsViewController.selectedCommit];
+      commit = _tagsViewController.selectedCommit;
     } else if (_ancestorsView.superview) {
-      [_mapViewController selectCommit:_ancestorsViewController.selectedCommit];
+      commit = _ancestorsViewController.selectedCommit;
     }
-    _preventSelectionLoopback = NO;
+    if (commit) {  // Don't deselect commit in map if no commit is selected in the list
+      _preventSelectionLoopback = YES;
+      [_mapViewController selectCommit:commit];
+      _preventSelectionLoopback = NO;
+    }
   }
   
   if (((_searchView.superview && _searchResultsViewController.selectedResult) || (_tagsView.superview && _tagsViewController.selectedResult) || (_ancestorsView.superview && _ancestorsViewController.selectedResult)) && !_mapViewController.selectedCommit) {
