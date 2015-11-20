@@ -862,21 +862,23 @@ static void _DrawLine(GILine* line, CGContextRef context, CGFloat offset, CGFloa
 
 static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, GIBranch* branch, GIGraphOptions options) {
 
+  // Build a long rich text from branches and tags
+
   NSMutableString* multilineTitle = [[NSMutableString alloc] init]; // Multiline string above the HEAD
-  NSMutableArray* boldRanges = [[NSMutableArray alloc] init];       // Ranges to be drawn using bold font
-  NSMutableArray* darkRanges = [[NSMutableArray alloc] init];       // Ranges to draw with darker color
+	NSMutableArray* boldRanges = [[NSMutableArray alloc] init];       // Ranges to be drawn using bold font
+	NSMutableArray* darkRanges = [[NSMutableArray alloc] init];       // Ranges to draw with darker color
 
   for (GCHistoryLocalBranch* localBranch in branch.localBranches) {
     GCHistoryRemoteBranch* remoteBranch = (id)localBranch.upstream;
     if ([remoteBranch isKindOfClass:GCHistoryRemoteBranch.class]) {
-			NSString* branchName = remoteBranch.branchName;
-			NSRange branchNameRange = NSMakeRange(multilineTitle.length, branchName.length);
-			[multilineTitle appendFormat:@"%@\n", branchName];
-			[boldRanges addObject:[NSValue valueWithRange:branchNameRange]];
-			[darkRanges addObject:boldRanges.lastObject];
-			
+      NSString* branchName = remoteBranch.branchName;
+      NSRange branchNameRange = NSMakeRange(multilineTitle.length, branchName.length);
+      [multilineTitle appendFormat:@"%@\n", branchName];
+      [boldRanges addObject:[NSValue valueWithRange:branchNameRange]];
+      [darkRanges addObject:boldRanges.lastObject];
+
       NSString* remoteName = remoteBranch.remoteName;
-			[multilineTitle appendFormat:@"%@/%@\n", remoteName, branchName];
+      [multilineTitle appendFormat:@"%@/%@\n", remoteName, branchName];
       branchNameRange = NSMakeRange(multilineTitle.length - branchName.length - 1, branchName.length);
       [darkRanges addObject:[NSValue valueWithRange:branchNameRange]];
     }
@@ -895,7 +897,7 @@ static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, GIBranc
     NSString* remoteName = remoteBranch.remoteName;
     NSString* branchName = remoteBranch.branchName;
     [multilineTitle appendFormat:@"%@/%@\n", remoteName, branchName];
-		NSRange branchNameRange = NSMakeRange(multilineTitle.length - branchName.length - 1, branchName.length);
+    NSRange branchNameRange = NSMakeRange(multilineTitle.length - branchName.length - 1, branchName.length);
     [boldRanges addObject:[NSValue valueWithRange:branchNameRange]];
     [darkRanges addObject:boldRanges.lastObject];
   }
@@ -916,34 +918,39 @@ static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, GIBranc
     [multilineTitle appendString:@"\n"];
   }
 
+  if (multilineTitle.length == 0) {
+    [boldRanges release];
+    [darkRanges release];
+    [multilineTitle release];
+    return; // This should only happen if we have a detached HEAD with no other references pointing to the commit
+  }
+
+  // Create a light string to show above the HEAD
+
+  NSFont* titleFont = (NSFont *)CTFontCreateUIFontForLanguage(kCTFontUIFontSystem, 12.0, CFSTR("en-US"));
+  NSColor* titleColor = [NSColor grayColor];
+  NSDictionary* multilineTitleAttributes = @{ NSFontAttributeName: titleFont, NSForegroundColorAttributeName: titleColor };
+  NSMutableAttributedString* multilineAttributedTitle = [[NSMutableAttributedString alloc] initWithString:multilineTitle attributes:multilineTitleAttributes];
+  [multilineTitle release];
+  [titleColor release];
+  [titleFont release];
+
+  // Create CoreFoundation string from Foundation
+
+  CFAttributedStringRef string = (CFAttributedStringRef)multilineAttributedTitle.copy;
+  [multilineAttributedTitle release];
   [boldRanges release];
   [darkRanges release];
-	
-	if (multilineTitle.length == 0) {
-  	[multilineTitle release];
-		return; // This should only happen if we have a detached HEAD with no other references pointing to the commit
-	}
 
-  // Build attributes from scratch for each branch
+  // Prepare CoreText string from the rich attributed title
 
-  CTFontRef titleFont = CTFontCreateUIFontForLanguage(kCTFontUIFontEmphasizedSystem, 13.0, CFSTR("en-US"));
-  NSDictionary* attributes = @{(id)kCTForegroundColorFromContextAttributeName: (id)kCFBooleanTrue, (id)kCTFontAttributeName: (id)titleFont};
-
-  // Prepare text
-
-  CFAttributedStringRef string = CFAttributedStringCreate(kCFAllocatorDefault, (CFStringRef)multilineTitle, (CFDictionaryRef)attributes);
   CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString(string);
   CGSize size = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0, CFAttributedStringGetLength(string)), NULL, CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX), NULL);
   CGRect textRect = CGRectMake(kTitleOffsetX, kTitleOffsetY, ceil(size.width), ceil(size.height));
   CGPathRef path = CGPathCreateWithRect(textRect, NULL);
   CTFrameRef frame = CTFramesetterCreateFrame(framesetter, CFRangeMake(0, CFAttributedStringGetLength(string)), path, NULL);
-  CFAttributedStringRef character = CFAttributedStringCreate(kCFAllocatorDefault, CFSTR("\u2026"), (CFDictionaryRef)attributes);
+  CFAttributedStringRef character = CFAttributedStringCreate(kCFAllocatorDefault, CFSTR("\u2026"), (CFDictionaryRef)multilineTitleAttributes);
   CTLineRef token = CTLineCreateWithAttributedString(character);
-
-  // Attributed string is built, no need to keep attributes
-
-  CFRelease(titleFont);
-	[multilineTitle release];
 
   // Prepare context
   
