@@ -860,7 +860,7 @@ static void _DrawLine(GILine* line, CGContextRef context, CGFloat offset, CGFloa
   }
 }
 
-static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, GIBranch* branch, NSDictionary* attributes, GIGraphOptions options) {
+static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, GIBranch* branch, GIGraphOptions options) {
   NSUInteger index;
   
   // Generate text
@@ -909,9 +909,14 @@ static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, GIBranc
     [label release];
     return;  // This should only happen if we have a detached HEAD with no other references pointing to the commit
   }
-  
+
+  // Build attributes from scratch for each branch
+
+  CTFontRef titleFont = CTFontCreateUIFontForLanguage(kCTFontUIFontEmphasizedSystem, 13.0, CFSTR("en-US"));
+  NSDictionary* attributes = @{(id)kCTForegroundColorFromContextAttributeName: (id)kCFBooleanTrue, (id)kCTFontAttributeName: (id)titleFont};
+
   // Prepare text
-  
+
   CFAttributedStringRef string = CFAttributedStringCreate(kCFAllocatorDefault, (CFStringRef)label, (CFDictionaryRef)attributes);
   CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString(string);
   CGSize size = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0, CFAttributedStringGetLength(string)), NULL, CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX), NULL);
@@ -920,7 +925,11 @@ static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, GIBranc
   CTFrameRef frame = CTFramesetterCreateFrame(framesetter, CFRangeMake(0, CFAttributedStringGetLength(string)), path, NULL);
   CFAttributedStringRef character = CFAttributedStringCreate(kCFAllocatorDefault, CFSTR("\u2026"), (CFDictionaryRef)attributes);
   CTLineRef token = CTLineCreateWithAttributedString(character);
-  
+
+  // Attributed string is built, no need to keep attributes
+
+  CFRelease(titleFont);
+
   // Prepare context
   
   CGContextSaveGState(context);
@@ -1339,8 +1348,6 @@ static void _DrawSelectedNode(CGContextRef context, CGFloat x, CGFloat y, GINode
   NSUInteger endIndex = layerCount ? [self _indexOfLayerContainingPosition:dirtyRect.origin.y - kOverdrawMargin] : 0;
   CGFloat offset = _graph.size.height;
   NSMutableArray* lines = [[NSMutableArray alloc] init];
-  CTFontRef titleFont = CTFontCreateUIFontForLanguage(kCTFontUIFontEmphasizedSystem, 13.0, CFSTR("en-US"));
-  NSDictionary* titleAttributes = @{(id)kCTForegroundColorFromContextAttributeName: (id)kCFBooleanTrue, (id)kCTFontAttributeName: (id)titleFont};
   CTFontRef tagFont = CTFontCreateUIFontForLanguage(kCTFontUIFontSystem, 11.0, CFSTR("en-US"));
   NSDictionary* tagAttributes = @{(id)kCTForegroundColorFromContextAttributeName: (id)kCFBooleanTrue, (id)kCTFontAttributeName: (id)tagFont};
   CTFontRef branchFont = CTFontCreateUIFontForLanguage(kCTFontUIFontEmphasizedSystem, 11.0, CFSTR("en-US"));
@@ -1553,7 +1560,7 @@ static void _DrawSelectedNode(CGContextRef context, CGFloat x, CGFloat y, GINode
       GINode* node = branch.tipNode;
       CGFloat x = CONVERT_X(node.x);
       CGFloat y = CONVERT_Y(offset - node.layer.y);
-      _DrawBranchTitle(context, x, y, branch, titleAttributes, graphOptions);
+      _DrawBranchTitle(context, x, y, branch, graphOptions);
     }
   }
   
@@ -1578,7 +1585,6 @@ static void _DrawSelectedNode(CGContextRef context, CGFloat x, CGFloat y, GINode
   CFRelease(selectedFont1);
   CFRelease(branchFont);
   CFRelease(tagFont);
-  CFRelease(titleFont);
   [lines release];
 }
 
