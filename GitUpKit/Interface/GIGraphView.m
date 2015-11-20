@@ -860,7 +860,7 @@ static void _DrawLine(GILine* line, CGContextRef context, CGFloat offset, CGFloa
   }
 }
 
-static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, GIBranch* branch, GIGraphOptions options) {
+static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, NSColor* color, GIBranch* branch, GIGraphOptions options) {
 
   // Build a long rich text from branches and tags
 
@@ -928,11 +928,9 @@ static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, GIBranc
   // Create a light string to show above the HEAD
 
   NSFont* titleFont = (NSFont *)CTFontCreateUIFontForLanguage(kCTFontUIFontSystem, 12.0, CFSTR("en-US"));
-  NSColor* titleColor = [NSColor grayColor];
-  NSDictionary* multilineTitleAttributes = @{ NSFontAttributeName: titleFont, NSForegroundColorAttributeName: titleColor };
+  NSDictionary* multilineTitleAttributes = @{ NSFontAttributeName: titleFont, NSForegroundColorAttributeName: color };
   NSMutableAttributedString* multilineAttributedTitle = [[NSMutableAttributedString alloc] initWithString:multilineTitle attributes:multilineTitleAttributes];
   [multilineTitle release];
-  [titleColor release];
   [titleFont release];
 
   // Change font to bold on ranges collected before
@@ -946,11 +944,10 @@ static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, GIBranc
 
   // Change color to dark on ranges collected before
 
-  NSColor* darkColor = [NSColor blackColor];
+  NSColor* darkColor = [color shadowWithLevel:0.8];
   for (NSValue *dark in darkRanges) {
     [multilineAttributedTitle addAttribute:NSForegroundColorAttributeName value:darkColor range:dark.rangeValue];
   }
-  [darkColor release];
   [darkRanges release];
 
   // Create CoreFoundation string from Foundation
@@ -1597,7 +1594,7 @@ static void _DrawSelectedNode(CGContextRef context, CGFloat x, CGFloat y, GINode
       GINode* node = branch.tipNode;
       CGFloat x = CONVERT_X(node.x);
       CGFloat y = CONVERT_Y(offset - node.layer.y);
-      _DrawBranchTitle(context, x, y, branch, graphOptions);
+      _DrawBranchTitle(context, x, y, node.primaryLine.color, branch, graphOptions);
     }
   }
   
