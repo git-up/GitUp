@@ -47,8 +47,8 @@
 #endif
 
 #define kTitleSpacing 200
-#define kTitleOffsetX 17
-#define kTitleOffsetY 20
+#define kTitleOffsetX 7
+#define kTitleOffsetY 7
 
 #define kLabelOffsetX 18
 #define kLabelOffsetY 10
@@ -860,121 +860,160 @@ static void _DrawLine(GILine* line, CGContextRef context, CGFloat offset, CGFloa
   }
 }
 
-static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, GIBranch* branch, GIGraphOptions options) {
-  NSUInteger index;
+static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, NSColor* color, GIBranch* branch, GIGraphOptions options) {
   
-  // Generate text
+  // Build a long rich text from branches and tags
+  NSMutableString* multilineTitle = [[NSMutableString alloc] init]; // Multiline string above the HEAD
+  NSMutableArray* boldRanges = [[NSMutableArray alloc] init];       // Ranges to be drawn using bold font
+  NSMutableArray* darkRanges = [[NSMutableArray alloc] init];       // Ranges to draw with darker color
   
-  NSMutableString* label = [[NSMutableString alloc] init];
-  index = 0;
   for (GCHistoryLocalBranch* localBranch in branch.localBranches) {
-    if (index) {
-      [label appendString:@", "];
-    }
-    NSString* upstream = localBranch.upstream.name;
-    if (upstream) {
-      [label appendFormat:@"%@ ◀ %@", localBranch.name, upstream];
+    GCHistoryRemoteBranch* remoteBranch = (id)localBranch.upstream;
+    if ([remoteBranch isKindOfClass:GCHistoryRemoteBranch.class]) {
+      NSString* branchName = remoteBranch.branchName;
+      NSRange branchNameRange = NSMakeRange(multilineTitle.length, branchName.length);
+      [multilineTitle appendFormat:@"%@\n", branchName];
+      [boldRanges addObject:[NSValue valueWithRange:branchNameRange]];
+      [darkRanges addObject:boldRanges.lastObject];
+      
+      NSString* remoteName = remoteBranch.remoteName;
+      [multilineTitle appendFormat:@"%@/%@\n", remoteName, branchName];
+      branchNameRange = NSMakeRange(multilineTitle.length - branchName.length - 1, branchName.length); // -1 to exclude '\n'
+      [darkRanges addObject:[NSValue valueWithRange:branchNameRange]];
     } else {
-      [label appendString:localBranch.name];
+      NSString* branchName = localBranch.name;
+      NSRange branchNameRange = NSMakeRange(multilineTitle.length, branchName.length);
+      [multilineTitle appendFormat:@"%@\n", branchName];
+      [boldRanges addObject:[NSValue valueWithRange:branchNameRange]];
+      [darkRanges addObject:boldRanges.lastObject];
     }
-    ++index;
+    
+    [multilineTitle appendString:@"\n"];
   }
-  index = 0;
+  
   for (GCHistoryRemoteBranch* remoteBranch in branch.remoteBranches) {
-    if (index) {
-      [label appendString:@", "];
-    } else if (label.length) {
-      [label appendString:@"\n"];
-    }
-    [label appendString:remoteBranch.name];
-    ++index;
+    NSString* remoteName = remoteBranch.remoteName;
+    NSString* branchName = remoteBranch.branchName;
+    [multilineTitle appendFormat:@"%@/%@\n", remoteName, branchName];
+    NSRange branchNameRange = NSMakeRange(multilineTitle.length - branchName.length - 1, branchName.length); // -1 to exclude '\n'
+    [boldRanges addObject:[NSValue valueWithRange:branchNameRange]];
+    [darkRanges addObject:boldRanges.lastObject];
   }
-  index = 0;
+  
+  if (branch.remoteBranches.count > 0) {
+    [multilineTitle appendString:@"\n"];
+  }
+  
   for (GCHistoryTag* tag in branch.tags) {
-    if (index) {
-      [label appendString:@", "];
-    } else {
-      if (label.length) {
-        [label appendString:@"\n"];
-      }
-      [label appendString:@"["];
-    }
-    [label appendString:tag.name];
-    ++index;
+    NSString* tagName = tag.name;
+    [multilineTitle appendFormat:@"[%@]\n", tagName];
+    NSRange tagNameRange = NSMakeRange(multilineTitle.length - tagName.length - 2, tagName.length); // -2 to exclude char ']' plus '\n'
+    [boldRanges addObject:[NSValue valueWithRange:tagNameRange]];
+    [darkRanges addObject:boldRanges.lastObject];
   }
-  if (index) {
-    [label appendString:@"]"];
+  
+  if (branch.tags.count > 0) {
+    [multilineTitle appendString:@"\n"];
   }
-  if (!label.length) {
-    [label release];
-    return;  // This should only happen if we have a detached HEAD with no other references pointing to the commit
+  
+  if (multilineTitle.length == 0) {
+    [boldRanges release];
+    [darkRanges release];
+    [multilineTitle release];
+    return; // This should only happen if we have a detached HEAD with no other references pointing to the commit
   }
-
-  // Build attributes from scratch for each branch
-
-  CTFontRef titleFont = CTFontCreateUIFontForLanguage(kCTFontUIFontEmphasizedSystem, 13.0, CFSTR("en-US"));
-  NSDictionary* attributes = @{(id)kCTForegroundColorFromContextAttributeName: (id)kCFBooleanTrue, (id)kCTFontAttributeName: (id)titleFont};
-
-  // Prepare text
-
-  CFAttributedStringRef string = CFAttributedStringCreate(kCFAllocatorDefault, (CFStringRef)label, (CFDictionaryRef)attributes);
-  CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString(string);
-  CGSize size = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0, CFAttributedStringGetLength(string)), NULL, CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX), NULL);
+  
+  // Create a light string to show above the HEAD
+  CTFontRef titleFont = CTFontCreateUIFontForLanguage(kCTFontUIFontSystem, 12.0, CFSTR("en-US"));
+  NSMutableParagraphStyle* style = [[NSMutableParagraphStyle alloc] init];
+  style.lineHeightMultiple = 0.8;
+  NSDictionary* multilineTitleAttributes = @{ NSFontAttributeName: (id)titleFont, NSForegroundColorAttributeName: color, NSParagraphStyleAttributeName: style };
+  NSMutableAttributedString* multilineAttributedTitle = [[NSMutableAttributedString alloc] initWithString:multilineTitle attributes:multilineTitleAttributes];
+  CFRelease(titleFont);
+  [style release];
+  
+  // Change font to bold on ranges collected before
+  CTFontRef boldFont = CTFontCreateUIFontForLanguage(kCTFontUIFontEmphasizedSystem, 12.0, CFSTR("en-US"));
+  for (NSValue* bold in boldRanges) {
+    [multilineAttributedTitle addAttribute:NSFontAttributeName value:(id)boldFont range:bold.rangeValue];
+  }
+  CFRelease(boldFont);
+  
+  // Change color to dark on ranges collected before
+  NSColor* darkColor = [color shadowWithLevel:0.7];
+  for (NSValue* dark in darkRanges) {
+    [multilineAttributedTitle addAttribute:NSForegroundColorAttributeName value:darkColor range:dark.rangeValue];
+  }
+  
+  // Prepare CoreText string from the rich attributed title
+  CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)multilineAttributedTitle);
+  CGSize size = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0, multilineAttributedTitle.length), NULL, CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX), NULL);
   CGRect textRect = CGRectMake(kTitleOffsetX, kTitleOffsetY, ceil(size.width), ceil(size.height));
   CGPathRef path = CGPathCreateWithRect(textRect, NULL);
-  CTFrameRef frame = CTFramesetterCreateFrame(framesetter, CFRangeMake(0, CFAttributedStringGetLength(string)), path, NULL);
-  CFAttributedStringRef character = CFAttributedStringCreate(kCFAllocatorDefault, CFSTR("\u2026"), (CFDictionaryRef)attributes);
-  CTLineRef token = CTLineCreateWithAttributedString(character);
-
-  // Attributed string is built, no need to keep attributes
-
-  CFRelease(titleFont);
-
-  // Prepare context
+  CTFrameRef frame = CTFramesetterCreateFrame(framesetter, CFRangeMake(0, multilineAttributedTitle.length), path, NULL);
+  CFAttributedStringRef ellipsis = CFAttributedStringCreate(kCFAllocatorDefault, CFSTR("\u2026"), (CFDictionaryRef)multilineTitleAttributes);
+  CTLineRef ellipsisToken = CTLineCreateWithAttributedString(ellipsis);
   
+  // Prepare context
   CGContextSaveGState(context);
   CGContextTranslateCTM(context, x, y);
-  CGContextRotateCTM(context, 40.0 / 180.0 * M_PI);
-  
-  // Draw label
-  
-#if __DEBUG_BOXES__
-  CGRect labelRect = CGRectInset(CGRectMake(textRect.origin.x, textRect.origin.y, MIN(textRect.size.width, kMaxBranchTitleWidth), textRect.size.height), -4.5, -3.5);
-  CGContextSetRGBFillColor(context, 1.0, 0.0, 0.0, 0.666);
-  CGContextFillRect(context, labelRect);
-#endif
+  CGContextRotateCTM(context, 45.0 / 180.0 * M_PI);
+  CGContextSetLineWidth(context, 0.5);
   
   // Draw text
-  
-  CGContextSetRGBFillColor(context, 0.0, 0.0, 0.0, 1.0);
+  CGFloat lastLineWidth = 0.0;
   CFArrayRef lines = CTFrameGetLines(frame);
   for (CFIndex i = 0, count = CFArrayGetCount(lines); i < count; ++i) {
     CTLineRef line = CFArrayGetValueAtIndex(lines, i);
     CGPoint origin;
     CTFrameGetLineOrigins(frame, CFRangeMake(i, 1), &origin);
-    CGContextSetTextPosition(context, textRect.origin.x + origin.x, textRect.origin.y + origin.y);
-    if (size.width <= kMaxBranchTitleWidth) {
+    
+    origin.x += textRect.origin.x + origin.y;
+    origin.y += textRect.origin.y;
+    
+    CGFloat ascent, descent, leading;
+    CGFloat lineWidth = CTLineGetTypographicBounds(line, &ascent, &descent, &leading);
+    CGFloat lineHeight = ascent;
+    
+    // Draw separator in case of new line which is guaranteed by the building algorithm
+    CFRange stringRange = CTLineGetStringRange(line);
+    if (stringRange.length == 1) {
+      CGRect underlineRect = CGRectMake(origin.x - 1.0, origin.y - 1.0, lastLineWidth + 5.0, lineHeight - 3.0);
+      CGContextMoveToPoint(context, underlineRect.origin.x, underlineRect.origin.y);
+      CGContextAddLineToPoint(context, underlineRect.origin.x + underlineRect.size.height, underlineRect.origin.y + underlineRect.size.height);
+      CGContextAddLineToPoint(context, underlineRect.origin.x + underlineRect.size.width, underlineRect.origin.y + underlineRect.size.height);
+      CGContextSetStrokeColorWithColor(context, [color colorWithAlphaComponent:0.5].CGColor);
+      CGContextStrokePath(context);
+      continue;
+    }
+    
+    // Draw line with ellipsis in the end if needed
+    CGContextSetTextPosition(context, origin.x, origin.y);
+    if (lineWidth <= kMaxBranchTitleWidth) {
       CTLineDraw(line, context);
     } else {
-      CTLineRef drawLine = CTLineCreateTruncatedLine(line, kMaxBranchTitleWidth, kCTLineTruncationEnd, token);
+      CTLineRef drawLine = CTLineCreateTruncatedLine(line, kMaxBranchTitleWidth, kCTLineTruncationEnd, ellipsisToken);
       CTLineDraw(drawLine, context);
       CFRelease(drawLine);
     }
+    
+    // Remember last line width for the next separator below
+    lastLineWidth = MIN(lineWidth, kMaxBranchTitleWidth);
   }
   
   // Reset context
-  
   CGContextRestoreGState(context);
   
   // Clean up
-  
-  CFRelease(token);
-  CFRelease(character);
-  CFRelease(frame);
+  [multilineAttributedTitle release];
+  [multilineTitle release];
+  [boldRanges release];
+  [darkRanges release];
   CGPathRelease(path);
+  CFRelease(ellipsisToken);
+  CFRelease(ellipsis);
+  CFRelease(frame);
   CFRelease(framesetter);
-  CFRelease(string);
-  [label release];
 }
 
 static void _DrawNodeLabels(CGContextRef context, CGFloat x, CGFloat y, GINode* node, NSDictionary* tagAttributes, NSDictionary* branchAttributes) {
@@ -1560,7 +1599,7 @@ static void _DrawSelectedNode(CGContextRef context, CGFloat x, CGFloat y, GINode
       GINode* node = branch.tipNode;
       CGFloat x = CONVERT_X(node.x);
       CGFloat y = CONVERT_Y(offset - node.layer.y);
-      _DrawBranchTitle(context, x, y, branch, graphOptions);
+      _DrawBranchTitle(context, x, y, node.primaryLine.color, branch, graphOptions);
     }
   }
   
