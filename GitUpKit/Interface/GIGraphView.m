@@ -909,7 +909,7 @@ static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, GIBranc
   for (GCHistoryTag* tag in branch.tags) {
     NSString* tagName = tag.name;
     [multilineTitle appendFormat:@"[%@]\n", tagName];
-    NSRange tagNameRange = NSMakeRange(multilineTitle.length - tagName.length - 3, tagName.length);
+    NSRange tagNameRange = NSMakeRange(multilineTitle.length - tagName.length - 2, tagName.length);
     [boldRanges addObject:[NSValue valueWithRange:tagNameRange]];
     [darkRanges addObject:boldRanges.lastObject];
   }
@@ -935,12 +935,28 @@ static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, GIBranc
   [titleColor release];
   [titleFont release];
 
+  // Change font to bold on ranges collected before
+
+  NSFont* boldFont = (NSFont *)CTFontCreateUIFontForLanguage(kCTFontUIFontEmphasizedSystem, 12.0, CFSTR("en-US"));
+  for (NSValue *bold in boldRanges) {
+    [multilineAttributedTitle addAttribute:NSFontAttributeName value:boldFont range:bold.rangeValue];
+  }
+  [boldFont release];
+  [boldRanges release];
+
+  // Change color to dark on ranges collected before
+
+  NSColor* darkColor = [NSColor blackColor];
+  for (NSValue *dark in darkRanges) {
+    [multilineAttributedTitle addAttribute:NSForegroundColorAttributeName value:darkColor range:dark.rangeValue];
+  }
+  [darkColor release];
+  [darkRanges release];
+
   // Create CoreFoundation string from Foundation
 
   CFAttributedStringRef string = (CFAttributedStringRef)multilineAttributedTitle.copy;
   [multilineAttributedTitle release];
-  [boldRanges release];
-  [darkRanges release];
 
   // Prepare CoreText string from the rich attributed title
 
@@ -965,7 +981,7 @@ static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, GIBranc
   CGContextSetRGBFillColor(context, 1.0, 0.0, 0.0, 0.666);
   CGContextFillRect(context, labelRect);
 #endif
-  
+	
   // Draw text
   
   CGContextSetRGBFillColor(context, 0.0, 0.0, 0.0, 1.0);
