@@ -861,54 +861,68 @@ static void _DrawLine(GILine* line, CGContextRef context, CGFloat offset, CGFloa
 }
 
 static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, GIBranch* branch, GIGraphOptions options) {
-  NSUInteger index;
-  
-  // Generate text
-  
-  NSMutableString* label = [[NSMutableString alloc] init];
-  index = 0;
+
+  NSMutableString* multilineTitle = [[NSMutableString alloc] init]; // Multiline string above the HEAD
+  NSMutableArray* boldRanges = [[NSMutableArray alloc] init];       // Ranges to be drawn using bold font
+  NSMutableArray* darkRanges = [[NSMutableArray alloc] init];       // Ranges to draw with darker color
+
   for (GCHistoryLocalBranch* localBranch in branch.localBranches) {
-    if (index) {
-      [label appendString:@", "];
+    GCHistoryRemoteBranch* remoteBranch = (id)localBranch.upstream;
+    if ([remoteBranch isKindOfClass:GCHistoryRemoteBranch.class]) {
+			NSString* branchName = remoteBranch.branchName;
+			NSRange branchNameRange = NSMakeRange(multilineTitle.length, branchName.length);
+			[multilineTitle appendFormat:@"%@\n", branchName];
+			[boldRanges addObject:[NSValue valueWithRange:branchNameRange]];
+			[darkRanges addObject:boldRanges.lastObject];
+			
+      NSString* remoteName = remoteBranch.remoteName;
+			[multilineTitle appendFormat:@"%@/%@\n", remoteName, branchName];
+      branchNameRange = NSMakeRange(multilineTitle.length - branchName.length - 1, branchName.length);
+      [darkRanges addObject:[NSValue valueWithRange:branchNameRange]];
     }
-    NSString* upstream = localBranch.upstream.name;
-    if (upstream) {
-      [label appendFormat:@"%@ ◀ %@", localBranch.name, upstream];
-    } else {
-      [label appendString:localBranch.name];
+    else {
+      NSString* branchName = localBranch.name;
+      NSRange branchNameRange = NSMakeRange(multilineTitle.length, branchName.length);
+      [multilineTitle appendFormat:@"%@\n", branchName];
+      [boldRanges addObject:[NSValue valueWithRange:branchNameRange]];
+      [darkRanges addObject:boldRanges.lastObject];
     }
-    ++index;
+
+    [multilineTitle appendString:@"\n"];
   }
-  index = 0;
+
   for (GCHistoryRemoteBranch* remoteBranch in branch.remoteBranches) {
-    if (index) {
-      [label appendString:@", "];
-    } else if (label.length) {
-      [label appendString:@"\n"];
-    }
-    [label appendString:remoteBranch.name];
-    ++index;
+    NSString* remoteName = remoteBranch.remoteName;
+    NSString* branchName = remoteBranch.branchName;
+    [multilineTitle appendFormat:@"%@/%@\n", remoteName, branchName];
+		NSRange branchNameRange = NSMakeRange(multilineTitle.length - branchName.length - 1, branchName.length);
+    [boldRanges addObject:[NSValue valueWithRange:branchNameRange]];
+    [darkRanges addObject:boldRanges.lastObject];
   }
-  index = 0;
+
+  if (branch.remoteBranches.count > 0) {
+    [multilineTitle appendString:@"\n"];
+  }
+
   for (GCHistoryTag* tag in branch.tags) {
-    if (index) {
-      [label appendString:@", "];
-    } else {
-      if (label.length) {
-        [label appendString:@"\n"];
-      }
-      [label appendString:@"["];
-    }
-    [label appendString:tag.name];
-    ++index;
+    NSString* tagName = tag.name;
+    [multilineTitle appendFormat:@"[%@]\n", tagName];
+    NSRange tagNameRange = NSMakeRange(multilineTitle.length - tagName.length - 3, tagName.length);
+    [boldRanges addObject:[NSValue valueWithRange:tagNameRange]];
+    [darkRanges addObject:boldRanges.lastObject];
   }
-  if (index) {
-    [label appendString:@"]"];
+
+  if (branch.tags.count > 0) {
+    [multilineTitle appendString:@"\n"];
   }
-  if (!label.length) {
-    [label release];
-    return;  // This should only happen if we have a detached HEAD with no other references pointing to the commit
-  }
+
+  [boldRanges release];
+  [darkRanges release];
+	
+	if (multilineTitle.length == 0) {
+  	[multilineTitle release];
+		return; // This should only happen if we have a detached HEAD with no other references pointing to the commit
+	}
 
   // Build attributes from scratch for each branch
 
@@ -917,7 +931,7 @@ static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, GIBranc
 
   // Prepare text
 
-  CFAttributedStringRef string = CFAttributedStringCreate(kCFAllocatorDefault, (CFStringRef)label, (CFDictionaryRef)attributes);
+  CFAttributedStringRef string = CFAttributedStringCreate(kCFAllocatorDefault, (CFStringRef)multilineTitle, (CFDictionaryRef)attributes);
   CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString(string);
   CGSize size = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0, CFAttributedStringGetLength(string)), NULL, CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX), NULL);
   CGRect textRect = CGRectMake(kTitleOffsetX, kTitleOffsetY, ceil(size.width), ceil(size.height));
@@ -929,6 +943,7 @@ static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, GIBranc
   // Attributed string is built, no need to keep attributes
 
   CFRelease(titleFont);
+	[multilineTitle release];
 
   // Prepare context
   
@@ -974,7 +989,6 @@ static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, GIBranc
   CGPathRelease(path);
   CFRelease(framesetter);
   CFRelease(string);
-  [label release];
 }
 
 static void _DrawNodeLabels(CGContextRef context, CGFloat x, CGFloat y, GINode* node, NSDictionary* tagAttributes, NSDictionary* branchAttributes) {
