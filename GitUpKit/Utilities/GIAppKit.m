@@ -306,23 +306,24 @@ static NSColor* _separatorColor = nil;
   if ([[NSUserDefaults standardUserDefaults] boolForKey:GICommitMessageViewUserDefaultKey_ShowInvisibleCharacters]) {
     NSTextStorage* storage = self.textStorage;
     NSString* string = storage.string;
-    for (NSUInteger i = range.location; i < range.location + range.length; ++i) {
-      switch ([string characterAtIndex:i]) {
-        
+    for (NSUInteger glyphIndex = range.location; glyphIndex < range.location + range.length; ++glyphIndex) {
+      NSUInteger characterIndex = [self characterIndexForGlyphAtIndex:glyphIndex];
+      switch ([string characterAtIndex:characterIndex]) {
+
         case ' ': {
-          NSFont* font = [storage attribute:NSFontAttributeName atIndex:i effectiveRange:NULL];
+          NSFont* font = [storage attribute:NSFontAttributeName atIndex:characterIndex effectiveRange:NULL];
           XLOG_DEBUG_CHECK([font.fontName isEqualToString:@"Menlo-Regular"]);
-          [self replaceGlyphAtIndex:i withGlyph:[font glyphWithName:@"periodcentered"]];
+          [self replaceGlyphAtIndex:glyphIndex withGlyph:[font glyphWithName:@"periodcentered"]];
           break;
         }
-        
+
         case '\n': {
-          NSFont* font = [storage attribute:NSFontAttributeName atIndex:i effectiveRange:NULL];
+          NSFont* font = [storage attribute:NSFontAttributeName atIndex:characterIndex effectiveRange:NULL];
           XLOG_DEBUG_CHECK([font.fontName isEqualToString:@"Menlo-Regular"]);
-          [self replaceGlyphAtIndex:i withGlyph:[font glyphWithName:@"carriagereturn"]];
+          [self replaceGlyphAtIndex:glyphIndex withGlyph:[font glyphWithName:@"carriagereturn"]];
           break;
         }
-        
+
       }
     }
   }
