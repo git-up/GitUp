@@ -47,8 +47,8 @@
 #endif
 
 #define kTitleSpacing 200
-#define kTitleOffsetX 17
-#define kTitleOffsetY 20
+#define kTitleOffsetX 8
+#define kTitleOffsetY 10
 
 #define kLabelOffsetX 18
 #define kLabelOffsetY 10
@@ -66,7 +66,7 @@
 #define kNodeLabelMaxWidth 200
 #define kNodeLabelMaxHeight 50
 
-#define kMaxBranchTitleWidth 250
+#define kMaxBranchTitleWidth 300
 
 #define kScrollingInset kSpacingY
 
@@ -865,8 +865,8 @@ static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, NSColor
   // Build a long rich text from branches and tags
 
   NSMutableString* multilineTitle = [[NSMutableString alloc] init]; // Multiline string above the HEAD
-	NSMutableArray* boldRanges = [[NSMutableArray alloc] init];       // Ranges to be drawn using bold font
-	NSMutableArray* darkRanges = [[NSMutableArray alloc] init];       // Ranges to draw with darker color
+  NSMutableArray* boldRanges = [[NSMutableArray alloc] init];       // Ranges to be drawn using bold font
+  NSMutableArray* darkRanges = [[NSMutableArray alloc] init];       // Ranges to draw with darker color
 
   for (GCHistoryLocalBranch* localBranch in branch.localBranches) {
     GCHistoryRemoteBranch* remoteBranch = (id)localBranch.upstream;
@@ -936,7 +936,7 @@ static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, NSColor
   // Change font to bold on ranges collected before
 
   NSFont* boldFont = (NSFont *)CTFontCreateUIFontForLanguage(kCTFontUIFontEmphasizedSystem, 12.0, CFSTR("en-US"));
-  for (NSValue *bold in boldRanges) {
+  for (NSValue* bold in boldRanges) {
     [multilineAttributedTitle addAttribute:NSFontAttributeName value:boldFont range:bold.rangeValue];
   }
   [boldFont release];
@@ -945,7 +945,7 @@ static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, NSColor
   // Change color to dark on ranges collected before
 
   NSColor* darkColor = [color shadowWithLevel:0.8];
-  for (NSValue *dark in darkRanges) {
+  for (NSValue* dark in darkRanges) {
     [multilineAttributedTitle addAttribute:NSForegroundColorAttributeName value:darkColor range:dark.rangeValue];
   }
   [darkRanges release];
@@ -969,25 +969,20 @@ static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, NSColor
   
   CGContextSaveGState(context);
   CGContextTranslateCTM(context, x, y);
-  CGContextRotateCTM(context, 40.0 / 180.0 * M_PI);
+  CGContextRotateCTM(context, 45.0 / 180.0 * M_PI);
   
-  // Draw label
-  
-#if __DEBUG_BOXES__
-  CGRect labelRect = CGRectInset(CGRectMake(textRect.origin.x, textRect.origin.y, MIN(textRect.size.width, kMaxBranchTitleWidth), textRect.size.height), -4.5, -3.5);
-  CGContextSetRGBFillColor(context, 1.0, 0.0, 0.0, 0.666);
-  CGContextFillRect(context, labelRect);
-#endif
-	
   // Draw text
   
-  CGContextSetRGBFillColor(context, 0.0, 0.0, 0.0, 1.0);
   CFArrayRef lines = CTFrameGetLines(frame);
   for (CFIndex i = 0, count = CFArrayGetCount(lines); i < count; ++i) {
     CTLineRef line = CFArrayGetValueAtIndex(lines, i);
     CGPoint origin;
     CTFrameGetLineOrigins(frame, CFRangeMake(i, 1), &origin);
-    CGContextSetTextPosition(context, textRect.origin.x + origin.x, textRect.origin.y + origin.y);
+
+    origin.x += CGRectGetMinX(textRect) + origin.y;
+    origin.y += CGRectGetMinY(textRect);
+
+    CGContextSetTextPosition(context, origin.x, origin.y);
     if (size.width <= kMaxBranchTitleWidth) {
       CTLineDraw(line, context);
     } else {
@@ -995,6 +990,12 @@ static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, NSColor
       CTLineDraw(drawLine, context);
       CFRelease(drawLine);
     }
+
+#if __DEBUG_BOXES__
+    CGRect labelRect = CGRectMake(origin.x, origin.y, MIN(CGRectGetWidth(textRect), kMaxBranchTitleWidth), 6.0);
+    CGContextSetRGBFillColor(context, 1.0, 0.0, 0.0, 0.333);
+    CGContextFillRect(context, labelRect);
+#endif
   }
   
   // Reset context
