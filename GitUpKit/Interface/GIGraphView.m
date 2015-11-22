@@ -942,15 +942,12 @@ static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, NSColor
     [multilineAttributedTitle addAttribute:NSForegroundColorAttributeName value:darkColor range:dark.rangeValue];
   }
   
-  // Create CoreFoundation string from Foundation
-  CFAttributedStringRef string = (CFAttributedStringRef)multilineAttributedTitle.copy;
-  
   // Prepare CoreText string from the rich attributed title
-  CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString(string);
-  CGSize size = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0, CFAttributedStringGetLength(string)), NULL, CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX), NULL);
+  CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)multilineAttributedTitle);
+  CGSize size = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0, multilineAttributedTitle.length), NULL, CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX), NULL);
   CGRect textRect = CGRectMake(kTitleOffsetX, kTitleOffsetY, ceil(size.width), ceil(size.height));
   CGPathRef path = CGPathCreateWithRect(textRect, NULL);
-  CTFrameRef frame = CTFramesetterCreateFrame(framesetter, CFRangeMake(0, CFAttributedStringGetLength(string)), path, NULL);
+  CTFrameRef frame = CTFramesetterCreateFrame(framesetter, CFRangeMake(0, multilineAttributedTitle.length), path, NULL);
   CFAttributedStringRef ellipsis = CFAttributedStringCreate(kCFAllocatorDefault, CFSTR("\u2026"), (CFDictionaryRef)multilineTitleAttributes);
   CTLineRef ellipsisToken = CTLineCreateWithAttributedString(ellipsis);
   
@@ -1021,7 +1018,6 @@ static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, NSColor
   CFRelease(ellipsis);
   CFRelease(frame);
   CFRelease(framesetter);
-  CFRelease(string);
   CFRelease(titleFont);
 }
 
