@@ -929,12 +929,14 @@ static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, NSColor
   style.lineHeightMultiple = 0.8;
   NSDictionary* multilineTitleAttributes = @{ NSFontAttributeName: (id)titleFont, NSForegroundColorAttributeName: color, NSParagraphStyleAttributeName: style };
   NSMutableAttributedString* multilineAttributedTitle = [[NSMutableAttributedString alloc] initWithString:multilineTitle attributes:multilineTitleAttributes];
+  CFRelease(titleFont);
   
   // Change font to bold on ranges collected before
   CTFontRef boldFont = CTFontCreateUIFontForLanguage(kCTFontUIFontEmphasizedSystem, 12.0, CFSTR("en-US"));
   for (NSValue* bold in boldRanges) {
     [multilineAttributedTitle addAttribute:NSFontAttributeName value:(id)boldFont range:bold.rangeValue];
   }
+  CFRelease(boldFont);
   
   // Change color to dark on ranges collected before
   NSColor* darkColor = [color shadowWithLevel:0.8];
@@ -1010,12 +1012,10 @@ static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, NSColor
   [boldRanges release];
   [darkRanges release];
   CGPathRelease(path);
-  CFRelease(boldFont);
   CFRelease(ellipsisToken);
   CFRelease(ellipsis);
   CFRelease(frame);
   CFRelease(framesetter);
-  CFRelease(titleFont);
 }
 
 static void _DrawNodeLabels(CGContextRef context, CGFloat x, CGFloat y, GINode* node, NSDictionary* tagAttributes, NSDictionary* branchAttributes) {
