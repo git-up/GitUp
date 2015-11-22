@@ -944,7 +944,6 @@ static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, NSColor
   
   // Create CoreFoundation string from Foundation
   CFAttributedStringRef string = (CFAttributedStringRef)multilineAttributedTitle.copy;
-  [multilineAttributedTitle release];
   
   // Prepare CoreText string from the rich attributed title
   CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString(string);
@@ -1011,6 +1010,7 @@ static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, NSColor
   CGContextRestoreGState(context);
   
   // Clean up
+  [multilineAttributedTitle release];
   [style release];
   [multilineTitle release];
   [boldRanges release];
