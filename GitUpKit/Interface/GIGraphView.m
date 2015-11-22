@@ -982,8 +982,8 @@ static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, NSColor
     CGPoint origin;
     CTFrameGetLineOrigins(frame, CFRangeMake(i, 1), &origin);
     
-    origin.x += CGRectGetMinX(textRect) + origin.y;
-    origin.y += CGRectGetMinY(textRect);
+    origin.x += textRect.origin.x + origin.y;
+    origin.y += textRect.origin.y;
     
     CGFloat ascent, descent, leading;
     CGFloat lineWidth = CTLineGetTypographicBounds(line, &ascent, &descent, &leading);
@@ -995,9 +995,9 @@ static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, NSColor
     if (stringRange.length == 1) {
       CGRect underlineRect = CGRectMake(origin.x - 1.0, origin.y - 1.0, lastLineWidth + 5.0, lineHeight - 3.0);
       CGMutablePathRef separatorPath = CGPathCreateMutable();
-      CGPathMoveToPoint(separatorPath, NULL, CGRectGetMinX(underlineRect), CGRectGetMinY(underlineRect));
-      CGPathAddLineToPoint(separatorPath, NULL, CGRectGetMinX(underlineRect) + CGRectGetHeight(underlineRect), CGRectGetMaxY(underlineRect));
-      CGPathAddLineToPoint(separatorPath, NULL, CGRectGetMaxX(underlineRect), CGRectGetMaxY(underlineRect));
+      CGPathMoveToPoint(separatorPath, NULL, underlineRect.origin.x, underlineRect.origin.y);
+      CGPathAddLineToPoint(separatorPath, NULL, underlineRect.origin.x + underlineRect.size.height, underlineRect.origin.y + underlineRect.size.height);
+      CGPathAddLineToPoint(separatorPath, NULL, underlineRect.origin.x + underlineRect.size.width, underlineRect.origin.y + underlineRect.size.height);
       CGContextSetLineWidth(context, 0.5);
       CGContextSetStrokeColorWithColor(context, color.CGColor);
       CGContextSaveGState(context);
