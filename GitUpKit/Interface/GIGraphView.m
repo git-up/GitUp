@@ -47,8 +47,8 @@
 #endif
 
 #define kTitleSpacing 200
-#define kTitleOffsetX 8
-#define kTitleOffsetY 10
+#define kTitleOffsetX 7
+#define kTitleOffsetY 7
 
 #define kLabelOffsetX 18
 #define kLabelOffsetY 10
@@ -66,7 +66,7 @@
 #define kNodeLabelMaxWidth 200
 #define kNodeLabelMaxHeight 50
 
-#define kMaxBranchTitleWidth 300
+#define kMaxBranchTitleWidth 250
 
 #define kScrollingInset kSpacingY
 
@@ -975,7 +975,8 @@ static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, NSColor
   CGContextRotateCTM(context, 45.0 / 180.0 * M_PI);
   
   // Draw text
-  
+
+  CGFloat lastLineWidth = 0.0;
   CFArrayRef lines = CTFrameGetLines(frame);
   for (CFIndex i = 0, count = CFArrayGetCount(lines); i < count; ++i) {
     CTLineRef line = CFArrayGetValueAtIndex(lines, i);
@@ -985,8 +986,33 @@ static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, NSColor
     origin.x += CGRectGetMinX(textRect) + origin.y;
     origin.y += CGRectGetMinY(textRect);
 
+    CGFloat ascent, descent, leading;
+    CGFloat lineWidth = CTLineGetTypographicBounds(line, &ascent, &descent, &leading);
+    CGFloat lineHeight = ascent;
+
+    // Draw separator in case of new line which is guaranteed by the building algorithm
+
+    CFRange stringRange = CTLineGetStringRange(line);
+    if (stringRange.length == 1) {
+      CGRect underlineRect = CGRectMake(origin.x - 1.0, origin.y - 1.0, lastLineWidth + 5.0, lineHeight - 3.0);
+      CGMutablePathRef separatorPath = CGPathCreateMutable();
+      CGPathMoveToPoint(separatorPath, NULL, CGRectGetMinX(underlineRect), CGRectGetMinY(underlineRect));
+      CGPathAddLineToPoint(separatorPath, NULL, CGRectGetMinX(underlineRect) + CGRectGetHeight(underlineRect), CGRectGetMaxY(underlineRect));
+      CGPathAddLineToPoint(separatorPath, NULL, CGRectGetMaxX(underlineRect), CGRectGetMaxY(underlineRect));
+      CGContextSetLineWidth(context, 0.5);
+      CGContextSetStrokeColorWithColor(context, color.CGColor);
+      CGContextSaveGState(context);
+      CGContextAddPath(context, separatorPath);
+      CGContextStrokePath(context);
+      CGContextRestoreGState(context);
+      CGPathRelease(separatorPath);
+      continue;
+    }
+
+    // Draw line with ellipsis in the end if needed
+
     CGContextSetTextPosition(context, origin.x, origin.y);
-    if (size.width <= kMaxBranchTitleWidth) {
+    if (lineWidth <= kMaxBranchTitleWidth) {
       CTLineDraw(line, context);
     } else {
       CTLineRef drawLine = CTLineCreateTruncatedLine(line, kMaxBranchTitleWidth, kCTLineTruncationEnd, ellipsisToken);
@@ -994,8 +1020,12 @@ static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, NSColor
       CFRelease(drawLine);
     }
 
+    // Remember last line width for the next separator below
+
+    lastLineWidth = MIN(lineWidth, kMaxBranchTitleWidth);
+
 #if __DEBUG_BOXES__
-    CGRect labelRect = CGRectMake(origin.x, origin.y, MIN(CGRectGetWidth(textRect), kMaxBranchTitleWidth), 6.0);
+    CGRect labelRect = CGRectMake(origin.x, origin.y, MIN(CGRectGetWidth(textRect), kMaxBranchTitleWidth), 1.0);
     CGContextSetRGBFillColor(context, 1.0, 0.0, 0.0, 0.333);
     CGContextFillRect(context, labelRect);
 #endif
