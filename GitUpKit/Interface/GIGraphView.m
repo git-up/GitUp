@@ -928,7 +928,7 @@ static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, NSColor
   // Create a light string to show above the HEAD
   
   CTFontRef titleFont = CTFontCreateUIFontForLanguage(kCTFontUIFontSystem, 12.0, CFSTR("en-US"));
-  NSMutableParagraphStyle *style = [NSParagraphStyle defaultParagraphStyle].mutableCopy;
+  NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
   style.lineHeightMultiple = 0.8;
   NSDictionary* multilineTitleAttributes = @{ NSFontAttributeName: (id)titleFont, NSForegroundColorAttributeName: color, NSParagraphStyleAttributeName: style };
   NSMutableAttributedString* multilineAttributedTitle = [[NSMutableAttributedString alloc] initWithString:multilineTitle attributes:multilineTitleAttributes];
