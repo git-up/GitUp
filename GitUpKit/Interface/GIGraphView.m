@@ -863,7 +863,6 @@ static void _DrawLine(GILine* line, CGContextRef context, CGFloat offset, CGFloa
 static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, NSColor* color, GIBranch* branch, GIGraphOptions options) {
   
   // Build a long rich text from branches and tags
-  
   NSMutableString* multilineTitle = [[NSMutableString alloc] init]; // Multiline string above the HEAD
   NSMutableArray* boldRanges = [[NSMutableArray alloc] init];       // Ranges to be drawn using bold font
   NSMutableArray* darkRanges = [[NSMutableArray alloc] init];       // Ranges to draw with darker color
@@ -926,7 +925,6 @@ static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, NSColor
   }
   
   // Create a light string to show above the HEAD
-  
   CTFontRef titleFont = CTFontCreateUIFontForLanguage(kCTFontUIFontSystem, 12.0, CFSTR("en-US"));
   NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
   style.lineHeightMultiple = 0.8;
@@ -936,7 +934,6 @@ static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, NSColor
   [multilineTitle release];
   
   // Change font to bold on ranges collected before
-  
   NSFont* boldFont = (NSFont *)CTFontCreateUIFontForLanguage(kCTFontUIFontEmphasizedSystem, 12.0, CFSTR("en-US"));
   for (NSValue* bold in boldRanges) {
     [multilineAttributedTitle addAttribute:NSFontAttributeName value:boldFont range:bold.rangeValue];
@@ -945,7 +942,6 @@ static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, NSColor
   [boldRanges release];
   
   // Change color to dark on ranges collected before
-  
   NSColor* darkColor = [color shadowWithLevel:0.8];
   for (NSValue* dark in darkRanges) {
     [multilineAttributedTitle addAttribute:NSForegroundColorAttributeName value:darkColor range:dark.rangeValue];
@@ -953,12 +949,10 @@ static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, NSColor
   [darkRanges release];
   
   // Create CoreFoundation string from Foundation
-  
   CFAttributedStringRef string = (CFAttributedStringRef)multilineAttributedTitle.copy;
   [multilineAttributedTitle release];
   
   // Prepare CoreText string from the rich attributed title
-  
   CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString(string);
   CGSize size = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0, CFAttributedStringGetLength(string)), NULL, CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX), NULL);
   CGRect textRect = CGRectMake(kTitleOffsetX, kTitleOffsetY, ceil(size.width), ceil(size.height));
@@ -968,13 +962,11 @@ static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, NSColor
   CTLineRef ellipsisToken = CTLineCreateWithAttributedString(ellipsis);
   
   // Prepare context
-  
   CGContextSaveGState(context);
   CGContextTranslateCTM(context, x, y);
   CGContextRotateCTM(context, 45.0 / 180.0 * M_PI);
   
   // Draw text
-  
   CGFloat lastLineWidth = 0.0;
   CFArrayRef lines = CTFrameGetLines(frame);
   for (CFIndex i = 0, count = CFArrayGetCount(lines); i < count; ++i) {
@@ -990,7 +982,6 @@ static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, NSColor
     CGFloat lineHeight = ascent;
     
     // Draw separator in case of new line which is guaranteed by the building algorithm
-    
     CFRange stringRange = CTLineGetStringRange(line);
     if (stringRange.length == 1) {
       CGRect underlineRect = CGRectMake(origin.x - 1.0, origin.y - 1.0, lastLineWidth + 5.0, lineHeight - 3.0);
@@ -1009,7 +1000,6 @@ static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, NSColor
     }
     
     // Draw line with ellipsis in the end if needed
-    
     CGContextSetTextPosition(context, origin.x, origin.y);
     if (lineWidth <= kMaxBranchTitleWidth) {
       CTLineDraw(line, context);
@@ -1020,16 +1010,13 @@ static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, NSColor
     }
     
     // Remember last line width for the next separator below
-    
     lastLineWidth = MIN(lineWidth, kMaxBranchTitleWidth);
   }
   
   // Reset context
-  
   CGContextRestoreGState(context);
   
   // Clean up
-  
   CFRelease(ellipsisToken);
   CFRelease(ellipsis);
   CFRelease(frame);
