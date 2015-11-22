@@ -1041,7 +1041,7 @@ static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, NSColor
 
 static void _DrawNodeLabels(CGContextRef context, CGFloat x, CGFloat y, GINode* node, NSDictionary* tagAttributes, NSDictionary* branchAttributes) {
   GCHistoryCommit* commit = node.commit;
-	
+  
   // Generate text
   NSMutableString* label = [[NSMutableString alloc] init];
   NSUInteger separator = NSNotFound;
