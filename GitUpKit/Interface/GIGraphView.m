@@ -956,12 +956,10 @@ static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, NSColor
   CGContextTranslateCTM(context, x, y);
   CGContextRotateCTM(context, 45.0 / 180.0 * M_PI);
   CGContextSetLineWidth(context, 0.5);
-  CGContextSetStrokeColorWithColor(context, color.CGColor);
   
   // Draw text
   CGFloat lastLineWidth = 0.0;
   CFArrayRef lines = CTFrameGetLines(frame);
-  CGMutablePathRef separatorsPath = CGPathCreateMutable();
   for (CFIndex i = 0, count = CFArrayGetCount(lines); i < count; ++i) {
     CTLineRef line = CFArrayGetValueAtIndex(lines, i);
     CGPoint origin;
@@ -978,9 +976,9 @@ static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, NSColor
     CFRange stringRange = CTLineGetStringRange(line);
     if (stringRange.length == 1) {
       CGRect underlineRect = CGRectMake(origin.x - 1.0, origin.y - 1.0, lastLineWidth + 5.0, lineHeight - 3.0);
-      CGPathMoveToPoint(separatorsPath, NULL, underlineRect.origin.x, underlineRect.origin.y);
-      CGPathAddLineToPoint(separatorsPath, NULL, underlineRect.origin.x + underlineRect.size.height, underlineRect.origin.y + underlineRect.size.height);
-      CGPathAddLineToPoint(separatorsPath, NULL, underlineRect.origin.x + underlineRect.size.width, underlineRect.origin.y + underlineRect.size.height);
+      CGContextMoveToPoint(context, underlineRect.origin.x, underlineRect.origin.y);
+      CGContextAddLineToPoint(context, underlineRect.origin.x + underlineRect.size.height, underlineRect.origin.y + underlineRect.size.height);
+      CGContextAddLineToPoint(context, underlineRect.origin.x + underlineRect.size.width, underlineRect.origin.y + underlineRect.size.height);
       continue;
     }
     
@@ -998,8 +996,8 @@ static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, NSColor
     lastLineWidth = MIN(lineWidth, kMaxBranchTitleWidth);
   }
   
-  // Draw connections between titles
-  CGContextAddPath(context, separatorsPath);
+  // Stroke was defined in the for loop before
+  CGContextSetStrokeColorWithColor(context, [color colorWithAlphaComponent:0.5].CGColor);
   CGContextStrokePath(context);
   
   // Reset context
@@ -1012,7 +1010,6 @@ static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, NSColor
   [boldRanges release];
   [darkRanges release];
   CGPathRelease(path);
-  CGPathRelease(separatorsPath);
   CFRelease(boldFont);
   CFRelease(ellipsisToken);
   CFRelease(ellipsis);
