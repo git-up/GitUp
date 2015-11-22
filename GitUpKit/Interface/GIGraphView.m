@@ -962,8 +962,8 @@ static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, NSColor
   CGRect textRect = CGRectMake(kTitleOffsetX, kTitleOffsetY, ceil(size.width), ceil(size.height));
   CGPathRef path = CGPathCreateWithRect(textRect, NULL);
   CTFrameRef frame = CTFramesetterCreateFrame(framesetter, CFRangeMake(0, CFAttributedStringGetLength(string)), path, NULL);
-  CFAttributedStringRef character = CFAttributedStringCreate(kCFAllocatorDefault, CFSTR("\u2026"), (CFDictionaryRef)multilineTitleAttributes);
-  CTLineRef token = CTLineCreateWithAttributedString(character);
+  CFAttributedStringRef ellipsis = CFAttributedStringCreate(kCFAllocatorDefault, CFSTR("\u2026"), (CFDictionaryRef)multilineTitleAttributes);
+  CTLineRef ellipsisToken = CTLineCreateWithAttributedString(ellipsis);
 
   // Prepare context
   
@@ -991,7 +991,7 @@ static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, NSColor
     if (size.width <= kMaxBranchTitleWidth) {
       CTLineDraw(line, context);
     } else {
-      CTLineRef drawLine = CTLineCreateTruncatedLine(line, kMaxBranchTitleWidth, kCTLineTruncationEnd, token);
+      CTLineRef drawLine = CTLineCreateTruncatedLine(line, kMaxBranchTitleWidth, kCTLineTruncationEnd, ellipsisToken);
       CTLineDraw(drawLine, context);
       CFRelease(drawLine);
     }
@@ -1003,8 +1003,8 @@ static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, NSColor
   
   // Clean up
   
-  CFRelease(token);
-  CFRelease(character);
+  CFRelease(ellipsisToken);
+  CFRelease(ellipsis);
   CFRelease(frame);
   CGPathRelease(path);
   CFRelease(framesetter);
