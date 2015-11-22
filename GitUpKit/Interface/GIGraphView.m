@@ -940,7 +940,7 @@ static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, NSColor
   CFRelease(boldFont);
   
   // Change color to dark on ranges collected before
-  NSColor* darkColor = [color shadowWithLevel:0.8];
+  NSColor* darkColor = [color shadowWithLevel:0.7];
   for (NSValue* dark in darkRanges) {
     [multilineAttributedTitle addAttribute:NSForegroundColorAttributeName value:darkColor range:dark.rangeValue];
   }
