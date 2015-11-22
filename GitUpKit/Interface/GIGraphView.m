@@ -930,6 +930,7 @@ static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, NSColor
   NSDictionary* multilineTitleAttributes = @{ NSFontAttributeName: (id)titleFont, NSForegroundColorAttributeName: color, NSParagraphStyleAttributeName: style };
   NSMutableAttributedString* multilineAttributedTitle = [[NSMutableAttributedString alloc] initWithString:multilineTitle attributes:multilineTitleAttributes];
   CFRelease(titleFont);
+  [style release];
   
   // Change font to bold on ranges collected before
   CTFontRef boldFont = CTFontCreateUIFontForLanguage(kCTFontUIFontEmphasizedSystem, 12.0, CFSTR("en-US"));
@@ -1007,7 +1008,6 @@ static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, NSColor
   
   // Clean up
   [multilineAttributedTitle release];
-  [style release];
   [multilineTitle release];
   [boldRanges release];
   [darkRanges release];
