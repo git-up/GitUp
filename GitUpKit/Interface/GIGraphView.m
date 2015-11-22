@@ -878,10 +878,9 @@ static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, NSColor
       
       NSString* remoteName = remoteBranch.remoteName;
       [multilineTitle appendFormat:@"%@/%@\n", remoteName, branchName];
-      branchNameRange = NSMakeRange(multilineTitle.length - branchName.length - 1, branchName.length);
+      branchNameRange = NSMakeRange(multilineTitle.length - branchName.length - 1, branchName.length); // -1 to exclude '\n'
       [darkRanges addObject:[NSValue valueWithRange:branchNameRange]];
-    }
-    else {
+    } else {
       NSString* branchName = localBranch.name;
       NSRange branchNameRange = NSMakeRange(multilineTitle.length, branchName.length);
       [multilineTitle appendFormat:@"%@\n", branchName];
@@ -896,7 +895,7 @@ static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, NSColor
     NSString* remoteName = remoteBranch.remoteName;
     NSString* branchName = remoteBranch.branchName;
     [multilineTitle appendFormat:@"%@/%@\n", remoteName, branchName];
-    NSRange branchNameRange = NSMakeRange(multilineTitle.length - branchName.length - 1, branchName.length);
+    NSRange branchNameRange = NSMakeRange(multilineTitle.length - branchName.length - 1, branchName.length); // -1 to exclude '\n'
     [boldRanges addObject:[NSValue valueWithRange:branchNameRange]];
     [darkRanges addObject:boldRanges.lastObject];
   }
@@ -908,7 +907,7 @@ static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, NSColor
   for (GCHistoryTag* tag in branch.tags) {
     NSString* tagName = tag.name;
     [multilineTitle appendFormat:@"[%@]\n", tagName];
-    NSRange tagNameRange = NSMakeRange(multilineTitle.length - tagName.length - 2, tagName.length);
+    NSRange tagNameRange = NSMakeRange(multilineTitle.length - tagName.length - 2, tagName.length); // -2 to exclude char ']' plus '\n'
     [boldRanges addObject:[NSValue valueWithRange:tagNameRange]];
     [darkRanges addObject:boldRanges.lastObject];
   }
@@ -926,7 +925,7 @@ static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, NSColor
   
   // Create a light string to show above the HEAD
   CTFontRef titleFont = CTFontCreateUIFontForLanguage(kCTFontUIFontSystem, 12.0, CFSTR("en-US"));
-  NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+  NSMutableParagraphStyle* style = [[NSMutableParagraphStyle alloc] init];
   style.lineHeightMultiple = 0.8;
   NSDictionary* multilineTitleAttributes = @{ NSFontAttributeName: (id)titleFont, NSForegroundColorAttributeName: color, NSParagraphStyleAttributeName: style };
   NSMutableAttributedString* multilineAttributedTitle = [[NSMutableAttributedString alloc] initWithString:multilineTitle attributes:multilineTitleAttributes];
