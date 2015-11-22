@@ -929,23 +929,18 @@ static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, NSColor
   style.lineHeightMultiple = 0.8;
   NSDictionary* multilineTitleAttributes = @{ NSFontAttributeName: (id)titleFont, NSForegroundColorAttributeName: color, NSParagraphStyleAttributeName: style };
   NSMutableAttributedString* multilineAttributedTitle = [[NSMutableAttributedString alloc] initWithString:multilineTitle attributes:multilineTitleAttributes];
-  [style release];
-  [multilineTitle release];
   
   // Change font to bold on ranges collected before
   NSFont* boldFont = (NSFont *)CTFontCreateUIFontForLanguage(kCTFontUIFontEmphasizedSystem, 12.0, CFSTR("en-US"));
   for (NSValue* bold in boldRanges) {
     [multilineAttributedTitle addAttribute:NSFontAttributeName value:boldFont range:bold.rangeValue];
   }
-  [boldFont release];
-  [boldRanges release];
   
   // Change color to dark on ranges collected before
   NSColor* darkColor = [color shadowWithLevel:0.8];
   for (NSValue* dark in darkRanges) {
     [multilineAttributedTitle addAttribute:NSForegroundColorAttributeName value:darkColor range:dark.rangeValue];
   }
-  [darkRanges release];
   
   // Create CoreFoundation string from Foundation
   CFAttributedStringRef string = (CFAttributedStringRef)multilineAttributedTitle.copy;
@@ -1016,6 +1011,11 @@ static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, NSColor
   CGContextRestoreGState(context);
   
   // Clean up
+  [style release];
+  [multilineTitle release];
+  [boldFont release];
+  [boldRanges release];
+  [darkRanges release];
   CFRelease(ellipsisToken);
   CFRelease(ellipsis);
   CFRelease(frame);
