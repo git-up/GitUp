@@ -982,6 +982,8 @@ static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, NSColor
       CGContextMoveToPoint(context, underlineRect.origin.x, underlineRect.origin.y);
       CGContextAddLineToPoint(context, underlineRect.origin.x + underlineRect.size.height, underlineRect.origin.y + underlineRect.size.height);
       CGContextAddLineToPoint(context, underlineRect.origin.x + underlineRect.size.width, underlineRect.origin.y + underlineRect.size.height);
+      CGContextSetStrokeColorWithColor(context, [color colorWithAlphaComponent:0.5].CGColor);
+      CGContextStrokePath(context);
       continue;
     }
     
@@ -998,10 +1000,6 @@ static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, NSColor
     // Remember last line width for the next separator below
     lastLineWidth = MIN(lineWidth, kMaxBranchTitleWidth);
   }
-  
-  // Stroke was defined in the for loop before
-  CGContextSetStrokeColorWithColor(context, [color colorWithAlphaComponent:0.5].CGColor);
-  CGContextStrokePath(context);
   
   // Reset context
   CGContextRestoreGState(context);
