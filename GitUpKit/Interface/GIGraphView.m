@@ -1339,17 +1339,39 @@ static void _DrawSelectedNode(CGContextRef context, CGFloat x, CGFloat y, GINode
   NSUInteger endIndex = layerCount ? [self _indexOfLayerContainingPosition:dirtyRect.origin.y - kOverdrawMargin] : 0;
   CGFloat offset = _graph.size.height;
   NSMutableArray* lines = [[NSMutableArray alloc] init];
-  CTFontRef titleFont = CTFontCreateUIFontForLanguage(kCTFontUIFontEmphasizedSystem, 13.0, CFSTR("en-US"));
-  NSDictionary* titleAttributes = @{(id)kCTForegroundColorFromContextAttributeName: (id)kCFBooleanTrue, (id)kCTFontAttributeName: (id)titleFont};
-  CTFontRef tagFont = CTFontCreateUIFontForLanguage(kCTFontUIFontSystem, 11.0, CFSTR("en-US"));
-  NSDictionary* tagAttributes = @{(id)kCTForegroundColorFromContextAttributeName: (id)kCFBooleanTrue, (id)kCTFontAttributeName: (id)tagFont};
-  CTFontRef branchFont = CTFontCreateUIFontForLanguage(kCTFontUIFontEmphasizedSystem, 11.0, CFSTR("en-US"));
-  NSDictionary* branchAttributes = @{(id)kCTForegroundColorFromContextAttributeName: (id)kCFBooleanTrue, (id)kCTFontAttributeName: (id)branchFont};
-  CTFontRef selectedFont1 = CTFontCreateUIFontForLanguage(kCTFontUIFontSystem, 10.0, CFSTR("en-US"));
-  NSDictionary* selectedAttributes1 = @{(id)kCTForegroundColorFromContextAttributeName: (id)kCFBooleanTrue, (id)kCTFontAttributeName: (id)selectedFont1};
-  CTFontRef selectedFont2 = CTFontCreateUIFontForLanguage(kCTFontUIFontEmphasizedSystem, 10.0, CFSTR("en-US"));
-  NSDictionary* selectedAttributes2 = @{(id)kCTForegroundColorFromContextAttributeName: (id)kCFBooleanTrue, (id)kCTFontAttributeName: (id)selectedFont2};
-  
+
+  // Cache attributes
+  static NSDictionary* titleAttributes = nil;
+  if (titleAttributes == nil) {
+    CTFontRef font = CTFontCreateUIFontForLanguage(kCTFontUIFontEmphasizedSystem, 13.0, CFSTR("en-US"));
+    titleAttributes = [@{(id)kCTForegroundColorFromContextAttributeName: (id)kCFBooleanTrue, (id)kCTFontAttributeName: (id)font} retain];
+    CFRelease(font);
+  }
+  static NSDictionary* tagAttributes = nil;
+  if (tagAttributes == nil) {
+    CTFontRef font = CTFontCreateUIFontForLanguage(kCTFontUIFontSystem, 11.0, CFSTR("en-US"));
+    tagAttributes = [@{(id)kCTForegroundColorFromContextAttributeName: (id)kCFBooleanTrue, (id)kCTFontAttributeName: (id)font} retain];
+    CFRelease(font);
+  }
+  static NSDictionary* branchAttributes = nil;
+  if (branchAttributes == nil) {
+    CTFontRef font = CTFontCreateUIFontForLanguage(kCTFontUIFontEmphasizedSystem, 11.0, CFSTR("en-US"));
+    branchAttributes = [@{(id)kCTForegroundColorFromContextAttributeName: (id)kCFBooleanTrue, (id)kCTFontAttributeName: (id)font} retain];
+    CFRelease(font);
+  }
+  static NSDictionary* selectedAttributes1 = nil;
+  if (selectedAttributes1 == nil) {
+    CTFontRef font = CTFontCreateUIFontForLanguage(kCTFontUIFontSystem, 10.0, CFSTR("en-US"));
+    selectedAttributes1 = [@{(id)kCTForegroundColorFromContextAttributeName: (id)kCFBooleanTrue, (id)kCTFontAttributeName: (id)font} retain];
+    CFRelease(font);
+  }
+  static NSDictionary* selectedAttributes2 = nil;
+  if (selectedAttributes2 == nil) {
+    CTFontRef font = CTFontCreateUIFontForLanguage(kCTFontUIFontEmphasizedSystem, 10.0, CFSTR("en-US"));
+    selectedAttributes2 = [@{(id)kCTForegroundColorFromContextAttributeName: (id)kCFBooleanTrue, (id)kCTFontAttributeName: (id)font} retain];
+    CFRelease(font);
+  }
+
   // Set up graphics context
   CGContextRef context = [[NSGraphicsContext currentContext] graphicsPort];
   CGContextSaveGState(context);
@@ -1574,11 +1596,6 @@ static void _DrawSelectedNode(CGContextRef context, CGFloat x, CGFloat y, GINode
   CGContextRestoreGState(context);
   
   // Clean up
-  CFRelease(selectedFont2);
-  CFRelease(selectedFont1);
-  CFRelease(branchFont);
-  CFRelease(tagFont);
-  CFRelease(titleFont);
   [lines release];
 }
 
