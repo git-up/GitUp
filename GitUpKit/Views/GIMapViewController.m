@@ -370,12 +370,34 @@ static NSColor* _patternColor = nil;
       [menu addItem:item];
       
       [menu addItem:[NSMenuItem separatorItem]];
-      
+
+      BOOL needsSeparator = YES;
       submenu = [[NSMenu alloc] init];
-      for (GCHistoryRemoteBranch* remoteBranch in self.repository.history.remoteBranches) {
-        item = [[NSMenuItem alloc] initWithTitle:remoteBranch.name action:@selector(_configureUpstreamForLocalBranch:) keyEquivalent:@""];
-        item.representedObject = @[branch, remoteBranch];
-        [submenu addItem:item];
+      if (self.repository.history.remoteBranches.count) {
+        for (GCHistoryRemoteBranch* remoteBranch in self.repository.history.remoteBranches) {
+          item = [[NSMenuItem alloc] initWithTitle:remoteBranch.name action:@selector(_configureUpstreamForLocalBranch:) keyEquivalent:@""];
+          item.representedObject = @[branch, remoteBranch];
+          if ([remoteBranch isEqualToBranch:upstream]) {
+            item.state = NSOnState;
+          }
+          [submenu addItem:item];
+        }
+      }
+      if (self.repository.history.localBranches.count) {
+        for (GCHistoryLocalBranch* localBranch in self.repository.history.localBranches) {
+          if (![localBranch isEqualToBranch:branch]) {
+            if (needsSeparator) {
+              [submenu addItem:[NSMenuItem separatorItem]];
+              needsSeparator = NO;
+            }
+            item = [[NSMenuItem alloc] initWithTitle:localBranch.name action:@selector(_configureUpstreamForLocalBranch:) keyEquivalent:@""];
+            item.representedObject = @[branch, localBranch];
+            if ([localBranch isEqualToBranch:upstream]) {
+              item.state = NSOnState;
+            }
+            [submenu addItem:item];
+          }
+        }
       }
       item = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"Set Upstream to", nil) action:NULL keyEquivalent:@""];
       item.submenu = submenu;
