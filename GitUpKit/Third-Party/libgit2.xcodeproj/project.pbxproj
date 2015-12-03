@@ -1378,6 +1378,7 @@
 					GIT_COMMON_CRYPTO,
 					GIT_SECURE_TRANSPORT,
 					GIT_SSH,
+					GIT_USE_STAT_ATIMESPEC,
 				);
 				HEADER_SEARCH_PATHS = (
 					"Libraries/libssh2/$(PLATFORM_NAME)/include",
@@ -1415,6 +1416,7 @@
 					GIT_COMMON_CRYPTO,
 					GIT_SECURE_TRANSPORT,
 					GIT_SSH,
+					GIT_USE_STAT_ATIMESPEC,
 				);
 				HEADER_SEARCH_PATHS = (
 					"Libraries/libssh2/$(PLATFORM_NAME)/include",
@@ -1495,6 +1497,7 @@
 					GIT_COMMON_CRYPTO,
 					GIT_SECURE_TRANSPORT,
 					GIT_SSH,
+					GIT_USE_STAT_ATIMESPEC,
 				);
 				HEADER_SEARCH_PATHS = (
 					"Libraries/libssh2/$(PLATFORM_NAME)/include",

@@ -21,6 +21,7 @@
 
 static inline GCConfigLevel _ConfigLevelFromLevel(git_config_level_t level) {
   switch (level) {
+    case GIT_CONFIG_LEVEL_PROGRAMDATA: break;
     case GIT_CONFIG_LEVEL_SYSTEM: return kGCConfigLevel_System;
     case GIT_CONFIG_LEVEL_XDG: return kGCConfigLevel_XDG;
     case GIT_CONFIG_LEVEL_GLOBAL: return kGCConfigLevel_Global;

@@ -55,7 +55,7 @@ static int _DiffNotifyCallback(const git_diff* diff_so_far, const git_diff_delta
   // Prepare
   diffOptions.flags = GIT_DIFF_SKIP_BINARY_CHECK;  // This should not be needed since not generating patches anyway
   diffOptions.notify_cb = _DiffNotifyCallback;
-  diffOptions.notify_payload = &delta_status;
+  diffOptions.payload = &delta_status;
   git_index* index = [self reloadRepositoryIndex:error];
   if (index == NULL) {
     goto cleanup;
