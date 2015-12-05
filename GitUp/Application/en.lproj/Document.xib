@@ -559,7 +559,7 @@ Adjust settings in Show menu</string>
             <rect key="frame" x="0.0" y="0.0" width="220" height="32"/>
             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
             <subviews>
-                <button toolTip="Select previous commit" verticalHuggingPriority="750" id="XLH-eo-cDO">
+                <button toolTip="Select next commit" verticalHuggingPriority="750" id="XLH-eo-cDO">
                     <rect key="frame" x="3" y="3" width="28" height="25"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="icon_nav_up" imagePosition="only" alignment="center" state="on" borderStyle="border" inset="2" id="6oq-0x-6JA">
@@ -572,7 +572,7 @@ Adjust settings in Show menu</string>
                         <action selector="selectNextCommit:" target="-2" id="ELb-0V-1uX"/>
                     </connections>
                 </button>
-                <button toolTip="Select next commit" verticalHuggingPriority="750" id="Xfs-0l-8it">
+                <button toolTip="Select previous commit" verticalHuggingPriority="750" id="Xfs-0l-8it">
                     <rect key="frame" x="33" y="3" width="28" height="25"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="icon_nav_down" imagePosition="only" alignment="center" state="on" borderStyle="border" inset="2" id="hN6-p6-EDX">
