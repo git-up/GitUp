@@ -18,7 +18,8 @@
 typedef NS_ENUM(NSUInteger, GIAlertType) {
   kGIAlertType_Note = 0,
   kGIAlertType_Caution,
-  kGIAlertType_Stop
+  kGIAlertType_Stop,
+  kGIAlertType_Danger
 };
 
 extern NSString* const GICommitMessageViewUserDefaultKey_ShowInvisibleCharacters;

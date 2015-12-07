@@ -265,7 +265,10 @@
     alert.messageText = title;
     alert.informativeText = message;
     alert.showsSuppressionButton = key ? YES : NO;
-    [alert addButtonWithTitle:button];
+    NSButton* defaultButton = [alert addButtonWithTitle:button];
+    if (type == kGIAlertType_Danger) {
+      defaultButton.keyEquivalent = @"";
+    }
     [alert addButtonWithTitle:NSLocalizedString(@"Cancel", nil)];
     [self presentAlert:alert completionHandler:^(NSModalResponse returnCode) {
       
