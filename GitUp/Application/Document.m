@@ -1743,7 +1743,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
   }
   
   if (item.action == @selector(switchMode:)) {
-    if ([_windowMode isEqualToString:kWindowModeString_Map_QuickView] || [_windowMode isEqualToString:kWindowModeString_Map_Diff]
+    if ([_windowMode isEqualToString:kWindowModeString_Map_Diff]
         || [_windowMode isEqualToString:kWindowModeString_Map_Rewrite] || [_windowMode isEqualToString:kWindowModeString_Map_Config]) {
       return NO;
     }
