@@ -30,7 +30,7 @@
 #define __DEBUG_DESCENDANTS__ 0
 #define __DEBUG_ANCESTORS__ 0
 
-#define kSpacingX 30
+#define kSpacingX 40
 #define kSpacingY 30
 
 #define kMainLineWidth 8
