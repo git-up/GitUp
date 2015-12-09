@@ -65,6 +65,9 @@
 }
 
 - (BOOL)isEqualToReference:(GCReference*)reference {
+  if (reference == nil) {
+    return NO;
+  }
   return (self == reference) || ([self compareWithReference:reference->_private] == NSOrderedSame);
 }
 

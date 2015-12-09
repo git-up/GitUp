@@ -12,6 +12,7 @@
 		749786941B85AAB10065BD55 /* GCOrderedSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 74EDB5D11B84D4C400F00E79 /* GCOrderedSet.m */; };
 		74EDB5D61B84E06500F00E79 /* GCOrderedSet-Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 74EDB5D51B84E06500F00E79 /* GCOrderedSet-Tests.m */; };
 		74EDB5D71B8517F500F00E79 /* GCOrderedSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 74EDB5D11B84D4C400F00E79 /* GCOrderedSet.m */; };
+		DDEB6BE51C183C800071A15F /* GCReference-Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = DDEB6BE41C183C800071A15F /* GCReference-Tests.m */; };
 		E200A3BA1B02DDA100C4E39D /* GCPrivate.m in Sources */ = {isa = PBXBuildFile; fileRef = E200A3B81B02DDA100C4E39D /* GCPrivate.m */; };
 		E20EB08C19FC75CA0031A075 /* GCRepository+Reset.m in Sources */ = {isa = PBXBuildFile; fileRef = E20EB08A19FC75CA0031A075 /* GCRepository+Reset.m */; };
 		E20EB09019FC76160031A075 /* GCRepository+Status.m in Sources */ = {isa = PBXBuildFile; fileRef = E20EB08E19FC76160031A075 /* GCRepository+Status.m */; };
@@ -420,6 +421,7 @@
 		74EDB5D01B84D4C400F00E79 /* GCOrderedSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCOrderedSet.h; sourceTree = "<group>"; };
 		74EDB5D11B84D4C400F00E79 /* GCOrderedSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCOrderedSet.m; sourceTree = "<group>"; };
 		74EDB5D51B84E06500F00E79 /* GCOrderedSet-Tests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GCOrderedSet-Tests.m"; sourceTree = "<group>"; };
+		DDEB6BE41C183C800071A15F /* GCReference-Tests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GCReference-Tests.m"; sourceTree = "<group>"; };
 		E200A3B81B02DDA100C4E39D /* GCPrivate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCPrivate.m; sourceTree = "<group>"; };
 		E20EB08919FC75CA0031A075 /* GCRepository+Reset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GCRepository+Reset.h"; sourceTree = "<group>"; };
 		E20EB08A19FC75CA0031A075 /* GCRepository+Reset.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GCRepository+Reset.m"; sourceTree = "<group>"; };
@@ -939,6 +941,7 @@
 				74EDB5D51B84E06500F00E79 /* GCOrderedSet-Tests.m */,
 				E2C338DF19F85C8600063D95 /* GCPrivate.h */,
 				E200A3B81B02DDA100C4E39D /* GCPrivate.m */,
+				DDEB6BE41C183C800071A15F /* GCReference-Tests.m */,
 				E2C338E019F85C8600063D95 /* GCReference.h */,
 				E2C338E119F85C8600063D95 /* GCReference.m */,
 				E218A5881A566F6A00DFF1DF /* GCReferenceTransform.h */,
@@ -1548,6 +1551,7 @@
 				E259C2DD1A64FDD00079616B /* GCRepository+HEAD-Tests.m in Sources */,
 				E259C2C51A64C8EA0079616B /* GCTestCase.m in Sources */,
 				E259C2E51A6624DC0079616B /* GCCommit-Tests.m in Sources */,
+				DDEB6BE51C183C800071A15F /* GCReference-Tests.m in Sources */,
 				E299D00C1A71F0E9005035F7 /* GCSQLiteRepository.m in Sources */,
 				E2C338F619F85C8600063D95 /* GCStash.m in Sources */,
 				E2F5C2831A81C53A00C30739 /* GCRepository+Reflog-Tests.m in Sources */,
