@@ -377,7 +377,7 @@ static NSColor* _patternColor = nil;
         for (GCHistoryRemoteBranch* remoteBranch in self.repository.history.remoteBranches) {
           item = [[NSMenuItem alloc] initWithTitle:remoteBranch.name action:@selector(_configureUpstreamForLocalBranch:) keyEquivalent:@""];
           item.representedObject = @[branch, remoteBranch];
-          if ([remoteBranch isEqualToBranch:upstream]) {
+          if ([upstream isEqualToBranch:remoteBranch]) {
             item.state = NSOnState;
           }
           [submenu addItem:item];
@@ -392,7 +392,7 @@ static NSColor* _patternColor = nil;
             }
             item = [[NSMenuItem alloc] initWithTitle:localBranch.name action:@selector(_configureUpstreamForLocalBranch:) keyEquivalent:@""];
             item.representedObject = @[branch, localBranch];
-            if ([localBranch isEqualToBranch:upstream]) {
+            if ([upstream isEqualToBranch:localBranch]) {
               item.state = NSOnState;
             }
             [submenu addItem:item];
