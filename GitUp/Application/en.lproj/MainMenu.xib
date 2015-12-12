@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="9531" systemVersion="14F1505" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7706"/>
+        <development version="6300" identifier="xcode"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="9531"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NSApplication">
@@ -17,7 +18,7 @@
             <rect key="contentRect" x="940" y="240" width="500" height="400"/>
             <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1417"/>
             <view key="contentView" id="uEJ-lO-PMl">
-                <rect key="frame" x="0.0" y="5" width="500" height="400"/>
+                <rect key="frame" x="0.0" y="0.0" width="500" height="400"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <userGuides>
                     <userLayoutGuide location="138" affinity="minX"/>
@@ -37,7 +38,6 @@
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="EBQ-WH-0CZ">
                                             <rect key="frame" x="12" y="363" width="120" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <animations/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Appearance:" id="KoF-W9-skh">
                                                 <font key="font" metaFont="system"/>
                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -47,7 +47,6 @@
                                         <button id="FHl-t5-4zJ">
                                             <rect key="frame" x="137" y="362" width="169" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <animations/>
                                             <buttonCell key="cell" type="check" title="Enable visual effects" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="s0v-Nh-NIo">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="system"/>
@@ -163,7 +162,7 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                             <rect key="frame" x="139" y="216" width="299" height="58"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                            <size key="cellSize" width="276" height="18"/>
+                                            <size key="cellSize" width="280" height="18"/>
                                             <size key="intercellSpacing" width="4" height="2"/>
                                             <buttonCell key="prototype" type="radio" title="Radio" imagePosition="left" alignment="left" inset="2" id="S4o-dE-O99">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -217,7 +216,7 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                             <rect key="frame" x="139" y="290" width="289" height="58"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                            <size key="cellSize" width="268" height="18"/>
+                                            <size key="cellSize" width="272" height="18"/>
                                             <size key="intercellSpacing" width="4" height="2"/>
                                             <buttonCell key="prototype" type="radio" title="Radio" imagePosition="left" alignment="left" inset="2" id="aRV-8E-fbW">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -252,13 +251,13 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                     </subviews>
                                 </view>
                             </tabViewItem>
-                            <tabViewItem label="{500, 265}" identifier="advanced" id="Qdl-lQ-O4q">
+                            <tabViewItem label="{500, 262}" identifier="advanced" id="Qdl-lQ-O4q">
                                 <view key="view" id="8CG-H0-Xhk">
                                     <rect key="frame" x="0.0" y="0.0" width="500" height="400"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <popUpButton verticalHuggingPriority="750" id="7N4-S9-iWL">
-                                            <rect key="frame" x="136" y="189" width="200" height="26"/>
+                                            <rect key="frame" x="136" y="192" width="200" height="26"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <popUpButtonCell key="cell" type="push" title="&lt;RELEASE CHANNEL&gt;" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" autoenablesItems="NO" selectedItem="xdx-IX-FK6" id="Sdr-Ep-kPW">
                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -276,7 +275,7 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                             </connections>
                                         </popUpButton>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="mi3-Eg-51i">
-                                            <rect key="frame" x="12" y="195" width="120" height="17"/>
+                                            <rect key="frame" x="12" y="198" width="120" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="right" title="Release Channel:" id="M0A-b6-dhN">
                                                 <font key="font" metaFont="system"/>
@@ -294,7 +293,7 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                             </textFieldCell>
                                         </textField>
                                         <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="PtA-hG-Qmn">
-                                            <rect key="frame" x="137" y="151" width="345" height="34"/>
+                                            <rect key="frame" x="137" y="154" width="345" height="34"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="The &quot;Continuous&quot; release channel installs builds directly from GitUp Continuous Integration. Use at your own risks!" id="qB2-E4-Yuu">
                                                 <font key="font" metaFont="smallSystem"/>
@@ -303,7 +302,7 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="w2N-io-xkS">
-                                            <rect key="frame" x="137" y="236" width="130" height="17"/>
+                                            <rect key="frame" x="137" y="295" width="130" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="left" title="Automatically check" id="X1v-BK-dAQ">
                                                 <font key="font" metaFont="system"/>
@@ -312,7 +311,7 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                             </textFieldCell>
                                         </textField>
                                         <popUpButton verticalHuggingPriority="750" id="ZYX-Yt-1fl">
-                                            <rect key="frame" x="271" y="230" width="145" height="26"/>
+                                            <rect key="frame" x="271" y="289" width="145" height="26"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <popUpButtonCell key="cell" type="push" title="Never" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" autoenablesItems="NO" altersStateOfSelectedItem="NO" selectedItem="KgR-3b-gT5" id="Pdg-S3-YXJ">
                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -409,7 +408,7 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                             </connections>
                                         </popUpButton>
                                         <button id="Xxa-CO-ELY">
-                                            <rect key="frame" x="136" y="294" width="346" height="18"/>
+                                            <rect key="frame" x="136" y="269" width="346" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="check" title="Allow quick confirmation of dangerous operations" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="uJq-iS-sPr">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -420,7 +419,7 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                             </connections>
                                         </button>
                                         <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="Ad9-ef-Jqv">
-                                            <rect key="frame" x="137" y="262" width="345" height="28"/>
+                                            <rect key="frame" x="137" y="237" width="345" height="28"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="This allows dangerous operations on remotes, like force push, to be confirmed by pressing the Return key in dialogs." id="LQY-Xb-bQ5">
                                                 <font key="font" metaFont="smallSystem"/>
@@ -453,7 +452,7 @@ You must close and reopen any opened repositories in GitUp after changing this s
                     <toolbarItem reference="doU-9n-plE"/>
                 </defaultToolbarItems>
             </toolbar>
-            <point key="canvasLocation" x="-106" y="1327"/>
+            <point key="canvasLocation" x="-8" y="1086"/>
         </window>
         <customObject id="Voe-Tx-rLC" customClass="AppDelegate">
             <connections>
