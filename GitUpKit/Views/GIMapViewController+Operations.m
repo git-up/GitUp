@@ -31,6 +31,7 @@
 #define kUserDefaultsKey_SkipPushBranchWarning kUserDefaultsPrefix "SkipPushBranchWarning"
 #define kUserDefaultsKey_SkipPushLocalBranchToRemoteWarning kUserDefaultsPrefix "SkipPushLocalBranchToRemoteWarning"
 #define kUserDefaultsKey_SkipFetchRemoteBranchesWarning kUserDefaultsPrefix "SkipFetchRemoteBranchesWarning"
+#define kUserDefaultsKey_AllowReturnKeyForDangerousRemoteOperations kUserDefaultsPrefix "AllowReturnKeyForDangerousRemoteOperations"
 
 @interface GIMapViewController (Internal)
 - (void)_promptForCommitMessage:(NSString*)message withTitle:(NSString*)title button:(NSString*)button block:(void (^)(NSString* message))block;
@@ -38,6 +39,10 @@
 
 static inline NSString* _CleanedUpCommitMessage(NSString* message) {
   return [message stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
+}
+
+static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
+  return ([[NSUserDefaults standardUserDefaults] boolForKey:kUserDefaultsKey_AllowReturnKeyForDangerousRemoteOperations] ? kGIAlertType_Stop : kGIAlertType_Danger);
 }
 
 @implementation GIMapViewController (Operations)
@@ -456,7 +461,7 @@ static inline NSString* _CleanedUpCommitMessage(NSString* message) {
     
   }]) {
     if ([upstream isKindOfClass:[GCHistoryRemoteBranch class]]) {
-      [self confirmUserActionWithAlertType:kGIAlertType_Stop
+      [self confirmUserActionWithAlertType:_AlertTypeForDangerousRemoteOperations()
                                      title:[NSString stringWithFormat:NSLocalizedString(@"Do you also want to delete the upstream remote branch \"%@\" from its remote?", nil), upstream.name]
                                    message:NSLocalizedString(@"This action cannot be undone.", nil)
                                     button:NSLocalizedString(@"Delete Remote Branch", nil)
@@ -924,7 +929,7 @@ static inline NSString* _CleanedUpCommitMessage(NSString* message) {
       }
       
     } else if (!force && [error.domain isEqualToString:GCErrorDomain] && (error.code == kGCErrorCode_NonFastForward)) {
-      [self confirmUserActionWithAlertType:kGIAlertType_Stop
+      [self confirmUserActionWithAlertType:_AlertTypeForDangerousRemoteOperations()
                                      title:[NSString stringWithFormat:NSLocalizedString(@"The branch \"%@\" could not be fast-forwarded on the remote \"%@\". Do you want to attempt to force push?", nil), branch.name, remote ? remote.name : upstreamRemote.name]
                                    message:NSLocalizedString(@"This action cannot be undone.", nil)
                                     button:NSLocalizedString(@"Force Push", nil)
@@ -978,7 +983,7 @@ static inline NSString* _CleanedUpCommitMessage(NSString* message) {
     if (success) {
       [self.windowController showOverlayWithStyle:kGIOverlayStyle_Informational format:NSLocalizedString(@"All branches were pushed to the remote \"%@\" successfully!", nil), remote.name];
     } else if ([error.domain isEqualToString:GCErrorDomain] && (error.code == kGCErrorCode_NonFastForward)) {
-      [self confirmUserActionWithAlertType:kGIAlertType_Stop
+      [self confirmUserActionWithAlertType:_AlertTypeForDangerousRemoteOperations()
                                      title:[NSString stringWithFormat:NSLocalizedString(@"Some branches could not be fast-forwarded on the remote \"%@\". Do you want to attempt to force push?", nil), remote.name]
                                    message:NSLocalizedString(@"This action cannot be undone.", nil)
                                     button:NSLocalizedString(@"Force Push", nil)
@@ -1000,7 +1005,7 @@ static inline NSString* _CleanedUpCommitMessage(NSString* message) {
   NSArray* remotes = [self.repository listRemotes:&localError];
   if (remotes.count <= 1) {
     GCRemote* remote = remotes[0];
-    [self confirmUserActionWithAlertType:kGIAlertType_Stop
+    [self confirmUserActionWithAlertType:_AlertTypeForDangerousRemoteOperations()
                                    title:[NSString stringWithFormat:NSLocalizedString(@"Are you sure you want to push all branches to the remote \"%@\"?", nil), remote.name]
                                  message:NSLocalizedString(@"This action cannot be undone.", nil)
                                   button:NSLocalizedString(@"Push All Branches", nil)
@@ -1056,7 +1061,7 @@ static inline NSString* _CleanedUpCommitMessage(NSString* message) {
   NSArray* remotes = [self.repository listRemotes:&localError];
   if (remotes.count <= 1) {
     GCRemote* remote = remotes[0];
-    [self confirmUserActionWithAlertType:kGIAlertType_Stop
+    [self confirmUserActionWithAlertType:_AlertTypeForDangerousRemoteOperations()
                                    title:[NSString stringWithFormat:NSLocalizedString(@"Are you sure you want to push all tags to the remote \"%@\"?", nil), remote.name]
                                  message:NSLocalizedString(@"This action cannot be undone.", nil)
                                   button:NSLocalizedString(@"Push All Tags", nil)
@@ -1103,7 +1108,7 @@ static inline NSString* _CleanedUpCommitMessage(NSString* message) {
 
 // TODO: Delete upstream(s) in config if needed and put on undo stack
 - (void)deleteRemoteBranch:(GCHistoryRemoteBranch*)branch {
-  [self confirmUserActionWithAlertType:kGIAlertType_Stop
+  [self confirmUserActionWithAlertType:_AlertTypeForDangerousRemoteOperations()
                                  title:[NSString stringWithFormat:NSLocalizedString(@"Are you sure you want to delete the remote branch \"%@\" from its remote?", nil), branch.name]
                                message:NSLocalizedString(@"This action cannot be undone.", nil)
                                 button:NSLocalizedString(@"Delete Branch", nil)
@@ -1116,7 +1121,7 @@ static inline NSString* _CleanedUpCommitMessage(NSString* message) {
 }
 
 - (void)deleteTagFromAllRemotes:(GCHistoryTag*)tag {
-  [self confirmUserActionWithAlertType:kGIAlertType_Stop
+  [self confirmUserActionWithAlertType:_AlertTypeForDangerousRemoteOperations()
                                  title:[NSString stringWithFormat:NSLocalizedString(@"Are you sure you want to delete the tag \"%@\" from all remotes?", nil), tag.name]
                                message:NSLocalizedString(@"This action cannot be undone.", nil)
                                 button:NSLocalizedString(@"Delete Tag", nil)
