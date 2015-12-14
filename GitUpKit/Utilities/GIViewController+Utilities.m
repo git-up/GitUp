@@ -211,6 +211,24 @@ static NSString* _diffTemporaryDirectoryPath = nil;
   return success;
 }
 
+- (void)discardAllChangesForFiles:(NSArray<NSString*>*)paths resetIndex:(BOOL)resetIndex {
+  [self confirmUserActionWithAlertType:kGIAlertType_Stop
+                                 title:NSLocalizedString(@"Are you sure you want to discard all changes for the selected files?", nil)
+                               message:NSLocalizedString(@"This action cannot be undone.", nil)
+                                button:NSLocalizedString(@"Discard", nil)
+             suppressionUserDefaultKey:nil
+                                 block:^{
+
+    NSError* error;
+    for (NSString* path in paths) {
+      if (![self discardAllChangesForFile:path resetIndex:resetIndex error:&error]) {
+        [self presentError:error];
+      }
+    }
+    [self.repository notifyWorkingDirectoryChanged];
+  }];
+}
+
 - (void)discardAllChangesForFile:(NSString*)path resetIndex:(BOOL)resetIndex {
   [self confirmUserActionWithAlertType:kGIAlertType_Stop
                                  title:[NSString stringWithFormat:NSLocalizedString(@"Are you sure you want to discard all changes from the file \"%@\"?", nil), path.lastPathComponent]

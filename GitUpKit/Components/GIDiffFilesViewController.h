@@ -18,6 +18,7 @@
 #import "GCDiff.h"
 
 @class GIDiffFilesViewController;
+@class GIDiffFileData;
 
 @protocol GIDiffFilesViewControllerDelegate <NSObject>
 @optional
@@ -41,5 +42,5 @@
 - (void)setDeltas:(NSArray*)deltas usingConflicts:(NSDictionary*)conflicts;
 
 @property(nonatomic, assign) GCDiffDelta* selectedDelta;
-@property(nonatomic, assign) NSArray* selectedDeltas;
+@property(nonatomic, assign) NSArray<GCDiffDelta*>* selectedDeltas;
 @end

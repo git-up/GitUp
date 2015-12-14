@@ -218,7 +218,7 @@ static NSImage* _untrackedImage = nil;
   }
 }
 
-- (NSArray*)selectedDeltas {
+- (NSArray<GCDiffDelta*>*)selectedDeltas {
   NSMutableArray* array = [[NSMutableArray alloc] init];
   [_tableView.selectedRowIndexes enumerateIndexesUsingBlock:^(NSUInteger index, BOOL* stop) {
     [array addObject:[(GIDiffFileData*)_data[index] delta]];
