@@ -15,7 +15,7 @@
 
 #import "GIAppKit.h"
 
-@class GIWindowController, GIViewController, GCUndoManager, GCLiveRepository, GCSnapshot;
+@class GIWindowController, GIViewController, GCLiveRepository, GCSnapshot;
 
 @interface GIView : NSView
 @property(nonatomic, readonly) GIViewController* viewController;
