@@ -655,7 +655,7 @@ cleanup:
 
 - (git_index*)reloadRepositoryIndex:(NSError**)error {
   git_index* index = NULL;
-  
+
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_repository_index, &index, self.private);
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_index_read, index, false);  // Force reading shouldn't be needed
   return index;
