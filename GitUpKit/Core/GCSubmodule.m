@@ -186,11 +186,19 @@ cleanup:
     return NO;
   }
   for (GCSubmodule* submodule in submodules) {
-    if ([self checkSubmoduleInitialized:submodule error:NULL]) {  // Ignore errors
-      continue;
+    if (![self checkSubmoduleInitialized:submodule error:NULL]) {  // Ignore errors
+      if (![self initializeSubmodule:submodule recursive:recursive error:error]) {
+        return NO;
+      }
     }
-    if (![self initializeSubmodule:submodule recursive:recursive error:error]) {
-      return NO;
+    if (recursive) {
+      GCRepository* repository = [[GCRepository alloc] initWithSubmodule:submodule error:error];
+      if (repository == nil) {
+        return NO;
+      }
+      if (![repository initializeAllSubmodules:recursive error:error]) {
+        return NO;
+      }
     }
   }
   return YES;
