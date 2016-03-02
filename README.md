@@ -28,7 +28,7 @@ Getting Started
 
 **Learn all about GitUp and download the latest release from http://gitup.co.**
 
-**Read the [docs](http://forums.gitup.co/c/docs) and visit the [community forums](http://forums.gitup.co/) for support & feedback.**
+**Read the [docs](https://github.com/git-up/GitUp/wiki) and use [GitHub Issues](https://github.com/git-up/GitUp/issues) for support & feedback.**
 
 Releases notes are available at https://github.com/git-up/GitUp/releases. Builds tagged with a `v` (e.g. `v1.2.3`) are released on the "Stable" channel, while builds tagged with a `b` (e.g. `b1234`) are only released on the "Continuous" channel. You can change the update channel used by GitUp in the app preferences.
 
