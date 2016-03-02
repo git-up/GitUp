@@ -1,8 +1,8 @@
 **[Pull requests](https://github.com/git-up/GitUp/pulls?q=is%3Apr) are welcome but be aware that GitUp is used for production work by many thousands of developers around the world, so the bar is very high. The last thing we want is letting the code quality slip or introducing a regression.**
 
-**If you are unsure your contribution would be valuable to GitUp, or are looking for contributions to work on, check out the [dedicated topics](http://forums.gitup.co/c/contributions) in the GitUp community forums.**
+**If you are unsure your contribution would be valuable to GitUp, or are looking for contributions to work on, check out the opened [GitHub Issues](https://github.com/git-up/GitUp/issues).**
 
-**You must accept the terms of the [GitUp Contributor License Agreement](http://forums.gitup.co/t/gitup-contributor-license-agreement/323) before your pull request can be merged into upstream.**
+**You must accept the terms of the [GitUp Contributor License Agreement](https://github.com/git-up/GitUp/wiki/GITUP-CONTRIBUTOR-LICENSE-AGREEMENT) before your pull request can be merged into upstream. To do so, you must include "I AGREE TO THE GITUP CONTRIBUTOR LICENSE AGREEMENT" somewhere in the description of your pull request.**
 
 The following is a list of absolute requirements for PRs (not following them would result in immediate rejection):
 
