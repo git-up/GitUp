@@ -467,16 +467,16 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
   }
 }
 
-- (IBAction)viewDocumentation:(id)sender {
-  [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:kURL_Documentation]];
+- (IBAction)viewWiki:(id)sender {
+  [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:kURL_Wiki]];
 }
 
 - (IBAction)viewReleaseNotes:(id)sender {
   [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:kURL_ReleaseNotes]];
 }
 
-- (IBAction)visitForums:(id)sender {
-  [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:kURL_Forums]];
+- (IBAction)viewIssues:(id)sender {
+  [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:kURL_Issues]];
 }
 
 - (IBAction)showAboutPanel:(id)sender {
@@ -594,10 +594,6 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
 
 - (IBAction)openTwitter:(id)sender {
   [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:kURL_Twitter]];
-}
-
-- (IBAction)openForums:(id)sender {
-  [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:kURL_Forums]];
 }
 
 - (IBAction)installTool:(id)sender {

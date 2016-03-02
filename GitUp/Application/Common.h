@@ -34,8 +34,8 @@
 
 #define kURL_AppCast @"https://s3-us-west-2.amazonaws.com/gitup-builds/%@/appcast.xml"
 
-#define kURL_Forums @"http://forums.gitup.co/"
-#define kURL_Documentation @"http://forums.gitup.co/c/docs"
+#define kURL_Issues @"https://github.com/git-up/GitUp/issues"
+#define kURL_Wiki @"https://github.com/git-up/GitUp/wiki"
 #define kURL_ReleaseNotes @"https://github.com/git-up/GitUp/releases"
 
 #define kURL_Twitter @"https://twitter.com/GitUpApp"

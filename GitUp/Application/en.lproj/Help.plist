@@ -16,7 +16,7 @@ Right-click on a commit in the Map to show a list of available actions and their
 Right-click on a commit to see all editing operations. You can undo / redo your edits at any time with [Cmd-Z] / [Cmd-Shift-Z].</string>
 		</array>
 		<key>link</key>
-		<string>http://forums.gitup.co/t/using-gitup-map-view/34/1</string>
+		<string>https://github.com/git-up/GitUp/wiki/Using-GitUp-Map-View</string>
 	</dict>
 	<key>commit</key>
 	<dict>
@@ -28,7 +28,7 @@ The Simple mode uses a unified index and workdir and you can enable it in GitUp 
 You can stage or unstage selected lines (click on line numbers), or selected files, just by pressing [Return].</string>
 		</array>
 		<key>link</key>
-		<string>http://forums.gitup.co/t/using-gitup-advanced-commit-view/33/1</string>
+		<string>https://github.com/git-up/GitUp/wiki/Using-GitUp-Advanced-Commit-View</string>
 	</dict>
 	<key>stashes</key>
 	<dict>
@@ -38,7 +38,7 @@ You can stage or unstage selected lines (click on line numbers), or selected fil
 You can also re-apply stashes, delete them or save new ones.</string>
 		</array>
 		<key>link</key>
-		<string>http://forums.gitup.co/t/using-gitup-stashes-view/31/1</string>
+		<string>https://github.com/git-up/GitUp/wiki/Using-GitUp-Stashes-View</string>
 	</dict>
 	<key>config</key>
 	<dict>
@@ -48,7 +48,7 @@ You can also re-apply stashes, delete them or save new ones.</string>
 Be sure to only edit options you understand or you may prevent your repository to work correctly.</string>
 		</array>
 		<key>link</key>
-		<string>http://forums.gitup.co/t/using-gitup-configuration-editor/38/1</string>
+		<string>https://github.com/git-up/GitUp/wiki/Using-GitUp-Configuration-Editor</string>
 	</dict>
 	<key>quickview</key>
 	<dict>
@@ -58,7 +58,7 @@ Be sure to only edit options you understand or you may prevent your repository t
 Press [Cmd-Arrow-Up] or [Cmd-Arrow-Down] to select the previous or next commit, or [Spacebar] or [Esc] to exit.</string>
 		</array>
 		<key>link</key>
-		<string>http://forums.gitup.co/t/using-gitup-quick-view/45/1</string>
+		<string>https://github.com/git-up/GitUp/wiki/Using-GitUp-Quick-View</string>
 	</dict>
 	<key>diff</key>
 	<dict>
@@ -68,7 +68,7 @@ Press [Cmd-Arrow-Up] or [Cmd-Arrow-Down] to select the previous or next commit, 
 Press [i] or [Spacebar] to exit.</string>
 		</array>
 		<key>link</key>
-		<string>http://forums.gitup.co/t/viewing-diffs-in-gitup/35</string>
+		<string>https://github.com/git-up/GitUp/wiki/Viewing-Diffs-in-GitUp</string>
 	</dict>
 	<key>search</key>
 	<dict>
@@ -78,7 +78,7 @@ Press [i] or [Spacebar] to exit.</string>
 Select a result to jump to it in the Map, or press [Spacebar] to view its diff with Quick View.</string>
 		</array>
 		<key>link</key>
-		<string>http://forums.gitup.co/t/using-gitup-search/46/1</string>
+		<string>https://github.com/git-up/GitUp/wiki/Using-GitUp-Search</string>
 	</dict>
 	<key>tags</key>
 	<dict>
@@ -88,7 +88,7 @@ Select a result to jump to it in the Map, or press [Spacebar] to view its diff w
 If you have lots of tags in your repository, you can use the search field to find a specific tag faster.</string>
 		</array>
 		<key>link</key>
-		<string>http://forums.gitup.co/t/browsing-tags-with-gitup/47/1</string>
+		<string>https://github.com/git-up/GitUp/wiki/Browsing-Tags-with-GitUp</string>
 	</dict>
 	<key>ancestors</key>
 	<dict>
@@ -98,7 +98,7 @@ If you have lots of tags in your repository, you can use the search field to fin
 Select an ancestor commit to jump to it in the Map view or press [Spacebar] to enter Quick View.</string>
 		</array>
 		<key>link</key>
-		<string>http://forums.gitup.co/t/browsing-head-ancestors-with-gitup/70/1</string>
+		<string>https://github.com/git-up/GitUp/wiki/Browsing-HEAD-Ancestors-with-GitUp</string>
 	</dict>
 	<key>snapshots</key>
 	<dict>
@@ -108,7 +108,7 @@ Select an ancestor commit to jump to it in the Map view or press [Spacebar] to e
 Select a Snapshot to preview the state of the repository at that time and then click &quot;Restore&quot; to roll back to it.</string>
 		</array>
 		<key>link</key>
-		<string>http://forums.gitup.co/t/using-gitup-snapshots/18/1</string>
+		<string>https://github.com/git-up/GitUp/wiki/Using-GitUp-Snapshots</string>
 	</dict>
 	<key>reflog</key>
 	<dict>
@@ -118,7 +118,7 @@ Select a Snapshot to preview the state of the repository at that time and then c
 Unreachable commits are indicated in darker text and can be made reachable again by clicking on &quot;Restore&quot;.</string>
 		</array>
 		<key>link</key>
-		<string>http://forums.gitup.co/t/using-gitup-reflog/19/1</string>
+		<string>https://github.com/git-up/GitUp/wiki/Using-GitUp-Reflog</string>
 	</dict>
 	<key>rewrite</key>
 	<dict>
@@ -128,7 +128,7 @@ Unreachable commits are indicated in darker text and can be made reachable again
 Add, remove or edit files in the working directory as you would normally do, then click &quot;Continue&quot;.</string>
 		</array>
 		<key>link</key>
-		<string>http://forums.gitup.co/t/rewriting-commits-with-gitup/39/1</string>
+		<string>https://github.com/git-up/GitUp/wiki/Rewriting-Commits-with-GitUp</string>
 	</dict>
 	<key>split</key>
 	<dict>
@@ -138,7 +138,7 @@ Add, remove or edit files in the working directory as you would normally do, the
 Changes can only be moved, not removed or added. Use the diff area to review the moved changes, then click &quot;Continue&quot; when done.</string>
 		</array>
 		<key>link</key>
-		<string>http://forums.gitup.co/t/splitting-commits-with-gitup/40/1</string>
+		<string>https://github.com/git-up/GitUp/wiki/Splitting-Commits-with-GitUp</string>
 	</dict>
 	<key>resolve</key>
 	<dict>
@@ -148,7 +148,7 @@ Changes can only be moved, not removed or added. Use the diff area to review the
 Once you have resolved all the conflicts, click &quot;Commit&quot; to complete the editing operation.</string>
 		</array>
 		<key>link</key>
-		<string>http://forums.gitup.co/t/handling-merge-conflicts-in-gitup/36/1</string>
+		<string>https://github.com/git-up/GitUp/wiki/Handling-Merge-Conflicts-in-GitUp</string>
 	</dict>
 </dict>
 </plist>

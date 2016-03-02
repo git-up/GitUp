@@ -832,7 +832,7 @@ You must close and reopen any opened repositories in GitUp after changing this s
                             <menuItem title="Documentation…" id="Ke5-jK-SAM">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="viewDocumentation:" target="Voe-Tx-rLC" id="erl-Tr-3gP"/>
+                                    <action selector="viewWiki:" target="Voe-Tx-rLC" id="L5Z-NL-KtK"/>
                                 </connections>
                             </menuItem>
                             <menuItem title="Release Notes…" id="aLm-Bn-jpX">
@@ -841,10 +841,10 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                     <action selector="viewReleaseNotes:" target="Voe-Tx-rLC" id="Glr-e4-eNM"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="GitUp Forums…" id="fwj-0H-19c">
+                            <menuItem title="Feedback and Bugs…" id="fwj-0H-19c">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="visitForums:" target="-1" id="psH-UB-r2R"/>
+                                    <action selector="viewIssues:" target="Voe-Tx-rLC" id="4xH-3m-JaQ"/>
                                 </connections>
                             </menuItem>
                         </items>
@@ -1104,7 +1104,7 @@ UI design by Wayne Fan</string>
             <rect key="contentRect" x="131" y="158" width="280" height="349"/>
             <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1417"/>
             <view key="contentView" id="36m-6r-JT2" customClass="WelcomeView">
-                <rect key="frame" x="0.0" y="7" width="280" height="349"/>
+                <rect key="frame" x="0.0" y="0.0" width="280" height="349"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <button id="Fwx-IU-wXQ">
@@ -1242,15 +1242,15 @@ UI design by Wayne Fan</string>
                             <userDefinedRuntimeAttribute type="color" keyPath="alternateLinkColor">
                                 <color key="value" red="0.0" green="0.0" blue="0.0" alpha="0.5" colorSpace="calibratedRGB"/>
                             </userDefinedRuntimeAttribute>
-                            <userDefinedRuntimeAttribute type="string" keyPath="link" value="Forums"/>
+                            <userDefinedRuntimeAttribute type="string" keyPath="link" value="Feedback"/>
                         </userDefinedRuntimeAttributes>
                         <connections>
-                            <action selector="openForums:" target="Voe-Tx-rLC" id="fjQ-4x-1Gd"/>
+                            <action selector="viewIssues:" target="Voe-Tx-rLC" id="C7T-gw-NmH"/>
                         </connections>
                     </customView>
                 </subviews>
             </view>
-            <point key="canvasLocation" x="-216" y="699.5"/>
+            <point key="canvasLocation" x="-252" y="578.5"/>
         </window>
         <userDefaultsController representsSharedInstance="YES" id="AR1-cq-KNa"/>
     </objects>
