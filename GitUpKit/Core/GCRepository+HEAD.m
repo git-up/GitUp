@@ -116,7 +116,7 @@
   }
   
   const git_commit* parents[2] = {headCommit, parent.private};
-  commit = [self createCommitFromIndex:index withParents:parents count:(headCommit ? (parent ? 2 : 1) : 0) message:message error:error];
+  commit = [self createCommitFromIndex:index withParents:parents count:(headCommit ? (parent ? 2 : 1) : 0) author:NULL message:message error:error];
   if (commit == nil) {
     goto cleanup;
   }

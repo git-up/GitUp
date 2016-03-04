@@ -51,6 +51,7 @@ static inline GCCommit* _CopyCommit(GCRepository* repository, git_commit* commit
             withAncestorCommit:(git_commit*)ancestorCommit
                        parents:(const git_commit**)parents
                          count:(NSUInteger)count
+                        author:(const git_signature*)author
                        message:(NSString*)message
                conflictHandler:(GCConflictHandler)handler
                          error:(NSError**)error {
@@ -74,10 +75,10 @@ static inline GCCommit* _CopyCommit(GCRepository* repository, git_commit* commit
     for (NSUInteger i = 0; i < count; ++i) {
       [array addObject:_CopyCommit(self, (git_commit*)parents[i])];
     }
-    commit = handler([[GCIndex alloc] initWithRepository:nil index:index], _CopyCommit(self, ourCommit), _CopyCommit(self, theirCommit), array, message, error);
+    commit = handler([[GCIndex alloc] initWithRepository:nil index:index], _CopyCommit(self, ourCommit), _CopyCommit(self, theirCommit), array, message, error);  // Doesn't make sense to specify a custom author on conflict anyway
     index = NULL;  // Ownership has been transferred to GCIndex instance
   } else {
-    commit = [self createCommitFromIndex:index withParents:parents count:count message:message error:error];
+    commit = [self createCommitFromIndex:index withParents:parents count:count author:author message:message error:error];
   }
   
 cleanup:
@@ -100,6 +101,7 @@ cleanup:
               withAncestorCommit:ancestorCommit.private
                          parents:parents
                            count:1
+                          author:git_commit_author(pickCommit.private)
                          message:message
                  conflictHandler:handler
                            error:error];
@@ -117,6 +119,7 @@ cleanup:
               withAncestorCommit:revertCommit.private
                          parents:parents
                            count:1
+                          author:NULL
                          message:message
                  conflictHandler:handler
                            error:error];
@@ -193,6 +196,7 @@ cleanup:
               withAncestorCommit:ancestorCommit.private
                          parents:parents
                            count:2
+                          author:NULL
                          message:message
                  conflictHandler:handler
                            error:error];
@@ -210,7 +214,7 @@ cleanup:
   for (GCCommit* parent in parents) {
     commits[count++] = parent.private;
   }
-  return [self createCommitFromIndex:index.private withParents:commits count:count message:message error:error];
+  return [self createCommitFromIndex:index.private withParents:commits count:count author:NULL message:message error:error];
 }
 
 - (GCCommit*)copyCommit:(GCCommit*)copyCommit
@@ -356,6 +360,7 @@ cleanup:
 - (GCCommit*)createCommitFromTree:(git_tree*)tree
                       withParents:(const git_commit**)parents
                             count:(NSUInteger)count
+                           author:(const git_signature*)author
                           message:(NSString*)message
                             error:(NSError**)error {
   GCCommit* commit = nil;
@@ -363,7 +368,7 @@ cleanup:
   
   git_oid oid;
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_signature_default, &signature, self.private);
-  CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_commit_create, &oid, self.private, NULL, signature, signature, NULL, GCCleanedUpCommitMessage(message).bytes, tree, count, parents);
+  CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_commit_create, &oid, self.private, NULL, author ? author : signature, signature, NULL, GCCleanedUpCommitMessage(message).bytes, tree, count, parents);
   git_commit* newCommit = NULL;
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_commit_lookup, &newCommit, self.private, &oid);
   commit = [[GCCommit alloc] initWithRepository:self commit:newCommit];
@@ -376,6 +381,7 @@ cleanup:
 - (GCCommit*)createCommitFromIndex:(git_index*)index
                        withParents:(const git_commit**)parents
                              count:(NSUInteger)count
+                            author:(const git_signature*)author
                            message:(NSString*)message
                              error:(NSError**)error {
   GCCommit* commit = nil;
@@ -385,7 +391,7 @@ cleanup:
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_index_write_tree_to, &oid, index, self.private);
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_tree_lookup, &tree, self.private, &oid);
   
-  commit = [self createCommitFromTree:tree withParents:parents count:count message:message error:error];
+  commit = [self createCommitFromTree:tree withParents:parents count:count author:author message:message error:error];
   
 cleanup:
   git_tree_free(tree);
