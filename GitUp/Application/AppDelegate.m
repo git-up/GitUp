@@ -391,6 +391,14 @@
   return NO;
 }
 
+- (BOOL)applicationShouldHandleReopen:(NSApplication*)theApplication hasVisibleWindows:(BOOL)hasVisibleWindows {
+  if (!hasVisibleWindows) {
+    _allowWelcome = 1; // Always show welcome when clicking on dock icon
+    [self handleDocumentCountChanged];
+  }
+  return YES;
+}
+
 - (void)applicationDidBecomeActive:(NSNotification*)notification {
   if (_allowWelcome < 0) {
     _allowWelcome = 1;
