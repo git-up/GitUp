@@ -41,6 +41,7 @@
 @end
 
 @interface AppDelegate () <NSUserNotificationCenterDelegate, CrashlyticsDelegate, SUUpdaterDelegate>
+- (IBAction)closeWelcomeWindow:(id)sender;
 @end
 
 @implementation WelcomeView
@@ -54,6 +55,25 @@
   CGContextSetRGBFillColor(context, 0.9, 0.9, 0.9, 1.0);
   GICGContextAddRoundedRect(context, bounds, kWelcomeWindowCornerRadius);
   CGContextFillPath(context);
+}
+
+@end
+
+@interface WelcomeWindow : NSWindow
+@end
+
+@implementation WelcomeWindow
+
+- (BOOL)validateMenuItem:(NSMenuItem*)menuItem {
+  return menuItem.action == @selector(performClose:) ? YES : [super validateMenuItem:menuItem];
+}
+
+- (void)performClose:(id)sender {
+  [[AppDelegate sharedDelegate] closeWelcomeWindow:sender];
+}
+
+- (BOOL)canBecomeKeyWindow {
+  return YES;
 }
 
 @end
