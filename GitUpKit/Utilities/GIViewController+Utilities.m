@@ -207,6 +207,29 @@ static NSString* _diffTemporaryDirectoryPath = nil;
   }
 }
 
+- (void)stageAllChangesForFiles:(NSArray<NSString *> *)paths {
+  NSError* error;
+  NSMutableArray *existingFiles = [NSMutableArray array];
+  NSMutableArray *nonExistingFiles = [NSMutableArray array];
+  for(NSString *path in paths) {
+    if ([[NSFileManager defaultManager] fileExistsAtPath:[self.repository absolutePathForFile:path]]) {
+      [existingFiles addObject:path];
+    } else {
+      [nonExistingFiles addObject:path];
+    }
+  }
+  
+  if (![self.repository addFilesToIndex:existingFiles error:&error]){
+    [self presentError:error];
+  }
+  
+  if (![self.repository removeFilesFromIndex:nonExistingFiles error:&error]){
+    [self presentError:error];
+  }
+  
+  [self.repository notifyRepositoryChanged];
+}
+
 - (void)stageSelectedChangesForFile:(NSString*)path oldLines:(NSIndexSet*)oldLines newLines:(NSIndexSet*)newLines {
   NSError* error;
   if ([self.repository addLinesFromFileToIndex:path
@@ -227,8 +250,12 @@ static NSString* _diffTemporaryDirectoryPath = nil;
 }
 
 - (void)unstageAllChangesForFile:(NSString*)path {
+  [self unstageAllChangesForFiles:@[path]];
+}
+
+- (void)unstageAllChangesForFiles:(NSArray<NSString *>*)filePaths {
   NSError* error;
-  if ([self.repository resetFileInIndexToHEAD:path error:&error]) {
+  if ([self.repository resetFilesInIndexToHEAD:filePaths error:&error]) {
     [self.repository notifyWorkingDirectoryChanged];
   } else {
     [self presentError:error];

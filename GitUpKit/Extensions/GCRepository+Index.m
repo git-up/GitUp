@@ -46,12 +46,46 @@
   return [self removeFile:path fromIndex:index error:error] && [self writeRepositoryIndex:index error:error];
 }
 
+- (BOOL)removeFilesFromIndex:(NSArray<NSString *> *)paths error:(NSError**)error {
+  GCIndex* index = [self readRepositoryIndex:error];
+  if (index == nil) {
+    return NO;
+  }
+  
+  for (NSString *path in paths) {
+    if (![self removeFile:path fromIndex:index error:error]) {
+      return false;
+    }else if (error) {
+      return false;
+    }
+  }
+  
+  return [self writeRepositoryIndex:index error:error];
+}
+
 - (BOOL)addFileToIndex:(NSString*)path error:(NSError**)error {
   GCIndex* index = [self readRepositoryIndex:error];
   if (index == nil) {
     return NO;
   }
   return [self addFileInWorkingDirectory:path toIndex:index error:error] && [self writeRepositoryIndex:index error:error];
+}
+
+- (BOOL)addFilesToIndex:(NSArray<NSString *> *)paths error:(NSError**)error {
+  GCIndex* index = [self readRepositoryIndex:error];
+  if (index == nil) {
+    return NO;
+  }
+  
+  for (NSString *path in paths) {
+    if (![self addFileInWorkingDirectory:path toIndex:index error:error]) {
+      return false;
+    }else if (*error) {
+      return false;
+    }
+  }
+  
+  return [self writeRepositoryIndex:index error:error];
 }
 
 - (BOOL)resetFileInIndexToHEAD:(NSString*)path error:(NSError**)error {
@@ -72,6 +106,31 @@
       return NO;
     }
   }
+  return [self writeRepositoryIndex:index error:error];
+}
+
+- (BOOL)resetFilesInIndexToHEAD:(NSArray<NSString *> *)paths error:(NSError**)error {
+  GCIndex* index = [self readRepositoryIndex:error];
+  if (index == nil) {
+    return NO;
+  }
+  GCCommit* headCommit;
+  if (![self lookupHEADCurrentCommit:&headCommit branch:NULL error:error]) {
+    return NO;
+  }
+  
+  for (NSString *path in paths) {
+    if (headCommit) {
+      if (![self resetFile:path inIndex:index toCommit:headCommit error:error]) {
+        return NO;
+      }
+    } else {
+      if (![self removeFile:path fromIndex:index error:error]) {
+        return NO;
+      }
+    }
+  }
+  
   return [self writeRepositoryIndex:index error:error];
 }
 
