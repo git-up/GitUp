@@ -301,6 +301,10 @@ static NSString* _diffTemporaryDirectoryPath = nil;
   [[NSWorkspace sharedWorkspace] openFile:[self.repository absolutePathForFile:path]];  // This will silently fail if the file doesn't exist in the working directory
 }
 
+- (void)showFileInFinder:(NSString*)path {
+  [[NSWorkspace sharedWorkspace] activateFileViewerSelectingURLs:@[[NSURL fileURLWithPath:[self.repository absolutePathForFile:path]]]];
+}
+
 - (void)openSubmoduleWithApp:(NSString*)path {
   NSError* error;
   GCSubmodule* submodule = [self.repository lookupSubmoduleWithName:path error:&error];
@@ -697,6 +701,10 @@ static NSString* _diffTemporaryDirectoryPath = nil;
         [self openFileWithDefaultEditor:delta.canonicalPath];
       }];
     }
+    
+    [menu addItemWithTitle:NSLocalizedString(@"Show in Finder…", nil) block:^{
+      [self showFileInFinder:delta.canonicalPath];
+    }];
   }
   
   return menu;
