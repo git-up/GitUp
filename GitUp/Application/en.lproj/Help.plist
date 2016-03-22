@@ -10,7 +10,7 @@
 You can customize what is shown in the Map using the &quot;Show&quot; menu at the bottom of the window.</string>
 			<string>GitUp lets you instantaneously view the detailed information and diff of any commit with Quick View.
 Select a commit in the Map and then press [Spacebar] to enter Quick View.</string>
-			<string>Branch and commit operations that used to be complex with the command line becomes intuitive, faster and safer with GitUp.
+			<string>Branch and commit operations that used to be complex with the command line become intuitive, faster and safer with GitUp.
 Right-click on a commit in the Map to show a list of available actions and their associated keyboard shortcuts.</string>
 			<string>For instance, to edit an incorrect commit message with GitUp, just select the commit in the Map then press [E].
 Right-click on a commit to see all editing operations. You can undo / redo your edits at any time with [Cmd-Z] / [Cmd-Shift-Z].</string>
