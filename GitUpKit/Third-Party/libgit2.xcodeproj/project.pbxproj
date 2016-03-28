@@ -265,6 +265,8 @@
 		E217515D1B912B6C00BE234A /* zstream.c in Sources */ = {isa = PBXBuildFile; fileRef = E217503E1B912B6C00BE234A /* zstream.c */; };
 		E21751841B912B8E00BE234A /* http_parser.c in Sources */ = {isa = PBXBuildFile; fileRef = E21751601B912B8E00BE234A /* http_parser.c */; };
 		E21751851B912B8E00BE234A /* http_parser.c in Sources */ = {isa = PBXBuildFile; fileRef = E21751601B912B8E00BE234A /* http_parser.c */; };
+		E228B2B31CA997DD00A026FC /* merge_driver.c in Sources */ = {isa = PBXBuildFile; fileRef = E228B2B11CA997DD00A026FC /* merge_driver.c */; };
+		E228B2B41CA997DD00A026FC /* merge_driver.c in Sources */ = {isa = PBXBuildFile; fileRef = E228B2B11CA997DD00A026FC /* merge_driver.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -367,7 +369,6 @@
 		E2174F8E1B912B6B00BE234A /* merge.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = merge.c; sourceTree = "<group>"; };
 		E2174F8F1B912B6B00BE234A /* merge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = merge.h; sourceTree = "<group>"; };
 		E2174F901B912B6B00BE234A /* merge_file.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = merge_file.c; sourceTree = "<group>"; };
-		E2174F911B912B6B00BE234A /* merge_file.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = merge_file.h; sourceTree = "<group>"; };
 		E2174F921B912B6B00BE234A /* message.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = message.c; sourceTree = "<group>"; };
 		E2174F931B912B6B00BE234A /* message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = message.h; sourceTree = "<group>"; };
 		E2174F941B912B6B00BE234A /* mwindow.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = mwindow.c; sourceTree = "<group>"; };
@@ -585,6 +586,8 @@
 		E21752EA1B914B9600BE234A /* types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = types.h; sourceTree = "<group>"; };
 		E21752EB1B914B9600BE234A /* version.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = version.h; sourceTree = "<group>"; };
 		E21752EC1B914B9600BE234A /* git2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = git2.h; sourceTree = "<group>"; };
+		E228B2B11CA997DD00A026FC /* merge_driver.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = merge_driver.c; sourceTree = "<group>"; };
+		E228B2B21CA997DD00A026FC /* merge_driver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = merge_driver.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -722,8 +725,9 @@
 				E2174F8D1B912B6B00BE234A /* map.h */,
 				E2174F8E1B912B6B00BE234A /* merge.c */,
 				E2174F8F1B912B6B00BE234A /* merge.h */,
+				E228B2B11CA997DD00A026FC /* merge_driver.c */,
+				E228B2B21CA997DD00A026FC /* merge_driver.h */,
 				E2174F901B912B6B00BE234A /* merge_file.c */,
-				E2174F911B912B6B00BE234A /* merge_file.h */,
 				E2174F921B912B6B00BE234A /* message.c */,
 				E2174F931B912B6B00BE234A /* message.h */,
 				E2174F941B912B6B00BE234A /* mwindow.c */,
@@ -1112,6 +1116,7 @@
 				E21750401B912B6C00BE234A /* annotated_commit.c in Sources */,
 				E217514E1B912B6C00BE234A /* xdiffi.c in Sources */,
 				E21750F81B912B6C00BE234A /* status.c in Sources */,
+				E228B2B31CA997DD00A026FC /* merge_driver.c in Sources */,
 				E21750C21B912B6C00BE234A /* openssl_stream.c in Sources */,
 				E217505E1B912B6C00BE234A /* commit_list.c in Sources */,
 				E217511E1B912B6C00BE234A /* smart_pkt.c in Sources */,
@@ -1248,6 +1253,7 @@
 				E21750411B912B6C00BE234A /* annotated_commit.c in Sources */,
 				E217514F1B912B6C00BE234A /* xdiffi.c in Sources */,
 				E21750F91B912B6C00BE234A /* status.c in Sources */,
+				E228B2B41CA997DD00A026FC /* merge_driver.c in Sources */,
 				E21750C31B912B6C00BE234A /* openssl_stream.c in Sources */,
 				E217505F1B912B6C00BE234A /* commit_list.c in Sources */,
 				E217511F1B912B6C00BE234A /* smart_pkt.c in Sources */,
@@ -1378,7 +1384,7 @@
 					GIT_COMMON_CRYPTO,
 					GIT_SECURE_TRANSPORT,
 					GIT_SSH,
-					GIT_USE_STAT_ATIMESPEC,
+					GIT_USE_STAT_MTIMESPEC,
 				);
 				HEADER_SEARCH_PATHS = (
 					"Libraries/libssh2/$(PLATFORM_NAME)/include",
@@ -1416,7 +1422,7 @@
 					GIT_COMMON_CRYPTO,
 					GIT_SECURE_TRANSPORT,
 					GIT_SSH,
-					GIT_USE_STAT_ATIMESPEC,
+					GIT_USE_STAT_MTIMESPEC,
 				);
 				HEADER_SEARCH_PATHS = (
 					"Libraries/libssh2/$(PLATFORM_NAME)/include",
@@ -1497,7 +1503,7 @@
 					GIT_COMMON_CRYPTO,
 					GIT_SECURE_TRANSPORT,
 					GIT_SSH,
-					GIT_USE_STAT_ATIMESPEC,
+					GIT_USE_STAT_MTIMESPEC,
 				);
 				HEADER_SEARCH_PATHS = (
 					"Libraries/libssh2/$(PLATFORM_NAME)/include",
