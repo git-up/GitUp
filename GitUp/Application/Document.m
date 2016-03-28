@@ -54,6 +54,10 @@
 
 #define kMaxProgressRefreshRate 10.0  // Hz
 
+@interface NSWindow (OSX_10_10)
+- (void)setTitleVisibility:(NSWindowTitleVisibility)visibility;
+@end
+
 @interface Document () <NSToolbarDelegate, NSTextFieldDelegate, GCLiveRepositoryDelegate,
                         GIWindowControllerDelegate, GIMapViewControllerDelegate, GISnapshotListViewControllerDelegate, GIUnifiedReflogViewControllerDelegate,
                         GICommitListViewControllerDelegate, GICommitRewriterViewControllerDelegate, GICommitSplitterViewControllerDelegate,
@@ -282,7 +286,7 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
   _mainWindow.backgroundColor = [NSColor whiteColor];
   [_mainWindow setToolbar:_toolbar];
   if (_unifiedToolbar) {
-    _mainWindow.titleVisibility = NSWindowTitleHidden;
+    [_mainWindow setTitleVisibility:NSWindowTitleHidden];
   }
   _contentView.wantsLayer = YES;
   _leftView.wantsLayer = YES;
@@ -545,7 +549,7 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
         NSAlert* alert = [NSAlert alertWithMessageText:NSLocalizedString(@"Do you want to initialize submodules?", nil) defaultButton:NSLocalizedString(@"Initialize", nil) alternateButton:NSLocalizedString(@"Cancel", nil) otherButton:nil informativeTextWithFormat:@"One or more submodules in this repository are uninitialized."];
         alert.type = kGIAlertType_Caution;
         alert.showsSuppressionButton = YES;
-        [alert beginSheetModalForWindow:_mainWindow withCompletionHandler:^(NSModalResponse returnCode) {
+        [alert beginSheetModalForWindow:_mainWindow withCompletionHandler:^(NSInteger returnCode) {
           
           if (alert.suppressionButton.state) {
             [_repository setUserInfo:@(YES) forKey:kRepositoryUserInfoKey_SkipSubmoduleCheck];
@@ -1778,7 +1782,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
   alert.accessoryView = _resetView;
   [alert addButtonWithTitle:NSLocalizedString(@"Reset", nil)];
   [alert addButtonWithTitle:NSLocalizedString(@"Cancel", nil)];
-  [alert beginSheetModalForWindow:_mainWindow withCompletionHandler:^(NSModalResponse returnCode) {
+  [alert beginSheetModalForWindow:_mainWindow withCompletionHandler:^(NSInteger returnCode) {
     
     if (returnCode == NSAlertFirstButtonReturn) {
       NSError* error;

@@ -1903,6 +1903,10 @@
 				);
 				PRODUCT_NAME = GitUpTests;
 				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"$(inherited)",
+					"-Wno-partial-availability",
+				);
 			};
 			name = Debug;
 		};
@@ -1919,6 +1923,10 @@
 				);
 				PRODUCT_NAME = GitUpTests;
 				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"$(inherited)",
+					"-Wno-partial-availability",
+				);
 			};
 			name = Release;
 		};
@@ -1951,6 +1959,10 @@
 				);
 				PRODUCT_NAME = GitUpTests;
 				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"$(inherited)",
+					"-Wno-partial-availability",
+				);
 			};
 			name = Distribution;
 		};

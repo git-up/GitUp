@@ -752,7 +752,7 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
                                            otherButton:NSLocalizedString(@"Merge", nil)
                              informativeTextWithFormat:NSLocalizedString(@"Do you want to still create a merge or just fast-forward?", nil)];
         alert.type = kGIAlertType_Note;
-        [self presentAlert:alert completionHandler:^(NSModalResponse returnCode) {
+        [self presentAlert:alert completionHandler:^(NSInteger returnCode) {
           
           if (returnCode == NSAlertDefaultReturn) {
             [self fastForwardLocalBranch:intoBranch toCommitOrBranch:commitOrBranch withUserMessage:userMessage];
@@ -1200,7 +1200,7 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
                                                otherButton:NSLocalizedString(@"Merge", nil)
                                  informativeTextWithFormat:NSLocalizedString(@"The branch \"%@\" has diverged from its upstream and cannot be fast-forwarded.", nil), branch.name];
             alert.type = kGIAlertType_Note;
-            [self presentAlert:alert completionHandler:^(NSModalResponse returnCode) {
+            [self presentAlert:alert completionHandler:^(NSInteger returnCode) {
               
               if (returnCode == NSAlertDefaultReturn) {
                 [self rebaseLocalBranch:branch fromCommit:ancestorCommit ontoCommit:upstream.tipCommit withUserMessage:nil];

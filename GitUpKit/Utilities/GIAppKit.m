@@ -54,14 +54,14 @@ static NSColor* _separatorColor = nil;
 @implementation NSAlert (GIAppKit)
 
 + (void)_alertDidEnd:(NSAlert*)alert returnCode:(NSInteger)returnCode contextInfo:(void*)contextInfo {
-  void (^handler)(NSModalResponse) = contextInfo ? CFBridgingRelease(contextInfo) : NULL;
+  void (^handler)(NSInteger) = contextInfo ? CFBridgingRelease(contextInfo) : NULL;
   [alert.window orderOut:nil];  // Dismiss the alert window before the handler might chain another one
   if (handler) {
     handler(returnCode);
   }
 }
 
-- (void)beginSheetModalForWindow:(NSWindow*)window withCompletionHandler:(void (^)(NSModalResponse returnCode))handler {
+- (void)beginSheetModalForWindow:(NSWindow*)window withCompletionHandler:(void (^)(NSInteger returnCode))handler {
   [self beginSheetModalForWindow:window modalDelegate:[NSAlert class] didEndSelector:@selector(_alertDidEnd:returnCode:contextInfo:) contextInfo:(handler ? (void*)CFBridgingRetain(handler) : NULL)];
 }
 

@@ -37,6 +37,10 @@
 #define kToolName @"gitup"
 #define kToolInstallPath @"/usr/local/bin/" kToolName
 
+@interface NSSavePanel (OSX_10_9)
+- (void)setShowsTagField:(BOOL)flag;
+@end
+
 @interface WelcomeView : NSView
 @end
 

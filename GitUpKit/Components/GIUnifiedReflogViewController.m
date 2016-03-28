@@ -277,7 +277,7 @@ static NSString* _StringFromActions(GCReflogActions actions) {
   alert.accessoryView = _restoreView;
   [alert addButtonWithTitle:NSLocalizedString(@"Create Branch", nil)];
   [alert addButtonWithTitle:NSLocalizedString(@"Cancel", nil)];
-  [self presentAlert:alert completionHandler:^(NSModalResponse returnCode) {
+  [self presentAlert:alert completionHandler:^(NSInteger returnCode) {
     
     if (returnCode == NSAlertFirstButtonReturn) {
       NSString* name = [_nameTextField.stringValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
