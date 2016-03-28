@@ -1252,7 +1252,7 @@
 		E2C338A319F8562F00063D95 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0720;
+				LastUpgradeCheck = 0730;
 				ORGANIZATIONNAME = "";
 				TargetAttributes = {
 					E217531A1B91613300BE234A = {
