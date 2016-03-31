@@ -126,6 +126,8 @@
 - (void)diffContentsViewController:(GIDiffContentsViewController*)controller didClickActionButtonForDelta:(GCDiffDelta*)delta conflict:(GCIndexConflict*)conflict {
   if (delta.submodule) {
     [self discardSubmoduleAtPath:delta.canonicalPath resetIndex:YES];
+  } else if (delta.change == kGCFileDiffChange_Untracked) {
+    [self discardAllChangesForFile:delta.canonicalPath resetIndex:NO];
   } else {
     NSIndexSet* oldLines;
     NSIndexSet* newLines;
