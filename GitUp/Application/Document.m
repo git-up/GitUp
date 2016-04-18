@@ -1748,7 +1748,8 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
   
   if (item.action == @selector(switchMode:)) {
     if ([_windowMode isEqualToString:kWindowModeString_Map_QuickView] || [_windowMode isEqualToString:kWindowModeString_Map_Diff]
-        || [_windowMode isEqualToString:kWindowModeString_Map_Rewrite] || [_windowMode isEqualToString:kWindowModeString_Map_Config]) {
+        || [_windowMode isEqualToString:kWindowModeString_Map_Rewrite] || [_windowMode isEqualToString:kWindowModeString_Map_Config]
+        || [_windowMode isEqualToString:kWindowModeString_Map_Resolve]) {
       return NO;
     }
     [(NSMenuItem*)item setState:([(NSMenuItem*)item tag] == _WindowModeIDFromString(_windowMode) ? NSOnState : NSOffState)];
