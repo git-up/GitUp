@@ -52,7 +52,6 @@ extern int git_reference__is_tag(const char *ref_name);
   const char* URL = git_remote_url(_private);
   if (URL) {
     _URL = GCURLFromGitURL([NSString stringWithUTF8String:URL]);
-    XLOG_DEBUG_CHECK(_URL);
   } else {
     _URL = nil;
   }
@@ -60,7 +59,6 @@ extern int git_reference__is_tag(const char *ref_name);
   const char* pushURL = git_remote_pushurl(_private);
   if (pushURL) {
     _pushURL = GCURLFromGitURL([NSString stringWithUTF8String:pushURL]);
-    XLOG_DEBUG_CHECK(_pushURL);
   } else {
     _pushURL = nil;
   }
