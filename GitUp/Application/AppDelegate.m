@@ -578,33 +578,37 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
   _cloneRecursiveButton.state = NSOnState;
   if ([NSApp runModalForWindow:_cloneWindow] && _cloneURLTextField.stringValue.length) {
     NSURL* url = GCURLFromGitURL(_cloneURLTextField.stringValue);
-    NSString* name = [url.path.lastPathComponent stringByDeletingPathExtension];
-    NSSavePanel* savePanel = [NSSavePanel savePanel];
-    savePanel.title = NSLocalizedString(@"Clone Repository", nil);
-    savePanel.prompt = NSLocalizedString(@"Clone", nil);
-    savePanel.nameFieldLabel = NSLocalizedString(@"Name:", nil);
-    savePanel.nameFieldStringValue = name ? name : @"";
-    if ([savePanel respondsToSelector:@selector(setShowsTagField:)]) {
-      [savePanel setShowsTagField:NO];
-    }
-    if ([savePanel runModal] == NSFileHandlingPanelOKButton) {
-      NSString* path = savePanel.URL.path;
-      NSError* error;
-      if (![[NSFileManager defaultManager] fileExistsAtPath:path] || [[NSFileManager defaultManager] moveItemAtPathToTrash:path error:&error]) {
-        GCRepository* repository = [[GCRepository alloc] initWithNewLocalRepository:path bare:NO error:&error];
-        if (repository) {
-          if ([repository addRemoteWithName:@"origin" url:url error:&error]) {
-            [self _openRepositoryWithURL:[NSURL fileURLWithPath:repository.workingDirectoryPath] withCloneMode:(_cloneRecursiveButton.state ? kCloneMode_Recursive : kCloneMode_Default) windowModeID:NSNotFound];
+    if (url) {
+      NSString* name = [url.path.lastPathComponent stringByDeletingPathExtension];
+      NSSavePanel* savePanel = [NSSavePanel savePanel];
+      savePanel.title = NSLocalizedString(@"Clone Repository", nil);
+      savePanel.prompt = NSLocalizedString(@"Clone", nil);
+      savePanel.nameFieldLabel = NSLocalizedString(@"Name:", nil);
+      savePanel.nameFieldStringValue = name ? name : @"";
+      if ([savePanel respondsToSelector:@selector(setShowsTagField:)]) {
+        [savePanel setShowsTagField:NO];
+      }
+      if ([savePanel runModal] == NSFileHandlingPanelOKButton) {
+        NSString* path = savePanel.URL.path;
+        NSError* error;
+        if (![[NSFileManager defaultManager] fileExistsAtPath:path] || [[NSFileManager defaultManager] moveItemAtPathToTrash:path error:&error]) {
+          GCRepository* repository = [[GCRepository alloc] initWithNewLocalRepository:path bare:NO error:&error];
+          if (repository) {
+            if ([repository addRemoteWithName:@"origin" url:url error:&error]) {
+              [self _openRepositoryWithURL:[NSURL fileURLWithPath:repository.workingDirectoryPath] withCloneMode:(_cloneRecursiveButton.state ? kCloneMode_Recursive : kCloneMode_Default) windowModeID:NSNotFound];
+            } else {
+              [NSApp presentError:error];
+              [[NSFileManager defaultManager] removeItemAtPath:path error:NULL];  // Ignore errors
+            }
           } else {
             [NSApp presentError:error];
-            [[NSFileManager defaultManager] removeItemAtPath:path error:NULL];  // Ignore errors
           }
         } else {
           [NSApp presentError:error];
         }
-      } else {
-        [NSApp presentError:error];
       }
+    } else {
+      [NSApp presentError:MAKE_ERROR(@"Invalid Git repository URL")];
     }
   }
 }
