@@ -247,48 +247,6 @@ static NSColor* _patternColor = nil;
   }
 }
 
-#pragma mark - Restoration
-
-- (void)encodeRestorableStateWithCoder:(NSCoder*)coder {
-  [super encodeRestorableStateWithCoder:coder];
-  
-  [coder encodeBool:_showsVirtualTips forKey:kRestorableStateKey_ShowVirtualTips];
-  [coder encodeBool:_hidesTagTips forKey:kRestorableStateKey_HideTagTips];
-  [coder encodeBool:_hidesRemoteBranchTips forKey:kRestorableStateKey_HideRemoteBranchTips];
-  [coder encodeBool:_hidesStaleBranchTips forKey:kRestorableStateKey_HideStaleBranchTips];
-  
-  [coder encodeBool:_graphView.showsTagLabels forKey:kRestorableStateKey_ShowTagLabels];
-  [coder encodeBool:_graphView.showsBranchLabels forKey:kRestorableStateKey_ShowBranchLabels];
-}
-
-- (void)restoreStateWithCoder:(NSCoder*)coder {
-  [super restoreStateWithCoder:coder];
-  
-  BOOL needsReload = NO;
-  if ([coder decodeBoolForKey:kRestorableStateKey_ShowVirtualTips] != _showsVirtualTips) {
-    _showsVirtualTips = !_showsVirtualTips;
-    needsReload = YES;
-  }
-  if ([coder decodeBoolForKey:kRestorableStateKey_HideTagTips] != _hidesTagTips) {
-    _hidesTagTips = !_hidesTagTips;
-    needsReload = YES;
-  }
-  if ([coder decodeBoolForKey:kRestorableStateKey_HideRemoteBranchTips] != _hidesRemoteBranchTips) {
-    _hidesRemoteBranchTips = !_hidesRemoteBranchTips;
-    needsReload = YES;
-  }
-  if ([coder decodeBoolForKey:kRestorableStateKey_HideStaleBranchTips] != _hidesStaleBranchTips) {
-    _hidesStaleBranchTips = !_hidesStaleBranchTips;
-    needsReload = YES;
-  }
-  if (needsReload) {
-    [self _reloadMap:NO];  // TODO: Avoid dual reloading of the map on initialization and then restoration
-  }
-  
-  _graphView.showsTagLabels = [coder decodeBoolForKey:kRestorableStateKey_ShowTagLabels];
-  _graphView.showsBranchLabels = [coder decodeBoolForKey:kRestorableStateKey_ShowBranchLabels];
-}
-
 #pragma mark - NSTextViewDelegate
 
 // Intercept Return key and Option-Return key in NSTextView and forward to next responder
