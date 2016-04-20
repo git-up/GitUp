@@ -1238,9 +1238,6 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
   
   // Restrict to non-modal modes
   [coder encodeObject:_WindowModeStringFromID(_WindowModeIDFromString(_windowMode)) forKey:kRestorableStateKey_WindowMode];
-  
-  // NSView restoration doesn't work reliably if wanting to support pre-Yosemite so just manually archive our view controllers
-  [_mapViewController encodeRestorableStateWithCoder:coder];
 }
 
 - (void)restoreStateWithCoder:(NSCoder*)coder {
@@ -1252,8 +1249,6 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
   } else {
     XLOG_DEBUG_UNREACHABLE();
   }
-  
-  [_mapViewController restoreStateWithCoder:coder];  // NSView restoration doesn't work reliably if wanting to support pre-Yosemite so just manually restore our view controllers
   
   if (!_ready) {
     [self performSelector:@selector(_documentDidOpen:) withObject:[NSNull null] afterDelay:0.0];
