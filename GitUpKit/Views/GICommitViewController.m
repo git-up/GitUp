@@ -123,6 +123,10 @@
     _messageTextView.string = message;
     [_messageTextView.undoManager removeAllActions];
     [_messageTextView selectAll:nil];
+    
+    if ([message isEqualToString:@""]) {
+      [self prepareCommitMsg];
+    }
   }
   
   [self _updateInterface];
@@ -156,6 +160,18 @@
     [_messageTextView.undoManager removeAllActions];
     [_messageTextView selectAll:nil];
   }
+}
+
+- (void)prepareCommitMsg {
+  dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
+    NSString* msg;
+    [self.repository runHookWithName:@"prepare-commit-msg" arguments:nil standardInput:nil standardOutput:&msg error:nil];
+    if (msg) {
+      dispatch_async(dispatch_get_main_queue(), ^{
+        _messageTextView.string = [msg stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
+      });
+    }
+  });
 }
 
 @end

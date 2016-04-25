@@ -245,6 +245,10 @@ static int _ReferenceForEachCallback(const char* refname, void* payload) {
 }
 
 - (BOOL)runHookWithName:(NSString*)name arguments:(NSArray*)arguments standardInput:(NSString*)standardInput error:(NSError**)error {
+  return [self runHookWithName:name arguments:arguments standardInput:standardInput standardOutput:nil error:error];
+}
+
+- (BOOL)runHookWithName:(NSString*)name arguments:(NSArray*)arguments standardInput:(NSString*)standardInput standardOutput:(NSString**)standardOutput error:(NSError**)error {
   NSString* path = [self pathForHookWithName:name];
   if (path) {
     static NSString* cachedPATH = nil;
@@ -282,6 +286,7 @@ static int _ReferenceForEachCallback(const char* refname, void* payload) {
       }
       return NO;
     }
+    *standardOutput = [[NSString alloc] initWithData:stdoutData encoding:NSUTF8StringEncoding];
   }
   return YES;
 }
