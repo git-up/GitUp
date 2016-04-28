@@ -29,6 +29,8 @@
 #define kContextualMenuOffsetX 0
 #define kContextualMenuOffsetY -6
 
+static NSString* _diffTemporaryDirectoryPath = nil;
+
 @interface GIDiffContentScrollView : NSScrollView
 @end
 
@@ -56,6 +58,11 @@
 @end
 
 @interface GIBinaryDiffCellView : NSTableCellView
+@end
+
+@interface GIImageDiffCellView : NSTableCellView
+@property(nonatomic, weak) IBOutlet NSImageView* oldImageView;
+@property(nonatomic, weak) IBOutlet NSImageView* currentImageView;
 @end
 
 @interface GIConflictDiffCellView : NSTableCellView
@@ -162,6 +169,9 @@ NSString* const GIDiffContentsViewControllerUserDefaultKey_DiffViewMode = @"GIDi
 @implementation GIBinaryDiffCellView
 @end
 
+@implementation GIImageDiffCellView
+@end
+
 @implementation GIConflictDiffCellView
 @end
 
@@ -199,6 +209,7 @@ static NSImage* _untrackedImage = nil;
   CGFloat _conflictViewHeight;
   CGFloat _submoduleViewHeight;
   CGFloat _binaryViewHeight;
+	CGFloat _imageViewHeight;
 }
 
 static NSColor* _DimColor(NSColor* color) {
@@ -223,6 +234,14 @@ static NSColor* _DimColor(NSColor* color) {
   _deletedImage = [[NSBundle bundleForClass:[GIDiffContentsViewController class]] imageForResource:@"icon_file_d"];
   _renamedImage = [[NSBundle bundleForClass:[GIDiffContentsViewController class]] imageForResource:@"icon_file_r"];
   _untrackedImage = [[NSBundle bundleForClass:[GIDiffContentsViewController class]] imageForResource:@"icon_file_u"];
+	
+	if (_diffTemporaryDirectoryPath == nil) {
+		_diffTemporaryDirectoryPath = [NSTemporaryDirectory() stringByAppendingPathComponent:[[NSBundle mainBundle] bundleIdentifier]];
+		[[NSFileManager defaultManager] removeItemAtPath:_diffTemporaryDirectoryPath error:NULL];
+		if (![[NSFileManager defaultManager] createDirectoryAtPath:_diffTemporaryDirectoryPath withIntermediateDirectories:YES attributes:nil error:NULL]) {
+			XLOG_DEBUG_UNREACHABLE();
+		}
+	}
 }
 
 - (instancetype)initWithRepository:(GCLiveRepository*)repository {
@@ -257,7 +276,8 @@ static NSColor* _DimColor(NSColor* color) {
   _conflictViewHeight = [[_tableView makeViewWithIdentifier:@"conflict" owner:self] frame].size.height;
   _submoduleViewHeight = [[_tableView makeViewWithIdentifier:@"submodule" owner:self] frame].size.height;
   _binaryViewHeight = [[_tableView makeViewWithIdentifier:@"binary" owner:self] frame].size.height;
-  
+	_imageViewHeight = [[_tableView makeViewWithIdentifier:@"image" owner:self] frame].size.height;
+	
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_viewBoundsDidChange:) name:NSViewBoundsDidChangeNotification object:_tableView.superview];
 }
 
@@ -551,13 +571,37 @@ static inline NSString* _StringFromFileMode(GCFileMode mode) {
         view.customTextField.hidden = YES;
       }
       return view;
-    } else {
-      GIBinaryDiffCellView* view = [_tableView makeViewWithIdentifier:@"binary" owner:self];
-      NSImage* image = [[NSWorkspace sharedWorkspace] iconForFileType:data.delta.canonicalPath.pathExtension];  // TODO: Can we use a lower-level API?
-      image.size = view.imageView.bounds.size;
-      view.imageView.image = image;  // Required or the image is always at 32x32
-      return view;
-    }
+		} else if ([self isImageExtension:data.delta.canonicalPath.pathExtension]) {
+			GIImageDiffCellView* view = [_tableView makeViewWithIdentifier:@"image" owner:self];
+			NSError* error;
+			view.currentImageView.image = nil;
+			view.oldImageView.image = nil;
+			if (delta.newFile.path != nil && delta.newFile.SHA1 != nil) {
+				NSString* path = [_diffTemporaryDirectoryPath stringByAppendingPathComponent:delta.newFile.SHA1];
+				if ([self.repository exportBlobWithSHA1:delta.newFile.SHA1 toPath:path error:&error]) {
+					NSImage* image =  [[NSImage alloc] initWithContentsOfFile: path];
+					view.currentImageView.image = image;
+				}
+			} else {
+				NSString* path = [self.repository absolutePathForFile:delta.canonicalPath];
+				NSImage* image =  [[NSImage alloc] initWithContentsOfFile: path];
+				view.currentImageView.image = image;
+			}
+			if (delta.oldFile.path != nil && delta.oldFile.SHA1 != nil) {
+				NSString* path = [_diffTemporaryDirectoryPath stringByAppendingPathComponent:delta.oldFile.SHA1];
+				if ([self.repository exportBlobWithSHA1:delta.oldFile.SHA1 toPath:path error:&error]) {
+					NSImage* image =  [[NSImage alloc] initWithContentsOfFile: path];
+					view.oldImageView.image = image;
+				}
+			}
+			return view;
+		} else {
+			GIBinaryDiffCellView* view = [_tableView makeViewWithIdentifier:@"binary" owner:self];
+			NSImage* image =  [[NSWorkspace sharedWorkspace] iconForFileType:data.delta.canonicalPath.pathExtension];  // TODO: Can we use a lower-level API?
+			image.size = view.imageView.bounds.size;
+			view.imageView.image = image;  // Required or the image is always at 32x32
+			return view;
+		}
   }
   
   GIHeaderDiffCellView* view = [_tableView makeViewWithIdentifier:@"header" owner:self];
@@ -657,7 +701,9 @@ static inline NSString* _StringFromFileMode(GCFileMode mode) {
       return _conflictViewHeight;
     } else if (GC_FILE_MODE_IS_SUBMODULE(delta.oldFile.mode) || GC_FILE_MODE_IS_SUBMODULE(delta.newFile.mode)) {
       return _submoduleViewHeight;
-    } else {
+    } else if ([self isImageExtension:data.delta.canonicalPath.pathExtension]) {
+			return _imageViewHeight;
+		} else {
       return _binaryViewHeight;
     }
   }
@@ -690,6 +736,10 @@ static inline NSString* _StringFromFileMode(GCFileMode mode) {
   if ([_delegate respondsToSelector:@selector(diffContentsViewControllerDidChangeSelection:)]) {
     [_delegate diffContentsViewControllerDidChangeSelection:self];
   }
+}
+
+-(BOOL)isImageExtension:(NSString*)extension {
+	return [@[@"jpg",@"jpeg",@"png"] containsObject:extension.lowercaseString];
 }
 
 #pragma mark - Actions
