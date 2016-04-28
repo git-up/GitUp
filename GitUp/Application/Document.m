@@ -54,6 +54,10 @@
 
 #define kMaxProgressRefreshRate 10.0  // Hz
 
+@interface NSWindow (OSX_10_10)
+- (void)setTitleVisibility:(NSWindowTitleVisibility)visibility;
+@end
+
 @interface Document () <NSToolbarDelegate, NSTextFieldDelegate, GCLiveRepositoryDelegate,
                         GIWindowControllerDelegate, GIMapViewControllerDelegate, GISnapshotListViewControllerDelegate, GIUnifiedReflogViewControllerDelegate,
                         GICommitListViewControllerDelegate, GICommitRewriterViewControllerDelegate, GICommitSplitterViewControllerDelegate,
@@ -282,7 +286,7 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
   _mainWindow.backgroundColor = [NSColor whiteColor];
   [_mainWindow setToolbar:_toolbar];
   if (_unifiedToolbar) {
-    _mainWindow.titleVisibility = NSWindowTitleHidden;
+    [_mainWindow setTitleVisibility:NSWindowTitleHidden];
   }
   _contentView.wantsLayer = YES;
   _leftView.wantsLayer = YES;
@@ -545,7 +549,7 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
         NSAlert* alert = [NSAlert alertWithMessageText:NSLocalizedString(@"Do you want to initialize submodules?", nil) defaultButton:NSLocalizedString(@"Initialize", nil) alternateButton:NSLocalizedString(@"Cancel", nil) otherButton:nil informativeTextWithFormat:@"One or more submodules in this repository are uninitialized."];
         alert.type = kGIAlertType_Caution;
         alert.showsSuppressionButton = YES;
-        [alert beginSheetModalForWindow:_mainWindow withCompletionHandler:^(NSModalResponse returnCode) {
+        [alert beginSheetModalForWindow:_mainWindow withCompletionHandler:^(NSInteger returnCode) {
           
           if (alert.suppressionButton.state) {
             [_repository setUserInfo:@(YES) forKey:kRepositoryUserInfoKey_SkipSubmoduleCheck];
@@ -1234,9 +1238,6 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
   
   // Restrict to non-modal modes
   [coder encodeObject:_WindowModeStringFromID(_WindowModeIDFromString(_windowMode)) forKey:kRestorableStateKey_WindowMode];
-  
-  // NSView restoration doesn't work reliably if wanting to support pre-Yosemite so just manually archive our view controllers
-  [_mapViewController encodeRestorableStateWithCoder:coder];
 }
 
 - (void)restoreStateWithCoder:(NSCoder*)coder {
@@ -1248,8 +1249,6 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
   } else {
     XLOG_DEBUG_UNREACHABLE();
   }
-  
-  [_mapViewController restoreStateWithCoder:coder];  // NSView restoration doesn't work reliably if wanting to support pre-Yosemite so just manually restore our view controllers
   
   if (!_ready) {
     [self performSelector:@selector(_documentDidOpen:) withObject:[NSNull null] afterDelay:0.0];
@@ -1744,7 +1743,8 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
   
   if (item.action == @selector(switchMode:)) {
     if ([_windowMode isEqualToString:kWindowModeString_Map_QuickView] || [_windowMode isEqualToString:kWindowModeString_Map_Diff]
-        || [_windowMode isEqualToString:kWindowModeString_Map_Rewrite] || [_windowMode isEqualToString:kWindowModeString_Map_Config]) {
+        || [_windowMode isEqualToString:kWindowModeString_Map_Rewrite] || [_windowMode isEqualToString:kWindowModeString_Map_Config]
+        || [_windowMode isEqualToString:kWindowModeString_Map_Resolve]) {
       return NO;
     }
     [(NSMenuItem*)item setState:([(NSMenuItem*)item tag] == _WindowModeIDFromString(_windowMode) ? NSOnState : NSOffState)];
@@ -1778,7 +1778,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
   alert.accessoryView = _resetView;
   [alert addButtonWithTitle:NSLocalizedString(@"Reset", nil)];
   [alert addButtonWithTitle:NSLocalizedString(@"Cancel", nil)];
-  [alert beginSheetModalForWindow:_mainWindow withCompletionHandler:^(NSModalResponse returnCode) {
+  [alert beginSheetModalForWindow:_mainWindow withCompletionHandler:^(NSInteger returnCode) {
     
     if (returnCode == NSAlertFirstButtonReturn) {
       NSError* error;

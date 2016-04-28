@@ -54,6 +54,7 @@ extern NSString* const GIViewController_MergeTool;
 
 - (void)restoreFile:(NSString*)path toCommit:(GCCommit*)commit;  // Prompts user
 
+- (void)showFileInFinder:(NSString*)path;
 - (void)openFileWithDefaultEditor:(NSString*)path;
 - (void)openSubmoduleWithApp:(NSString*)path;
 - (void)viewDeltasInDiffTool:(NSArray*)deltas;

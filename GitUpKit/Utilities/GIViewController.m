@@ -182,7 +182,7 @@
   return nil;
 }
 
-- (void)presentAlert:(NSAlert*)alert completionHandler:(void (^)(NSModalResponse returnCode))handler {
+- (void)presentAlert:(NSAlert*)alert completionHandler:(void (^)(NSInteger returnCode))handler {
   [alert beginSheetModalForWindow:self.view.window withCompletionHandler:handler];
 }
 
@@ -270,7 +270,7 @@
       defaultButton.keyEquivalent = @"";
     }
     [alert addButtonWithTitle:NSLocalizedString(@"Cancel", nil)];
-    [self presentAlert:alert completionHandler:^(NSModalResponse returnCode) {
+    [self presentAlert:alert completionHandler:^(NSInteger returnCode) {
       
       if (returnCode == NSAlertFirstButtonReturn) {
         block();

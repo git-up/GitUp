@@ -28,7 +28,7 @@
 @property(nonatomic, readonly, getter=isLiveResizing) BOOL liveResizing;
 @property(nonatomic, readonly) GIWindowController* windowController;
 - (instancetype)initWithRepository:(GCLiveRepository*)repository;
-- (void)presentAlert:(NSAlert*)alert completionHandler:(void (^)(NSModalResponse returnCode))handler;
+- (void)presentAlert:(NSAlert*)alert completionHandler:(void (^)(NSInteger returnCode))handler;
 @end
 
 @interface GIViewController (Extensions)
