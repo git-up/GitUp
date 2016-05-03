@@ -54,7 +54,7 @@ Be sure to only edit options you understand or you may prevent your repository t
 	<dict>
 		<key>contents</key>
 		<array>
-			<string>Quick View shows you detailed information about a specfic commit in the repository along with its full diff.
+			<string>Quick View shows you detailed information about a specific commit in the repository along with its full diff.
 Press [Cmd-Arrow-Up] or [Cmd-Arrow-Down] to select the previous or next commit, or [Spacebar] or [Esc] to exit.</string>
 		</array>
 		<key>link</key>
