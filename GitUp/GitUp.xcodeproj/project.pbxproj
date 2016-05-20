@@ -33,7 +33,6 @@
 		E2C338BF19F8562F00063D95 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = E2C338BD19F8562F00063D95 /* MainMenu.xib */; };
 		E2C338D719F85C2E00063D95 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2C338D619F85C2E00063D95 /* Cocoa.framework */; };
 		E2C5672D1A6D98BC00ECFE07 /* WindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C5672C1A6D98BC00ECFE07 /* WindowController.m */; };
-		E2F6AA0A1A7EED89002DBF56 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2F6AA091A7EED74002DBF56 /* Crashlytics.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -162,7 +161,6 @@
 				E2C338D719F85C2E00063D95 /* Cocoa.framework in Frameworks */,
 				E267E26B1B84E07E00BAB377 /* Security.framework in Frameworks */,
 				E2653D251A5B2FBD006A9871 /* Sparkle.framework in Frameworks */,
-				E2F6AA0A1A7EED89002DBF56 /* Crashlytics.framework in Frameworks */,
 				E28A16E51B87023200218332 /* GitUpKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -295,7 +293,6 @@
 				E2C338A919F8562F00063D95 /* Resources */,
 				E2653D271A5B3298006A9871 /* Copy Frameworks */,
 				E21DCAF21B2538FB006424E8 /* Copy Tool */,
-				E219D0381A5B2A5F00E1FEB8 /* Run Crashlytics */,
 			);
 			buildRules = (
 			);
@@ -387,24 +384,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		E219D0381A5B2A5F00E1FEB8 /* Run Crashlytics */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Run Crashlytics";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "if [ \"$RUN_CLANG_STATIC_ANALYZER\" != \"\" ]; then\n  echo \"Skipping Crashlytics for Clang Static Analyzer\"\nelif [ \"$CONFIGURATION\" == \"Distribution\" ]; then\n  ./Crashlytics.framework/run 946dcb56f0db1be8f0c52df6e7d392202a2cc9b2 f28ac00033414b7f28707ab10fc43b008b96dd8cf081d4fb462294c811397108\nelse\n  echo \"Skipping Crashlytics in $CONFIGURATION configuration\"\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		E21DCAE41B253847006424E8 /* Sources */ = {
@@ -542,7 +521,6 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				BUNDLE_VERSION = 0;
 				BUNDLE_VERSION_STRING = 1.0.6;
-				CODE_SIGN_IDENTITY = "Mac Developer";
 				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)";
 				GCC_DYNAMIC_NO_PIC = YES;
 				INFOPLIST_FILE = Application/Info.plist;
@@ -559,7 +537,6 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				BUNDLE_VERSION = 0;
 				BUNDLE_VERSION_STRING = 1.0.6;
-				CODE_SIGN_IDENTITY = "Mac Developer";
 				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)";
 				GCC_DYNAMIC_NO_PIC = YES;
 				INFOPLIST_FILE = Application/Info.plist;
@@ -584,7 +561,6 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				BUNDLE_VERSION = 0;
 				BUNDLE_VERSION_STRING = 1.0.6;
-				CODE_SIGN_IDENTITY = "Developer ID Application";
 				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)";
 				GCC_DYNAMIC_NO_PIC = YES;
 				INFOPLIST_FILE = Application/Info.plist;
