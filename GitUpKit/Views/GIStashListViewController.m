@@ -307,6 +307,9 @@
       [self.undoManager setActionName:NSLocalizedString(@"Drop Stash", nil)];
       [[self.undoManager prepareWithInvocationTarget:self] _undoDropStashWithPreviousState:currentState ignore:NO];  // TODO: We should really use the built-in undo mechanism from GCLiveRepository
       [self.repository notifyRepositoryChanged];
+      if (row > 0) {
+        [_tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:(row - 1)] byExtendingSelection:NO];
+      }
     } else {
       [self presentError:error];
     }
