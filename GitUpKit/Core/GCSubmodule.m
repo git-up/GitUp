@@ -155,7 +155,7 @@ cleanup:
   XLOG_DEBUG_CHECK(![self checkSubmoduleInitialized:submodule error:NULL]);
   
   NSString* modulePath = [[self.repositoryPath stringByAppendingPathComponent:@"modules"] stringByAppendingPathComponent:submodule.path];
-  if ([[NSFileManager defaultManager] fileExistsAtPath:modulePath] && ![[NSFileManager defaultManager] removeItemAtPath:modulePath error:error]) {
+  if ([[NSFileManager defaultManager] fileExistsAtPath:modulePath followLastSymlink:NO] && ![[NSFileManager defaultManager] removeItemAtPath:modulePath error:error]) {
     return NO;
   }
   

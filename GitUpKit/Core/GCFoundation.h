@@ -15,10 +15,12 @@
 
 #import <Foundation/Foundation.h>
 
+@interface NSFileManager (GCFoundation)
+- (BOOL)fileExistsAtPath:(NSString*)path followLastSymlink:(BOOL)followLastSymlink;
+
 #if !TARGET_OS_IPHONE
 
-@interface NSFileManager (GCFoundation)
 - (BOOL)moveItemAtPathToTrash:(NSString*)path error:(NSError**)error;
-@end
 
 #endif
+@end

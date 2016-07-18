@@ -137,7 +137,7 @@ static const void* _associatedObjectKey = &_associatedObjectKey;
   } else {
     _temporaryPath = @"/tmp/gitup";
   }
-  if ([[NSFileManager defaultManager] fileExistsAtPath:_temporaryPath]) {
+  if ([[NSFileManager defaultManager] fileExistsAtPath:_temporaryPath followLastSymlink:NO]) {
     XCTAssertTrue([[NSFileManager defaultManager] removeItemAtPath:_temporaryPath error:NULL]);
   }
   XCTAssertTrue([[NSFileManager defaultManager] createDirectoryAtPath:_temporaryPath withIntermediateDirectories:NO attributes:nil error:NULL]);

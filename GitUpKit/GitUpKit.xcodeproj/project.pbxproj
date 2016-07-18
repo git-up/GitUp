@@ -369,6 +369,7 @@
 		E2C3394919F85D8700063D95 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E2C3394419F85D4B00063D95 /* libz.dylib */; };
 		E2C3394C19F85D8700063D95 /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E2C3393E19F85D2A00063D95 /* libiconv.dylib */; };
 		E2C3AA5C19FF0B0600BA89F3 /* GCRepository+Bare.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C3AA5A19FF0B0600BA89F3 /* GCRepository+Bare.m */; };
+		E2C56CC41D71B3730011960D /* GCFoundation-Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C56CC31D71B3730011960D /* GCFoundation-Tests.m */; };
 		E2D4148C1A02D68700B99634 /* GCHistory+Rewrite.m in Sources */ = {isa = PBXBuildFile; fileRef = E2D4148A1A02D68700B99634 /* GCHistory+Rewrite.m */; };
 		E2F5C27F1A8171C900C30739 /* GCSnapshot.m in Sources */ = {isa = PBXBuildFile; fileRef = E2F5C27D1A8171C900C30739 /* GCSnapshot.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		E2F5C2811A8186C200C30739 /* GCSnapshot-Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = E2F5C2801A8186C200C30739 /* GCSnapshot-Tests.m */; };
@@ -612,6 +613,7 @@
 		E2C3394619F85D5100063D95 /* libheimdal-asn1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libheimdal-asn1.dylib"; path = "usr/lib/libheimdal-asn1.dylib"; sourceTree = SDKROOT; };
 		E2C3AA5919FF0B0600BA89F3 /* GCRepository+Bare.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GCRepository+Bare.h"; sourceTree = "<group>"; };
 		E2C3AA5A19FF0B0600BA89F3 /* GCRepository+Bare.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GCRepository+Bare.m"; sourceTree = "<group>"; };
+		E2C56CC31D71B3730011960D /* GCFoundation-Tests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GCFoundation-Tests.m"; sourceTree = "<group>"; };
 		E2C9FF861AA510170051B2AE /* GIUnifiedDiffView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GIUnifiedDiffView.h; sourceTree = "<group>"; };
 		E2C9FF871AA510170051B2AE /* GIUnifiedDiffView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GIUnifiedDiffView.m; sourceTree = "<group>"; };
 		E2D414891A02D68700B99634 /* GCHistory+Rewrite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GCHistory+Rewrite.h"; sourceTree = "<group>"; };
@@ -922,6 +924,7 @@
 				E2146C901A58849F00F4550B /* GCError.h */,
 				E2790D401ACB1B1100965A98 /* GCFoundation.h */,
 				E2790D411ACB1B1100965A98 /* GCFoundation.m */,
+				E2C56CC31D71B3730011960D /* GCFoundation-Tests.m */,
 				E21739F11A4FE39E00EC6777 /* GCFunctions.h */,
 				E21739F21A4FE39E00EC6777 /* GCFunctions.m */,
 				E259C2D21A64F9FF0079616B /* GCHistory-Tests.m */,
@@ -1538,6 +1541,7 @@
 				74EDB5D61B84E06500F00E79 /* GCOrderedSet-Tests.m in Sources */,
 				E27E43031A74A96000D04ED1 /* GIBranch.m in Sources */,
 				E27E43081A74A96000D04ED1 /* GINode.m in Sources */,
+				E2C56CC41D71B3730011960D /* GCFoundation-Tests.m in Sources */,
 				E299D0161A749D27005035F7 /* GCRepository+Mock-Tests.m in Sources */,
 				E2D4148C1A02D68700B99634 /* GCHistory+Rewrite.m in Sources */,
 				E2146C8F1A57F3BC00F4550B /* GCObject.m in Sources */,

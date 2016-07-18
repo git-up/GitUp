@@ -521,7 +521,7 @@ static void _StreamCallback(ConstFSEventStreamRef streamRef, void* clientCallBac
 - (void)_readSnapshots {
   NSString* path = [self.privateAppDirectoryPath stringByAppendingPathComponent:kSnapshotsFileName];
   if (path) {
-    if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
+    if ([[NSFileManager defaultManager] fileExistsAtPath:path followLastSymlink:NO]) {
       NSArray* array = [NSKeyedUnarchiver unarchiveObjectWithFile:path];
       if (array) {
         [_snapshots addObjectsFromArray:array];
