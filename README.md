@@ -14,12 +14,12 @@ Git recently celebrated its 10 years anniversary, but most engineers are still c
 GitUp is a bet to invent a new Git interaction model that lets engineers of all levels work quickly, safely, and without headaches. It's unlike any other Git client out there from the way it’s built (it interacts directly with the Git database on disk), to the way it works (you manipulate the repository graph instead of manipulating commits).
 
 With GitUp, you get a truly efficient Git client for Mac:
-- A live and interactive repo graph (edit, reorder, fixup, merge commits…),
-- Unlimited undo / redo of almost all operations (even rebases and merges),
-- Time Machine like snapshots for 1-click rollbacks to previous repo states,
-- Features that don’t even exist natively in Git like a visual commit splitter or a unified reflog browser,
-- Instant search across the entire repo including diff contents, 
-- A ridiculously fast UI, often faster than the command line.
+- A **live and interactive repo graph** (edit, reorder, fixup, merge commits…),
+- **Unlimited undo / redo** of almost all operations (even rebases and merges),
+- Time Machine like **snapshots for 1-click rollbacks** to previous repo states,
+- Features that don’t even exist natively in Git like a **visual commit splitter** or a **unified reflog browser**,
+- **Instant search across the entire repo** including diff contents, 
+- A **ridiculously fast UI**, often faster than the command line.
 
 *GitUp was created by [@swisspol](https://github.com/swisspol) in late 2014 as a bet to reinvent the way developers interact with Git. After several months of work, it was made available in pre-release early 2015 and reached the [top of Hacker News](https://news.ycombinator.com/item?id=9653978) along with being [featured by Product Hunt](http://www.producthunt.com/tech/gitup-1) and [Daring Fireball](http://daringfireball.net/linked/2015/06/04/gitup). 30,000 lines of code later, GitUp reached 1.0 mid-August 2015 and was released open source as a gift to the developer community.*
 
