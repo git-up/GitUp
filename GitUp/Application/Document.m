@@ -1509,7 +1509,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
   }
   
   id headBranch = _repository.history.HEADBranch;
-  if (_lastHEADBranch) {
+  if (_lastHEADBranch && _lastHEADBranch != (id)[NSNull null]) {
     if (![headBranch isEqualToBranch:_lastHEADBranch]) {
       if (!_helpHEADDisabled) {
         if ([headBranch isKindOfClass:[GCHistoryLocalBranch class]]) {
