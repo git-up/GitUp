@@ -2054,9 +2054,15 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 }
 
 - (IBAction)openInTerminal:(id)sender {
-  NSString* script = [NSString stringWithFormat:@"tell application \"Terminal\" to do script \"cd \\\"%@\\\"\"", _repository.workingDirectoryPath];
+  NSString* script = @"";
+  NSString* identifier = [[NSUserDefaults standardUserDefaults] stringForKey:GIViewController_TerminalTool];
+  if ([identifier isEqualToString:GIViewControllerTool_Terminal]) {
+  script = [NSString stringWithFormat:@"tell application \"Terminal\" to do script \"cd \\\"%@\\\"\"", _repository.workingDirectoryPath];
+ } else { // must be iTerm
+   script = [NSString stringWithFormat:@"tell application \"%@\" to write current session of current window text \"cd \\\"%@\\\"\"", identifier, _repository.workingDirectoryPath];
+  }
   [[[NSAppleScript alloc] initWithSource:script] executeAndReturnError:NULL];
-  [[NSWorkspace sharedWorkspace] launchApplication:@"Terminal"];
+  [[NSWorkspace sharedWorkspace] launchApplication: identifier];
 }
 
 - (IBAction)dismissHelp:(id)sender {

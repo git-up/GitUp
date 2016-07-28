@@ -23,8 +23,13 @@ extern NSString* const GIViewControllerTool_BeyondCompare;
 extern NSString* const GIViewControllerTool_P4Merge;
 extern NSString* const GIViewControllerTool_GitTool;
 
+extern NSString* const GIViewControllerTool_Terminal;
+extern NSString* const GIViewControllerTool_iTerm;
+extern NSString* const GIViewControllerTool_iTerm2;
+
 extern NSString* const GIViewController_DiffTool;
 extern NSString* const GIViewController_MergeTool;
+extern NSString* const GIViewController_TerminalTool;
 
 @protocol GIMergeConflictResolver <NSObject>
 - (BOOL)resolveMergeConflictsWithOurCommit:(GCCommit*)ourCommit theirCommit:(GCCommit*)theirCommit;
