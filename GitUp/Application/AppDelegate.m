@@ -68,8 +68,36 @@
 
 @implementation WelcomeWindow
 
-- (BOOL)validateMenuItem:(NSMenuItem*)menuItem {
-  return menuItem.action == @selector(performClose:) ? YES : [super validateMenuItem:menuItem];
+- (void)awakeFromNib {
+  [self registerForDraggedTypes:[NSArray arrayWithObjects:NSURLPboardType,  NSStringPboardType, nil]];
+}
+
+- (NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender {
+  return NSDragOperationCopy;
+}
+
+- (BOOL)performDragOperation:(id <NSDraggingInfo>)sender {
+  NSPasteboard *pboard;
+  NSURL* url;
+  AppDelegate* ad = [AppDelegate sharedDelegate];
+  pboard = [sender draggingPasteboard];
+  NSArray* types = [pboard types];
+  NSLog(@"types: %@", types);
+  
+  if ([types containsObject:@"public.file-url"]) {
+    url = [NSURL URLFromPasteboard:pboard];
+    NSLog(@"url: %@", url);
+    [ad openRepositoryWithURL:url withCloneMode:kCloneMode_None windowModeID:NSNotFound];
+  } else if ([types containsObject:@"NSStringPboardType"]) {
+    NSString *text = [pboard stringForType:NSStringPboardType];
+    url = [NSURL URLWithString:text];
+    NSString* ext = [url pathExtension];
+    NSLog(@"url: %@ ext: %@", url, ext);
+    if ([ext isEqualToString:@"git"]) {
+      [ad cloneWithURL:url];
+    }
+  }
+  return YES;
 }
 
 - (void)performClose:(id)sender {
@@ -202,7 +230,7 @@
   [(Document*)arguments[0] setWindowModeID:[arguments[1] unsignedIntegerValue]];
 }
 
-- (void)_openRepositoryWithURL:(NSURL*)url withCloneMode:(CloneMode)cloneMode windowModeID:(WindowModeID)windowModeID {
+- (void)openRepositoryWithURL:(NSURL*)url withCloneMode:(CloneMode)cloneMode windowModeID:(WindowModeID)windowModeID {
   [[NSDocumentController sharedDocumentController] openDocumentWithContentsOfURL:url
                                                                          display:YES
                                                                completionHandler:^(NSDocument* document, BOOL documentWasAlreadyOpen, NSError* openError) {
@@ -227,7 +255,7 @@
 }
 
 - (void)_openDocument:(NSMenuItem*)sender {
-  [self _openRepositoryWithURL:sender.representedObject withCloneMode:kCloneMode_None windowModeID:NSNotFound];
+  [self openRepositoryWithURL:sender.representedObject withCloneMode:kCloneMode_None windowModeID:NSNotFound];
 }
 
 - (void)_willShowRecentPopUpMenu:(NSNotification*)notification {
@@ -462,13 +490,13 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
     return @{kToolDictionaryKey_Error: @"Invalid command"};
   }
   if ([command isEqualToString:@kToolCommand_Open]) {
-    [self _openRepositoryWithURL:[NSURL fileURLWithPath:repository] withCloneMode:kCloneMode_None windowModeID:NSNotFound];
+    [self openRepositoryWithURL:[NSURL fileURLWithPath:repository] withCloneMode:kCloneMode_None windowModeID:NSNotFound];
   } else if ([command isEqualToString:@kToolCommand_Map]) {
-    [self _openRepositoryWithURL:[NSURL fileURLWithPath:repository] withCloneMode:kCloneMode_None windowModeID:kWindowModeID_Map];
+    [self openRepositoryWithURL:[NSURL fileURLWithPath:repository] withCloneMode:kCloneMode_None windowModeID:kWindowModeID_Map];
   } else if ([command isEqualToString:@kToolCommand_Commit]) {
-    [self _openRepositoryWithURL:[NSURL fileURLWithPath:repository] withCloneMode:kCloneMode_None windowModeID:kWindowModeID_Commit];
+    [self openRepositoryWithURL:[NSURL fileURLWithPath:repository] withCloneMode:kCloneMode_None windowModeID:kWindowModeID_Commit];
   } else if ([command isEqualToString:@kToolCommand_Stash]) {
-    [self _openRepositoryWithURL:[NSURL fileURLWithPath:repository] withCloneMode:kCloneMode_None windowModeID:kWindowModeID_Stashes];
+    [self openRepositoryWithURL:[NSURL fileURLWithPath:repository] withCloneMode:kCloneMode_None windowModeID:kWindowModeID_Stashes];
   } else {
     return @{kToolDictionaryKey_Error: [NSString stringWithFormat:@"Unknown command '%@'", command]};
   }
@@ -563,7 +591,7 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
     if (![[NSFileManager defaultManager] fileExistsAtPath:path] || [[NSFileManager defaultManager] moveItemAtPathToTrash:path error:&error]) {
       GCRepository* repository = [[GCRepository alloc] initWithNewLocalRepository:path bare:NO error:&error];
       if (repository) {
-        [self _openRepositoryWithURL:[NSURL fileURLWithPath:repository.workingDirectoryPath] withCloneMode:kCloneMode_None windowModeID:NSNotFound];
+        [self openRepositoryWithURL:[NSURL fileURLWithPath:repository.workingDirectoryPath] withCloneMode:kCloneMode_None windowModeID:NSNotFound];
       } else {
         [NSApp presentError:error];
       }
@@ -573,43 +601,47 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
   }
 }
 
+- (void)cloneWithURL:(NSURL *)url {
+  if (url) {
+    NSString* name = [url.path.lastPathComponent stringByDeletingPathExtension];
+    NSSavePanel* savePanel = [NSSavePanel savePanel];
+    savePanel.title = NSLocalizedString(@"Clone Repository", nil);
+    savePanel.prompt = NSLocalizedString(@"Clone", nil);
+    savePanel.nameFieldLabel = NSLocalizedString(@"Name:", nil);
+    savePanel.nameFieldStringValue = name ? name : @"";
+    if ([savePanel respondsToSelector:@selector(setShowsTagField:)]) {
+      [savePanel setShowsTagField:NO];
+    }
+    if ([savePanel runModal] == NSFileHandlingPanelOKButton) {
+      NSString* path = savePanel.URL.path;
+      NSError* error;
+      if (![[NSFileManager defaultManager] fileExistsAtPath:path] || [[NSFileManager defaultManager] moveItemAtPathToTrash:path error:&error]) {
+        GCRepository* repository = [[GCRepository alloc] initWithNewLocalRepository:path bare:NO error:&error];
+        if (repository) {
+          if ([repository addRemoteWithName:@"origin" url:url error:&error]) {
+            [self openRepositoryWithURL:[NSURL fileURLWithPath:repository.workingDirectoryPath] withCloneMode:(_cloneRecursiveButton.state ? kCloneMode_Recursive : kCloneMode_Default) windowModeID:NSNotFound];
+          } else {
+            [NSApp presentError:error];
+            [[NSFileManager defaultManager] removeItemAtPath:path error:NULL];  // Ignore errors
+          }
+        } else {
+          [NSApp presentError:error];
+        }
+      } else {
+        [NSApp presentError:error];
+      }
+    }
+  } else {
+    [NSApp presentError:MAKE_ERROR(@"Invalid Git repository URL")];
+  }
+}
+
 - (IBAction)cloneRepository:(id)sender {
   _cloneURLTextField.stringValue = @"";
   _cloneRecursiveButton.state = NSOnState;
   if ([NSApp runModalForWindow:_cloneWindow] && _cloneURLTextField.stringValue.length) {
     NSURL* url = GCURLFromGitURL(_cloneURLTextField.stringValue);
-    if (url) {
-      NSString* name = [url.path.lastPathComponent stringByDeletingPathExtension];
-      NSSavePanel* savePanel = [NSSavePanel savePanel];
-      savePanel.title = NSLocalizedString(@"Clone Repository", nil);
-      savePanel.prompt = NSLocalizedString(@"Clone", nil);
-      savePanel.nameFieldLabel = NSLocalizedString(@"Name:", nil);
-      savePanel.nameFieldStringValue = name ? name : @"";
-      if ([savePanel respondsToSelector:@selector(setShowsTagField:)]) {
-        [savePanel setShowsTagField:NO];
-      }
-      if ([savePanel runModal] == NSFileHandlingPanelOKButton) {
-        NSString* path = savePanel.URL.path;
-        NSError* error;
-        if (![[NSFileManager defaultManager] fileExistsAtPath:path] || [[NSFileManager defaultManager] moveItemAtPathToTrash:path error:&error]) {
-          GCRepository* repository = [[GCRepository alloc] initWithNewLocalRepository:path bare:NO error:&error];
-          if (repository) {
-            if ([repository addRemoteWithName:@"origin" url:url error:&error]) {
-              [self _openRepositoryWithURL:[NSURL fileURLWithPath:repository.workingDirectoryPath] withCloneMode:(_cloneRecursiveButton.state ? kCloneMode_Recursive : kCloneMode_Default) windowModeID:NSNotFound];
-            } else {
-              [NSApp presentError:error];
-              [[NSFileManager defaultManager] removeItemAtPath:path error:NULL];  // Ignore errors
-            }
-          } else {
-            [NSApp presentError:error];
-          }
-        } else {
-          [NSApp presentError:error];
-        }
-      }
-    } else {
-      [NSApp presentError:MAKE_ERROR(@"Invalid Git repository URL")];
-    }
+    [self cloneWithURL:url];
   }
 }
 

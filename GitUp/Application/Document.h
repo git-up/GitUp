@@ -102,4 +102,6 @@ typedef NS_ENUM(NSUInteger, WindowModeID) {
 
 - (BOOL)setWindowModeID:(WindowModeID)modeID;
 - (BOOL)shouldCloseDocument;
+- (BOOL)readFromURL:(NSURL*)url ofType:(NSString*)typeName error:(NSError**)outError;
+
 @end
