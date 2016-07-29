@@ -14,6 +14,7 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #import <GitUpKit/GitUpKit.h>
+#import "Document.h"
 
 @interface AppDelegate : NSObject <NSApplicationDelegate, GCRepositoryDelegate>
 @property(nonatomic, strong) IBOutlet NSWindow* preferencesWindow;
@@ -48,4 +49,7 @@
 - (void)repository:(GCRepository*)repository didFinishTransferWithURL:(NSURL*)url success:(BOOL)success;
 
 - (void)handleDocumentCountChanged;
+- (void)openRepositoryWithURL:(NSURL*)url withCloneMode:(CloneMode)cloneMode windowModeID:(WindowModeID)windowModeID;
+- (void)cloneWithURL:(NSURL *)url;
+
 @end
