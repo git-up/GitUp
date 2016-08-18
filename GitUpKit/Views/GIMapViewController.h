@@ -54,4 +54,18 @@
 - (IBAction)pushAllTags:(id)sender;
 - (IBAction)pullCurrentBranch:(id)sender;
 - (IBAction)pushCurrentBranch:(id)sender;
+
+// GitFlow
+- (IBAction)gitFlowInitialize:(id)sender;
+- (IBAction)gitFlowStartFeature:(id)sender;
+- (IBAction)gitFlowFinishFeature:(id)sender;
+- (IBAction)gitFlowStartImprovement:(id)sender;
+- (IBAction)gitFlowFinishImprovement:(id)sender;
+- (IBAction)gitFlowStartRelease:(id)sender;
+- (IBAction)gitFlowFinishRelease:(id)sender;
+- (IBAction)gitFlowStartHotfix:(id)sender;
+- (IBAction)gitFlowFinishHotfix:(id)sender;
+- (IBAction)gitFlowAbout:(id)sender;
+
+
 @end

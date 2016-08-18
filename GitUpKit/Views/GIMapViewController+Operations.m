@@ -625,7 +625,7 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
 
 #pragma mark - Merging
 
-- (void)fastForwardLocalBranch:(GCHistoryLocalBranch*)branch toCommitOrBranch:(id)commitOrBranch withUserMessage:(NSString*)userMessage {
+- (BOOL)fastForwardLocalBranch:(GCHistoryLocalBranch*)branch toCommitOrBranch:(id)commitOrBranch withUserMessage:(NSString*)userMessage {
   if ([self checkCleanRepositoryForOperationOnBranch:branch]) {
     BOOL isBranch = [commitOrBranch isKindOfClass:[GCBranch class]];
     GCHistoryCommit* commit = isBranch ? [commitOrBranch tipCommit] : commitOrBranch;
@@ -647,48 +647,59 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
       if (userMessage) {
         [self.windowController showOverlayWithStyle:kGIOverlayStyle_Informational message:userMessage];
       }
+      return YES;
     } else {
       [self presentError:error];
+      return NO;
     }
   }
+  return NO;
 }
+
+- (void)mergeCommitOrBranch:(id)commitOrBranch intoLocalBranch:(GCHistoryLocalBranch*)branch withAncestorCommit:(GCHistoryCommit*)ancestorCommit userMessage:(NSString*)userMessage mergeMessage:(NSString *)mergeMessage {
+  BOOL isBranch = [commitOrBranch isKindOfClass:[GCBranch class]];
+  GCHistoryCommit* commit = isBranch ? [commitOrBranch tipCommit] : commitOrBranch;
+  NSError* error;
+  __block GCCommit* newCommit = nil;
+  if (isBranch) {
+    [self.repository setUndoActionName:[NSString stringWithFormat:NSLocalizedString(@"Merge Branch \"%@\" Into \"%@\" Branch", nil), [commitOrBranch name], branch.name]];
+  } else {
+    [self.repository setUndoActionName:[NSString stringWithFormat:NSLocalizedString(@"Merge Commit Into \"%@\" Branch", nil), branch.name]];
+  }
+  if ([self.repository performReferenceTransformWithReason:(isBranch ? @"merge_branch" : @"merge_commit")
+                                                  argument:(isBranch ? [commitOrBranch name] : [commitOrBranch SHA1])
+                                                     error:&error
+                                                usingBlock:^GCReferenceTransform*(GCLiveRepository* repository, NSError** outError1) {
+                                                  
+                                                  return [repository.history mergeCommit:commit intoBranch:branch withAncestorCommit:ancestorCommit message:mergeMessage conflictHandler:^GCCommit*(GCIndex* index, GCCommit* ourCommit, GCCommit* theirCommit, NSArray* parentCommits, NSString* message2, NSError** outError2) {
+                                                    
+                                                    return [self resolveConflictsWithResolver:self.delegate index:index ourCommit:ourCommit theirCommit:theirCommit parentCommits:parentCommits message:message2 error:outError2];
+                                                    
+                                                  } newCommit:&newCommit error:outError1];
+                                                  
+                                                }]) {
+                                                  [self selectCommit:newCommit];
+                                                  if (userMessage) {
+                                                    [self.windowController showOverlayWithStyle:kGIOverlayStyle_Informational message:userMessage];
+                                                  }
+                                                } else {
+                                                  [self presentError:error];
+                                                }
+  
+}
+
 
 // We don't need to suspend history updates as there is no replay by definition
 - (void)mergeCommitOrBranch:(id)commitOrBranch intoLocalBranch:(GCHistoryLocalBranch*)branch withAncestorCommit:(GCHistoryCommit*)ancestorCommit userMessage:(NSString*)userMessage {
   if ([self checkCleanRepositoryForOperationOnBranch:branch]) {
     BOOL isBranch = [commitOrBranch isKindOfClass:[GCBranch class]];
-    GCHistoryCommit* commit = isBranch ? [commitOrBranch tipCommit] : commitOrBranch;
+    typeof(self) __weak self_weak = self;
     [self _promptForCommitMessage:[NSString stringWithFormat:NSLocalizedString(@"Merge %@ into %@", nil), isBranch ? [commitOrBranch name] : [commitOrBranch SHA1], branch.name]
                         withTitle:NSLocalizedString(@"Merged commit message:", nil)
                            button:NSLocalizedString(@"Merge", nil)
                             block:^(NSString* message) {
-      
-      NSError* error;
-      __block GCCommit* newCommit = nil;
-      if (isBranch) {
-        [self.repository setUndoActionName:[NSString stringWithFormat:NSLocalizedString(@"Merge Branch \"%@\" Into \"%@\" Branch", nil), [commitOrBranch name], branch.name]];
-      } else {
-        [self.repository setUndoActionName:[NSString stringWithFormat:NSLocalizedString(@"Merge Commit Into \"%@\" Branch", nil), branch.name]];
-      }
-      if ([self.repository performReferenceTransformWithReason:(isBranch ? @"merge_branch" : @"merge_commit")
-                                                      argument:(isBranch ? [commitOrBranch name] : [commitOrBranch SHA1])
-                                                         error:&error
-                                                    usingBlock:^GCReferenceTransform*(GCLiveRepository* repository, NSError** outError1) {
-        
-        return [repository.history mergeCommit:commit intoBranch:branch withAncestorCommit:ancestorCommit message:message conflictHandler:^GCCommit*(GCIndex* index, GCCommit* ourCommit, GCCommit* theirCommit, NSArray* parentCommits, NSString* message2, NSError** outError2) {
-          
-          return [self resolveConflictsWithResolver:self.delegate index:index ourCommit:ourCommit theirCommit:theirCommit parentCommits:parentCommits message:message2 error:outError2];
-          
-        } newCommit:&newCommit error:outError1];
-        
-      }]) {
-        [self selectCommit:newCommit];
-        if (userMessage) {
-          [self.windowController showOverlayWithStyle:kGIOverlayStyle_Informational message:userMessage];
-        }
-      } else {
-        [self presentError:error];
-      }
+                              typeof(self_weak) sself = self_weak;
+                              [sself mergeCommitOrBranch:commitOrBranch intoLocalBranch:branch withAncestorCommit:ancestorCommit userMessage:userMessage mergeMessage:message];
       
     }];
   }

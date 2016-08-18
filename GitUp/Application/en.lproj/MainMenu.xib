@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="9532" systemVersion="14F1605" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
         <development version="6300" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="9532"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="10117"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NSApplication">
@@ -162,7 +162,7 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                             <rect key="frame" x="139" y="216" width="341" height="58"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                            <size key="cellSize" width="280" height="18"/>
+                                            <size key="cellSize" width="276" height="18"/>
                                             <size key="intercellSpacing" width="4" height="2"/>
                                             <buttonCell key="prototype" type="radio" title="Radio" imagePosition="left" alignment="left" inset="2" id="S4o-dE-O99">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -216,7 +216,7 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                             <rect key="frame" x="139" y="290" width="341" height="58"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                            <size key="cellSize" width="272" height="18"/>
+                                            <size key="cellSize" width="268" height="18"/>
                                             <size key="intercellSpacing" width="4" height="2"/>
                                             <buttonCell key="prototype" type="radio" title="Radio" imagePosition="left" alignment="left" inset="2" id="aRV-8E-fbW">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -454,6 +454,7 @@ You must close and reopen any opened repositories in GitUp after changing this s
             </toolbar>
             <point key="canvasLocation" x="-8" y="1086"/>
         </window>
+        <customObject id="fTc-yK-w9h" customClass="GitFlow"/>
         <customObject id="Voe-Tx-rLC" customClass="AppDelegate">
             <connections>
                 <outlet property="aboutPanel" destination="sHg-NM-pfN" id="nuH-JO-Zxx"/>
@@ -715,6 +716,82 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                     <action selector="editSettings:" target="-1" id="eKw-Pa-s3l"/>
                                 </connections>
                             </menuItem>
+                            <menuItem isSeparatorItem="YES" id="euH-Hm-yiK"/>
+                            <menuItem title="Git flow..." id="Nco-F9-shO">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" title="Git flow..." id="Jjx-rh-W6S">
+                                    <items>
+                                        <menuItem title="Initialize" id="JM9-X8-aqI">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="gitFlowInitialize:" target="-1" id="v5r-Av-6Ul"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="vkR-Th-c6n"/>
+                                        <menuItem title="Sart New Feature" keyEquivalent="f" id="NOc-yG-4kp">
+                                            <modifierMask key="keyEquivalentModifierMask" control="YES" command="YES"/>
+                                            <connections>
+                                                <action selector="gitFlowStartFeature:" target="-1" id="pUN-oU-OS8"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Finish Feature" id="RJa-G0-neu">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="gitFlowFinishFeature:" target="-1" id="BU4-ZE-Cke"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="fUp-0E-ucb"/>
+                                        <menuItem title="Start New Improvement" keyEquivalent="i" id="6aZ-TX-hVr">
+                                            <modifierMask key="keyEquivalentModifierMask" control="YES" command="YES"/>
+                                            <connections>
+                                                <action selector="gitFlowStartImprovement:" target="-1" id="kD1-uc-rIi"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Finish Improvement" id="W93-IR-bRz">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="gitFlowFinishImprovement:" target="-1" id="KYd-zH-Qxr"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="ZY6-f4-VKK"/>
+                                        <menuItem title="Start New Release" keyEquivalent="r" id="p30-kD-Ywj">
+                                            <modifierMask key="keyEquivalentModifierMask" control="YES" command="YES"/>
+                                            <connections>
+                                                <action selector="gitFlowStartRelease:" target="-1" id="Sxb-fF-8DO"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Finish Release" id="xQI-8C-May">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="gitFlowFinishRelease:" target="-1" id="6BE-1i-NXA"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="6r1-fY-k3o"/>
+                                        <menuItem title="Start New Hotfix" keyEquivalent="h" id="WdD-fa-Kqr">
+                                            <modifierMask key="keyEquivalentModifierMask" control="YES" command="YES"/>
+                                            <connections>
+                                                <action selector="gitFlowStartHotfix:" target="-1" id="Chn-6s-Czc"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Finish Hotfix" id="3XE-OC-8vU">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="gitFlowFinishHotfix:" target="-1" id="svh-22-ekt"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="im6-Xj-t0C"/>
+                                        <menuItem title="About Git flow" id="Tzf-Cg-jDI">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="gitFlowAbout:" target="-1" id="2uz-th-uBc"/>
+                                            </connections>
+                                        </menuItem>
+                                    </items>
+                                </menu>
+                                <connections>
+                                    <action selector="openGitFlowMenu:" target="-1" id="zbA-K7-bfi"/>
+                                </connections>
+                            </menuItem>
                         </items>
                     </menu>
                 </menuItem>
@@ -932,7 +1009,7 @@ Gw
             <rect key="contentRect" x="131" y="158" width="428" height="217"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
             <view key="contentView" id="kmS-EA-B5p">
-                <rect key="frame" x="0.0" y="5" width="428" height="217"/>
+                <rect key="frame" x="0.0" y="0.0" width="428" height="217"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="ThD-Fn-TeP">
@@ -1253,6 +1330,17 @@ UI design by Wayne Fan</string>
             <point key="canvasLocation" x="-252" y="578.5"/>
         </window>
         <userDefaultsController representsSharedInstance="YES" id="AR1-cq-KNa"/>
+        <window title="Git flow Initialization" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="VXd-Ip-5Pb">
+            <windowStyleMask key="styleMask" titled="YES"/>
+            <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
+            <rect key="contentRect" x="109" y="138" width="480" height="270"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1280" height="800"/>
+            <view key="contentView" id="gHw-Kk-987">
+                <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
+                <autoresizingMask key="autoresizingMask"/>
+            </view>
+            <point key="canvasLocation" x="604" y="83"/>
+        </window>
     </objects>
     <resources>
         <image name="NSApplicationIcon" width="128" height="128"/>

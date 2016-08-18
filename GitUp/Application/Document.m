@@ -1717,20 +1717,22 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
     return NO;
   }
   
+  BOOL isMapWindowMode = [_windowMode isEqualToString:kWindowModeString_Map];
+  
   if ((item.action == @selector(focusSearch:)) || (item.action == @selector(performSearch:))) {
-    return [_windowMode isEqualToString:kWindowModeString_Map] && !_tagsView.superview && !_snapshotsView.superview && !_reflogView.superview && !_ancestorsView.superview && _searchReady;
+    return isMapWindowMode && !_tagsView.superview && !_snapshotsView.superview && !_reflogView.superview && !_ancestorsView.superview && _searchReady;
   }
   if (item.action == @selector(toggleTags:)) {
-    return [_windowMode isEqualToString:kWindowModeString_Map] && !_searchView.superview && !_snapshotsView.superview && !_reflogView.superview && !_ancestorsView.superview ? YES : NO;
+    return isMapWindowMode && !_searchView.superview && !_snapshotsView.superview && !_reflogView.superview && !_ancestorsView.superview ? YES : NO;
   }
   if (item.action == @selector(toggleSnapshots:)) {
-    return [_windowMode isEqualToString:kWindowModeString_Map] && !_searchView.superview && !_tagsView.superview && !_reflogView.superview && !_ancestorsView.superview && _repository.snapshots.count ? YES : NO;
+    return isMapWindowMode && !_searchView.superview && !_tagsView.superview && !_reflogView.superview && !_ancestorsView.superview && _repository.snapshots.count ? YES : NO;
   }
   if (item.action == @selector(toggleReflog:)) {
-    return [_windowMode isEqualToString:kWindowModeString_Map] && !_searchView.superview && !_tagsView.superview && !_snapshotsView.superview && !_ancestorsView.superview ? YES : NO;
+    return isMapWindowMode && !_searchView.superview && !_tagsView.superview && !_snapshotsView.superview && !_ancestorsView.superview ? YES : NO;
   }
   if (item.action == @selector(toggleAncestors:)) {
-    return [_windowMode isEqualToString:kWindowModeString_Map] && !_searchView.superview && !_tagsView.superview && !_snapshotsView.superview && !_reflogView.superview && _repository.history.HEADCommit ? YES : NO;
+    return isMapWindowMode && !_searchView.superview && !_tagsView.superview && !_snapshotsView.superview && !_reflogView.superview && _repository.history.HEADCommit ? YES : NO;
   }
   
   if (_repository.hasBackgroundOperationInProgress) {
@@ -1763,7 +1765,11 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
   }
   
   if (item.action == @selector(editConfiguration:)) {
-    return [_windowMode isEqualToString:kWindowModeString_Map];
+    return isMapWindowMode;
+  }
+  
+  if (item.action == @selector(openGitFlowMenu:)) {
+    return isMapWindowMode;
   }
   
   return [super validateUserInterfaceItem:item];
@@ -2087,5 +2093,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
   
   [_repository setUserInfo:(_indexDiffsButton.state ? @(YES) : @(NO)) forKey:kRepositoryUserInfoKey_IndexDiffs];
 }
+
+- (IBAction)openGitFlowMenu:(id)sender {}
 
 @end

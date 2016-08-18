@@ -35,6 +35,23 @@
 #define kPersistentViewStateKey_HideTagLabels kPersistentViewStateKeyNamespace @"HideTagLabels"
 #define kPersistentViewStateKey_ShowBranchLabels kPersistentViewStateKeyNamespace @"ShowBranchLabels"
 
+typedef NSString* GIGitFlowConfigKey;
+
+static GIGitFlowConfigKey const GIGitFlowBranchDevelop = @"gitflow.branch.develop";
+static GIGitFlowConfigKey const GIGitFlowBranchMaster = @"gitflow.branch.master";
+static GIGitFlowConfigKey const GIGitFlowPrefixFeature = @"gitflow.prefix.feature";
+static GIGitFlowConfigKey const GIGitFlowPrefixRelease = @"gitflow.prefix.release";
+static GIGitFlowConfigKey const GIGitFlowPrefixHotfix = @"gitflow.prefix.hotfix";
+static GIGitFlowConfigKey const GIGitFlowPrefixImprovement = @"gitflow.prefix.improvement";
+static GIGitFlowConfigKey const GIGitFlowPrefixVersionTag = @"gitflow.prefix.versiontag";
+
+typedef NS_ENUM(NSInteger, GIGitFlowAction) {
+  GIGitFlowActionFeature = 1,
+  GIGitFlowActionRelease,
+  GIGitFlowActionImprovement,
+  GIGitFlowActionHotfix
+};
+
 @interface GIMapViewController () <GIGraphViewDelegate>
 @property(nonatomic, weak) IBOutlet NSScrollView* graphScrollView;
 @property(nonatomic, weak) IBOutlet GIGraphView* graphView;
@@ -56,6 +73,15 @@
 @property(nonatomic, strong) IBOutlet NSView* createBranchView;
 @property(nonatomic, weak) IBOutlet NSTextField* createBranchTextField;
 @property(nonatomic, weak) IBOutlet NSButton* createBranchButton;
+
+@property(nonatomic, strong) IBOutlet NSView* gitFlowTagView;
+@property(nonatomic, weak) IBOutlet NSTextField* gitFlowTagNameTextField;
+@property(nonatomic, strong) IBOutlet GICommitMessageView* gitFlowTagMessageTextView;  // Does not support weak references
+
+@property(nonatomic, strong) IBOutlet NSView* createGitFlowActionView;
+@property(nonatomic, weak) IBOutlet NSTextField* createGitFlowActionTextField;
+@property(nonatomic, weak) IBOutlet NSTextField* createGitFlowActionLabel;
+@property(nonatomic, weak) IBOutlet NSButton* createGitFlowActionButton;
 
 @property(nonatomic, strong) IBOutlet NSView* messageView;
 @property(nonatomic, weak) IBOutlet NSTextField* messageTextField;
@@ -648,6 +674,22 @@ static NSColor* _patternColor = nil;
     return !editingDisabled && self.repository.history.HEADBranch;
   }
   
+  NSArray<NSString *> *gitFlowActions = @[
+                                          NSStringFromSelector(@selector(gitFlowStartRelease:)),
+                                          NSStringFromSelector(@selector(gitFlowFinishRelease:)),
+                                          NSStringFromSelector(@selector(gitFlowStartImprovement:)),
+                                          NSStringFromSelector(@selector(gitFlowFinishImprovement:)),
+                                          NSStringFromSelector(@selector(gitFlowStartFeature:)),
+                                          NSStringFromSelector(@selector(gitFlowFinishFeature:)),
+                                          NSStringFromSelector(@selector(gitFlowStartHotfix:)),
+                                          NSStringFromSelector(@selector(gitFlowFinishHotfix:)),
+                                          NSStringFromSelector(@selector(gitFlowInitialize:)),
+                                          NSStringFromSelector(@selector(gitFlowAbout:)),
+                                          ];
+  if ([gitFlowActions containsObject: NSStringFromSelector(item.action)]) {
+    return YES;
+  }
+  
   GCHistoryCommit* commit = _graphView.selectedCommit;
   if (commit == nil) {
     XLOG_DEBUG_UNREACHABLE();
@@ -799,6 +841,270 @@ static NSColor* _patternColor = nil;
   }
 }
 
+#pragma mark - GitFlow
+
+- (void)showGitFlowInitError {
+  [self showGitFlowError:@"Git Flow doesn't installed. Please, run \"Initialize\" first."];
+}
+
+- (void)showGitFlowError:(NSString*)message {
+  NSString *displayMessage = NSLocalizedString(message, nil);
+  NSError *displayError = [NSError errorWithDomain:GCErrorDomain code:-1 userInfo:@{NSLocalizedDescriptionKey: displayMessage}];
+  [self presentError:displayError];
+}
+
+- (void)startGitFlowAction: (GIGitFlowAction)action {
+//  GCHistoryCommit* commit = self.graphView.selectedNode.commit;
+  NSString *branchConfigKey = nil;
+  NSString *prefixConfigKey = nil;
+  NSString *actionName = nil;
+  switch (action) {
+    case GIGitFlowActionFeature:
+      actionName = NSLocalizedString(@"FEATURE", nil);
+      branchConfigKey = GIGitFlowBranchDevelop;
+      prefixConfigKey = GIGitFlowPrefixFeature;
+      break;
+      
+    case GIGitFlowActionHotfix:
+      actionName = NSLocalizedString(@"HOTFIX", nil);
+      branchConfigKey = GIGitFlowBranchMaster;
+      prefixConfigKey = GIGitFlowPrefixHotfix;
+      break;
+      
+    case GIGitFlowActionRelease:
+      actionName = NSLocalizedString(@"RELEASE", nil);
+      branchConfigKey = GIGitFlowBranchDevelop;
+      prefixConfigKey = GIGitFlowPrefixRelease;
+      break;
+      
+    case GIGitFlowActionImprovement:
+      actionName = NSLocalizedString(@"IMPROVEMENT", nil);
+      branchConfigKey = GIGitFlowBranchDevelop;
+      prefixConfigKey = GIGitFlowPrefixImprovement;
+      break;
+  }
+  NSError *error = nil;
+  GCConfigOption *branchOption = [self.repository readConfigOptionForVariable:branchConfigKey error:&error];
+  if (error != nil) {
+    [self showGitFlowInitError];
+    return;
+  }
+  
+  GCConfigOption *prefixOption = [self.repository readConfigOptionForVariable:prefixConfigKey error:&error];
+  if (error != nil) {
+    [self showGitFlowInitError];
+    return;
+  }
+  
+  GCHistoryLocalBranch *devBranch = [self.repository.history historyLocalBranchWithName:branchOption.value];
+  GCHistoryCommit *commit = devBranch.tipCommit;
+
+  _createGitFlowActionTextField.stringValue = @"";
+  _createGitFlowActionButton.state = NSOnState;
+  _createGitFlowActionLabel.stringValue = [NSString stringWithFormat:@"New %@ name:", actionName];
+  [self.windowController runModalView:_createGitFlowActionView withInitialFirstResponder:_createGitFlowActionTextField completionHandler:^(BOOL success) {
+    
+    if (success) {
+      NSString* name = _createGitFlowActionTextField.stringValue;
+      if (name.length) {
+        NSString *prefix = prefixOption.value;
+        if ([prefix hasSuffix:@"/"] == NO) {
+          prefix = [NSString stringWithFormat:@"%@/", prefix];
+        }
+        NSString *fullName = [NSString stringWithFormat:@"%@%@", prefix, name];
+        [self createLocalBranchAtCommit:commit withName:fullName checkOut:_createGitFlowActionButton.state];
+      } else {
+        NSBeep();
+      }
+    }
+    
+  }];
+}
+
+- (void)finishGitFlowAction: (GIGitFlowAction)action {
+  //  GCHistoryCommit* commit = self.graphView.selectedNode.commit;
+  BOOL mergeToMaster = NO;
+  NSString *prefixConfigKey = nil;
+  switch (action) {
+    case GIGitFlowActionFeature:
+      prefixConfigKey = GIGitFlowPrefixFeature;
+      break;
+      
+    case GIGitFlowActionHotfix:
+      mergeToMaster = YES;
+      prefixConfigKey = GIGitFlowPrefixHotfix;
+      break;
+      
+    case GIGitFlowActionRelease:
+      mergeToMaster = YES;
+      prefixConfigKey = GIGitFlowPrefixRelease;
+      break;
+      
+    case GIGitFlowActionImprovement:
+      prefixConfigKey = GIGitFlowPrefixImprovement;
+      break;
+  }
+  NSError *error = nil;
+  GCConfigOption *prefixOption = [self.repository readConfigOptionForVariable:prefixConfigKey error:&error];
+  if (error != nil) {
+    [self showGitFlowInitError];
+    return;
+  }
+  
+  GCHistoryLocalBranch *currentBranch = self.repository.history.HEADBranch;
+  
+  if ([currentBranch.name hasPrefix:prefixOption.value] == NO) {
+//    self overl
+    NSString* message = [NSString stringWithFormat:@"Incorrect branch selected. Branch should have prefix %@", prefixOption.value];//TODO: add NSLocalizedString
+    [self.windowController showOverlayWithStyle:kGIOverlayStyle_Warning message:message];
+    return;
+  }
+  
+  if (mergeToMaster == NO) {
+    [self finishGitFlowActionWithMergeToMaster:mergeToMaster tagName:nil tagMessage:nil currentBranch: currentBranch];
+    return;
+  }
+  _gitFlowTagNameTextField.stringValue = @"";
+  _gitFlowTagMessageTextView.string = @"";
+  typeof(self) __weak self_weak = self;
+  [self.windowController runModalView:_gitFlowTagView withInitialFirstResponder:_gitFlowTagNameTextField completionHandler:^(BOOL success) {
+    typeof(self_weak) sself = self_weak;
+    
+    if (success) {
+      NSString* name = _gitFlowTagNameTextField.stringValue;
+      NSString* message = [_gitFlowTagMessageTextView.string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+      [sself finishGitFlowActionWithMergeToMaster:mergeToMaster tagName:name tagMessage:message currentBranch: currentBranch];
+    }
+    _tagMessageTextView.string = @"";
+    [_tagMessageTextView.undoManager removeAllActions];
+    
+  }];
+}
+
+- (BOOL)gitFlowMergeBranch:(GCHistoryLocalBranch *)fromBranch intoBranch:(GCHistoryLocalBranch *)intoBranch {
+  NSError* analyzeError;
+  GCHistoryCommit* ancestorCommit;
+  GCCommit* commit;
+  GCMergeAnalysisResult result = [self.repository analyzeMergingCommit:[fromBranch tipCommit] intoCommit:intoBranch.tipCommit ancestorCommit:&commit error:&analyzeError];
+  switch (result) {
+      
+    case kGCMergeAnalysisResult_Unknown:
+      [self presentError:analyzeError];
+      return NO;
+      
+    case kGCMergeAnalysisResult_UpToDate:
+      return NO;
+    
+      
+    case kGCMergeAnalysisResult_FastForward: {
+      return [self fastForwardLocalBranch:intoBranch toCommitOrBranch:fromBranch withUserMessage:nil];
+//      [self showGitFlowError:@"Merge can be fast-forwarded! Abort."];
+//      return NO;
+    }
+      
+    case kGCMergeAnalysisResult_Normal: {
+      ancestorCommit = [self.repository.history historyCommitForCommit:commit];
+      NSError *error;
+      __block GCCommit *newCommit = nil;
+      [self.repository setUndoActionName:[NSString stringWithFormat:NSLocalizedString(@"Merge Branch \"%@\" Into \"%@\" Branch", nil), [fromBranch name], intoBranch.name]];
+      if ([self.repository performReferenceTransformWithReason:@"merge_branch"
+                                                      argument:[fromBranch name]
+                                                         error:&error
+                                                    usingBlock:^GCReferenceTransform*(GCLiveRepository* repository, NSError** outError1) {
+                                                      NSString *mergeMessage = [NSString stringWithFormat:NSLocalizedString(@"Merge %@ into %@", nil), fromBranch, intoBranch.name];
+                                                      return [repository.history mergeCommit:fromBranch.tipCommit intoBranch:intoBranch withAncestorCommit:ancestorCommit message:mergeMessage conflictHandler:^GCCommit*(GCIndex* index, GCCommit* ourCommit, GCCommit* theirCommit, NSArray* parentCommits, NSString* message2, NSError** outError2) {
+                                                        
+                                                        return [self resolveConflictsWithResolver:self.delegate index:index ourCommit:ourCommit theirCommit:theirCommit parentCommits:parentCommits message:message2 error:outError2];
+                                                        
+                                                      } newCommit:&newCommit error:outError1];
+                                                      
+                                                    }]) {
+                                                      [self selectCommit:newCommit];
+                                                      return YES;
+                                                    } else {
+                                                      [self presentError:error];
+                                                      return NO;
+                                                    }
+    }
+  }
+}
+
+- (BOOL)gitFlowCheckoutAndMergeFrom:(GCHistoryLocalBranch *)currentBranch toBranch:(GIGitFlowConfigKey)branchKey resultBranch:(GCHistoryLocalBranch **)result {
+  NSError* error = nil;
+  GCConfigOption *branchOption = [self.repository readConfigOptionForVariable:branchKey error:&error];
+  if (error != nil) {
+    [self showGitFlowInitError];
+    return NO;
+  }
+  GCHistoryLocalBranch *branch = [self.repository.history historyLocalBranchWithName:branchOption.value];
+  if (branch == nil) {
+    [self showGitFlowError: @"Master branch not found."];
+    return NO;
+  }
+  [self checkoutLocalBranch:branch];
+  if ([self gitFlowMergeBranch:currentBranch intoBranch:branch] == NO) { return NO; }
+  if (result != NULL) { *result = branch; }
+  return YES;
+}
+
+- (void)finishGitFlowActionWithMergeToMaster:(BOOL)mergeToMaster tagName:(NSString *)tagName tagMessage:(NSString *)tagMessage currentBranch:(GCHistoryLocalBranch *)currentBranch {
+  if (mergeToMaster) {
+    GCHistoryLocalBranch *branch = nil;
+    if ([self gitFlowCheckoutAndMergeFrom:currentBranch toBranch:GIGitFlowBranchMaster resultBranch:&branch] == NO) { return; }
+    if (tagName.length > 0) {
+      GCCommit *commit = [self.repository lookupTipCommitForBranch:branch error:nil];
+      GCHistoryCommit *historyCommit = [self.repository.history historyCommitForCommit:commit];
+      [self createTagAtCommit:historyCommit withName:tagName message:tagMessage];
+    }
+  }
+  if ([self gitFlowCheckoutAndMergeFrom:currentBranch toBranch:GIGitFlowBranchDevelop resultBranch:nil] == NO) { return; }
+  [self deleteLocalBranch:currentBranch];
+}
+
+
+- (IBAction)gitFlowInitialize:(id)sender {
+  
+}
+
+- (IBAction)gitFlowStartFeature:(id)sender {
+  [self startGitFlowAction: GIGitFlowActionFeature];
+}
+
+
+
+- (IBAction)gitFlowFinishFeature:(id)sender {
+  //TODO: add finish feature (and another actions) from contextual menu
+  [self finishGitFlowAction: GIGitFlowActionFeature];
+}
+
+- (IBAction)gitFlowStartImprovement:(id)sender {
+  [self startGitFlowAction: GIGitFlowActionImprovement];
+}
+
+- (IBAction)gitFlowFinishImprovement:(id)sender {
+  [self finishGitFlowAction: GIGitFlowActionImprovement];
+}
+
+- (IBAction)gitFlowStartRelease:(id)sender {
+  [self startGitFlowAction: GIGitFlowActionRelease];
+}
+
+- (IBAction)gitFlowFinishRelease:(id)sender {
+  [self finishGitFlowAction: GIGitFlowActionRelease];
+}
+
+- (IBAction)gitFlowStartHotfix:(id)sender {
+  [self startGitFlowAction: GIGitFlowActionHotfix];
+}
+
+- (IBAction)gitFlowFinishHotfix:(id)sender {
+  [self finishGitFlowAction: GIGitFlowActionHotfix];
+}
+
+- (IBAction)gitFlowAbout:(id)sender {
+  
+}
+
 #pragma mark - Contextual Menu Actions
 
 - (IBAction)quickViewSelectedCommit:(id)sender {
@@ -918,6 +1224,7 @@ static NSColor* _patternColor = nil;
     
   }];
 }
+
 
 - (IBAction)editSelectedCommitMessage:(id)sender {
   GCHistoryCommit* commit = self.graphView.selectedNode.commit;
