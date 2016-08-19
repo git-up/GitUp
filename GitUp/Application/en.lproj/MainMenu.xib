@@ -728,55 +728,35 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="vkR-Th-c6n"/>
-                                        <menuItem title="Sart New Feature" keyEquivalent="f" id="NOc-yG-4kp">
-                                            <modifierMask key="keyEquivalentModifierMask" control="YES" command="YES"/>
+                                        <menuItem title="Finish action" keyEquivalent="F" id="ngz-Hp-BwD">
+                                            <modifierMask key="keyEquivalentModifierMask" control="YES"/>
+                                            <connections>
+                                                <action selector="gitFlowFinishCurrentAction:" target="-1" id="saJ-dY-cPG"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="6VI-uA-rx7"/>
+                                        <menuItem title="Start New Feature" keyEquivalent="f" id="NOc-yG-4kp">
+                                            <modifierMask key="keyEquivalentModifierMask" control="YES"/>
                                             <connections>
                                                 <action selector="gitFlowStartFeature:" target="-1" id="pUN-oU-OS8"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Finish Feature" id="RJa-G0-neu">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="gitFlowFinishFeature:" target="-1" id="BU4-ZE-Cke"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem isSeparatorItem="YES" id="fUp-0E-ucb"/>
                                         <menuItem title="Start New Improvement" keyEquivalent="i" id="6aZ-TX-hVr">
-                                            <modifierMask key="keyEquivalentModifierMask" control="YES" command="YES"/>
+                                            <modifierMask key="keyEquivalentModifierMask" control="YES"/>
                                             <connections>
                                                 <action selector="gitFlowStartImprovement:" target="-1" id="kD1-uc-rIi"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Finish Improvement" id="W93-IR-bRz">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="gitFlowFinishImprovement:" target="-1" id="KYd-zH-Qxr"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem isSeparatorItem="YES" id="ZY6-f4-VKK"/>
                                         <menuItem title="Start New Release" keyEquivalent="r" id="p30-kD-Ywj">
-                                            <modifierMask key="keyEquivalentModifierMask" control="YES" command="YES"/>
+                                            <modifierMask key="keyEquivalentModifierMask" control="YES"/>
                                             <connections>
                                                 <action selector="gitFlowStartRelease:" target="-1" id="Sxb-fF-8DO"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Finish Release" id="xQI-8C-May">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="gitFlowFinishRelease:" target="-1" id="6BE-1i-NXA"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem isSeparatorItem="YES" id="6r1-fY-k3o"/>
                                         <menuItem title="Start New Hotfix" keyEquivalent="h" id="WdD-fa-Kqr">
-                                            <modifierMask key="keyEquivalentModifierMask" control="YES" command="YES"/>
+                                            <modifierMask key="keyEquivalentModifierMask" control="YES"/>
                                             <connections>
                                                 <action selector="gitFlowStartHotfix:" target="-1" id="Chn-6s-Czc"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="Finish Hotfix" id="3XE-OC-8vU">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="gitFlowFinishHotfix:" target="-1" id="svh-22-ekt"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="im6-Xj-t0C"/>

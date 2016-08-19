@@ -169,6 +169,13 @@ CA
                         <action selector="splitSelectedCommit:" target="-2" id="l3u-zi-MRS"/>
                     </connections>
                 </menuItem>
+                <menuItem isSeparatorItem="YES" id="FZs-dX-Dk4"/>
+                <menuItem title="Finish Action" keyEquivalent="f" id="Bbt-UW-KiK">
+                    <modifierMask key="keyEquivalentModifierMask" option="YES"/>
+                    <connections>
+                        <action selector="gitFlowFinishSelectedAction:" target="-2" id="h7y-HC-7Bl"/>
+                    </connections>
+                </menuItem>
                 <menuItem isSeparatorItem="YES" id="erI-b5-M78"/>
                 <menuItem title="Revert Against Current Branch…" keyEquivalent="r" id="cC0-Dd-nDb">
                     <modifierMask key="keyEquivalentModifierMask"/>
@@ -336,7 +343,7 @@ Gw
                     </connections>
                 </button>
             </subviews>
-            <point key="canvasLocation" x="135.5" y="1432.5"/>
+            <point key="canvasLocation" x="-58.5" y="1446.5"/>
         </customView>
         <customView id="vmT-nM-DHH" userLabel="Tag View">
             <rect key="frame" x="0.0" y="0.0" width="433" height="207"/>

@@ -676,16 +676,47 @@ static NSColor* _patternColor = nil;
   
   NSArray<NSString *> *gitFlowActions = @[
                                           NSStringFromSelector(@selector(gitFlowStartRelease:)),
-                                          NSStringFromSelector(@selector(gitFlowFinishRelease:)),
                                           NSStringFromSelector(@selector(gitFlowStartImprovement:)),
-                                          NSStringFromSelector(@selector(gitFlowFinishImprovement:)),
                                           NSStringFromSelector(@selector(gitFlowStartFeature:)),
-                                          NSStringFromSelector(@selector(gitFlowFinishFeature:)),
                                           NSStringFromSelector(@selector(gitFlowStartHotfix:)),
-                                          NSStringFromSelector(@selector(gitFlowFinishHotfix:)),
                                           NSStringFromSelector(@selector(gitFlowInitialize:)),
                                           NSStringFromSelector(@selector(gitFlowAbout:)),
                                           ];
+  if (item.action == @selector(gitFlowInitialize:)) {
+    return YES;
+  }
+  if (item.action == @selector(gitFlowFinishCurrentAction:)) {
+    GCHistoryLocalBranch *currentBranch = self.repository.history.HEADBranch;
+    GIGitFlowAction action;
+    BOOL result = [self gitFlowActionForBranch:currentBranch action:&action];
+    NSMenuItem *i = (NSMenuItem*)item;
+    if (result == NO) {
+      i.hidden = YES;
+      return NO;
+    }
+    NSString *title = nil;
+    switch (action) {
+      case GIGitFlowActionRelease:
+        title = NSLocalizedString(@"Finish Release", nil);
+        break;
+        
+      case GIGitFlowActionHotfix:
+        title = NSLocalizedString(@"Finish Hotfix", nil);
+        break;
+        
+      case GIGitFlowActionFeature:
+        title = NSLocalizedString(@"Finish Feature", nil);
+        break;
+        
+      case GIGitFlowActionImprovement:
+        title = NSLocalizedString(@"Finish Improvement", nil);
+        break;
+
+    }
+    i.title = title;
+    i.hidden = NO;
+    return YES;
+  }
   if ([gitFlowActions containsObject: NSStringFromSelector(item.action)]) {
     return YES;
   }
@@ -718,6 +749,48 @@ static NSColor* _patternColor = nil;
   
   if (editingDisabled) {
     return NO;
+  }
+  
+  if (item.action == @selector(gitFlowFinishSelectedAction:)) {
+    NSMenuItem *i = (NSMenuItem*)item;
+    if (commit.localBranches.count == 0) {
+      i.hidden = YES;
+      return NO;
+    }
+    GIGitFlowAction action;
+    BOOL isSuccess = NO;
+    for (GCLocalBranch *branch in commit.localBranches) {
+      GCHistoryLocalBranch *currentBranch = [self.repository.history historyLocalBranchForLocalBranch:branch];
+      BOOL result = [self gitFlowActionForBranch:currentBranch action:&action];
+      if (result == YES) { isSuccess = YES; break; }
+    }
+    if (isSuccess == NO) {
+      i.hidden = YES;
+      return NO;
+    }
+    
+    NSString *title = nil;
+    switch (action) {
+      case GIGitFlowActionRelease:
+        title = NSLocalizedString(@"Finish Release", nil);
+        break;
+        
+      case GIGitFlowActionHotfix:
+        title = NSLocalizedString(@"Finish Hotfix", nil);
+        break;
+        
+      case GIGitFlowActionFeature:
+        title = NSLocalizedString(@"Finish Feature", nil);
+        break;
+        
+      case GIGitFlowActionImprovement:
+        title = NSLocalizedString(@"Finish Improvement", nil);
+        break;
+        
+    }
+    i.title = title;
+    i.hidden = NO;
+    return YES;
   }
   
   if (item.action == @selector(checkoutSelectedCommit:)) {
@@ -843,18 +916,26 @@ static NSColor* _patternColor = nil;
 
 #pragma mark - GitFlow
 
+- (BOOL)gitFlowInitialized {
+  NSArray *required = @[ GIGitFlowBranchMaster, GIGitFlowBranchDevelop, GIGitFlowPrefixRelease, GIGitFlowPrefixFeature ];
+  for (NSString *key in required) {
+    if ([self.repository readConfigOptionForVariable:key error:nil].value.length > 0) { return NO; }
+  }
+  return YES;
+}
+
 - (void)showGitFlowInitError {
   [self showGitFlowError:@"Git Flow doesn't installed. Please, run \"Initialize\" first."];
 }
 
 - (void)showGitFlowError:(NSString*)message {
   NSString *displayMessage = NSLocalizedString(message, nil);
-  NSError *displayError = [NSError errorWithDomain:GCErrorDomain code:-1 userInfo:@{NSLocalizedDescriptionKey: displayMessage}];
-  [self presentError:displayError];
+//  NSError *displayError = [NSError errorWithDomain:GCErrorDomain code:-1 userInfo:@{NSLocalizedDescriptionKey: displayMessage}];
+  [self.windowController showOverlayWithStyle:kGIOverlayStyle_Warning message:displayMessage];//What is better? overlay or present error?
+//  [self presentError:displayError];
 }
 
 - (void)startGitFlowAction: (GIGitFlowAction)action {
-//  GCHistoryCommit* commit = self.graphView.selectedNode.commit;
   NSString *branchConfigKey = nil;
   NSString *prefixConfigKey = nil;
   NSString *actionName = nil;
@@ -921,43 +1002,38 @@ static NSColor* _patternColor = nil;
   }];
 }
 
-- (void)finishGitFlowAction: (GIGitFlowAction)action {
-  //  GCHistoryCommit* commit = self.graphView.selectedNode.commit;
+- (BOOL)gitFlowActionForBranch: (GCBranch *)currentBranch action:(GIGitFlowAction*)action {
+  NSDictionary<NSString *, NSNumber *> *prefixes = @{
+                                                     GIGitFlowPrefixHotfix: @(GIGitFlowActionHotfix),
+                                                     GIGitFlowPrefixFeature: @(GIGitFlowActionFeature),
+                                                     GIGitFlowPrefixRelease: @(GIGitFlowActionRelease),
+                                                     GIGitFlowPrefixImprovement: @(GIGitFlowActionImprovement)
+                                                     };
+  
+  for (NSString *key in prefixes.allKeys) {
+    GCConfigOption *prefixOption = [self.repository readConfigOptionForVariable:key error:nil];
+    if (prefixOption == nil) {
+      continue;
+    }
+    if ([currentBranch.name hasPrefix:prefixOption.value] == YES) {
+      if (action != NULL) { *action = prefixes[key].integerValue; }
+      return YES;
+    }
+  }
+  return NO;
+}
+
+- (void)finishGitFlowActionInBranch: (GCHistoryLocalBranch *)currentBranch {
   BOOL mergeToMaster = NO;
-  NSString *prefixConfigKey = nil;
-  switch (action) {
-    case GIGitFlowActionFeature:
-      prefixConfigKey = GIGitFlowPrefixFeature;
-      break;
-      
-    case GIGitFlowActionHotfix:
-      mergeToMaster = YES;
-      prefixConfigKey = GIGitFlowPrefixHotfix;
-      break;
-      
-    case GIGitFlowActionRelease:
-      mergeToMaster = YES;
-      prefixConfigKey = GIGitFlowPrefixRelease;
-      break;
-      
-    case GIGitFlowActionImprovement:
-      prefixConfigKey = GIGitFlowPrefixImprovement;
-      break;
-  }
-  NSError *error = nil;
-  GCConfigOption *prefixOption = [self.repository readConfigOptionForVariable:prefixConfigKey error:&error];
-  if (error != nil) {
-    [self showGitFlowInitError];
+  
+  GIGitFlowAction action;
+  if ([self gitFlowActionForBranch:currentBranch action:&action] == NO) {
+    NSString* message = @"Incorrect branch selected or GitFlow doesn't installed.";
+    [self showGitFlowError:message];
     return;
   }
-  
-  GCHistoryLocalBranch *currentBranch = self.repository.history.HEADBranch;
-  
-  if ([currentBranch.name hasPrefix:prefixOption.value] == NO) {
-//    self overl
-    NSString* message = [NSString stringWithFormat:@"Incorrect branch selected. Branch should have prefix %@", prefixOption.value];//TODO: add NSLocalizedString
-    [self.windowController showOverlayWithStyle:kGIOverlayStyle_Warning message:message];
-    return;
+  if (action == GIGitFlowActionRelease || action == GIGitFlowActionHotfix) {
+    mergeToMaster = YES;
   }
   
   if (mergeToMaster == NO) {
@@ -993,13 +1069,11 @@ static NSColor* _patternColor = nil;
       return NO;
       
     case kGCMergeAnalysisResult_UpToDate:
-      return NO;
+      return YES;
     
       
     case kGCMergeAnalysisResult_FastForward: {
       return [self fastForwardLocalBranch:intoBranch toCommitOrBranch:fromBranch withUserMessage:nil];
-//      [self showGitFlowError:@"Merge can be fast-forwarded! Abort."];
-//      return NO;
     }
       
     case kGCMergeAnalysisResult_Normal: {
@@ -1061,6 +1135,25 @@ static NSColor* _patternColor = nil;
   [self deleteLocalBranch:currentBranch];
 }
 
+- (IBAction)gitFlowFinishCurrentAction:(id)sender {
+  GCHistoryLocalBranch *currentBranch = self.repository.history.HEADBranch;
+  [self finishGitFlowActionInBranch:currentBranch];
+}
+
+- (IBAction)gitFlowFinishSelectedAction:(id)sender {
+  GCHistoryCommit *commit = self.graphView.selectedCommit;
+  GCHistoryLocalBranch *currentBranch;
+  for (GCLocalBranch *branch in commit.localBranches) {
+    GCHistoryLocalBranch *b = [self.repository.history historyLocalBranchForLocalBranch:branch];
+    BOOL result = [self gitFlowActionForBranch:b action:nil];
+    if (result == YES) { currentBranch = b; break; }
+  }
+  if (currentBranch == nil) {
+    [self showGitFlowError:@"I don't know what I should do with this commit :("];
+    return;
+  }
+  [self finishGitFlowActionInBranch:currentBranch];
+}
 
 - (IBAction)gitFlowInitialize:(id)sender {
   
@@ -1070,35 +1163,16 @@ static NSColor* _patternColor = nil;
   [self startGitFlowAction: GIGitFlowActionFeature];
 }
 
-
-
-- (IBAction)gitFlowFinishFeature:(id)sender {
-  //TODO: add finish feature (and another actions) from contextual menu
-  [self finishGitFlowAction: GIGitFlowActionFeature];
-}
-
 - (IBAction)gitFlowStartImprovement:(id)sender {
   [self startGitFlowAction: GIGitFlowActionImprovement];
-}
-
-- (IBAction)gitFlowFinishImprovement:(id)sender {
-  [self finishGitFlowAction: GIGitFlowActionImprovement];
 }
 
 - (IBAction)gitFlowStartRelease:(id)sender {
   [self startGitFlowAction: GIGitFlowActionRelease];
 }
 
-- (IBAction)gitFlowFinishRelease:(id)sender {
-  [self finishGitFlowAction: GIGitFlowActionRelease];
-}
-
 - (IBAction)gitFlowStartHotfix:(id)sender {
   [self startGitFlowAction: GIGitFlowActionHotfix];
-}
-
-- (IBAction)gitFlowFinishHotfix:(id)sender {
-  [self finishGitFlowAction: GIGitFlowActionHotfix];
 }
 
 - (IBAction)gitFlowAbout:(id)sender {
