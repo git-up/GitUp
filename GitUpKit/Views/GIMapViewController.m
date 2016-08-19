@@ -1057,9 +1057,33 @@ static NSColor* _patternColor = nil;
   }];
 }
 
+- (BOOL)gitFlowMergeFrom:(GCHistoryLocalBranch *)fromBranch intoBranch:(GCHistoryLocalBranch *)intoBranch ancestor:(GCCommit *)commit {
+  GCHistoryCommit* ancestorCommit = [self.repository.history historyCommitForCommit:commit];
+  NSError *error;
+  __block GCCommit *newCommit = nil;
+  [self.repository setUndoActionName:[NSString stringWithFormat:NSLocalizedString(@"Merge Branch \"%@\" Into \"%@\" Branch", nil), [fromBranch name], intoBranch.name]];
+  if ([self.repository performReferenceTransformWithReason:@"merge_branch"
+                                                  argument:[fromBranch name]
+                                                     error:&error
+                                                usingBlock:^GCReferenceTransform*(GCLiveRepository* repository, NSError** outError1) {
+                                                  NSString *mergeMessage = [NSString stringWithFormat:NSLocalizedString(@"Merge %@ into %@", nil), fromBranch, intoBranch.name];
+                                                  return [repository.history mergeCommit:fromBranch.tipCommit intoBranch:intoBranch withAncestorCommit:ancestorCommit message:mergeMessage conflictHandler:^GCCommit*(GCIndex* index, GCCommit* ourCommit, GCCommit* theirCommit, NSArray* parentCommits, NSString* message2, NSError** outError2) {
+                                                    
+                                                    return [self resolveConflictsWithResolver:self.delegate index:index ourCommit:ourCommit theirCommit:theirCommit parentCommits:parentCommits message:message2 error:outError2];
+                                                    
+                                                  } newCommit:&newCommit error:outError1];
+                                                  
+                                                }]) {
+                                                  [self selectCommit:newCommit];
+                                                  return YES;
+                                                } else {
+                                                  [self presentError:error];
+                                                  return NO;
+                                                }
+}
+
 - (BOOL)gitFlowMergeBranch:(GCHistoryLocalBranch *)fromBranch intoBranch:(GCHistoryLocalBranch *)intoBranch {
   NSError* analyzeError;
-  GCHistoryCommit* ancestorCommit;
   GCCommit* commit;
   GCMergeAnalysisResult result = [self.repository analyzeMergingCommit:[fromBranch tipCommit] intoCommit:intoBranch.tipCommit ancestorCommit:&commit error:&analyzeError];
   switch (result) {
@@ -1072,33 +1096,9 @@ static NSColor* _patternColor = nil;
       return YES;
     
       
-    case kGCMergeAnalysisResult_FastForward: {
-      return [self fastForwardLocalBranch:intoBranch toCommitOrBranch:fromBranch withUserMessage:nil];
-    }
-      
+    case kGCMergeAnalysisResult_FastForward:
     case kGCMergeAnalysisResult_Normal: {
-      ancestorCommit = [self.repository.history historyCommitForCommit:commit];
-      NSError *error;
-      __block GCCommit *newCommit = nil;
-      [self.repository setUndoActionName:[NSString stringWithFormat:NSLocalizedString(@"Merge Branch \"%@\" Into \"%@\" Branch", nil), [fromBranch name], intoBranch.name]];
-      if ([self.repository performReferenceTransformWithReason:@"merge_branch"
-                                                      argument:[fromBranch name]
-                                                         error:&error
-                                                    usingBlock:^GCReferenceTransform*(GCLiveRepository* repository, NSError** outError1) {
-                                                      NSString *mergeMessage = [NSString stringWithFormat:NSLocalizedString(@"Merge %@ into %@", nil), fromBranch, intoBranch.name];
-                                                      return [repository.history mergeCommit:fromBranch.tipCommit intoBranch:intoBranch withAncestorCommit:ancestorCommit message:mergeMessage conflictHandler:^GCCommit*(GCIndex* index, GCCommit* ourCommit, GCCommit* theirCommit, NSArray* parentCommits, NSString* message2, NSError** outError2) {
-                                                        
-                                                        return [self resolveConflictsWithResolver:self.delegate index:index ourCommit:ourCommit theirCommit:theirCommit parentCommits:parentCommits message:message2 error:outError2];
-                                                        
-                                                      } newCommit:&newCommit error:outError1];
-                                                      
-                                                    }]) {
-                                                      [self selectCommit:newCommit];
-                                                      return YES;
-                                                    } else {
-                                                      [self presentError:error];
-                                                      return NO;
-                                                    }
+      return [self gitFlowMergeFrom:fromBranch intoBranch:intoBranch ancestor:commit];
     }
   }
 }
