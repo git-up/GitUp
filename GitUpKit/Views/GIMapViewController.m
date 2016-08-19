@@ -680,7 +680,6 @@ static NSColor* _patternColor = nil;
                                           NSStringFromSelector(@selector(gitFlowStartFeature:)),
                                           NSStringFromSelector(@selector(gitFlowStartHotfix:)),
                                           NSStringFromSelector(@selector(gitFlowInitialize:)),
-                                          NSStringFromSelector(@selector(gitFlowAbout:)),
                                           ];
   if (item.action == @selector(gitFlowInitialize:)) {
     return YES;
@@ -1173,10 +1172,6 @@ static NSColor* _patternColor = nil;
 
 - (IBAction)gitFlowStartHotfix:(id)sender {
   [self startGitFlowAction: GIGitFlowActionHotfix];
-}
-
-- (IBAction)gitFlowAbout:(id)sender {
-  
 }
 
 #pragma mark - Contextual Menu Actions

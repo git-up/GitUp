@@ -34,6 +34,8 @@
 @property(nonatomic, weak) IBOutlet NSTextField* versionTextField;
 @property(nonatomic, weak) IBOutlet NSTextField* copyrightTextField;
 
+@property(nonatomic, strong) IBOutlet NSPanel* gitFlowAboutPanel;
+
 @property(nonatomic, strong) IBOutlet NSWindow* welcomeWindow;
 @property(nonatomic, weak) IBOutlet NSPopUpButton* recentPopUpButton;
 @property(nonatomic, weak) IBOutlet GILinkButton* twitterButton;

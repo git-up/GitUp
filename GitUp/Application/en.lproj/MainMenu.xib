@@ -468,6 +468,7 @@ You must close and reopen any opened repositories in GitUp after changing this s
                 <outlet property="cloneWindow" destination="6SP-eN-0Kv" id="Bd8-7b-vpr"/>
                 <outlet property="copyrightTextField" destination="c4g-uo-jg9" id="l3W-uq-nyp"/>
                 <outlet property="forumsButton" destination="ozw-os-Nc4" id="DU4-lD-lmd"/>
+                <outlet property="gitFlowAboutPanel" destination="VXd-Ip-5Pb" id="So1-sh-uo5"/>
                 <outlet property="preferencesTabView" destination="anN-jw-l7x" id="zP7-18-Z2X"/>
                 <outlet property="preferencesToolbar" destination="YkS-ea-UXD" id="eZX-nc-ex8"/>
                 <outlet property="preferencesWindow" destination="3qV-q4-a6k" id="yO6-yX-KBA"/>
@@ -763,7 +764,7 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                         <menuItem title="About Git flow" id="Tzf-Cg-jDI">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
-                                                <action selector="gitFlowAbout:" target="-1" id="2uz-th-uBc"/>
+                                                <action selector="showGitFlowAboutPanel:" target="Voe-Tx-rLC" id="be3-un-Exd"/>
                                             </connections>
                                         </menuItem>
                                     </items>
@@ -1223,6 +1224,7 @@ UI design by Wayne Fan</string>
                         </view>
                         <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
                         <color key="fillColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <font key="titleFont" metaFont="message" size="11"/>
                     </box>
                     <box verticalHuggingPriority="750" title="Box" boxType="separator" titlePosition="noTitle" id="FXE-km-lcD">
                         <rect key="frame" x="0.0" y="85" width="280" height="5"/>
@@ -1255,6 +1257,7 @@ UI design by Wayne Fan</string>
                         </view>
                         <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
                         <color key="fillColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <font key="titleFont" metaFont="message" size="11"/>
                     </box>
                     <box verticalHuggingPriority="750" title="Box" boxType="separator" titlePosition="noTitle" id="3Ya-QW-NlZ">
                         <rect key="frame" x="0.0" y="49" width="280" height="5"/>
@@ -1310,16 +1313,80 @@ UI design by Wayne Fan</string>
             <point key="canvasLocation" x="-252" y="578.5"/>
         </window>
         <userDefaultsController representsSharedInstance="YES" id="AR1-cq-KNa"/>
-        <window title="Git flow Initialization" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="VXd-Ip-5Pb">
-            <windowStyleMask key="styleMask" titled="YES"/>
+        <window title="About Git Flow" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="VXd-Ip-5Pb" customClass="GitFlowAboutPanel">
+            <windowStyleMask key="styleMask" titled="YES" closable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="109" y="138" width="480" height="270"/>
+            <rect key="contentRect" x="432" y="299" width="400" height="250"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1280" height="800"/>
             <view key="contentView" id="gHw-Kk-987">
-                <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
+                <rect key="frame" x="0.0" y="0.0" width="400" height="250"/>
                 <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="Xhn-GZ-WMa">
+                        <rect key="frame" x="22" y="176" width="356" height="63"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" enabled="NO" sendsActionOnEndEditing="YES" alignment="center" title="Git Flow is really useful model for working with git. But Git Flow here contains few changes from standart Git Flow." id="H3w-eo-Qi1">
+                            <font key="font" metaFont="system" size="14"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="ssc-7o-lgP">
+                        <rect key="frame" x="28" y="72" width="258" height="36"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" enabled="NO" sendsActionOnEndEditing="YES" alignment="left" title="Read more about changes you can here:" id="QbQ-bJ-Tnv">
+                            <font key="font" size="13" name=".AppleSystemUIFont"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="DVq-wp-c9p">
+                        <rect key="frame" x="182" y="6" width="200" height="17"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Added this feature for you by AlexIzh" id="o55-JI-cd6">
+                            <font key="font" metaFont="smallSystem"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="lKB-bY-JH0">
+                        <rect key="frame" x="28" y="109" width="258" height="33"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" enabled="NO" sendsActionOnEndEditing="YES" alignment="left" title="Read more about Git Flow you can here:" id="0bY-wr-6dj">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <button verticalHuggingPriority="750" id="uV1-HT-nou">
+                        <rect key="frame" x="276" y="89" width="117" height="19"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="roundRect" title="Changes" bezelStyle="roundedRect" alignment="center" inset="2" id="7d7-j0-pQR">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="cellTitle"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="changesAction:" target="VXd-Ip-5Pb" id="d2v-CZ-CXH"/>
+                        </connections>
+                    </button>
+                    <button verticalHuggingPriority="750" id="GFR-vz-Xbh">
+                        <rect key="frame" x="276" y="123" width="117" height="19"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="roundRect" title="Git Flow" bezelStyle="roundedRect" alignment="center" inset="2" id="cB7-p3-eus">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="cellTitle"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="gitFlowAction:" target="VXd-Ip-5Pb" id="dec-2I-Q9o"/>
+                        </connections>
+                    </button>
+                </subviews>
             </view>
-            <point key="canvasLocation" x="604" y="83"/>
+            <connections>
+                <outlet property="changesButton" destination="uV1-HT-nou" id="k1N-w5-Gfo"/>
+                <outlet property="gitFlowButton" destination="GFR-vz-Xbh" id="loS-58-dP0"/>
+            </connections>
+            <point key="canvasLocation" x="504" y="432"/>
         </window>
     </objects>
     <resources>
