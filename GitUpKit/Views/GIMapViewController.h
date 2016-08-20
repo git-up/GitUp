@@ -66,14 +66,12 @@ extern GIGitFlowConfigKey const GIGitFlowPrefixVersionTag;
 - (IBAction)pushCurrentBranch:(id)sender;
 
 // GitFlow
-- (IBAction)gitFlowInitialize:(id)sender;
 - (IBAction)gitFlowFinishCurrentAction:(id)sender;
 - (IBAction)gitFlowFinishSelectedAction:(id)sender;
 - (IBAction)gitFlowStartFeature:(id)sender;
 - (IBAction)gitFlowStartImprovement:(id)sender;
 - (IBAction)gitFlowStartRelease:(id)sender;
 - (IBAction)gitFlowStartHotfix:(id)sender;
-- (IBAction)gitFlowAbout:(id)sender;
 
 
 @end
