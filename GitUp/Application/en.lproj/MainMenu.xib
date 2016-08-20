@@ -718,9 +718,9 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="euH-Hm-yiK"/>
-                            <menuItem title="Git flow..." id="Nco-F9-shO">
+                            <menuItem title="Git Flow" id="Nco-F9-shO">
                                 <modifierMask key="keyEquivalentModifierMask"/>
-                                <menu key="submenu" title="Git flow..." id="Jjx-rh-W6S">
+                                <menu key="submenu" title="Git Flow" id="Jjx-rh-W6S">
                                     <items>
                                         <menuItem title="Initialize" id="JM9-X8-aqI">
                                             <modifierMask key="keyEquivalentModifierMask"/>
@@ -761,7 +761,7 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="im6-Xj-t0C"/>
-                                        <menuItem title="About Git flow" id="Tzf-Cg-jDI">
+                                        <menuItem title="About Git Flow" id="Tzf-Cg-jDI">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="showGitFlowAboutPanel:" target="Voe-Tx-rLC" id="be3-un-Exd"/>
