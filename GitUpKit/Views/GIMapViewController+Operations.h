@@ -35,6 +35,7 @@
 - (void)editCommitMessage:(GCHistoryCommit*)commit;
 
 - (void)createLocalBranchAtCommit:(GCHistoryCommit*)commit withName:(NSString*)name checkOut:(BOOL)checkOut;
+- (BOOL)createLocalBranchAtCommit:(GCHistoryCommit*)commit withName:(NSString*)name checkOut:(BOOL)checkOut error:(NSError **)error;
 - (void)deleteLocalBranch:(GCHistoryLocalBranch*)branch;
 - (void)setName:(NSString*)name forLocalBranch:(GCHistoryLocalBranch*)branch;
 - (void)setTipCommit:(GCHistoryCommit*)commit forLocalBranch:(GCHistoryLocalBranch*)branch;

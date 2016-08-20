@@ -422,26 +422,29 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
 #pragma mark - Local Branches
 
 // This will abort on conflicts in workdir or index so there's no need to require a clean repo
-- (void)createLocalBranchAtCommit:(GCHistoryCommit*)commit withName:(NSString*)name checkOut:(BOOL)checkOut {
-  NSError* error;
+- (BOOL)createLocalBranchAtCommit:(GCHistoryCommit*)commit withName:(NSString*)name checkOut:(BOOL)checkOut error:(NSError **)error {
   [self.repository setUndoActionName:[NSString stringWithFormat:NSLocalizedString(@"Create Branch \"%@\"", nil), name]];
-  if (![self.repository performOperationWithReason:@"create_branch"
+  return [self.repository performOperationWithReason:@"create_branch"
                                           argument:name
                                 skipCheckoutOnUndo:NO
-                                             error:&error
+                                             error:error
                                         usingBlock:^BOOL(GCLiveRepository* repository, NSError** outError) {
-    
-    GCLocalBranch* branch = [repository createLocalBranchFromCommit:commit withName:name force:NO error:outError];
-    if (branch == nil) {
-      return NO;
-    }
-    if (checkOut && ![repository checkoutLocalBranch:branch options:kGCCheckoutOption_UpdateSubmodulesRecursively error:outError]) {
-      [repository deleteLocalBranch:branch error:NULL];  // Ignore errors
-      return NO;
-    }
-    return YES;
-    
-  }]) {
+                                          
+                                          GCLocalBranch* branch = [repository createLocalBranchFromCommit:commit withName:name force:NO error:outError];
+                                          if (branch == nil) {
+                                            return NO;
+                                          }
+                                          if (checkOut && ![repository checkoutLocalBranch:branch options:kGCCheckoutOption_UpdateSubmodulesRecursively error:outError]) {
+                                            [repository deleteLocalBranch:branch error:NULL];  // Ignore errors
+                                            return NO;
+                                          }
+                                          return YES;
+                                          
+  }];
+}
+- (void)createLocalBranchAtCommit:(GCHistoryCommit*)commit withName:(NSString*)name checkOut:(BOOL)checkOut {
+  NSError* error;
+  if (![self createLocalBranchAtCommit:commit withName:name checkOut:checkOut error:&error]) {
     [self presentError:error];
   }
 }

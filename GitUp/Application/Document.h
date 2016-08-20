@@ -14,6 +14,7 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #import <AppKit/AppKit.h>
+#import "GitFlowInitWindow.h"
 
 typedef NS_ENUM(NSUInteger, CloneMode) {
   kCloneMode_None = 0,
@@ -96,6 +97,8 @@ typedef NS_ENUM(NSUInteger, WindowModeID) {
 
 @property(nonatomic, strong) IBOutlet NSWindow* settingsWindow;
 @property(nonatomic, weak) IBOutlet NSButton* indexDiffsButton;
+
+@property(nonatomic, strong) IBOutlet GitFlowInitWindow* gitFlowInitWindow;
 
 @property(nonatomic) CloneMode cloneMode;
 @property(nonatomic, readonly) NSString* windowMode;

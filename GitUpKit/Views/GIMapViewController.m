@@ -35,15 +35,13 @@
 #define kPersistentViewStateKey_HideTagLabels kPersistentViewStateKeyNamespace @"HideTagLabels"
 #define kPersistentViewStateKey_ShowBranchLabels kPersistentViewStateKeyNamespace @"ShowBranchLabels"
 
-typedef NSString* GIGitFlowConfigKey;
-
-static GIGitFlowConfigKey const GIGitFlowBranchDevelop = @"gitflow.branch.develop";
-static GIGitFlowConfigKey const GIGitFlowBranchMaster = @"gitflow.branch.master";
-static GIGitFlowConfigKey const GIGitFlowPrefixFeature = @"gitflow.prefix.feature";
-static GIGitFlowConfigKey const GIGitFlowPrefixRelease = @"gitflow.prefix.release";
-static GIGitFlowConfigKey const GIGitFlowPrefixHotfix = @"gitflow.prefix.hotfix";
-static GIGitFlowConfigKey const GIGitFlowPrefixImprovement = @"gitflow.prefix.improvement";
-static GIGitFlowConfigKey const GIGitFlowPrefixVersionTag = @"gitflow.prefix.versiontag";
+GIGitFlowConfigKey const GIGitFlowBranchDevelop = @"gitflow.branch.develop";
+GIGitFlowConfigKey const GIGitFlowBranchMaster = @"gitflow.branch.master";
+GIGitFlowConfigKey const GIGitFlowPrefixFeature = @"gitflow.prefix.feature";
+GIGitFlowConfigKey const GIGitFlowPrefixRelease = @"gitflow.prefix.release";
+GIGitFlowConfigKey const GIGitFlowPrefixHotfix = @"gitflow.prefix.hotfix";
+GIGitFlowConfigKey const GIGitFlowPrefixImprovement = @"gitflow.prefix.improvement";
+GIGitFlowConfigKey const GIGitFlowPrefixVersionTag = @"gitflow.prefix.versiontag";
 
 typedef NS_ENUM(NSInteger, GIGitFlowAction) {
   GIGitFlowActionFeature = 1,
@@ -679,11 +677,7 @@ static NSColor* _patternColor = nil;
                                           NSStringFromSelector(@selector(gitFlowStartImprovement:)),
                                           NSStringFromSelector(@selector(gitFlowStartFeature:)),
                                           NSStringFromSelector(@selector(gitFlowStartHotfix:)),
-                                          NSStringFromSelector(@selector(gitFlowInitialize:)),
                                           ];
-  if (item.action == @selector(gitFlowInitialize:)) {
-    return YES;
-  }
   if (item.action == @selector(gitFlowFinishCurrentAction:)) {
     GCHistoryLocalBranch *currentBranch = self.repository.history.HEADBranch;
     GIGitFlowAction action;
@@ -1152,10 +1146,6 @@ static NSColor* _patternColor = nil;
     return;
   }
   [self finishGitFlowActionInBranch:currentBranch];
-}
-
-- (IBAction)gitFlowInitialize:(id)sender {
-  
 }
 
 - (IBAction)gitFlowStartFeature:(id)sender {

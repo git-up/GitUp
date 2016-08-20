@@ -725,7 +725,7 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                         <menuItem title="Initialize" id="JM9-X8-aqI">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
-                                                <action selector="gitFlowInitialize:" target="-1" id="v5r-Av-6Ul"/>
+                                                <action selector="gitFlowInitialize:" target="-1" id="plm-2c-bGb"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="vkR-Th-c6n"/>
@@ -1224,7 +1224,6 @@ UI design by Wayne Fan</string>
                         </view>
                         <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
                         <color key="fillColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                        <font key="titleFont" metaFont="message" size="11"/>
                     </box>
                     <box verticalHuggingPriority="750" title="Box" boxType="separator" titlePosition="noTitle" id="FXE-km-lcD">
                         <rect key="frame" x="0.0" y="85" width="280" height="5"/>
@@ -1257,7 +1256,6 @@ UI design by Wayne Fan</string>
                         </view>
                         <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
                         <color key="fillColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                        <font key="titleFont" metaFont="message" size="11"/>
                     </box>
                     <box verticalHuggingPriority="750" title="Box" boxType="separator" titlePosition="noTitle" id="3Ya-QW-NlZ">
                         <rect key="frame" x="0.0" y="49" width="280" height="5"/>

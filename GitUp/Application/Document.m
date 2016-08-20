@@ -1771,6 +1771,9 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
   if (item.action == @selector(openGitFlowMenu:)) {
     return isMapWindowMode;
   }
+  if (item.action == @selector(gitFlowInitialize:)) {
+    return YES;
+  }
   
   return [super validateUserInterfaceItem:item];
 }
@@ -2095,5 +2098,59 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 }
 
 - (IBAction)openGitFlowMenu:(id)sender {}
+
+- (IBAction)gitFlowInitialize:(id)sender {
+  [NSApp beginSheet:_gitFlowInitWindow modalForWindow:_mainWindow modalDelegate:nil didEndSelector:NULL contextInfo:NULL];
+}
+- (IBAction)gitFlowDoneInit:(id)sender {
+  [NSApp endSheet:_gitFlowInitWindow];
+  [_gitFlowInitWindow orderOut:nil];
+  
+  NSString *masterBranchName = self.gitFlowInitWindow.masterBranchField.stringValue;
+  NSString *developBranchName = self.gitFlowInitWindow.developBranchField.stringValue;
+  NSError *error = nil;
+  if ([_repository writeConfigOptionForLevel:kGCConfigLevel_Local variable:GIGitFlowBranchMaster withValue:masterBranchName error:&error] == NO) {
+    [self presentError:error];
+    return;
+  }
+  if ([_repository writeConfigOptionForLevel:kGCConfigLevel_Local variable:GIGitFlowBranchDevelop withValue:developBranchName error:&error] == NO) {
+    [self presentError:error];
+    return;
+  }
+  if ([_repository writeConfigOptionForLevel:kGCConfigLevel_Local variable:GIGitFlowPrefixFeature withValue:self.gitFlowInitWindow.featurePrefixField.stringValue error:&error] == NO) {
+    [self presentError:error];
+    return;
+  }
+  if ([_repository writeConfigOptionForLevel:kGCConfigLevel_Local variable:GIGitFlowPrefixHotfix withValue:self.gitFlowInitWindow.hotfixPrefixField.stringValue error:&error] == NO) {
+    [self presentError:error];
+    return;
+  }
+  if ([_repository writeConfigOptionForLevel:kGCConfigLevel_Local variable:GIGitFlowPrefixRelease withValue:self.gitFlowInitWindow.releasePrefixField.stringValue error:&error] == NO) {
+    [self presentError:error];
+    return;
+  }
+  if ([_repository writeConfigOptionForLevel:kGCConfigLevel_Local variable:GIGitFlowPrefixImprovement withValue:self.gitFlowInitWindow.improvementPrefixField.stringValue error:&error] == NO) {
+    [self presentError:error];
+    return;
+  }
+  
+  GCHistoryCommit *commit =  _repository.history.HEADCommit;
+  if (commit == nil) {
+    NSString *message = @"You should run `git init` before and you should have at least one commit in repository.";
+    [_windowController showOverlayWithStyle:kGIOverlayStyle_Informational message:NSLocalizedString(message, nil)];
+    return;
+  }
+  if (![_mapViewController createLocalBranchAtCommit:commit withName:masterBranchName checkOut:YES error:&error]) {
+    if (error.code != -4) { [self presentError:error]; }// Sorry for the magic -4 number. -4 is error code when branch exists already. 
+  }
+  if (![_mapViewController createLocalBranchAtCommit:commit withName:developBranchName checkOut:YES error:&error]) {
+    if (error.code != -4) { [self presentError:error]; }
+  }
+}
+
+- (IBAction)gitFlowCancelInit:(id)sender {
+  [NSApp endSheet:_gitFlowInitWindow];
+  [_gitFlowInitWindow orderOut:nil];
+}
 
 @end
