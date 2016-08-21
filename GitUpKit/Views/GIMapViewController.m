@@ -40,13 +40,11 @@ GIGitFlowConfigKey const GIGitFlowBranchMaster = @"gitflow.branch.master";
 GIGitFlowConfigKey const GIGitFlowPrefixFeature = @"gitflow.prefix.feature";
 GIGitFlowConfigKey const GIGitFlowPrefixRelease = @"gitflow.prefix.release";
 GIGitFlowConfigKey const GIGitFlowPrefixHotfix = @"gitflow.prefix.hotfix";
-GIGitFlowConfigKey const GIGitFlowPrefixImprovement = @"gitflow.prefix.improvement";
 GIGitFlowConfigKey const GIGitFlowPrefixVersionTag = @"gitflow.prefix.versiontag";
 
 typedef NS_ENUM(NSInteger, GIGitFlowAction) {
   GIGitFlowActionFeature = 1,
   GIGitFlowActionRelease,
-  GIGitFlowActionImprovement,
   GIGitFlowActionHotfix
 };
 
@@ -674,7 +672,6 @@ static NSColor* _patternColor = nil;
   
   NSArray<NSString *> *gitFlowActions = @[
                                           NSStringFromSelector(@selector(gitFlowStartRelease:)),
-                                          NSStringFromSelector(@selector(gitFlowStartImprovement:)),
                                           NSStringFromSelector(@selector(gitFlowStartFeature:)),
                                           NSStringFromSelector(@selector(gitFlowStartHotfix:)),
                                           ];
@@ -700,11 +697,6 @@ static NSColor* _patternColor = nil;
       case GIGitFlowActionFeature:
         title = NSLocalizedString(@"Finish Feature", nil);
         break;
-        
-      case GIGitFlowActionImprovement:
-        title = NSLocalizedString(@"Finish Improvement", nil);
-        break;
-
     }
     i.title = title;
     i.hidden = NO;
@@ -775,11 +767,6 @@ static NSColor* _patternColor = nil;
       case GIGitFlowActionFeature:
         title = NSLocalizedString(@"Finish Feature", nil);
         break;
-        
-      case GIGitFlowActionImprovement:
-        title = NSLocalizedString(@"Finish Improvement", nil);
-        break;
-        
     }
     i.title = title;
     i.hidden = NO;
@@ -950,12 +937,6 @@ static NSColor* _patternColor = nil;
       branchConfigKey = GIGitFlowBranchDevelop;
       prefixConfigKey = GIGitFlowPrefixRelease;
       break;
-      
-    case GIGitFlowActionImprovement:
-      actionName = NSLocalizedString(@"IMPROVEMENT", nil);
-      branchConfigKey = GIGitFlowBranchDevelop;
-      prefixConfigKey = GIGitFlowPrefixImprovement;
-      break;
   }
   NSError *error = nil;
   GCConfigOption *branchOption = [self.repository readConfigOptionForVariable:branchConfigKey error:&error];
@@ -999,8 +980,7 @@ static NSColor* _patternColor = nil;
   NSDictionary<NSString *, NSNumber *> *prefixes = @{
                                                      GIGitFlowPrefixHotfix: @(GIGitFlowActionHotfix),
                                                      GIGitFlowPrefixFeature: @(GIGitFlowActionFeature),
-                                                     GIGitFlowPrefixRelease: @(GIGitFlowActionRelease),
-                                                     GIGitFlowPrefixImprovement: @(GIGitFlowActionImprovement)
+                                                     GIGitFlowPrefixRelease: @(GIGitFlowActionRelease)
                                                      };
   
   for (NSString *key in prefixes.allKeys) {
@@ -1154,10 +1134,6 @@ static NSColor* _patternColor = nil;
 
 - (IBAction)gitFlowStartFeature:(id)sender {
   [self startGitFlowAction: GIGitFlowActionFeature];
-}
-
-- (IBAction)gitFlowStartImprovement:(id)sender {
-  [self startGitFlowAction: GIGitFlowActionImprovement];
 }
 
 - (IBAction)gitFlowStartRelease:(id)sender {

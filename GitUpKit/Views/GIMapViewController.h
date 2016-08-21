@@ -26,7 +26,6 @@ extern GIGitFlowConfigKey const GIGitFlowBranchMaster;
 extern GIGitFlowConfigKey const GIGitFlowPrefixFeature;
 extern GIGitFlowConfigKey const GIGitFlowPrefixRelease;
 extern GIGitFlowConfigKey const GIGitFlowPrefixHotfix;
-extern GIGitFlowConfigKey const GIGitFlowPrefixImprovement;
 extern GIGitFlowConfigKey const GIGitFlowPrefixVersionTag;
 
 @protocol GIMapViewControllerDelegate <GIMergeConflictResolver>
@@ -69,7 +68,6 @@ extern GIGitFlowConfigKey const GIGitFlowPrefixVersionTag;
 - (IBAction)gitFlowFinishCurrentAction:(id)sender;
 - (IBAction)gitFlowFinishSelectedAction:(id)sender;
 - (IBAction)gitFlowStartFeature:(id)sender;
-- (IBAction)gitFlowStartImprovement:(id)sender;
 - (IBAction)gitFlowStartRelease:(id)sender;
 - (IBAction)gitFlowStartHotfix:(id)sender;
 

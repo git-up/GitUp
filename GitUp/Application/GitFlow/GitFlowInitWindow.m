@@ -23,7 +23,6 @@
                                      self.masterBranchField,
                                      self.developBranchField,
                                      self.featurePrefixField,
-                                     self.improvementPrefixField,
                                      self.releasePrefixField,
                                      self.hotfixPrefixField
                                      ];

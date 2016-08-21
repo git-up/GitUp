@@ -17,7 +17,6 @@
 @property (nonatomic, strong) IBOutlet NSTextField *developBranchField;
 
 @property (nonatomic, strong) IBOutlet NSTextField *featurePrefixField;
-@property (nonatomic, strong) IBOutlet NSTextField *improvementPrefixField;
 @property (nonatomic, strong) IBOutlet NSTextField *releasePrefixField;
 @property (nonatomic, strong) IBOutlet NSTextField *hotfixPrefixField;
 @property (nonatomic, strong) IBOutlet NSTextField *tagVersionPrefixField;

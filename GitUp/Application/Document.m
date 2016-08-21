@@ -2129,10 +2129,6 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
     [self presentError:error];
     return;
   }
-  if ([_repository writeConfigOptionForLevel:kGCConfigLevel_Local variable:GIGitFlowPrefixImprovement withValue:self.gitFlowInitWindow.improvementPrefixField.stringValue error:&error] == NO) {
-    [self presentError:error];
-    return;
-  }
   if ([_repository writeConfigOptionForLevel:kGCConfigLevel_Local variable:GIGitFlowPrefixVersionTag withValue:self.gitFlowInitWindow.tagVersionPrefixField.stringValue error:&error] == NO) {
     [self presentError:error];
     return;
