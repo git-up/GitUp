@@ -2133,8 +2133,12 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
     [self presentError:error];
     return;
   }
+  if ([_repository writeConfigOptionForLevel:kGCConfigLevel_Local variable:GIGitFlowPrefixVersionTag withValue:self.gitFlowInitWindow.tagVersionPrefixField.stringValue error:&error] == NO) {
+    [self presentError:error];
+    return;
+  }
   
-  GCHistoryCommit *commit =  _repository.history.HEADCommit;
+  GCHistoryCommit *commit = _repository.history.HEADCommit;
   if (commit == nil) {
     NSString *message = @"You should run `git init` before and you should have at least one commit in repository.";
     [_windowController showOverlayWithStyle:kGIOverlayStyle_Informational message:NSLocalizedString(message, nil)];

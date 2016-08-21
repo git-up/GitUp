@@ -20,5 +20,6 @@
 @property (nonatomic, strong) IBOutlet NSTextField *improvementPrefixField;
 @property (nonatomic, strong) IBOutlet NSTextField *releasePrefixField;
 @property (nonatomic, strong) IBOutlet NSTextField *hotfixPrefixField;
+@property (nonatomic, strong) IBOutlet NSTextField *tagVersionPrefixField;
 
 @end

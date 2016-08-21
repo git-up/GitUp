@@ -1121,6 +1121,10 @@ static NSColor* _patternColor = nil;
     if (tagName.length > 0) {
       GCCommit *commit = [self.repository lookupTipCommitForBranch:branch error:nil];
       GCHistoryCommit *historyCommit = [self.repository.history historyCommitForCommit:commit];
+      GCConfigOption *option = [self.repository readConfigOptionForVariable:GIGitFlowPrefixVersionTag error:nil];
+      if (option != nil) {
+        tagName = [NSString stringWithFormat:@"%@%@", option.value, tagName];
+      }
       [self createTagAtCommit:historyCommit withName:tagName message:tagMessage];
     }
   }
