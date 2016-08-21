@@ -525,10 +525,6 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
   [_aboutPanel makeKeyAndOrderFront:nil];
 }
 
-- (IBAction)showGitFlowAboutPanel:(id)sender {
-  [_gitFlowAboutPanel makeKeyAndOrderFront:nil];
-}
-
 - (IBAction)showPreferences:(id)sender {
   [self _updatePreferencePanel];
   [_preferencesWindow makeKeyAndOrderFront:nil];
