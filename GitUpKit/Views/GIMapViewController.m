@@ -1039,7 +1039,7 @@ static NSColor* _patternColor = nil;
                                                   argument:[fromBranch name]
                                                      error:&error
                                                 usingBlock:^GCReferenceTransform*(GCLiveRepository* repository, NSError** outError1) {
-                                                  NSString *mergeMessage = [NSString stringWithFormat:NSLocalizedString(@"Merge %@ into %@", nil), fromBranch, intoBranch.name];
+                                                  NSString *mergeMessage = [NSString stringWithFormat:NSLocalizedString(@"Merge %@ into %@", nil), fromBranch.name, intoBranch.name];
                                                   return [repository.history mergeCommit:fromBranch.tipCommit intoBranch:intoBranch withAncestorCommit:ancestorCommit message:mergeMessage conflictHandler:^GCCommit*(GCIndex* index, GCCommit* ourCommit, GCCommit* theirCommit, NSArray* parentCommits, NSString* message2, NSError** outError2) {
                                                     
                                                     return [self resolveConflictsWithResolver:self.delegate index:index ourCommit:ourCommit theirCommit:theirCommit parentCommits:parentCommits message:message2 error:outError2];
