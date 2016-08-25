@@ -107,6 +107,7 @@
     kUserDefaultsKey_FirstLaunch: @(YES),
     kUserDefaultsKey_DiffWhitespaceMode: @(kGCLiveRepositoryDiffWhitespaceMode_Normal),
     kUserDefaultsKey_EnableVisualEffects: @(NO),
+    kUserDefaultsKey_ShowWelcomeWindow: @(YES),
   };
   [[NSUserDefaults standardUserDefaults] registerDefaults:defaults];
 }
@@ -313,7 +314,8 @@
 }
 
 - (void)handleDocumentCountChanged {
-  if ((_allowWelcome > 0) && ![[[NSDocumentController sharedDocumentController] documents] count]) {
+  BOOL showWelcomeWindow = [[NSUserDefaults standardUserDefaults] boolForKey:kUserDefaultsKey_ShowWelcomeWindow];
+  if (showWelcomeWindow && (_allowWelcome > 0) && ![[[NSDocumentController sharedDocumentController] documents] count]) {
     if (!_welcomeWindow.visible) {
       [_welcomeWindow makeKeyAndOrderFront:nil];
     }
