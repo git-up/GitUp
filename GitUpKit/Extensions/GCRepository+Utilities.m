@@ -512,7 +512,7 @@ NSString* GCNameFromHostingService(GCHostingService service) {
 }
 
 - (BOOL)safeDeleteFileIfExists:(NSString*)path error:(NSError**)error {
-  return ![[NSFileManager defaultManager] fileExistsAtPath:[self absolutePathForFile:path]] || [self safeDeleteFile:path error:error];
+  return ![[NSFileManager defaultManager] fileExistsAtPath:[self absolutePathForFile:path] followLastSymlink:NO] || [self safeDeleteFile:path error:error];
 }
 
 - (NSMutableDictionary*)_readUserInfo {

@@ -94,7 +94,7 @@
   XCTAssertTrue([self.repository addFileToIndex:@"file1" error:NULL]);
   [self updateFileAtPath:@"file2" withString:@"2"];
   XCTAssertTrue([self.repository cleanWorkingDirectory:NULL]);
-  XCTAssertTrue([[NSFileManager defaultManager] fileExistsAtPath:[self.repository.workingDirectoryPath stringByAppendingPathComponent:@"file1"]]);
+  XCTAssertTrue([[NSFileManager defaultManager] fileExistsAtPath:[self.repository.workingDirectoryPath stringByAppendingPathComponent:@"file1"] followLastSymlink:NO]);
   XCTAssertFalse([[NSFileManager defaultManager] fileExistsAtPath:[self.repository.workingDirectoryPath stringByAppendingPathComponent:@"file2"]]);
 }
 

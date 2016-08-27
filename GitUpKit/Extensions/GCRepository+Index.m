@@ -116,7 +116,7 @@
   if (index == nil) {
     return NO;
   }
-  if ([[NSFileManager defaultManager] fileExistsAtPath:[self absolutePathForFile:path]] && ![self addFileInWorkingDirectory:path toIndex:index error:error]) {
+  if ([[NSFileManager defaultManager] fileExistsAtPath:[self absolutePathForFile:path] followLastSymlink:NO] && ![self addFileInWorkingDirectory:path toIndex:index error:error]) {
     return NO;
   }
   return [self clearConflictForFile:path inIndex:index error:error] && [self writeRepositoryIndex:index error:error];

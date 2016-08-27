@@ -562,7 +562,7 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
   if ([savePanel runModal] == NSFileHandlingPanelOKButton) {
     NSString* path = savePanel.URL.path;
     NSError* error;
-    if (![[NSFileManager defaultManager] fileExistsAtPath:path] || [[NSFileManager defaultManager] moveItemAtPathToTrash:path error:&error]) {
+    if (![[NSFileManager defaultManager] fileExistsAtPath:path followLastSymlink:NO] || [[NSFileManager defaultManager] moveItemAtPathToTrash:path error:&error]) {
       GCRepository* repository = [[GCRepository alloc] initWithNewLocalRepository:path bare:NO error:&error];
       if (repository) {
         [self _openRepositoryWithURL:[NSURL fileURLWithPath:repository.workingDirectoryPath] withCloneMode:kCloneMode_None windowModeID:NSNotFound];
@@ -593,7 +593,7 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
       if ([savePanel runModal] == NSFileHandlingPanelOKButton) {
         NSString* path = savePanel.URL.path;
         NSError* error;
-        if (![[NSFileManager defaultManager] fileExistsAtPath:path] || [[NSFileManager defaultManager] moveItemAtPathToTrash:path error:&error]) {
+        if (![[NSFileManager defaultManager] fileExistsAtPath:path followLastSymlink:NO] || [[NSFileManager defaultManager] moveItemAtPathToTrash:path error:&error]) {
           GCRepository* repository = [[GCRepository alloc] initWithNewLocalRepository:path bare:NO error:&error];
           if (repository) {
             if ([repository addRemoteWithName:@"origin" url:url error:&error]) {
