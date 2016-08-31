@@ -14,6 +14,7 @@ find "GitUpKit/Extensions" -type f -iname *.h -o  -iname *.m | xargs clang-forma
 find "GitUpKit/Interface" -type f -iname *.h -o  -iname *.m | xargs clang-format -style=file -i
 find "GitUpKit/Utilities" -type f -iname *.h -o  -iname *.m | xargs clang-format -style=file -i
 find "GitUpKit/Views" -type f -iname *.h -o  -iname *.m | xargs clang-format -style=file -i
+perl -p -i -e "s|AppKit / AppKit|AppKit/AppKit|g" "GitUpKit/Interface/GIInterface.h"
 
 find "GitUp/Application" -type f -iname *.h -o  -iname *.m | xargs clang-format -style=file -i
 find "GitUp/Tool" -type f -iname *.h -o  -iname *.m | xargs clang-format -style=file -i
