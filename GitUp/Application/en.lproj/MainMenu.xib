@@ -1204,6 +1204,7 @@ UI design by Wayne Fan</string>
                                     <popUpButtonCell key="cell" type="bevel" title="Recently Opened…" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" pullsDown="YES" autoenablesItems="NO" altersStateOfSelectedItem="NO" selectedItem="BnD-OX-t50" id="TkZ-yA-jfp">
                                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                         <font key="font" metaFont="menu"/>
+                                        <string key="keyEquivalent"></string>
                                         <menu key="menu" autoenablesItems="NO" id="SuZ-b2-YNW">
                                             <items>
                                                 <menuItem title="Recently Opened…" state="on" hidden="YES" id="BnD-OX-t50"/>
