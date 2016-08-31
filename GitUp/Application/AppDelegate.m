@@ -24,6 +24,7 @@
 #import "Document.h"
 #import "Common.h"
 #import "ToolProtocol.h"
+#import "GARawTracker.h"
 
 #define __ENABLE_SUDDEN_TERMINATION__ 1
 
@@ -337,6 +338,9 @@
   [Crashlytics startWithAPIKey:@"946dcb56f0db1be8f0c52df6e7d392202a2cc9b2"];
   [[Crashlytics sharedInstance] setDelegate:self];
 #endif
+
+  // Initialize Google Analytics
+  [[GARawTracker sharedTracker] startWithTrackingID:@"UA-83409580-1"];
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification*)notification {
@@ -430,6 +434,8 @@
     _allowWelcome = 1;
   }
   [self handleDocumentCountChanged];
+
+  [[GARawTracker sharedTracker] sendEventWithCategory:@"application" action:@"activate" label:nil value:nil completionBlock:NULL];
 }
 
 #if __ENABLE_SUDDEN_TERMINATION__
