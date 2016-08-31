@@ -112,7 +112,7 @@
 		E222FF7E1B9210F600507E77 /* libcrypto.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcrypto.dylib; path = usr/lib/libcrypto.dylib; sourceTree = SDKROOT; };
 		E24306981B276D0B00CE8CCB /* ToolProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ToolProtocol.h; sourceTree = "<group>"; };
 		E25EBCEA1AA3F8B700D3AF44 /* Application.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Application.xcassets; sourceTree = "<group>"; };
-		E2653D241A5B2FBD006A9871 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = SOURCE_ROOT; };
+		E2653D241A5B2FBD006A9871 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = "Third-Party/Sparkle.framework"; sourceTree = SOURCE_ROOT; };
 		E27E37561B86F670000A551A /* Base.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Base.xcconfig; sourceTree = "<group>"; };
 		E27E37571B86F670000A551A /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		E27E37581B86F670000A551A /* Distribution.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Distribution.xcconfig; sourceTree = "<group>"; };
@@ -137,7 +137,7 @@
 		E2C5672C1A6D98BC00ECFE07 /* WindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WindowController.m; sourceTree = "<group>"; };
 		E2C8C91519FABC5100DA54AA /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/Document.xib; sourceTree = "<group>"; };
 		E2C8C91619FABC5100DA54AA /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
-		E2F6AA091A7EED74002DBF56 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = SOURCE_ROOT; };
+		E2F6AA091A7EED74002DBF56 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Crashlytics.framework; path = "Third-Party/Crashlytics.framework"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -543,7 +543,7 @@
 				BUNDLE_VERSION = 0;
 				BUNDLE_VERSION_STRING = 1.0.6;
 				CODE_SIGN_IDENTITY = "Mac Developer";
-				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)";
+				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/Third-Party";
 				GCC_DYNAMIC_NO_PIC = YES;
 				INFOPLIST_FILE = Application/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
@@ -560,7 +560,7 @@
 				BUNDLE_VERSION = 0;
 				BUNDLE_VERSION_STRING = 1.0.6;
 				CODE_SIGN_IDENTITY = "Mac Developer";
-				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)";
+				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/Third-Party";
 				GCC_DYNAMIC_NO_PIC = YES;
 				INFOPLIST_FILE = Application/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
@@ -585,7 +585,7 @@
 				BUNDLE_VERSION = 0;
 				BUNDLE_VERSION_STRING = 1.0.6;
 				CODE_SIGN_IDENTITY = "Developer ID Application";
-				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)";
+				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/Third-Party";
 				GCC_DYNAMIC_NO_PIC = YES;
 				INFOPLIST_FILE = Application/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
