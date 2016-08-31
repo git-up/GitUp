@@ -35,7 +35,8 @@
 		E2C5672D1A6D98BC00ECFE07 /* WindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C5672C1A6D98BC00ECFE07 /* WindowController.m */; };
 		E2E3C9A01D771E7600AA9A62 /* GARawTracker.m in Sources */ = {isa = PBXBuildFile; fileRef = E2E3C99F1D771E7600AA9A62 /* GARawTracker.m */; };
 		E2E3C9A21D771E9D00AA9A62 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2E3C9A11D771E9D00AA9A62 /* SystemConfiguration.framework */; };
-		E2F6AA0A1A7EED89002DBF56 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2F6AA091A7EED74002DBF56 /* Crashlytics.framework */; };
+		E2E3C9A41D77227F00AA9A62 /* HockeySDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2E3C9A31D77227F00AA9A62 /* HockeySDK.framework */; };
+		E2E3C9A51D77228F00AA9A62 /* HockeySDK.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = E2E3C9A31D77227F00AA9A62 /* HockeySDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -96,6 +97,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				E267E1F31B84D93300BAB377 /* Sparkle.framework in Copy Frameworks */,
+				E2E3C9A51D77228F00AA9A62 /* HockeySDK.framework in Copy Frameworks */,
 				E28A16E61B87023C00218332 /* GitUpKit.framework in Copy Frameworks */,
 			);
 			name = "Copy Frameworks";
@@ -142,7 +144,7 @@
 		E2E3C99E1D771E7600AA9A62 /* GARawTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GARawTracker.h; sourceTree = "<group>"; };
 		E2E3C99F1D771E7600AA9A62 /* GARawTracker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GARawTracker.m; sourceTree = "<group>"; };
 		E2E3C9A11D771E9D00AA9A62 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
-		E2F6AA091A7EED74002DBF56 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Crashlytics.framework; path = "Third-Party/Crashlytics.framework"; sourceTree = SOURCE_ROOT; };
+		E2E3C9A31D77227F00AA9A62 /* HockeySDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HockeySDK.framework; path = "Third-Party/HockeySDK.framework"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -167,9 +169,9 @@
 				165C32B61B95739700D2F894 /* QuartzCore.framework in Frameworks */,
 				E2C338D719F85C2E00063D95 /* Cocoa.framework in Frameworks */,
 				E267E26B1B84E07E00BAB377 /* Security.framework in Frameworks */,
-				E2653D251A5B2FBD006A9871 /* Sparkle.framework in Frameworks */,
-				E2F6AA0A1A7EED89002DBF56 /* Crashlytics.framework in Frameworks */,
 				E28A16E51B87023200218332 /* GitUpKit.framework in Frameworks */,
+				E2E3C9A41D77227F00AA9A62 /* HockeySDK.framework in Frameworks */,
+				E2653D251A5B2FBD006A9871 /* Sparkle.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -185,8 +187,8 @@
 				E28200AC1A7D71EE00DA4096 /* CoreServices.framework */,
 				165C32B51B95739700D2F894 /* QuartzCore.framework */,
 				E2B14B561A88102C00003E64 /* Security.framework */,
+				E2E3C9A31D77227F00AA9A62 /* HockeySDK.framework */,
 				E2653D241A5B2FBD006A9871 /* Sparkle.framework */,
-				E2F6AA091A7EED74002DBF56 /* Crashlytics.framework */,
 				E222FF7E1B9210F600507E77 /* libcrypto.dylib */,
 				E212A6DD1B92100E00F62B18 /* libiconv.dylib */,
 				E2C3394419F85D4B00063D95 /* libz.dylib */,
@@ -313,7 +315,6 @@
 				E2C338A919F8562F00063D95 /* Resources */,
 				E2653D271A5B3298006A9871 /* Copy Frameworks */,
 				E21DCAF21B2538FB006424E8 /* Copy Tool */,
-				E219D0381A5B2A5F00E1FEB8 /* Run Crashlytics */,
 			);
 			buildRules = (
 			);
@@ -405,24 +406,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		E219D0381A5B2A5F00E1FEB8 /* Run Crashlytics */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Run Crashlytics";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "if [ \"$RUN_CLANG_STATIC_ANALYZER\" != \"\" ]; then\n  echo \"Skipping Crashlytics for Clang Static Analyzer\"\nelif [ \"$CONFIGURATION\" == \"Distribution\" ]; then\n  ./Crashlytics.framework/run 946dcb56f0db1be8f0c52df6e7d392202a2cc9b2 f28ac00033414b7f28707ab10fc43b008b96dd8cf081d4fb462294c811397108\nelse\n  echo \"Skipping Crashlytics in $CONFIGURATION configuration\"\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		E21DCAE41B253847006424E8 /* Sources */ = {

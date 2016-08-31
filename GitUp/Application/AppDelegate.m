@@ -14,7 +14,10 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #import <Security/Security.h>
-#import <Crashlytics/Crashlytics.h>
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wobjc-interface-ivars"
+#import <HockeySDK/HockeySDK.h>
+#pragma clang diagnostic pop
 #import <Sparkle/Sparkle.h>
 
 #import <GitUpKit/XLFacilityMacros.h>
@@ -45,7 +48,7 @@
 @interface WelcomeView : NSView
 @end
 
-@interface AppDelegate () <NSUserNotificationCenterDelegate, CrashlyticsDelegate, SUUpdaterDelegate>
+@interface AppDelegate () <NSUserNotificationCenterDelegate, SUUpdaterDelegate>
 - (IBAction)closeWelcomeWindow:(id)sender;
 @end
 
@@ -332,11 +335,13 @@
 - (void)applicationWillFinishLaunching:(NSNotification*)notification {
   // Initialize custom subclass of NSDocumentController
   [DocumentController sharedDocumentController];
-  
+
 #if !DEBUG
-  // Initialize Crashlytics
-  [Crashlytics startWithAPIKey:@"946dcb56f0db1be8f0c52df6e7d392202a2cc9b2"];
-  [[Crashlytics sharedInstance] setDelegate:self];
+  // Initialize HockeyApp
+  [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"65233b0e034e4fcbaf6754afba3b2b23"];
+  [[BITHockeyManager sharedHockeyManager] setDisableMetricsManager:YES];
+  [[BITHockeyManager sharedHockeyManager] setDisableFeedbackManager:YES];
+  [[BITHockeyManager sharedHockeyManager] startManager];
 
   // Initialize Google Analytics
   [[GARawTracker sharedTracker] startWithTrackingID:@"UA-83409580-1"];
@@ -744,12 +749,6 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
   _authenticationURL = nil;
   _authenticationUsername = nil;
   _authenticationPassword = nil;
-}
-
-#pragma mark - CrashlyticsDelegate
-
-- (void)crashlytics:(Crashlytics*)crashlytics didDetectCrashDuringPreviousExecution:(id <CLSCrashReport>)crash {
-  XLOG_WARNING(@"Application crashed during previous execution on %@", crash.crashedOnDate);
 }
 
 #pragma mark - SUUpdaterDelegate
