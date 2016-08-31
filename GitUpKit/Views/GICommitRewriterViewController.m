@@ -53,7 +53,7 @@
     _dateFormatter = [[NSDateFormatter alloc] init];
     _dateFormatter.dateStyle = NSDateFormatterShortStyle;
     _dateFormatter.timeStyle = NSDateFormatterShortStyle;
-    
+
     self.showsBranchInfo = NO;
   }
   return self;
@@ -61,13 +61,13 @@
 
 - (void)loadView {
   [super loadView];
-  
+
   _diffContentsViewController = [[GIDiffContentsViewController alloc] initWithRepository:self.repository];
   _diffContentsViewController.delegate = self;
   _diffContentsViewController.showsUntrackedAsAdded = YES;
   _diffContentsViewController.emptyLabel = NSLocalizedString(@"No changes in working directory", nil);
   [_contentsView replaceWithView:_diffContentsViewController.view];
-  
+
   _diffFilesViewController = [[GIDiffFilesViewController alloc] initWithRepository:self.repository];
   _diffFilesViewController.delegate = self;
   _diffFilesViewController.showsUntrackedAsAdded = YES;
@@ -78,30 +78,30 @@
 - (void)viewWillShow {
   XLOG_DEBUG_CHECK(_targetCommit != nil);
   [super viewWillShow];
-  
+
   XLOG_DEBUG_CHECK(self.repository.statusMode == kGCLiveRepositoryStatusMode_Disabled);
   self.repository.statusMode = kGCLiveRepositoryStatusMode_Unified;
-  
+
   self.messageTextView.string = _targetCommit.message;
-  
+
   [self _reloadContents];
 }
 
 - (void)viewDidHide {
   [super viewDidHide];
-  
+
   _unifiedStatus = nil;
-  
+
   [_diffContentsViewController setDeltas:nil usingConflicts:nil];
   [_diffFilesViewController setDeltas:nil usingConflicts:nil];
-  
+
   XLOG_DEBUG_CHECK(self.repository.statusMode == kGCLiveRepositoryStatusMode_Unified);
   self.repository.statusMode = kGCLiveRepositoryStatusMode_Disabled;
 }
 
 - (void)repositoryStatusDidUpdate {
   [super repositoryStatusDidUpdate];
-  
+
   if (self.viewVisible) {
     [self _reloadContents];
   }
@@ -110,13 +110,13 @@
 - (void)_reloadContents {
   CGFloat offset;
   GCDiffDelta* topDelta = [_diffContentsViewController topVisibleDelta:&offset];
-  
+
   _unifiedStatus = self.repository.unifiedStatus;
   [_diffContentsViewController setDeltas:_unifiedStatus.deltas usingConflicts:nil];
   [_diffFilesViewController setDeltas:_unifiedStatus.deltas usingConflicts:nil];
-  
+
   [_diffContentsViewController setTopVisibleDelta:topDelta offset:offset];
-  
+
   _continueButton.enabled = _unifiedStatus.modified;
 }
 
@@ -135,18 +135,18 @@
 
 - (BOOL)startRewritingCommit:(GCHistoryCommit*)commit error:(NSError**)error {
   XLOG_DEBUG_CHECK(_targetCommit == nil);
-  
+
   // Check that repository is completely clean (don't even allow untracked files)
   if (![self.repository checkClean:0 error:error]) {
     return NO;
   }
-  
+
   // Check out commit and move back HEAD by 1 to put changes in index
   BOOL success = [self.repository checkoutCommit:commit options:kGCCheckoutOption_UpdateSubmodulesRecursively error:error];
   if (success) {
     success = [self.repository setDetachedHEADToCommit:commit.parents[0] error:error];
   }
-  
+
   // Save original HEAD
   if (success) {
     _savedHEAD = self.repository.history.HEADBranch;
@@ -154,10 +154,10 @@
       _savedHEAD = self.repository.history.HEADCommit;
     }
   }
-  
+
   // Clean up
   [self.repository notifyRepositoryChanged];
-  
+
   _targetCommit = commit;
   _titleTextField.stringValue = [NSString stringWithFormat:@"\"%@\" <%@>", _targetCommit.summary, _targetCommit.shortSHA1];
   return YES;
@@ -177,12 +177,12 @@
   BOOL success = NO;
   GCCommit* newCommit;
   GCIndex* index;
-  
+
   // Add all workdir changes to index
   if (![self.repository syncIndexWithWorkingDirectory:error]) {
     goto cleanup;
   }
-  
+
   // Copy commit with updated index and message
   index = [self.repository readRepositoryIndex:error];
   if (index == nil) {
@@ -192,12 +192,12 @@
   if (newCommit == nil) {
     goto cleanup;
   }
-  
+
   // Restore original HEAD (must happen before transform in case the transform moves it as part of replaying commits)
   if (![self _restoreHEAD:error]) {
     goto cleanup;
   }
-  
+
   // Rewrite commit
   [self.repository suspendHistoryUpdates];  // We need to suspend history updates to prevent history to change during replay if conflict handler is called
   [self.repository setUndoActionName:NSLocalizedString(@"Rewrite Commit", nil)];
@@ -205,25 +205,29 @@
                                                    argument:_targetCommit.SHA1
                                                       error:error
                                                  usingBlock:^GCReferenceTransform*(GCLiveRepository* repository, NSError** outError1) {
-    
-    return [repository.history rewriteCommit:_targetCommit withUpdatedCommit:newCommit copyTrees:NO conflictHandler:^GCCommit*(GCIndex* index2, GCCommit* ourCommit, GCCommit* theirCommit, NSArray* parentCommits, NSString* message2, NSError** outError2) {
-      
-        return [self resolveConflictsWithResolver:self.delegate index:index2 ourCommit:ourCommit theirCommit:theirCommit parentCommits:parentCommits message:message2 error:outError2];
-        
-      } error:outError1];
-    
-  }]) {
+
+                                                   return [repository.history rewriteCommit:_targetCommit
+                                                                          withUpdatedCommit:newCommit
+                                                                                  copyTrees:NO
+                                                                            conflictHandler:^GCCommit*(GCIndex* index2, GCCommit* ourCommit, GCCommit* theirCommit, NSArray* parentCommits, NSString* message2, NSError** outError2) {
+
+                                                                              return [self resolveConflictsWithResolver:self.delegate index:index2 ourCommit:ourCommit theirCommit:theirCommit parentCommits:parentCommits message:message2 error:outError2];
+
+                                                                            }
+                                                                                      error:outError1];
+
+                                                 }]) {
     [self.repository resumeHistoryUpdates];
     goto cleanup;
   }
   [self.repository resumeHistoryUpdates];
-  
+
   // Make sure index and workdir are in sync with HEAD
   if (![self.repository forceCheckoutHEAD:NO error:error]) {
     goto cleanup;
   }
   success = YES;
-  
+
 cleanup:
   _savedHEAD = nil;
   _targetCommit = nil;
@@ -300,23 +304,25 @@ cleanup:
   [self.delegate commitRewriterViewControllerShouldCancel:self];
 }
 
-- (IBAction)continue:(id)sender {
+- (IBAction) continue:(id)sender {
   if (self.repository.indexConflicts.count) {
     [self presentAlertWithType:kGIAlertType_Stop title:NSLocalizedString(@"You must resolve conflicts before continuing!", nil) message:nil];
     return;
   }
-  [self.windowController runModalView:self.messageView withInitialFirstResponder:self.messageTextView completionHandler:^(BOOL success) {
-    
-    if (success) {
-      NSString* message = [self.messageTextView.string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-      if (message.length) {
-        [self.delegate commitRewriterViewControllerShouldFinish:self withMessage:message];
-      } else {
-        [self presentAlertWithType:kGIAlertType_Stop title:NSLocalizedString(@"You must provide a non-empty commit message", nil) message:nil];
-      }
-    }
-    
-  }];
+  [self.windowController runModalView:self.messageView
+            withInitialFirstResponder:self.messageTextView
+                    completionHandler:^(BOOL success) {
+
+                      if (success) {
+                        NSString* message = [self.messageTextView.string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+                        if (message.length) {
+                          [self.delegate commitRewriterViewControllerShouldFinish:self withMessage:message];
+                        } else {
+                          [self presentAlertWithType:kGIAlertType_Stop title:NSLocalizedString(@"You must provide a non-empty commit message", nil) message:nil];
+                        }
+                      }
+
+                    }];
 }
 
 @end

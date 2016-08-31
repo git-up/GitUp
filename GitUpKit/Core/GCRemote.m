@@ -20,9 +20,9 @@
 #import "GCPrivate.h"
 
 // SPIs from libgit2
-extern int git_reference__is_branch(const char *ref_name);
-extern int git_reference__is_remote(const char *ref_name);
-extern int git_reference__is_tag(const char *ref_name);
+extern int git_reference__is_branch(const char* ref_name);
+extern int git_reference__is_remote(const char* ref_name);
+extern int git_reference__is_tag(const char* ref_name);
 
 @implementation GCRemote {
   __unsafe_unretained GCRepository* _repository;
@@ -48,14 +48,14 @@ extern int git_reference__is_tag(const char *ref_name);
 
 - (void)_reload {
   _name = [NSString stringWithUTF8String:git_remote_name(_private)];
-  
+
   const char* URL = git_remote_url(_private);
   if (URL) {
     _URL = GCURLFromGitURL([NSString stringWithUTF8String:URL]);
   } else {
     _URL = nil;
   }
-  
+
   const char* pushURL = git_remote_pushurl(_private);
   if (pushURL) {
     _pushURL = GCURLFromGitURL([NSString stringWithUTF8String:pushURL]);
@@ -104,7 +104,7 @@ extern int git_reference__is_tag(const char *ref_name);
 - (NSArray*)listRemotes:(NSError**)error {
   NSMutableArray* array = nil;
   git_strarray names = {0};
-  
+
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_remote_list, &names, self.private);
   array = [[NSMutableArray alloc] init];
   for (size_t i = 0; i < names.count; ++i) {
@@ -113,7 +113,7 @@ extern int git_reference__is_tag(const char *ref_name);
     GCRemote* remote = [[GCRemote alloc] initWithRepository:self remote:loadedRemote];
     [array addObject:remote];
   }
-  
+
 cleanup:
   git_strarray_free(&names);
   return array;
@@ -170,7 +170,7 @@ cleanup:
   const char* remoteURL = git_remote_url(remote);
   NSURL* url = remoteURL ? GCURLFromGitURL([NSString stringWithUTF8String:remoteURL]) : nil;
   [self willStartRemoteTransferWithURL:url];
-  
+
   git_remote_callbacks callbacks = GIT_REMOTE_CALLBACKS_INIT;
   [self setRemoteCallbacks:&callbacks];
   int status = git_remote_connect(remote, direction, &callbacks, NULL);
@@ -187,7 +187,7 @@ cleanup:
       git_fetch_options options = GIT_FETCH_OPTIONS_INIT;
       options.callbacks = callbacks;
       CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_remote_download, remote, &array, &options);  // Passing NULL or 0 refspecs is equivalent to using the built-in "fetch" refspecs of the remote (typically "+refs/heads/*:refs/remotes/{REMOTE_NAME}/*")
-      
+
       /*
        When fetching:
        - This only updates tips matching the active refspecs of the remote i.e. the ones passed to git_remote_download() and possibly some (GIT_REMOTE_DOWNLOAD_TAGS_AUTO) or *all* tags (GIT_REMOTE_DOWNLOAD_TAGS_ALL)
@@ -195,13 +195,19 @@ cleanup:
        */
       git_remote_autotag_option_t mode = GIT_REMOTE_DOWNLOAD_TAGS_UNSPECIFIED;
       switch (tagMode) {
-        case kGCFetchTagMode_Automatic: mode = GIT_REMOTE_DOWNLOAD_TAGS_AUTO; break;
-        case kGCFetchTagMode_None: mode = GIT_REMOTE_DOWNLOAD_TAGS_NONE; break;
-        case kGCFetchTagMode_All: mode = GIT_REMOTE_DOWNLOAD_TAGS_ALL; break;
+        case kGCFetchTagMode_Automatic:
+          mode = GIT_REMOTE_DOWNLOAD_TAGS_AUTO;
+          break;
+        case kGCFetchTagMode_None:
+          mode = GIT_REMOTE_DOWNLOAD_TAGS_NONE;
+          break;
+        case kGCFetchTagMode_All:
+          mode = GIT_REMOTE_DOWNLOAD_TAGS_ALL;
+          break;
       }
       NSString* message = [NSString stringWithFormat:kGCReflogMessageFormat_Git_Fetch, [NSString stringWithUTF8String:git_remote_name(remote)]];
       CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_remote_update_tips, remote, &callbacks, true, mode, message.UTF8String);
-      
+
       if (prune) {
         // This only prunes based on the active refspecs i.e. the ones passed to git_remote_download()
         CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_remote_prune, remote, &callbacks);
@@ -210,7 +216,7 @@ cleanup:
       git_push_options options = GIT_PUSH_OPTIONS_INIT;
       options.callbacks = callbacks;
       CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_remote_upload, remote, &array, &options);  // Passing NULL or 0 refspecs is equivalent to using the built-in "push" refspecs of the remote (typically none)
-      
+
       /*
        When pushing:
        - This only updates tips matching the ones passed to git_remote_upload() AND also matching the built-in refspecs of the remote
@@ -221,7 +227,7 @@ cleanup:
     }
   }
   updatedTips = self.lastUpdatedTips;
-  
+
 cleanup:
   git_remote_disconnect(remote);  // Ignore error
   [self didFinishRemoteTransferWithURL:url success:(updatedTips != NSNotFound)];
@@ -243,29 +249,31 @@ cleanup:
   CFDictionaryValueCallBacks valueCallbacks = {0, GCOIDCopyCallBack, GCFreeReleaseCallBack, NULL, GCOIDEqualCallBack};
   CFMutableDictionaryRef localReferences = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, &keyCallbacks, &valueCallbacks);
   CFMutableDictionaryRef remoteReferences = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, &keyCallbacks, &valueCallbacks);
-  
+
   // Build list of remote branches matching this remote's refspecs (excluding symbolic ones)
-  if (![self enumerateReferencesWithOptions:0 error:error usingBlock:^BOOL(git_reference* reference) {
-    
-    const char* name = git_reference_name(reference);
-    if (((options & kGCRemoteCheckOption_IncludeBranches) && git_reference__is_remote(name)) ||
-        ((options & kGCRemoteCheckOption_IncludeTags) && git_reference__is_tag(name))) {
-      if (git_reference_type(reference) == GIT_REF_OID) {
-        for (size_t i = 0; i < git_remote_refspec_count(remote.private); ++i) {
-          const git_refspec* refspec = git_remote_get_refspec(remote.private, i);
-          if ((git_refspec_direction(refspec) == GIT_DIRECTION_FETCH) && git_refspec_dst_matches(refspec, name)) {
-            CFDictionarySetValue(localReferences, name, git_reference_target(reference));
-            break;
-          }
-        }
-      }
-    }
-    return YES;
-    
-  }]) {
+  if (![self enumerateReferencesWithOptions:0
+                                      error:error
+                                 usingBlock:^BOOL(git_reference* reference) {
+
+                                   const char* name = git_reference_name(reference);
+                                   if (((options & kGCRemoteCheckOption_IncludeBranches) && git_reference__is_remote(name)) ||
+                                       ((options & kGCRemoteCheckOption_IncludeTags) && git_reference__is_tag(name))) {
+                                     if (git_reference_type(reference) == GIT_REF_OID) {
+                                       for (size_t i = 0; i < git_remote_refspec_count(remote.private); ++i) {
+                                         const git_refspec* refspec = git_remote_get_refspec(remote.private, i);
+                                         if ((git_refspec_direction(refspec) == GIT_DIRECTION_FETCH) && git_refspec_dst_matches(refspec, name)) {
+                                           CFDictionarySetValue(localReferences, name, git_reference_target(reference));
+                                           break;
+                                         }
+                                       }
+                                     }
+                                   }
+                                   return YES;
+
+                                 }]) {
     goto cleanup;
   }
-  
+
   // Build list of branches on remotes filtered by remote refspecs (excluding symbolic ones)
   if ([self _transfer:GIT_DIRECTION_FETCH withRemote:remote.private refspecs:NULL count:0 tagMode:kGCFetchTagMode_None prune:NO error:error] == NSNotFound) {
     goto cleanup;
@@ -290,7 +298,7 @@ cleanup:
       }
     }
   }
-  
+
   // Compare lists
   if (addedReferences) {
     *addedReferences = [[NSMutableDictionary alloc] init];
@@ -320,7 +328,7 @@ cleanup:
     [(NSMutableDictionary*)*deletedReferences setObject:GCGitOIDToSHA1(localOID) forKey:[NSString stringWithUTF8String:name]];  // Reference is not in remote anymore but still in repository
   });
   success = YES;
-  
+
 cleanup:
   CFRelease(remoteReferences);
   CFRelease(localReferences);
@@ -339,7 +347,7 @@ cleanup:
   if (remote == NULL) {
     return NO;
   }
-  
+
   const char* dstName = git_reference_name(branch.private);
   for (size_t i = 0; i < git_remote_refspec_count(remote); ++i) {
     const git_refspec* refspec = git_remote_get_refspec(remote, i);
@@ -355,7 +363,7 @@ cleanup:
     }
   }
   GC_SET_GENERIC_ERROR(@"No matching refspec for \"%@\"", branch.name);
-  
+
 cleanup:
   git_remote_free(remote);
   if (result == NSNotFound) {
@@ -388,7 +396,7 @@ cleanup:
   if (result == NSNotFound) {
     return nil;
   }
-  
+
   const git_remote_head** headList;
   size_t headCount;
   CALL_LIBGIT2_FUNCTION_RETURN(nil, git_remote_ls, &headList, &headCount, remote.private);
@@ -439,7 +447,7 @@ cleanup:
   git_buf remoteBuffer = {0};
   git_buf mergeBuffer = {0};
   git_remote* remote = NULL;
-  
+
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_branch_upstream_remote, &remoteBuffer, self.private, name);
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_branch_upstream_merge, &mergeBuffer, self.private, name);
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_remote_lookup, &remote, self.private, remoteBuffer.ptr);
@@ -447,7 +455,7 @@ cleanup:
     goto cleanup;
   }
   success = YES;
-  
+
 cleanup:
   if (remote && usedRemote) {
     *usedRemote = [[GCRemote alloc] initWithRepository:self remote:remote];  // Return even on error
@@ -504,16 +512,18 @@ static BOOL _SetBranchDefaultUpstream(git_repository* repository, git_remote* re
 // TODO: libgit2 doesn't support pattern based push refspecs like "refs/heads/*:refs/heads/*"
 - (BOOL)_pushAllReferencesToRemote:(git_remote*)remote branches:(BOOL)branches tags:(BOOL)tags force:(BOOL)force error:(NSError**)error {
   GC_POINTER_LIST_ALLOCATE(buffers, 128);
-  BOOL success = [self enumerateReferencesWithOptions:0 error:error usingBlock:^BOOL(git_reference* reference) {
-    
-    if ((branches && git_reference_is_branch(reference)) || (tags && git_reference_is_tag(reference))) {
-      char* buffer;
-      asprintf(&buffer, "%s%s:%s", force ? "+" : "", git_reference_name(reference), git_reference_name(reference));
-      GC_POINTER_LIST_APPEND(buffers, buffer);
-    }
-    return YES;
-    
-  }];
+  BOOL success = [self enumerateReferencesWithOptions:0
+                                                error:error
+                                           usingBlock:^BOOL(git_reference* reference) {
+
+                                             if ((branches && git_reference_is_branch(reference)) || (tags && git_reference_is_tag(reference))) {
+                                               char* buffer;
+                                               asprintf(&buffer, "%s%s:%s", force ? "+" : "", git_reference_name(reference), git_reference_name(reference));
+                                               GC_POINTER_LIST_APPEND(buffers, buffer);
+                                             }
+                                             return YES;
+
+                                           }];
   if (success) {
     success = [self _pushToRemote:remote refspecs:(const char**)GC_POINTER_LIST_ROOT(buffers) count:GC_POINTER_LIST_COUNT(buffers) error:error];
   }
@@ -529,14 +539,16 @@ static BOOL _SetBranchDefaultUpstream(git_repository* repository, git_remote* re
   if (![self _pushAllReferencesToRemote:remote.private branches:YES tags:NO force:force error:error]) {
     return NO;
   }
-  if (setUpstream && ![self enumerateReferencesWithOptions:0 error:error usingBlock:^BOOL(git_reference* reference) {
-    
-    if (git_reference_is_branch(reference) && !_SetBranchDefaultUpstream(self.private, remote.private, reference, error)) {
-      return NO;
-    }
-    return YES;
-    
-  }]) {
+  if (setUpstream && ![self enumerateReferencesWithOptions:0
+                                                     error:error
+                                                usingBlock:^BOOL(git_reference* reference) {
+
+                                                  if (git_reference_is_branch(reference) && !_SetBranchDefaultUpstream(self.private, remote.private, reference, error)) {
+                                                    return NO;
+                                                  }
+                                                  return YES;
+
+                                                }]) {
     return NO;
   }
   return YES;
@@ -550,7 +562,7 @@ static BOOL _SetBranchDefaultUpstream(git_repository* repository, git_remote* re
 - (BOOL)deleteRemoteBranchFromRemote:(GCRemoteBranch*)branch error:(NSError**)error {
   BOOL success = NO;
   git_remote* remote = NULL;
-  
+
   remote = [self _loadRemoteForRemoteBranch:branch.private error:error];
   if (remote == NULL) {
     goto cleanup;
@@ -569,7 +581,7 @@ static BOOL _SetBranchDefaultUpstream(git_repository* repository, git_remote* re
       goto cleanup;  // TODO: What if there is more than one match?
     }
   }
-  
+
 cleanup:
   git_remote_free(remote);
   return success;
@@ -627,16 +639,16 @@ cleanup:
 
 - (BOOL)cloneUsingRemote:(GCRemote*)remote recursive:(BOOL)recursive error:(NSError**)error {
   [self willStartRemoteTransferWithURL:remote.URL];
-  
+
   git_fetch_options fetchOptions = GIT_FETCH_OPTIONS_INIT;
   [self setRemoteCallbacks:&fetchOptions.callbacks];
   git_checkout_options checkoutOptions = GIT_CHECKOUT_OPTIONS_INIT;
   checkoutOptions.checkout_strategy = GIT_CHECKOUT_SAFE;
   int status = git_clone_into(self.private, remote.private, &fetchOptions, &checkoutOptions, NULL);  // This will fail if the repository is not empty
-  
+
   [self didFinishRemoteTransferWithURL:remote.URL success:(status == GIT_OK)];
   CHECK_LIBGIT2_FUNCTION_CALL(return NO, status, == GIT_OK);
-  
+
   return recursive ? [self initializeAllSubmodules:YES error:error] : YES;
 }
 

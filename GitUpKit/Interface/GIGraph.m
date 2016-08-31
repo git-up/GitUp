@@ -45,7 +45,7 @@ static void _ReleaseCallBack(CFAllocatorRef allocator, const void* value) {
   if ((self = [super init])) {
     _history = [history retain];
     _options = options;
-    
+
     CFArrayCallBacks callbacks = {0, NULL, _ReleaseCallBack, NULL, NULL};
     _branches = CFArrayCreateMutable(kCFAllocatorDefault, 0, &callbacks);
     _layers = CFArrayCreateMutable(kCFAllocatorDefault, 0, &callbacks);
@@ -53,12 +53,12 @@ static void _ReleaseCallBack(CFAllocatorRef allocator, const void* value) {
     _nodes = CFArrayCreateMutable(kCFAllocatorDefault, 0, &callbacks);
     _nodesWithReferences = CFArrayCreateMutable(kCFAllocatorDefault, 0, NULL);
     _mapping = calloc(_history.nextAutoIncrementID, sizeof(GINode*));
-    
+
     [self _generateGraph];
 #if DEBUG
     [self _validateTopology];
 #endif
-    
+
     [self _computeNodePositions];
 #if __GI_HAS_APPKIT__
     [self _computeNodeAndLineColors];
@@ -77,9 +77,9 @@ static void _ReleaseCallBack(CFAllocatorRef allocator, const void* value) {
   CFRelease(_lines);
   CFRelease(_layers);
   CFRelease(_branches);
-  
+
   [_history release];
-  
+
   [super dealloc];
 }
 
@@ -118,15 +118,13 @@ static void _ReleaseCallBack(CFAllocatorRef allocator, const void* value) {
     skipped = calloc(_history.nextAutoIncrementID, sizeof(BOOL));
   }
   GCHistoryCommit* headCommit = _history.HEADCommit;
-  
+
   // Add HEAD first to tips
-  if (headCommit && (
-      ((_options & kGIGraphOption_ShowVirtualTips) && !_history.HEADDetached) ||
-      (headCommit.leaf && !headCommit.localBranches && !headCommit.remoteBranches && !headCommit.tags)
-    )) {
+  if (headCommit && (((_options & kGIGraphOption_ShowVirtualTips) && !_history.HEADDetached) ||
+                     (headCommit.leaf && !headCommit.localBranches && !headCommit.remoteBranches && !headCommit.tags))) {
     [tips addObject:headCommit];
   }
-  
+
   // Add local branches to tips (with their upstreams first if applicable)
   for (GCHistoryLocalBranch* branch in _history.localBranches) {
     if (_options & kGIGraphOption_PreserveUpstreamRemoteBranchTips) {
@@ -136,29 +134,29 @@ static void _ReleaseCallBack(CFAllocatorRef allocator, const void* value) {
         [tips addObject:upstreamTip];
       }
     }
-    
+
     if (((_options & kGIGraphOption_ShowVirtualTips) || branch.tipCommit.leaf)) {
       [tips addObject:branch.tipCommit];
     }
   }
-  
+
   // Add remote branches to tips
   for (GCHistoryRemoteBranch* branch in _history.remoteBranches) {
     if (((_options & kGIGraphOption_ShowVirtualTips) || branch.tipCommit.leaf)) {
       [tips addObject:branch.tipCommit];
     }
   }
-  
+
   // Add leaf tags
   for (GCHistoryTag* tag in _history.tags) {
     if (tag.commit.leaf) {
       [tips addObject:tag.commit];
     }
   }
-  
+
   // Verify all leaves are included in tips
   XLOG_DEBUG_CHECK([[NSSet setWithArray:_history.leafCommits] isSubsetOfSet:[NSSet setWithArray:tips.objects]]);
-  
+
   // Remove stale branch tips if needed
   if (_options & kGIGraphOption_SkipStaleBranchTips) {
     for (GCHistoryLocalBranch* branch in _history.localBranches) {
@@ -182,7 +180,7 @@ static void _ReleaseCallBack(CFAllocatorRef allocator, const void* value) {
       }
     }
   }
-  
+
   // Remove standalone tag tips if needed
   if (_options & kGIGraphOption_SkipStandaloneTagTips) {
     for (GCHistoryTag* tag in _history.tags) {
@@ -198,7 +196,7 @@ static void _ReleaseCallBack(CFAllocatorRef allocator, const void* value) {
       }
     }
   }
-  
+
   // Remove remote standalone remote branch tips if needed (unless upstream)
   if (_options & kGIGraphOption_SkipStandaloneRemoteBranchTips) {
     for (GCHistoryRemoteBranch* branch in _history.remoteBranches) {
@@ -216,7 +214,7 @@ static void _ReleaseCallBack(CFAllocatorRef allocator, const void* value) {
       }
     }
   }
-  
+
   // Walk skipped commits ancestors
   void (^skipBlock)(BOOL) = ^(BOOL updateTips) {
     while (1) {
@@ -227,7 +225,7 @@ static void _ReleaseCallBack(CFAllocatorRef allocator, const void* value) {
           if (COMMIT_SKIPPED(parent)) {
             continue;
           }
-          
+
           // If updating tips, make sure HEAD or references that are not leaves are not skipped
           if (updateTips) {
             XLOG_DEBUG_CHECK(!parent.leaf);
@@ -262,14 +260,14 @@ static void _ReleaseCallBack(CFAllocatorRef allocator, const void* value) {
                   continue;
                 }
               }
-              
+
               // Also make sure references that are upstream tips are not skipped
               if ((_options & kGIGraphOption_PreserveUpstreamRemoteBranchTips) && [upstreamTips containsObject:parent]) {
                 continue;
               }
             }
           }
-          
+
           // A commit can be skipped if all its children are skipped
           BOOL skip = YES;
           for (GCHistoryCommit* child in parent.children) {
@@ -278,7 +276,7 @@ static void _ReleaseCallBack(CFAllocatorRef allocator, const void* value) {
               break;
             }
           }
-          
+
           // Skip commit if applicable
           if (skip) {
             XLOG_DEBUG_CHECK(!updateTips || ![tips containsObject:parent]);
@@ -288,13 +286,13 @@ static void _ReleaseCallBack(CFAllocatorRef allocator, const void* value) {
           }
         }
       }
-      
+
       // If new list is empty we're done
       if (!GC_POINTER_LIST_COUNT(newSkipList)) {
         GC_POINTER_LIST_RESET(skipList);
         break;
       }
-      
+
       // Replace current list with new list
       GC_POINTER_LIST_SWAP(newSkipList, skipList);
       GC_POINTER_LIST_RESET(newSkipList);
@@ -303,19 +301,19 @@ static void _ReleaseCallBack(CFAllocatorRef allocator, const void* value) {
   if (skipped) {
     skipBlock(YES);
   }
-  
+
   NSArray* tipsArray = tips.objects;
-  
+
   // Make sure we have some tips left
   if (tipsArray.count == 0) {
     goto cleanup;
   }
-  
+
   // Re-sort all tips in descending chronological order (this ensures virtual tips will be on the rightside of the tips descending from the same commits)
   if (_options & kGIGraphOption_ShowVirtualTips) {
     tipsArray = [tipsArray sortedArrayUsingSelector:@selector(reverseTimeCompare:)];
   }
-  
+
   // Create initial layer made of tips
   GILayer* layer = [[GILayer alloc] initWithIndex:CFArrayGetCount(_layers)];
   @autoreleasepool {
@@ -326,7 +324,7 @@ static void _ReleaseCallBack(CFAllocatorRef allocator, const void* value) {
 #ifdef __clang_analyzer__
       [branch release];  // Release is actually handled by CFArray which doesn't retain
 #endif
-      
+
       // Create new line
       GILine* line = [[GILine alloc] initWithBranch:branch];
       CFArrayAppendValue(_lines, line);
@@ -335,7 +333,7 @@ static void _ReleaseCallBack(CFAllocatorRef allocator, const void* value) {
 #ifdef __clang_analyzer__
       [line release];  // Release is actually handled by CFArray which doesn't retain
 #endif
-      
+
       // Create new node
       GINode* node;
       BOOL ready = YES;
@@ -370,19 +368,19 @@ static void _ReleaseCallBack(CFAllocatorRef allocator, const void* value) {
 #ifdef __clang_analyzer__
   [layer release];
 #endif
-  
+
   // Add next layers following commit parent hierarchy
   GILayer* previousLayer = layer;
   while (1) {
     @autoreleasepool {
       // Create a new empty layer
       layer = [[GILayer alloc] initWithIndex:CFArrayGetCount(_layers)];
-      
+
       // Iterate over nodes from previous layer
       for (GINode* previousNode in previousLayer.nodes) {
         GINode* (^nodeBlock)(GILine*, GCHistoryCommit*, GCHistoryCommit*) = ^(GILine* line, GCHistoryCommit* commit, GCHistoryCommit* alternateCommit) {
           XLOG_DEBUG_CHECK(!MAP_COMMIT_TO_NODE(commit));
-          
+
           // Check if this commit is "ready" to be a node i.e. all its children have non-dummy nodes associated (but not on the current layer)
           BOOL ready = YES;
           for (GCHistoryCommit* child in commit.children) {
@@ -395,7 +393,7 @@ static void _ReleaseCallBack(CFAllocatorRef allocator, const void* value) {
               break;
             }
           }
-          
+
           // Create new node (dummy if the commit is not ready)
           GINode* node;
           if (ready) {
@@ -408,10 +406,10 @@ static void _ReleaseCallBack(CFAllocatorRef allocator, const void* value) {
           CFArrayAppendValue(_nodes, node);
           [layer addNode:node];
           [line addNode:node];
-          
+
           return node;
         };
-        
+
         // If the previous node is a dummy one reprocess its commit
         GCHistoryCommit* commit = previousNode.commit;
         GILine* line = previousNode.primaryLine;
@@ -454,20 +452,20 @@ static void _ReleaseCallBack(CFAllocatorRef allocator, const void* value) {
             [layer addLine:parentLine];
             ++index;
           }
-          
+
           // Cache node if it has references
           if (commit.hasReferences) {
             CFArrayAppendValue(_nodesWithReferences, previousNode);
           }
         }
       }
-      
+
       // If new layer is empty, we're done
       if (layer.nodes.count == 0) {
         [layer release];
         break;
       }
-      
+
 #if DEBUG
       // Make sure new layer contains at least one non-dummy node
       BOOL found = NO;
@@ -479,7 +477,7 @@ static void _ReleaseCallBack(CFAllocatorRef allocator, const void* value) {
       }
       XLOG_DEBUG_CHECK(found);
 #endif
-      
+
       // Save new layer
       CFArrayAppendValue(_layers, layer);
 #ifdef __clang_analyzer__
@@ -488,7 +486,7 @@ static void _ReleaseCallBack(CFAllocatorRef allocator, const void* value) {
       previousLayer = layer;
     }
   }
-  
+
 cleanup:
   if (skipped) {
     free(skipped);
@@ -503,7 +501,7 @@ cleanup:
   CGFloat maxX = 0.0;
   for (CFIndex i = 0, count = CFArrayGetCount(_layers); i < count; ++i) {
     GILayer* layer = CFArrayGetValueAtIndex(_layers, i);
-    
+
     CGFloat lastX = 0.0;
     NSUInteger index = 0;
     for (GINode* node in layer.nodes) {
@@ -522,7 +520,7 @@ cleanup:
       }
       ++index;
     }
-    
+
     layer.y = layer.index;
   }
   _size = CGSizeMake(maxX, CFArrayGetCount(_layers) - 1);
@@ -551,7 +549,7 @@ cleanup:
   [colors addObject:[NSColor colorWithDeviceRed:(134.0 / 255.0) green:(126 / 255.0) blue:(124.0 / 255.0) alpha:1.0]];
 #endif
   NSUInteger numColors = colors.count;
-  
+
 #if __COLORIZE_BRANCHES__
   CFMutableDictionaryRef dictionary = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, NULL, NULL);
   NSUInteger index = 0;
@@ -578,7 +576,7 @@ cleanup:
     line.color = color;
   }
 #endif
-  
+
   [colors release];
 }
 
@@ -595,7 +593,7 @@ cleanup:
     XLOG_DEBUG_CHECK(node.commit);
     XLOG_DEBUG_CHECK((node.dummy && (node.parentCount == 1)) || (!node.dummy && (node.parentCount == node.commit.parents.count)));
   }
-  
+
   // Validate lines
   for (CFIndex i = 0, count = CFArrayGetCount(_lines); i < count; ++i) {
     GILine* line = CFArrayGetValueAtIndex(_lines, i);
@@ -615,14 +613,14 @@ cleanup:
       }
     }
   }
-  
+
   // Validate branches
   for (CFIndex i = 0, count = CFArrayGetCount(_branches); i < count; ++i) {
     GIBranch* branch = CFArrayGetValueAtIndex(_branches, i);
     XLOG_DEBUG_CHECK(branch.mainLine);
     XLOG_DEBUG_CHECK(branch.mainLine.branch == branch);
   }
-  
+
   // Validate layers - TODO: Find a way to validate lines in layers
   for (CFIndex i = 0, count = CFArrayGetCount(_layers); i < count; ++i) {
     GILayer* layer = CFArrayGetValueAtIndex(_layers, i);
@@ -630,7 +628,7 @@ cleanup:
     XLOG_DEBUG_CHECK(layer.nodes.count >= 1);
     XLOG_DEBUG_CHECK([[NSSet setWithArray:layer.lines] count] == layer.lines.count);
   }
-  
+
   // Make sure HEAD has an associated non-dummy node
   if (_history.HEADCommit) {
     GINode* node = MAP_COMMIT_TO_NODE(_history.HEADCommit);
@@ -638,7 +636,7 @@ cleanup:
       XLOG_DEBUG_CHECK(!node.dummy);
     }
   }
-  
+
   // Make sure all commits have a non-dummy node associated and that there are no orphan non-dummy nodes
   NSMutableSet* orphanNodes = [NSMutableSet setWithCapacity:CFArrayGetCount(_nodes)];
   for (CFIndex i = 0, count = CFArrayGetCount(_nodes); i < count; ++i) {
@@ -656,7 +654,7 @@ cleanup:
     }
   }
   XLOG_DEBUG_CHECK(orphanNodes.count == 0);
-  
+
   // Make sure global node list matches all line nodes
   NSMutableSet* lineNodes = [NSMutableSet setWithCapacity:CFArrayGetCount(_nodes)];
   for (CFIndex i = 0, count = CFArrayGetCount(_lines); i < count; ++i) {
@@ -664,7 +662,7 @@ cleanup:
     [lineNodes addObjectsFromArray:line.nodes];
   }
   XLOG_DEBUG_CHECK([lineNodes isEqualToSet:[NSSet setWithArray:(NSArray*)_nodes]]);
-  
+
   // Make sure global node list matches all layer nodes
   NSMutableSet* layerNodes = [NSMutableSet setWithCapacity:CFArrayGetCount(_nodes)];
   for (CFIndex i = 0, count = CFArrayGetCount(_layers); i < count; ++i) {
@@ -672,7 +670,7 @@ cleanup:
     [layerNodes addObjectsFromArray:layer.nodes];
   }
   XLOG_DEBUG_CHECK([layerNodes isEqualToSet:[NSSet setWithArray:(NSArray*)_nodes]]);
-  
+
   // Make sure all lines are a hierarchy of nodes and end with a non-dummy node
   for (CFIndex i = 0, count = CFArrayGetCount(_lines); i < count; ++i) {
     GILine* line = CFArrayGetValueAtIndex(_lines, i);
@@ -704,7 +702,7 @@ cleanup:
     }
     XLOG_DEBUG_CHECK(set.count == layer.nodes.count);
   }
-  
+
   // Make sure children nodes are above parent nodes
   for (GCHistoryCommit* commit in _history.allCommits) {
     GINode* node = MAP_COMMIT_TO_NODE(commit);
@@ -717,7 +715,7 @@ cleanup:
       }
     }
   }
-  
+
   // Make sure all lines have a color and their nodes are laid out upwards
   for (CFIndex i = 0, count = CFArrayGetCount(_lines); i < count; ++i) {
     GILine* line = CFArrayGetValueAtIndex(_lines, i);
@@ -760,7 +758,7 @@ cleanup:
               layerEndBlock:(void (^)(GILayer* layer, BOOL* stop))endBlock {
   GC_POINTER_LIST_ALLOCATE(row, 32);
   GC_POINTER_LIST_ALLOCATE(tempRow, 32);
-  
+
   __block CFIndex index = node.layer.index;
   CFIndex maxIndex = CFArrayGetCount(_layers);
   GC_POINTER_LIST_APPEND(row, node);
@@ -804,7 +802,7 @@ cleanup:
     GC_POINTER_LIST_SWAP(tempRow, row);
     GC_POINTER_LIST_RESET(tempRow);
   }
-  
+
 cleanup:
   GC_POINTER_LIST_FREE(tempRow);
   GC_POINTER_LIST_FREE(row);

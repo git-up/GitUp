@@ -37,7 +37,7 @@
 
 - (void)viewWillMoveToWindow:(NSWindow*)newWindow {
   [super viewWillMoveToWindow:newWindow];
-  
+
   if (newWindow) {
     [_viewController viewWillShow];
   } else {
@@ -47,7 +47,7 @@
 
 - (void)viewDidMoveToWindow {
   [super viewDidMoveToWindow];
-  
+
   if (self.window) {
     [_viewController viewDidShow];
   } else {
@@ -66,19 +66,19 @@
 
 - (void)resizeSubviewsWithOldSize:(NSSize)oldSize {
   [super resizeSubviewsWithOldSize:oldSize];
-  
+
   [_viewController viewDidResize];
 }
 
 - (void)viewWillStartLiveResize {
   [super viewWillStartLiveResize];
-  
+
   [_viewController viewWillBeginLiveResize];
 }
 
 - (void)viewDidEndLiveResize {
   [super viewDidEndLiveResize];
-  
+
   [_viewController viewDidFinishLiveResize];
 }
 
@@ -94,7 +94,7 @@
   if ((self = [super initWithNibName:nil bundle:nil])) {
     _repository = repository;
     _textViewUndoManager = [[NSUndoManager alloc] init];
-    
+
     if (OVERRIDES_METHOD(repositoryDidChange)) {
       [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(repositoryDidChange) name:GCLiveRepositoryDidChangeNotification object:_repository];
     }
@@ -116,7 +116,7 @@
     if (OVERRIDES_METHOD(repositorySnapshotsDidUpdate)) {
       [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(repositorySnapshotsDidUpdate) name:GCLiveRepositorySnapshotsDidUpdateNotification object:_repository];
     }
-    
+
     self.view.viewController = self;  // This loads the view
   }
   return self;
@@ -124,7 +124,7 @@
 
 - (void)dealloc {
   self.view.viewController = nil;  // In case someone is still retaining the view
-  
+
   if (OVERRIDES_METHOD(repositoryDidChange)) {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:GCLiveRepositoryDidChangeNotification object:self.repository];
   }
@@ -270,16 +270,17 @@
       defaultButton.keyEquivalent = @"";
     }
     [alert addButtonWithTitle:NSLocalizedString(@"Cancel", nil)];
-    [self presentAlert:alert completionHandler:^(NSInteger returnCode) {
-      
-      if (returnCode == NSAlertFirstButtonReturn) {
-        block();
-      }
-      if (alert.suppressionButton.state) {
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:key];
-      }
-      
-    }];
+    [self presentAlert:alert
+        completionHandler:^(NSInteger returnCode) {
+
+          if (returnCode == NSAlertFirstButtonReturn) {
+            block();
+          }
+          if (alert.suppressionButton.state) {
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:key];
+          }
+
+        }];
   }
 }
 

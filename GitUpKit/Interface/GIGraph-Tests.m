@@ -59,7 +59,7 @@
 
 - (void)_test:(NSString*)file {
   NSString* path = [NSTemporaryDirectory() stringByAppendingPathComponent:[[NSProcessInfo processInfo] globallyUniqueString]];
-  
+
   // Parse file
   NSString* contents = [[NSString alloc] initWithContentsOfFile:file encoding:NSUTF8StringEncoding error:NULL];
   XCTAssertNotNil(contents);
@@ -80,16 +80,16 @@
   }
   NSString* notation = [contents substringWithRange:NSMakeRange(range1.location + range1.length, range2.location - range1.location - range1.length)];
   NSString* expected = [contents substringWithRange:NSMakeRange(range2.location + range2.length, contents.length - range2.location - range2.length)];
-  
+
   // Create mock repository from notation
   GCRepository* repository = [[GCSQLiteRepository alloc] initWithDatabase:path error:NULL];
   XCTAssertNotNil(repository);
   XCTAssertNotNil([repository createMockCommitHierarchyFromNotation:notation force:NO error:NULL]);
-  
+
   // Load history
   GCHistory* history = [repository loadHistoryUsingSorting:kGCHistorySorting_None error:NULL];
   XCTAssertNotNil(history);
-  
+
   // Create graph
   GIGraphOptions graphOptions = 0;
   if ([[options valueForKey:@"showVirtualTips"] boolValue]) {
@@ -106,7 +106,7 @@
   }
   GIGraph* graph = [[GIGraph alloc] initWithHistory:history options:graphOptions];
   XCTAssertNotNil(graph);
-  
+
   // Compare graph with expected
   NSMutableString* string = [[NSMutableString alloc] init];
   NSUInteger index = 0;
@@ -123,7 +123,7 @@
     ++index;
   }
   XCTAssertEqualObjects(string, expected);
-  
+
   // Destroy repository
   repository = nil;
   XCTAssertTrue([[NSFileManager defaultManager] removeItemAtPath:path error:NULL]);

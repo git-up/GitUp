@@ -52,7 +52,7 @@ int main(int argc, const char* argv[]) {
   BOOL success = NO;
   @autoreleasepool {
     const char* command = argc >= 2 ? argv[1] : "open";
-    
+
     if (!strcmp(command, kToolCommand_Help)) {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wformat-nonliteral"
@@ -60,10 +60,10 @@ int main(int argc, const char* argv[]) {
 #pragma clang diagnostic pop
       success = YES;
     }
-    
+
     else {
       assert(git_libgit2_init() >= 1);
-      
+
       // Find and open repo
       char wdBuffer[MAXPATHLEN];
       git_buf repoBuffer = {0};
@@ -75,7 +75,7 @@ int main(int argc, const char* argv[]) {
           if (!git_repository_is_bare(repository)) {
             const char* path = git_repository_workdir(repository);
             NSString* repositoryPath = [[NSFileManager defaultManager] stringWithFileSystemRepresentation:path length:strlen(path)];
-            
+
             // Launch app and / or bring it to front
             NSString* executablePath = [[[NSBundle mainBundle] executablePath] stringByResolvingSymlinksInPath];  // -executablePath is returning the symlink instead of the actual executable
             NSString* appPath = [[[executablePath stringByDeletingLastPathComponent] stringByDeletingLastPathComponent] stringByDeletingLastPathComponent];  // Remove "Contents/SharedSupport/{executable}"
@@ -88,7 +88,6 @@ int main(int argc, const char* argv[]) {
               while (1) {
                 CFMessagePortRef messagePort = CFMessagePortCreateRemote(kCFAllocatorDefault, CFSTR(kToolPortName));
                 if (messagePort) {
-                  
                   // Send message
                   NSMutableDictionary* message = [[NSMutableDictionary alloc] init];
                   [message setObject:[NSString stringWithUTF8String:command] forKey:kToolDictionaryKey_Command];
@@ -109,7 +108,7 @@ int main(int argc, const char* argv[]) {
                   }
                   CFMessagePortInvalidate(messagePort);
                   break;
-                  
+
                 } else {
                   if (CFAbsoluteTimeGetCurrent() >= startTime + kCommunicationTimeOut) {
                     fprintf(stderr, "Failed connecting to GitUp application\n");
@@ -121,7 +120,7 @@ int main(int argc, const char* argv[]) {
             } else {
               fprintf(stderr, "Failed launching GitUp application (%i)\n", status);
             }
-            
+
           } else {
             fprintf(stderr, "Bare repositories are not supported at this time\n");
           }

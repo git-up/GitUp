@@ -67,9 +67,16 @@ static NSColor* _separatorColor = nil;
 
 - (void)setType:(GIAlertType)type {
   switch (type) {
-    case kGIAlertType_Note: self.icon = [[NSBundle bundleForClass:[GILayoutManager class]] imageForResource:@"icon_alert_note"]; break;  // TODO: Image is not cached
-    case kGIAlertType_Caution: self.icon = [[NSBundle bundleForClass:[GILayoutManager class]] imageForResource:@"icon_alert_caution"]; break;  // TODO: Image is not cached
-    case kGIAlertType_Stop: case kGIAlertType_Danger: self.icon = [[NSBundle bundleForClass:[GILayoutManager class]] imageForResource:@"icon_alert_stop"]; break;  // TODO: Image is not cached
+    case kGIAlertType_Note:
+      self.icon = [[NSBundle bundleForClass:[GILayoutManager class]] imageForResource:@"icon_alert_note"];
+      break;  // TODO: Image is not cached
+    case kGIAlertType_Caution:
+      self.icon = [[NSBundle bundleForClass:[GILayoutManager class]] imageForResource:@"icon_alert_caution"];
+      break;  // TODO: Image is not cached
+    case kGIAlertType_Stop:
+    case kGIAlertType_Danger:
+      self.icon = [[NSBundle bundleForClass:[GILayoutManager class]] imageForResource:@"icon_alert_stop"];
+      break;  // TODO: Image is not cached
   }
 }
 
@@ -106,7 +113,7 @@ static NSColor* _separatorColor = nil;
 }
 
 - (NSMenuItem*)addItemWithTitle:(NSString*)title keyEquivalent:(unichar)code modifierMask:(NSUInteger)mask block:(dispatch_block_t)block {
-  NSMenuItem* item = [[NSMenuItem alloc] initWithTitle:title action:NULL keyEquivalent:(code ? [NSString stringWithCharacters:&code length:1]: @"")];
+  NSMenuItem* item = [[NSMenuItem alloc] initWithTitle:title action:NULL keyEquivalent:(code ? [NSString stringWithCharacters:&code length:1] : @"")];
   if (block) {
     item.target = self;
     item.action = @selector(_blockAction:);
@@ -153,7 +160,7 @@ static NSColor* _separatorColor = nil;
 
 - (void)awakeFromNib {
   [super awakeFromNib];
-  
+
   self.font = [NSFont userFixedPitchFontOfSize:11];
   self.continuousSpellCheckingEnabled = [[NSUserDefaults standardUserDefaults] boolForKey:GICommitMessageViewUserDefaultKey_EnableSpellChecking];
   self.automaticSpellingCorrectionEnabled = NO;  // Don't trust IB
@@ -165,7 +172,7 @@ static NSColor* _separatorColor = nil;
   self.automaticTextReplacementEnabled = NO;  // Don't trust IB
   self.smartInsertDeleteEnabled = YES;  // Don't trust IB
   [self.textContainer replaceLayoutManager:[[GILayoutManager alloc] init]];
-  
+
   [[NSUserDefaults standardUserDefaults] addObserver:self forKeyPath:GICommitMessageViewUserDefaultKey_ShowInvisibleCharacters options:0 context:(__bridge void*)[GICommitMessageView class]];
   [[NSUserDefaults standardUserDefaults] addObserver:self forKeyPath:GICommitMessageViewUserDefaultKey_ShowMargins options:0 context:(__bridge void*)[GICommitMessageView class]];
   [[NSUserDefaults standardUserDefaults] addObserver:self forKeyPath:GICommitMessageViewUserDefaultKey_EnableSpellChecking options:0 context:(__bridge void*)[GICommitMessageView class]];
@@ -173,15 +180,15 @@ static NSColor* _separatorColor = nil;
 
 - (void)drawRect:(NSRect)dirtyRect {
   [super drawRect:dirtyRect];
-  
+
   if ([[NSUserDefaults standardUserDefaults] boolForKey:GICommitMessageViewUserDefaultKey_ShowMargins]) {
     NSRect bounds = self.bounds;
     CGFloat offset = self.textContainerOrigin.x + self.textContainerInset.width + self.textContainer.lineFragmentPadding;
     CGFloat charWidth = self.font.maximumAdvancement.width;  // TODO: Is this the most reliable way to get the character width of a fixed-width font?
     CGContextRef context = [[NSGraphicsContext currentContext] graphicsPort];
-    
+
     CGContextSaveGState(context);
-    
+
     CGFloat x1 = floor(offset + kSummaryMaxWidth * charWidth) + 0.5;
     const CGFloat pattern1[] = {2, 4};
     CGContextSetLineDash(context, 0, pattern1, 2);
@@ -189,7 +196,7 @@ static NSColor* _separatorColor = nil;
     CGContextMoveToPoint(context, x1, 0);
     CGContextAddLineToPoint(context, x1, bounds.size.height);
     CGContextStrokePath(context);
-    
+
     CGFloat x2 = floor(offset + kBodyMaxWidth * charWidth) + 0.5;
     const CGFloat pattern2[] = {4, 2};
     CGContextSetLineDash(context, 0, pattern2, 2);
@@ -197,7 +204,7 @@ static NSColor* _separatorColor = nil;
     CGContextMoveToPoint(context, x2, 0);
     CGContextAddLineToPoint(context, x2, bounds.size.height);
     CGContextStrokePath(context);
-    
+
     CGContextRestoreGState(context);
   }
 }
@@ -244,13 +251,13 @@ static NSColor* _separatorColor = nil;
 
 - (void)awakeFromNib {
   [super awakeFromNib];
-  
+
   [self saveTextFieldColors];
 }
 
 - (void)setBackgroundStyle:(NSBackgroundStyle)backgroundStyle {
   [super setBackgroundStyle:backgroundStyle];
-  
+
   for (NSView* view in self.subviews) {
     if ([view isKindOfClass:[NSTextField class]]) {
       if (backgroundStyle == NSBackgroundStyleDark) {
@@ -265,7 +272,7 @@ static NSColor* _separatorColor = nil;
 - (void)drawRect:(NSRect)dirtyRect {
   NSRect bounds = self.bounds;
   CGContextRef context = [[NSGraphicsContext currentContext] graphicsPort];
-  
+
   [_separatorColor setStroke];
   CGContextMoveToPoint(context, 0, 0.5);
   CGContextAddLineToPoint(context, bounds.size.width, 0.5);
@@ -287,7 +294,7 @@ static NSColor* _separatorColor = nil;
 
 // NSTableView built-in fallback for tab key when not editable cell is around is to change the first responder to the next key view directly without using -selectNextKeyView:
 - (void)keyDown:(NSEvent*)event {
-  if (event.keyCode == kGIKeyCode_Tab)  {
+  if (event.keyCode == kGIKeyCode_Tab) {
     if (event.modifierFlags & NSShiftKeyMask) {
       [self.window selectPreviousKeyView:nil];
     } else {
@@ -309,7 +316,6 @@ static NSColor* _separatorColor = nil;
     for (NSUInteger glyphIndex = range.location; glyphIndex < range.location + range.length; ++glyphIndex) {
       NSUInteger characterIndex = [self characterIndexForGlyphAtIndex:glyphIndex];
       switch ([string characterAtIndex:characterIndex]) {
-
         case ' ': {
           NSFont* font = [storage attribute:NSFontAttributeName atIndex:characterIndex effectiveRange:NULL];
           XLOG_DEBUG_CHECK([font.fontName isEqualToString:@"Menlo-Regular"]);
@@ -323,7 +329,6 @@ static NSColor* _separatorColor = nil;
           [self replaceGlyphAtIndex:glyphIndex withGlyph:[font glyphWithName:@"carriagereturn"]];
           break;
         }
-
       }
     }
   }

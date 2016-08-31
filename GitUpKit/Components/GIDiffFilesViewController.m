@@ -104,7 +104,7 @@
   NSData* buffer = [sender.draggingPasteboard dataForType:kPasteboardType];
   const void** pointer = (const void**)buffer.bytes;
   NSMutableArray* array = [[NSMutableArray alloc] init];
-  for (size_t i = 0, count = buffer.length / sizeof(void*); i < count; ++i, ++pointer) {
+  for (size_t i = 0, count = buffer.length / sizeof(void *); i < count; ++i, ++pointer) {
     [array addObject:(__bridge GCDiffDelta*)*pointer];
   }
   return [_controller.delegate diffFilesViewController:_controller didReceiveDeltas:array fromOtherController:sourceController];
@@ -146,13 +146,13 @@ static NSImage* _untrackedImage = nil;
 
 - (void)loadView {
   [super loadView];
-  
+
   _tableView.controller = self;
   _tableView.target = self;
   _tableView.doubleAction = @selector(doubleClick:);
-  
+
   _emptyTextField.stringValue = @"";
-  
+
   self.allowsMultipleSelection = NO;
 }
 
@@ -177,7 +177,7 @@ static NSImage* _untrackedImage = nil;
     _data = nil;
   }
   [_tableView reloadData];
-  
+
   _emptyTextField.hidden = _data.count ? YES : NO;
 }
 
@@ -245,11 +245,10 @@ static NSImage* _untrackedImage = nil;
 #pragma mark - Actions
 
 - (BOOL)validateUserInterfaceItem:(id<NSValidatedUserInterfaceItem>)item {
-  
   if (item.action == @selector(copy:)) {
     return (_tableView.selectedRow >= 0);
   }
-  
+
   return NO;
 }
 
@@ -262,7 +261,7 @@ static NSImage* _untrackedImage = nil;
     }
     [string appendString:delta.canonicalPath];
   }];
-  [[NSPasteboard generalPasteboard] declareTypes:@[NSPasteboardTypeString] owner:nil];
+  [[NSPasteboard generalPasteboard] declareTypes:@[ NSPasteboardTypeString ] owner:nil];
   [[NSPasteboard generalPasteboard] setString:string forType:NSPasteboardTypeString];
 }
 
@@ -303,23 +302,22 @@ static NSImage* _untrackedImage = nil;
     view.imageView.image = _conflictImage;
   } else {
     switch (data.delta.change) {
-      
       case kGCFileDiffChange_Added:
         view.imageView.image = _addedImage;
         break;
-      
+
       case kGCFileDiffChange_Deleted:
         view.imageView.image = _deletedImage;
         break;
-      
+
       case kGCFileDiffChange_Modified:
         view.imageView.image = _modifiedImage;
         break;
-      
+
       case kGCFileDiffChange_Renamed:
         view.imageView.image = _renamedImage;
         break;
-      
+
       case kGCFileDiffChange_Untracked:
         if (_showsUntrackedAsAdded) {
           view.imageView.image = _addedImage;
@@ -327,12 +325,11 @@ static NSImage* _untrackedImage = nil;
           view.imageView.image = _untrackedImage;
         }
         break;
-      
+
       default:
         view.imageView.image = nil;
         XLOG_DEBUG_UNREACHABLE();
         break;
-      
     }
   }
   return view;

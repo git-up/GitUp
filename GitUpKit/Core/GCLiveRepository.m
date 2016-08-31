@@ -66,17 +66,17 @@ static int32_t _allocatedCount = 0;
   GCRepositoryState _state;
   NSInteger _historyUpdatesSuspended;
   BOOL _historyUpdatePending;
-  
+
   NSMutableArray* _snapshots;
   CFRunLoopTimerRef _snapshotsTimer;
   GCSnapshot* _lastSnapshot;
   BOOL _snapshotPending;
-  
+
   GCCommitDatabase* _database;
   BOOL _databaseIndexesDiffs;
   BOOL _updatingDatabase;
   BOOL _databaseUpdatePending;
-  
+
   NSString* _undoActionName;
 }
 
@@ -123,7 +123,6 @@ static void _TimerCallBack(CFRunLoopTimerRef timer, void* info) {
   for (size_t i = 0; i < numEvents; ++i) {
     const char* path = ((const char**)eventPaths)[i];
     if (eventFlags[i] & kFSEventStreamEventFlagRootChanged) {
-      
       XLOG_DEBUG_CHECK(stream == _gitDirectoryStream);
       char buffer[PATH_MAX];
       if (fcntl(_gitDirectory, F_GETPATH, buffer) >= 0) {
@@ -140,13 +139,12 @@ static void _TimerCallBack(CFRunLoopTimerRef timer, void* info) {
         XLOG_DEBUG_UNREACHABLE();
         XLOG_ERROR(@"Failed retrieving directory path (%s)", strerror(errno));
       }
-      
+
     } else if (eventFlags[i] & kFSEventStreamEventFlagMustScanSubDirs) {
-      
       XLOG_WARNING(@"Ignoring event stream request to rescan \"%s\"", path);  // Note that this directory path can be missing the trailing slash
-      
+
     } else {  // Documentation says "eventFlags" should be 0x0 for regular events but that's not the case on OS X 10.10 at least
-      
+
       const char* gitDirectoryPath = git_repository_path(self.private);
       size_t length = strlen(gitDirectoryPath);
       XLOG_DEBUG_CHECK(gitDirectoryPath[length - 1] == '/');
@@ -179,7 +177,6 @@ static void _TimerCallBack(CFRunLoopTimerRef timer, void* info) {
           }
         }
       }
-      
     }
   }
 }
@@ -202,7 +199,7 @@ static void _StreamCallback(ConstFSEventStreamRef streamRef, void* clientCallBac
   if (path) {
     FSEventStreamContext streamContext = {0, (__bridge void*)self, NULL, NULL, NULL};
     _workingDirectoryStream = FSEventStreamCreate(kCFAllocatorDefault, _StreamCallback, &streamContext,
-                                                  (__bridge CFArrayRef)@[path], kFSEventStreamEventIdSinceNow,
+                                                  (__bridge CFArrayRef) @[ path ], kFSEventStreamEventIdSinceNow,
                                                   kFSLatency, kFSEventStreamCreateFlagIgnoreSelf);  // This opens the path
     if (_workingDirectoryStream) {
       FSEventStreamScheduleWithRunLoop(_workingDirectoryStream, CFRunLoopGetMain(), kCFRunLoopCommonModes);
@@ -220,27 +217,27 @@ static void _StreamCallback(ConstFSEventStreamRef streamRef, void* clientCallBac
     _diffWhitespaceMode = kGCLiveRepositoryDiffWhitespaceMode_Normal;
     _diffMaxInterHunkLines = 0;
     _diffMaxContextLines = 3;
-    
+
     _state = [super state];
-    
+
     CFAbsoluteTime time = CFAbsoluteTimeGetCurrent();
     _history = [self loadHistoryUsingSorting:[self.class historySorting] error:error];
     if (_history == nil) {
       return nil;
     }
     XLOG_VERBOSE(@"History loaded for \"%@\" (%lu commits scanned in %.3f seconds)", self.repositoryPath, _history.allCommits.count, CFAbsoluteTimeGetCurrent() - time);
-    
+
     NSString* path = self.repositoryPath;
     _gitDirectory = open(path.fileSystemRepresentation, O_RDONLY);  // Don't use O_EVTONLY as we do want to prevent unmounting the volume that contains the directory
     CHECK_POSIX_FUNCTION_CALL(return nil, _gitDirectory, >= 0);
-    
+
     CFRunLoopTimerContext context = {0, (__bridge void*)self, NULL, NULL, NULL};
     _updateTimer = CFRunLoopTimerCreate(kCFAllocatorDefault, HUGE_VALF, HUGE_VALF, 0, 0, _TimerCallBack, &context);
     CFRunLoopAddTimer(CFRunLoopGetMain(), _updateTimer, kCFRunLoopCommonModes);
-    
+
     FSEventStreamContext streamContext = {0, (__bridge void*)self, NULL, NULL, NULL};
     _gitDirectoryStream = FSEventStreamCreate(kCFAllocatorDefault, _StreamCallback, &streamContext,
-                                              (__bridge CFArrayRef)@[path], kFSEventStreamEventIdSinceNow,
+                                              (__bridge CFArrayRef) @[ path ], kFSEventStreamEventIdSinceNow,
                                               kFSLatency, kFSEventStreamCreateFlagWatchRoot | kFSEventStreamCreateFlagIgnoreSelf);  // This opens the path
     if (_gitDirectoryStream == NULL) {
       XLOG_ERROR(@"Failed creating event stream at \"%@\"", path);
@@ -251,7 +248,7 @@ static void _StreamCallback(ConstFSEventStreamRef streamRef, void* clientCallBac
       XLOG_ERROR(@"Failed starting event stream at \"%@\"", path);
       return nil;
     }
-    
+
     [self _reloadWorkingDirectoryStream];
   }
   return self;
@@ -290,7 +287,7 @@ static void _StreamCallback(ConstFSEventStreamRef streamRef, void* clientCallBac
     if (_statusMode != kGCLiveRepositoryStatusMode_Disabled) {
       [self _updateStatus:YES];
     }
-    
+
     if ([self.delegate respondsToSelector:@selector(repositoryWorkingDirectoryDidChange:)]) {
       [self.delegate repositoryWorkingDirectoryDidChange:self];
     }
@@ -309,7 +306,7 @@ static void _StreamCallback(ConstFSEventStreamRef streamRef, void* clientCallBac
     if ((_statusMode != kGCLiveRepositoryStatusMode_Disabled) && !workingDirectoryChanged) {  // Don't update status twice!
       [self _updateStatus:YES];
     }
-    
+
     if ([self.delegate respondsToSelector:@selector(repositoryDidChange:)]) {
       [self.delegate repositoryDidChange:self];
     }
@@ -356,9 +353,12 @@ static void _StreamCallback(ConstFSEventStreamRef streamRef, void* clientCallBac
 
 - (GCDiffOptions)diffBaseOptions {
   switch (_diffWhitespaceMode) {
-    case kGCLiveRepositoryDiffWhitespaceMode_Normal: return 0;
-    case kGCLiveRepositoryDiffWhitespaceMode_IgnoreChanges: return kGCDiffOption_IgnoreSpaceChanges;
-    case kGCLiveRepositoryDiffWhitespaceMode_IgnoreAll: return kGCDiffOption_IgnoreAllSpaces;
+    case kGCLiveRepositoryDiffWhitespaceMode_Normal:
+      return 0;
+    case kGCLiveRepositoryDiffWhitespaceMode_IgnoreChanges:
+      return kGCDiffOption_IgnoreSpaceChanges;
+    case kGCLiveRepositoryDiffWhitespaceMode_IgnoreAll:
+      return kGCDiffOption_IgnoreAllSpaces;
   }
   XLOG_DEBUG_UNREACHABLE();
   return 0;
@@ -370,7 +370,7 @@ static void _StreamCallback(ConstFSEventStreamRef streamRef, void* clientCallBac
   GCRepositoryState state = [super state];
   if (state != _state) {
     _state = state;
-    
+
     if ([self.delegate respondsToSelector:@selector(repositoryDidUpdateState:)]) {
       [self.delegate repositoryDidUpdateState:self];
     }
@@ -415,17 +415,17 @@ static void _StreamCallback(ConstFSEventStreamRef streamRef, void* clientCallBac
   if ([self reloadHistory:_history referencesDidChange:&referencesDidChange addedCommits:NULL removedCommits:NULL error:&error]) {
     if (referencesDidChange) {
       XLOG_VERBOSE(@"History updated for \"%@\" (%lu commits scanned in %.3f seconds)", self.repositoryPath, _history.allCommits.count, CFAbsoluteTimeGetCurrent() - time);
-      
+
       if (_snapshotsTimer) {
         CFRunLoopTimerSetNextFireDate(_snapshotsTimer, CFAbsoluteTimeGetCurrent() + kAutomaticSnapshotDelay);
         _snapshotPending = YES;
       }
-      
+
       if ([self.delegate respondsToSelector:@selector(repositoryDidUpdateHistory:)]) {
         [self.delegate repositoryDidUpdateHistory:self];
       }
       [[NSNotificationCenter defaultCenter] postNotificationName:GCLiveRepositoryHistoryDidUpdateNotification object:self];
-      
+
       if (_database) {
         [self _updateSearch];
       }
@@ -443,23 +443,24 @@ static void _StreamCallback(ConstFSEventStreamRef streamRef, void* clientCallBac
   NSString* path = [self.privateAppDirectoryPath stringByAppendingPathComponent:kCommitDatabaseFileName];
   _updatingDatabase = YES;
   dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
-    
+
     NSError* error;
     GCRepository* repository = [[GCRepository alloc] initWithExistingLocalRepository:self.repositoryPath error:&error];  // We cannot use self because we access the repo on a background thread
     GCCommitDatabase* database = repository ? [[GCCommitDatabase alloc] initWithRepository:repository
                                                                               databasePath:path
                                                                                    options:(_databaseIndexesDiffs ? kGCCommitDatabaseOptions_IndexDiffs : 0)
-                                                                                     error:&error] : nil;
+                                                                                     error:&error]
+                                            : nil;
     BOOL success = [database updateWithProgressHandler:handler error:&error];
     database = nil;  // Release and close immediately
     dispatch_async(dispatch_get_main_queue(), ^{
-      
+
       XLOG_DEBUG_CHECK(_updatingDatabase);
       _updatingDatabase = NO;
       completion(success, error);
-      
+
     });
-    
+
   });
 }
 
@@ -468,25 +469,26 @@ static void _StreamCallback(ConstFSEventStreamRef streamRef, void* clientCallBac
   if (_updatingDatabase) {
     _databaseUpdatePending = YES;
   } else {
-    [self _updateDatabaseInBackgroundWithProgressHandler:NULL completion:^(BOOL success, NSError* error) {
-      
-      if (success) {
-        if ([self.delegate respondsToSelector:@selector(repositoryDidUpdateSearch:)]) {
-          [self.delegate repositoryDidUpdateSearch:self];
-        }
-        [[NSNotificationCenter defaultCenter] postNotificationName:GCLiveRepositorySearchDidUpdateNotification object:self];
-        
-        if (_databaseUpdatePending) {
-          [self _updateSearch];
-          _databaseUpdatePending = NO;
-        }
-      } else {
-        if ([self.delegate respondsToSelector:@selector(repository:searchUpdateDidFailWithError:)]) {
-          [self.delegate repository:self searchUpdateDidFailWithError:error];
-        }
-      }
-      
-    }];
+    [self _updateDatabaseInBackgroundWithProgressHandler:NULL
+                                              completion:^(BOOL success, NSError* error) {
+
+                                                if (success) {
+                                                  if ([self.delegate respondsToSelector:@selector(repositoryDidUpdateSearch:)]) {
+                                                    [self.delegate repositoryDidUpdateSearch:self];
+                                                  }
+                                                  [[NSNotificationCenter defaultCenter] postNotificationName:GCLiveRepositorySearchDidUpdateNotification object:self];
+
+                                                  if (_databaseUpdatePending) {
+                                                    [self _updateSearch];
+                                                    _databaseUpdatePending = NO;
+                                                  }
+                                                } else {
+                                                  if ([self.delegate respondsToSelector:@selector(repository:searchUpdateDidFailWithError:)]) {
+                                                    [self.delegate repository:self searchUpdateDidFailWithError:error];
+                                                  }
+                                                }
+
+                                              }];
   }
 }
 
@@ -552,7 +554,7 @@ static void _StreamCallback(ConstFSEventStreamRef streamRef, void* clientCallBac
     [self.delegate repositoryDidUpdateSnapshots:self];
   }
   [[NSNotificationCenter defaultCenter] postNotificationName:GCLiveRepositorySnapshotsDidUpdateNotification object:self];
-  
+
   [self _writeSnapshots];
   return YES;
 }
@@ -612,14 +614,14 @@ static void _StreamCallback(ConstFSEventStreamRef streamRef, void* clientCallBac
     _lastSnapshot = _snapshots.firstObject;
   } else if (!flag && _snapshotsTimer) {
     [self _saveAutomaticSnapshotIfPending];
-    
+
     if (_lastSnapshot && ![_snapshots.firstObject isEqualToSnapshot:_lastSnapshot usingOptions:(kGCSnapshotOption_IncludeHEAD | kGCSnapshotOption_IncludeLocalBranches | kGCSnapshotOption_IncludeTags)]) {
       XLOG_DEBUG_CHECK(_undoActionName);
       [_undoManager setActionName:_undoActionName];
       [[_undoManager prepareWithInvocationTarget:self] _undoOperationWithReason:@"automatic" beforeSnapshot:_lastSnapshot afterSnapshot:_snapshots.firstObject checkoutIfNeeded:YES ignore:NO];
       _undoActionName = nil;
     }
-    
+
     CFRunLoopTimerInvalidate(_snapshotsTimer);
     CFRelease(_snapshotsTimer);
     _snapshotsTimer = NULL;
@@ -653,7 +655,7 @@ static void _StreamCallback(ConstFSEventStreamRef streamRef, void* clientCallBac
   GCDiff* workdirDiff = nil;
   NSDictionary* conflicts = nil;
   NSError* error;
-  
+
   CFAbsoluteTime time = CFAbsoluteTimeGetCurrent();
   if (_statusMode == kGCLiveRepositoryStatusMode_Unified) {
     unifiedDiff = [self diffWorkingDirectoryWithHEAD:nil
@@ -688,7 +690,7 @@ static void _StreamCallback(ConstFSEventStreamRef streamRef, void* clientCallBac
       success = NO;
     }
   }
-  
+
   if (success) {
     if (((_statusMode == kGCLiveRepositoryStatusMode_Unified) && ![_unifiedStatus isEqualToDiff:unifiedDiff]) || ((_statusMode != kGCLiveRepositoryStatusMode_Unified) && (![_indexStatus isEqualToDiff:indexDiff] || ![_workingDirectoryStatus isEqualToDiff:workdirDiff])) || ![_indexConflicts isEqualToDictionary:conflicts]) {
       XLOG_VERBOSE(@"Status updated for \"%@\" in %.3f seconds", self.repositoryPath, CFAbsoluteTimeGetCurrent() - time);
@@ -696,7 +698,7 @@ static void _StreamCallback(ConstFSEventStreamRef streamRef, void* clientCallBac
       _indexStatus = indexDiff;
       _indexConflicts = conflicts;
       _workingDirectoryStatus = workdirDiff;
-      
+
       if (notify) {
         if ([self.delegate respondsToSelector:@selector(repositoryDidUpdateStatus:)]) {
           [self.delegate repositoryDidUpdateStatus:self];
@@ -736,7 +738,7 @@ static void _StreamCallback(ConstFSEventStreamRef streamRef, void* clientCallBac
     if (![_stashes isEqualToArray:stashes]) {
       XLOG_VERBOSE(@"Stashes updated for \"%@\"", self.repositoryPath);
       _stashes = stashes;
-      
+
       if (notify) {
         if ([self.delegate respondsToSelector:@selector(repositoryDidUpdateStashes:)]) {
           [self.delegate repositoryDidUpdateStashes:self];
@@ -770,7 +772,7 @@ static void _StreamCallback(ConstFSEventStreamRef streamRef, void* clientCallBac
     [[_undoManager prepareWithInvocationTarget:self] _undoOperationWithReason:reason beforeSnapshot:beforeSnapshot afterSnapshot:afterSnapshot checkoutIfNeeded:checkoutIfNeeded ignore:NO];
     return;
   }
-  
+
   BOOL success = NO;
   NSError* error;
   GCCommit* oldHeadCommit;
@@ -792,7 +794,7 @@ static void _StreamCallback(ConstFSEventStreamRef streamRef, void* clientCallBac
     }
     [self notifyRepositoryChanged];
   }
-  
+
   if (!success) {  // In case of error, put a dummy operation on the undo stack since we *must* put something, but pop it at the next runloop iteration
     [[_undoManager prepareWithInvocationTarget:self] _undoOperationWithReason:reason beforeSnapshot:beforeSnapshot afterSnapshot:afterSnapshot checkoutIfNeeded:checkoutIfNeeded ignore:YES];
     [_undoManager performSelector:(self.undoManager.isRedoing ? @selector(undo) : @selector(redo)) withObject:nil afterDelay:0.0];
@@ -810,7 +812,7 @@ static void _StreamCallback(ConstFSEventStreamRef streamRef, void* clientCallBac
   if (![_snapshots.firstObject isEqualToSnapshot:afterSnapshot usingOptions:(kGCSnapshotOption_IncludeLocalBranches | kGCSnapshotOption_IncludeTags)]) {
     [self _saveSnapshot:afterSnapshot withReason:reason argument:argument];  // Only save snapshot if different from last one (excluding HEAD)
   }
-  
+
 #if DEBUG
   if ([afterSnapshot isEqualToSnapshot:beforeSnapshot usingOptions:(kGCSnapshotOption_IncludeHEAD | kGCSnapshotOption_IncludeLocalBranches | kGCSnapshotOption_IncludeTags)]) {
     kill(getpid(), SIGSTOP);  // Break into debugger - only works on main thread
@@ -862,12 +864,12 @@ static void _StreamCallback(ConstFSEventStreamRef streamRef, void* clientCallBac
       [self.delegate repositoryBackgroundOperationInProgressDidChange:self];
     }
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-      
+
       GCRepository* repository = [[GCRepository alloc] initWithExistingLocalRepository:self.repositoryPath error:&error];
       repository.delegate = self.delegate;
       __block BOOL success = repository && operationBlock(repository, &error);
       dispatch_async(dispatch_get_main_queue(), ^{
-        
+
         if (success) {
           GCSnapshot* afterSnapshot = reason ? [self takeSnapshot:&error] : nil;
           if (!reason || afterSnapshot) {
@@ -884,15 +886,15 @@ static void _StreamCallback(ConstFSEventStreamRef streamRef, void* clientCallBac
         }
         [[NSProcessInfo processInfo] enableSuddenTermination];
         completionBlock(success, error);
-        
+
       });
-      
+
     });
   } else {
     dispatch_async(dispatch_get_main_queue(), ^{
-      
+
       completionBlock(NO, error);
-      
+
     });
   }
 }
@@ -905,29 +907,33 @@ static void _StreamCallback(ConstFSEventStreamRef streamRef, void* clientCallBac
                                    argument:(id<NSCoding>)argument
                                       error:(NSError**)error
                                  usingBlock:(GCReferenceTransform* (^)(GCLiveRepository* repository, NSError** outError))block {
-  return [self performOperationWithReason:reason argument:argument skipCheckoutOnUndo:NO error:error usingBlock:^BOOL(GCLiveRepository* repository, NSError** outError) {
-    
-    GCReferenceTransform* transform = block(repository, outError);
-    if (!transform) {
-      return NO;
-    }
-    GCCommit* oldHeadCommit;
-    if (![repository lookupHEADCurrentCommit:&oldHeadCommit branch:NULL error:error]) {
-      return NO;
-    }
-    if (![repository applyReferenceTransform:transform error:outError]) {
-      return NO;
-    }
-    GCCommit* newHeadCommit;
-    if (![repository lookupHEADCurrentCommit:&newHeadCommit branch:NULL error:error]) {
-      return NO;
-    }
-    if (newHeadCommit && (!oldHeadCommit || ![newHeadCommit isEqualToCommit:oldHeadCommit])) {
-      return [self checkoutTreeForCommit:nil withBaseline:oldHeadCommit options:kGCCheckoutOption_UpdateSubmodulesRecursively error:outError];
-    }
-    return YES;
-    
-  }];
+  return [self performOperationWithReason:reason
+                                 argument:argument
+                       skipCheckoutOnUndo:NO
+                                    error:error
+                               usingBlock:^BOOL(GCLiveRepository* repository, NSError** outError) {
+
+                                 GCReferenceTransform* transform = block(repository, outError);
+                                 if (!transform) {
+                                   return NO;
+                                 }
+                                 GCCommit* oldHeadCommit;
+                                 if (![repository lookupHEADCurrentCommit:&oldHeadCommit branch:NULL error:error]) {
+                                   return NO;
+                                 }
+                                 if (![repository applyReferenceTransform:transform error:outError]) {
+                                   return NO;
+                                 }
+                                 GCCommit* newHeadCommit;
+                                 if (![repository lookupHEADCurrentCommit:&newHeadCommit branch:NULL error:error]) {
+                                   return NO;
+                                 }
+                                 if (newHeadCommit && (!oldHeadCommit || ![newHeadCommit isEqualToCommit:oldHeadCommit])) {
+                                   return [self checkoutTreeForCommit:nil withBaseline:oldHeadCommit options:kGCCheckoutOption_UpdateSubmodulesRecursively error:outError];
+                                 }
+                                 return YES;
+
+                               }];
 }
 
 - (GCCommit*)performCommitCreationFromHEADAndOtherParent:(GCCommit*)parent withMessage:(NSString*)message error:(NSError**)error {
@@ -937,11 +943,11 @@ static void _StreamCallback(ConstFSEventStreamRef streamRef, void* clientCallBac
                      skipCheckoutOnUndo:YES
                                   error:error
                              usingBlock:^BOOL(GCLiveRepository* repository, NSError** outError) {
-    
-    newCommit = [repository createCommitFromHEADAndOtherParent:parent withMessage:message error:outError];
-    return newCommit ? YES : NO;
-    
-  }]) {
+
+                               newCommit = [repository createCommitFromHEADAndOtherParent:parent withMessage:message error:outError];
+                               return newCommit ? YES : NO;
+
+                             }]) {
     return nil;
   }
   return newCommit;
@@ -954,11 +960,11 @@ static void _StreamCallback(ConstFSEventStreamRef streamRef, void* clientCallBac
                      skipCheckoutOnUndo:YES
                                   error:error
                              usingBlock:^BOOL(GCLiveRepository* repository, NSError** outError) {
-    
-    newCommit = [repository createCommitByAmendingHEADWithMessage:message error:error];
-    return newCommit ? YES : NO;
-    
-  }]) {
+
+                               newCommit = [repository createCommitByAmendingHEADWithMessage:message error:error];
+                               return newCommit ? YES : NO;
+
+                             }]) {
     return nil;
   }
   return newCommit;
@@ -973,26 +979,27 @@ static void _StreamCallback(ConstFSEventStreamRef streamRef, void* clientCallBac
                        completion:(void (^)(BOOL success, NSError* error))completion {
   if (_database == nil) {
     _databaseIndexesDiffs = indexDiffs;
-    [self _updateDatabaseInBackgroundWithProgressHandler:handler completion:^(BOOL success, NSError* error) {
-      
-      if (success) {
-        NSString* path = [self.privateAppDirectoryPath stringByAppendingPathComponent:kCommitDatabaseFileName];
-        _database = [[GCCommitDatabase alloc] initWithRepository:self
-                                                    databasePath:path
-                                                         options:((_databaseIndexesDiffs ? kGCCommitDatabaseOptions_IndexDiffs : 0) | kGCCommitDatabaseOptions_QueryOnly)
-                                                           error:&error];
-        if (_database) {
-          if (_databaseUpdatePending) {
-            [self _updateSearch];
-            _databaseUpdatePending = NO;
-          }
-        } else {
-          success = NO;
-        }
-      }
-      completion(success, error);
-      
-    }];
+    [self _updateDatabaseInBackgroundWithProgressHandler:handler
+                                              completion:^(BOOL success, NSError* error) {
+
+                                                if (success) {
+                                                  NSString* path = [self.privateAppDirectoryPath stringByAppendingPathComponent:kCommitDatabaseFileName];
+                                                  _database = [[GCCommitDatabase alloc] initWithRepository:self
+                                                                                              databasePath:path
+                                                                                                   options:((_databaseIndexesDiffs ? kGCCommitDatabaseOptions_IndexDiffs : 0) | kGCCommitDatabaseOptions_QueryOnly)
+                                                                                                     error:&error];
+                                                  if (_database) {
+                                                    if (_databaseUpdatePending) {
+                                                      [self _updateSearch];
+                                                      _databaseUpdatePending = NO;
+                                                    }
+                                                  } else {
+                                                    success = NO;
+                                                  }
+                                                }
+                                                completion(success, error);
+
+                                              }];
   } else {
     XLOG_DEBUG_UNREACHABLE();
   }
@@ -1008,7 +1015,6 @@ static BOOL _MatchReference(NSString* match, NSString* name) {
   NSMutableArray* results = [[NSMutableArray alloc] init];
   match = [match stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
   if (match.length >= kMinSearchLength) {
-    
     // Search SHA1s directly
     NSArray* words = [match componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     for (NSString* prefix in words) {
@@ -1024,7 +1030,7 @@ static BOOL _MatchReference(NSString* match, NSString* name) {
         }
       }
     }
-    
+
     // Search references
     for (GCHistoryLocalBranch* branch in _history.localBranches) {
       if (_MatchReference(match, branch.name)) {
@@ -1053,10 +1059,9 @@ static BOOL _MatchReference(NSString* match, NSString* name) {
         }
       }
     }
-    
+
     // Search commits
     [results addObjectsFromArray:[_database findCommitsUsingHistory:_history matching:match error:NULL]];  // Ignore errors
-    
   }
   return results;
 }

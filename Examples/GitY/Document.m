@@ -48,7 +48,7 @@
   if (_repository) {
     if (_repository.bare) {
       if (outError) {
-        *outError = [NSError errorWithDomain:NSCocoaErrorDomain code:-1 userInfo:@{NSLocalizedDescriptionKey: @"Bare repositories are not supported!"}];
+        *outError = [NSError errorWithDomain:NSCocoaErrorDomain code:-1 userInfo:@{ NSLocalizedDescriptionKey : @"Bare repositories are not supported!" }];
       }
     } else {
       _repository.delegate = self;
@@ -60,7 +60,7 @@
 
 - (void)close {
   [super close];
-  
+
   _repository.delegate = nil;
   _repository = nil;
 }
@@ -70,28 +70,28 @@
   [self addWindowController:_windowController];
 }
 
-- (void)windowControllerDidLoadNib:(NSWindowController *)aController {
+- (void)windowControllerDidLoadNib:(NSWindowController*)aController {
   [super windowControllerDidLoadNib:aController];
-  
+
   _toolbar = [[NSToolbar alloc] initWithIdentifier:@"default"];
   _toolbar.delegate = self;
   _windowController.window.toolbar = _toolbar;
-  
+
   NSSortDescriptor* descriptor = [[NSSortDescriptor alloc] initWithKey:@"date" ascending:NO selector:@selector(compare:)];
-  _arrayController.sortDescriptors = @[descriptor];
-  
+  _arrayController.sortDescriptors = @[ descriptor ];
+
   _diffContentsViewController = [[GIDiffContentsViewController alloc] initWithRepository:_repository];
   _diffContentsViewController.delegate = self;
   _diffContentsViewController.headerView = _headerView;
   _diffContentsViewController.view.frame = _diffView.frame;
   [_diffView.superview replaceSubview:_diffView with:_diffContentsViewController.view];
-  
+
   _commitViewController = [[GIAdvancedCommitViewController alloc] initWithRepository:_repository];
   [[_tabView tabViewItemAtIndex:1] setView:_commitViewController.view];
-  
+
   _headerViewMinHeight = _headerView.frame.size.height - _messageTextField.frame.size.height;
   _messageTextFieldMargins = _headerView.frame.size.width - _messageTextField.frame.size.width;
-  
+
   [self repositoryDidUpdateHistory:nil];
 }
 
@@ -115,7 +115,7 @@
 }
 
 - (NSArray*)toolbarDefaultItemIdentifiers:(NSToolbar*)toolbar {
-  return @[kToolbarItem_LeftView, NSToolbarFlexibleSpaceItemIdentifier, kToolbarItem_RightView];
+  return @[ kToolbarItem_LeftView, NSToolbarFlexibleSpaceItemIdentifier, kToolbarItem_RightView ];
 }
 
 - (NSArray*)toolbarAllowedItemIdentifiers:(NSToolbar*)toolbar {

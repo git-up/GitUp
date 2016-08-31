@@ -41,7 +41,7 @@
   }
   [_alternateCommit release];
   [_commit release];
-  
+
   [super dealloc];
 }
 

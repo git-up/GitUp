@@ -70,7 +70,7 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
   }
   CFRelease(_children);
   CFRelease(_parents);
-  
+
   [super dealloc];
 }
 
@@ -179,7 +179,7 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
 
 - (void)dealloc {
   [_annotation release];
-  
+
   [super dealloc];
 }
 
@@ -239,12 +239,12 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
   [_remoteBranches release];
   [_tips release];
   [_md5 release];
-  
+
   CFRelease(_lookup);
   [_leaves release];
   [_roots release];
   [_commits release];
-  
+
   [super dealloc];
 }
 
@@ -331,35 +331,36 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
   if (![fromCommit isEqualToCommit:toCommit]) {
     __block NSUInteger counter = 1;
     BOOL* states = calloc(_nextAutoIncrementID, sizeof(BOOL));
-    
+
     COMMIT_STATE(toCommit) = YES;
-    GCHistoryWalker* walker = [self walkerForAncestorsOfCommits:@[fromCommit]];
+    GCHistoryWalker* walker = [self walkerForAncestorsOfCommits:@[ fromCommit ]];
     while (1) {
       NSUInteger oldCounter = counter;
       if (![walker iterateWithCommitBlock:^(GCHistoryCommit* commit, BOOL* stop) {
-        
-        if (!COMMIT_STATE(commit)) {
-          BOOL skip = NO;
-          CFArrayRef children = commit->_children;
-          for (CFIndex i = 0, count = CFArrayGetCount(children); i < count; ++i) {
-            GCHistoryCommit* childCommit = CFArrayGetValueAtIndex(children, i);
-            if (COMMIT_STATE(childCommit)) {
-              skip = YES;
-              break;
+
+            if (!COMMIT_STATE(commit)) {
+              BOOL skip = NO;
+              CFArrayRef children = commit->_children;
+              for (CFIndex i = 0, count = CFArrayGetCount(children); i < count; ++i) {
+                GCHistoryCommit* childCommit = CFArrayGetValueAtIndex(children, i);
+                if (COMMIT_STATE(childCommit)) {
+                  skip = YES;
+                  break;
+                }
+              }
+              if (skip) {
+                COMMIT_STATE(commit) = YES;
+              } else {
+                ++counter;
+              }
             }
-          }
-          if (skip) {
-            COMMIT_STATE(commit) = YES;
-          } else {
-            ++counter;
-          }
-        }
-        
-      }] || (counter == oldCounter)) {
+
+          }] ||
+          (counter == oldCounter)) {
         break;
       }
     }
-    
+
     free(states);
     return counter;
   }
@@ -380,7 +381,7 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
   BOOL _followParents;
   BOOL _entireHistory;
   BOOL _done;
-  
+
   int* states;
   GCPointerList row;
   GCPointerList previousRow;
@@ -398,7 +399,7 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
     _commits = [commits retain];
     _followParents = followParents;
     _entireHistory = entireHistory;
-    
+
     states = calloc(history.nextAutoIncrementID, sizeof(int));
     GC_POINTER_LIST_INITIALIZE(row, 32);
     GC_POINTER_LIST_INITIALIZE(previousRow, GC_POINTER_LIST_MAX(row));
@@ -413,10 +414,10 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
   GC_POINTER_LIST_FREE(previousRow);
   GC_POINTER_LIST_FREE(row);
   free(states);
-  
+
   [_commits release];
   [_history release];
-  
+
   [super dealloc];
 }
 
@@ -425,12 +426,12 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
     XLOG_DEBUG_UNREACHABLE();  // We were already done iterating before!
     return NO;
   }
-  
+
   if (_history.nextGeneration != _nextGeneration) {
     XLOG_DEBUG_UNREACHABLE();  // The history has changed from under us!
     return NO;
   }
-  
+
   // Seed first row with initial commits
   if (_commits) {
     for (GCHistoryCommit* commit in _commits) {
@@ -456,14 +457,15 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
       return YES;
     }
   }
-  
+
   // Keep generating commit rows following parents (respectively children)
   if (GC_POINTER_LIST_COUNT(previousRow)) {
     __block BOOL success = NO;
-    BOOL (^commitBlock)(GCHistoryCommit*) = ^(GCHistoryCommit* commit) {
+    BOOL (^commitBlock)
+    (GCHistoryCommit*) = ^(GCHistoryCommit* commit) {
       XLOG_DEBUG_CHECK(!COMMIT_IS_PROCESSED(commit));
       BOOL ready = YES;
-      
+
       // Check if this commit is "ready" i.e. all its children (respectively parents) have been processed (but not on the current iteration)
       CFArrayRef relations = _followParents ? commit->_children : commit->_parents;
       for (CFIndex j = 0, jMax = CFArrayGetCount(relations); j < jMax; ++j) {
@@ -473,7 +475,7 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
           break;
         }
       }
-      
+
       // Process commit if ready or skip it otherwise
       if (ready) {
         BOOL stop = NO;
@@ -490,10 +492,9 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
       return YES;
     };
     ++iteration;
-    
+
     // Iterate over commits from previous row
     GC_POINTER_LIST_FOR_LOOP(previousRow, GCHistoryCommit*, previousCommit) {
-      
       // If commit was processed, attempt to process its parents (respectively children)
       if (COMMIT_IS_PROCESSED(previousCommit)) {
         if (!COMMIT_WAS_JUST_PROCESSED(previousCommit)) {
@@ -520,21 +521,20 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
           }
         }
       }
-      
     }
-    
+
     // If row is empty we're done
     if (!GC_POINTER_LIST_COUNT(row)) {
       _done = YES;
       return NO;
     }
-    
+
     // If row only contains only skipped commits (this can only happen when not walking the entire history),
     // break the deadlock by force processing the newest (respectively oldest) skipped commit
     if (!success) {
       XLOG_DEBUG_CHECK(!_entireHistory);
       XLOG_DEBUG_CHECK(sizeof(git_time_t) == sizeof(int64_t));
-      
+
       // Find newest (respectively oldest) skipped commit(s)
       git_time_t boundaryTime = _followParents ? LONG_LONG_MIN : LONG_LONG_MAX;
       GC_POINTER_LIST_FOR_LOOP(row, GCHistoryCommit*, timeCommit) {
@@ -547,7 +547,7 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
           boundaryTime = time;
         }
       }
-      
+
       // If we have multiple candidates, remove the ones that are parents (respectively children) of the others
       if (GC_POINTER_LIST_COUNT(candidates) > 1) {
         GC_POINTER_LIST_ALLOCATE(temp, GC_POINTER_LIST_MAX(candidates));
@@ -568,7 +568,7 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
         }
         GC_POINTER_LIST_SWAP(temp, candidates);
         GC_POINTER_LIST_FREE(temp);
-        
+
         // Bail if we still have more than a single candidate since it's not possible to guarantee the following commits won't be processed out-of-order
         if (GC_POINTER_LIST_COUNT(candidates) != 1) {
           XLOG_ERROR(@"Unable to continue walking history in \"%@\" due to unsolvable deadlock", _history.repository.repositoryPath);
@@ -576,7 +576,7 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
           return NO;
         }
       }
-      
+
       // Force process commit
       GCHistoryCommit* commit = GC_POINTER_LIST_GET(candidates, 0);
       BOOL stop = NO;
@@ -587,7 +587,7 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
       }
       SET_COMMIT_PROCESSED(commit);
     }
-    
+
     // Save row
     GC_POINTER_LIST_SWAP(row, previousRow);
     GC_POINTER_LIST_RESET(row);
@@ -595,7 +595,7 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
     _done = YES;
     return NO;
   }
-  
+
   return YES;
 }
 
@@ -685,11 +685,11 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
 }
 
 - (BOOL)_reloadHistory:(GCHistory*)history
-         usingSnapshot:(GCSnapshot*)snapshot
-   referencesDidChange:(BOOL*)outReferencesDidChange
-          addedCommits:(NSArray**)outAddedCommits
-        removedCommits:(NSArray**)outRemovedCommits
-                 error:(NSError**)error {
+          usingSnapshot:(GCSnapshot*)snapshot
+    referencesDidChange:(BOOL*)outReferencesDidChange
+           addedCommits:(NSArray**)outAddedCommits
+         removedCommits:(NSArray**)outRemovedCommits
+                  error:(NSError**)error {
   XLOG_DEBUG_CHECK([NSThread isMainThread]);  // This could work from any thread but it really shouldn't happen in practice
   BOOL success = NO;
   NSUInteger nextAutoIncrementID = history.nextAutoIncrementID;
@@ -710,7 +710,7 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
   NSMutableArray* addedCommits = nil;
   NSMutableArray* removedCommits = nil;
   NSDictionary* config = nil;
-  
+
   // Reset output arguments
   if (outReferencesDidChange) {
     *outReferencesDidChange = NO;
@@ -721,7 +721,7 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
   if (outRemovedCommits) {
     *outRemovedCommits = nil;
   }
-  
+
   // Load local config
   if (snapshot) {
     config = snapshot.config;
@@ -735,12 +735,12 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
       [(NSMutableDictionary*)config setObject:option.value forKey:option.variable];  // TODO: Handle duplicate config entries for the same variable
     }
   }
-  
+
   // Initialize MD5
   CC_MD5_CTX md5Context;
   CC_MD5_CTX* md5ContextPtr = &md5Context;  // Required for use within block
   CC_MD5_Init(md5ContextPtr);
-  
+
   // Find HEAD tip
   git_commit* headCommit = NULL;
   if (snapshot) {
@@ -777,10 +777,11 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
   if (headCommit) {
     CC_MD5_Update(md5ContextPtr, git_commit_id(headCommit), sizeof(git_oid));
   }
-  
+
   // Find all other tips
-  BOOL (^enumerateBlock)(git_reference*) = ^(git_reference* reference) {
-    
+  BOOL (^enumerateBlock)
+  (git_reference*) = ^(git_reference* reference) {
+
     GCReference* referenceObject = nil;
     if (git_reference_type(reference) != GIT_REF_SYMBOLIC) {  // Skip symbolic refs like "remote/origin/HEAD"
       git_commit* commit = NULL;
@@ -844,7 +845,7 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
           if (upstreamName.ptr) {
             objc_setAssociatedObject(referenceObject, _associatedObjectUpstreamNameKey, [NSString stringWithUTF8String:upstreamName.ptr], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
           }
-          
+
           CC_MD5_Update(md5ContextPtr, git_reference_name(reference), (CC_LONG)strlen(git_reference_name(reference)));
           CC_MD5_Update(md5ContextPtr, git_commit_id(commit), sizeof(git_oid));
           if (upstreamName.ptr) {
@@ -866,7 +867,7 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
       git_reference_free(reference);
     }
     return YES;
-    
+
   };
   if (snapshot) {
     for (GCSerializedReference* serializedReference in snapshot.serializedReferences) {
@@ -875,19 +876,17 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
       }
       git_reference* reference = NULL;
       switch (serializedReference.type) {
-        
         case GIT_REF_OID:
           CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_reference_create_virtual, &reference, self.private, serializedReference.name, serializedReference.directTarget);
           break;
-        
+
         case GIT_REF_SYMBOLIC:
           CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_reference_symbolic_create_virtual, &reference, self.private, serializedReference.name, serializedReference.symbolicTarget);
           break;
-        
+
         default:
           XLOG_DEBUG_UNREACHABLE();
           goto cleanup;
-        
       }
       if (!enumerateBlock(reference)) {
         git_reference_free(reference);
@@ -899,7 +898,7 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
       goto cleanup;
     }
   }
-  
+
   // Check if there were any modified references compared to previous version of history
   NSMutableData* md5 = [NSMutableData dataWithLength:CC_MD5_DIGEST_LENGTH];
   CC_MD5_Final(md5.mutableBytes, md5ContextPtr);
@@ -907,7 +906,7 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
     success = YES;
     goto cleanup;
   }
-  
+
   // Configure commit tree walker to start from tips
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_revwalk_new, &walker, self.private);
   git_revwalk_sorting(walker, GIT_SORT_NONE);
@@ -930,7 +929,7 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
       CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_revwalk_push, walker, git_commit_id(tip.private));
     }
   }
-  
+
   // Generate commits by walking commit tree
   while (1) {
     git_oid oid;
@@ -949,7 +948,7 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
     [commit release];
     CFDictionarySetValue(lookup, git_commit_id(walkCommit), (const void*)commit);  // Use the git_oid stored in the object itself (and retained by GCHistoryCommit) as the key, so no need to copy it
   }
-  
+
   // Add parent / child relations to commits
   for (GCHistoryCommit* commit in commits) {
     git_commit* walkCommit = commit.private;
@@ -962,14 +961,14 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
       }
     }
   }
-  
+
   // Merge newfound commits into old history
   if (historyTips) {
     [history.commits addObjectsFromArray:commits];
     addedCommits = commits;
     commits = history.commits;
   }
-  
+
   // Clear old references
   if (historyTips) {
     for (GCHistoryTag* tag in history.tags) {
@@ -982,25 +981,25 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
       [branch.tipCommit removeAllReferences];
     }
   }
-  
+
   // Find and remove orphan commits from old history
   if (historyTips) {
-    
     // Update generation for all commits reachable from new tips
     for (GCCommit* tip in tips) {
       GCHistoryCommit* tipCommit = (GCHistoryCommit*)CFDictionaryGetValue(lookup, git_commit_id(tip.private));
       XLOG_DEBUG_CHECK(tipCommit);
-      [self _walkAncestorsFromCommit:tipCommit usingBlock:^BOOL(GCHistoryCommit* commit, GCHistoryCommit* previousCommit) {
-        
-        if (commit->generation == generation) {
-          return NO;
-        }
-        commit->generation = generation;
-        return YES;
-        
-      }];
+      [self _walkAncestorsFromCommit:tipCommit
+                          usingBlock:^BOOL(GCHistoryCommit* commit, GCHistoryCommit* previousCommit) {
+
+                            if (commit->generation == generation) {
+                              return NO;
+                            }
+                            commit->generation = generation;
+                            return YES;
+
+                          }];
     }
-    
+
     // Scan all commits reachable from old tips and check if still reachable from new tips
     removedCommits = [[NSMutableArray alloc] init];  // Make sure to retain removed commits as they can be accessed several times through the scan
     for (GCCommit* tip in historyTips) {
@@ -1008,40 +1007,40 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
       if (tipCommit == nil) {
         continue;  // Commit might have already been removed
       }
-      [self _walkAncestorsFromCommit:tipCommit usingBlock:^BOOL(GCHistoryCommit* commit, GCHistoryCommit* childCommit) {
-        
-        if (commit->generation == generation) {
-          if (childCommit) {
-            [childCommit removeParent:commit];
-            [commit removeChild:childCommit];
-          }
-          return NO;
-        }
-        if (CFDictionaryContainsKey(lookup, git_commit_id(commit.private))) {  // Using -indexOfObjectIdenticalTo: on a large array can be quite slow so make sure the commit is in there first
-          NSUInteger index = [commits indexOfObjectIdenticalTo:commit];  // Pointer comparison is enough here, no need for -isEqual
-          if (index != NSNotFound) {
-            [removedCommits addObject:commit];
-            CFDictionaryRemoveValue(lookup, git_commit_id(commit.private));
-            [commits removeObjectAtIndex:index];  // Should be a bit faster than calling -removeObjectIdenticalTo: since it will stop on the first (and unique) match
-            XLOG_DEBUG_CHECK(![commits containsObject:commit]);
-          } else {
-            XLOG_DEBUG_UNREACHABLE();
-          }
-        }
-        return YES;
-        
-      }];
+      [self _walkAncestorsFromCommit:tipCommit
+                          usingBlock:^BOOL(GCHistoryCommit* commit, GCHistoryCommit* childCommit) {
+
+                            if (commit->generation == generation) {
+                              if (childCommit) {
+                                [childCommit removeParent:commit];
+                                [commit removeChild:childCommit];
+                              }
+                              return NO;
+                            }
+                            if (CFDictionaryContainsKey(lookup, git_commit_id(commit.private))) {  // Using -indexOfObjectIdenticalTo: on a large array can be quite slow so make sure the commit is in there first
+                              NSUInteger index = [commits indexOfObjectIdenticalTo:commit];  // Pointer comparison is enough here, no need for -isEqual
+                              if (index != NSNotFound) {
+                                [removedCommits addObject:commit];
+                                CFDictionaryRemoveValue(lookup, git_commit_id(commit.private));
+                                [commits removeObjectAtIndex:index];  // Should be a bit faster than calling -removeObjectIdenticalTo: since it will stop on the first (and unique) match
+                                XLOG_DEBUG_CHECK(![commits containsObject:commit]);
+                              } else {
+                                XLOG_DEBUG_UNREACHABLE();
+                              }
+                            }
+                            return YES;
+
+                          }];
     }
-    
   }
-  
+
   // Sort commits
   if (history.sorting == kGCHistorySorting_ReverseChronological) {
     [commits sortUsingSelector:@selector(reverseTimeCompare:)];  // Newest first
   } else {
     XLOG_DEBUG_CHECK(history.sorting == kGCHistorySorting_None);
   }
-  
+
   // Update roots and leaves
   if (historyTips) {
     [roots removeAllObjects];
@@ -1056,7 +1055,7 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
       [leaves addObject:commit];
     }
   }
-  
+
   // Add new references
   for (NSUInteger i = 0, count = tags.count; i < count; ++i) {
     GCHistoryTag* tag = tags[i];
@@ -1133,7 +1132,7 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
       objc_setAssociatedObject(branch, _associatedObjectUpstreamNameKey, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
   }
-  
+
   // Finish saving state in history
   history.nextAutoIncrementID = nextAutoIncrementID;
   history.nextGeneration = generation + 1;
@@ -1152,7 +1151,7 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
   history.HEADBranch = headBranch;
   XLOG_DEBUG_CHECK(!headReference || !history.HEADCommit || history.HEADBranch);
   history.md5 = md5;
-  
+
   // We're done!
   if (outReferencesDidChange) {
     *outReferencesDidChange = YES;
@@ -1165,7 +1164,7 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
   }
   [removedCommits autorelease];  // Don't release remove commits immediately as client may still depend on them!
   success = YES;
-  
+
 #if DEBUG
   // Check history consistency
   XLOG_DEBUG_CHECK((NSUInteger)CFDictionaryGetCount(lookup) == commits.count);
@@ -1188,7 +1187,7 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
     }
   }
 #endif
-  
+
 cleanup:
   [headTip release];
   [tips release];
@@ -1221,7 +1220,7 @@ cleanup:
   char* fileName = strdup(GCGitPathFromFileSystemPath(path));
   git_revwalk* walker = NULL;
   git_oid oid;
-  
+
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_revwalk_new, &walker, self.private);
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_revwalk_push_head, walker);
   git_revwalk_sorting(walker, GIT_SORT_TOPOLOGICAL);
@@ -1297,7 +1296,7 @@ cleanup:
     }
     CHECK_LIBGIT2_FUNCTION_CALL(goto cleanup, status, == GIT_OK);
   }
-  
+
 cleanup:
   git_revwalk_free(walker);
   free(fileName);

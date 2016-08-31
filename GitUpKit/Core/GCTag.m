@@ -46,10 +46,10 @@
 - (NSString*)description {
   NSString* message = [self.message stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];  // Trim ending newline
   return [NSString stringWithFormat:@"[%@] '%@' %@ '%@%@'", self.class,
-          self.shortSHA1,
-          [[self.tagger componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] firstObject],
-          message.length > kTruncatedDescriptionThreshold ? [message substringToIndex:kTruncatedDescriptionThreshold] : message,
-          message.length > kTruncatedDescriptionThreshold ? @"..." : @""];
+                                    self.shortSHA1,
+                                    [[self.tagger componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] firstObject],
+                                    message.length > kTruncatedDescriptionThreshold ? [message substringToIndex:kTruncatedDescriptionThreshold] : message,
+                                    message.length > kTruncatedDescriptionThreshold ? @"..." : @""];
 }
 
 @end
@@ -98,17 +98,19 @@
 
 - (NSArray*)listTags:(NSError**)error {
   NSMutableArray* array = [[NSMutableArray alloc] init];
-  BOOL success = [self enumerateReferencesWithOptions:kGCReferenceEnumerationOption_RetainReferences error:error usingBlock:^BOOL(git_reference* reference) {
-    
-    if (git_reference_is_tag(reference)) {
-      GCTag* tag = [[GCTag alloc] initWithRepository:self reference:reference];
-      [array addObject:tag];
-    } else {
-      git_reference_free(reference);
-    }
-    return YES;
-    
-  }];
+  BOOL success = [self enumerateReferencesWithOptions:kGCReferenceEnumerationOption_RetainReferences
+                                                error:error
+                                           usingBlock:^BOOL(git_reference* reference) {
+
+                                             if (git_reference_is_tag(reference)) {
+                                               GCTag* tag = [[GCTag alloc] initWithRepository:self reference:reference];
+                                               [array addObject:tag];
+                                             } else {
+                                               git_reference_free(reference);
+                                             }
+                                             return YES;
+
+                                           }];
   return success ? array : nil;
 }
 
@@ -117,7 +119,7 @@
 - (GCCommit*)lookupCommitForTag:(GCTag*)tag annotation:(GCTagAnnotation**)annotation error:(NSError**)error {
   git_object* object = NULL;
   GCCommit* commit = nil;
-  
+
   if (![self refreshReference:tag error:error]) {
     goto cleanup;
   }
@@ -144,7 +146,7 @@
     XLOG_DEBUG_UNREACHABLE();
     GC_SET_GENERIC_ERROR(@"Unexpected reference target");
   }
-  
+
 cleanup:
   git_object_free(object);
   return commit;
@@ -174,7 +176,7 @@ cleanup:
     GC_SET_GENERIC_ERROR(@"Message cannot be an empty string");
     return nil;
   }
-  
+
   git_oid oid;
   git_signature* signature;
   CALL_LIBGIT2_FUNCTION_RETURN(nil, git_signature_default, &signature, self.private);

@@ -20,8 +20,8 @@
 #import "GCPrivate.h"
 
 @implementation GCOrderedSet {
-  NSMutableArray* _objects; // Contains all the objects, even removed ones
-  CFMutableSetRef _actualObjectHashes; // Objects that were added but have not been removed
+  NSMutableArray* _objects;  // Contains all the objects, even removed ones
+  CFMutableSetRef _actualObjectHashes;  // Objects that were added but have not been removed
   CFMutableSetRef _removedObjectHashes;
 }
 
@@ -66,7 +66,7 @@
 - (NSArray*)objects {
   NSMutableArray* result = [[NSMutableArray alloc] initWithCapacity:_objects.count];
   for (GCObject* object in _objects) {
-    if ([self containsObject:object]) { // Return only objects that were not removed
+    if ([self containsObject:object]) {  // Return only objects that were not removed
       [result addObject:object];
     }
   }

@@ -32,25 +32,25 @@
 
 - (void)testOpen {
   NSString* path = [NSTemporaryDirectory() stringByAppendingPathComponent:[[NSProcessInfo processInfo] globallyUniqueString]];
-  
+
   // Create repository
   NSString* output = [self runGitCLTWithRepository:nil command:@"init", path, nil];
   XCTAssertNotNil(output);
-  
+
   // Open repository
   GCRepository* repo1 = [[GCRepository alloc] initWithExistingLocalRepository:path error:NULL];
   XCTAssertNotNil(repo1);
   XCTAssertFalse(repo1.readOnly);
   repo1 = nil;
-  
+
   // Test read-only
-  XCTAssertTrue([[NSFileManager defaultManager] setAttributes:@{NSFilePosixPermissions: @(0500)} ofItemAtPath:[path stringByAppendingPathComponent:@".git"] error:NULL]);
+  XCTAssertTrue([[NSFileManager defaultManager] setAttributes:@{ NSFilePosixPermissions : @(0500) } ofItemAtPath:[path stringByAppendingPathComponent:@".git"] error:NULL]);
   GCRepository* repo2 = [[GCRepository alloc] initWithExistingLocalRepository:path error:NULL];
   XCTAssertNotNil(repo2);
   XCTAssertTrue(repo2.readOnly);
   repo2 = nil;
-  XCTAssertTrue([[NSFileManager defaultManager] setAttributes:@{NSFilePosixPermissions: @(0700)} ofItemAtPath:[path stringByAppendingPathComponent:@".git"] error:NULL]);
-  
+  XCTAssertTrue([[NSFileManager defaultManager] setAttributes:@{ NSFilePosixPermissions : @(0700) } ofItemAtPath:[path stringByAppendingPathComponent:@".git"] error:NULL]);
+
   // Destroy repository
   XCTAssertTrue([[NSFileManager defaultManager] removeItemAtPath:path error:NULL]);
 }
@@ -63,14 +63,14 @@
 - (void)testInitialization {
   // Check initialization result
   [self assertGitCLTOutputContainsString:@"On branch master\n\nInitial commit\n" withRepository:self.repository command:@"status", nil];
-  
+
   // Check properties
   XCTAssertEqualObjects([self.repository.repositoryPath stringByStandardizingPath], [self.temporaryPath stringByAppendingPathComponent:@".git"]);
   XCTAssertEqualObjects([self.repository.workingDirectoryPath stringByStandardizingPath], self.temporaryPath);
   XCTAssertFalse(self.repository.bare);
   XCTAssertTrue(self.repository.empty);
   XCTAssertEqual(self.repository.state, kGCRepositoryState_None);
-  
+
   // Test re-initializing
   XCTAssertFalse([[GCRepository alloc] initWithNewLocalRepository:self.repository.workingDirectoryPath bare:NO error:NULL]);
 }
@@ -81,14 +81,14 @@
 
 - (void)testClone {
   NSString* path = [NSTemporaryDirectory() stringByAppendingPathComponent:[[NSProcessInfo processInfo] globallyUniqueString]];
-  
+
   // Clone repo using HTTPS
   GCRepository* repo1 = [[GCRepository alloc] initWithClonedRepositoryFromURL:GCURLFromGitURL(@"https://github.com/git-up/test-repo-base.git") toPath:path usingDelegate:nil recursive:NO error:NULL];
   XCTAssertNotNil(repo1);
   XCTAssertFalse(repo1.empty);
   repo1 = nil;
   XCTAssert([[NSFileManager defaultManager] removeItemAtPath:path error:NULL]);
-  
+
   // Clone repo using SSH (scp-like syntax)
   if (!self.botMode) {
     GCRepository* repo2 = [[GCRepository alloc] initWithClonedRepositoryFromURL:GCURLFromGitURL(@"git@github.com:git-up/test-repo-base.git") toPath:path usingDelegate:nil recursive:NO error:NULL];
@@ -97,14 +97,14 @@
     repo2 = nil;
     XCTAssert([[NSFileManager defaultManager] removeItemAtPath:path error:NULL]);
   }
-  
+
   // Clone repo using local path
   GCRepository* repo3 = [[GCRepository alloc] initWithClonedRepositoryFromURL:[NSURL fileURLWithPath:self.repository.workingDirectoryPath] toPath:path usingDelegate:nil recursive:NO error:NULL];
   XCTAssertNotNil(repo3);
   XCTAssertFalse(repo3.empty);
   repo3 = nil;
   XCTAssert([[NSFileManager defaultManager] removeItemAtPath:path error:NULL]);
-  
+
   // Clone repo with submodules not recursively
   GCRepository* repo4 = [[GCRepository alloc] initWithClonedRepositoryFromURL:GCURLFromGitURL(@"https://github.com/git-up/test-repo-submodules.git") toPath:path usingDelegate:nil recursive:NO error:NULL];
   XCTAssertNotNil(repo4);
@@ -113,7 +113,7 @@
   XCTAssertEqualObjects(contents, @[]);  // Submodule directory should be empty
   repo4 = nil;
   XCTAssert([[NSFileManager defaultManager] removeItemAtPath:path error:NULL]);
-  
+
   // Clone repo with recursive submodules recursively
   GCRepository* repo5 = [[GCRepository alloc] initWithClonedRepositoryFromURL:GCURLFromGitURL(@"https://github.com/git-up/test-repo-recursive-submodules.git") toPath:path usingDelegate:nil recursive:YES error:NULL];
   XCTAssertNotNil(repo5);
@@ -131,11 +131,11 @@
 - (void)testState {
   // Check initial state
   XCTAssertEqual(self.repository.state, kGCRepositoryState_None);
-  
+
   // Merge topic branch and check state
   XCTAssertTrue([self.repository mergeCommitToHEAD:self.commitA error:NULL]);
   XCTAssertEqual(self.repository.state, kGCRepositoryState_Merge);
-  
+
   // Reset state
   XCTAssertTrue([self.repository cleanupState:NULL]);
   XCTAssertEqual(self.repository.state, kGCRepositoryState_None);

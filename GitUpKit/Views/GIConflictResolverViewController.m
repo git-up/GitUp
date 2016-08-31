@@ -43,13 +43,13 @@
 
 - (void)loadView {
   [super loadView];
-  
+
   _diffContentsViewController = [[GIDiffContentsViewController alloc] initWithRepository:self.repository];
   _diffContentsViewController.delegate = self;
   _diffContentsViewController.showsUntrackedAsAdded = YES;
   _diffContentsViewController.emptyLabel = NSLocalizedString(@"No changes in working directory", nil);
   [_contentsView replaceWithView:_diffContentsViewController.view];
-  
+
   _diffFilesViewController = [[GIDiffFilesViewController alloc] initWithRepository:self.repository];
   _diffFilesViewController.delegate = self;
   _diffFilesViewController.showsUntrackedAsAdded = YES;
@@ -60,20 +60,20 @@
 - (void)viewWillShow {
   XLOG_DEBUG_CHECK(self.repository.statusMode == kGCLiveRepositoryStatusMode_Disabled);
   self.repository.statusMode = kGCLiveRepositoryStatusMode_Unified;
-  
+
   _oursTextField.stringValue = [NSString stringWithFormat:@"\"%@\" <%@>", _ourCommit.summary, _ourCommit.shortSHA1];
   _theirsTextField.stringValue = [NSString stringWithFormat:@"\"%@\" <%@>", _theirCommit.summary, _theirCommit.shortSHA1];
-  
+
   [self _reloadContents];
 }
 
 - (void)viewDidHide {
   _unifiedStatus = nil;
   _indexConflicts = nil;
-  
+
   [_diffContentsViewController setDeltas:nil usingConflicts:nil];
   [_diffFilesViewController setDeltas:nil usingConflicts:nil];
-  
+
   XLOG_DEBUG_CHECK(self.repository.statusMode == kGCLiveRepositoryStatusMode_Unified);
   self.repository.statusMode = kGCLiveRepositoryStatusMode_Disabled;
 }
@@ -87,14 +87,14 @@
 - (void)_reloadContents {
   CGFloat offset;
   GCDiffDelta* topDelta = [_diffContentsViewController topVisibleDelta:&offset];
-  
+
   _unifiedStatus = self.repository.unifiedStatus;
   _indexConflicts = self.repository.indexConflicts;
   [_diffContentsViewController setDeltas:_unifiedStatus.deltas usingConflicts:_indexConflicts];
   [_diffFilesViewController setDeltas:_unifiedStatus.deltas usingConflicts:_indexConflicts];
-  
+
   [_diffContentsViewController setTopVisibleDelta:topDelta offset:offset];
-  
+
   _continueButton.enabled = (_indexConflicts.count == 0);
 }
 
@@ -165,7 +165,7 @@
   [_delegate conflictResolverViewControllerShouldCancel:self];
 }
 
-- (IBAction)continue:(id)sender {
+- (IBAction) continue:(id)sender {
   [_delegate conflictResolverViewControllerDidFinish:self];
 }
 

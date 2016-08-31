@@ -81,4 +81,3 @@ static inline BOOL _EqualObjects(GCObject* object1, GCObject* object2) {
 }
 
 @end
-

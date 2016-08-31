@@ -70,7 +70,7 @@ static NSColor* _reachableColor = nil;
 
 - (void)loadView {
   [super loadView];
-  
+
   _cachedCellView = [_tableView makeViewWithIdentifier:[_tableView.tableColumns[0] identifier] owner:self];
 }
 
@@ -141,8 +141,8 @@ static NSAttributedString* _AttributedStringFromReflogEntry(GCReflogEntry* entry
       message = [message substringFromIndex:(sizeof(kGCReflogCustomPrefix) - 1)];
     }
     GCReference* reference = entry.references[i];
-    [string appendString:reference.name withAttributes:@{NSFontAttributeName: [NSFont boldSystemFontOfSize:fontSize]}];
-    [string appendString:@" • " withAttributes:@{NSFontAttributeName: [NSFont systemFontOfSize:fontSize]}];
+    [string appendString:reference.name withAttributes:@{NSFontAttributeName : [NSFont boldSystemFontOfSize:fontSize]}];
+    [string appendString:@" • " withAttributes:@{NSFontAttributeName : [NSFont systemFontOfSize:fontSize]}];
     [string appendString:message withAttributes:nil];
     if (i < count - 1) {
       [string appendString:@"\n" withAttributes:nil];
@@ -277,46 +277,47 @@ static NSString* _StringFromActions(GCReflogActions actions) {
   alert.accessoryView = _restoreView;
   [alert addButtonWithTitle:NSLocalizedString(@"Create Branch", nil)];
   [alert addButtonWithTitle:NSLocalizedString(@"Cancel", nil)];
-  [self presentAlert:alert completionHandler:^(NSInteger returnCode) {
-    
-    if (returnCode == NSAlertFirstButtonReturn) {
-      NSString* name = [_nameTextField.stringValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-      if (name.length) {
-        BOOL success = NO;
-        NSError* error;
-        if ([self.repository checkClean:0 error:&error]) {
-          [self.repository setUndoActionName:NSLocalizedString(@"Restore Reflog Entry", nil)];
-          success = [self.repository performOperationWithReason:@"restore_reflog_entry"
-                                                       argument:entry.toCommit.SHA1
-                                             skipCheckoutOnUndo:NO
-                                                          error:&error
-                                                     usingBlock:^BOOL(GCLiveRepository* repository, NSError** outError) {
-            
-            GCLocalBranch* branch = [repository createLocalBranchFromCommit:entry.toCommit withName:name force:NO error:outError];
-            if (branch == nil) {
-              return NO;
+  [self presentAlert:alert
+      completionHandler:^(NSInteger returnCode) {
+
+        if (returnCode == NSAlertFirstButtonReturn) {
+          NSString* name = [_nameTextField.stringValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+          if (name.length) {
+            BOOL success = NO;
+            NSError* error;
+            if ([self.repository checkClean:0 error:&error]) {
+              [self.repository setUndoActionName:NSLocalizedString(@"Restore Reflog Entry", nil)];
+              success = [self.repository performOperationWithReason:@"restore_reflog_entry"
+                                                           argument:entry.toCommit.SHA1
+                                                 skipCheckoutOnUndo:NO
+                                                              error:&error
+                                                         usingBlock:^BOOL(GCLiveRepository* repository, NSError** outError) {
+
+                                                           GCLocalBranch* branch = [repository createLocalBranchFromCommit:entry.toCommit withName:name force:NO error:outError];
+                                                           if (branch == nil) {
+                                                             return NO;
+                                                           }
+                                                           if (![repository checkoutLocalBranch:branch options:kGCCheckoutOption_UpdateSubmodulesRecursively error:outError]) {
+                                                             [repository deleteLocalBranch:branch error:NULL];  // Ignore errors
+                                                             return NO;
+                                                           }
+                                                           return YES;
+
+                                                         }];
             }
-            if (![repository checkoutLocalBranch:branch options:kGCCheckoutOption_UpdateSubmodulesRecursively error:outError]) {
-              [repository deleteLocalBranch:branch error:NULL];  // Ignore errors
-              return NO;
+            if (success) {
+              if ([_delegate respondsToSelector:@selector(unifiedReflogViewController:didRestoreReflogEntry:)]) {
+                [_delegate unifiedReflogViewController:self didRestoreReflogEntry:entry];
+              }
+            } else {
+              [self presentError:error];
             }
-            return YES;
-            
-          }];
-        }
-        if (success) {
-          if ([_delegate respondsToSelector:@selector(unifiedReflogViewController:didRestoreReflogEntry:)]) {
-            [_delegate unifiedReflogViewController:self didRestoreReflogEntry:entry];
+          } else {
+            NSBeep();
           }
-        } else {
-          [self presentError:error];
         }
-      } else {
-        NSBeep();
-      }
-    }
-    
-  }];
+
+      }];
 }
 
 @end

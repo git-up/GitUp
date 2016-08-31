@@ -83,14 +83,14 @@
 
 @implementation GCRepository (GCReference_Private)
 
-- (id)findReferenceWithFullName:(NSString*)fullname class:(Class)class error:(NSError**)error {
+- (id)findReferenceWithFullName:(NSString*)fullname class:(Class) class error:(NSError**)error {
   XLOG_DEBUG_CHECK([class isSubclassOfClass:[GCReference class]]);
   git_reference* reference;
   CALL_LIBGIT2_FUNCTION_RETURN(nil, git_reference_lookup, &reference, self.private, fullname.UTF8String);
   return [[class alloc] initWithRepository:self reference:reference];
 }
 
-- (BOOL)refreshReference:(GCReference*)reference error:(NSError**)error {
+    - (BOOL)refreshReference : (GCReference*)reference error : (NSError**)error {
   git_reference* newReference;
   CALL_LIBGIT2_FUNCTION_RETURN(NO, git_reference_lookup, &newReference, self.private, git_reference_name(reference.private));
   [reference updateReference:newReference];
@@ -100,7 +100,7 @@
 - (BOOL)enumerateReferencesWithOptions:(GCReferenceEnumerationOptions)options error:(NSError**)error usingBlock:(BOOL (^)(git_reference* reference))block {
   BOOL success = NO;
   git_reference_iterator* iterator = NULL;
-  
+
   if (options & kGCReferenceEnumerationOption_IncludeHEAD) {
     git_reference* headReference;
     CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_reference_lookup, &headReference, self.private, kHEADReferenceFullName);
@@ -112,7 +112,7 @@
       goto cleanup;
     }
   }
-  
+
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_reference_iterator_new, &iterator, self.private);
   while (1) {
     git_reference* reference;
@@ -130,23 +130,23 @@
     }
   }
   success = YES;
-  
+
 cleanup:
   git_reference_iterator_free(iterator);
   return success;
 }
 
-- (BOOL)loadTargetOID:(git_oid*)oid fromReference:(git_reference*)reference error:(NSError**)error  {
+- (BOOL)loadTargetOID:(git_oid*)oid fromReference:(git_reference*)reference error:(NSError**)error {
   BOOL success = NO;
   git_reference* resolvedReference = reference;
-  
+
   if (git_reference_type(reference) == GIT_REF_SYMBOLIC) {
     CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_reference_resolve, &resolvedReference, reference);
   }
   XLOG_DEBUG_CHECK(git_reference_type(resolvedReference) == GIT_REF_OID);
   git_oid_cpy(oid, git_reference_target(resolvedReference));
   success = YES;
-  
+
 cleanup:
   if (resolvedReference != reference) {
     git_reference_free(resolvedReference);
@@ -161,13 +161,13 @@ cleanup:
   git_reference* currentReference = reference;
   const char* referenceName = NULL;
   git_reference* localNewReference = NULL;
-  
+
   while (1) {
     if (git_reference_type(currentReference) == GIT_REF_OID) {
       referenceName = git_reference_name(currentReference);
       break;
     }
-    
+
     XLOG_DEBUG_CHECK(git_reference_type(currentReference) == GIT_REF_SYMBOLIC);
     const char* targetName = git_reference_symbolic_target(currentReference);
     git_reference* targetReference;
@@ -181,7 +181,7 @@ cleanup:
       git_reference_free(currentReference);
     }
     currentReference = targetReference;
-    
+
     ++level;
     if (level > kMaxReferenceNestingLevels) {
       GC_SET_GENERIC_ERROR(@"Too many reference nesting levels");
@@ -192,7 +192,7 @@ cleanup:
     CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_reference_create, &localNewReference, self.private, referenceName, oid, true, message.UTF8String);  // This actually calls git_reference_create_matching() passing NULL for "current_id"
     success = YES;
   }
-  
+
 cleanup:
   if (success && newReference) {
     *newReference = localNewReference;

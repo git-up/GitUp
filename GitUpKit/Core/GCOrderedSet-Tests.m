@@ -16,7 +16,7 @@
 #import "GCTestCase.h"
 #import "GCOrderedSet.h"
 
-@implementation GCMultipleCommitsRepositoryTests(GCOrderedSetTests)
+@implementation GCMultipleCommitsRepositoryTests (GCOrderedSetTests)
 
 - (void)testOrderedSetAddObject {
   GCOrderedSet* collection = [[GCOrderedSet alloc] init];

@@ -39,7 +39,7 @@
 
 - (void)awakeFromNib {
   [super awakeFromNib];
-  
+
   _restoreButton.hidden = YES;
 }
 
@@ -150,24 +150,24 @@
                                        skipCheckoutOnUndo:NO
                                                     error:&error
                                                usingBlock:^BOOL(GCLiveRepository* repository, NSError** outError) {
-      
-      BOOL didUpdateReferences;
-      if (![repository restoreSnapshot:snapshot
-                           withOptions:(kGCSnapshotOption_IncludeHEAD | kGCSnapshotOption_IncludeLocalBranches | kGCSnapshotOption_IncludeTags)
-                         reflogMessage:kGCReflogMessageFormat_GitUp_RestoreSnapshot
-                   didUpdateReferences:&didUpdateReferences
-                                 error:outError]) {
-        return NO;
-      }
-      if (didUpdateReferences) {
-        if (!repository.HEADUnborn && ![repository forceCheckoutHEAD:YES error:outError]) {
-          return NO;
-        }
-        didUpdate = YES;
-      }
-      return YES;
-      
-    }];
+
+                                                 BOOL didUpdateReferences;
+                                                 if (![repository restoreSnapshot:snapshot
+                                                                      withOptions:(kGCSnapshotOption_IncludeHEAD | kGCSnapshotOption_IncludeLocalBranches | kGCSnapshotOption_IncludeTags)
+                                                                    reflogMessage:kGCReflogMessageFormat_GitUp_RestoreSnapshot
+                                                              didUpdateReferences:&didUpdateReferences
+                                                                            error:outError]) {
+                                                   return NO;
+                                                 }
+                                                 if (didUpdateReferences) {
+                                                   if (!repository.HEADUnborn && ![repository forceCheckoutHEAD:YES error:outError]) {
+                                                     return NO;
+                                                   }
+                                                   didUpdate = YES;
+                                                 }
+                                                 return YES;
+
+                                               }];
   }
   if (success) {
     if (didUpdate) {

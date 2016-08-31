@@ -23,7 +23,7 @@
 
 // Patch method to allow selecting folders
 - (void)beginOpenPanel:(NSOpenPanel*)openPanel forTypes:(NSArray*)inTypes completionHandler:(void (^)(NSInteger result))completionHandler {
-  XLOG_DEBUG_CHECK([inTypes isEqualToArray:@[@"public.directory"]]);
+  XLOG_DEBUG_CHECK([inTypes isEqualToArray:@[ @"public.directory" ]]);
   openPanel.canChooseFiles = NO;
   openPanel.canChooseDirectories = YES;
   openPanel.treatsFilePackagesAsDirectories = YES;
@@ -35,23 +35,23 @@
   if ([underlyingError.domain isEqualToString:GCErrorDomain]) {
     error = underlyingError;  // Required to display real error from -[NSDocument readFromURL:ofType:error:]
   }
-  
+
   if ([error.domain isEqualToString:GCErrorDomain] && (error.code == kGCErrorCode_CheckoutConflicts) && [error.localizedDescription hasSuffix:@" checkout"]) {  // TODO: Avoid hardcoding libgit2 error
     error = GCNewError(kGCErrorCode_CheckoutConflicts, @"Local changes would be overwritten by checkout");
   }
-  
+
   return [super willPresentError:error];
 }
 
 - (void)addDocument:(NSDocument*)document {
   [super addDocument:document];
-  
+
   [[AppDelegate sharedDelegate] handleDocumentCountChanged];
 }
 
 - (void)removeDocument:(NSDocument*)document {
   [super removeDocument:document];
-  
+
   [[AppDelegate sharedDelegate] handleDocumentCountChanged];
 }
 

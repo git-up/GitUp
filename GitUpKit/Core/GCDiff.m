@@ -23,17 +23,28 @@
 
 static inline GCFileDiffChange _FileDiffChangeFromStatus(git_delta_t status) {
   switch (status) {
-    case GIT_DELTA_UNMODIFIED: return kGCFileDiffChange_Unmodified;
-    case GIT_DELTA_ADDED: return kGCFileDiffChange_Added;
-    case GIT_DELTA_DELETED: return kGCFileDiffChange_Deleted;
-    case GIT_DELTA_MODIFIED: return kGCFileDiffChange_Modified;
-    case GIT_DELTA_RENAMED: return kGCFileDiffChange_Renamed;
-    case GIT_DELTA_COPIED: return kGCFileDiffChange_Copied;
-    case GIT_DELTA_IGNORED: return kGCFileDiffChange_Ignored;
-    case GIT_DELTA_UNTRACKED: return kGCFileDiffChange_Untracked;
-    case GIT_DELTA_TYPECHANGE: return kGCFileDiffChange_TypeChanged;
-    case GIT_DELTA_UNREADABLE: return kGCFileDiffChange_Unreadable;
-    case GIT_DELTA_CONFLICTED: return kGCFileDiffChange_Conflicted;
+    case GIT_DELTA_UNMODIFIED:
+      return kGCFileDiffChange_Unmodified;
+    case GIT_DELTA_ADDED:
+      return kGCFileDiffChange_Added;
+    case GIT_DELTA_DELETED:
+      return kGCFileDiffChange_Deleted;
+    case GIT_DELTA_MODIFIED:
+      return kGCFileDiffChange_Modified;
+    case GIT_DELTA_RENAMED:
+      return kGCFileDiffChange_Renamed;
+    case GIT_DELTA_COPIED:
+      return kGCFileDiffChange_Copied;
+    case GIT_DELTA_IGNORED:
+      return kGCFileDiffChange_Ignored;
+    case GIT_DELTA_UNTRACKED:
+      return kGCFileDiffChange_Untracked;
+    case GIT_DELTA_TYPECHANGE:
+      return kGCFileDiffChange_TypeChanged;
+    case GIT_DELTA_UNREADABLE:
+      return kGCFileDiffChange_Unreadable;
+    case GIT_DELTA_CONFLICTED:
+      return kGCFileDiffChange_Conflicted;
   }
   XLOG_DEBUG_UNREACHABLE();
   return 0;
@@ -106,28 +117,26 @@ static inline GCFileDiffChange _FileDiffChangeFromStatus(git_delta_t status) {
         const git_diff_line* line;
         if (git_patch_get_line_in_hunk(&line, _private, i, j) == GIT_OK) {
           switch (line->origin) {
-            
             case GIT_DIFF_LINE_CONTEXT:
               lineHandler(kGCLineDiffChange_Unmodified, line->old_lineno, line->new_lineno, line->content, line->content_len);
               break;
-            
+
             case GIT_DIFF_LINE_ADDITION:
               lineHandler(kGCLineDiffChange_Added, NSNotFound, line->new_lineno, line->content, line->content_len);
               break;
-            
+
             case GIT_DIFF_LINE_DELETION:
               lineHandler(kGCLineDiffChange_Deleted, line->old_lineno, NSNotFound, line->content, line->content_len);
               break;
-            
+
             case GIT_DIFF_LINE_CONTEXT_EOFNL:
             case GIT_DIFF_LINE_ADD_EOFNL:
             case GIT_DIFF_LINE_DEL_EOFNL:
               break;
-            
+
             default:
               XLOG_DEBUG_UNREACHABLE();
               break;
-            
           }
         } else {
           XLOG_DEBUG_UNREACHABLE();
@@ -208,15 +217,14 @@ static inline GCFileDiffChange _FileDiffChangeFromStatus(git_delta_t status) {
 
 - (NSString*)description {
   static char modes[] = {' ', 'T', 'B', 'X', 'L', 'C'};  // WARNING: Must match GCFileModeFromMode
-  static char status[] = {  // WARNING: Must match GCFileDiffChange
-    ' ', 'I', '?', 'X',
-    'A', 'D', 'M',
-    'R', 'C', 'T',
-    '!'
-  };
+  static char status[] = {// WARNING: Must match GCFileDiffChange
+                          ' ', 'I', '?', 'X',
+                          'A', 'D', 'M',
+                          'R', 'C', 'T',
+                          '!'};
   return [NSString stringWithFormat:@"%c \"%s\" (%c) -> \"%s\" (%c)", status[_FileDiffChangeFromStatus(_private->status)],
-          _private->old_file.path, modes[GCFileModeFromMode(_private->old_file.mode)],
-          _private->new_file.path, modes[GCFileModeFromMode(_private->new_file.mode)]];
+                                    _private->old_file.path, modes[GCFileModeFromMode(_private->old_file.mode)],
+                                    _private->new_file.path, modes[GCFileModeFromMode(_private->new_file.mode)]];
 }
 
 @end
@@ -226,14 +234,13 @@ static inline GCFileDiffChange _FileDiffChangeFromStatus(git_delta_t status) {
 // This must match the logic for the canonical path
 - (BOOL)isSubmodule {
   switch (_change) {
-    
     case kGCFileDiffChange_Deleted:
     case kGCFileDiffChange_Unmodified:
     case kGCFileDiffChange_Ignored:
     case kGCFileDiffChange_Untracked:
     case kGCFileDiffChange_Unreadable:
       return GC_FILE_MODE_IS_SUBMODULE(_oldFile.mode);
-    
+
     case kGCFileDiffChange_Added:
     case kGCFileDiffChange_Modified:
     case kGCFileDiffChange_Renamed:
@@ -241,7 +248,6 @@ static inline GCFileDiffChange _FileDiffChangeFromStatus(git_delta_t status) {
     case kGCFileDiffChange_TypeChanged:
     case kGCFileDiffChange_Conflicted:
       return GC_FILE_MODE_IS_SUBMODULE(_newFile.mode);
-    
   }
   XLOG_DEBUG_UNREACHABLE();
   return NO;
@@ -258,11 +264,11 @@ static inline BOOL _EqualDeltas(const git_diff_delta* delta1, const git_diff_del
   if (delta1->status != delta2->status) {
     return NO;
   }
-  
+
   if (!_SafeEqualStrings(delta1->old_file.path, delta2->old_file.path) || !_SafeEqualStrings(delta1->new_file.path, delta2->new_file.path)) {
     return NO;
   }
-  
+
   if ((delta1->old_file.flags & GIT_DIFF_FLAG_VALID_ID) && (delta2->old_file.flags & GIT_DIFF_FLAG_VALID_ID)) {
     if (!git_oid_equal(&delta1->old_file.id, &delta2->old_file.id)) {
       return NO;
@@ -272,7 +278,7 @@ static inline BOOL _EqualDeltas(const git_diff_delta* delta1, const git_diff_del
       return NO;
     }
   }
-  
+
   if ((delta1->new_file.flags & GIT_DIFF_FLAG_VALID_ID) && (delta2->new_file.flags & GIT_DIFF_FLAG_VALID_ID)) {
     if (!git_oid_equal(&delta1->new_file.id, &delta2->new_file.id)) {
       return NO;
@@ -282,7 +288,7 @@ static inline BOOL _EqualDeltas(const git_diff_delta* delta1, const git_diff_del
       return NO;
     }
   }
-  
+
   return YES;
 }
 
@@ -435,7 +441,7 @@ static inline BOOL _EqualDiffs(git_diff* diff1, git_diff* diff2) {
                    block:(int (^)(git_diff** outDiff, git_diff_options* diffOptions))block {
   GCDiff* gcDiff = nil;
   git_diff* diff = NULL;
-  
+
   git_diff_options diffOptions = GIT_DIFF_OPTIONS_INIT;
   if (options & kGCDiffOption_IncludeUnmodified) {
     diffOptions.flags |= GIT_DIFF_INCLUDE_UNMODIFIED;
@@ -462,7 +468,7 @@ static inline BOOL _EqualDiffs(git_diff* diff1, git_diff* diff2) {
     diffOptions.pathspec.count = 1;
     const char* filePath = GCGitPathFromFileSystemPath(filePattern);
     diffOptions.pathspec.strings = (char**)&filePath;
-    
+
     static NSCharacterSet* set = nil;
     if (set == nil) {
       set = [NSCharacterSet characterSetWithCharactersInString:@"?*[]"];
@@ -496,7 +502,7 @@ static inline BOOL _EqualDiffs(git_diff* diff1, git_diff* diff2) {
   }
   gcDiff = [[GCDiff alloc] initWithRepository:self diff:diff type:type options:options maxInterHunkLines:diffOptions.interhunk_lines maxContextLines:diffOptions.context_lines];
   diff = NULL;
-  
+
 cleanup:
   git_diff_free(diff);
   return gcDiff;
@@ -519,29 +525,35 @@ cleanup:
   if (commit) {
     CALL_LIBGIT2_FUNCTION_RETURN(nil, git_commit_tree, &tree, commit.private);
   }
-  GCDiff* diff = [self _diffWithType:kGCDiffType_WorkingDirectoryWithCommit filePattern:filePattern options:options maxInterHunkLines:maxInterHunkLines maxContextLines:maxContextLines error:error block:^int(git_diff** outDiff, git_diff_options* diffOptions) {
-    
-    int status = git_diff_tree_to_index(outDiff, self.private, tree, index.private, diffOptions);
-    if (status == GIT_OK) {
-      git_diff* diff2;
-      diffOptions->flags |= GIT_DIFF_UPDATE_INDEX;
-      status = git_diff_index_to_workdir(&diff2, self.private, index.private, diffOptions);
-      if (status == GIT_ELOCKED) {
-        status = GIT_OK;  // Passing GIT_DIFF_UPDATE_INDEX means git_diff_index_to_workdir() may attempt to write the index and this could fail if it is currently locked by another process but that's OK to ignore this failure
-      }
-      if (status == GIT_OK) {
-        status = git_diff_merge(*outDiff, diff2);
-        if (status != GIT_OK) {
-          git_diff_free(*outDiff);
-        }
-        git_diff_free(diff2);
-      } else {
-        git_diff_free(*outDiff);
-      }
-    }
-    return status;
-    
-  }];
+  GCDiff* diff = [self _diffWithType:kGCDiffType_WorkingDirectoryWithCommit
+                         filePattern:filePattern
+                             options:options
+                   maxInterHunkLines:maxInterHunkLines
+                     maxContextLines:maxContextLines
+                               error:error
+                               block:^int(git_diff** outDiff, git_diff_options* diffOptions) {
+
+                                 int status = git_diff_tree_to_index(outDiff, self.private, tree, index.private, diffOptions);
+                                 if (status == GIT_OK) {
+                                   git_diff* diff2;
+                                   diffOptions->flags |= GIT_DIFF_UPDATE_INDEX;
+                                   status = git_diff_index_to_workdir(&diff2, self.private, index.private, diffOptions);
+                                   if (status == GIT_ELOCKED) {
+                                     status = GIT_OK;  // Passing GIT_DIFF_UPDATE_INDEX means git_diff_index_to_workdir() may attempt to write the index and this could fail if it is currently locked by another process but that's OK to ignore this failure
+                                   }
+                                   if (status == GIT_OK) {
+                                     status = git_diff_merge(*outDiff, diff2);
+                                     if (status != GIT_OK) {
+                                       git_diff_free(*outDiff);
+                                     }
+                                     git_diff_free(diff2);
+                                   } else {
+                                     git_diff_free(*outDiff);
+                                   }
+                                 }
+                                 return status;
+
+                               }];
   git_tree_free(tree);
   return diff;
 }
@@ -558,25 +570,31 @@ cleanup:
       return nil;
     }
   }
-  return [self _diffWithType:kGCDiffType_WorkingDirectoryWithIndex filePattern:filePattern options:options maxInterHunkLines:maxInterHunkLines maxContextLines:maxContextLines error:error block:^int(git_diff** outDiff, git_diff_options* diffOptions) {
-    
-    diffOptions->flags |= GIT_DIFF_UPDATE_INDEX;
-    int status = git_diff_index_to_workdir(outDiff, self.private, index.private, diffOptions);
-    if (status == GIT_ELOCKED) {
-      status = GIT_OK;  // Passing GIT_DIFF_UPDATE_INDEX means git_diff_index_to_workdir() will attempt to write the index even if there are no changes and this could fail if it is currently locked by another process
-    }
-    return status;
-    
-  }];
+  return [self _diffWithType:kGCDiffType_WorkingDirectoryWithIndex
+                 filePattern:filePattern
+                     options:options
+           maxInterHunkLines:maxInterHunkLines
+             maxContextLines:maxContextLines
+                       error:error
+                       block:^int(git_diff** outDiff, git_diff_options* diffOptions) {
+
+                         diffOptions->flags |= GIT_DIFF_UPDATE_INDEX;
+                         int status = git_diff_index_to_workdir(outDiff, self.private, index.private, diffOptions);
+                         if (status == GIT_ELOCKED) {
+                           status = GIT_OK;  // Passing GIT_DIFF_UPDATE_INDEX means git_diff_index_to_workdir() will attempt to write the index even if there are no changes and this could fail if it is currently locked by another process
+                         }
+                         return status;
+
+                       }];
 }
 
 - (GCDiff*)diffIndex:(GCIndex*)index
-          withCommit:(GCCommit*)commit
-         filePattern:(NSString*)filePattern
-             options:(GCDiffOptions)options
-   maxInterHunkLines:(NSUInteger)maxInterHunkLines
-     maxContextLines:(NSUInteger)maxContextLines
-               error:(NSError**)error {
+           withCommit:(GCCommit*)commit
+          filePattern:(NSString*)filePattern
+              options:(GCDiffOptions)options
+    maxInterHunkLines:(NSUInteger)maxInterHunkLines
+      maxContextLines:(NSUInteger)maxContextLines
+                error:(NSError**)error {
   if (index == nil) {
     index = [self readRepositoryIndex:error];
     if (index == nil) {
@@ -587,11 +605,17 @@ cleanup:
   if (commit) {
     CALL_LIBGIT2_FUNCTION_RETURN(nil, git_commit_tree, &tree, commit.private);
   }
-  GCDiff* diff = [self _diffWithType:kGCDiffType_IndexWithCommit filePattern:filePattern options:options maxInterHunkLines:maxInterHunkLines maxContextLines:maxContextLines error:error block:^int(git_diff** outDiff, git_diff_options* diffOptions) {
-    
-    return git_diff_tree_to_index(outDiff, self.private, tree, index.private, diffOptions);
-    
-  }];
+  GCDiff* diff = [self _diffWithType:kGCDiffType_IndexWithCommit
+                         filePattern:filePattern
+                             options:options
+                   maxInterHunkLines:maxInterHunkLines
+                     maxContextLines:maxContextLines
+                               error:error
+                               block:^int(git_diff** outDiff, git_diff_options* diffOptions) {
+
+                                 return git_diff_tree_to_index(outDiff, self.private, tree, index.private, diffOptions);
+
+                               }];
   git_tree_free(tree);
   return diff;
 }
@@ -613,28 +637,40 @@ cleanup:
     CHECK_LIBGIT2_FUNCTION_CALL(return nil, status, == GIT_OK);
     git_tree_free(oldTree);
   }
-  GCDiff* diff = [self _diffWithType:kGCDiffType_CommitWithCommit filePattern:filePattern options:options maxInterHunkLines:maxInterHunkLines maxContextLines:maxContextLines error:error block:^int(git_diff** outDiff, git_diff_options* diffOptions) {
-    
-    return git_diff_tree_to_tree(outDiff, self.private, oldTree, newTree, diffOptions);
-    
-  }];
+  GCDiff* diff = [self _diffWithType:kGCDiffType_CommitWithCommit
+                         filePattern:filePattern
+                             options:options
+                   maxInterHunkLines:maxInterHunkLines
+                     maxContextLines:maxContextLines
+                               error:error
+                               block:^int(git_diff** outDiff, git_diff_options* diffOptions) {
+
+                                 return git_diff_tree_to_tree(outDiff, self.private, oldTree, newTree, diffOptions);
+
+                               }];
   git_tree_free(newTree);
   git_tree_free(oldTree);
   return diff;
 }
 
 - (GCDiff*)diffIndex:(GCIndex*)newIndex
-           withIndex:(GCIndex*)oldIndex
-         filePattern:(NSString*)filePattern
-             options:(GCDiffOptions)options
-   maxInterHunkLines:(NSUInteger)maxInterHunkLines
-     maxContextLines:(NSUInteger)maxContextLines
-               error:(NSError**)error {
-  return [self _diffWithType:kGCDiffType_IndexWithIndex filePattern:filePattern options:options maxInterHunkLines:maxInterHunkLines maxContextLines:maxContextLines error:error block:^int(git_diff** outDiff, git_diff_options* diffOptions) {
-    
-    return git_diff_index_to_index(outDiff, self.private, oldIndex.private, newIndex.private, diffOptions);
-    
-  }];
+            withIndex:(GCIndex*)oldIndex
+          filePattern:(NSString*)filePattern
+              options:(GCDiffOptions)options
+    maxInterHunkLines:(NSUInteger)maxInterHunkLines
+      maxContextLines:(NSUInteger)maxContextLines
+                error:(NSError**)error {
+  return [self _diffWithType:kGCDiffType_IndexWithIndex
+                 filePattern:filePattern
+                     options:options
+           maxInterHunkLines:maxInterHunkLines
+             maxContextLines:maxContextLines
+                       error:error
+                       block:^int(git_diff** outDiff, git_diff_options* diffOptions) {
+
+                         return git_diff_index_to_index(outDiff, self.private, oldIndex.private, newIndex.private, diffOptions);
+
+                       }];
 }
 
 - (BOOL)mergeDiff:(GCDiff*)diff ontoDiff:(GCDiff*)ontoDiff error:(NSError**)error {

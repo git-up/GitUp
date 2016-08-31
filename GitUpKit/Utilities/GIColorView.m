@@ -23,7 +23,7 @@
 
 - (void)setBackgroundColor:(NSColor*)color {
   _backgroundColor = color;
-  
+
   [self setNeedsDisplay:YES];
 }
 

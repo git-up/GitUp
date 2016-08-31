@@ -66,11 +66,11 @@
 
 - (void)loadView {
   [super loadView];
-  
+
   _emptyTextField.stringValue = @"";
-  
+
   _cachedCommitCellView = [_tableView makeViewWithIdentifier:@"commit" owner:self];
-  
+
   GIReferenceCellView* view = [_tableView makeViewWithIdentifier:@"reference" owner:self];
   _referenceCellHeight = view.frame.size.height;
 }
@@ -95,9 +95,9 @@
   } else {
     _commits = nil;
   }
-  
+
   [self _reloadResults];
-  
+
   if (_commits.count) {
     [_tableView scrollRowToVisible:0];
   }
@@ -105,7 +105,7 @@
 
 - (void)_reloadResults {
   [_tableView reloadData];
-  
+
   if (_results.count) {
     _tableView.hidden = NO;
     _emptyTextField.hidden = YES;
@@ -175,7 +175,7 @@
 
 - (NSView*)tableView:(NSTableView*)tableView viewForTableColumn:(NSTableColumn*)tableColumn row:(NSInteger)row {
   id result = _results[row];
-  
+
   if ([result isKindOfClass:[GCCommit class]]) {
     GCCommit* commit = result;
     GICommitCellView* view = [tableView makeViewWithIdentifier:@"commit" owner:self];
@@ -186,14 +186,14 @@
     NSMutableAttributedString* author = [[NSMutableAttributedString alloc] init];
     CGFloat fontSize = view.authorTextField.font.pointSize;
     [author beginEditing];
-    [author appendString:commit.authorName withAttributes:@{NSFontAttributeName: [NSFont boldSystemFontOfSize:fontSize]}];
-    [author appendString:@" " withAttributes:@{NSFontAttributeName: [NSFont systemFontOfSize:fontSize]}];
+    [author appendString:commit.authorName withAttributes:@{NSFontAttributeName : [NSFont boldSystemFontOfSize:fontSize]}];
+    [author appendString:@" " withAttributes:@{NSFontAttributeName : [NSFont systemFontOfSize:fontSize]}];
     [author appendString:commit.authorEmail withAttributes:nil];
     [author endEditing];
     view.authorTextField.attributedStringValue = author;
     return view;
   }
-  
+
   if ([result isKindOfClass:[GCReference class]]) {
     GCReference* reference = result;
     GIReferenceCellView* view = [tableView makeViewWithIdentifier:@"reference" owner:self];
@@ -211,14 +211,14 @@
     view.nameTextField.stringValue = reference.name;
     return view;
   }
-  
+
   XLOG_DEBUG_UNREACHABLE();
   return nil;
 }
 
 - (CGFloat)tableView:(NSTableView*)tableView heightOfRow:(NSInteger)row {
   id result = _results[row];
-  
+
   if ([result isKindOfClass:[GCCommit class]]) {
     GCCommit* commit = result;
     _cachedCommitCellView.frame = NSMakeRect(0, 0, [_tableView.tableColumns[0] width], 1000);
@@ -229,11 +229,11 @@
     CGFloat delta = ceilf(size.height) - frame.size.height;
     return _cachedCommitCellView.frame.size.height + delta;
   }
-  
+
   if ([result isKindOfClass:[GCReference class]]) {
     return _referenceCellHeight;
   }
-  
+
   XLOG_DEBUG_UNREACHABLE();
   return _tableView.rowHeight;
 }

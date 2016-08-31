@@ -27,7 +27,7 @@
 - (instancetype)initWithBranch:(GIBranch*)branch {
   if ((self = [super init])) {
     _branch = branch;
-    
+
     _nodes = CFArrayCreateMutable(kCFAllocatorDefault, 0, NULL);
   }
   return self;
@@ -38,7 +38,7 @@
   [_color release];
 #endif
   CFRelease(_nodes);
-  
+
   [super dealloc];
 }
 

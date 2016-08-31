@@ -14,7 +14,7 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #ifndef __GI_HAS_APPKIT__
-#if defined(__has_include) && __has_include(<AppKit/AppKit.h>)
+#if defined(__has_include) && __has_include(<AppKit / AppKit.h>)
 #define __GI_HAS_APPKIT__ 1
 #else
 #define __GI_HAS_APPKIT__ 0

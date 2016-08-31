@@ -24,13 +24,13 @@
 
 - (void)windowDidLoad {
   [super windowDidLoad];
-  
+
   self.window.delegate = self;
 }
 
 - (void)synchronizeWindowTitleWithDocumentName {
   [super synchronizeWindowTitleWithDocumentName];
-  
+
   NSString* title = [NSString stringWithFormat:@"%@ • %@", [(Document*)self.document displayName], NSLocalizedString([(Document*)self.document windowMode], nil)];
   [[(Document*)self.document titleTextField] setStringValue:title];
 }

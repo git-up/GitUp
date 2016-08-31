@@ -69,11 +69,11 @@ typedef GCCommit* (^GCConflictHandler)(GCIndex* index, GCCommit* ourCommit, GCCo
                              error:(NSError**)error;
 
 - (GCCommit*)copyCommit:(GCCommit*)copyCommit
-     withUpdatedMessage:(NSString*)message
-         updatedParents:(NSArray*)parents
-   updatedTreeFromIndex:(GCIndex*)index
-        updateCommitter:(BOOL)updateCommitter
-                  error:(NSError**)error;
+      withUpdatedMessage:(NSString*)message
+          updatedParents:(NSArray*)parents
+    updatedTreeFromIndex:(GCIndex*)index
+         updateCommitter:(BOOL)updateCommitter
+                   error:(NSError**)error;
 
 - (GCCommit*)replayCommit:(GCCommit*)replayCommit
                ontoCommit:(GCCommit*)ontoCommit

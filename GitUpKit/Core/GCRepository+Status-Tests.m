@@ -25,7 +25,7 @@
 - (void)testStatus_Base {
   // Check clean
   XCTAssertTrue([self.repository checkClean:kGCCleanCheckOption_IgnoreUntrackedFiles error:NULL]);
-  
+
   // Add some files & commit changes
   [self updateFileAtPath:@".gitignore" withString:@"ignored.txt\n"];
   XCTAssertTrue([self.repository addFileToIndex:@".gitignore" error:NULL]);
@@ -38,10 +38,10 @@
   [self updateFileAtPath:@"type-changed.txt" withString:@""];
   XCTAssertTrue([self.repository addFileToIndex:@"type-changed.txt" error:NULL]);
   XCTAssertNotNil([self.repository createCommitFromHEADWithMessage:@"Update" error:NULL]);
-  
+
   // Check clean
   XCTAssertTrue([self.repository checkClean:kGCCleanCheckOption_IgnoreUntrackedFiles error:NULL]);
-  
+
   // Touch files
   [self updateFileAtPath:@"ignored.txt" withString:@""];
   [self updateFileAtPath:@"modified.txt" withString:@"Hi there!"];
@@ -51,10 +51,10 @@
   XCTAssertTrue([[NSFileManager defaultManager] removeItemAtPath:[self.repository.workingDirectoryPath stringByAppendingPathComponent:@"type-changed.txt"] error:NULL]);
   XCTAssertTrue([[NSFileManager defaultManager] createSymbolicLinkAtPath:[self.repository.workingDirectoryPath stringByAppendingPathComponent:@"type-changed.txt"] withDestinationPath:@"hello_world.txt" error:NULL]);
   XCTAssertTrue([[NSFileManager defaultManager] copyItemAtPath:[self.repository.workingDirectoryPath stringByAppendingPathComponent:@"hello_world.txt"] toPath:[self.repository.workingDirectoryPath stringByAppendingPathComponent:@"copied.txt"] error:NULL]);
-  
+
   // Check clean
   XCTAssertFalse([self.repository checkClean:kGCCleanCheckOption_IgnoreUntrackedFiles error:NULL]);
-  
+
   // Diff index
   GCDiff* indexStatus1 = [self.repository diffRepositoryIndexWithHEAD:nil
                                                               options:(kGCDiffOption_FindRenames | kGCDiffOption_FindCopies | kGCDiffOption_IncludeUnmodified)
@@ -72,7 +72,7 @@
   XCTAssertEqual([indexStatus1 changeForFile:@"renamed1.txt"], kGCFileDiffChange_Unmodified);
   XCTAssertEqual([indexStatus1 changeForFile:@"renamed2.txt"], NSNotFound);
   XCTAssertEqual([indexStatus1 changeForFile:@"type-changed.txt"], kGCFileDiffChange_Unmodified);
-  
+
   // Diff workdir
   GCDiff* workdirStatus1 = [self.repository diffWorkingDirectoryWithRepositoryIndex:nil
                                                                             options:(kGCDiffOption_FindTypeChanges | kGCDiffOption_FindRenames | kGCDiffOption_FindCopies | kGCDiffOption_IncludeUnmodified | kGCDiffOption_IncludeUntracked | kGCDiffOption_IncludeIgnored)
@@ -89,16 +89,16 @@
   XCTAssertEqual([workdirStatus1 changeForFile:@"modified.txt"], kGCFileDiffChange_Modified);
   XCTAssertEqual([workdirStatus1 changeForFile:@"renamed2.txt"], kGCFileDiffChange_Renamed);  // TODO: Check source is "renamed1.txt"
   XCTAssertEqual([workdirStatus1 changeForFile:@"type-changed.txt"], kGCFileDiffChange_TypeChanged);
-  
+
   // Check conflicts
   XCTAssertEqualObjects([self.repository checkConflicts:NULL], @{});
-  
+
   // Update index
   XCTAssertTrue([self.repository addAllFilesToIndex:NULL]);
-  
+
   // Check clean
   XCTAssertFalse([self.repository checkClean:kGCCleanCheckOption_IgnoreUntrackedFiles error:NULL]);
-  
+
   // Diff index
   GCDiff* indexStatus2 = [self.repository diffRepositoryIndexWithHEAD:nil
                                                               options:(kGCDiffOption_FindTypeChanges | kGCDiffOption_FindRenames | kGCDiffOption_FindCopies | kGCDiffOption_IncludeUnmodified)
@@ -116,7 +116,7 @@
   XCTAssertEqual([indexStatus2 changeForFile:@"renamed1.txt"], NSNotFound);
   XCTAssertEqual([indexStatus2 changeForFile:@"renamed2.txt"], kGCFileDiffChange_Renamed);  // TODO: Check source is "renamed1.txt"
   XCTAssertEqual([indexStatus2 changeForFile:@"type-changed.txt"], kGCFileDiffChange_TypeChanged);
-  
+
   // Diff workdir
   GCDiff* workdirStatus2 = [self.repository diffWorkingDirectoryWithRepositoryIndex:nil
                                                                             options:(kGCDiffOption_FindRenames | kGCDiffOption_FindCopies | kGCDiffOption_IncludeUnmodified | kGCDiffOption_IncludeUntracked | kGCDiffOption_IncludeIgnored)
@@ -133,7 +133,7 @@
   XCTAssertEqual([workdirStatus2 changeForFile:@"modified.txt"], kGCFileDiffChange_Unmodified);
   XCTAssertEqual([workdirStatus2 changeForFile:@"renamed2.txt"], kGCFileDiffChange_Unmodified);
   XCTAssertEqual([workdirStatus2 changeForFile:@"type-changed.txt"], kGCFileDiffChange_Unmodified);
-  
+
   // Check conflicts
   XCTAssertEqualObjects([self.repository checkConflicts:NULL], @{});
 }
@@ -141,16 +141,16 @@
 - (void)testStatus_Conflicts {
   // Check initial state
   XCTAssertEqualObjects([self.repository checkConflicts:NULL], @{});
-  
+
   // Modify file
   GCCommit* newCommit = [self makeCommitWithUpdatedFileAtPath:@"hello_world.txt" string:@"Bonjour le monde!\n" message:@"Modified"];
-  
+
   // Create test branch with commit
   GCLocalBranch* branch1 = [self.repository createLocalBranchFromCommit:self.initialCommit withName:@"b1" force:NO error:NULL];
   XCTAssertNotNil(branch1);
   XCTAssertTrue([self.repository checkoutLocalBranch:branch1 options:0 error:NULL]);
   [self makeCommitWithUpdatedFileAtPath:@"hello_world.txt" string:@"Hola Mundo!\n" message:@"c1"];
-  
+
   // Test "both modified"
   XCTAssertTrue([self.repository mergeCommitToHEAD:newCommit error:NULL]);
   [self assertGitCLTOutputEqualsString:@"UU hello_world.txt\n" withRepository:self.repository command:@"status", @"--ignored", @"--porcelain", nil];
@@ -163,16 +163,16 @@
   NSDictionary* conflicts1 = [self.repository checkConflicts:NULL];
   XCTAssertEqual(conflicts1.count, 1);
   XCTAssertEqual([(GCIndexConflict*)conflicts1[@"hello_world.txt"] status], kGCIndexConflictStatus_BothModified);
-  
+
   // Reset
   XCTAssertTrue([self.repository resetToHEAD:kGCResetMode_Hard error:NULL]);
-  
+
   // Create test branch with commit
   GCLocalBranch* branch2 = [self.repository createLocalBranchFromCommit:self.initialCommit withName:@"b2" force:NO error:NULL];
   XCTAssertNotNil(branch2);
   XCTAssertTrue([self.repository checkoutLocalBranch:branch2 options:0 error:NULL]);
   GCCommit* commit2 = [self makeCommitWithDeletedFileAtPath:@"hello_world.txt" message:@"c2"];
-  
+
   // Test "deleted by us"
   XCTAssertTrue([self.repository mergeCommitToHEAD:newCommit error:NULL]);
   [self assertGitCLTOutputEqualsString:@"DU hello_world.txt\n" withRepository:self.repository command:@"status", @"--ignored", @"--porcelain", nil];
@@ -185,10 +185,10 @@
   NSDictionary* conflicts2 = [self.repository checkConflicts:NULL];
   XCTAssertEqual(conflicts2.count, 1);
   XCTAssertEqual([(GCIndexConflict*)conflicts2[@"hello_world.txt"] status], kGCIndexConflictStatus_DeletedByUs);
-  
+
   // Reset
   XCTAssertTrue([self.repository resetToHEAD:kGCResetMode_Hard error:NULL]);
-  
+
   // Test "deleted by them"
   XCTAssertTrue([self.repository checkoutLocalBranch:[self.repository findLocalBranchWithName:@"master" error:NULL] options:0 error:NULL]);
   XCTAssertTrue([self.repository mergeCommitToHEAD:commit2 error:NULL]);
@@ -202,16 +202,16 @@
   NSDictionary* conflicts3 = [self.repository checkConflicts:NULL];
   XCTAssertEqual(conflicts3.count, 1);
   XCTAssertEqual([(GCIndexConflict*)conflicts3[@"hello_world.txt"] status], kGCIndexConflictStatus_DeletedByThem);
-  
+
   // Reset
   XCTAssertTrue([self.repository resetToHEAD:kGCResetMode_Hard error:NULL]);
-  
+
   // Create test branch with commit
   GCLocalBranch* branch3 = [self.repository createLocalBranchFromCommit:self.initialCommit withName:@"b3" force:NO error:NULL];
   XCTAssertNotNil(branch3);
   XCTAssertTrue([self.repository checkoutLocalBranch:branch3 options:0 error:NULL]);
   GCCommit* commit3 = [self makeCommitWithUpdatedFileAtPath:@"test.txt" string:@"Hello\n" message:@"c3"];
-  
+
   // Test "both added"
   XCTAssertTrue([self.repository checkoutLocalBranch:[self.repository findLocalBranchWithName:@"master" error:NULL] options:0 error:NULL]);
   [self makeCommitWithUpdatedFileAtPath:@"test.txt" string:@"Bonjour\n" message:@"c4"];
@@ -239,7 +239,7 @@
   GCDiff* workdirStatus1 = [self.repository checkWorkingDirectoryStatus:NULL];
   XCTAssertNotNil(workdirStatus1);
   XCTAssertFalse(workdirStatus1.modified);
-  
+
   // Modify file in working directory
   [self updateFileAtPath:@"hello_world.txt" withString:@"Bonjour le monde!\n"];
   XCTAssertTrue([self.repository checkRepositoryDirty:YES]);
@@ -249,7 +249,7 @@
   GCDiff* workdirStatus2 = [self.repository checkWorkingDirectoryStatus:NULL];
   XCTAssertNotNil(workdirStatus2);
   XCTAssertTrue(workdirStatus2.modified);
-  
+
   // Add file to index
   XCTAssertTrue([self.repository addFileToIndex:@"hello_world.txt" error:NULL]);
   XCTAssertTrue([self.repository checkRepositoryDirty:YES]);

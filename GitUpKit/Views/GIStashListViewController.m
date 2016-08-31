@@ -70,30 +70,30 @@
 
 - (void)loadView {
   [super loadView];
-  
+
   _tableView.target = self;
   _tableView.doubleAction = @selector(applyStash:);
-  
+
   _diffContentsViewController = [[GIDiffContentsViewController alloc] initWithRepository:self.repository];
   _diffContentsViewController.emptyLabel = NSLocalizedString(@"No differences", nil);
   [_diffView replaceWithView:_diffContentsViewController.view];
-  
+
   _cachedCellView = [_tableView makeViewWithIdentifier:[_tableView.tableColumns[0] identifier] owner:self];
-  
+
   _dropButton.enabled = NO;
 }
 
 - (void)viewWillShow {
   XLOG_DEBUG_CHECK(self.repository.stashesEnabled == NO);
   self.repository.stashesEnabled = YES;
-  
+
   [self _reloadStashes];
 }
 
 - (void)viewDidHide {
   _stashes = nil;
   [_tableView reloadData];
-  
+
   XLOG_DEBUG_CHECK(self.repository.stashesEnabled == YES);
   self.repository.stashesEnabled = NO;
 }
@@ -107,7 +107,7 @@
 - (void)_reloadStashes {
   _stashes = self.repository.stashes;
   [_tableView reloadData];
-  
+
   if (_stashes.count == 0) {
     _emptyLabel.hidden = NO;
     [self tableViewSelectionDidChange:nil];  // Work around a bug where -tableViewSelectionDidChange is not called when emptying the table
@@ -179,18 +179,17 @@
 #pragma mark - Actions
 
 - (BOOL)validateUserInterfaceItem:(id<NSValidatedUserInterfaceItem>)item {
-  
   if (item.action == @selector(copy:)) {
     return (_tableView.selectedRow >= 0);
   }
-  
+
   return NO;
 }
 
 - (IBAction)copy:(id)sender {
   NSInteger row = _tableView.selectedRow;
   if (row >= 0) {
-    [[NSPasteboard generalPasteboard] declareTypes:@[NSPasteboardTypeString] owner:nil];
+    [[NSPasteboard generalPasteboard] declareTypes:@[ NSPasteboardTypeString ] owner:nil];
     [[NSPasteboard generalPasteboard] setString:[NSString stringWithFormat:@"stash@{%li}", row] forType:NSPasteboardTypeString];
   } else {
     XLOG_DEBUG_UNREACHABLE();
@@ -202,7 +201,7 @@
     [[self.undoManager prepareWithInvocationTarget:self] _undoSaveStash:stash withMessage:message keepIndex:keepIndex includeUntracked:includeUntracked ignore:NO];
     return;
   }
-  
+
   BOOL success;
   NSError* error;
   if (stash) {
@@ -232,26 +231,28 @@
   _messageTextField.stringValue = @"";
   _untrackedButton.state = NO;
   _indexButton.state = NO;
-  [self.windowController runModalView:_saveView withInitialFirstResponder:_messageTextField completionHandler:^(BOOL success) {
-    
-    if (success) {
-      NSString* message = [_messageTextField.stringValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-      NSError* error;
-      GCStash* stash = [self.repository saveStashWithMessage:(message.length ? message : nil) keepIndex:_indexButton.state includeUntracked:_untrackedButton.state error:&error];
-      if (stash) {
-        [self.undoManager setActionName:NSLocalizedString(@"Save Stash", nil)];
-        [[self.undoManager prepareWithInvocationTarget:self] _undoSaveStash:stash withMessage:(message.length ? message : nil) keepIndex:_indexButton.state includeUntracked:_untrackedButton.state ignore:NO];  // TODO: We should really use the built-in undo mechanism from GCLiveRepository
-        [self.repository notifyRepositoryChanged];
-        
-        [self.view.window makeFirstResponder:_tableView];
-        [_tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:0] byExtendingSelection:NO];
-        [_tableView scrollRowToVisible:0];
-      } else {
-        [self presentError:error];
-      }
-    }
-    
-  }];
+  [self.windowController runModalView:_saveView
+            withInitialFirstResponder:_messageTextField
+                    completionHandler:^(BOOL success) {
+
+                      if (success) {
+                        NSString* message = [_messageTextField.stringValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+                        NSError* error;
+                        GCStash* stash = [self.repository saveStashWithMessage:(message.length ? message : nil) keepIndex:_indexButton.state includeUntracked:_untrackedButton.state error:&error];
+                        if (stash) {
+                          [self.undoManager setActionName:NSLocalizedString(@"Save Stash", nil)];
+                          [[self.undoManager prepareWithInvocationTarget:self] _undoSaveStash:stash withMessage:(message.length ? message : nil) keepIndex:_indexButton.state includeUntracked:_untrackedButton.state ignore:NO];  // TODO: We should really use the built-in undo mechanism from GCLiveRepository
+                          [self.repository notifyRepositoryChanged];
+
+                          [self.view.window makeFirstResponder:_tableView];
+                          [_tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:0] byExtendingSelection:NO];
+                          [_tableView scrollRowToVisible:0];
+                        } else {
+                          [self presentError:error];
+                        }
+                      }
+
+                    }];
 }
 
 - (IBAction)applyStash:(id)sender {
@@ -264,16 +265,16 @@
                                   button:NSLocalizedString(@"Apply Stash", nil)
                suppressionUserDefaultKey:kUserDefaultsKey_SkipApplyWarning
                                    block:^{
-      
-      NSError* error;
-      if ([self.repository applyStash:stash restoreIndex:NO error:&error]) {
-        [self.repository notifyRepositoryChanged];
-        [self.windowController showOverlayWithStyle:kGIOverlayStyle_Informational message:NSLocalizedString(@"Stash was applied successfully!", nil)];
-      } else {
-        [self presentError:error];
-      }
-      
-    }];
+
+                                     NSError* error;
+                                     if ([self.repository applyStash:stash restoreIndex:NO error:&error]) {
+                                       [self.repository notifyRepositoryChanged];
+                                       [self.windowController showOverlayWithStyle:kGIOverlayStyle_Informational message:NSLocalizedString(@"Stash was applied successfully!", nil)];
+                                     } else {
+                                       [self presentError:error];
+                                     }
+
+                                   }];
   } else {
     NSBeep();
   }
@@ -284,7 +285,7 @@
     [[self.undoManager prepareWithInvocationTarget:self] _undoDropStashWithPreviousState:state ignore:NO];
     return;
   }
-  
+
   NSError* error;
   GCStashState* currentState = [self.repository saveStashState:&error];
   if (currentState && [self.repository restoreStashState:state error:&error]) {

@@ -20,10 +20,10 @@ typedef NS_ENUM(NSInteger, GCErrorCode) {
   kGCErrorCode_RepositoryDirty = 2,
   kGCErrorCode_Generic = 1,
   kGCErrorCode_UserCancelled = 0,
-  kGCErrorCode_NotFound = -3, // GIT_ENOTFOUND,
+  kGCErrorCode_NotFound = -3,  // GIT_ENOTFOUND,
   kGCErrorCode_User = -7,  // GIT_EUSER
   kGCErrorCode_NonFastForward = -11,  // GIT_ENONFASTFORWARD
-  kGCErrorCode_CheckoutConflicts= -13,  // GIT_ECONFLICT
+  kGCErrorCode_CheckoutConflicts = -13,  // GIT_ECONFLICT
   kGCErrorCode_Authentication = -16  // GIT_EAUTH
 };
 

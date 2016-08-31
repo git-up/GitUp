@@ -27,7 +27,7 @@
 - (instancetype)initWithIndex:(NSUInteger)index {
   if ((self = [super init])) {
     _index = index;
-    
+
     _nodes = CFArrayCreateMutable(kCFAllocatorDefault, 0, NULL);
     _lines = CFArrayCreateMutable(kCFAllocatorDefault, 0, NULL);
   }
@@ -37,7 +37,7 @@
 - (void)dealloc {
   CFRelease(_lines);
   CFRelease(_nodes);
-  
+
   [super dealloc];
 }
 

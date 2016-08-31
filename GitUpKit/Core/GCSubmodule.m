@@ -19,7 +19,7 @@
 
 #import "GCPrivate.h"
 
-extern int git_path_make_relative(git_buf *path, const char *parent);  // SPI
+extern int git_path_make_relative(git_buf* path, const char* parent);  // SPI
 
 @implementation GCSubmodule {
   __unsafe_unretained GCRepository* _repository;
@@ -47,23 +47,47 @@ extern int git_path_make_relative(git_buf *path, const char *parent);  // SPI
   const char* branch = git_submodule_branch(_private);
   _remoteBranchName = branch ? [NSString stringWithUTF8String:branch] : nil;
   switch (git_submodule_ignore(_private)) {
-    case GIT_SUBMODULE_IGNORE_NONE: _ignoreMode = kGCSubmoduleIgnoreMode_None; break;
-    case GIT_SUBMODULE_IGNORE_UNTRACKED: _ignoreMode = kGCSubmoduleIgnoreMode_Untracked; break;
-    case GIT_SUBMODULE_IGNORE_DIRTY: _ignoreMode = kGCSubmoduleIgnoreMode_Dirty; break;
-    case GIT_SUBMODULE_IGNORE_ALL: _ignoreMode = kGCSubmoduleIgnoreMode_All; break;
-    case GIT_SUBMODULE_IGNORE_UNSPECIFIED: XLOG_DEBUG_UNREACHABLE();
+    case GIT_SUBMODULE_IGNORE_NONE:
+      _ignoreMode = kGCSubmoduleIgnoreMode_None;
+      break;
+    case GIT_SUBMODULE_IGNORE_UNTRACKED:
+      _ignoreMode = kGCSubmoduleIgnoreMode_Untracked;
+      break;
+    case GIT_SUBMODULE_IGNORE_DIRTY:
+      _ignoreMode = kGCSubmoduleIgnoreMode_Dirty;
+      break;
+    case GIT_SUBMODULE_IGNORE_ALL:
+      _ignoreMode = kGCSubmoduleIgnoreMode_All;
+      break;
+    case GIT_SUBMODULE_IGNORE_UNSPECIFIED:
+      XLOG_DEBUG_UNREACHABLE();
   }
   switch (git_submodule_fetch_recurse_submodules(_private)) {
-    case GIT_SUBMODULE_RECURSE_NO: _fetchRecurseMode = kGCSubmoduleFetchRecurseMode_No; break;
-    case GIT_SUBMODULE_RECURSE_YES: _fetchRecurseMode = kGCSubmoduleFetchRecurseMode_Yes; break;
-    case GIT_SUBMODULE_RECURSE_ONDEMAND: _fetchRecurseMode = kGCSubmoduleFetchRecurseMode_OnDemand; break;
+    case GIT_SUBMODULE_RECURSE_NO:
+      _fetchRecurseMode = kGCSubmoduleFetchRecurseMode_No;
+      break;
+    case GIT_SUBMODULE_RECURSE_YES:
+      _fetchRecurseMode = kGCSubmoduleFetchRecurseMode_Yes;
+      break;
+    case GIT_SUBMODULE_RECURSE_ONDEMAND:
+      _fetchRecurseMode = kGCSubmoduleFetchRecurseMode_OnDemand;
+      break;
   }
   switch (git_submodule_update_strategy(_private)) {
-    case GIT_SUBMODULE_UPDATE_CHECKOUT: _updateMode = kGCSubmoduleUpdateMode_Checkout; break;
-    case GIT_SUBMODULE_UPDATE_REBASE: _updateMode = kGCSubmoduleUpdateMode_Rebase; break;
-    case GIT_SUBMODULE_UPDATE_MERGE: _updateMode = kGCSubmoduleUpdateMode_Merge; break;
-    case GIT_SUBMODULE_UPDATE_NONE: _updateMode = kGCSubmoduleUpdateMode_None; break;
-    case GIT_SUBMODULE_UPDATE_DEFAULT: XLOG_DEBUG_UNREACHABLE();
+    case GIT_SUBMODULE_UPDATE_CHECKOUT:
+      _updateMode = kGCSubmoduleUpdateMode_Checkout;
+      break;
+    case GIT_SUBMODULE_UPDATE_REBASE:
+      _updateMode = kGCSubmoduleUpdateMode_Rebase;
+      break;
+    case GIT_SUBMODULE_UPDATE_MERGE:
+      _updateMode = kGCSubmoduleUpdateMode_Merge;
+      break;
+    case GIT_SUBMODULE_UPDATE_NONE:
+      _updateMode = kGCSubmoduleUpdateMode_None;
+      break;
+    case GIT_SUBMODULE_UPDATE_DEFAULT:
+      XLOG_DEBUG_UNREACHABLE();
   }
 }
 
@@ -125,7 +149,7 @@ extern int git_path_make_relative(git_buf *path, const char *parent);  // SPI
   git_submodule* submodule = NULL;
   GCRepository* repository;
   GCRemote* remote;
-  
+
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_submodule_add_setup, &submodule, self.private, GCGitURLFromURL(url).UTF8String, GCGitPathFromFileSystemPath(path), true);
   git_repository* subRepository;
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_submodule_open, &subRepository, submodule);
@@ -143,7 +167,7 @@ extern int git_path_make_relative(git_buf *path, const char *parent);  // SPI
   }
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_submodule_add_finalize, submodule);  // This just calls git_submodule_add_to_index()
   success = YES;
-  
+
 cleanup:
   if (!success) {
     git_submodule_free(submodule);
@@ -153,19 +177,19 @@ cleanup:
 
 - (BOOL)initializeSubmodule:(GCSubmodule*)submodule recursive:(BOOL)recursive error:(NSError**)error {
   XLOG_DEBUG_CHECK(![self checkSubmoduleInitialized:submodule error:NULL]);
-  
+
   NSString* modulePath = [[self.repositoryPath stringByAppendingPathComponent:@"modules"] stringByAppendingPathComponent:submodule.path];
   if ([[NSFileManager defaultManager] fileExistsAtPath:modulePath followLastSymlink:NO] && ![[NSFileManager defaultManager] removeItemAtPath:modulePath error:error]) {
     return NO;
   }
-  
+
   git_submodule_update_options options = GIT_SUBMODULE_UPDATE_OPTIONS_INIT;
   [self setRemoteCallbacks:&options.fetch_opts.callbacks];
   [self willStartRemoteTransferWithURL:submodule.URL];
   int status = git_submodule_update(submodule.private, true, &options);  // This actually does a clone if the submodule is not initialized
   [self didFinishRemoteTransferWithURL:submodule.URL success:(status == GIT_OK)];
   CHECK_LIBGIT2_FUNCTION_CALL(return NO, status, == GIT_OK);
-  
+
   if (recursive) {
     GCRepository* repository = [[GCRepository alloc] initWithSubmodule:submodule error:error];
     if (repository == nil) {
@@ -176,7 +200,7 @@ cleanup:
       return NO;
     }
   }
-  
+
   return YES;
 }
 
@@ -226,14 +250,13 @@ cleanup:
   git_repository* subRepository = NULL;
   git_index* index = NULL;
   git_commit* commit = NULL;
-  
+
   switch (git_submodule_update_strategy(submodule.private)) {
-    
     case GIT_SUBMODULE_UPDATE_NONE: {
       success = YES;
       break;
     }
-    
+
     // Reimplement git_submodule_update() when no submodule initialization is needed
     case GIT_SUBMODULE_UPDATE_CHECKOUT: {
       CFAbsoluteTime time = CFAbsoluteTimeGetCurrent();
@@ -269,13 +292,12 @@ cleanup:
       XLOG_VERBOSE(@"Updated submodule \"%@\" in \"%@\" in %.3f seconds", submodule.name, self.repositoryPath, CFAbsoluteTimeGetCurrent() - time);
       break;
     }
-    
+
     default:
       GC_SET_GENERIC_ERROR(@"Unsupported update mode for submodule \"%@\"", submodule.name);
       break;
-    
   }
-  
+
 cleanup:
   git_commit_free(commit);
   git_index_free(index);

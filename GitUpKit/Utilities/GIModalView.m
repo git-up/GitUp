@@ -46,7 +46,7 @@
 // See https://developer.apple.com/library/mac/documentation/GraphicsImaging/Reference/CoreImageFilterReference/index.html
 - (void)_initialize {
   self.wantsLayer = YES;
-  
+
 #if __ENABLE_BLUR__
   if (kCFCoreFoundationVersionNumber >= kCFCoreFoundationVersionNumber10_10) {  // Background filters don't seem to work on 10.8 and 10.9
     size_t size;
@@ -60,13 +60,13 @@
       free(machine);
     }
   }
-  
+
   if (_useBackgroundFilters) {
     CIFilter* blurFilter = [CIFilter filterWithName:@"CIGaussianBlur"];
     blurFilter.name = kBlurName;
     [blurFilter setDefaults];
     [blurFilter setValue:@(0.0) forKey:@"inputRadius"];
-    self.backgroundFilters = @[blurFilter];
+    self.backgroundFilters = @[ blurFilter ];
   }
 #endif
 }
@@ -87,7 +87,7 @@
 
 - (void)presentContentView:(NSView*)view withCompletionHandler:(dispatch_block_t)handler {
   XLOG_DEBUG_CHECK(self.subviews.count == 0);
-  
+
   NSRect bounds = self.bounds;
   NSRect frame = view.frame;
   view.frame = NSMakeRect(round((bounds.size.width - frame.size.width) / 2), round((bounds.size.height - frame.size.height) / 2), frame.size.width, frame.size.height);
@@ -96,7 +96,7 @@
   view.layer.borderWidth = 1.0;
   view.layer.borderColor = [[NSColor colorWithDeviceRed:0.0 green:0.0 blue:0.0 alpha:0.2] CGColor];
   view.layer.cornerRadius = 5.0;
-  
+
 #if __ENABLE_BLUR__
   if (_useBackgroundFilters) {
     [self.layer setValue:@(kBlurRadius) forKeyPath:kBlurKeyPath];
@@ -107,16 +107,16 @@
     animation.duration = kAnimationDuration;
     animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];
     [self.layer addAnimation:animation forKey:nil];
-    
+
     [NSAnimationContext beginGrouping];
     [[NSAnimationContext currentContext] setDuration:kAnimationDuration];
     [[NSAnimationContext currentContext] setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn]];
     [[NSAnimationContext currentContext] setCompletionHandler:^{
-      
+
       if (handler) {
         handler();
       }
-      
+
     }];
     [self.animator addSubview:view];
     [NSAnimationContext endGrouping];
@@ -134,7 +134,7 @@
 
 - (void)dismissContentViewWithCompletionHandler:(dispatch_block_t)handler {
   XLOG_DEBUG_CHECK(self.subviews.count == 1);
-  
+
   NSView* view = self.subviews.firstObject;
 #if __ENABLE_BLUR__
   if (_useBackgroundFilters) {
@@ -142,16 +142,16 @@
     [[NSAnimationContext currentContext] setDuration:kAnimationDuration];
     [[NSAnimationContext currentContext] setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut]];
     [[NSAnimationContext currentContext] setCompletionHandler:^{
-      
+
       view.wantsLayer = NO;
       if (handler) {
         handler();
       }
-      
+
     }];
     [view.animator removeFromSuperviewWithoutNeedingDisplay];
     [NSAnimationContext endGrouping];
-    
+
     [self.layer setValue:@(0.0) forKeyPath:kBlurKeyPath];
     CABasicAnimation* animation = [CABasicAnimation animation];
     animation.keyPath = kBlurKeyPath;
@@ -173,18 +173,31 @@
 }
 
 // Prevent events bubbling to ancestor views - TODO: Is there a better way?
-- (void)mouseDown:(NSEvent*)event {}
-- (void)rightMouseDown:(NSEvent*)event {}
-- (void)otherMouseDown:(NSEvent*)event {}
-- (void)mouseUp:(NSEvent*)event {}
-- (void)rightMouseUp:(NSEvent*)event {}
-- (void)otherMouseUp:(NSEvent*)event {}
-- (void)mouseMoved:(NSEvent*)event {}
-- (void)mouseDragged:(NSEvent*)event {}
-- (void)scrollWheel:(NSEvent*)event {}
-- (void)rightMouseDragged:(NSEvent*)event {}
-- (void)otherMouseDragged:(NSEvent*)event {}
-- (void)mouseEntered:(NSEvent*)event {}
-- (void)mouseExited:(NSEvent*)event {}
+- (void)mouseDown:(NSEvent*)event {
+}
+- (void)rightMouseDown:(NSEvent*)event {
+}
+- (void)otherMouseDown:(NSEvent*)event {
+}
+- (void)mouseUp:(NSEvent*)event {
+}
+- (void)rightMouseUp:(NSEvent*)event {
+}
+- (void)otherMouseUp:(NSEvent*)event {
+}
+- (void)mouseMoved:(NSEvent*)event {
+}
+- (void)mouseDragged:(NSEvent*)event {
+}
+- (void)scrollWheel:(NSEvent*)event {
+}
+- (void)rightMouseDragged:(NSEvent*)event {
+}
+- (void)otherMouseDragged:(NSEvent*)event {
+}
+- (void)mouseEntered:(NSEvent*)event {
+}
+- (void)mouseExited:(NSEvent*)event {
+}
 
 @end

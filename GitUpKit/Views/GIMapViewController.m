@@ -98,12 +98,12 @@ static NSColor* _patternColor = nil;
 
 - (void)loadView {
   [super loadView];
-  
+
   _graphView.delegate = self;
   [self _setGraphViewBackgroundColors:NO];
   _graphView.showsTagLabels = ![[self.repository userInfoForKey:kPersistentViewStateKey_HideTagLabels] boolValue];
   _graphView.showsBranchLabels = [[self.repository userInfoForKey:kPersistentViewStateKey_ShowBranchLabels] boolValue];
-  
+
   _updatePending = YES;
 }
 
@@ -130,7 +130,7 @@ static NSColor* _patternColor = nil;
   if (selectedCommit == nil) {
     focus = _graphView.focusedNode;
   }
-  
+
   GIGraphOptions options = kGIGraphOption_PreserveUpstreamRemoteBranchTips;
   if (_showsVirtualTips) {
     options |= kGIGraphOption_ShowVirtualTips;
@@ -155,7 +155,7 @@ static NSColor* _patternColor = nil;
     [_delegate mapViewControllerDidReloadGraph:self];
   }
   XLOG_VERBOSE(@"Graph regenerated for \"%@\" in %.3f seconds", self.repository.repositoryPath, CFAbsoluteTimeGetCurrent() - time);
-  
+
   if (selectedCommit) {
     if (_previewHistory) {
       _graphView.selectedCommit = [_previewHistory historyCommitForCommit:selectedCommit];
@@ -276,7 +276,7 @@ static NSColor* _patternColor = nil;
 - (void)graphView:(GIGraphView*)graphView didDoubleClickOnNode:(GINode*)node {
   if (_previewHistory) {
     NSBeep();
-  } else if ([self validateUserInterfaceItem:_checkoutMenuItem]){
+  } else if ([self validateUserInterfaceItem:_checkoutMenuItem]) {
     [self checkoutSelectedCommit:nil];
   }
 }
@@ -284,56 +284,56 @@ static NSColor* _patternColor = nil;
 - (NSMenu*)graphView:(GIGraphView*)graphView willShowContextualMenuForNode:(GINode*)node {
   NSMenuItem* item;
   NSMenu* submenu;
-  
+
   NSInteger index = [_contextualMenu indexOfItem:_separatorMenuItem];
   while (_contextualMenu.numberOfItems > (index + 1)) {
     [_contextualMenu removeItemAtIndex:(index + 1)];
   }
-  
+
   if (!_previewHistory) {
     NSArray* remotes = [self.repository listRemotes:NULL];  // TODO: How to handle errors here?
-    
+
     for (GCHistoryLocalBranch* branch in node.commit.localBranches) {
       GCBranch* upstream = branch.upstream;
       NSMenu* menu = [[NSMenu alloc] init];
-      
+
       item = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"Rename…", nil) action:@selector(_renameLocalBranch:) keyEquivalent:@""];
       item.representedObject = branch;
       [menu addItem:item];
-      
+
       [menu addItem:[NSMenuItem separatorItem]];
-      
+
       submenu = [[NSMenu alloc] init];
       for (GCHistoryLocalBranch* localBranch in self.repository.history.localBranches) {
         if (localBranch == branch) {
           continue;
         }
         item = [[NSMenuItem alloc] initWithTitle:localBranch.name action:@selector(_mergeLocalBranch:) keyEquivalent:@""];
-        item.representedObject = @[branch, localBranch];
+        item.representedObject = @[ branch, localBranch ];
         [submenu addItem:item];
       }
       item = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"Merge into…", nil) action:NULL keyEquivalent:@""];
       item.submenu = submenu;
       [menu addItem:item];
-      
+
       submenu = [[NSMenu alloc] init];
       for (GCHistoryLocalBranch* localBranch in self.repository.history.localBranches) {
         if (localBranch == branch) {
           continue;
         }
         item = [[NSMenuItem alloc] initWithTitle:localBranch.name action:@selector(_rebaseLocalBranch:) keyEquivalent:@""];
-        item.representedObject = @[branch, localBranch];
+        item.representedObject = @[ branch, localBranch ];
         [submenu addItem:item];
       }
       for (GCHistoryRemoteBranch* remoteBranch in self.repository.history.remoteBranches) {
         item = [[NSMenuItem alloc] initWithTitle:remoteBranch.name action:@selector(_rebaseLocalBranch:) keyEquivalent:@""];
-        item.representedObject = @[branch, remoteBranch];
+        item.representedObject = @[ branch, remoteBranch ];
         [submenu addItem:item];
       }
       item = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"Rebase onto", nil) action:NULL keyEquivalent:@""];
       item.submenu = submenu;
       [menu addItem:item];
-      
+
       [menu addItem:[NSMenuItem separatorItem]];
 
       BOOL needsSeparator = YES;
@@ -341,7 +341,7 @@ static NSColor* _patternColor = nil;
       if (self.repository.history.remoteBranches.count) {
         for (GCHistoryRemoteBranch* remoteBranch in self.repository.history.remoteBranches) {
           item = [[NSMenuItem alloc] initWithTitle:remoteBranch.name action:@selector(_configureUpstreamForLocalBranch:) keyEquivalent:@""];
-          item.representedObject = @[branch, remoteBranch];
+          item.representedObject = @[ branch, remoteBranch ];
           if ([upstream isEqualToBranch:remoteBranch]) {
             item.state = NSOnState;
           }
@@ -356,7 +356,7 @@ static NSColor* _patternColor = nil;
               needsSeparator = NO;
             }
             item = [[NSMenuItem alloc] initWithTitle:localBranch.name action:@selector(_configureUpstreamForLocalBranch:) keyEquivalent:@""];
-            item.representedObject = @[branch, localBranch];
+            item.representedObject = @[ branch, localBranch ];
             if ([upstream isEqualToBranch:localBranch]) {
               item.state = NSOnState;
             }
@@ -367,37 +367,37 @@ static NSColor* _patternColor = nil;
       item = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"Set Upstream to", nil) action:NULL keyEquivalent:@""];
       item.submenu = submenu;
       [menu addItem:item];
-      
+
       if (upstream) {
         item = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"Unset Upstream", nil) action:@selector(_configureUpstreamForLocalBranch:) keyEquivalent:@""];
         item.representedObject = branch;
         [menu addItem:item];
       }
-      
+
       [menu addItem:[NSMenuItem separatorItem]];
-      
+
       if (upstream) {
         item = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"Pull from Upstream", nil) action:@selector(_pullLocalBranchFromUpstream:) keyEquivalent:@""];
         item.representedObject = branch;
         [menu addItem:item];
-        
+
         item = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"Push to Upstream", nil) action:@selector(_pushLocalBranchToUpstream:) keyEquivalent:@""];
         item.representedObject = branch;
         [menu addItem:item];
       }
-      
+
       submenu = [[NSMenu alloc] init];
       for (GCRemote* remote in remotes) {
         item = [[NSMenuItem alloc] initWithTitle:remote.name action:@selector(_pushLocalBranchToRemote:) keyEquivalent:@""];
-        item.representedObject = @[branch, remote];
+        item.representedObject = @[ branch, remote ];
         [submenu addItem:item];
       }
       item = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"Push to Remote", nil) action:NULL keyEquivalent:@""];
       item.submenu = submenu;
       [menu addItem:item];
-      
+
       [menu addItem:[NSMenuItem separatorItem]];
-      
+
       if (![self.repository.history.HEADBranch isEqualToBranch:branch]) {
         item = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"Delete", nil) action:@selector(_deleteLocalBranch:) keyEquivalent:@""];
         item.representedObject = branch;
@@ -405,15 +405,15 @@ static NSColor* _patternColor = nil;
         item = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"Delete", nil) action:NULL keyEquivalent:@""];
       }
       [menu addItem:item];
-      
+
       item = [[NSMenuItem alloc] initWithTitle:[NSString stringWithFormat:NSLocalizedString(@"Edit Local Branch \"%@\"", nil), branch.name] action:NULL keyEquivalent:@""];
       item.submenu = menu;
       [_contextualMenu addItem:item];
     }
-    
+
     for (GCHistoryRemoteBranch* branch in node.commit.remoteBranches) {
       NSMenu* menu = [[NSMenu alloc] init];
-      
+
       BOOL found = NO;
       for (GCHistoryLocalBranch* localBranch in self.repository.history.localBranches) {
         if ([localBranch.name isEqualToString:branch.branchName]) {
@@ -425,41 +425,41 @@ static NSColor* _patternColor = nil;
         item = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"Checkout New Tracking Local Branch", nil) action:@selector(_checkoutRemoteBranch:) keyEquivalent:@""];
         item.representedObject = branch;
         [menu addItem:item];
-        
+
         [menu addItem:[NSMenuItem separatorItem]];
       }
-      
+
       submenu = [[NSMenu alloc] init];
       for (GCHistoryLocalBranch* localBranch in self.repository.history.localBranches) {
         item = [[NSMenuItem alloc] initWithTitle:localBranch.name action:@selector(_mergeRemoteBranch:) keyEquivalent:@""];
-        item.representedObject = @[branch, localBranch];
+        item.representedObject = @[ branch, localBranch ];
         [submenu addItem:item];
       }
       item = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"Merge into…", nil) action:NULL keyEquivalent:@""];
       item.submenu = submenu;
       [menu addItem:item];
-      
+
       [menu addItem:[NSMenuItem separatorItem]];
-      
+
       item = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"Fetch", nil) action:@selector(_fetchRemoteBranch:) keyEquivalent:@""];
       item.representedObject = branch;
       [menu addItem:item];
-      
+
       [menu addItem:[NSMenuItem separatorItem]];
-      
+
       item = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"Delete…", nil) action:@selector(_deleteRemoteBranch:) keyEquivalent:@""];
       item.representedObject = branch;
       [menu addItem:item];
-      
+
       GCHostingService service;
       NSURL* url = [self.repository hostingURLForRemoteBranch:branch service:&service error:NULL];  // Ignore errors
       if (url) {
         [menu addItem:[NSMenuItem separatorItem]];
-        
+
         item = [[NSMenuItem alloc] initWithTitle:[NSString stringWithFormat:NSLocalizedString(@"View on %@…", nil), GCNameFromHostingService(service)] action:@selector(_viewBranchOnHostingService:) keyEquivalent:@""];
         item.representedObject = url;
         [menu addItem:item];
-        
+
         submenu = [[NSMenu alloc] init];
         for (GCHistoryRemoteBranch* remoteBranch in self.repository.history.remoteBranches) {
           if (![remoteBranch isEqualToBranch:branch]) {
@@ -472,72 +472,69 @@ static NSColor* _patternColor = nil;
           }
         }
         switch (service) {
-          
           case kGCHostingService_Unknown:
             XLOG_DEBUG_UNREACHABLE();
             break;
-          
+
           case kGCHostingService_GitLab:
             item = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"Create Merge Request Into…", nil) action:NULL keyEquivalent:@""];
             break;
-          
+
           case kGCHostingService_GitHub:
           case kGCHostingService_BitBucket:
             item = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"Create Pull Request Against…", nil) action:NULL keyEquivalent:@""];
             break;
-          
         }
         item.submenu = submenu;
         [menu addItem:item];
       }
-      
+
       item = [[NSMenuItem alloc] initWithTitle:[NSString stringWithFormat:NSLocalizedString(@"Edit Remote Branch \"%@\"", nil), branch.name] action:NULL keyEquivalent:@""];
       item.submenu = menu;
       [_contextualMenu addItem:item];
     }
-    
+
     for (GCHistoryTag* tag in node.commit.tags) {
       NSMenu* menu = [[NSMenu alloc] init];
-      
+
       item = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"Rename…", nil) action:@selector(_renameTag:) keyEquivalent:@""];
       item.representedObject = tag;
       [menu addItem:item];
-      
+
       [menu addItem:[NSMenuItem separatorItem]];
-      
+
       submenu = [[NSMenu alloc] init];
       for (GCRemote* remote in remotes) {
         item = [[NSMenuItem alloc] initWithTitle:remote.name action:@selector(_pushTagToRemote:) keyEquivalent:@""];
-        item.representedObject = @[tag, remote];
+        item.representedObject = @[ tag, remote ];
         [submenu addItem:item];
       }
       item = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"Push to Remote", nil) action:NULL keyEquivalent:@""];
       item.submenu = submenu;
       [menu addItem:item];
-      
+
       item = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"Delete from All Remotes…", nil) action:@selector(_deleteTagFromAllRemotes:) keyEquivalent:@""];
       item.representedObject = tag;
       [menu addItem:item];
-      
+
       [menu addItem:[NSMenuItem separatorItem]];
-      
+
       item = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"Delete from Repository", nil) action:@selector(_deleteTag:) keyEquivalent:@""];
       item.representedObject = tag;
       [menu addItem:item];
-      
+
       item = [[NSMenuItem alloc] initWithTitle:[NSString stringWithFormat:NSLocalizedString(@"Edit Tag \"%@\"", nil), tag.name] action:NULL keyEquivalent:@""];
       item.submenu = menu;
       [_contextualMenu addItem:item];
     }
-    
   }
-  
+
   if (_contextualMenu.numberOfItems > (index + 1)) {
     _separatorMenuItem.hidden = NO;
   } else {
     _separatorMenuItem.hidden = YES;
   }
-  
+
   return _contextualMenu;
 }
 
@@ -591,30 +588,31 @@ static NSColor* _patternColor = nil;
   _messageTextView.string = message;
   [_messageTextView selectAll:nil];
   _messageButton.title = button;
-  [self.windowController runModalView:_messageView withInitialFirstResponder:_messageTextView completionHandler:^(BOOL success) {
-    
-    if (success) {
-      NSString* editedMessage = [_messageTextView.string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-      if (editedMessage.length) {
-        block(editedMessage);
-      } else {
-        NSBeep();
-      }
-    }
-    _messageTextView.string = @"";
-    [_messageTextView.undoManager removeAllActions];
-    
-  }];
+  [self.windowController runModalView:_messageView
+            withInitialFirstResponder:_messageTextView
+                    completionHandler:^(BOOL success) {
+
+                      if (success) {
+                        NSString* editedMessage = [_messageTextView.string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+                        if (editedMessage.length) {
+                          block(editedMessage);
+                        } else {
+                          NSBeep();
+                        }
+                      }
+                      _messageTextView.string = @"";
+                      [_messageTextView.undoManager removeAllActions];
+
+                    }];
 }
 
 - (BOOL)validateUserInterfaceItem:(id<NSValidatedUserInterfaceItem>)item {
   BOOL editingDisabled = _previewHistory || self.repository.hasBackgroundOperationInProgress;
-  
-  if ((item.action == @selector(fetchAllRemoteBranches:)) || (item.action == @selector(fetchAllRemoteTags:)) || (item.action == @selector(fetchAndPruneAllRemoteTags:))
-      || (item.action == @selector(pushAllLocalBranches:)) || (item.action == @selector(pushAllTags:))) {
+
+  if ((item.action == @selector(fetchAllRemoteBranches:)) || (item.action == @selector(fetchAllRemoteTags:)) || (item.action == @selector(fetchAndPruneAllRemoteTags:)) || (item.action == @selector(pushAllLocalBranches:)) || (item.action == @selector(pushAllTags:))) {
     return !_previewHistory && !self.repository.hasBackgroundOperationInProgress;
   }
-  
+
   if (item.action == @selector(toggleVirtualTips:)) {
     [(NSMenuItem*)item setState:(_showsVirtualTips ? NSOnState : NSOffState)];
     return YES;
@@ -631,7 +629,7 @@ static NSColor* _patternColor = nil;
     [(NSMenuItem*)item setState:(_hidesStaleBranchTips && !_forceShowAllTips ? NSOffState : NSOnState)];
     return !_forceShowAllTips;
   }
-  
+
   if (item.action == @selector(toggleTagLabels:)) {
     [(NSMenuItem*)item setState:(_graphView.showsTagLabels ? NSOnState : NSOffState)];
     return YES;
@@ -640,20 +638,20 @@ static NSColor* _patternColor = nil;
     [(NSMenuItem*)item setState:(_graphView.showsBranchLabels ? NSOnState : NSOffState)];
     return YES;
   }
-  
+
   if (item.action == @selector(pullCurrentBranch:)) {
     return !editingDisabled && self.repository.history.HEADBranch.upstream;
   }
   if (item.action == @selector(pushCurrentBranch:)) {
     return !editingDisabled && self.repository.history.HEADBranch;
   }
-  
+
   GCHistoryCommit* commit = _graphView.selectedCommit;
   if (commit == nil) {
     XLOG_DEBUG_UNREACHABLE();
     return NO;
   }
-  
+
   if ((item.action == @selector(quickViewSelectedCommit:)) || (item.action == @selector(externalDiffSelectedCommit:))) {
     return YES;
   }
@@ -664,8 +662,12 @@ static NSColor* _patternColor = nil;
       service = kGCHostingService_Unknown;
     }
     switch (service) {
-      case kGCHostingService_Unknown: [(NSMenuItem*)item setTitle:NSLocalizedString(@"View on Hosting Service…", nil)]; break;
-      default: [(NSMenuItem*)item setTitle:[NSString stringWithFormat:NSLocalizedString(@"View on %@…", nil), GCNameFromHostingService(service)]]; break;
+      case kGCHostingService_Unknown:
+        [(NSMenuItem*)item setTitle:NSLocalizedString(@"View on Hosting Service…", nil)];
+        break;
+      default:
+        [(NSMenuItem*)item setTitle:[NSString stringWithFormat:NSLocalizedString(@"View on %@…", nil), GCNameFromHostingService(service)]];
+        break;
     }
     [(NSMenuItem*)item setRepresentedObject:url];
     return (service != kGCHostingService_Unknown);
@@ -673,11 +675,11 @@ static NSColor* _patternColor = nil;
   if ((item.action == @selector(diffSelectedCommitWithHEAD:)) || (item.action == @selector(externalDiffWithHEAD:))) {
     return ![self.repository.history.HEADCommit isEqualToCommit:commit];
   }
-  
+
   if (editingDisabled) {
     return NO;
   }
-  
+
   if (item.action == @selector(checkoutSelectedCommit:)) {
     id target = [self _smartCheckoutTarget:commit];
     if ([target isKindOfClass:[GCLocalBranch class]]) {
@@ -688,7 +690,7 @@ static NSColor* _patternColor = nil;
       return ![self.repository.history.HEADCommit isEqualToCommit:target];
     }
   }
-  
+
   BOOL onAnyLocalBranch = [self.repository.history isCommitOnAnyLocalBranch:commit];
   if (item.action == @selector(deleteSelectedCommit:)) {
     return onAnyLocalBranch || commit.remoteBranches.count;
@@ -696,8 +698,7 @@ static NSColor* _patternColor = nil;
   if (item.action == @selector(editSelectedCommitMessage:)) {
     return onAnyLocalBranch;
   }
-  if ((item.action == @selector(rewriteSelectedCommit:)) || (item.action == @selector(splitSelectedCommit:))
-      || (item.action == @selector(fixupSelectedCommit:)) || (item.action == @selector(squashSelectedCommit:))) {
+  if ((item.action == @selector(rewriteSelectedCommit:)) || (item.action == @selector(splitSelectedCommit:)) || (item.action == @selector(fixupSelectedCommit:)) || (item.action == @selector(squashSelectedCommit:))) {
     return onAnyLocalBranch && (commit.parents.count == 1);
   }
   if (item.action == @selector(swapSelectedCommitWithParent:)) {
@@ -706,8 +707,7 @@ static NSColor* _patternColor = nil;
   if (item.action == @selector(swapSelectedCommitWithChild:)) {
     return onAnyLocalBranch && (commit.children.count == 1);  // TODO: If there is more than child, we don't know which one to swap with
   }
-  if ((item.action == @selector(cherryPickSelectedCommit:)) || (item.action == @selector(mergeSelectedCommit:))
-      || (item.action == @selector(rebaseOntoSelectedCommit:))) {
+  if ((item.action == @selector(cherryPickSelectedCommit:)) || (item.action == @selector(mergeSelectedCommit:)) || (item.action == @selector(rebaseOntoSelectedCommit:))) {
     return !self.repository.history.HEADDetached && ![self.repository.history.HEADCommit isEqualToCommit:commit];
   }
   if (item.action == @selector(revertSelectedCommit:)) {
@@ -716,7 +716,7 @@ static NSColor* _patternColor = nil;
   if ((item.action == @selector(setBranchTipToSelectedCommit:)) || (item.action == @selector(moveBranchTipToSelectedCommit:))) {
     return !self.repository.history.HEADDetached && ![self.repository.history.HEADCommit isEqualToCommit:commit];
   }
-  
+
   return [self respondsToSelector:item.action];
 }
 
@@ -818,42 +818,38 @@ static NSColor* _patternColor = nil;
   GCHistoryCommit* headCommit = self.repository.history.HEADCommit;
   GCHistoryCommit* selectedCommit = _graphView.selectedCommit;
   switch ([selectedCommit.date compare:headCommit.date]) {
-    
     case NSOrderedAscending:  // Selected commit is older than HEAD commit
       handler(headCommit, selectedCommit);
       break;
-    
+
     case NSOrderedDescending:  // Selected commit is newer than HEAD commit
       handler(selectedCommit, headCommit);
       break;
-    
+
     case NSOrderedSame: {  // Selected and HEAD commits have the exact same date
       NSError* error;
       GCCommitRelation relation = [self.repository findRelationOfCommit:selectedCommit relativeToCommit:headCommit error:&error];
       switch (relation) {
-        
         case kGCCommitRelation_Unknown:
           [self presentError:error];
           break;
-        
+
         case kGCCommitRelation_Identical:  // Selected and HEAD commits are the same
           XLOG_DEBUG_UNREACHABLE();
           break;
-        
-        case kGCCommitRelation_Ancestor:   // Selected commit is an ancestor of HEAD commit
+
+        case kGCCommitRelation_Ancestor:  // Selected commit is an ancestor of HEAD commit
           handler(headCommit, selectedCommit);
           break;
-        
+
         case kGCCommitRelation_Descendant:  // Anything else
         case kGCCommitRelation_Cousin:
         case kGCCommitRelation_Unrelated:
           handler(selectedCommit, headCommit);
           break;
-        
       }
       break;
     }
-    
   }
 }
 
@@ -883,15 +879,16 @@ static NSColor* _patternColor = nil;
                                          otherButton:NSLocalizedString(@"Checkout Commit", nil)
                            informativeTextWithFormat:NSLocalizedString(@"The selected commit is also the tip of the remote branch \"%@\".", nil), branch.name];
       alert.type = kGIAlertType_Note;
-      [self presentAlert:alert completionHandler:^(NSInteger returnCode) {
-        
-        if (returnCode == NSAlertDefaultReturn) {
-          [self checkoutRemoteBranch:branch];
-        } else if (returnCode == NSAlertOtherReturn) {
-          [self checkoutCommit:target];
-        }
-        
-      }];
+      [self presentAlert:alert
+          completionHandler:^(NSInteger returnCode) {
+
+            if (returnCode == NSAlertDefaultReturn) {
+              [self checkoutRemoteBranch:branch];
+            } else if (returnCode == NSAlertOtherReturn) {
+              [self checkoutCommit:target];
+            }
+
+          }];
     } else {
       [self checkoutCommit:target];
     }
@@ -902,21 +899,23 @@ static NSColor* _patternColor = nil;
   GCHistoryCommit* commit = _graphView.selectedCommit;
   _tagNameTextField.stringValue = @"";
   _tagMessageTextView.string = @"";
-  [self.windowController runModalView:_tagView withInitialFirstResponder:_tagNameTextField completionHandler:^(BOOL success) {
-    
-    if (success) {
-      NSString* name = _tagNameTextField.stringValue;
-      NSString* message = [_tagMessageTextView.string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-      if (name.length) {
-        [self createTagAtCommit:commit withName:name message:message];
-      } else {
-        NSBeep();
-      }
-    }
-    _tagMessageTextView.string = @"";
-    [_tagMessageTextView.undoManager removeAllActions];
-    
-  }];
+  [self.windowController runModalView:_tagView
+            withInitialFirstResponder:_tagNameTextField
+                    completionHandler:^(BOOL success) {
+
+                      if (success) {
+                        NSString* name = _tagNameTextField.stringValue;
+                        NSString* message = [_tagMessageTextView.string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+                        if (name.length) {
+                          [self createTagAtCommit:commit withName:name message:message];
+                        } else {
+                          NSBeep();
+                        }
+                      }
+                      _tagMessageTextView.string = @"";
+                      [_tagMessageTextView.undoManager removeAllActions];
+
+                    }];
 }
 
 - (IBAction)editSelectedCommitMessage:(id)sender {
@@ -953,15 +952,16 @@ static NSColor* _patternColor = nil;
                                        otherButton:NSLocalizedString(@"Delete Commit", nil)
                          informativeTextWithFormat:NSLocalizedString(@"The selected commit is also the tip of the local branch \"%@\".", nil), localBranch.name];
     alert.type = kGIAlertType_Note;
-    [self presentAlert:alert completionHandler:^(NSInteger returnCode) {
-      
-      if (returnCode == NSAlertDefaultReturn) {
-        [self deleteLocalBranch:localBranch];
-      } else if (returnCode == NSAlertOtherReturn) {
-        [self deleteCommit:commit];
-      }
-      
-    }];
+    [self presentAlert:alert
+        completionHandler:^(NSInteger returnCode) {
+
+          if (returnCode == NSAlertDefaultReturn) {
+            [self deleteLocalBranch:localBranch];
+          } else if (returnCode == NSAlertOtherReturn) {
+            [self deleteCommit:commit];
+          }
+
+        }];
   } else {
     GCHistoryRemoteBranch* remoteBranch = commit.remoteBranches.firstObject;
     if (remoteBranch && ![self.repository.history isCommitOnAnyLocalBranch:commit]) {
@@ -1025,18 +1025,20 @@ static NSColor* _patternColor = nil;
   GCHistoryCommit* commit = self.graphView.selectedNode.commit;
   _createBranchTextField.stringValue = @"";
   _createBranchButton.state = NSOnState;
-  [self.windowController runModalView:_createBranchView withInitialFirstResponder:_createBranchTextField completionHandler:^(BOOL success) {
-    
-    if (success) {
-      NSString* name = _createBranchTextField.stringValue;
-      if (name.length) {
-        [self createLocalBranchAtCommit:commit withName:name checkOut:_createBranchButton.state];
-      } else {
-        NSBeep();
-      }
-    }
-    
-  }];
+  [self.windowController runModalView:_createBranchView
+            withInitialFirstResponder:_createBranchTextField
+                    completionHandler:^(BOOL success) {
+
+                      if (success) {
+                        NSString* name = _createBranchTextField.stringValue;
+                        if (name.length) {
+                          [self createLocalBranchAtCommit:commit withName:name checkOut:_createBranchButton.state];
+                        } else {
+                          NSBeep();
+                        }
+                      }
+
+                    }];
 }
 
 #pragma mark - Internal Actions
@@ -1044,18 +1046,20 @@ static NSColor* _patternColor = nil;
 - (IBAction)_renameTag:(id)sender {
   GCHistoryTag* tag = [(NSMenuItem*)sender representedObject];
   _renameTagTextField.stringValue = tag.name;
-  [self.windowController runModalView:_renameTagView withInitialFirstResponder:_renameTagTextField completionHandler:^(BOOL success) {
-    
-    if (success) {
-      NSString* name = _renameTagTextField.stringValue;
-      if (name.length && ![name isEqualToString:tag.name]) {
-        [self setName:name forTag:tag];
-      } else {
-        NSBeep();
-      }
-    }
-    
-  }];
+  [self.windowController runModalView:_renameTagView
+            withInitialFirstResponder:_renameTagTextField
+                    completionHandler:^(BOOL success) {
+
+                      if (success) {
+                        NSString* name = _renameTagTextField.stringValue;
+                        if (name.length && ![name isEqualToString:tag.name]) {
+                          [self setName:name forTag:tag];
+                        } else {
+                          NSBeep();
+                        }
+                      }
+
+                    }];
 }
 
 - (IBAction)_deleteTag:(id)sender {
@@ -1118,18 +1122,20 @@ static NSColor* _patternColor = nil;
 - (IBAction)_renameLocalBranch:(id)sender {
   GCHistoryLocalBranch* branch = [(NSMenuItem*)sender representedObject];
   _renameBranchTextField.stringValue = branch.name;
-  [self.windowController runModalView:_renameBranchView withInitialFirstResponder:_renameBranchTextField completionHandler:^(BOOL success) {
-    
-    if (success) {
-      NSString* name = _renameBranchTextField.stringValue;
-      if (name.length && ![name isEqualToString:branch.name]) {
-        [self setName:_renameBranchTextField.stringValue forLocalBranch:branch];
-      } else {
-        NSBeep();
-      }
-    }
-    
-  }];
+  [self.windowController runModalView:_renameBranchView
+            withInitialFirstResponder:_renameBranchTextField
+                    completionHandler:^(BOOL success) {
+
+                      if (success) {
+                        NSString* name = _renameBranchTextField.stringValue;
+                        if (name.length && ![name isEqualToString:branch.name]) {
+                          [self setName:_renameBranchTextField.stringValue forLocalBranch:branch];
+                        } else {
+                          NSBeep();
+                        }
+                      }
+
+                    }];
 }
 
 - (IBAction)_deleteLocalBranch:(id)sender {

@@ -13,7 +13,7 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#define MAKE_ERROR(message) [NSError errorWithDomain:@"App" code:-1 userInfo:@{NSLocalizedDescriptionKey: message}]
+#define MAKE_ERROR(message) [NSError errorWithDomain:@"App" code:-1 userInfo:@{NSLocalizedDescriptionKey : message}]
 
 #define kReleaseChannel_Stable @"stable"
 #define kReleaseChannel_Continuous @"continuous"

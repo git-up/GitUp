@@ -44,7 +44,7 @@
   @autoreleasepool {
     NSFileHandle* fileHandle = notification.object;
     NSData* data = fileHandle.availableData;
-    
+
     if (fileHandle == _outFileHandle) {
       if (data.length) {
         [_outData appendData:data];
@@ -60,7 +60,7 @@
     } else {
       XLOG_DEBUG_UNREACHABLE();
     }
-    
+
     if (data.length) {
       [fileHandle waitForDataInBackgroundAndNotify];
     }
@@ -73,7 +73,7 @@
   NSPipe* outPipe = nil;
   NSPipe* errorPipe = nil;
   NSTimer* timer = nil;
-  
+
   NSTask* task = [[NSTask alloc] init];
   task.launchPath = _executablePath;
   NSMutableDictionary* environment = [[NSMutableDictionary alloc] initWithDictionary:[[NSProcessInfo processInfo] environment]];
@@ -81,7 +81,7 @@
   task.environment = environment;
   task.currentDirectoryPath = _currentDirectoryPath ? _currentDirectoryPath : [[NSFileManager defaultManager] currentDirectoryPath];
   task.arguments = arguments ? arguments : @[];
-  
+
   if (stdin) {
     inPipe = [[NSPipe alloc] init];
     XLOG_DEBUG_CHECK(inPipe);
@@ -97,7 +97,7 @@
     XLOG_DEBUG_CHECK(errorPipe);
     task.standardError = errorPipe;
   }
-  
+
   @try {
     [task launch];
   }
@@ -105,7 +105,7 @@
     GC_SET_GENERIC_ERROR(@"%@", exception.reason);
     goto cleanup;
   }
-  
+
   if (inPipe) {
     NSFileHandle* fileHandle = inPipe.fileHandleForWriting;
     @try {
@@ -119,7 +119,7 @@
       goto cleanup;
     }
   }
-  
+
   if (_executionTimeOut > 0.0) {
     timer = [[NSTimer alloc] initWithFireDate:[NSDate dateWithTimeIntervalSinceNow:_executionTimeOut] interval:0.0 target:self selector:@selector(_timer:) userInfo:task repeats:NO];
     [[NSRunLoop currentRunLoop] addTimer:timer forMode:NSDefaultRunLoopMode];
@@ -151,7 +151,7 @@
     goto cleanup;
   }
   success = YES;
-  
+
 cleanup:
   if (inPipe) {
     [inPipe.fileHandleForReading closeFile];

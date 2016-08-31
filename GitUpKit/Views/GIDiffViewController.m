@@ -49,12 +49,12 @@
 
 - (void)loadView {
   [super loadView];
-  
+
   _diffContentsViewController = [[GIDiffContentsViewController alloc] initWithRepository:self.repository];
   _diffContentsViewController.delegate = self;
   _diffContentsViewController.emptyLabel = NSLocalizedString(@"No differences", nil);
   [_contentsView replaceWithView:_diffContentsViewController.view];
-  
+
   _diffFilesViewController = [[GIDiffFilesViewController alloc] initWithRepository:self.repository];
   _diffFilesViewController.delegate = self;
   [_filesView replaceWithView:_diffFilesViewController.view];
@@ -78,13 +78,13 @@
       }
       [_diffContentsViewController setDeltas:diff.deltas usingConflicts:nil];
       [_diffFilesViewController setDeltas:diff.deltas usingConflicts:nil];
-      
+
       _fromTextField.stringValue = [NSString stringWithFormat:@"\"%@\" <%@> (%@)", _commit.summary, _commit.shortSHA1, [_dateFormatter stringFromDate:_commit.date]];
       _toTextField.stringValue = [NSString stringWithFormat:@"\"%@\" <%@> (%@)", _parentCommit.summary, _parentCommit.shortSHA1, [_dateFormatter stringFromDate:_parentCommit.date]];
     } else {
       [_diffContentsViewController setDeltas:nil usingConflicts:nil];
       [_diffFilesViewController setDeltas:nil usingConflicts:nil];
-      
+
       _fromTextField.stringValue = NSLocalizedString(@"n/a", nil);
       _toTextField.stringValue = NSLocalizedString(@"n/a", nil);
     }

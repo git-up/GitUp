@@ -30,14 +30,14 @@
 }
 
 - (void)createSymlinkAtPath:(NSString*)symlinkPath toPath:(NSString*)sourcePath {
-  NSError *error;
+  NSError* error;
   XCTAssertTrue([_fileManager createSymbolicLinkAtPath:symlinkPath
                                    withDestinationPath:sourcePath
                                                  error:&error],
                 @"Couldn't create symlink due to an error %@", error);
 }
 
-- (void)createFileAtPath:(NSString *)path {
+- (void)createFileAtPath:(NSString*)path {
   XCTAssertTrue([_fileManager createFileAtPath:path
                                       contents:nil
                                     attributes:nil],
@@ -51,7 +51,6 @@
                                          attributes:NULL
                                               error:&error],
                 @"Couldn't create directory at path '%@' due to an error %@", path, error);
-
 }
 
 - (void)setUp {

@@ -71,7 +71,7 @@ static NSMutableDictionary* _patternHelp = nil;
     XLOG_DEBUG_CHECK(range.location != NSNotFound);
     NSString* title = [section substringToIndex:range.location];
     NSString* content = [section substringFromIndex:(range.location + range.length)];
-    
+
     if ([title rangeOfString:@"<"].location != NSNotFound) {
       NSMutableString* pattern = [[NSMutableString alloc] initWithString:title];
       [pattern replaceOccurrencesOfString:@"." withString:@"\\." options:0 range:NSMakeRange(0, pattern.length)];
@@ -103,20 +103,20 @@ static NSMutableDictionary* _patternHelp = nil;
 
 - (void)loadView {
   [super loadView];
-  
+
   _tableView.target = self;
   _tableView.doubleAction = @selector(editOption:);
-  
+
   _cachedCellView = [_tableView makeViewWithIdentifier:[_tableView.tableColumns[0] identifier] owner:self];
-  
+
   NSMutableParagraphStyle* style = [[NSMutableParagraphStyle alloc] init];
   style.paragraphSpacing = -6;
-  _helpAttributes = @{NSParagraphStyleAttributeName: style};
-  
+  _helpAttributes = @{NSParagraphStyleAttributeName : style};
+
   CGFloat fontSize = _cachedCellView.optionTextField.font.pointSize;
-  _optionAttributes = @{NSFontAttributeName: [NSFont boldSystemFontOfSize:fontSize]};
-  _separatorAttributes = @{NSFontAttributeName: [NSFont systemFontOfSize:fontSize]};
-  _valueAttributes = @{NSFontAttributeName: [NSFont systemFontOfSize:fontSize], NSBackgroundColorAttributeName: [NSColor colorWithDeviceRed:1.0 green:1.0 blue:0.0 alpha:0.5]};
+  _optionAttributes = @{NSFontAttributeName : [NSFont boldSystemFontOfSize:fontSize]};
+  _separatorAttributes = @{NSFontAttributeName : [NSFont systemFontOfSize:fontSize]};
+  _valueAttributes = @{NSFontAttributeName : [NSFont systemFontOfSize:fontSize], NSBackgroundColorAttributeName : [NSColor colorWithDeviceRed:1.0 green:1.0 blue:0.0 alpha:0.5]};
 }
 
 - (void)viewWillShow {
@@ -164,7 +164,7 @@ static NSMutableDictionary* _patternHelp = nil;
 - (void)_reloadConfig {
   NSInteger selectedRow = _tableView.selectedRow;
   GCConfigOption* selectedOption = (selectedRow >= 0 ? _config[selectedRow] : nil);
-  
+
   NSError* error;
   NSArray* config = [self.repository readAllConfigs:&error];
   if (config) {
@@ -192,7 +192,7 @@ static NSMutableDictionary* _patternHelp = nil;
   }
   [_tableView reloadData];
   XLOG_VERBOSE(@"Reloaded config for \"%@\"", self.repository.repositoryPath);
-  
+
   if (selectedOption && ![self _selectOptionWithLevel:selectedOption.level variable:selectedOption.variable]) {
     [_tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:selectedRow] byExtendingSelection:NO];
   }
@@ -222,23 +222,21 @@ static NSMutableDictionary* _patternHelp = nil;
   view.row = row;
   GCConfigOption* option = _config[row];
   switch (option.level) {
-    
     case kGCConfigLevel_System:
       view.levelTextField.stringValue = NSLocalizedString(@"System", nil);
       break;
-    
+
     case kGCConfigLevel_XDG:
       view.levelTextField.stringValue = NSLocalizedString(@"XDG", nil);
       break;
-    
+
     case kGCConfigLevel_Global:
       view.levelTextField.stringValue = NSLocalizedString(@"Global", nil);
       break;
-    
+
     case kGCConfigLevel_Local:
       view.levelTextField.stringValue = NSLocalizedString(@"Local", nil);
       break;
-    
   }
   NSMutableAttributedString* string = [[NSMutableAttributedString alloc] init];
   [string appendString:option.variable withAttributes:_optionAttributes];
@@ -269,11 +267,10 @@ static NSMutableDictionary* _patternHelp = nil;
 #pragma mark - Actions
 
 - (BOOL)validateUserInterfaceItem:(id<NSValidatedUserInterfaceItem>)item {
-  
   if (item.action == @selector(copy:)) {
     return (_tableView.selectedRow >= 0);
   }
-  
+
   return NO;
 }
 
@@ -281,7 +278,7 @@ static NSMutableDictionary* _patternHelp = nil;
   NSInteger row = _tableView.selectedRow;
   if (row >= 0) {
     GCConfigOption* option = _config[row];
-    [[NSPasteboard generalPasteboard] declareTypes:@[NSPasteboardTypeString] owner:nil];
+    [[NSPasteboard generalPasteboard] declareTypes:@[ NSPasteboardTypeString ] owner:nil];
     [[NSPasteboard generalPasteboard] setString:[NSString stringWithFormat:@"%@ = %@", option.variable, option.value] forType:NSPasteboardTypeString];
   } else {
     XLOG_DEBUG_UNREACHABLE();
@@ -293,11 +290,10 @@ static NSMutableDictionary* _patternHelp = nil;
     [[self.undoManager prepareWithInvocationTarget:self] _undoWriteOptionWithLevel:level variable:variable value:value ignore:NO];
     return;
   }
-  
+
   NSError* error;
   GCConfigOption* currentOption = [self.repository readConfigOptionForLevel:level variable:variable error:&error];
-  if ((currentOption || ([error.domain isEqualToString:GCErrorDomain] && (error.code == kGCErrorCode_NotFound)))
-    && [self.repository writeConfigOptionForLevel:level variable:variable withValue:value error:&error]) {
+  if ((currentOption || ([error.domain isEqualToString:GCErrorDomain] && (error.code == kGCErrorCode_NotFound))) && [self.repository writeConfigOptionForLevel:level variable:variable withValue:value error:&error]) {
     [[self.undoManager prepareWithInvocationTarget:self] _undoWriteOptionWithLevel:level variable:variable value:currentOption.value ignore:NO];
     [self.repository notifyRepositoryChanged];
   } else {  // In case of error, put a dummy operation on the undo stack since we *must* put something, but pop it at the next runloop iteration
@@ -312,32 +308,33 @@ static NSMutableDictionary* _patternHelp = nil;
   _valueTextField.stringValue = option ? option.value : @"";
   _nameTextField.editable = (option == nil);
   _nameTextField.textColor = option ? [NSColor grayColor] : _valueTextField.textColor;
-  [self.windowController runModalView:_editView withInitialFirstResponder:(option ? _valueTextField : _nameTextField) completionHandler:^(BOOL success) {
-    
-    if (success) {
-      NSString* name = option ? option.variable : [_nameTextField.stringValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-      NSString* value = [_valueTextField.stringValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-      if (name.length && value.length) {
-        NSError* error;
-        GCConfigOption* currentOption = option ? option : [self.repository readConfigOptionForLevel:kGCConfigLevel_Local variable:name error:&error];
-        if ((currentOption || ([error.domain isEqualToString:GCErrorDomain] && (error.code == kGCErrorCode_NotFound)))
-          && [self.repository writeConfigOptionForLevel:(option ? option.level : kGCConfigLevel_Local) variable:name withValue:value error:&error]) {
-          [self.undoManager setActionName:NSLocalizedString(@"Edit Configuration", nil)];
-          [[self.undoManager prepareWithInvocationTarget:self] _undoWriteOptionWithLevel:(option ? option.level : kGCConfigLevel_Local) variable:name value:currentOption.value ignore:NO];  // TODO: We should really use the built-in undo mechanism from GCLiveRepository
-          [self.repository notifyRepositoryChanged];
-          
-          if (!option) {
-            [self _selectOptionWithLevel:kGCConfigLevel_Local variable:name];
-          }
-        } else {
-          [self presentError:error];
-        }
-      } else {
-        NSBeep();
-      }
-    }
-    
-  }];
+  [self.windowController runModalView:_editView
+            withInitialFirstResponder:(option ? _valueTextField : _nameTextField)
+                    completionHandler:^(BOOL success) {
+
+                      if (success) {
+                        NSString* name = option ? option.variable : [_nameTextField.stringValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+                        NSString* value = [_valueTextField.stringValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+                        if (name.length && value.length) {
+                          NSError* error;
+                          GCConfigOption* currentOption = option ? option : [self.repository readConfigOptionForLevel:kGCConfigLevel_Local variable:name error:&error];
+                          if ((currentOption || ([error.domain isEqualToString:GCErrorDomain] && (error.code == kGCErrorCode_NotFound))) && [self.repository writeConfigOptionForLevel:(option ? option.level : kGCConfigLevel_Local) variable:name withValue:value error:&error]) {
+                            [self.undoManager setActionName:NSLocalizedString(@"Edit Configuration", nil)];
+                            [[self.undoManager prepareWithInvocationTarget:self] _undoWriteOptionWithLevel:(option ? option.level : kGCConfigLevel_Local) variable:name value:currentOption.value ignore:NO];  // TODO: We should really use the built-in undo mechanism from GCLiveRepository
+                            [self.repository notifyRepositoryChanged];
+
+                            if (!option) {
+                              [self _selectOptionWithLevel:kGCConfigLevel_Local variable:name];
+                            }
+                          } else {
+                            [self presentError:error];
+                          }
+                        } else {
+                          NSBeep();
+                        }
+                      }
+
+                    }];
 }
 
 - (IBAction)addOption:(id)sender {
