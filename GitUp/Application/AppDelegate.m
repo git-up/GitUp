@@ -337,10 +337,10 @@
   // Initialize Crashlytics
   [Crashlytics startWithAPIKey:@"946dcb56f0db1be8f0c52df6e7d392202a2cc9b2"];
   [[Crashlytics sharedInstance] setDelegate:self];
-#endif
 
   // Initialize Google Analytics
   [[GARawTracker sharedTracker] startWithTrackingID:@"UA-83409580-1"];
+#endif
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification*)notification {
@@ -435,7 +435,9 @@
   }
   [self handleDocumentCountChanged];
 
+#if !DEBUG
   [[GARawTracker sharedTracker] sendEventWithCategory:@"application" action:@"activate" label:nil value:nil completionBlock:NULL];
+#endif
 }
 
 #if __ENABLE_SUDDEN_TERMINATION__
