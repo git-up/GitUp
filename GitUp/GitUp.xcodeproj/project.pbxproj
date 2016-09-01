@@ -16,7 +16,6 @@
 		E21DCAF61B254F33006424E8 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2C338D819F85C3400063D95 /* Foundation.framework */; };
 		E21DCAF71B254F53006424E8 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E28200AC1A7D71EE00DA4096 /* CoreServices.framework */; };
 		E21DCAF81B255471006424E8 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E2C3394419F85D4B00063D95 /* libz.dylib */; };
-		E222FF7F1B9210F600507E77 /* libcrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E222FF7E1B9210F600507E77 /* libcrypto.dylib */; };
 		E23C9B291B92104500ACA5A9 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2B14B561A88102C00003E64 /* Security.framework */; };
 		E25EBCEB1AA3F8B700D3AF44 /* Application.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E25EBCEA1AA3F8B700D3AF44 /* Application.xcassets */; };
 		E2653D251A5B2FBD006A9871 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2653D241A5B2FBD006A9871 /* Sparkle.framework */; };
@@ -155,7 +154,6 @@
 				E23C9B291B92104500ACA5A9 /* Security.framework in Frameworks */,
 				E21DCAF71B254F53006424E8 /* CoreServices.framework in Frameworks */,
 				E21DCAF61B254F33006424E8 /* Foundation.framework in Frameworks */,
-				E222FF7F1B9210F600507E77 /* libcrypto.dylib in Frameworks */,
 				E212A6DE1B92100E00F62B18 /* libiconv.dylib in Frameworks */,
 				E21DCAF81B255471006424E8 /* libz.dylib in Frameworks */,
 			);
@@ -487,6 +485,7 @@
 				HEADER_SEARCH_PATHS = "../GitUpKit/Third-Party/libgit2/include";
 				OTHER_LDFLAGS = (
 					"$(BUILD_DIR)/$(CONFIGURATION)/libgit2.a",
+					"../GitUpKit/Third-Party/Libraries/libssl/$(PLATFORM_NAME)/lib/libcrypto.a",
 					"../GitUpKit/Third-Party/Libraries/libssh2/$(PLATFORM_NAME)/lib/libssh2.a",
 				);
 				PRODUCT_NAME = gitup;
@@ -501,6 +500,7 @@
 				HEADER_SEARCH_PATHS = "../GitUpKit/Third-Party/libgit2/include";
 				OTHER_LDFLAGS = (
 					"$(BUILD_DIR)/$(CONFIGURATION)/libgit2.a",
+					"../GitUpKit/Third-Party/Libraries/libssl/$(PLATFORM_NAME)/lib/libcrypto.a",
 					"../GitUpKit/Third-Party/Libraries/libssh2/$(PLATFORM_NAME)/lib/libssh2.a",
 				);
 				PRODUCT_NAME = gitup;
@@ -515,6 +515,7 @@
 				HEADER_SEARCH_PATHS = "../GitUpKit/Third-Party/libgit2/include";
 				OTHER_LDFLAGS = (
 					"$(BUILD_DIR)/$(CONFIGURATION)/libgit2.a",
+					"../GitUpKit/Third-Party/Libraries/libssl/$(PLATFORM_NAME)/lib/libcrypto.a",
 					"../GitUpKit/Third-Party/Libraries/libssh2/$(PLATFORM_NAME)/lib/libssh2.a",
 				);
 				PRODUCT_NAME = gitup;
