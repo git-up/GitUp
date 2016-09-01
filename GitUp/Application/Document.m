@@ -1056,7 +1056,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 
   CAAnimationGroup* group = [CAAnimationGroup animation];
   group.animations = @[ position, transform, zPosition ];
-  group.delegate = self;
+  group.delegate = (id)self;  // id<CAAnimationDelegate> is only available on OS X 10.12 SDK
   [group setValue:kAnimationID_QuickViewSnapshot forKey:kAnimationKey_ID];
 
   [_animatingSnapshotLayer addAnimation:group forKey:kAnimationID_QuickViewSnapshot];
