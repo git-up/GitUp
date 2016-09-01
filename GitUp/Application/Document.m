@@ -1524,19 +1524,18 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
   }
 
   id headBranch = _repository.history.HEADBranch;
-  if (_lastHEADBranch) {
-    if (![headBranch isEqualToBranch:_lastHEADBranch]) {
-      if (!_helpHEADDisabled) {
-        if ([headBranch isKindOfClass:[GCHistoryLocalBranch class]]) {
-          [_windowController showOverlayWithStyle:kGIOverlayStyle_Informational format:NSLocalizedString(@"You are now on branch \"%@\"", nil), [headBranch name]];
-        } else if ((headBranch != [NSNull null]) && (_lastHEADBranch != [NSNull null])) {
-          [_windowController showOverlayWithStyle:kGIOverlayStyle_Informational message:NSLocalizedString(@"You are not on any branch anymore", nil)];
-        }
+  if (headBranch == nil) {
+    headBranch = [NSNull null];
+  }
+  if (![_lastHEADBranch isEqual:headBranch]) {
+    if (!_helpHEADDisabled) {
+      if ([headBranch isKindOfClass:[GCHistoryLocalBranch class]]) {
+        [_windowController showOverlayWithStyle:kGIOverlayStyle_Informational format:NSLocalizedString(@"You are now on branch \"%@\"", nil), [headBranch name]];
+      } else if (headBranch == [NSNull null]) {
+        [_windowController showOverlayWithStyle:kGIOverlayStyle_Informational message:NSLocalizedString(@"You are not on any branch anymore", nil)];
       }
-      _lastHEADBranch = headBranch ? headBranch : [NSNull null];
     }
-  } else {
-    _lastHEADBranch = headBranch ? headBranch : [NSNull null];
+    _lastHEADBranch = headBranch;
   }
 }
 
