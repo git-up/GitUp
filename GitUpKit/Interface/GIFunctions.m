@@ -1,4 +1,4 @@
-//  Copyright (C) 2015 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2016 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@ void GIComputeHighlightRanges(const char* deletedBytes, NSUInteger deletedCount,
   const char* deletedMax = deletedBytes + deletedCount;
   const char* addedMin = addedBytes;
   const char* addedMax = addedBytes + addedCount;
-  
+
   CFIndex start = 0;
   size_t remaining = 0;
   while ((deletedMin < deletedMax) && (addedMin < addedMax)) {
@@ -57,7 +57,7 @@ void GIComputeHighlightRanges(const char* deletedBytes, NSUInteger deletedCount,
       ++start;
     }
   }
-  
+
   CFIndex end = 0;
   const char* deletedByte = deletedMax - 1;
   const char* addedByte = addedMax - 1;
@@ -72,7 +72,7 @@ void GIComputeHighlightRanges(const char* deletedBytes, NSUInteger deletedCount,
     --deletedByte;
     --addedByte;
   }
-  
+
   *deletedRange = CFRangeMake(start, deletedLength - end - start);
   XLOG_DEBUG_CHECK(deletedRange->length >= 0);
   *addedRange = CFRangeMake(start, addedLength - end - start);
@@ -91,13 +91,20 @@ NSString* GIFormatDateRelativelyFromNow(NSDate* date, BOOL showApproximateTime) 
 
 static NSString* _WeekdayName(NSInteger index) {
   switch (index) {
-    case 1: return NSLocalizedString(@"Sunday", nil);
-    case 2: return NSLocalizedString(@"Monday", nil);
-    case 3: return NSLocalizedString(@"Tuesday", nil);
-    case 4: return NSLocalizedString(@"Wednesday", nil);
-    case 5: return NSLocalizedString(@"Thursday", nil);
-    case 6: return NSLocalizedString(@"Friday", nil);
-    case 7: return NSLocalizedString(@"Saturday", nil);
+    case 1:
+      return NSLocalizedString(@"Sunday", nil);
+    case 2:
+      return NSLocalizedString(@"Monday", nil);
+    case 3:
+      return NSLocalizedString(@"Tuesday", nil);
+    case 4:
+      return NSLocalizedString(@"Wednesday", nil);
+    case 5:
+      return NSLocalizedString(@"Thursday", nil);
+    case 6:
+      return NSLocalizedString(@"Friday", nil);
+    case 7:
+      return NSLocalizedString(@"Saturday", nil);
   }
   XLOG_DEBUG_UNREACHABLE();
   return nil;
@@ -112,7 +119,7 @@ NSString* GIFormatRelativeDateDifference(NSDate* fromDate, NSDate* toDate, BOOL 
         NSDateComponents* fromComponents = [calendar components:(NSCalendarUnitWeekday | NSCalendarUnitWeekOfYear) fromDate:fromDate];
         NSDateComponents* toComponents = [calendar components:(NSCalendarUnitWeekday | NSCalendarUnitWeekOfYear | NSCalendarUnitHour) fromDate:toDate];
         if (components.weekOfYear == 0) {  // Dates are less than 1 week apart
-          
+
           if (components.day == 0) {  // Dates are less than 1 day apart
             if (components.hour == 0) {  // Dates are less than 1 hour apart
               if (components.minute >= -1) {
@@ -131,7 +138,7 @@ NSString* GIFormatRelativeDateDifference(NSDate* fromDate, NSDate* toDate, BOOL 
             }
             // Pass through!
           }
-          
+
           if ((toComponents.weekOfYear == fromComponents.weekOfYear) && (toComponents.weekday == fromComponents.weekday)) {  // Dates are on the same day
             if (showApproximateTime) {
               if (toComponents.hour < 12) {
@@ -141,17 +148,16 @@ NSString* GIFormatRelativeDateDifference(NSDate* fromDate, NSDate* toDate, BOOL 
             }
             return NSLocalizedString(@"Today", nil);
           }
-          
+
           if ((toComponents.weekday == fromComponents.weekday - 1) || ((fromComponents.weekday == 1) && (toComponents.weekday == 7))) {  // Dates are on consecutive days
             return NSLocalizedString(@"Yesterday", nil);
           }
-          
+
           if (toComponents.weekOfYear == fromComponents.weekOfYear) {  // Dates are in the same week
             return [NSString stringWithFormat:NSLocalizedString(@"This %@", nil), _WeekdayName(toComponents.weekday)];
           }
-          
+
           return [NSString stringWithFormat:NSLocalizedString(@"Last %@", nil), _WeekdayName(toComponents.weekday)];
-          
         }
         if (components.weekOfYear == -1) {
           return NSLocalizedString(@"A week ago", nil);

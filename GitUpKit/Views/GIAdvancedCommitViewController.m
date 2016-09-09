@@ -1,4 +1,4 @@
-//  Copyright (C) 2015 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2016 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -49,57 +49,57 @@
 
 - (void)loadView {
   [super loadView];
-  
+
   _workdirFilesViewController = [[GIDiffFilesViewController alloc] initWithRepository:self.repository];
   _workdirFilesViewController.delegate = self;
   _workdirFilesViewController.allowsMultipleSelection = YES;
   _workdirFilesViewController.emptyLabel = NSLocalizedString(@"No changes in working directory", nil);
   [_workdirFilesView replaceWithView:_workdirFilesViewController.view];
-  
+
   _indexFilesViewController = [[GIDiffFilesViewController alloc] initWithRepository:self.repository];
   _indexFilesViewController.delegate = self;
   _indexFilesViewController.allowsMultipleSelection = YES;
   _indexFilesViewController.emptyLabel = NSLocalizedString(@"No changes in index", nil);
   [_indexFilesView replaceWithView:_indexFilesViewController.view];
-  
+
   _diffContentsViewController = [[GIDiffContentsViewController alloc] initWithRepository:self.repository];
   _diffContentsViewController.delegate = self;
   _diffContentsViewController.emptyLabel = NSLocalizedString(@"No file selected", nil);
   [_diffContentsView replaceWithView:_diffContentsViewController.view];
-  
+
   self.messageTextView.string = @"";
 }
 
 - (void)viewWillShow {
   [super viewWillShow];
-  
+
   XLOG_DEBUG_CHECK(self.repository.statusMode == kGCLiveRepositoryStatusMode_Disabled);
   self.repository.statusMode = kGCLiveRepositoryStatusMode_Normal;
-  
+
   [self _reloadContents];
-  
+
   _workdirFilesViewController.selectedDelta = _workdirStatus.deltas.firstObject;
   _indexFilesViewController.selectedDelta = _indexStatus.deltas.firstObject;
 }
 
 - (void)viewDidHide {
   [super viewDidHide];
-  
+
   _workdirStatus = nil;
   _indexStatus = nil;
   _indexConflicts = nil;
-  
+
   [_workdirFilesViewController setDeltas:nil usingConflicts:nil];
   [_indexFilesViewController setDeltas:nil usingConflicts:nil];
   [_diffContentsViewController setDeltas:nil usingConflicts:nil];
-  
+
   XLOG_DEBUG_CHECK(self.repository.statusMode == kGCLiveRepositoryStatusMode_Normal);
   self.repository.statusMode = kGCLiveRepositoryStatusMode_Disabled;
 }
 
 - (void)repositoryStatusDidUpdate {
   [super repositoryStatusDidUpdate];
-  
+
   if (self.viewVisible) {
     [self _reloadContents];
   }
@@ -116,34 +116,34 @@
   NSUInteger selectedWorkdirRow = selectedWorkdirDeltas.count ? [_workdirStatus.deltas indexOfObjectIdenticalTo:selectedWorkdirDeltas.firstObject] : NSNotFound;
   NSArray* selectedIndexDeltas = _indexFilesViewController.selectedDeltas;
   NSUInteger selectedIndexRow = selectedIndexDeltas.count ? [_indexStatus.deltas indexOfObjectIdenticalTo:selectedIndexDeltas.firstObject] : NSNotFound;
-  
+
   _disableFeedback = YES;
-  
+
   _workdirStatus = self.repository.workingDirectoryStatus;
   _indexStatus = self.repository.indexStatus;
   _indexConflicts = self.repository.indexConflicts;
-  
+
   [_workdirFilesViewController setDeltas:_workdirStatus.deltas usingConflicts:_indexConflicts];
   _workdirFilesViewController.selectedDeltas = selectedWorkdirDeltas;
   if (_workdirStatus.deltas.count && selectedWorkdirDeltas.count && !_workdirFilesViewController.selectedDeltas.count && (selectedWorkdirRow != NSNotFound)) {
     _workdirFilesViewController.selectedDelta = _workdirStatus.deltas[MIN(selectedWorkdirRow, _workdirStatus.deltas.count - 1)];  // If we can't preserve the selected deltas, attempt to preserve the first selected row
   }
-  
+
   [_indexFilesViewController setDeltas:_indexStatus.deltas usingConflicts:_indexConflicts];
   _indexFilesViewController.selectedDeltas = selectedIndexDeltas;
   if (_indexStatus.deltas.count && selectedIndexDeltas.count && !_indexFilesViewController.selectedDeltas.count && (selectedIndexRow != NSNotFound)) {
     _indexFilesViewController.selectedDelta = _indexStatus.deltas[MIN(selectedIndexRow, _indexStatus.deltas.count - 1)];  // If we can't preserve the selected deltas, attempt to preserve the first selected row
   }
-  
+
   if (_indexActive) {
     [_diffContentsViewController setDeltas:_indexFilesViewController.selectedDeltas usingConflicts:_indexConflicts];
   } else {
     [_diffContentsViewController setDeltas:_workdirFilesViewController.selectedDeltas usingConflicts:_indexConflicts];
   }
   [_diffContentsViewController setTopVisibleDelta:topDelta offset:offset];
-  
+
   _disableFeedback = NO;
-  
+
   _unstageButton.enabled = _indexStatus.modified;
   _stageButton.enabled = _workdirStatus.modified;
   _discardButton.enabled = _workdirStatus.modified;
@@ -160,7 +160,7 @@
 
 - (void)didCreateCommit:(GCCommit*)commit {
   [super didCreateCommit:commit];
-  
+
   _indexActive = NO;
   [self.view.window makeFirstResponder:_workdirFilesViewController.preferredFirstResponder];
 }
@@ -255,22 +255,22 @@
                                     button:NSLocalizedString(@"Discard", nil)
                  suppressionUserDefaultKey:nil
                                      block:^{
-        
-        for (GCDiffDelta* delta in deltas) {
-          NSError* error;
-          BOOL submodule = delta.submodule;
-          if ((submodule && ![self discardSubmoduleAtPath:delta.canonicalPath resetIndex:NO error:&error]) || (!submodule && ![self discardAllChangesForFile:delta.canonicalPath resetIndex:NO error:&error])) {
-            [self presentError:error];
-            break;
-          }
-        }
-        [self.repository notifyWorkingDirectoryChanged];
-        if (!_workdirFilesViewController.deltas.count) {
-          _indexActive = YES;
-          [self.view.window makeFirstResponder:_indexFilesViewController.preferredFirstResponder];
-        }
-        
-      }];
+
+                                       for (GCDiffDelta* delta in deltas) {
+                                         NSError* error;
+                                         BOOL submodule = delta.submodule;
+                                         if ((submodule && ![self discardSubmoduleAtPath:delta.canonicalPath resetIndex:NO error:&error]) || (!submodule && ![self discardAllChangesForFile:delta.canonicalPath resetIndex:NO error:&error])) {
+                                           [self presentError:error];
+                                           break;
+                                         }
+                                       }
+                                       [self.repository notifyWorkingDirectoryChanged];
+                                       if (!_workdirFilesViewController.deltas.count) {
+                                         _indexActive = YES;
+                                         [self.view.window makeFirstResponder:_indexFilesViewController.preferredFirstResponder];
+                                       }
+
+                                     }];
     } else {
       NSBeep();
     }
@@ -290,13 +290,13 @@
       return YES;
     }
   }
-  
+
   if (controller == _workdirFilesViewController) {
     return [self handleKeyDownEvent:event forSelectedDeltas:_workdirFilesViewController.selectedDeltas withConflicts:_indexConflicts allowOpen:YES];
   } else if (controller == _indexFilesViewController) {
     return [self handleKeyDownEvent:event forSelectedDeltas:_indexFilesViewController.selectedDeltas withConflicts:_indexConflicts allowOpen:YES];
   }
-  
+
   return NO;
 }
 
@@ -402,25 +402,25 @@
                                     button:NSLocalizedString(@"Discard", nil)
                  suppressionUserDefaultKey:nil
                                      block:^{
-        
-        for (GCDiffDelta* delta in _diffContentsViewController.deltas) {
-          NSIndexSet* oldLines;
-          NSIndexSet* newLines;
-          if ([_diffContentsViewController getSelectedLinesForDelta:delta oldLines:&oldLines newLines:&newLines]) {
-            NSError* error;
-            if (![self discardSelectedChangesForFile:delta.canonicalPath oldLines:oldLines newLines:newLines resetIndex:NO error:&error]) {
-              [self presentError:error];
-              break;
-            }
-          }
-        }
-        [self.repository notifyWorkingDirectoryChanged];
-        if (!_workdirFilesViewController.deltas.count) {
-          _indexActive = !_indexActive;
-        }
-        [self.view.window makeFirstResponder:(_indexActive ? _indexFilesViewController.preferredFirstResponder : _workdirFilesViewController.preferredFirstResponder)];
-      
-      }];
+
+                                       for (GCDiffDelta* delta in _diffContentsViewController.deltas) {
+                                         NSIndexSet* oldLines;
+                                         NSIndexSet* newLines;
+                                         if ([_diffContentsViewController getSelectedLinesForDelta:delta oldLines:&oldLines newLines:&newLines]) {
+                                           NSError* error;
+                                           if (![self discardSelectedChangesForFile:delta.canonicalPath oldLines:oldLines newLines:newLines resetIndex:NO error:&error]) {
+                                             [self presentError:error];
+                                             break;
+                                           }
+                                         }
+                                       }
+                                       [self.repository notifyWorkingDirectoryChanged];
+                                       if (!_workdirFilesViewController.deltas.count) {
+                                         _indexActive = !_indexActive;
+                                       }
+                                       [self.view.window makeFirstResponder:(_indexActive ? _indexFilesViewController.preferredFirstResponder : _workdirFilesViewController.preferredFirstResponder)];
+
+                                     }];
     } else {
       NSBeep();
     }
@@ -495,36 +495,40 @@
 
 - (NSMenu*)diffContentsViewController:(GIDiffContentsViewController*)controller willShowContextualMenuForDelta:(GCDiffDelta*)delta conflict:(GCIndexConflict*)conflict {
   NSMenu* menu = [self contextualMenuForDelta:delta withConflict:conflict allowOpen:YES];
-  
+
   if (!_indexActive && !conflict) {
     [menu addItem:[NSMenuItem separatorItem]];
-    
+
     if (GC_FILE_MODE_IS_FILE(delta.oldFile.mode) || GC_FILE_MODE_IS_FILE(delta.newFile.mode)) {
       if (delta.change == kGCFileDiffChange_Untracked) {
-        [menu addItemWithTitle:NSLocalizedString(@"Delete File…", nil) block:^{
-          [self deleteUntrackedFile:delta.canonicalPath];
-        }];
+        [menu addItemWithTitle:NSLocalizedString(@"Delete File…", nil)
+                         block:^{
+                           [self deleteUntrackedFile:delta.canonicalPath];
+                         }];
       } else {
         if ([controller getSelectedLinesForDelta:delta oldLines:NULL newLines:NULL]) {
-          [menu addItemWithTitle:NSLocalizedString(@"Discard Line Changes…", nil) block:^{
-            NSIndexSet* oldLines;
-            NSIndexSet* newLines;
-            [_diffContentsViewController getSelectedLinesForDelta:delta oldLines:&oldLines newLines:&newLines];
-            [self discardSelectedChangesForFile:delta.canonicalPath oldLines:oldLines newLines:newLines resetIndex:NO];
-          }];
+          [menu addItemWithTitle:NSLocalizedString(@"Discard Line Changes…", nil)
+                           block:^{
+                             NSIndexSet* oldLines;
+                             NSIndexSet* newLines;
+                             [_diffContentsViewController getSelectedLinesForDelta:delta oldLines:&oldLines newLines:&newLines];
+                             [self discardSelectedChangesForFile:delta.canonicalPath oldLines:oldLines newLines:newLines resetIndex:NO];
+                           }];
         } else {
-          [menu addItemWithTitle:NSLocalizedString(@"Discard File Changes…", nil) block:^{
-            [self discardAllChangesForFile:delta.canonicalPath resetIndex:NO];
-          }];
+          [menu addItemWithTitle:NSLocalizedString(@"Discard File Changes…", nil)
+                           block:^{
+                             [self discardAllChangesForFile:delta.canonicalPath resetIndex:NO];
+                           }];
         }
       }
     } else if (delta.submodule) {
-      [menu addItemWithTitle:NSLocalizedString(@"Discard Submodule Changes…", nil) block:^{
-        [self discardSubmoduleAtPath:delta.canonicalPath resetIndex:NO];
-      }];
+      [menu addItemWithTitle:NSLocalizedString(@"Discard Submodule Changes…", nil)
+                       block:^{
+                         [self discardSubmoduleAtPath:delta.canonicalPath resetIndex:NO];
+                       }];
     }
   }
-  
+
   return menu;
 }
 
@@ -543,7 +547,7 @@
 // Override
 - (IBAction)toggleAmend:(id)sender {
   [super toggleAmend:sender];
-  
+
   [self _updateCommitButton];
 }
 

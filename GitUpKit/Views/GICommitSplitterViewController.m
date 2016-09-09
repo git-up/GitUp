@@ -1,4 +1,4 @@
-//  Copyright (C) 2015 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2016 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -64,19 +64,19 @@
 
 - (void)loadView {
   [super loadView];
-  
+
   _filesViewControllerNew = [[GIDiffFilesViewController alloc] initWithRepository:self.repository];
   _filesViewControllerNew.delegate = self;
   _filesViewControllerNew.allowsMultipleSelection = YES;
   _filesViewControllerNew.emptyLabel = NSLocalizedString(@"No changes in commit", nil);
   [_filesViewNew replaceWithView:_filesViewControllerNew.view];
-  
+
   _filesViewControllerOld = [[GIDiffFilesViewController alloc] initWithRepository:self.repository];
   _filesViewControllerOld.delegate = self;
   _filesViewControllerOld.allowsMultipleSelection = YES;
   _filesViewControllerOld.emptyLabel = NSLocalizedString(@"No changes in commit", nil);
   [_filesViewOld replaceWithView:_filesViewControllerOld.view];
-  
+
   _diffContentsViewController = [[GIDiffContentsViewController alloc] initWithRepository:self.repository];
   _diffContentsViewController.delegate = self;
   _diffContentsViewController.emptyLabel = NSLocalizedString(@"No file selected", nil);
@@ -86,23 +86,23 @@
 - (void)viewWillShow {
   XLOG_DEBUG_CHECK(_commit);
   [super viewWillShow];
-  
+
   _titleTextField.stringValue = [NSString stringWithFormat:@"\"%@\" <%@>", _commit.summary, _commit.shortSHA1];
-  
+
   self.messageTextView.string = _commit.message;
   self.otherMessageTextView.string = _commit.message;
-  
+
   [self _reload];
-  
+
   _filesViewControllerOld.selectedDelta = _diffOld.deltas.firstObject;
 }
 
 - (void)viewDidHide {
   [super viewDidHide];
-  
+
   _diffNew = nil;
   _diffOld = nil;
-  
+
   [_filesViewControllerNew setDeltas:nil usingConflicts:nil];
   [_filesViewControllerOld setDeltas:nil usingConflicts:nil];
   [_diffContentsViewController setDeltas:nil usingConflicts:nil];
@@ -115,7 +115,7 @@
   NSUInteger selectedRowNew = selectedDeltasNew.count ? [_diffNew.deltas indexOfObjectIdenticalTo:selectedDeltasNew.firstObject] : NSNotFound;
   NSArray* selectedDeltasOld = _filesViewControllerOld.selectedDeltas;
   NSUInteger selectedRowOld = selectedDeltasOld.count ? [_diffOld.deltas indexOfObjectIdenticalTo:selectedDeltasOld.firstObject] : NSNotFound;
-  
+
   NSError* error;
   _diffNew = [self.repository diffIndex:_indexNew withIndex:_indexOld filePattern:nil options:kGCDiffOption_FindRenames maxInterHunkLines:0 maxContextLines:kGCDefaultMaxDiffContextLines error:&error];
   if (_diffNew == nil) {
@@ -125,30 +125,30 @@
   if (_diffOld == nil) {
     [self presentError:error];
   }
-  
+
   _disableFeedback = YES;
-  
+
   [_filesViewControllerNew setDeltas:_diffNew.deltas usingConflicts:nil];
   _filesViewControllerNew.selectedDeltas = selectedDeltasNew;
   if (_diffNew.deltas.count && selectedDeltasNew.count && !_filesViewControllerNew.selectedDeltas.count && (selectedRowNew != NSNotFound)) {
     _filesViewControllerNew.selectedDelta = _diffNew.deltas[MIN(selectedRowNew, _diffNew.deltas.count - 1)];  // If we can't preserve the selected deltas, attempt to preserve the first selected row
   }
-  
+
   [_filesViewControllerOld setDeltas:_diffOld.deltas usingConflicts:nil];
   _filesViewControllerOld.selectedDeltas = selectedDeltasOld;
   if (_diffOld.deltas.count && selectedDeltasOld.count && !_filesViewControllerOld.selectedDeltas.count && (selectedRowOld != NSNotFound)) {
     _filesViewControllerOld.selectedDelta = _diffOld.deltas[MIN(selectedRowOld, _diffOld.deltas.count - 1)];  // If we can't preserve the selected deltas, attempt to preserve the first selected row
   }
-  
+
   if (_newActive) {
     [_diffContentsViewController setDeltas:_filesViewControllerNew.selectedDeltas usingConflicts:nil];
   } else {
     [_diffContentsViewController setDeltas:_filesViewControllerOld.selectedDeltas usingConflicts:nil];
   }
   [_diffContentsViewController setTopVisibleDelta:topDelta offset:offset];
-  
+
   _disableFeedback = NO;
-  
+
   _continueButton.enabled = _diffNew.modified && _diffOld.modified;
 }
 
@@ -190,26 +190,34 @@
   NSError* error;
   BOOL success;
   if (delta.change == kGCFileDiffChange_Deleted) {
-    success = [self.repository resetLinesInFile:delta.canonicalPath index:_indexOld toCommit:_commit error:&error usingFilter:^BOOL(GCLineDiffChange change, NSUInteger oldLineNumber, NSUInteger newLineNumber) {
-      
-      if (change == kGCLineDiffChange_Added) {
-        return [oldLines containsIndex:newLineNumber];
-      }
-      return NO;
-      
-    }];
+    success = [self.repository resetLinesInFile:delta.canonicalPath
+                                          index:_indexOld
+                                       toCommit:_commit
+                                          error:&error
+                                    usingFilter:^BOOL(GCLineDiffChange change, NSUInteger oldLineNumber, NSUInteger newLineNumber) {
+
+                                      if (change == kGCLineDiffChange_Added) {
+                                        return [oldLines containsIndex:newLineNumber];
+                                      }
+                                      return NO;
+
+                                    }];
   } else {
-    success = [self.repository copyLinesInFile:delta.canonicalPath fromOtherIndex:_indexNew toIndex:_indexOld error:&error usingFilter:^BOOL(GCLineDiffChange change, NSUInteger oldLineNumber, NSUInteger newLineNumber) {
-      
-      if (change == kGCLineDiffChange_Added) {
-        return [newLines containsIndex:newLineNumber];
-      }
-      if (change == kGCLineDiffChange_Deleted) {
-        return [oldLines containsIndex:oldLineNumber];
-      }
-      return NO;
-      
-    }];
+    success = [self.repository copyLinesInFile:delta.canonicalPath
+                                fromOtherIndex:_indexNew
+                                       toIndex:_indexOld
+                                         error:&error
+                                   usingFilter:^BOOL(GCLineDiffChange change, NSUInteger oldLineNumber, NSUInteger newLineNumber) {
+
+                                     if (change == kGCLineDiffChange_Added) {
+                                       return [newLines containsIndex:newLineNumber];
+                                     }
+                                     if (change == kGCLineDiffChange_Deleted) {
+                                       return [oldLines containsIndex:oldLineNumber];
+                                     }
+                                     return NO;
+
+                                   }];
   }
   if (success) {
     [self _reload];
@@ -253,17 +261,21 @@
 
 - (void)_copyFileLinesFromIndexOldToIndexNew:(GCDiffDelta*)delta oldLines:(NSIndexSet*)oldLines newLines:(NSIndexSet*)newLines {
   NSError* error;
-  if ([self.repository resetLinesInFile:delta.canonicalPath index:_indexOld toCommit:_parentCommit error:&error usingFilter:^BOOL(GCLineDiffChange change, NSUInteger oldLineNumber, NSUInteger newLineNumber) {
-    
-    if (change == kGCLineDiffChange_Added) {
-      return [newLines containsIndex:newLineNumber];
-    }
-    if (change == kGCLineDiffChange_Deleted) {
-      return [oldLines containsIndex:oldLineNumber];
-    }
-    return NO;
-    
-  }]) {
+  if ([self.repository resetLinesInFile:delta.canonicalPath
+                                  index:_indexOld
+                               toCommit:_parentCommit
+                                  error:&error
+                            usingFilter:^BOOL(GCLineDiffChange change, NSUInteger oldLineNumber, NSUInteger newLineNumber) {
+
+                              if (change == kGCLineDiffChange_Added) {
+                                return [newLines containsIndex:newLineNumber];
+                              }
+                              if (change == kGCLineDiffChange_Deleted) {
+                                return [oldLines containsIndex:oldLineNumber];
+                              }
+                              return NO;
+
+                            }]) {
     [self _reload];
     _disableFeedback = YES;
     _filesViewControllerNew.selectedDelta = delta;
@@ -282,7 +294,7 @@
   if (!indexOld || ![self.repository resetIndex:indexOld toTreeForCommit:commit error:error]) {
     return NO;
   }
-  
+
   _commit = commit;
   _parentCommit = commit.parents.firstObject;  // Use mainline
   _indexNew = indexNew;
@@ -304,19 +316,19 @@
 - (BOOL)finishSplittingCommitWithOldMessage:(NSString*)oldMessage newMessage:(NSString*)newMessage error:(NSError**)error {
   BOOL success = NO;
   GCCommit* newCommit;
-  
+
   // Copy old commit with updated index and message
   newCommit = [self.repository copyCommit:_commit withUpdatedMessage:oldMessage updatedParents:nil updatedTreeFromIndex:_indexOld updateCommitter:YES error:error];
   if (newCommit == nil) {
     goto cleanup;
   }
-  
+
   // Copy new commit with updated index and message
-  newCommit = [self.repository copyCommit:_commit withUpdatedMessage:newMessage updatedParents:@[newCommit] updatedTreeFromIndex:_indexNew updateCommitter:YES error:error];
+  newCommit = [self.repository copyCommit:_commit withUpdatedMessage:newMessage updatedParents:@[ newCommit ] updatedTreeFromIndex:_indexNew updateCommitter:YES error:error];
   if (newCommit == nil) {
     goto cleanup;
   }
-  
+
   // Rewrite commit
   [self.repository suspendHistoryUpdates];  // We need to suspend history updates to prevent history to change during replay if conflict handler is called
   [self.repository setUndoActionName:NSLocalizedString(@"Split Commit", nil)];
@@ -324,19 +336,23 @@
                                                   argument:_commit.SHA1
                                                      error:error
                                                 usingBlock:^GCReferenceTransform*(GCLiveRepository* repository, NSError** outError1) {
-    
-    return [repository.history rewriteCommit:_commit withUpdatedCommit:newCommit copyTrees:YES conflictHandler:^GCCommit*(GCIndex* index, GCCommit* ourCommit, GCCommit* theirCommit, NSArray* parentCommits, NSString* message3, NSError** outError2) {
-      
-        XLOG_DEBUG_UNREACHABLE();  // Splitting a commit should not generate index conflicts when replaying descendants
-        return [self resolveConflictsWithResolver:self.delegate index:index ourCommit:ourCommit theirCommit:theirCommit parentCommits:parentCommits message:message3 error:outError2];
-        
-      } error:outError1];
-    
-  }]) {
+
+                                                  return [repository.history rewriteCommit:_commit
+                                                                         withUpdatedCommit:newCommit
+                                                                                 copyTrees:YES
+                                                                           conflictHandler:^GCCommit*(GCIndex* index, GCCommit* ourCommit, GCCommit* theirCommit, NSArray* parentCommits, NSString* message3, NSError** outError2) {
+
+                                                                             XLOG_DEBUG_UNREACHABLE();  // Splitting a commit should not generate index conflicts when replaying descendants
+                                                                             return [self resolveConflictsWithResolver:self.delegate index:index ourCommit:ourCommit theirCommit:theirCommit parentCommits:parentCommits message:message3 error:outError2];
+
+                                                                           }
+                                                                                     error:outError1];
+
+                                                }]) {
     success = YES;
   }
   [self.repository resumeHistoryUpdates];
-  
+
 cleanup:
   [self _cleanup];
   if (success) {
@@ -382,13 +398,13 @@ cleanup:
       return YES;
     }
   }
-  
+
   if (controller == _filesViewControllerNew) {
     return [self handleKeyDownEvent:event forSelectedDeltas:_filesViewControllerNew.selectedDeltas withConflicts:nil allowOpen:NO];
   } else if (controller == _filesViewControllerOld) {
     return [self handleKeyDownEvent:event forSelectedDeltas:_filesViewControllerOld.selectedDeltas withConflicts:nil allowOpen:NO];
   }
-  
+
   return NO;
 }
 
@@ -508,20 +524,22 @@ cleanup:
   [self.delegate commitSplitterViewControllerShouldCancel:self];
 }
 
-- (IBAction)continue:(id)sender {
-  [self.windowController runModalView:_messageView withInitialFirstResponder:self.messageTextView completionHandler:^(BOOL success) {
-    
-    if (success) {
-      NSString* message = [self.messageTextView.string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-      NSString* otherMessage = [self.otherMessageTextView.string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-      if (message.length && otherMessage.length) {
-        [self.delegate commitSplitterViewControllerShouldFinish:self withOldMessage:message newMessage:otherMessage];
-      } else {
-        [self presentAlertWithType:kGIAlertType_Stop title:NSLocalizedString(@"You must provide non-empty commit messages", nil) message:nil];
-      }
-    }
-    
-  }];
+- (IBAction) continue:(id)sender {
+  [self.windowController runModalView:_messageView
+            withInitialFirstResponder:self.messageTextView
+                    completionHandler:^(BOOL success) {
+
+                      if (success) {
+                        NSString* message = [self.messageTextView.string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+                        NSString* otherMessage = [self.otherMessageTextView.string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+                        if (message.length && otherMessage.length) {
+                          [self.delegate commitSplitterViewControllerShouldFinish:self withOldMessage:message newMessage:otherMessage];
+                        } else {
+                          [self presentAlertWithType:kGIAlertType_Stop title:NSLocalizedString(@"You must provide non-empty commit messages", nil) message:nil];
+                        }
+                      }
+
+                    }];
 }
 
 @end

@@ -1,0 +1,11 @@
+---
+Language: Cpp
+BasedOnStyle: Google
+ColumnLimit: 0
+AlignTrailingComments: false
+DerivePointerAlignment: false
+AlwaysBreakBeforeMultilineStrings: false
+AccessModifierOffset: -2
+ObjCSpaceBeforeProtocolList: true
+SortIncludes: false
+...

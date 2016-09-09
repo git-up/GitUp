@@ -1,4 +1,4 @@
-//  Copyright (C) 2015 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2016 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -46,15 +46,15 @@ typedef NS_ENUM(NSUInteger, GCFileDiffChange) {
   kGCFileDiffChange_Ignored,
   kGCFileDiffChange_Untracked,
   kGCFileDiffChange_Unreadable,
-  
+
   kGCFileDiffChange_Added,
   kGCFileDiffChange_Deleted,
   kGCFileDiffChange_Modified,
-  
+
   kGCFileDiffChange_Renamed,
   kGCFileDiffChange_Copied,
   kGCFileDiffChange_TypeChanged,
-  
+
   kGCFileDiffChange_Conflicted
 };
 
@@ -141,12 +141,12 @@ typedef void (^GCDiffEndHunkHandler)();
                                    error:(NSError**)error;  // (?)
 
 - (GCDiff*)diffIndex:(GCIndex*)index  // Pass nil for repository index
-          withCommit:(GCCommit*)commit  // May be nil
-         filePattern:(NSString*)filePattern  // May be nil
-             options:(GCDiffOptions)options
-   maxInterHunkLines:(NSUInteger)maxInterHunkLines
-     maxContextLines:(NSUInteger)maxContextLines
-               error:(NSError**)error;  // (?)
+           withCommit:(GCCommit*)commit  // May be nil
+          filePattern:(NSString*)filePattern  // May be nil
+              options:(GCDiffOptions)options
+    maxInterHunkLines:(NSUInteger)maxInterHunkLines
+      maxContextLines:(NSUInteger)maxContextLines
+                error:(NSError**)error;  // (?)
 
 - (GCDiff*)diffCommit:(GCCommit*)newCommit
            withCommit:(GCCommit*)oldCommit  // May be nil
@@ -157,12 +157,12 @@ typedef void (^GCDiffEndHunkHandler)();
                 error:(NSError**)error;  // git diff {old_commit} {new_commit}
 
 - (GCDiff*)diffIndex:(GCIndex*)newIndex
-           withIndex:(GCIndex*)oldIndex
-         filePattern:(NSString*)filePattern  // May be nil
-             options:(GCDiffOptions)options
-   maxInterHunkLines:(NSUInteger)maxInterHunkLines
-     maxContextLines:(NSUInteger)maxContextLines
-               error:(NSError**)error;  // (?)
+            withIndex:(GCIndex*)oldIndex
+          filePattern:(NSString*)filePattern  // May be nil
+              options:(GCDiffOptions)options
+    maxInterHunkLines:(NSUInteger)maxInterHunkLines
+      maxContextLines:(NSUInteger)maxContextLines
+                error:(NSError**)error;  // (?)
 
 - (GCDiff*)diffWorkingDirectoryWithHEAD:(NSString*)filePattern  // May be nil
                                 options:(GCDiffOptions)options

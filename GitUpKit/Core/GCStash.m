@@ -1,4 +1,4 @@
-//  Copyright (C) 2015 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2016 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -79,21 +79,21 @@
   git_commit* commit;
   CALL_LIBGIT2_FUNCTION_RETURN(nil, git_commit_lookup, &commit, self.private, oid);
   GCStash* stash = [[GCStash alloc] initWithRepository:self commit:commit];
-  
+
   git_commit* baseCommit;
   CALL_LIBGIT2_FUNCTION_RETURN(nil, git_commit_parent, &baseCommit, commit, 0);
   stash.baseCommit = [[GCCommit alloc] initWithRepository:self commit:baseCommit];
-  
+
   git_commit* indexCommit;
   CALL_LIBGIT2_FUNCTION_RETURN(nil, git_commit_parent, &indexCommit, commit, 1);
   stash.indexCommit = [[GCCommit alloc] initWithRepository:self commit:indexCommit];
-  
+
   if (git_commit_parentcount(commit) == 3) {
     git_commit* untrackedCommit;
     CALL_LIBGIT2_FUNCTION_RETURN(nil, git_commit_parent, &untrackedCommit, commit, 2);
     stash.untrackedCommit = [[GCCommit alloc] initWithRepository:self commit:untrackedCommit];
   }
-  
+
   return stash;
 }
 
@@ -110,7 +110,7 @@
   GCStash* stash = nil;
   git_index* index = NULL;
   git_signature* signature = NULL;
-  
+
   index = [self reloadRepositoryIndex:error];  // git_stash_save() doesn't reload the repository index
   if (index == NULL) {
     goto cleanup;
@@ -126,7 +126,7 @@
   git_oid oid;
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_stash_save, &oid, self.private, signature, GCCleanedUpCommitMessage(message).bytes, flags);
   stash = [self _newStashFromOID:&oid error:error];
-  
+
 cleanup:
   git_signature_free(signature);
   git_index_free(index);
@@ -136,7 +136,7 @@ cleanup:
 - (NSArray*)listStashes:(NSError**)error {
   NSMutableArray* array = [[NSMutableArray alloc] init];
   CALL_LIBGIT2_FUNCTION_RETURN(nil, git_stash_foreach_block, self.private, ^int(size_t index, const char* message, const git_oid* stash_id) {
-    
+
     XLOG_DEBUG_CHECK(array.count == index);
     GCStash* stash = [self _newStashFromOID:stash_id error:error];
     if (stash == nil) {
@@ -144,7 +144,7 @@ cleanup:
     }
     [array addObject:stash];
     return GIT_OK;
-    
+
   });
   return array;
 }
@@ -153,13 +153,13 @@ cleanup:
   const git_oid* oid = git_commit_id(stash.private);
   __block NSUInteger stashIndex = NSNotFound;
   CALL_LIBGIT2_FUNCTION_RETURN(NSNotFound, git_stash_foreach_block, self.private, ^int(size_t index, const char* message, const git_oid* stash_id) {
-    
+
     if (git_oid_equal(stash_id, oid)) {
       XLOG_DEBUG_CHECK(stashIndex == NSNotFound);
       stashIndex = index;
     }
     return GIT_OK;
-    
+
   });
   if (stashIndex == NSNotFound) {
     GC_SET_GENERIC_ERROR(@"Stash does not exist");
@@ -173,12 +173,12 @@ cleanup:
     return NO;
   }
   git_index_free(index);
-  
+
   NSUInteger i = [self _indexOfStash:stash error:error];
   if (i == NSNotFound) {
     return NO;
   }
-  
+
   git_stash_apply_options options = GIT_STASH_APPLY_OPTIONS_INIT;
   if (restoreIndex) {
     options.flags |= GIT_STASH_APPLY_REINSTATE_INDEX;
@@ -203,12 +203,12 @@ cleanup:
     return NO;
   }
   git_index_free(index);
-  
+
   NSUInteger i = [self _indexOfStash:stash error:error];
   if (i == NSNotFound) {
     return NO;
   }
-  
+
   git_stash_apply_options options = GIT_STASH_APPLY_OPTIONS_INIT;
   if (restoreIndex) {
     options.flags |= GIT_STASH_APPLY_REINSTATE_INDEX;

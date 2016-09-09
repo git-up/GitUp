@@ -1,4 +1,4 @@
-//  Copyright (C) 2015 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2016 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -111,11 +111,11 @@ static inline NSString* _ConvertMessage(GCCommit* commit, const char* message, s
 - (NSString*)description {
   NSString* summary = self.summary;
   return [NSString stringWithFormat:@"[%@] %@ '%@' %@ '%@%@'", self.class,
-          self.shortSHA1,
-          self.date,
-          [[self.author componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] firstObject],
-          summary.length > kTruncatedDescriptionThreshold ? [summary substringToIndex:kTruncatedDescriptionThreshold] : summary,
-          summary.length > kTruncatedDescriptionThreshold ? @"..." : @""];
+                                    self.shortSHA1,
+                                    self.date,
+                                    [[self.author componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] firstObject],
+                                    summary.length > kTruncatedDescriptionThreshold ? [summary substringToIndex:kTruncatedDescriptionThreshold] : summary,
+                                    summary.length > kTruncatedDescriptionThreshold ? @"..." : @""];
 }
 
 @end
@@ -206,11 +206,11 @@ static inline NSComparisonResult _TimeCompare(GCCommit* commit1, GCCommit* commi
   NSString* sha1 = nil;
   git_tree* tree = NULL;
   git_tree_entry* entry = NULL;
-  
+
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_commit_tree, &tree, commit.private);
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_tree_entry_bypath, &entry, tree, GCGitPathFromFileSystemPath(path));
   sha1 = GCGitOIDToSHA1(git_tree_entry_id(entry));
-  
+
 cleanup:
   git_tree_entry_free(entry);
   git_tree_free(tree);

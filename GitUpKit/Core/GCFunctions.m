@@ -1,4 +1,4 @@
-//  Copyright (C) 2015 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2016 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -24,13 +24,13 @@ NSString* const GCErrorDomain = @"GCErrorDomain";
 NSError* GCNewError(NSInteger code, NSString* message) {
   return [NSError errorWithDomain:GCErrorDomain
                              code:code
-                         userInfo:@{NSLocalizedDescriptionKey: message}];
+                         userInfo:@{NSLocalizedDescriptionKey : message}];
 }
 
 NSError* GCNewPosixError(int code, NSString* message) {
   return [NSError errorWithDomain:NSPOSIXErrorDomain
                              code:code
-                         userInfo:@{NSLocalizedDescriptionKey: message}];
+                         userInfo:@{NSLocalizedDescriptionKey : message}];
 }
 
 NSString* GCGitOIDToSHA1(const git_oid* oid) {
@@ -133,12 +133,18 @@ NSString* GCGitURLFromURL(NSURL* url) {
 
 GCFileMode GCFileModeFromMode(git_filemode_t mode) {
   switch (mode) {
-    case GIT_FILEMODE_UNREADABLE: return kGCFileMode_Unreadable;
-    case GIT_FILEMODE_TREE: return kGCFileMode_Tree;
-    case GIT_FILEMODE_BLOB: return kGCFileMode_Blob;
-    case GIT_FILEMODE_BLOB_EXECUTABLE: return kGCFileMode_BlobExecutable;
-    case GIT_FILEMODE_LINK: return kGCFileMode_Link;
-    case GIT_FILEMODE_COMMIT: return kGCFileMode_Commit;
+    case GIT_FILEMODE_UNREADABLE:
+      return kGCFileMode_Unreadable;
+    case GIT_FILEMODE_TREE:
+      return kGCFileMode_Tree;
+    case GIT_FILEMODE_BLOB:
+      return kGCFileMode_Blob;
+    case GIT_FILEMODE_BLOB_EXECUTABLE:
+      return kGCFileMode_BlobExecutable;
+    case GIT_FILEMODE_LINK:
+      return kGCFileMode_Link;
+    case GIT_FILEMODE_COMMIT:
+      return kGCFileMode_Commit;
   }
   XLOG_DEBUG_UNREACHABLE();
   return 0;

@@ -29,7 +29,7 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification*)notification {
   NSError* error;
-  
+
   // Prompt user for a directory
   NSOpenPanel* openPanel = [NSOpenPanel openPanel];
   openPanel.canChooseDirectories = YES;
@@ -38,22 +38,22 @@
     [NSApp terminate:nil];
   }
   NSString* path = openPanel.URL.path;
-  
+
   // Attempt to open the directory as a Git repo
   _repository = [[GCLiveRepository alloc] initWithExistingLocalRepository:path error:&error];
   if (_repository == nil) {
     [NSApp presentError:error];
     [NSApp terminate:nil];
   }
-  
+
   // A repo must have an associated NSUndoManager for the undo/redo system to work
   // We simply use the one of the window
   _repository.undoManager = _window.undoManager;
-  
+
   // Each GIWindow expects a GIWindowController around
   _windowController = [[GIWindowController alloc] initWithWindow:_window];
-  
-  // Create the view controller and add its view to the window
+
+// Create the view controller and add its view to the window
 #if 1
   _viewController = [[GIStashListViewController alloc] initWithRepository:_repository];
 #else
@@ -61,7 +61,7 @@
 #endif
   _viewController.view.frame = [_window.contentView bounds];
   [_window.contentView addSubview:_viewController.view];
-  
+
   // Show the window
   [_window makeKeyAndOrderFront:nil];
 }

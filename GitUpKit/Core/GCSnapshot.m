@@ -1,4 +1,4 @@
-//  Copyright (C) 2015 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2016 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -20,9 +20,9 @@
 #import "GCPrivate.h"
 
 // SPIs from libgit2
-extern int git_reference__is_branch(const char *ref_name);
-extern int git_reference__is_remote(const char *ref_name);
-extern int git_reference__is_tag(const char *ref_name);
+extern int git_reference__is_branch(const char* ref_name);
+extern int git_reference__is_remote(const char* ref_name);
+extern int git_reference__is_tag(const char* ref_name);
 
 @interface GCSnapshot ()
 @property(nonatomic, readonly) CFMutableDictionaryRef cache;
@@ -54,25 +54,23 @@ static inline BOOL _ShouldSkipReference(const char* referenceFullName, GCSnapsho
 
 static BOOL _CompareSerializedReferences(GCSerializedReference* serializedReference1, GCSerializedReference* serializedReference2) {
   switch (serializedReference1.type) {
-    
     case GIT_REF_OID: {
       if ((serializedReference2.type != GIT_REF_OID) || !git_oid_equal(serializedReference2.directTarget, serializedReference1.directTarget)) {
         return NO;
       }
       break;
     }
-    
+
     case GIT_REF_SYMBOLIC: {
       if ((serializedReference2.type != GIT_REF_SYMBOLIC) || strcmp(serializedReference2.symbolicTarget, serializedReference1.symbolicTarget)) {
         return NO;
       }
       break;
     }
-    
+
     default:
       XLOG_DEBUG_UNREACHABLE();
       return NO;
-    
   }
   return YES;
 }
@@ -94,25 +92,23 @@ static BOOL _CompareSerializedReferences(GCSerializedReference* serializedRefere
     _name = [_NSDataFromCString(git_reference_name(reference)) retain];
     _type = git_reference_type(reference);
     switch (_type) {
-      
       case GIT_REF_OID: {
         git_oid_cpy(&_OID, git_reference_target(reference));
         XLOG_DEBUG_CHECK(!git_oid_iszero(&_OID));
         break;
       }
-      
+
       case GIT_REF_SYMBOLIC: {
         _symbol = [_NSDataFromCString(git_reference_symbolic_target(reference)) retain];
         XLOG_DEBUG_CHECK(_symbol.length);
         break;
       }
-      
+
       default: {
         XLOG_DEBUG_UNREACHABLE();
         [self release];
         return nil;
       }
-      
     }
     if (object) {
       XLOG_DEBUG_CHECK((_type == GIT_REF_SYMBOLIC) || git_oid_equal(git_object_id(object), &_OID));
@@ -129,7 +125,7 @@ static BOOL _CompareSerializedReferences(GCSerializedReference* serializedRefere
 - (void)dealloc {
   [_symbol release];
   [_name release];
-  
+
   [super dealloc];
 }
 
@@ -148,7 +144,7 @@ static BOOL _CompareSerializedReferences(GCSerializedReference* serializedRefere
     XLOG_DEBUG_CHECK(_name);
     _type = [decoder decodeIntForKey:@"type"];
     XLOG_DEBUG_CHECK((_type == GIT_REF_OID) || (_type == GIT_REF_SYMBOLIC));
-    
+
     NSUInteger length1;
     const uint8_t* bytes1 = [decoder decodeBytesForKey:@"oid" returnedLength:&length1];
     if (bytes1 && (length1 == sizeof(git_oid))) {
@@ -156,11 +152,11 @@ static BOOL _CompareSerializedReferences(GCSerializedReference* serializedRefere
     } else {
       XLOG_DEBUG_UNREACHABLE();
     }
-    
+
     _symbol = [[decoder decodeObjectOfClass:[NSData class] forKey:@"symbol"] retain];
-    
+
     _resolvedType = [decoder decodeIntForKey:@"resolved_type"];
-    
+
     NSUInteger length2;
     const uint8_t* bytes2 = [decoder decodeBytesForKey:@"resolved_oid" returnedLength:&length2];
     if (bytes2 && (length2 == sizeof(git_oid))) {
@@ -168,7 +164,7 @@ static BOOL _CompareSerializedReferences(GCSerializedReference* serializedRefere
     } else {
       XLOG_DEBUG_UNREACHABLE();
     }
-    
+
     XLOG_DEBUG_CHECK(_symbol || (_type != GIT_REF_SYMBOLIC));
   }
   return self;
@@ -247,7 +243,7 @@ static NSMutableDictionary* _LoadRepositoryConfig(GCRepository* repository, NSEr
   git_config* config1 = NULL;
   git_config* config2 = NULL;
   git_config_iterator* iterator = NULL;
-  
+
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_repository_config, &config1, repository.private);
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_config_open_level, &config2, config1, GIT_CONFIG_LEVEL_LOCAL);
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_config_iterator_new, &iterator, config2);  // This takes a snapshot internally
@@ -261,7 +257,7 @@ static NSMutableDictionary* _LoadRepositoryConfig(GCRepository* repository, NSEr
     [dictionary setObject:[NSString stringWithUTF8String:entry->value] forKey:[NSString stringWithUTF8String:entry->name]];
   }
   success = YES;
-  
+
 cleanup:
   git_config_iterator_free(iterator);
   git_config_free(config1);
@@ -271,42 +267,43 @@ cleanup:
 
 - (id)initWithRepository:(GCRepository*)repository error:(NSError**)error {
   if ((self = [super init])) {
-    
     // Capture local config
     _config = [_LoadRepositoryConfig(repository, error) retain];
     if (_config == nil) {
       return nil;
     }
-    
+
     // Capture all references
     _serializedReferences = [[NSMutableArray alloc] init];
     CFDictionaryKeyCallBacks callbacks = {0, NULL, NULL, NULL, GCCStringEqualCallBack, GCCStringHashCallBack};
     _cache = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, &callbacks, NULL);
-    BOOL success = [repository enumerateReferencesWithOptions:kGCReferenceEnumerationOption_IncludeHEAD error:error usingBlock:^BOOL(git_reference* reference) {
-      
-      git_object* object = NULL;
-      git_oid oid;
-      if ([repository loadTargetOID:&oid fromReference:reference error:NULL]) {  // Ignore errors since repositories can have invalid references
-        int status = git_object_lookup(&object, repository.private, &oid, GIT_OBJ_ANY);
-        if (status != GIT_OK) {
-          LOG_LIBGIT2_ERROR(status);  // Ignore errors since repositories can have invalid references
-        }
-      }
-      
-      GCSerializedReference* serializedReference = [[GCSerializedReference alloc] initWithReference:reference resolvedObject:object];
-      [_serializedReferences addObject:serializedReference];
-      XLOG_DEBUG_CHECK(!CFDictionaryContainsKey(_cache, serializedReference.name));
-      CFDictionarySetValue(_cache, serializedReference.name, serializedReference);
-      [serializedReference release];
-      
-      git_object_free(object);
-      return YES;
-      
-    }];
+    BOOL success = [repository enumerateReferencesWithOptions:kGCReferenceEnumerationOption_IncludeHEAD
+                                                        error:error
+                                                   usingBlock:^BOOL(git_reference* reference) {
+
+                                                     git_object* object = NULL;
+                                                     git_oid oid;
+                                                     if ([repository loadTargetOID:&oid fromReference:reference error:NULL]) {  // Ignore errors since repositories can have invalid references
+                                                       int status = git_object_lookup(&object, repository.private, &oid, GIT_OBJ_ANY);
+                                                       if (status != GIT_OK) {
+                                                         LOG_LIBGIT2_ERROR(status);  // Ignore errors since repositories can have invalid references
+                                                       }
+                                                     }
+
+                                                     GCSerializedReference* serializedReference = [[GCSerializedReference alloc] initWithReference:reference resolvedObject:object];
+                                                     [_serializedReferences addObject:serializedReference];
+                                                     XLOG_DEBUG_CHECK(!CFDictionaryContainsKey(_cache, serializedReference.name));
+                                                     CFDictionarySetValue(_cache, serializedReference.name, serializedReference);
+                                                     [serializedReference release];
+
+                                                     git_object_free(object);
+                                                     return YES;
+
+                                                   }];
     if (!success) {
       return nil;
     }
-    
+
     _info = [[NSMutableDictionary alloc] init];
   }
   return self;
@@ -317,7 +314,7 @@ cleanup:
   [_info release];
   [_serializedReferences release];
   [_config release];
-  
+
   [super dealloc];
 }
 
@@ -335,7 +332,7 @@ cleanup:
     XLOG_DEBUG_CHECK(_serializedReferences);
     _info = [[decoder decodeObjectOfClass:[NSMutableDictionary class] forKey:@"info"] retain];
     XLOG_DEBUG_CHECK(_info);
-    
+
     CFDictionaryKeyCallBacks callbacks = {0, NULL, NULL, NULL, GCCStringEqualCallBack, GCCStringHashCallBack};
     _cache = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, &callbacks, NULL);
     for (GCSerializedReference* serializedReference in _serializedReferences) {
@@ -411,7 +408,7 @@ static inline BOOL _EqualSnapshots(GCSnapshot* snapshot1, GCSnapshot* snapshot2,
   if ((options == kGCSnapshotOption_IncludeAll) && (snapshot1->_serializedReferences.count != snapshot2->_serializedReferences.count)) {
     return NO;
   }
-  
+
   // Make sure all non-skippable references in "self" are in "snapshot" and equal
   for (GCSerializedReference* reference1 in snapshot1->_serializedReferences) {
     if (_ShouldSkipReference(reference1.name, options)) {
@@ -422,7 +419,7 @@ static inline BOOL _EqualSnapshots(GCSnapshot* snapshot1, GCSnapshot* snapshot2,
       return NO;
     }
   }
-  
+
   // Make sure all non-skippable references in "snapshot" are in "self"
   for (GCSerializedReference* reference2 in snapshot2->_serializedReferences) {
     if (_ShouldSkipReference(reference2.name, options)) {
@@ -432,7 +429,7 @@ static inline BOOL _EqualSnapshots(GCSnapshot* snapshot1, GCSnapshot* snapshot2,
       return NO;
     }
   }
-  
+
   // Make sure branch config variables are the same
   if (options & kGCSnapshotOption_IncludeLocalBranches) {
     for (NSString* variable in snapshot1->_config) {
@@ -454,7 +451,7 @@ static inline BOOL _EqualSnapshots(GCSnapshot* snapshot1, GCSnapshot* snapshot2,
       }
     }
   }
-  
+
   return YES;
 }
 
@@ -481,7 +478,7 @@ static BOOL _UpdateRepositoryConfig(GCRepository* repository, NSDictionary* chan
   BOOL success = NO;
   git_config* config1 = NULL;
   git_config* config2 = NULL;
-  
+
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_repository_config, &config1, repository.private);
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_config_open_level, &config2, config1, GIT_CONFIG_LEVEL_LOCAL);
   for (NSString* variable in changes) {
@@ -493,7 +490,7 @@ static BOOL _UpdateRepositoryConfig(GCRepository* repository, NSDictionary* chan
     }
   }
   success = YES;
-  
+
 cleanup:
   git_config_free(config1);
   git_config_free(config2);
@@ -503,7 +500,7 @@ cleanup:
 static void _DiffConfigsForLocalBranch(const char* name, NSDictionary* fromConfig, NSDictionary* toConfig, NSMutableDictionary* changes) {
   NSString* prefix = [NSString stringWithFormat:@"branch.%s.", name];
   NSMutableDictionary* copy = [[NSMutableDictionary alloc] initWithDictionary:toConfig];
-  
+
   // Compare variables between "from" and "to"
   for (NSString* fromVariable in fromConfig) {
     if ([fromVariable hasPrefix:prefix]) {
@@ -522,14 +519,14 @@ static void _DiffConfigsForLocalBranch(const char* name, NSDictionary* fromConfi
       }
     }
   }
-  
+
   // Finally recreate variables present in "to" but missing in "from"
   for (NSString* toVariable in copy) {
     if ([toVariable hasPrefix:prefix]) {
       [changes setObject:copy[toVariable] forKey:toVariable];
     }
   }
-  
+
   [copy release];
 }
 
@@ -541,32 +538,30 @@ static void _DiffConfigsForLocalBranch(const char* name, NSDictionary* fromConfi
            didUpdateReferences:(BOOL*)didUpdateReferences
                          error:(NSError**)error {
   BOOL success = NO;
-  GCReferenceTransform* transform  = [[GCReferenceTransform alloc] initWithRepository:self reflogMessage:message];
+  GCReferenceTransform* transform = [[GCReferenceTransform alloc] initWithRepository:self reflogMessage:message];
   CFMutableDictionaryRef copy = CFDictionaryCreateMutableCopy(kCFAllocatorDefault, 0, toSnapshot.cache);
   NSMutableDictionary* changes = [[NSMutableDictionary alloc] init];
-  
+
   // Compare references between "from" and "to"
   for (GCSerializedReference* fromSerializedReference in fromReferences) {
     if (!_ShouldSkipReference(fromSerializedReference.name, options)) {
       GCSerializedReference* toSerializedReference = [toSnapshot serializedReferenceWithName:fromSerializedReference.name];
-      
+
       // If reference is present in both "from" and "to", compare both versions and update "from" to "to" if they differ
       if (toSerializedReference) {
         if (!_CompareSerializedReferences(fromSerializedReference, toSerializedReference)) {
           switch (toSerializedReference.type) {
-            
             case GIT_REF_OID:
               [transform setDirectTarget:toSerializedReference.directTarget forReferenceWithName:toSerializedReference.name];
               break;
-            
+
             case GIT_REF_SYMBOLIC:
               [transform setSymbolicTarget:toSerializedReference.symbolicTarget forReferenceWithName:toSerializedReference.name];
               break;
-            
+
             default:
               XLOG_DEBUG_UNREACHABLE();
               break;
-            
           }
         }
         if ([toSerializedReference isLocalBranch]) {
@@ -583,32 +578,30 @@ static void _DiffConfigsForLocalBranch(const char* name, NSDictionary* fromConfi
       }
     }
   }
-  
+
   // Finally recreate references present in "to" but missing in "from"
   GCDictionaryApplyBlock(copy, ^(const void* key, const void* value) {
     GCSerializedReference* toSerializedReference = (const void*)value;
     if (!_ShouldSkipReference(toSerializedReference.name, options)) {
       switch (toSerializedReference.type) {
-        
         case GIT_REF_OID:
           [transform setDirectTarget:toSerializedReference.directTarget forReferenceWithName:toSerializedReference.name];
           break;
-        
+
         case GIT_REF_SYMBOLIC:
           [transform setSymbolicTarget:toSerializedReference.symbolicTarget forReferenceWithName:toSerializedReference.name];
           break;
-        
+
         default:
           XLOG_DEBUG_UNREACHABLE();
           break;
-        
       }
       if ([toSerializedReference isLocalBranch]) {
         _DiffConfigsForLocalBranch(toSerializedReference.shortHand, nil, toSnapshot.config, changes);
       }
     }
   });
-  
+
   // Apply transform if necessary
   if (transform.identity) {
     if (didUpdateReferences) {
@@ -622,15 +615,15 @@ static void _DiffConfigsForLocalBranch(const char* name, NSDictionary* fromConfi
       *didUpdateReferences = YES;
     }
   }
-  
+
   // Update config if necessary
   if (changes.count) {
     _UpdateRepositoryConfig(self, changes, NULL);  // TODO: Should we really ignore errors here?
   }
-  
+
   // We're done
   success = YES;
-  
+
 cleanup:
   [changes release];
   CFRelease(copy);
@@ -648,14 +641,16 @@ cleanup:
     return NO;
   }
   NSMutableArray* references = [[NSMutableArray alloc] init];
-  BOOL result = [self enumerateReferencesWithOptions:kGCReferenceEnumerationOption_IncludeHEAD error:error usingBlock:^BOOL(git_reference* reference) {
-    
-    GCSerializedReference* serializedReference = [[GCSerializedReference alloc] initWithReference:reference resolvedObject:NULL];
-    [references addObject:serializedReference];
-    [serializedReference release];
-    return YES;
-    
-  }];
+  BOOL result = [self enumerateReferencesWithOptions:kGCReferenceEnumerationOption_IncludeHEAD
+                                               error:error
+                                          usingBlock:^BOOL(git_reference* reference) {
+
+                                            GCSerializedReference* serializedReference = [[GCSerializedReference alloc] initWithReference:reference resolvedObject:NULL];
+                                            [references addObject:serializedReference];
+                                            [serializedReference release];
+                                            return YES;
+
+                                          }];
   if (result) {
     result = [self _restoreFromReferences:references andConfig:config toSnapshot:snapshot withOptions:options reflogMessage:message didUpdateReferences:didUpdateReferences error:error];
   }

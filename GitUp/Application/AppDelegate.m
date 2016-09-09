@@ -1,4 +1,4 @@
-//  Copyright (C) 2015 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2016 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -14,7 +14,10 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #import <Security/Security.h>
-#import <Crashlytics/Crashlytics.h>
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wobjc-interface-ivars"
+#import <HockeySDK/HockeySDK.h>
+#pragma clang diagnostic pop
 #import <Sparkle/Sparkle.h>
 
 #import <GitUpKit/XLFacilityMacros.h>
@@ -24,6 +27,7 @@
 #import "Document.h"
 #import "Common.h"
 #import "ToolProtocol.h"
+#import "GARawTracker.h"
 
 #define __ENABLE_SUDDEN_TERMINATION__ 1
 
@@ -44,7 +48,7 @@
 @interface WelcomeView : NSView
 @end
 
-@interface AppDelegate () <NSUserNotificationCenterDelegate, CrashlyticsDelegate, SUUpdaterDelegate>
+@interface AppDelegate () <NSUserNotificationCenterDelegate, SUUpdaterDelegate>
 - (IBAction)closeWelcomeWindow:(id)sender;
 @end
 
@@ -53,9 +57,9 @@
 - (void)drawRect:(NSRect)dirtyRect {
   NSRect bounds = self.bounds;
   CGContextRef context = [[NSGraphicsContext currentContext] graphicsPort];
-  
+
   CGContextClearRect(context, dirtyRect);
-  
+
   CGContextSetRGBFillColor(context, 0.9, 0.9, 0.9, 1.0);
   GICGContextAddRoundedRect(context, bounds, kWelcomeWindowCornerRadius);
   CGContextFillPath(context);
@@ -88,26 +92,26 @@
   BOOL _manualCheck;
   NSInteger _allowWelcome;
   CGFloat _welcomeMaxHeight;
-  
+
   BOOL _authenticationUseKeychain;
   NSURL* _authenticationURL;
   NSString* _authenticationUsername;
   NSString* _authenticationPassword;
-  
+
   CFMessagePortRef _messagePort;
 }
 
 + (void)initialize {
   NSDictionary* defaults = @{
-    GICommitMessageViewUserDefaultKey_ShowInvisibleCharacters: @(YES),
-    GICommitMessageViewUserDefaultKey_ShowMargins: @(YES),
-    GICommitMessageViewUserDefaultKey_EnableSpellChecking: @(YES),
-    kUserDefaultsKey_ReleaseChannel: kReleaseChannel_Stable,
-    kUserDefaultsKey_CheckInterval: @(15 * 60),
-    kUserDefaultsKey_FirstLaunch: @(YES),
-    kUserDefaultsKey_DiffWhitespaceMode: @(kGCLiveRepositoryDiffWhitespaceMode_Normal),
-    kUserDefaultsKey_EnableVisualEffects: @(NO),
-    kUserDefaultsKey_ShowWelcomeWindow: @(YES),
+    GICommitMessageViewUserDefaultKey_ShowInvisibleCharacters : @(YES),
+    GICommitMessageViewUserDefaultKey_ShowMargins : @(YES),
+    GICommitMessageViewUserDefaultKey_EnableSpellChecking : @(YES),
+    kUserDefaultsKey_ReleaseChannel : kReleaseChannel_Stable,
+    kUserDefaultsKey_CheckInterval : @(15 * 60),
+    kUserDefaultsKey_FirstLaunch : @(YES),
+    kUserDefaultsKey_DiffWhitespaceMode : @(kGCLiveRepositoryDiffWhitespaceMode_Normal),
+    kUserDefaultsKey_EnableVisualEffects : @(NO),
+    kUserDefaultsKey_ShowWelcomeWindow : @(YES),
   };
   [[NSUserDefaults standardUserDefaults] registerDefaults:defaults];
 }
@@ -130,7 +134,7 @@
                                                       0, NULL,  // Any security domain
                                                       accountName ? (UInt32)strlen(accountName) : 0, accountName,
                                                       0, NULL,  // Any path
-                                                      0, // Any port
+                                                      0,  // Any port
                                                       kSecProtocolTypeAny,
                                                       kSecAuthenticationTypeAny,
                                                       &passwordLength, &passwordData, &itemRef);
@@ -207,24 +211,24 @@
   [[NSDocumentController sharedDocumentController] openDocumentWithContentsOfURL:url
                                                                          display:YES
                                                                completionHandler:^(NSDocument* document, BOOL documentWasAlreadyOpen, NSError* openError) {
-    
-    if (document) {
-      if (documentWasAlreadyOpen) {
-        if ((NSUInteger)windowModeID != NSNotFound) {
-          [(Document*)document setWindowModeID:windowModeID];
-        }
-      } else {
-        [(Document*)document setCloneMode:cloneMode];
-        if ((NSUInteger)windowModeID != NSNotFound) {
-          XLOG_DEBUG_CHECK(cloneMode == kCloneMode_None);
-          [self performSelector:@selector(_setDocumentWindowModeID:) withObject:@[document, @(windowModeID)] afterDelay:0.1];  // TODO: Try to schedule *after* -[Document _documentDidOpen] has been called
-        }
-      }
-    } else {
-      [[NSDocumentController sharedDocumentController] presentError:openError];
-    }
-    
-  }];
+
+                                                                 if (document) {
+                                                                   if (documentWasAlreadyOpen) {
+                                                                     if ((NSUInteger)windowModeID != NSNotFound) {
+                                                                       [(Document*)document setWindowModeID:windowModeID];
+                                                                     }
+                                                                   } else {
+                                                                     [(Document*)document setCloneMode:cloneMode];
+                                                                     if ((NSUInteger)windowModeID != NSNotFound) {
+                                                                       XLOG_DEBUG_CHECK(cloneMode == kCloneMode_None);
+                                                                       [self performSelector:@selector(_setDocumentWindowModeID:) withObject:@[ document, @(windowModeID) ] afterDelay:0.1];  // TODO: Try to schedule *after* -[Document _documentDidOpen] has been called
+                                                                     }
+                                                                   }
+                                                                 } else {
+                                                                   [[NSDocumentController sharedDocumentController] presentError:openError];
+                                                                 }
+
+                                                               }];
 }
 
 - (void)_openDocument:(NSMenuItem*)sender {
@@ -263,28 +267,28 @@
 
 - (void)awakeFromNib {
   _welcomeMaxHeight = _welcomeWindow.frame.size.height;
-  
+
   _allowWelcome = -1;
-  
+
   _welcomeWindow.alphaValue = 1.0;
   _welcomeWindow.opaque = NO;
   _welcomeWindow.movableByWindowBackground = YES;
-  
+
   _twitterButton.textAlignment = NSLeftTextAlignment;
   _twitterButton.textFont = [NSFont boldSystemFontOfSize:11];
   _forumsButton.textAlignment = NSLeftTextAlignment;
   _forumsButton.textFont = [NSFont boldSystemFontOfSize:11];
-  
+
   _preferencesToolbar.selectedItemIdentifier = kPreferencePaneIdentifier_General;
   [self selectPreferencePane:nil];
-  
+
   [_channelPopUpButton.menu removeAllItems];
-  for (NSString* string in @[kReleaseChannel_Stable, kReleaseChannel_Continuous]) {
+  for (NSString* string in @[ kReleaseChannel_Stable, kReleaseChannel_Continuous ]) {
     NSMenuItem* item = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(string, nil) action:NULL keyEquivalent:@""];
     item.representedObject = string;
     [_channelPopUpButton.menu addItem:item];
   }
-  
+
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_willShowRecentPopUpMenu:) name:NSPopUpButtonWillPopUpNotification object:_recentPopUpButton];
 }
 
@@ -301,7 +305,7 @@
 - (void)_showNotificationWithTitle:(NSString*)title action:(SEL)action message:(NSString*)format, ... NS_FORMAT_FUNCTION(3, 4) {
   NSUserNotification* notification = [[NSUserNotification alloc] init];
   if (action) {
-    notification.userInfo = @{kNotificationUserInfoKey_Action: NSStringFromSelector(action)};
+    notification.userInfo = @{kNotificationUserInfoKey_Action : NSStringFromSelector(action)};
   }
   notification.title = title;
   va_list arguments;
@@ -309,7 +313,7 @@
   NSString* string = [[NSString alloc] initWithFormat:format arguments:arguments];
   va_end(arguments);
   notification.informativeText = string;
-  
+
   [[NSUserNotificationCenter defaultUserNotificationCenter] deliverNotification:notification];
 }
 
@@ -331,11 +335,16 @@
 - (void)applicationWillFinishLaunching:(NSNotification*)notification {
   // Initialize custom subclass of NSDocumentController
   [DocumentController sharedDocumentController];
-  
+
 #if !DEBUG
-  // Initialize Crashlytics
-  [Crashlytics startWithAPIKey:@"946dcb56f0db1be8f0c52df6e7d392202a2cc9b2"];
-  [[Crashlytics sharedInstance] setDelegate:self];
+  // Initialize HockeyApp
+  [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"65233b0e034e4fcbaf6754afba3b2b23"];
+  [[BITHockeyManager sharedHockeyManager] setDisableMetricsManager:YES];
+  [[BITHockeyManager sharedHockeyManager] setDisableFeedbackManager:YES];
+  [[BITHockeyManager sharedHockeyManager] startManager];
+
+  // Initialize Google Analytics
+  [[GARawTracker sharedTracker] startWithTrackingID:@"UA-83409580-1"];
 #endif
 }
 
@@ -348,15 +357,15 @@
     _updater.automaticallyChecksForUpdates = NO;
     _updater.sendsSystemProfile = NO;
     _updater.automaticallyDownloadsUpdates = YES;
-    
+
     _manualCheck = NO;
     [_updater checkForUpdatesInBackground];
   }
 #endif
-  
+
   // Initialize user notification center
   [[NSUserNotificationCenter defaultUserNotificationCenter] setDelegate:self];
-  
+
   // Notify user in case app was updated since last launch
   NSString* currentVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
   NSString* lastVersion = [[NSUserDefaults standardUserDefaults] objectForKey:kUserDefaultsKey_LastVersion];
@@ -369,7 +378,7 @@
   if ([currentVersion integerValue]) {
     [[NSUserDefaults standardUserDefaults] setObject:currentVersion forKey:kUserDefaultsKey_LastVersion];
   }
-  
+
   // Prompt to install command line tool if needed
   if (![[NSUserDefaults standardUserDefaults] boolForKey:kUserDefaultsKey_FirstLaunch] && ![[NSUserDefaults standardUserDefaults] boolForKey:kUserDefaultsKey_SkipInstallCLT]) {
     if (![[NSFileManager defaultManager] isExecutableFileAtPath:kToolInstallPath]) {
@@ -388,10 +397,10 @@
       }
     }
   }
-  
+
   // First launch has completed
   [[NSUserDefaults standardUserDefaults] setBool:NO forKey:kUserDefaultsKey_FirstLaunch];
-  
+
   // Create tool message port
   CFMessagePortContext context = {0, (__bridge void*)self, NULL, NULL, NULL};
   _messagePort = CFMessagePortCreateLocal(kCFAllocatorDefault, CFSTR(kToolPortName), _MessagePortCallBack, &context, NULL);
@@ -406,7 +415,7 @@
     XLOG_ERROR(@"Failed creating message port for tool");
     XLOG_DEBUG_UNREACHABLE();
   }
-  
+
 #if __ENABLE_SUDDEN_TERMINATION__
   // Enable sudden termination
   [[NSProcessInfo processInfo] enableSuddenTermination];
@@ -419,7 +428,7 @@
 
 - (BOOL)applicationShouldHandleReopen:(NSApplication*)theApplication hasVisibleWindows:(BOOL)hasVisibleWindows {
   if (!hasVisibleWindows) {
-    _allowWelcome = 1; // Always show welcome when clicking on dock icon
+    _allowWelcome = 1;  // Always show welcome when clicking on dock icon
     [self handleDocumentCountChanged];
   }
   return YES;
@@ -430,6 +439,14 @@
     _allowWelcome = 1;
   }
   [self handleDocumentCountChanged];
+
+#if !DEBUG
+  [[GARawTracker sharedTracker] sendEventWithCategory:@"application"
+                                               action:@"activate"
+                                                label:nil
+                                                value:nil
+                                      completionBlock:NULL];
+#endif
 }
 
 #if __ENABLE_SUDDEN_TERMINATION__
@@ -461,7 +478,7 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
   NSString* command = [input objectForKey:kToolDictionaryKey_Command];
   NSString* repository = [[input objectForKey:kToolDictionaryKey_Repository] stringByStandardizingPath];
   if (!command.length || !repository.length) {
-    return @{kToolDictionaryKey_Error: @"Invalid command"};
+    return @{ kToolDictionaryKey_Error : @"Invalid command" };
   }
   if ([command isEqualToString:@kToolCommand_Open]) {
     [self _openRepositoryWithURL:[NSURL fileURLWithPath:repository] withCloneMode:kCloneMode_None windowModeID:NSNotFound];
@@ -472,14 +489,14 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
   } else if ([command isEqualToString:@kToolCommand_Stash]) {
     [self _openRepositoryWithURL:[NSURL fileURLWithPath:repository] withCloneMode:kCloneMode_None windowModeID:kWindowModeID_Stashes];
   } else {
-    return @{kToolDictionaryKey_Error: [NSString stringWithFormat:@"Unknown command '%@'", command]};
+    return @{ kToolDictionaryKey_Error : [NSString stringWithFormat:@"Unknown command '%@'", command] };
   }
   return @{};
 }
 
 #pragma mark - Actions
 
-- (BOOL)validateUserInterfaceItem:(id <NSValidatedUserInterfaceItem>)anItem {
+- (BOOL)validateUserInterfaceItem:(id<NSValidatedUserInterfaceItem>)anItem {
   if (anItem.action == @selector(checkForUpdates:)) {
     return _updater && !_updatePending && ![_updater updateInProgress];
   }
@@ -495,7 +512,7 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
   NSString* newChannel = _channelPopUpButton.selectedItem.representedObject;
   if (![newChannel isEqualToString:oldChannel]) {
     [[NSUserDefaults standardUserDefaults] setObject:newChannel forKey:kUserDefaultsKey_ReleaseChannel];
-    
+
     _manualCheck = NO;
     [_updater checkForUpdatesInBackground];
   }
@@ -562,7 +579,7 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
   if ([savePanel runModal] == NSFileHandlingPanelOKButton) {
     NSString* path = savePanel.URL.path;
     NSError* error;
-    if (![[NSFileManager defaultManager] fileExistsAtPath:path] || [[NSFileManager defaultManager] moveItemAtPathToTrash:path error:&error]) {
+    if (![[NSFileManager defaultManager] fileExistsAtPath:path followLastSymlink:NO] || [[NSFileManager defaultManager] moveItemAtPathToTrash:path error:&error]) {
       GCRepository* repository = [[GCRepository alloc] initWithNewLocalRepository:path bare:NO error:&error];
       if (repository) {
         [self _openRepositoryWithURL:[NSURL fileURLWithPath:repository.workingDirectoryPath] withCloneMode:kCloneMode_None windowModeID:NSNotFound];
@@ -593,7 +610,7 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
       if ([savePanel runModal] == NSFileHandlingPanelOKButton) {
         NSString* path = savePanel.URL.path;
         NSError* error;
-        if (![[NSFileManager defaultManager] fileExistsAtPath:path] || [[NSFileManager defaultManager] moveItemAtPathToTrash:path error:&error]) {
+        if (![[NSFileManager defaultManager] fileExistsAtPath:path followLastSymlink:NO] || [[NSFileManager defaultManager] moveItemAtPathToTrash:path error:&error]) {
           GCRepository* repository = [[GCRepository alloc] initWithNewLocalRepository:path bare:NO error:&error];
           if (repository) {
             if ([repository addRemoteWithName:@"origin" url:url error:&error]) {
@@ -704,7 +721,6 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
 }
 
 - (BOOL)repository:(GCRepository*)repository requiresPlainTextAuthenticationForURL:(NSURL*)url user:(NSString*)user username:(NSString**)username password:(NSString**)password {
-  
   if (_authenticationUseKeychain) {
     _authenticationUseKeychain = NO;
     if ([self.class loadPlainTextAuthenticationFormKeychainForURL:url user:user username:username password:password allowInteraction:YES]) {
@@ -713,7 +729,7 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
   } else {
     XLOG_VERBOSE(@"Skipping Keychain lookup for repeated authentication failures");
   }
-  
+
   _authenticationURLTextField.stringValue = url.absoluteString;
   _authenticationNameTextField.stringValue = *username ? *username : @"";
   _authenticationPasswordTextField.stringValue = @"";
@@ -721,7 +737,7 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
   if ([NSApp runModalForWindow:_authenticationWindow] && _authenticationNameTextField.stringValue.length && _authenticationPasswordTextField.stringValue.length) {
     _authenticationURL = url;
     _authenticationUsername = [_authenticationNameTextField.stringValue copy];
-    _authenticationPassword = [_authenticationPasswordTextField.stringValue copy];    
+    _authenticationPassword = [_authenticationPasswordTextField.stringValue copy];
     *username = _authenticationNameTextField.stringValue;
     *password = _authenticationPasswordTextField.stringValue;
     return YES;
@@ -736,12 +752,6 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
   _authenticationURL = nil;
   _authenticationUsername = nil;
   _authenticationPassword = nil;
-}
-
-#pragma mark - CrashlyticsDelegate
-
-- (void)crashlytics:(Crashlytics*)crashlytics didDetectCrashDuringPreviousExecution:(id <CLSCrashReport>)crash {
-  XLOG_WARNING(@"Application crashed during previous execution on %@", crash.crashedOnDate);
 }
 
 #pragma mark - SUUpdaterDelegate

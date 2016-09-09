@@ -1,4 +1,4 @@
-//  Copyright (C) 2015 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2016 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -46,56 +46,54 @@
   GCCommit* headCommit = nil;
   GCLocalBranch* branch = nil;
   [self.repository lookupHEADCurrentCommit:&headCommit branch:&branch error:NULL];  // Ignore errors
-  
+
   NSString* name = [[self.repository readConfigOptionForVariable:@"user.name" error:NULL] value];
   NSString* email = [[self.repository readConfigOptionForVariable:@"user.email" error:NULL] value];
-  NSString* user = email && name ? [NSString stringWithFormat:@"%@ <%@>", name, email] : (name ? name : (email ? email :  NSLocalizedString(@"N/A", nil)));
+  NSString* user = email && name ? [NSString stringWithFormat:@"%@ <%@>", name, email] : (name ? name : (email ? email : NSLocalizedString(@"N/A", nil)));
   CGFloat fontSize = _infoTextField.font.pointSize;
   NSMutableAttributedString* string = [[NSMutableAttributedString alloc] init];
   [string beginEditing];
   if (_showsBranchInfo) {
-    [string appendString:NSLocalizedString(@"Committing", nil) withAttributes:@{NSFontAttributeName: [NSFont systemFontOfSize:fontSize]}];
+    [string appendString:NSLocalizedString(@"Committing", nil) withAttributes:@{NSFontAttributeName : [NSFont systemFontOfSize:fontSize]}];
     switch (self.repository.state) {
-      
       case kGCRepositoryState_Merge:
-        [string appendString:NSLocalizedString(@" merge", nil) withAttributes:@{NSFontAttributeName: [NSFont boldSystemFontOfSize:fontSize]}];
+        [string appendString:NSLocalizedString(@" merge", nil) withAttributes:@{NSFontAttributeName : [NSFont boldSystemFontOfSize:fontSize]}];
         break;
-      
+
       case kGCRepositoryState_Revert:
-        [string appendString:NSLocalizedString(@" revert", nil) withAttributes:@{NSFontAttributeName: [NSFont boldSystemFontOfSize:fontSize]}];
+        [string appendString:NSLocalizedString(@" revert", nil) withAttributes:@{NSFontAttributeName : [NSFont boldSystemFontOfSize:fontSize]}];
         break;
-      
+
       case kGCRepositoryState_CherryPick:
-        [string appendString:NSLocalizedString(@" cherry-pick", nil) withAttributes:@{NSFontAttributeName: [NSFont boldSystemFontOfSize:fontSize]}];
+        [string appendString:NSLocalizedString(@" cherry-pick", nil) withAttributes:@{NSFontAttributeName : [NSFont boldSystemFontOfSize:fontSize]}];
         break;
-      
+
       case kGCRepositoryState_Rebase:
       case kGCRepositoryState_RebaseInteractive:
       case kGCRepositoryState_RebaseMerge:
-        [string appendString:NSLocalizedString(@" rebase", nil) withAttributes:@{NSFontAttributeName: [NSFont boldSystemFontOfSize:fontSize]}];
+        [string appendString:NSLocalizedString(@" rebase", nil) withAttributes:@{NSFontAttributeName : [NSFont boldSystemFontOfSize:fontSize]}];
         break;
-      
+
       default:
         break;
-      
     }
-    [string appendString:NSLocalizedString(@" as ", nil) withAttributes:@{NSFontAttributeName: [NSFont systemFontOfSize:fontSize]}];
-    [string appendString:user withAttributes:@{NSFontAttributeName: [NSFont boldSystemFontOfSize:fontSize]}];
+    [string appendString:NSLocalizedString(@" as ", nil) withAttributes:@{NSFontAttributeName : [NSFont systemFontOfSize:fontSize]}];
+    [string appendString:user withAttributes:@{NSFontAttributeName : [NSFont boldSystemFontOfSize:fontSize]}];
     if (branch) {
-      [string appendString:NSLocalizedString(@" on branch ", nil) withAttributes:@{NSFontAttributeName: [NSFont systemFontOfSize:fontSize]}];
-      [string appendString:branch.name withAttributes:@{NSFontAttributeName: [NSFont boldSystemFontOfSize:fontSize]}];
+      [string appendString:NSLocalizedString(@" on branch ", nil) withAttributes:@{NSFontAttributeName : [NSFont systemFontOfSize:fontSize]}];
+      [string appendString:branch.name withAttributes:@{NSFontAttributeName : [NSFont boldSystemFontOfSize:fontSize]}];
     } else {
-      [string appendString:NSLocalizedString(@" on ", nil) withAttributes:@{NSFontAttributeName: [NSFont systemFontOfSize:fontSize]}];
-      [string appendString:NSLocalizedString(@"detached HEAD", nil) withAttributes:@{NSFontAttributeName: [NSFont boldSystemFontOfSize:fontSize]}];
+      [string appendString:NSLocalizedString(@" on ", nil) withAttributes:@{NSFontAttributeName : [NSFont systemFontOfSize:fontSize]}];
+      [string appendString:NSLocalizedString(@"detached HEAD", nil) withAttributes:@{NSFontAttributeName : [NSFont boldSystemFontOfSize:fontSize]}];
     }
   } else {
-    [string appendString:NSLocalizedString(@"Committing as ", nil) withAttributes:@{NSFontAttributeName: [NSFont systemFontOfSize:fontSize]}];
-    [string appendString:user withAttributes:@{NSFontAttributeName: [NSFont boldSystemFontOfSize:fontSize]}];
+    [string appendString:NSLocalizedString(@"Committing as ", nil) withAttributes:@{NSFontAttributeName : [NSFont systemFontOfSize:fontSize]}];
+    [string appendString:user withAttributes:@{NSFontAttributeName : [NSFont boldSystemFontOfSize:fontSize]}];
   }
   [string setAlignment:NSCenterTextAlignment range:NSMakeRange(0, string.length)];
   [string endEditing];
   _infoTextField.attributedStringValue = string;
-  
+
   _headCommitMessage = headCommit.message;
   if (!headCommit || self.repository.state) {  // Don't allow amending if there's no HEAD or repository is not in default state
     self.amendButton.enabled = NO;
@@ -109,7 +107,7 @@
 - (void)viewWillShow {
   if (_messageTextView.string.length == 0) {
     NSString* message = @"";
-    
+
     if (self.repository.state == kGCRepositoryState_Merge) {
       NSError* error;
       NSString* mergeMessage = [NSString stringWithContentsOfFile:[self.repository.repositoryPath stringByAppendingPathComponent:@"MERGE_MSG"] encoding:NSUTF8StringEncoding error:&error];
@@ -119,12 +117,12 @@
         XLOG_ERROR(@"Failed reading MERGE_MSG from \"%@\":%@ ", self.repository.repositoryPath, error);
       }
     }
-    
+
     _messageTextView.string = message;
     [_messageTextView.undoManager removeAllActions];
     [_messageTextView selectAll:nil];
   }
-  
+
   [self _updateInterface];
 }
 
@@ -141,12 +139,12 @@
 - (void)didCreateCommit:(GCCommit*)commit {
   _messageTextView.string = @"";
   [_messageTextView.undoManager removeAllActions];
-  
+
   _otherMessageTextView.string = @"";
   [_otherMessageTextView.undoManager removeAllActions];
-  
+
   _amendButton.state = NSOffState;
-  
+
   [_delegate commitViewController:self didCreateCommit:commit];
 }
 
@@ -164,12 +162,12 @@
 
 - (void)createCommitFromHEADWithMessage:(NSString*)message {
   NSError* error;
-  
+
   if (![self.repository runHookWithName:@"pre-commit" arguments:nil standardInput:nil error:&error]) {
     [self presentError:error];
     return;
   }
-  
+
   NSString* hook = [self.repository pathForHookWithName:@"commit-msg"];
   if (hook) {
     NSString* path = [NSTemporaryDirectory() stringByAppendingPathComponent:[[NSProcessInfo processInfo] globallyUniqueString]];
@@ -177,7 +175,7 @@
       [self presentError:error];
       return;
     }
-    if (![self.repository runHookWithName:@"commit-msg" arguments:@[path] standardInput:nil error:&error]) {
+    if (![self.repository runHookWithName:@"commit-msg" arguments:@[ path ] standardInput:nil error:&error]) {
       [self presentError:error];
       return;
     }
@@ -188,7 +186,7 @@
     }
     [[NSFileManager defaultManager] removeItemAtPath:path error:NULL];
   }
-  
+
   GCCommit* newCommit;
   [self.repository setUndoActionName:NSLocalizedString(@"Commit", nil)];
   if (_amendButton.state) {
@@ -208,10 +206,10 @@
         return;
       }
     }
-    
+
     newCommit = [self.repository performCommitCreationFromHEADAndOtherParent:otherParent withMessage:message error:&error];
   }
-  
+
   if (newCommit) {
     if (![self.repository runHookWithName:@"post-commit" arguments:nil standardInput:nil error:&error]) {
       [self presentError:error];

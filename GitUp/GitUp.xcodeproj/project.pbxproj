@@ -16,7 +16,6 @@
 		E21DCAF61B254F33006424E8 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2C338D819F85C3400063D95 /* Foundation.framework */; };
 		E21DCAF71B254F53006424E8 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E28200AC1A7D71EE00DA4096 /* CoreServices.framework */; };
 		E21DCAF81B255471006424E8 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E2C3394419F85D4B00063D95 /* libz.dylib */; };
-		E222FF7F1B9210F600507E77 /* libcrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E222FF7E1B9210F600507E77 /* libcrypto.dylib */; };
 		E23C9B291B92104500ACA5A9 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2B14B561A88102C00003E64 /* Security.framework */; };
 		E25EBCEB1AA3F8B700D3AF44 /* Application.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E25EBCEA1AA3F8B700D3AF44 /* Application.xcassets */; };
 		E2653D251A5B2FBD006A9871 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2653D241A5B2FBD006A9871 /* Sparkle.framework */; };
@@ -33,8 +32,10 @@
 		E2C338BF19F8562F00063D95 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = E2C338BD19F8562F00063D95 /* MainMenu.xib */; };
 		E2C338D719F85C2E00063D95 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2C338D619F85C2E00063D95 /* Cocoa.framework */; };
 		E2C5672D1A6D98BC00ECFE07 /* WindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C5672C1A6D98BC00ECFE07 /* WindowController.m */; };
-		E2F6AA0A1A7EED89002DBF56 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2F6AA091A7EED74002DBF56 /* Crashlytics.framework */; };
-		FAEDF5911D68D6880028E6AA /* GitFlowInitWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = FAEDF5901D68D6880028E6AA /* GitFlowInitWindow.m */; };
+		E2E3C9A01D771E7600AA9A62 /* GARawTracker.m in Sources */ = {isa = PBXBuildFile; fileRef = E2E3C99F1D771E7600AA9A62 /* GARawTracker.m */; };
+		E2E3C9A21D771E9D00AA9A62 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2E3C9A11D771E9D00AA9A62 /* SystemConfiguration.framework */; };
+		E2E3C9A41D77227F00AA9A62 /* HockeySDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2E3C9A31D77227F00AA9A62 /* HockeySDK.framework */; };
+		E2E3C9A51D77228F00AA9A62 /* HockeySDK.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = E2E3C9A31D77227F00AA9A62 /* HockeySDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -95,6 +96,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				E267E1F31B84D93300BAB377 /* Sparkle.framework in Copy Frameworks */,
+				E2E3C9A51D77228F00AA9A62 /* HockeySDK.framework in Copy Frameworks */,
 				E28A16E61B87023C00218332 /* GitUpKit.framework in Copy Frameworks */,
 			);
 			name = "Copy Frameworks";
@@ -113,7 +115,7 @@
 		E222FF7E1B9210F600507E77 /* libcrypto.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcrypto.dylib; path = usr/lib/libcrypto.dylib; sourceTree = SDKROOT; };
 		E24306981B276D0B00CE8CCB /* ToolProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ToolProtocol.h; sourceTree = "<group>"; };
 		E25EBCEA1AA3F8B700D3AF44 /* Application.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Application.xcassets; sourceTree = "<group>"; };
-		E2653D241A5B2FBD006A9871 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = SOURCE_ROOT; };
+		E2653D241A5B2FBD006A9871 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = "Third-Party/Sparkle.framework"; sourceTree = SOURCE_ROOT; };
 		E27E37561B86F670000A551A /* Base.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Base.xcconfig; sourceTree = "<group>"; };
 		E27E37571B86F670000A551A /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		E27E37581B86F670000A551A /* Distribution.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Distribution.xcconfig; sourceTree = "<group>"; };
@@ -138,9 +140,10 @@
 		E2C5672C1A6D98BC00ECFE07 /* WindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WindowController.m; sourceTree = "<group>"; };
 		E2C8C91519FABC5100DA54AA /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/Document.xib; sourceTree = "<group>"; };
 		E2C8C91619FABC5100DA54AA /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
-		E2F6AA091A7EED74002DBF56 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = SOURCE_ROOT; };
-		FAEDF58F1D68D6880028E6AA /* GitFlowInitWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GitFlowInitWindow.h; sourceTree = "<group>"; };
-		FAEDF5901D68D6880028E6AA /* GitFlowInitWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GitFlowInitWindow.m; sourceTree = "<group>"; };
+		E2E3C99E1D771E7600AA9A62 /* GARawTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GARawTracker.h; sourceTree = "<group>"; };
+		E2E3C99F1D771E7600AA9A62 /* GARawTracker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GARawTracker.m; sourceTree = "<group>"; };
+		E2E3C9A11D771E9D00AA9A62 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		E2E3C9A31D77227F00AA9A62 /* HockeySDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HockeySDK.framework; path = "Third-Party/HockeySDK.framework"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -151,7 +154,6 @@
 				E23C9B291B92104500ACA5A9 /* Security.framework in Frameworks */,
 				E21DCAF71B254F53006424E8 /* CoreServices.framework in Frameworks */,
 				E21DCAF61B254F33006424E8 /* Foundation.framework in Frameworks */,
-				E222FF7F1B9210F600507E77 /* libcrypto.dylib in Frameworks */,
 				E212A6DE1B92100E00F62B18 /* libiconv.dylib in Frameworks */,
 				E21DCAF81B255471006424E8 /* libz.dylib in Frameworks */,
 			);
@@ -161,12 +163,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E2E3C9A21D771E9D00AA9A62 /* SystemConfiguration.framework in Frameworks */,
 				165C32B61B95739700D2F894 /* QuartzCore.framework in Frameworks */,
 				E2C338D719F85C2E00063D95 /* Cocoa.framework in Frameworks */,
 				E267E26B1B84E07E00BAB377 /* Security.framework in Frameworks */,
-				E2653D251A5B2FBD006A9871 /* Sparkle.framework in Frameworks */,
-				E2F6AA0A1A7EED89002DBF56 /* Crashlytics.framework in Frameworks */,
 				E28A16E51B87023200218332 /* GitUpKit.framework in Frameworks */,
+				E2E3C9A41D77227F00AA9A62 /* HockeySDK.framework in Frameworks */,
+				E2653D251A5B2FBD006A9871 /* Sparkle.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -176,13 +179,14 @@
 		E20A52341A80D1BF003546C3 /* Framework and Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				E2E3C9A11D771E9D00AA9A62 /* SystemConfiguration.framework */,
 				E2C338D619F85C2E00063D95 /* Cocoa.framework */,
 				E2C338D819F85C3400063D95 /* Foundation.framework */,
 				E28200AC1A7D71EE00DA4096 /* CoreServices.framework */,
 				165C32B51B95739700D2F894 /* QuartzCore.framework */,
 				E2B14B561A88102C00003E64 /* Security.framework */,
+				E2E3C9A31D77227F00AA9A62 /* HockeySDK.framework */,
 				E2653D241A5B2FBD006A9871 /* Sparkle.framework */,
-				E2F6AA091A7EED74002DBF56 /* Crashlytics.framework */,
 				E222FF7E1B9210F600507E77 /* libcrypto.dylib */,
 				E212A6DD1B92100E00F62B18 /* libiconv.dylib */,
 				E2C3394419F85D4B00063D95 /* libz.dylib */,
@@ -228,6 +232,7 @@
 				E24306981B276D0B00CE8CCB /* ToolProtocol.h */,
 				E21DCAE91B253847006424E8 /* Tool */,
 				E2C338AD19F8562F00063D95 /* Application */,
+				E2E3C99D1D771E7600AA9A62 /* GARawTracker */,
 				E20A52341A80D1BF003546C3 /* Framework and Libraries */,
 				E27E37551B86F670000A551A /* Xcode-Configurations */,
 				E2C338AC19F8562F00063D95 /* Products */,
@@ -265,18 +270,18 @@
 				E2C338BD19F8562F00063D95 /* MainMenu.xib */,
 				E2C5672B1A6D98BC00ECFE07 /* WindowController.h */,
 				E2C5672C1A6D98BC00ECFE07 /* WindowController.m */,
-				FA1FC9D11D678FDC000B544F /* GitFlow */,
 			);
 			path = Application;
 			sourceTree = "<group>";
 		};
-		FA1FC9D11D678FDC000B544F /* GitFlow */ = {
+		E2E3C99D1D771E7600AA9A62 /* GARawTracker */ = {
 			isa = PBXGroup;
 			children = (
-				FAEDF58F1D68D6880028E6AA /* GitFlowInitWindow.h */,
-				FAEDF5901D68D6880028E6AA /* GitFlowInitWindow.m */,
+				E2E3C99E1D771E7600AA9A62 /* GARawTracker.h */,
+				E2E3C99F1D771E7600AA9A62 /* GARawTracker.m */,
 			);
-			path = GitFlow;
+			name = GARawTracker;
+			path = "Third-Party/GARawTracker/GARawTracker";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -308,7 +313,6 @@
 				E2C338A919F8562F00063D95 /* Resources */,
 				E2653D271A5B3298006A9871 /* Copy Frameworks */,
 				E21DCAF21B2538FB006424E8 /* Copy Tool */,
-				E219D0381A5B2A5F00E1FEB8 /* Run Crashlytics */,
 			);
 			buildRules = (
 			);
@@ -326,7 +330,7 @@
 		E2C338A319F8562F00063D95 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0730;
+				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = "";
 				TargetAttributes = {
 					E21DCAE71B253847006424E8 = {
@@ -334,7 +338,7 @@
 					};
 					E2C338AA19F8562F00063D95 = {
 						CreatedOnToolsVersion = 6.1;
-						DevelopmentTeam = 6L38SZDJ22;
+						DevelopmentTeam = 88W3E55T4B;
 					};
 				};
 			};
@@ -401,24 +405,6 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
-/* Begin PBXShellScriptBuildPhase section */
-		E219D0381A5B2A5F00E1FEB8 /* Run Crashlytics */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Run Crashlytics";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "if [ \"$RUN_CLANG_STATIC_ANALYZER\" != \"\" ]; then\n  echo \"Skipping Crashlytics for Clang Static Analyzer\"\nelif [ \"$CONFIGURATION\" == \"Distribution\" ]; then\n  ./Crashlytics.framework/run 946dcb56f0db1be8f0c52df6e7d392202a2cc9b2 f28ac00033414b7f28707ab10fc43b008b96dd8cf081d4fb462294c811397108\nelse\n  echo \"Skipping Crashlytics in $CONFIGURATION configuration\"\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
-
 /* Begin PBXSourcesBuildPhase section */
 		E21DCAE41B253847006424E8 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -433,10 +419,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				E21739F71A5080DD00EC6777 /* DocumentController.m in Sources */,
+				E2E3C9A01D771E7600AA9A62 /* GARawTracker.m in Sources */,
 				E2C338B419F8562F00063D95 /* main.m in Sources */,
 				E2C5672D1A6D98BC00ECFE07 /* WindowController.m in Sources */,
 				E2C338B219F8562F00063D95 /* AppDelegate.m in Sources */,
-				FAEDF5911D68D6880028E6AA /* GitFlowInitWindow.m in Sources */,
 				E2C338B719F8562F00063D95 /* Document.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -499,6 +485,7 @@
 				HEADER_SEARCH_PATHS = "../GitUpKit/Third-Party/libgit2/include";
 				OTHER_LDFLAGS = (
 					"$(BUILD_DIR)/$(CONFIGURATION)/libgit2.a",
+					"../GitUpKit/Third-Party/Libraries/libssl/$(PLATFORM_NAME)/lib/libcrypto.a",
 					"../GitUpKit/Third-Party/Libraries/libssh2/$(PLATFORM_NAME)/lib/libssh2.a",
 				);
 				PRODUCT_NAME = gitup;
@@ -513,6 +500,7 @@
 				HEADER_SEARCH_PATHS = "../GitUpKit/Third-Party/libgit2/include";
 				OTHER_LDFLAGS = (
 					"$(BUILD_DIR)/$(CONFIGURATION)/libgit2.a",
+					"../GitUpKit/Third-Party/Libraries/libssl/$(PLATFORM_NAME)/lib/libcrypto.a",
 					"../GitUpKit/Third-Party/Libraries/libssh2/$(PLATFORM_NAME)/lib/libssh2.a",
 				);
 				PRODUCT_NAME = gitup;
@@ -527,6 +515,7 @@
 				HEADER_SEARCH_PATHS = "../GitUpKit/Third-Party/libgit2/include";
 				OTHER_LDFLAGS = (
 					"$(BUILD_DIR)/$(CONFIGURATION)/libgit2.a",
+					"../GitUpKit/Third-Party/Libraries/libssl/$(PLATFORM_NAME)/lib/libcrypto.a",
 					"../GitUpKit/Third-Party/Libraries/libssh2/$(PLATFORM_NAME)/lib/libssh2.a",
 				);
 				PRODUCT_NAME = gitup;
@@ -555,9 +544,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				BUNDLE_VERSION = 0;
-				BUNDLE_VERSION_STRING = 1.0.6;
+				BUNDLE_VERSION_STRING = 1.0.7;
 				CODE_SIGN_IDENTITY = "Mac Developer";
-				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)";
+				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/Third-Party";
 				GCC_DYNAMIC_NO_PIC = YES;
 				INFOPLIST_FILE = Application/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
@@ -572,9 +561,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				BUNDLE_VERSION = 0;
-				BUNDLE_VERSION_STRING = 1.0.6;
+				BUNDLE_VERSION_STRING = 1.0.7;
 				CODE_SIGN_IDENTITY = "Mac Developer";
-				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)";
+				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/Third-Party";
 				GCC_DYNAMIC_NO_PIC = YES;
 				INFOPLIST_FILE = Application/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
@@ -597,9 +586,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				BUNDLE_VERSION = 0;
-				BUNDLE_VERSION_STRING = 1.0.6;
-				CODE_SIGN_IDENTITY = "Mac Developer";
-				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)";
+				BUNDLE_VERSION_STRING = 1.0.7;
+				CODE_SIGN_IDENTITY = "Developer ID Application";
+				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/Third-Party";
 				GCC_DYNAMIC_NO_PIC = YES;
 				INFOPLIST_FILE = Application/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";

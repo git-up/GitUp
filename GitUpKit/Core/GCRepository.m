@@ -1,4 +1,4 @@
-//  Copyright (C) 2015 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2016 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ static inline BOOL _IsDirectoryWritable(const char* path) {
   NSMutableArray* _privateKeyList;
   NSUInteger _privateKeyIndex;
 #endif
-  
+
   BOOL _hasFetchProgressDelegate;
   float _lastFetchProgress;
   BOOL _hasPushProgressDelegate;
@@ -47,7 +47,7 @@ static inline BOOL _IsDirectoryWritable(const char* path) {
 // We can't guarantee XLFacility has been initialized yet as +load method can be called in arbitrary order
 + (void)load {
   assert(pthread_main_np() > 0);
-  
+
   assert(git_libgit2_features() & GIT_FEATURE_THREADS);
   assert(git_libgit2_features() & GIT_FEATURE_HTTPS);
   assert(git_libgit2_features() & GIT_FEATURE_SSH);
@@ -156,16 +156,26 @@ static int _ReferenceForEachCallback(const char* refname, void* payload) {
 
 - (GCRepositoryState)state {
   switch (git_repository_state(_private)) {
-    case GIT_REPOSITORY_STATE_NONE: return kGCRepositoryState_None;
-    case GIT_REPOSITORY_STATE_MERGE: return kGCRepositoryState_Merge;
-    case GIT_REPOSITORY_STATE_REVERT: return kGCRepositoryState_Revert;
-    case GIT_REPOSITORY_STATE_CHERRYPICK: return kGCRepositoryState_CherryPick;
-    case GIT_REPOSITORY_STATE_BISECT: return kGCRepositoryState_Bisect;
-    case GIT_REPOSITORY_STATE_REBASE: return kGCRepositoryState_Rebase;
-    case GIT_REPOSITORY_STATE_REBASE_INTERACTIVE: return kGCRepositoryState_RebaseInteractive;
-    case GIT_REPOSITORY_STATE_REBASE_MERGE: return kGCRepositoryState_RebaseMerge;
-    case GIT_REPOSITORY_STATE_APPLY_MAILBOX: return kGCRepositoryState_ApplyMailbox;
-    case GIT_REPOSITORY_STATE_APPLY_MAILBOX_OR_REBASE: return kGCRepositoryState_ApplyMailboxOrRebase;
+    case GIT_REPOSITORY_STATE_NONE:
+      return kGCRepositoryState_None;
+    case GIT_REPOSITORY_STATE_MERGE:
+      return kGCRepositoryState_Merge;
+    case GIT_REPOSITORY_STATE_REVERT:
+      return kGCRepositoryState_Revert;
+    case GIT_REPOSITORY_STATE_CHERRYPICK:
+      return kGCRepositoryState_CherryPick;
+    case GIT_REPOSITORY_STATE_BISECT:
+      return kGCRepositoryState_Bisect;
+    case GIT_REPOSITORY_STATE_REBASE:
+      return kGCRepositoryState_Rebase;
+    case GIT_REPOSITORY_STATE_REBASE_INTERACTIVE:
+      return kGCRepositoryState_RebaseInteractive;
+    case GIT_REPOSITORY_STATE_REBASE_MERGE:
+      return kGCRepositoryState_RebaseMerge;
+    case GIT_REPOSITORY_STATE_APPLY_MAILBOX:
+      return kGCRepositoryState_ApplyMailbox;
+    case GIT_REPOSITORY_STATE_APPLY_MAILBOX_OR_REBASE:
+      return kGCRepositoryState_ApplyMailboxOrRebase;
   }
   XLOG_DEBUG_UNREACHABLE();
   return 0;
@@ -203,7 +213,7 @@ static int _ReferenceForEachCallback(const char* refname, void* payload) {
 
 - (NSString*)privateAppDirectoryPath {
   NSString* path = [_repositoryPath stringByAppendingPathComponent:[[NSBundle mainBundle] bundleIdentifier]];
-  
+
   BOOL isDirectory;
   if ([[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isDirectory]) {
     if (!isDirectory) {
@@ -217,7 +227,7 @@ static int _ReferenceForEachCallback(const char* refname, void* payload) {
       return nil;
     }
   }
-  
+
   if (!_IsDirectoryWritable(path.fileSystemRepresentation)) {
     XLOG_ERROR(@"Private app directory at \"%@\" is not writable", path);
     return nil;
@@ -251,17 +261,17 @@ static int _ReferenceForEachCallback(const char* refname, void* payload) {
     if (cachedPATH == nil) {
       GCTask* task = [[GCTask alloc] initWithExecutablePath:@"/bin/bash"];  // TODO: Handle user shell not being bash
       NSData* data;
-      if (![task runWithArguments:@[@"-l", @"-c", @"echo -n $PATH"] stdin:NULL stdout:&data stderr:NULL exitStatus:NULL error:error]) {
+      if (![task runWithArguments:@[ @"-l", @"-c", @"echo -n $PATH" ] stdin:NULL stdout:&data stderr:NULL exitStatus:NULL error:error]) {
         return NO;
       }
       cachedPATH = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
       XLOG_DEBUG_CHECK(cachedPATH);
     }
-    
+
     CFAbsoluteTime time = CFAbsoluteTimeGetCurrent();
     GCTask* task = [[GCTask alloc] initWithExecutablePath:path];
     task.currentDirectoryPath = self.workingDirectoryPath;  // TODO: Is this the right working directory?
-    task.additionalEnvironment = @{@"PATH": cachedPATH};
+    task.additionalEnvironment = @{ @"PATH" : cachedPATH };
     int status;
     NSData* stdoutData;
     NSData* stderrData;
@@ -275,9 +285,9 @@ static int _ReferenceForEachCallback(const char* refname, void* payload) {
         NSString* string = [[[NSString alloc] initWithData:(stderrData.length ? stderrData : stdoutData) encoding:NSUTF8StringEncoding] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
         XLOG_DEBUG_CHECK(string);
         NSDictionary* info = @{
-                               NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Hook '%@' exited with non-zero status (%i)", name, status],
-                               NSLocalizedRecoverySuggestionErrorKey: (string ? string : @"")
-                               };
+          NSLocalizedDescriptionKey : [NSString stringWithFormat:@"Hook '%@' exited with non-zero status (%i)", name, status],
+          NSLocalizedRecoverySuggestionErrorKey : (string ? string : @"")
+        };
         *error = [NSError errorWithDomain:GCErrorDomain code:status userInfo:info];
       }
       return NO;
@@ -366,7 +376,7 @@ static int _CredentialsCallback(git_cred** cred, const char* url, const char* us
       return git_cred_ssh_key_from_agent(cred, user);
     }
 #endif
-    
+
 #if !TARGET_OS_IPHONE
     if (repository->_privateKeyList == nil) {
       XLOG_WARNING(@"SSH Agent did not find any key for \"%s\"", url);
@@ -395,7 +405,7 @@ static int _CredentialsCallback(git_cred** cred, const char* url, const char* us
       return git_cred_ssh_key_new(cred, user, NULL, path, NULL);  // TODO: Handle passphrases
     }
 #endif
-    
+
     __block NSString* username = nil;
     __block NSString* publicPath = nil;
     __block NSString* privatePath = nil;
@@ -403,12 +413,22 @@ static int _CredentialsCallback(git_cred** cred, const char* url, const char* us
     __block BOOL success;
     if ([repository.delegate respondsToSelector:@selector(repository:requiresSSHAuthenticationForURL:user:username:publicKeyPath:privateKeyPath:passphrase:)]) {  // Must use sync dispatch
       if ([NSThread isMainThread]) {
-        success = [repository.delegate repository:repository requiresSSHAuthenticationForURL:GCURLFromGitURL([NSString stringWithUTF8String:url]) user:[NSString stringWithUTF8String:user]
-                                         username:&username publicKeyPath:&publicPath privateKeyPath:&privatePath passphrase:&passphrase];
+        success = [repository.delegate repository:repository
+                  requiresSSHAuthenticationForURL:GCURLFromGitURL([NSString stringWithUTF8String:url])
+                                             user:[NSString stringWithUTF8String:user]
+                                         username:&username
+                                    publicKeyPath:&publicPath
+                                   privateKeyPath:&privatePath
+                                       passphrase:&passphrase];
       } else {
         dispatch_sync(dispatch_get_main_queue(), ^{
-          success = [repository.delegate repository:repository requiresSSHAuthenticationForURL:GCURLFromGitURL([NSString stringWithUTF8String:url]) user:[NSString stringWithUTF8String:user]
-                                           username:&username publicKeyPath:&publicPath privateKeyPath:&privatePath passphrase:&passphrase];
+          success = [repository.delegate repository:repository
+                    requiresSSHAuthenticationForURL:GCURLFromGitURL([NSString stringWithUTF8String:url])
+                                               user:[NSString stringWithUTF8String:user]
+                                           username:&username
+                                      publicKeyPath:&publicPath
+                                     privateKeyPath:&privatePath
+                                         passphrase:&passphrase];
         });
       }
       if (success) {
@@ -423,12 +443,18 @@ static int _CredentialsCallback(git_cred** cred, const char* url, const char* us
       __block NSString* password = nil;
       __block BOOL success;
       if ([NSThread isMainThread]) {
-          success = [repository.delegate repository:repository requiresPlainTextAuthenticationForURL:GCURLFromGitURL([NSString stringWithUTF8String:url]) user:(user ? [NSString stringWithUTF8String:user] : nil)
-                                           username:&username password:&password];
+        success = [repository.delegate repository:repository
+            requiresPlainTextAuthenticationForURL:GCURLFromGitURL([NSString stringWithUTF8String:url])
+                                             user:(user ? [NSString stringWithUTF8String:user] : nil)
+                                         username:&username
+                                         password:&password];
       } else {
         dispatch_sync(dispatch_get_main_queue(), ^{
-          success = [repository.delegate repository:repository requiresPlainTextAuthenticationForURL:GCURLFromGitURL([NSString stringWithUTF8String:url]) user:(user ? [NSString stringWithUTF8String:user] : nil)
-                                           username:&username password:&password];
+          success = [repository.delegate repository:repository
+              requiresPlainTextAuthenticationForURL:GCURLFromGitURL([NSString stringWithUTF8String:url])
+                                               user:(user ? [NSString stringWithUTF8String:user] : nil)
+                                           username:&username
+                                           password:&password];
         });
       }
       if (success) {
@@ -535,11 +561,11 @@ static int _PushNegotiationCallback(git_remote* remote, const git_push_update** 
         [string appendFormat:@"%s %s\n", update->dst_refname, git_oid_tostr_s(&update->src)];
       }
     }
-    
+
     NSError* error;
     const char* remoteURL = git_remote_url(remote);
     if (![repository runHookWithName:@"pre-push"
-                           arguments:@[[NSString stringWithUTF8String:git_remote_name(remote)], remoteURL ? [NSString stringWithUTF8String:remoteURL] : @""]
+                           arguments:@[ [NSString stringWithUTF8String:git_remote_name(remote)], remoteURL ? [NSString stringWithUTF8String:remoteURL] : @"" ]
                        standardInput:string
                                error:&error]) {
       const char* message = error.localizedRecoverySuggestion.UTF8String;
@@ -566,18 +592,18 @@ static int _PushNegotiationCallback(git_remote* remote, const git_push_update** 
   callbacks->push_update_reference = _PushUpdateReferenceCallback;
   callbacks->push_negotiation = _PushNegotiationCallback;
   callbacks->payload = (__bridge void*)self;
-  
+
 #if !TARGET_OS_IPHONE
   _didTrySSHAgent = NO;
   _privateKeyList = nil;
   _privateKeyIndex = 0;
 #endif
-  
+
   _hasFetchProgressDelegate = [_delegate respondsToSelector:@selector(repository:updateTransferProgress:transferredBytes:)];
   _lastFetchProgress = -1.0;
   _hasPushProgressDelegate = [_delegate respondsToSelector:@selector(repository:updateTransferProgress:transferredBytes:)];
   _lastPushProgress = -1.0;
-  
+
   _lastUpdatedTips = 0;
 }
 
@@ -593,7 +619,7 @@ static int _PushNegotiationCallback(git_remote* remote, const git_push_update** 
   BOOL success = NO;
   git_blob* blob = NULL;
   int fd = -1;
-  
+
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_blob_lookup, &blob, self.private, oid);
   fd = open(path.fileSystemRepresentation, O_CREAT | O_WRONLY | O_TRUNC, S_IRUSR | S_IWUSR);
   CHECK_POSIX_FUNCTION_CALL(goto cleanup, fd, >= 0);
@@ -603,7 +629,7 @@ static int _PushNegotiationCallback(git_remote* remote, const git_push_update** 
     GC_SET_GENERIC_ERROR(@"%s", strerror(errno));
     XLOG_DEBUG_UNREACHABLE();
   }
-  
+
 cleanup:
   if (fd >= 0) {
     close(fd);

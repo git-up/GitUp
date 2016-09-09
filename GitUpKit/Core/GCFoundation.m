@@ -1,4 +1,4 @@
-//  Copyright (C) 2015 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2016 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -19,9 +19,24 @@
 
 #import "GCPrivate.h"
 
-#if !TARGET_OS_IPHONE
-
 @implementation NSFileManager (GCFoundation)
+
+- (BOOL)fileExistsAtPath:(NSString*)path followLastSymlink:(BOOL)followLastSymlink {
+  NSDictionary* pathAttributes = [self attributesOfItemAtPath:path error:NULL];
+
+  if (followLastSymlink && [[pathAttributes fileType] isEqualToString:NSFileTypeSymbolicLink]) {
+    path = [self destinationOfSymbolicLinkAtPath:path error:NULL];
+    if (!path) {
+      return NO;
+    }
+
+    return [self fileExistsAtPath:path followLastSymlink:YES];
+  }
+
+  return pathAttributes != nil;
+}
+
+#if !TARGET_OS_IPHONE
 
 - (BOOL)moveItemAtPathToTrash:(NSString*)path error:(NSError**)error {
   NSString* trashPath = [NSSearchPathForDirectoriesInDomains(NSTrashDirectory, NSUserDomainMask, YES) firstObject];
@@ -33,12 +48,12 @@
   NSString* name = [path.lastPathComponent stringByDeletingPathExtension];
   NSString* destinationPath = [trashPath stringByAppendingPathComponent:[name stringByAppendingPathExtension:extension]];
   NSUInteger counter = 0;
-  while ([self fileExistsAtPath:destinationPath]) {
+  while ([self fileExistsAtPath:destinationPath followLastSymlink:NO]) {
     destinationPath = [trashPath stringByAppendingPathComponent:[[NSString stringWithFormat:@"%@ (%lu)", name, ++counter] stringByAppendingPathExtension:extension]];
   }
   return [self moveItemAtPath:path toPath:destinationPath error:error];
 }
 
-@end
-
 #endif
+
+@end

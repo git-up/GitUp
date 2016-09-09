@@ -1,4 +1,4 @@
-//  Copyright (C) 2015 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2016 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@
 #import "GCPrivate.h"
 
 // libgit2 SPI
-extern void git_index_entry__init_from_stat(git_index_entry *entry, struct stat *st, bool trust_mode);
+extern void git_index_entry__init_from_stat(git_index_entry* entry, struct stat* st, bool trust_mode);
 
 @implementation GCIndexConflict {
   git_oid _ancestorOID;
@@ -37,25 +37,25 @@ extern void git_index_entry__init_from_stat(git_index_entry *entry, struct stat 
     if (our && their) {
       XLOG_DEBUG_CHECK(!strcmp(our->path, their->path));
       _status = ancestor ? kGCIndexConflictStatus_BothModified : kGCIndexConflictStatus_BothAdded;
-      
+
       git_oid_cpy(&_ourOID, &our->id);
       XLOG_DEBUG_CHECK((our->mode == GIT_FILEMODE_BLOB) || (our->mode == GIT_FILEMODE_BLOB_EXECUTABLE) || (our->mode == GIT_FILEMODE_LINK));
       _ourFileMode = GCFileModeFromMode(our->mode);
-      
+
       git_oid_cpy(&_theirOID, &their->id);
       XLOG_DEBUG_CHECK((their->mode == GIT_FILEMODE_BLOB) || (their->mode == GIT_FILEMODE_BLOB_EXECUTABLE) || (their->mode == GIT_FILEMODE_LINK));
       _theirFileMode = GCFileModeFromMode(their->mode);
     } else if (our) {
       XLOG_DEBUG_CHECK(!strcmp(our->path, ancestor->path));
       _status = kGCIndexConflictStatus_DeletedByThem;
-      
+
       git_oid_cpy(&_ourOID, &our->id);
       XLOG_DEBUG_CHECK((our->mode == GIT_FILEMODE_BLOB) || (our->mode == GIT_FILEMODE_BLOB_EXECUTABLE) || (our->mode == GIT_FILEMODE_LINK));
       _ourFileMode = GCFileModeFromMode(our->mode);
     } else if (their) {
       XLOG_DEBUG_CHECK(!strcmp(their->path, ancestor->path));
       _status = kGCIndexConflictStatus_DeletedByUs;
-      
+
       git_oid_cpy(&_theirOID, &their->id);
       XLOG_DEBUG_CHECK((their->mode == GIT_FILEMODE_BLOB) || (their->mode == GIT_FILEMODE_BLOB_EXECUTABLE) || (their->mode == GIT_FILEMODE_LINK));
       _theirFileMode = GCFileModeFromMode(their->mode);
@@ -254,11 +254,11 @@ static inline BOOL _EqualConflicts(GCIndexConflict* conflict1, GCIndexConflict* 
 - (BOOL)resetIndex:(GCIndex*)index toTreeForCommit:(GCCommit*)commit error:(NSError**)error {
   BOOL success = NO;
   git_tree* tree = NULL;
-  
+
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_commit_tree, &tree, commit.private);
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_index_read_tree, index.private, tree);
   success = YES;
-  
+
 cleanup:
   git_tree_free(tree);
   return success;
@@ -321,7 +321,7 @@ cleanup:
 
 - (BOOL)addLinesInWorkingDirectoryFile:(NSString*)path toIndex:(GCIndex*)index error:(NSError**)error usingFilter:(GCIndexLineFilter)filter {
   const char* filePath = GCGitPathFromFileSystemPath(path);
-  
+
   // If the file is already in the index, preserve the entry, otherwise create a new entry from the file metadata
   git_index_entry entry;
   const git_index_entry* entryPtr = git_index_get_bypath(index.private, filePath, 0);
@@ -334,7 +334,7 @@ cleanup:
     entryPtr = &entry;
   }
   NSMutableData* data = [[NSMutableData alloc] initWithCapacity:(1024 * 1024)];
-  
+
   // Diff file in working directory with index and create in-memory file copy excluding the lines we don't want
   GCDiff* diff = [self diffWorkingDirectoryWithIndex:index
                                          filePattern:path
@@ -353,9 +353,10 @@ cleanup:
   if (patch == nil) {
     return NO;
   }
-  [patch enumerateUsingBeginHunkHandler:NULL lineHandler:^(GCLineDiffChange change, NSUInteger oldLineNumber, NSUInteger newLineNumber, const char* contentBytes, NSUInteger contentLength) {
-    
-    /* Comparing workdir to index:
+  [patch enumerateUsingBeginHunkHandler:NULL
+                            lineHandler:^(GCLineDiffChange change, NSUInteger oldLineNumber, NSUInteger newLineNumber, const char* contentBytes, NSUInteger contentLength) {
+
+                              /* Comparing workdir to index:
      
      Change      | Filter     | Write?
      ------------|------------|------------
@@ -368,18 +369,24 @@ cleanup:
                  | NO         | YES
      
      */
-    BOOL shouldWrite = YES;
-    switch (change) {
-      case kGCLineDiffChange_Unmodified: break;
-      case kGCLineDiffChange_Added: shouldWrite = filter(change, oldLineNumber, newLineNumber); break;
-      case kGCLineDiffChange_Deleted: shouldWrite = !filter(change, oldLineNumber, newLineNumber); break;
-    }
-    if (shouldWrite) {
-      [data appendBytes:contentBytes length:contentLength];
-    }
-    
-  } endHunkHandler:NULL];
-  
+                              BOOL shouldWrite = YES;
+                              switch (change) {
+                                case kGCLineDiffChange_Unmodified:
+                                  break;
+                                case kGCLineDiffChange_Added:
+                                  shouldWrite = filter(change, oldLineNumber, newLineNumber);
+                                  break;
+                                case kGCLineDiffChange_Deleted:
+                                  shouldWrite = !filter(change, oldLineNumber, newLineNumber);
+                                  break;
+                              }
+                              if (shouldWrite) {
+                                [data appendBytes:contentBytes length:contentLength];
+                              }
+
+                            }
+                         endHunkHandler:NULL];
+
   return [self _addEntry:entryPtr toIndex:index.private withData:data error:error];
 }
 
@@ -388,7 +395,7 @@ cleanup:
   git_tree* tree = NULL;
   git_tree_entry* treeEntry = NULL;
   const char* filePath = GCGitPathFromFileSystemPath(path);
-  
+
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_commit_tree, &tree, commit.private);
   int status = git_tree_entry_bypath(&treeEntry, tree, filePath);
   if (status == GIT_ENOTFOUND) {
@@ -403,7 +410,7 @@ cleanup:
     CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_index_add, index.private, &indexEntry);
   }
   success = YES;
-  
+
 cleanup:
   git_tree_entry_free(treeEntry);
   git_tree_free(tree);
@@ -412,7 +419,7 @@ cleanup:
 
 - (BOOL)resetLinesInFile:(NSString*)path index:(GCIndex*)index toCommit:(GCCommit*)commit error:(NSError**)error usingFilter:(GCIndexLineFilter)filter {
   const char* filePath = GCGitPathFromFileSystemPath(path);
-  
+
   // If the file is already in the index, preserve the entry, otherwise create a new entry from the file blob
   git_index_entry entry;
   const git_index_entry* entryPtr = git_index_get_bypath(index.private, filePath, 0);
@@ -430,7 +437,7 @@ cleanup:
     git_tree_entry_free(treeEntry);
   }
   NSMutableData* data = [[NSMutableData alloc] initWithCapacity:(1024 * 1024)];
-  
+
   // Diff file in index directory with commit and create temporary file in memory excluding the lines we don't want
   GCDiff* diff = [self diffIndex:index withCommit:commit filePattern:path options:0 maxInterHunkLines:NSUIntegerMax maxContextLines:NSUIntegerMax error:error];
   if (diff == nil) {
@@ -444,9 +451,10 @@ cleanup:
   if (patch == nil) {
     return NO;
   }
-  [patch enumerateUsingBeginHunkHandler:NULL lineHandler:^(GCLineDiffChange change, NSUInteger oldLineNumber, NSUInteger newLineNumber, const char* contentBytes, NSUInteger contentLength) {
-    
-    /* Comparing index to commit:
+  [patch enumerateUsingBeginHunkHandler:NULL
+                            lineHandler:^(GCLineDiffChange change, NSUInteger oldLineNumber, NSUInteger newLineNumber, const char* contentBytes, NSUInteger contentLength) {
+
+                              /* Comparing index to commit:
      
      Change      | Filter     | Write?
      ------------|------------|------------
@@ -459,18 +467,24 @@ cleanup:
                  | NO         | NO
      
      */
-    BOOL shouldWrite = YES;
-    switch (change) {
-      case kGCLineDiffChange_Unmodified: break;
-      case kGCLineDiffChange_Added: shouldWrite = !filter(change, oldLineNumber, newLineNumber); break;
-      case kGCLineDiffChange_Deleted: shouldWrite = filter(change, oldLineNumber, newLineNumber); break;
-    }
-    if (shouldWrite) {
-      [data appendBytes:contentBytes length:contentLength];
-    }
-    
-  } endHunkHandler:NULL];
-  
+                              BOOL shouldWrite = YES;
+                              switch (change) {
+                                case kGCLineDiffChange_Unmodified:
+                                  break;
+                                case kGCLineDiffChange_Added:
+                                  shouldWrite = !filter(change, oldLineNumber, newLineNumber);
+                                  break;
+                                case kGCLineDiffChange_Deleted:
+                                  shouldWrite = filter(change, oldLineNumber, newLineNumber);
+                                  break;
+                              }
+                              if (shouldWrite) {
+                                [data appendBytes:contentBytes length:contentLength];
+                              }
+
+                            }
+                         endHunkHandler:NULL];
+
   return [self _addEntry:entryPtr toIndex:index.private withData:data error:error];
 }
 
@@ -490,7 +504,7 @@ cleanup:
   int fd = -1;
   GCDiff* diff;
   GCDiffPatch* patch;
-  
+
   // Create temporary path
   const char* tempPath = self.privateTemporaryFilePath.fileSystemRepresentation;
   if (!tempPath) {
@@ -499,7 +513,7 @@ cleanup:
   }
   fd = open(tempPath, O_CREAT | O_WRONLY | O_TRUNC, S_IRUSR | S_IWUSR);
   CHECK_POSIX_FUNCTION_CALL(goto cleanup, fd, >= 0);
-  
+
   // Diff file in working directory with index and create temporary file copy excluding the lines we don't want
   diff = [self diffWorkingDirectoryWithIndex:index
                                  filePattern:path
@@ -517,9 +531,10 @@ cleanup:
   patch = [self makePatchForDiffDelta:diff.deltas[0] isBinary:NULL error:error];
   if (patch) {
     __block BOOL failed = NO;
-    [patch enumerateUsingBeginHunkHandler:NULL lineHandler:^(GCLineDiffChange change, NSUInteger oldLineNumber, NSUInteger newLineNumber, const char* contentBytes, NSUInteger contentLength) {
-      
-      /* Comparing workdir to index:
+    [patch enumerateUsingBeginHunkHandler:NULL
+                              lineHandler:^(GCLineDiffChange change, NSUInteger oldLineNumber, NSUInteger newLineNumber, const char* contentBytes, NSUInteger contentLength) {
+
+                                /* Comparing workdir to index:
        
        Change      | Filter     | Write?
        ------------|------------|------------
@@ -532,19 +547,25 @@ cleanup:
                    | NO         | NO
        
        */
-      BOOL shouldWrite = YES;
-      switch (change) {
-        case kGCLineDiffChange_Unmodified: break;
-        case kGCLineDiffChange_Added: shouldWrite = !filter(change, oldLineNumber, newLineNumber); break;
-        case kGCLineDiffChange_Deleted: shouldWrite = filter(change, oldLineNumber, newLineNumber); break;
-      }
-      if (shouldWrite && (write(fd, contentBytes, contentLength) != (ssize_t)contentLength)) {
-        GC_SET_GENERIC_ERROR(@"%s", strerror(errno));
-        failed = YES;
-        XLOG_DEBUG_UNREACHABLE();
-      }
-      
-    } endHunkHandler:NULL];
+                                BOOL shouldWrite = YES;
+                                switch (change) {
+                                  case kGCLineDiffChange_Unmodified:
+                                    break;
+                                  case kGCLineDiffChange_Added:
+                                    shouldWrite = !filter(change, oldLineNumber, newLineNumber);
+                                    break;
+                                  case kGCLineDiffChange_Deleted:
+                                    shouldWrite = filter(change, oldLineNumber, newLineNumber);
+                                    break;
+                                }
+                                if (shouldWrite && (write(fd, contentBytes, contentLength) != (ssize_t)contentLength)) {
+                                  GC_SET_GENERIC_ERROR(@"%s", strerror(errno));
+                                  failed = YES;
+                                  XLOG_DEBUG_UNREACHABLE();
+                                }
+
+                              }
+                           endHunkHandler:NULL];
     if (failed) {
       goto cleanup;
     }
@@ -553,19 +574,19 @@ cleanup:
   }
   close(fd);
   fd = -1;
-  
+
   // Copy file metadata onto the temporary copy
   copyfile_state_t state = copyfile_state_alloc();
   int status = copyfile(fullPath, tempPath, state, COPYFILE_METADATA);
   copyfile_state_free(state);
   CHECK_POSIX_FUNCTION_CALL(goto cleanup, status, == 0);
-  
+
   // Swap temporary copy and original file
   CALL_POSIX_FUNCTION_GOTO(cleanup, exchangedata, fullPath, tempPath, FSOPT_NOFOLLOW);
   CALL_POSIX_FUNCTION_GOTO(cleanup, utimes, fullPath, NULL);  // Touch file to make sure any cached information in the index gets invalidated
-  
+
   success = YES;
-  
+
 cleanup:
   if (fd >= 0) {
     close(fd);
@@ -597,7 +618,7 @@ cleanup:
 
 - (BOOL)copyLinesInFile:(NSString*)path fromOtherIndex:(GCIndex*)otherIndex toIndex:(GCIndex*)index error:(NSError**)error usingFilter:(GCIndexLineFilter)filter {
   const char* filePath = GCGitPathFromFileSystemPath(path);
-  
+
   // Just grab entry from other index
   const git_index_entry* entry = git_index_get_bypath(otherIndex.private, filePath, 0);
   if (entry == NULL) {
@@ -605,7 +626,7 @@ cleanup:
     return NO;
   }
   NSMutableData* data = [[NSMutableData alloc] initWithCapacity:(1024 * 1024)];
-  
+
   // Diff file in other index with index and create temporary file in memory excluding the lines we don't want
   GCDiff* diff = [self diffIndex:otherIndex withIndex:index filePattern:path options:0 maxInterHunkLines:NSUIntegerMax maxContextLines:NSUIntegerMax error:error];
   if (diff == nil) {
@@ -619,9 +640,10 @@ cleanup:
   if (patch == nil) {
     return NO;
   }
-  [patch enumerateUsingBeginHunkHandler:NULL lineHandler:^(GCLineDiffChange change, NSUInteger oldLineNumber, NSUInteger newLineNumber, const char* contentBytes, NSUInteger contentLength) {
-    
-    /* Comparing other index to index:
+  [patch enumerateUsingBeginHunkHandler:NULL
+                            lineHandler:^(GCLineDiffChange change, NSUInteger oldLineNumber, NSUInteger newLineNumber, const char* contentBytes, NSUInteger contentLength) {
+
+                              /* Comparing other index to index:
      
      Change      | Filter     | Write?
      ------------|------------|------------
@@ -634,18 +656,24 @@ cleanup:
                  | NO         | YES
      
      */
-    BOOL shouldWrite = YES;
-    switch (change) {
-      case kGCLineDiffChange_Unmodified: break;
-      case kGCLineDiffChange_Added: shouldWrite = filter(change, oldLineNumber, newLineNumber); break;
-      case kGCLineDiffChange_Deleted: shouldWrite = !filter(change, oldLineNumber, newLineNumber); break;
-    }
-    if (shouldWrite) {
-      [data appendBytes:contentBytes length:contentLength];
-    }
-    
-  } endHunkHandler:NULL];
-  
+                              BOOL shouldWrite = YES;
+                              switch (change) {
+                                case kGCLineDiffChange_Unmodified:
+                                  break;
+                                case kGCLineDiffChange_Added:
+                                  shouldWrite = filter(change, oldLineNumber, newLineNumber);
+                                  break;
+                                case kGCLineDiffChange_Deleted:
+                                  shouldWrite = !filter(change, oldLineNumber, newLineNumber);
+                                  break;
+                              }
+                              if (shouldWrite) {
+                                [data appendBytes:contentBytes length:contentLength];
+                              }
+
+                            }
+                         endHunkHandler:NULL];
+
   return [self _addEntry:entry toIndex:index.private withData:data error:error];
 }
 
@@ -659,7 +687,7 @@ cleanup:
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_repository_index, &index, self.private);
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_index_read, index, false);  // Force reading shouldn't be needed
   return index;
-  
+
 cleanup:
   XLOG_DEBUG_UNREACHABLE();
   git_index_free(index);
@@ -673,7 +701,7 @@ cleanup:
   BOOL success = NO;
   git_index* index = NULL;
   git_status_list* list = NULL;
-  
+
   index = [self reloadRepositoryIndex:error];
   if (index == NULL) {
     goto cleanup;
@@ -685,30 +713,28 @@ cleanup:
   for (size_t i = 0, count = git_status_list_entrycount(list); i < count; ++i) {
     const git_status_entry* entry = git_status_byindex(list, i);
     switch (entry->status) {
-      
       case GIT_STATUS_WT_NEW:
       case GIT_STATUS_WT_MODIFIED:
       case GIT_STATUS_WT_TYPECHANGE:
         CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_index_add_bypath, index, entry->index_to_workdir->new_file.path);
         break;
-      
+
       case GIT_STATUS_WT_DELETED:
         CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_index_remove_bypath, index, entry->index_to_workdir->old_file.path);
         break;
-      
+
       case GIT_STATUS_CONFLICTED:
         CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_index_add_bypath, index, entry->index_to_workdir->new_file.path);  // Resolve conflict
         break;
-      
+
       default:
         XLOG_DEBUG_UNREACHABLE();
         break;
-      
     }
   }
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_index_write, index);
   success = YES;
-  
+
 cleanup:
   git_status_list_free(list);
   git_index_free(index);

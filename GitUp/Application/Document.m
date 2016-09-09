@@ -1,4 +1,4 @@
-//  Copyright (C) 2015 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2016 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -68,19 +68,19 @@ static NSDictionary* _helpPlist = nil;
 
 static inline NSString* _WindowModeStringFromID(WindowModeID mode) {
   switch (mode) {
-    case kWindowModeID_Map: return kWindowModeString_Map;
-    case kWindowModeID_Commit: return kWindowModeString_Commit;
-    case kWindowModeID_Stashes: return kWindowModeString_Stashes;
+    case kWindowModeID_Map:
+      return kWindowModeString_Map;
+    case kWindowModeID_Commit:
+      return kWindowModeString_Commit;
+    case kWindowModeID_Stashes:
+      return kWindowModeString_Stashes;
   }
   XLOG_DEBUG_UNREACHABLE();
   return nil;
 }
 
 static inline WindowModeID _WindowModeIDFromString(NSString* mode) {
-  if ([mode isEqualToString:kWindowModeString_Map] || [mode isEqualToString:kWindowModeString_Map_QuickView]
-      || [mode isEqualToString:kWindowModeString_Map_Diff] || [mode isEqualToString:kWindowModeString_Map_Rewrite]
-      || [mode isEqualToString:kWindowModeString_Map_Split] || [mode isEqualToString:kWindowModeString_Map_Resolve]
-      || [mode isEqualToString:kWindowModeString_Map_Config]) {
+  if ([mode isEqualToString:kWindowModeString_Map] || [mode isEqualToString:kWindowModeString_Map_QuickView] || [mode isEqualToString:kWindowModeString_Map_Diff] || [mode isEqualToString:kWindowModeString_Map_Rewrite] || [mode isEqualToString:kWindowModeString_Map_Split] || [mode isEqualToString:kWindowModeString_Map_Resolve] || [mode isEqualToString:kWindowModeString_Map_Config]) {
     return kWindowModeID_Map;
   }
   if ([mode isEqualToString:kWindowModeString_Commit]) {
@@ -141,7 +141,7 @@ static inline WindowModeID _WindowModeIDFromString(NSString* mode) {
   [[NSImage imageNamed:@"icon_nav_map"] setTemplate:YES];
   [[NSImage imageNamed:@"icon_nav_commit"] setTemplate:YES];
   [[NSImage imageNamed:@"icon_nav_stash"] setTemplate:YES];
-  
+
   NSString* path = [[NSBundle mainBundle] pathForResource:@"Help" ofType:@"plist"];
   if (path) {
     NSData* data = [NSData dataWithContentsOfFile:path];
@@ -168,11 +168,11 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
     _dateFormatter.locale = [NSLocale localeWithLocaleIdentifier:@"en_US"];
     _dateFormatter.dateStyle = NSDateFormatterLongStyle;
     _dateFormatter.timeStyle = NSDateFormatterMediumStyle;
-    
+
     CFRunLoopTimerContext context = {0, (__bridge void*)self, NULL, NULL, NULL};
     _checkTimer = CFRunLoopTimerCreate(kCFAllocatorDefault, HUGE_VALF, HUGE_VALF, 0, 0, _CheckTimerCallBack, &context);
     CFRunLoopAddTimer(CFRunLoopGetMain(), _checkTimer, kCFRunLoopCommonModes);
-    
+
     [[NSUserDefaults standardUserDefaults] addObserver:self forKeyPath:kUserDefaultsKey_DiffWhitespaceMode options:0 context:(__bridge void*)[Document class]];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_didBecomeActive:) name:NSApplicationDidBecomeActiveNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_didResignActive:) name:NSApplicationDidResignActiveNotification object:nil];
@@ -184,10 +184,10 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
   [[NSNotificationCenter defaultCenter] removeObserver:self name:NSApplicationDidResignActiveNotification object:nil];
   [[NSNotificationCenter defaultCenter] removeObserver:self name:NSApplicationDidBecomeActiveNotification object:nil];
   [[NSUserDefaults standardUserDefaults] removeObserver:self forKeyPath:kUserDefaultsKey_DiffWhitespaceMode context:(__bridge void*)[Document class]];
-  
+
   CFRunLoopTimerInvalidate(_checkTimer);
   CFRelease(_checkTimer);
-  
+
 #if DEBUG
   dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
     XLOG_DEBUG_CHECK([GCLiveRepository allocatedCount] == [[[NSDocumentController sharedDocumentController] documents] count]);
@@ -232,13 +232,13 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
         _repository.automaticSnapshotsEnabled = YES;  // TODO: Is this a good idea?
       }
       _repository.diffWhitespaceMode = [[NSUserDefaults standardUserDefaults] integerForKey:kUserDefaultsKey_DiffWhitespaceMode];
-      
+
 #if DEBUG
       dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         XLOG_DEBUG_CHECK([GCLiveRepository allocatedCount] == [[[NSDocumentController sharedDocumentController] documents] count]);
       });
 #endif
-      
+
       success = YES;
     }
   }
@@ -247,12 +247,12 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
 
 - (void)close {
   [super close];
-  
+
   CFRunLoopTimerSetNextFireDate(_checkTimer, HUGE_VALF);
-  
+
   XLOG_DEBUG_CHECK(_mainWindow);
   [_repository setUserInfo:_mainWindow.stringWithSavedFrame forKey:kRepositoryUserInfoKey_MainWindowFrame];
-  
+
   _repository.delegate = nil;  // Make sure that if the GCLiveRepository is still around afterwards, it won't call back to the dealloc'ed document
   _repository = nil;
 }
@@ -266,7 +266,7 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
 // This is called when opening documents or attempting to open a document already opened
 - (void)showWindows {
   [super showWindows];
-  
+
   if (!_ready) {
     [self performSelector:@selector(_documentDidOpen:) withObject:nil afterDelay:0.0];
     _ready = YES;
@@ -277,8 +277,8 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
   CGFloat fontSize = _infoTextField2.font.pointSize;
   NSMutableParagraphStyle* style = [[NSMutableParagraphStyle alloc] init];
   style.alignment = NSCenterTextAlignment;
-  _stateAttributes = @{NSParagraphStyleAttributeName: style, NSForegroundColorAttributeName: [NSColor redColor], NSFontAttributeName: [NSFont boldSystemFontOfSize:fontSize]};
-  
+  _stateAttributes = @{NSParagraphStyleAttributeName : style, NSForegroundColorAttributeName : [NSColor redColor], NSFontAttributeName : [NSFont boldSystemFontOfSize:fontSize]};
+
   NSString* frameString = [_repository userInfoForKey:kRepositoryUserInfoKey_MainWindowFrame];
   if (frameString) {
     [_mainWindow setFrameFromString:frameString];
@@ -292,13 +292,13 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
   _leftView.wantsLayer = YES;
   _titleView.wantsLayer = YES;
   _rightView.wantsLayer = YES;
-  
+
   // Text fields must be drawn on an opaque background to avoid subpixel antialiasing issues during animation.
-  for (NSTextField* field in @[_infoTextField1, _infoTextField2, _progressTextField]) {
+  for (NSTextField* field in @[ _infoTextField1, _infoTextField2, _progressTextField ]) {
     field.drawsBackground = YES;
     field.backgroundColor = _mainWindow.backgroundColor;
   }
-  
+
   _mapViewController = [[GIMapViewController alloc] initWithRepository:_repository];
   _mapViewController.delegate = self;
   [_mapControllerView replaceWithView:_mapViewController.view];
@@ -306,55 +306,55 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
   [_mapContainerView addSubview:_mapView];
   XLOG_DEBUG_CHECK(_mapContainerView.subviews.firstObject == _mapView);
   [self _updateStatusBar];
-  
+
   _tagsViewController = [[GICommitListViewController alloc] initWithRepository:_repository];
   _tagsViewController.delegate = self;
   _tagsViewController.emptyLabel = NSLocalizedString(@"No Tags", nil);
   [_tagsControllerView replaceWithView:_tagsViewController.view];
-  
+
   _snapshotListViewController = [[GISnapshotListViewController alloc] initWithRepository:_repository];
   _snapshotListViewController.delegate = self;
   [_snapshotsControllerView replaceWithView:_snapshotListViewController.view];
-  
+
   _unifiedReflogViewController = [[GIUnifiedReflogViewController alloc] initWithRepository:_repository];
   _unifiedReflogViewController.delegate = self;
   [_reflogControllerView replaceWithView:_unifiedReflogViewController.view];
-  
+
   _ancestorsViewController = [[GICommitListViewController alloc] initWithRepository:_repository];
   _ancestorsViewController.delegate = self;
   [_ancestorsControllerView replaceWithView:_ancestorsViewController.view];
-  
+
   _searchResultsViewController = [[GICommitListViewController alloc] initWithRepository:_repository];
   _searchResultsViewController.delegate = self;
   _searchResultsViewController.emptyLabel = NSLocalizedString(@"No Results", nil);
   [_searchControllerView replaceWithView:_searchResultsViewController.view];
-  
+
   _quickViewController = [[GIQuickViewController alloc] initWithRepository:_repository];
   NSTabViewItem* quickItem = [_mainTabView tabViewItemAtIndex:[_mainTabView indexOfTabViewItemWithIdentifier:kWindowModeString_Map_QuickView]];
   quickItem.view = _quickViewController.view;
-  
+
   _diffViewController = [[GIDiffViewController alloc] initWithRepository:_repository];
   NSTabViewItem* diffItem = [_mainTabView tabViewItemAtIndex:[_mainTabView indexOfTabViewItemWithIdentifier:kWindowModeString_Map_Diff]];
   diffItem.view = _diffViewController.view;
-  
+
   _commitRewriterViewController = [[GICommitRewriterViewController alloc] initWithRepository:_repository];
   _commitRewriterViewController.delegate = self;
   [_rewriteControllerView replaceWithView:_commitRewriterViewController.view];
   NSTabViewItem* rewriteItem = [_mainTabView tabViewItemAtIndex:[_mainTabView indexOfTabViewItemWithIdentifier:kWindowModeString_Map_Rewrite]];
   rewriteItem.view = _rewriteView;
-  
+
   _commitSplitterViewController = [[GICommitSplitterViewController alloc] initWithRepository:_repository];
   _commitSplitterViewController.delegate = self;
   [_splitControllerView replaceWithView:_commitSplitterViewController.view];
   NSTabViewItem* splitItem = [_mainTabView tabViewItemAtIndex:[_mainTabView indexOfTabViewItemWithIdentifier:kWindowModeString_Map_Split]];
   splitItem.view = _splitView;
-  
+
   _conflictResolverViewController = [[GIConflictResolverViewController alloc] initWithRepository:_repository];
   _conflictResolverViewController.delegate = self;
   [_resolveControllerView replaceWithView:_conflictResolverViewController.view];
   NSTabViewItem* resolveItem = [_mainTabView tabViewItemAtIndex:[_mainTabView indexOfTabViewItemWithIdentifier:kWindowModeString_Map_Resolve]];
   resolveItem.view = _resolveView;
-  
+
   if ([[NSUserDefaults standardUserDefaults] boolForKey:kUserDefaultsKey_SimpleCommit]) {
     _commitViewController = [[GISimpleCommitViewController alloc] initWithRepository:_repository];
   } else {
@@ -363,21 +363,21 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
   _commitViewController.delegate = self;
   NSTabViewItem* commitItem = [_mainTabView tabViewItemAtIndex:[_mainTabView indexOfTabViewItemWithIdentifier:kWindowModeString_Commit]];
   commitItem.view = _commitViewController.view;
-  
+
   _stashListViewController = [[GIStashListViewController alloc] initWithRepository:_repository];
   NSTabViewItem* stashesItem = [_mainTabView tabViewItemAtIndex:[_mainTabView indexOfTabViewItemWithIdentifier:kWindowModeString_Stashes]];
   stashesItem.view = _stashListViewController.view;
-  
+
   _configViewController = [[GIConfigViewController alloc] initWithRepository:_repository];
   NSTabViewItem* configItem = [_mainTabView tabViewItemAtIndex:[_mainTabView indexOfTabViewItemWithIdentifier:kWindowModeString_Map_Config]];
   configItem.view = _configViewController.view;
-  
+
   _hiddenWarningView.layer.backgroundColor = [[NSColor colorWithDeviceRed:0.0 green:0.0 blue:0.0 alpha:0.5] CGColor];
   _hiddenWarningView.layer.cornerRadius = 10.0;
-  
+
   [(NSTextFieldCell*)_searchField.cell setPlaceholderString:NSLocalizedString(@"Preparing Search… ", nil)];
   _searchField.enabled = NO;
-  
+
   for (NSMenuItem* item in _showMenu.itemArray) {  // We don't want first responder targets
     if (![item isSeparatorItem]) {
       item.target = _mapViewController;
@@ -385,7 +385,7 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
   }
   _pullButton.target = _mapViewController;
   _pushButton.target = _mapViewController;
-  
+
   [self _setWindowMode:kWindowModeString_Map];
 }
 
@@ -399,11 +399,11 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
     XLOG_DEBUG_UNREACHABLE();
     return NO;
   }
-  
+
   if ([error.domain isEqualToString:GCErrorDomain] && ((error.code == kGCErrorCode_UserCancelled) || (error.code == kGCErrorCode_User))) {
     return NO;
   }
-  
+
   if ([error.domain isEqualToString:GCErrorDomain] && (error.code == -1) && [error.localizedDescription isEqualToString:@"authentication required but no callback set"]) {  // TODO: Avoid hardcoding libgit2 error
     NSAlert* alert = [NSAlert alertWithMessageText:NSLocalizedString(@"Unable to authenticate with remote!", nil)
                                      defaultButton:NSLocalizedString(@"OK", nil)
@@ -414,7 +414,7 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
     [alert beginSheetModalForWindow:_mainWindow withCompletionHandler:NULL];
     return NO;
   }
-  
+
   return [super presentError:error];
 }
 
@@ -440,35 +440,41 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
 - (void)_performCloneUsingRemote:(GCRemote*)remote recursive:(BOOL)recursive {
   [_repository setUndoActionName:NSLocalizedString(@"Clone", nil)];
   [_repository suspendHistoryUpdates];
-  [_repository performOperationInBackgroundWithReason:@"clone" argument:nil usingOperationBlock:^BOOL(GCRepository* repository, NSError** outError) {
-    
-    return [repository cloneUsingRemote:remote recursive:recursive error:outError];
-    
-  } completionBlock:^(BOOL success, NSError* error) {
-    
-    [_repository resumeHistoryUpdates];
-    if (!success) {
-      [self presentError:error];
-    }
-    [self _prepareSearch];
-    [self _resetCheckTimer];
-    
-  }];
+  [_repository performOperationInBackgroundWithReason:@"clone"
+      argument:nil
+      usingOperationBlock:^BOOL(GCRepository* repository, NSError** outError) {
+
+        return [repository cloneUsingRemote:remote recursive:recursive error:outError];
+
+      }
+      completionBlock:^(BOOL success, NSError* error) {
+
+        [_repository resumeHistoryUpdates];
+        if (!success) {
+          [self presentError:error];
+        }
+        [self _prepareSearch];
+        [self _resetCheckTimer];
+
+      }];
 }
 
 - (void)_initializeSubmodules {
-  [_repository performOperationInBackgroundWithReason:nil argument:nil usingOperationBlock:^BOOL(GCRepository* repository, NSError** outError) {
-    
-    return [repository initializeAllSubmodules:YES error:outError];
-    
-  } completionBlock:^(BOOL success, NSError* error) {
-    
-    if (!success) {
-      [self presentError:error];
-    }
-    [self _resetCheckTimer];
-    
-  }];
+  [_repository performOperationInBackgroundWithReason:nil
+      argument:nil
+      usingOperationBlock:^BOOL(GCRepository* repository, NSError** outError) {
+
+        return [repository initializeAllSubmodules:YES error:outError];
+
+      }
+      completionBlock:^(BOOL success, NSError* error) {
+
+        if (!success) {
+          [self presentError:error];
+        }
+        [self _resetCheckTimer];
+
+      }];
 }
 
 - (void)_prepareSearch {
@@ -479,52 +485,53 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
   __block float lastProgress = 0.0;
   __block CFTimeInterval lastTime = 0.0;
   [_repository prepareSearchInBackground:[[_repository userInfoForKey:kRepositoryUserInfoKey_IndexDiffs] boolValue]
-                     withProgressHandler:^BOOL(BOOL firstUpdate, NSUInteger addedCommits, NSUInteger removedCommits) {
-    
-    if (firstUpdate) {
-      float progress = MIN(roundf(1000 * (float)addedCommits / (float)totalCount) / 10, 100.0);
-      if (progress > lastProgress) {
-        CFTimeInterval time = CFAbsoluteTimeGetCurrent();
-        if (time > lastTime + 1.0 / kMaxProgressRefreshRate) {
-          dispatch_async(dispatch_get_main_queue(), ^{
-            if (progress >= 100) {
-              [(NSTextFieldCell*)_searchField.cell setPlaceholderString:NSLocalizedString(@"Finishing…        ", nil)];
-            } else {
-              [(NSTextFieldCell*)_searchField.cell setPlaceholderString:[NSString stringWithFormat:NSLocalizedString(@"Preparing (%.1f%%)…", nil), progress]];
+      withProgressHandler:^BOOL(BOOL firstUpdate, NSUInteger addedCommits, NSUInteger removedCommits) {
+
+        if (firstUpdate) {
+          float progress = MIN(roundf(1000 * (float)addedCommits / (float)totalCount) / 10, 100.0);
+          if (progress > lastProgress) {
+            CFTimeInterval time = CFAbsoluteTimeGetCurrent();
+            if (time > lastTime + 1.0 / kMaxProgressRefreshRate) {
+              dispatch_async(dispatch_get_main_queue(), ^{
+                if (progress >= 100) {
+                  [(NSTextFieldCell*)_searchField.cell setPlaceholderString:NSLocalizedString(@"Finishing…        ", nil)];
+                } else {
+                  [(NSTextFieldCell*)_searchField.cell setPlaceholderString:[NSString stringWithFormat:NSLocalizedString(@"Preparing (%.1f%%)…", nil), progress]];
+                }
+              });
+              lastProgress = progress;
+              lastTime = time;
             }
-          });
-          lastProgress = progress;
-          lastTime = time;
+          }
         }
+        return !_abortIndexing;
+
       }
-    }
-    return !_abortIndexing;
-    
-  } completion:^(BOOL success, NSError* error) {
-    
-    if (!_abortIndexing) {  // If indexing has been aborted, this means the document has already been closed, so don't attempt to do *anything*
-      if (success) {
-        _searchReady = YES;
-        [(NSTextFieldCell*)_searchField.cell setPlaceholderString:NSLocalizedString(@"Search Repository…", nil)];
-        _searchField.enabled = YES;
-      } else {
-        [(NSTextFieldCell*)_searchField.cell setPlaceholderString:NSLocalizedString(@"Search Unavailable", nil)];
-        [self presentError:error];
-      }
-      [[NSProcessInfo processInfo] enableSuddenTermination];
-      _indexing = NO;
-    }
-    
-  }];
+      completion:^(BOOL success, NSError* error) {
+
+        if (!_abortIndexing) {  // If indexing has been aborted, this means the document has already been closed, so don't attempt to do *anything*
+          if (success) {
+            _searchReady = YES;
+            [(NSTextFieldCell*)_searchField.cell setPlaceholderString:NSLocalizedString(@"Search Repository…", nil)];
+            _searchField.enabled = YES;
+          } else {
+            [(NSTextFieldCell*)_searchField.cell setPlaceholderString:NSLocalizedString(@"Search Unavailable", nil)];
+            [self presentError:error];
+          }
+          [[NSProcessInfo processInfo] enableSuddenTermination];
+          _indexing = NO;
+        }
+
+      }];
 }
 
 // TODO: Search field placeholder strings must all be about the same length since NSSearchField doesn't recenter updated placeholder strings properly
 - (void)_documentDidOpen:(id)restored {
   XLOG_DEBUG_CHECK(_mainWindow.visible);
-  
+
   // Work around a bug of NSSearchField which is always enabled after restoration even if set to disabled during restoration
   [self _updateToolBar];
-  
+
   // Check if a clone is needed
   if (_cloneMode != kCloneMode_None) {
     XLOG_DEBUG_CHECK(_repository.empty && !restored);
@@ -537,10 +544,10 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
     }
     return;  // Don't do anything else
   }
-  
+
   // Prepare search
   [self _prepareSearch];
-  
+
   // Check for uninitialized submodules
   if (!restored && ![[_repository userInfoForKey:kRepositoryUserInfoKey_SkipSubmoduleCheck] boolValue]) {
     NSError* error;
@@ -549,23 +556,24 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
         NSAlert* alert = [NSAlert alertWithMessageText:NSLocalizedString(@"Do you want to initialize submodules?", nil) defaultButton:NSLocalizedString(@"Initialize", nil) alternateButton:NSLocalizedString(@"Cancel", nil) otherButton:nil informativeTextWithFormat:@"One or more submodules in this repository are uninitialized."];
         alert.type = kGIAlertType_Caution;
         alert.showsSuppressionButton = YES;
-        [alert beginSheetModalForWindow:_mainWindow withCompletionHandler:^(NSInteger returnCode) {
-          
-          if (alert.suppressionButton.state) {
-            [_repository setUserInfo:@(YES) forKey:kRepositoryUserInfoKey_SkipSubmoduleCheck];
-          }
-          if (returnCode == NSAlertDefaultReturn) {
-            [self _initializeSubmodules];
-          }
-          
-        }];
+        [alert beginSheetModalForWindow:_mainWindow
+                  withCompletionHandler:^(NSInteger returnCode) {
+
+                    if (alert.suppressionButton.state) {
+                      [_repository setUserInfo:@(YES) forKey:kRepositoryUserInfoKey_SkipSubmoduleCheck];
+                    }
+                    if (returnCode == NSAlertDefaultReturn) {
+                      [self _initializeSubmodules];
+                    }
+
+                  }];
         return;  // Don't do anything else
       } else {
         [self presentError:error];
       }
     }
   }
-  
+
   // Otherwise check for changes immediately
   if ([[NSUserDefaults standardUserDefaults] doubleForKey:kUserDefaultsKey_CheckInterval] > 0) {
     [self checkForChanges:nil];
@@ -589,13 +597,23 @@ static inline NSString* _FormatCommitCount(NSNumberFormatter* formatter, NSUInte
 
 static NSString* _StringFromRepositoryState(GCRepositoryState state) {
   switch (state) {
-    case kGCRepositoryState_None: return nil;
-    case kGCRepositoryState_Merge: return NSLocalizedString(@"merge", nil);
-    case kGCRepositoryState_Revert: return NSLocalizedString(@"revert", nil);
-    case kGCRepositoryState_CherryPick: return NSLocalizedString(@"cherry-pick", nil);
-    case kGCRepositoryState_Bisect: return NSLocalizedString(@"bisect", nil);
-    case kGCRepositoryState_Rebase: case kGCRepositoryState_RebaseInteractive: case kGCRepositoryState_RebaseMerge: return NSLocalizedString(@"rebase", nil);
-    case kGCRepositoryState_ApplyMailbox: case kGCRepositoryState_ApplyMailboxOrRebase: return NSLocalizedString(@"apply mailbox", nil);
+    case kGCRepositoryState_None:
+      return nil;
+    case kGCRepositoryState_Merge:
+      return NSLocalizedString(@"merge", nil);
+    case kGCRepositoryState_Revert:
+      return NSLocalizedString(@"revert", nil);
+    case kGCRepositoryState_CherryPick:
+      return NSLocalizedString(@"cherry-pick", nil);
+    case kGCRepositoryState_Bisect:
+      return NSLocalizedString(@"bisect", nil);
+    case kGCRepositoryState_Rebase:
+    case kGCRepositoryState_RebaseInteractive:
+    case kGCRepositoryState_RebaseMerge:
+      return NSLocalizedString(@"rebase", nil);
+    case kGCRepositoryState_ApplyMailbox:
+    case kGCRepositoryState_ApplyMailboxOrRebase:
+      return NSLocalizedString(@"apply mailbox", nil);
   }
   XLOG_DEBUG_UNREACHABLE();
   return nil;
@@ -611,7 +629,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
     } else {
       _infoTextField2.stringValue = NSLocalizedString(@"No snapshot selected", nil);
     }
-    
+
     _pullButton.hidden = YES;
     _pushButton.hidden = YES;
   } else {
@@ -621,7 +639,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
     if (_repository.history.HEADDetached) {
       _infoTextField1.font = [NSFont boldSystemFontOfSize:11];
       _infoTextField1.stringValue = NSLocalizedString(@"Not on any branch", nil);
-      
+
       if (stateString) {
         _infoTextField2.attributedStringValue = stateString;
       } else {
@@ -638,14 +656,14 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
         CGFloat fontSize = _infoTextField1.font.pointSize;
         NSMutableAttributedString* string = [[NSMutableAttributedString alloc] init];
         [string beginEditing];
-        [string appendString:NSLocalizedString(@"On branch ", nil) withAttributes:@{NSFontAttributeName: [NSFont systemFontOfSize:fontSize]}];
-        [string appendString:branch.name withAttributes:@{NSFontAttributeName: [NSFont boldSystemFontOfSize:fontSize]}];
-        [string appendString:NSLocalizedString(@" • tracking upstream ", nil) withAttributes:@{NSFontAttributeName: [NSFont systemFontOfSize:fontSize]}];
-        [string appendString:upstream.name withAttributes:@{NSFontAttributeName: [NSFont boldSystemFontOfSize:fontSize]}];
+        [string appendString:NSLocalizedString(@"On branch ", nil) withAttributes:@{NSFontAttributeName : [NSFont systemFontOfSize:fontSize]}];
+        [string appendString:branch.name withAttributes:@{NSFontAttributeName : [NSFont boldSystemFontOfSize:fontSize]}];
+        [string appendString:NSLocalizedString(@" • tracking upstream ", nil) withAttributes:@{NSFontAttributeName : [NSFont systemFontOfSize:fontSize]}];
+        [string appendString:upstream.name withAttributes:@{NSFontAttributeName : [NSFont boldSystemFontOfSize:fontSize]}];
         [string setAlignment:NSCenterTextAlignment range:NSMakeRange(0, string.length)];
         [string endEditing];
         _infoTextField1.attributedStringValue = string;
-        
+
         if (stateString) {
           _infoTextField2.attributedStringValue = stateString;
         } else {
@@ -654,7 +672,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
           if ([localTip isEqualToCommit:upstreamTip]) {
             _infoTextField2.stringValue = NSLocalizedString(@"Up-to-date", nil);
           } else {
-            GCCommit* commit = [_repository findMergeBaseForCommits:@[localTip, upstreamTip] error:NULL];
+            GCCommit* commit = [_repository findMergeBaseForCommits:@[ localTip, upstreamTip ] error:NULL];
             GCHistoryCommit* ancestor = commit ? [_repository.history historyCommitForCommit:commit] : nil;
             if (ancestor) {
               if ([ancestor isEqualToCommit:localTip]) {
@@ -676,7 +694,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
             }
           }
         }
-        
+
         NSString* upstreamSHA1 = [_updatedReferences objectForKey:upstream.fullName];
         if (upstreamSHA1 && ![upstreamSHA1 isEqualToString:[[(GCHistoryLocalBranch*)upstream tipCommit] SHA1]]) {
           isBehind = YES;
@@ -685,12 +703,12 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
         CGFloat fontSize = _infoTextField1.font.pointSize;
         NSMutableAttributedString* string = [[NSMutableAttributedString alloc] init];
         [string beginEditing];
-        [string appendString:NSLocalizedString(@"On branch ", nil) withAttributes:@{NSFontAttributeName: [NSFont systemFontOfSize:fontSize]}];
-        [string appendString:branch.name withAttributes:@{NSFontAttributeName: [NSFont boldSystemFontOfSize:fontSize]}];
+        [string appendString:NSLocalizedString(@"On branch ", nil) withAttributes:@{NSFontAttributeName : [NSFont systemFontOfSize:fontSize]}];
+        [string appendString:branch.name withAttributes:@{NSFontAttributeName : [NSFont boldSystemFontOfSize:fontSize]}];
         [string setAlignment:NSCenterTextAlignment range:NSMakeRange(0, string.length)];
         [string endEditing];
         _infoTextField1.attributedStringValue = string;
-        
+
         if (stateString) {
           _infoTextField2.attributedStringValue = stateString;
         } else {
@@ -698,7 +716,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
         }
       }
     }
-    
+
     _pullButton.hidden = NO;
     _pullButton.enabled = [_mapViewController validateUserInterfaceItem:(id)_pullButton];
     NSRect frame = _pullButton.frame;
@@ -716,9 +734,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 
 // NSToolbar automatic validation fires very often and at unpredictable times so we just do everything by hand
 - (void)_updateToolBar {
-  if ([_windowMode isEqualToString:kWindowModeString_Map_QuickView] || [_windowMode isEqualToString:kWindowModeString_Map_Diff]
-      || [_windowMode isEqualToString:kWindowModeString_Map_Rewrite] || [_windowMode isEqualToString:kWindowModeString_Map_Split]
-      || [_windowMode isEqualToString:kWindowModeString_Map_Resolve] || [_windowMode isEqualToString:kWindowModeString_Map_Config]) {
+  if ([_windowMode isEqualToString:kWindowModeString_Map_QuickView] || [_windowMode isEqualToString:kWindowModeString_Map_Diff] || [_windowMode isEqualToString:kWindowModeString_Map_Rewrite] || [_windowMode isEqualToString:kWindowModeString_Map_Split] || [_windowMode isEqualToString:kWindowModeString_Map_Resolve] || [_windowMode isEqualToString:kWindowModeString_Map_Config]) {
     _modeControl.hidden = YES;
     if (_quickViewCommits) {
       _previousButton.hidden = NO;
@@ -729,7 +745,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
       _previousButton.hidden = YES;
       _nextButton.hidden = YES;
     }
-    
+
     _snapshotsButton.hidden = YES;
     _searchField.hidden = YES;
     _exitButton.hidden = ([_windowMode isEqualToString:kWindowModeString_Map_Rewrite] || [_windowMode isEqualToString:kWindowModeString_Map_Split] || [_windowMode isEqualToString:kWindowModeString_Map_Resolve]);
@@ -738,7 +754,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
     _modeControl.enabled = !_windowController.hasModalView && !_repository.hasBackgroundOperationInProgress;
     _previousButton.hidden = YES;
     _nextButton.hidden = YES;
-    
+
     if ([_windowMode isEqualToString:kWindowModeString_Map]) {
       _snapshotsButton.hidden = NO;
       if (![self validateUserInterfaceItem:(id)_snapshotsButton]) {
@@ -766,12 +782,12 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 
 - (void)_didBecomeActive:(NSNotification*)notification {
   [_repository notifyRepositoryChanged];  // Make sure we are up-to-date right now
-  
+
   if (_repository.automaticSnapshotsEnabled) {
     [_repository setUndoActionName:NSLocalizedString(@"External Changes", nil)];
     _repository.automaticSnapshotsEnabled = NO;
   }
-  
+
   [self _updateToolBar];
 }
 
@@ -779,7 +795,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
   if (![_windowMode isEqualToString:kWindowModeString_Map_Resolve]) {  // Don't take automatic snapshots while conflict resolver is on screen
     _repository.automaticSnapshotsEnabled = YES;
   }
-  
+
   [self _updateToolBar];
 }
 
@@ -792,11 +808,11 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
         _savedFirstResponder = nil;
       }
     }
-    
+
     _windowMode = mode;
     [_mainTabView selectTabViewItemWithIdentifier:_windowMode];
     [_modeControl selectSegmentWithTag:_WindowModeIDFromString(_windowMode)];
-    
+
     // Don't let AppKit guess / restore first responder
     if ([_windowMode isEqualToString:kWindowModeString_Map]) {
       if (_savedFirstResponder) {
@@ -814,10 +830,10 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
       GIViewController* viewController = [(GIView*)_mainTabView.selectedTabViewItem.view viewController];
       [_mainWindow makeFirstResponder:viewController.preferredFirstResponder];
     }
-    
+
     [self _updateTitleBar];
     [self _updateToolBar];
-    
+
     if ([_windowMode isEqualToString:kWindowModeString_Map]) {
       if (_searchView.superview) {
         [self _showHelpWithIdentifier:kSideViewIdentifier_Search];
@@ -910,11 +926,11 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 
 - (void)_hideHelp:(BOOL)open {
   [[NSUserDefaults standardUserDefaults] setInteger:(_helpIndex + 1) forKey:[NSString stringWithFormat:@"HelpShown_%@", _helpIdentifier.uppercaseString]];  // For backward compatibility
-  
+
   if (open && _helpURL) {
     [[NSWorkspace sharedWorkspace] openURL:_helpURL];
   }
-  
+
   [self _showHelpWithIdentifier:_helpIdentifier];
 }
 
@@ -922,24 +938,24 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 
 - (void)_loadMoreAncestors {
   if (![_quickViewAncestors iterateWithCommitBlock:^(GCHistoryCommit* commit, BOOL* stop) {
-    [_quickViewCommits addObject:commit];
-  }]) {
+        [_quickViewCommits addObject:commit];
+      }]) {
     _quickViewAncestors = nil;
   }
 }
 
 - (void)_loadMoreDescendants {
   if (![_quickViewDescendants iterateWithCommitBlock:^(GCHistoryCommit* commit, BOOL* stop) {
-    [_quickViewCommits insertObject:commit atIndex:0];
-    _quickViewIndex += 1;  // We insert commits before the index too!
-  }]) {
+        [_quickViewCommits insertObject:commit atIndex:0];
+        _quickViewIndex += 1;  // We insert commits before the index too!
+      }]) {
     _quickViewDescendants = nil;
   }
 }
 
 - (void)_enterQuickViewWithHistoryCommit:(GCHistoryCommit*)commit commitList:(NSArray*)commitList {
   [_repository suspendHistoryUpdates];  // We don't want the the history to change while in QuickView because of the walkers
-  
+
   _quickViewCommits = [[NSMutableArray alloc] init];
   if (commitList) {
     [_quickViewCommits addObjectsFromArray:commitList];
@@ -948,17 +964,19 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
   } else {
     [_quickViewCommits addObject:commit];
     _quickViewIndex = 0;
-    _quickViewAncestors = [_repository.history walkerForAncestorsOfCommits:@[commit]];
+    _quickViewAncestors = [_repository.history walkerForAncestorsOfCommits:@[ commit ]];
     [self _loadMoreAncestors];
-    _quickViewDescendants = [_repository.history walkerForDescendantsOfCommits:@[commit]];
+    _quickViewDescendants = [_repository.history walkerForDescendantsOfCommits:@[ commit ]];
     [self _loadMoreDescendants];
   }
-  
+
   _quickViewController.commit = commit;
-  
-  [self _animateQuickViewForCommit:commit appearing:YES transition:^{
-    [self _setWindowMode:kWindowModeString_Map_QuickView];
-  }];
+
+  [self _animateQuickViewForCommit:commit
+                         appearing:YES
+                        transition:^{
+                          [self _setWindowMode:kWindowModeString_Map_QuickView];
+                        }];
 }
 
 - (void)_animateQuickViewForCommit:(GCHistoryCommit*)commit appearing:(BOOL)appearing transition:(void (^)(void))transitionBlock {
@@ -966,13 +984,13 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
     transitionBlock();
     return;
   }
-  
+
   [CATransaction flush];
   [CATransaction begin];
   [CATransaction setDisableActions:YES];
   [CATransaction setAnimationDuration:kQuickViewAnimationDuration];
   [CATransaction setAnimationTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionDefault]];
-  
+
   BOOL animationInFlight = YES;
   if (!_fixedSnapshotLayer) {
     animationInFlight = NO;
@@ -983,7 +1001,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
     _animatingSnapshotLayer.shadowOpacity = 0.2;
     _animatingSnapshotLayer.shadowRadius = 30;
   }
-  
+
   if (animationInFlight) {
     transitionBlock();
   } else if (appearing) {
@@ -995,24 +1013,24 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
     transitionBlock();
     _fixedSnapshotLayer.contents = [_contentView takeSnapshot];
   }
-  
+
   [_contentView.layer addSublayer:_fixedSnapshotLayer];
   [_contentView.layer addSublayer:_animatingSnapshotLayer];
-  
+
   _fixedSnapshotLayer.frame = _contentView.layer.bounds;
-  
+
   CALayer* fromLayer = nil;
   if (animationInFlight) {
     fromLayer = _animatingSnapshotLayer.presentationLayer;
   }
-  
+
   if (!fromLayer) {
     fromLayer = _animatingSnapshotLayer;
   }
-  
+
   // Calculating the startProgress to use when reversing an in-flight transition is nontrivial (for a nonlinear timing function).
   // But we can make Core Animation do it for us by animating a dummy property (zPosition) between 0 and 1 along with the real animations, and using that as the startProgress.
-  
+
   // Animate the title/toolbar updates alongside the snapshot zoom animation.
   CATransition* transition = [CATransition animation];
   transition.type = kCATransitionPush;
@@ -1021,28 +1039,28 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
   [_rightView.layer addAnimation:transition forKey:kCATransition];
   [_titleView.layer addAnimation:transition forKey:kCATransition];
   [_leftView.layer addAnimation:transition forKey:kCATransition];
-  
+
   CABasicAnimation* position = [CABasicAnimation animationWithKeyPath:@"position"];
   CABasicAnimation* transform = [CABasicAnimation animationWithKeyPath:@"transform"];
   CABasicAnimation* zPosition = [CABasicAnimation animationWithKeyPath:@"zPosition"];
-  
+
   [self _configureAnimatingSnapshotLayerForCommit:appearing ? commit : nil];
   position.fromValue = [fromLayer valueForKey:@"position"];
   transform.fromValue = [fromLayer valueForKey:@"transform"];
   zPosition.fromValue = @(1 - fromLayer.zPosition);
-  
+
   [self _configureAnimatingSnapshotLayerForCommit:appearing ? nil : commit];
   position.toValue = [_animatingSnapshotLayer valueForKey:@"position"];
   transform.toValue = [_animatingSnapshotLayer valueForKey:@"transform"];
   zPosition.toValue = @0;
-  
+
   CAAnimationGroup* group = [CAAnimationGroup animation];
-  group.animations = @[position, transform, zPosition];
-  group.delegate = self;
+  group.animations = @[ position, transform, zPosition ];
+  group.delegate = (id)self;  // id<CAAnimationDelegate> is only available on OS X 10.12 SDK
   [group setValue:kAnimationID_QuickViewSnapshot forKey:kAnimationKey_ID];
-  
+
   [_animatingSnapshotLayer addAnimation:group forKey:kAnimationID_QuickViewSnapshot];
-  
+
   [CATransaction commit];
 }
 
@@ -1118,12 +1136,14 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
   _quickViewCommits = nil;
   _quickViewAncestors = nil;
   _quickViewDescendants = nil;
-  
+
   [_repository resumeHistoryUpdates];
-  
-  [self _animateQuickViewForCommit:_quickViewController.commit appearing:NO transition:^{
-    [self _setWindowMode:kWindowModeString_Map];
-  }];
+
+  [self _animateQuickViewForCommit:_quickViewController.commit
+                         appearing:NO
+                        transition:^{
+                          [self _setWindowMode:kWindowModeString_Map];
+                        }];
 }
 
 #pragma mark - Diff
@@ -1135,7 +1155,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 
 - (void)_exitDiff {
   [self _setWindowMode:kWindowModeString_Map];
-  
+
   [_diffViewController setCommit:nil withParentCommit:nil];  // Unload diff immediately
 }
 
@@ -1143,14 +1163,14 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 
 - (void)_enterRewriteWithCommit:(GCHistoryCommit*)commit {
   _helpHEADDisabled = YES;
-  
+
   NSError* error;
   if (![_commitRewriterViewController startRewritingCommit:commit error:&error]) {
     [self presentError:error];
     _helpHEADDisabled = NO;
     return;
   }
-  
+
   [[NSProcessInfo processInfo] disableSuddenTermination];
   [self _setWindowMode:kWindowModeString_Map_Rewrite];
 }
@@ -1160,12 +1180,12 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 - (void)_exitRewriteWithMessage:(NSString*)message {
   [self _setWindowMode:kWindowModeString_Map];
   [[NSProcessInfo processInfo] enableSuddenTermination];
-  
+
   NSError* error;
   if ((message && ![_commitRewriterViewController finishRewritingCommitWithMessage:message error:&error]) || (!message && ![_commitRewriterViewController cancelRewritingCommit:&error])) {
     [self presentError:error];
   }
-  
+
   _helpHEADDisabled = NO;
 }
 
@@ -1177,7 +1197,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
     [self presentError:error];
     return;
   }
-  
+
   [[NSProcessInfo processInfo] disableSuddenTermination];
   [self _setWindowMode:kWindowModeString_Map_Split];
 }
@@ -1187,7 +1207,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 - (void)_exitSplitWithOldMessage:(NSString*)oldMessage newMessage:(NSString*)newMessage {
   [self _setWindowMode:kWindowModeString_Map];
   [[NSProcessInfo processInfo] enableSuddenTermination];
-  
+
   if (oldMessage && newMessage) {
     NSError* error;
     if (![_commitSplitterViewController finishSplittingCommitWithOldMessage:oldMessage newMessage:newMessage error:&error]) {
@@ -1202,10 +1222,10 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 
 - (void)_enterResolveWithOurCommit:(GCCommit*)ourCommit theirCommit:(GCCommit*)theirCommit {
   _helpHEADDisabled = YES;
-  
+
   _conflictResolverViewController.ourCommit = ourCommit;
   _conflictResolverViewController.theirCommit = theirCommit;
-  
+
   [[NSProcessInfo processInfo] disableSuddenTermination];
   [self _setWindowMode:kWindowModeString_Map_Resolve];
 }
@@ -1213,10 +1233,10 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 - (void)_exitResolve {
   [self _setWindowMode:kWindowModeString_Map];
   [[NSProcessInfo processInfo] enableSuddenTermination];
-  
+
   _conflictResolverViewController.ourCommit = nil;
   _conflictResolverViewController.theirCommit = nil;
-  
+
   _helpHEADDisabled = NO;
 }
 
@@ -1235,21 +1255,21 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 // This appears to be called by the NSDocumentController machinery whenever quitting the app even if -invalidateRestorableState was never called
 - (void)encodeRestorableStateWithCoder:(NSCoder*)coder {
   [super encodeRestorableStateWithCoder:coder];
-  
+
   // Restrict to non-modal modes
   [coder encodeObject:_WindowModeStringFromID(_WindowModeIDFromString(_windowMode)) forKey:kRestorableStateKey_WindowMode];
 }
 
 - (void)restoreStateWithCoder:(NSCoder*)coder {
   [super restoreStateWithCoder:coder];
-  
+
   NSString* windowMode = [coder decodeObjectOfClass:[NSString class] forKey:kRestorableStateKey_WindowMode];
   if (windowMode) {
     [self _setWindowMode:windowMode];
   } else {
     XLOG_DEBUG_UNREACHABLE();
   }
-  
+
   if (!_ready) {
     [self performSelector:@selector(_documentDidOpen:) withObject:[NSNull null] afterDelay:0.0];
     _ready = YES;
@@ -1278,9 +1298,9 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 
 - (NSArray*)toolbarDefaultItemIdentifiers:(NSToolbar*)toolbar {
   if (_unifiedToolbar) {
-    return @[kToolbarItem_Left, kToolbarItem_Title, NSToolbarSpaceItemIdentifier, kToolbarItem_Right];
+    return @[ kToolbarItem_Left, kToolbarItem_Title, NSToolbarSpaceItemIdentifier, kToolbarItem_Right ];
   }
-  return @[kToolbarItem_Left, NSToolbarFlexibleSpaceItemIdentifier, kToolbarItem_Right];
+  return @[ kToolbarItem_Left, NSToolbarFlexibleSpaceItemIdentifier, kToolbarItem_Right ];
 }
 
 - (NSArray*)toolbarAllowedItemIdentifiers:(NSToolbar*)toolbar {
@@ -1313,7 +1333,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 
 - (void)repository:(GCRepository*)repository willStartTransferWithURL:(NSURL*)url {
   [[AppDelegate sharedDelegate] repository:repository willStartTransferWithURL:url];  // Forward to AppDelegate
-  
+
   _infoTextField1.hidden = YES;
   _infoTextField2.hidden = YES;
   _progressTextField.hidden = NO;
@@ -1341,7 +1361,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
   _progressIndicator.hidden = YES;
   _infoTextField1.hidden = NO;
   _infoTextField2.hidden = NO;
-  
+
   [[AppDelegate sharedDelegate] repository:repository didFinishTransferWithURL:url success:success];  // Forward to AppDelegate
 }
 
@@ -1402,7 +1422,6 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
   if (![event isARepeat]) {
     NSString* characters = event.charactersIgnoringModifiers;
     if ([_windowMode isEqualToString:kWindowModeString_Map]) {
-      
       if (event.keyCode == kGIKeyCode_Esc) {
         if (_tagsView.superview) {
           [self toggleTags:nil];
@@ -1468,28 +1487,24 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
           }
         }
       }
-      
+
     } else if ([_windowMode isEqualToString:kWindowModeString_Map_QuickView]) {
-      
       if ((event.keyCode == kGIKeyCode_Esc) || [characters isEqualToString:@" "]) {
         [self exit:nil];
         handled = YES;
       }
-      
+
     } else if ([_windowMode isEqualToString:kWindowModeString_Map_Diff]) {
-      
       if ((event.keyCode == kGIKeyCode_Esc) || [characters isEqualToString:@"i"]) {
         [self exit:nil];
         handled = YES;
       }
-      
+
     } else if ([_windowMode isEqualToString:kWindowModeString_Map_Config]) {
-      
       if (event.keyCode == kGIKeyCode_Esc) {
         [self exit:nil];
         handled = YES;
       }
-      
     }
   }
   return handled;
@@ -1503,25 +1518,24 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 
 - (void)mapViewControllerDidReloadGraph:(GIMapViewController*)controller {
   [self _updateStatusBar];
-  
+
   if (_searchView.superview) {
     [self commitListViewControllerDidChangeSelection:nil];
   }
-  
+
   id headBranch = _repository.history.HEADBranch;
-  if (_lastHEADBranch) {
-    if (![headBranch isEqualToBranch:_lastHEADBranch]) {
-      if (!_helpHEADDisabled) {
-        if ([headBranch isKindOfClass:[GCHistoryLocalBranch class]]) {
-          [_windowController showOverlayWithStyle:kGIOverlayStyle_Informational format:NSLocalizedString(@"You are now on branch \"%@\"", nil), [headBranch name]];
-        } else if ((headBranch != [NSNull null]) && (_lastHEADBranch != [NSNull null])) {
-          [_windowController showOverlayWithStyle:kGIOverlayStyle_Informational message:NSLocalizedString(@"You are not on any branch anymore", nil)];
-        }
+  if (headBranch == nil) {
+    headBranch = [NSNull null];
+  }
+  if (![_lastHEADBranch isEqual:headBranch]) {
+    if (!_helpHEADDisabled) {
+      if ([headBranch isKindOfClass:[GCHistoryLocalBranch class]]) {
+        [_windowController showOverlayWithStyle:kGIOverlayStyle_Informational format:NSLocalizedString(@"You are now on branch \"%@\"", nil), [headBranch name]];
+      } else if (headBranch == [NSNull null]) {
+        [_windowController showOverlayWithStyle:kGIOverlayStyle_Informational message:NSLocalizedString(@"You are not on any branch anymore", nil)];
       }
-      _lastHEADBranch = headBranch ? headBranch : [NSNull null];
     }
-  } else {
-    _lastHEADBranch = headBranch ? headBranch : [NSNull null];
+    _lastHEADBranch = headBranch;
   }
 }
 
@@ -1617,7 +1631,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
       _preventSelectionLoopback = NO;
     }
   }
-  
+
   if (((_searchView.superview && _searchResultsViewController.selectedResult) || (_tagsView.superview && _tagsViewController.selectedResult) || (_ancestorsView.superview && _ancestorsViewController.selectedResult)) && !_mapViewController.selectedCommit) {
     _hiddenWarningView.hidden = NO;
   } else {
@@ -1665,16 +1679,16 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 
 - (BOOL)resolveMergeConflictsWithOurCommit:(GCCommit*)ourCommit theirCommit:(GCCommit*)theirCommit {
   [self _enterResolveWithOurCommit:ourCommit theirCommit:theirCommit];
-  
+
   // TODO: Is re-entering NSApp's event loop really AppKit-safe (it appears to partially break NSAnimationContext animations for instance)?
   _resolvingConflicts = 0;
   while (!_resolvingConflicts) {
     NSEvent* event = [NSApp nextEventMatchingMask:NSAnyEventMask untilDate:[NSDate distantFuture] inMode:NSModalPanelRunLoopMode dequeue:YES];
     [NSApp sendEvent:event];
   }
-  
+
   [self _exitResolve];
-  
+
   return (_resolvingConflicts > 0);
 }
 
@@ -1691,11 +1705,15 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
     GCHostingService service = kGCHostingService_Unknown;
     [_repository hostingURLForProject:&service error:NULL];  // Ignore errors
     switch (service) {
-      case kGCHostingService_Unknown: [(NSMenuItem*)item setTitle:NSLocalizedString(@"Open in Hosting Service…", nil)]; return NO;  // Must match title in the NIB
-      default: [(NSMenuItem*)item setTitle:[NSString stringWithFormat:NSLocalizedString(@"Open in %@…", nil), GCNameFromHostingService(service)]]; return YES;
+      case kGCHostingService_Unknown:
+        [(NSMenuItem*)item setTitle:NSLocalizedString(@"Open in Hosting Service…", nil)];
+        return NO;  // Must match title in the NIB
+      default:
+        [(NSMenuItem*)item setTitle:[NSString stringWithFormat:NSLocalizedString(@"Open in %@…", nil), GCNameFromHostingService(service)]];
+        return YES;
     }
   }
-  
+
   if (item.action == @selector(openSubmoduleMenu:)) {
     NSMenu* submenu = [(NSMenuItem*)item submenu];
     [submenu removeAllItems];
@@ -1712,7 +1730,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
     }
     return YES;
   }
-  
+
   if (_windowController.hasModalView) {
     return NO;
   }
@@ -1734,36 +1752,34 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
   if (item.action == @selector(toggleAncestors:)) {
     return isMapWindowMode && !_searchView.superview && !_tagsView.superview && !_snapshotsView.superview && !_reflogView.superview && _repository.history.HEADCommit ? YES : NO;
   }
-  
+
   if (_repository.hasBackgroundOperationInProgress) {
     return NO;
   }
-  
+
   if (item.action == @selector(resetHard:)) {
     return _repository.history.HEADCommit ? YES : NO;
   }
-  
+
   if (item.action == @selector(switchMode:)) {
-    if ([_windowMode isEqualToString:kWindowModeString_Map_QuickView] || [_windowMode isEqualToString:kWindowModeString_Map_Diff]
-        || [_windowMode isEqualToString:kWindowModeString_Map_Rewrite] || [_windowMode isEqualToString:kWindowModeString_Map_Config]
-        || [_windowMode isEqualToString:kWindowModeString_Map_Resolve]) {
+    if ([_windowMode isEqualToString:kWindowModeString_Map_QuickView] || [_windowMode isEqualToString:kWindowModeString_Map_Diff] || [_windowMode isEqualToString:kWindowModeString_Map_Rewrite] || [_windowMode isEqualToString:kWindowModeString_Map_Config] || [_windowMode isEqualToString:kWindowModeString_Map_Resolve]) {
       return NO;
     }
     [(NSMenuItem*)item setState:([(NSMenuItem*)item tag] == _WindowModeIDFromString(_windowMode) ? NSOnState : NSOffState)];
     return YES;
   }
-  
+
   if (item.action == @selector(selectPreviousCommit:)) {
     return [_windowMode isEqualToString:kWindowModeString_Map_QuickView] && [self _hasPreviousQuickView] ? YES : NO;
   }
   if (item.action == @selector(selectNextCommit:)) {
     return [_windowMode isEqualToString:kWindowModeString_Map_QuickView] && [self _hasNextQuickView] ? YES : NO;
   }
-  
+
   if (item.action == @selector(checkForChanges:)) {
     return _checkingForChanges ? NO : YES;
   }
-  
+
   if (item.action == @selector(editConfiguration:)) {
     return isMapWindowMode;
   }
@@ -1787,17 +1803,18 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
   alert.accessoryView = _resetView;
   [alert addButtonWithTitle:NSLocalizedString(@"Reset", nil)];
   [alert addButtonWithTitle:NSLocalizedString(@"Cancel", nil)];
-  [alert beginSheetModalForWindow:_mainWindow withCompletionHandler:^(NSInteger returnCode) {
-    
-    if (returnCode == NSAlertFirstButtonReturn) {
-      NSError* error;
-      if (![_repository resetToHEAD:kGCResetMode_Hard error:&error] || (_untrackedButton.state && ![_repository cleanWorkingDirectory:&error]) || ![_repository updateAllSubmodulesResursively:YES error:&error]) {
-        [self presentError:error];
-      }
-      [_repository notifyRepositoryChanged];
-    }
-    
-  }];
+  [alert beginSheetModalForWindow:_mainWindow
+            withCompletionHandler:^(NSInteger returnCode) {
+
+              if (returnCode == NSAlertFirstButtonReturn) {
+                NSError* error;
+                if (![_repository resetToHEAD:kGCResetMode_Hard error:&error] || (_untrackedButton.state && ![_repository cleanWorkingDirectory:&error]) || ![_repository updateAllSubmodulesResursively:YES error:&error]) {
+                  [self presentError:error];
+                }
+                [_repository notifyRepositoryChanged];
+              }
+
+            }];
 }
 
 - (IBAction)switchMode:(id)sender {
@@ -1816,7 +1833,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
   NSRect newViewFrame = NSMakeRect(contentFrame.size.width - viewFrame.size.width, mapFrame.origin.y, viewFrame.size.width, mapFrame.size.height);
   view.frame = NSOffsetRect(newViewFrame, viewFrame.size.width, 0);
   [_mapContainerView addSubview:view positioned:NSWindowAbove relativeTo:_mapView];
-  
+
   [NSAnimationContext beginGrouping];
   [[NSAnimationContext currentContext] setDuration:kSideViewAnimationDuration];
   if (completion) {
@@ -1828,7 +1845,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
   [view.animator setFrame:newViewFrame];
   [NSAnimationContext endGrouping];
   [self _updateToolBar];
-  
+
   [self _showHelpWithIdentifier:identifier];
 }
 
@@ -1838,7 +1855,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
   NSRect newMapFrame = NSMakeRect(0, mapFrame.origin.y, contentFrame.size.width, mapFrame.size.height);
   NSRect viewFrame = view.frame;
   NSRect newViewFrame = NSOffsetRect(viewFrame, viewFrame.size.width, 0);
-  
+
   [NSAnimationContext beginGrouping];
   [[NSAnimationContext currentContext] setDuration:kSideViewAnimationDuration];
   [[NSAnimationContext currentContext] setCompletionHandler:^{
@@ -1851,13 +1868,13 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
   [_mapView.animator setFrame:newMapFrame];
   [view.animator setFrame:newViewFrame];
   [NSAnimationContext endGrouping];
-  
+
   [self _showHelpWithIdentifier:_windowMode];
 }
 
 - (void)_reloadTagsView {
   _tagsViewController.results = _repository.history.tags;  // TODO: Should we resort the tags?
-  
+
   _preventSelectionLoopback = YES;
   _tagsViewController.selectedCommit = _mapViewController.selectedCommit;
   _preventSelectionLoopback = NO;
@@ -1865,14 +1882,15 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 
 - (IBAction)toggleTags:(id)sender {
   if (_tagsView.superview) {
-    [self _removeSideView:_tagsView completion:^{
-      _tagsViewController.results = nil;
-    }];
+    [self _removeSideView:_tagsView
+               completion:^{
+                 _tagsViewController.results = nil;
+               }];
     _hiddenWarningView.hidden = YES;  // Hide immediately
     [_mainWindow makeFirstResponder:_mapViewController.preferredFirstResponder];
   } else {
     [self _reloadTagsView];
-    
+
     [_mainWindow makeFirstResponder:nil];  // Force end-editing in search field to avoid close button remaining around
     [self _addSideView:_tagsView withIdentifier:kSideViewIdentifier_Tags completion:NULL];
     [_mainWindow makeFirstResponder:_tagsViewController.preferredFirstResponder];
@@ -1907,14 +1925,15 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 - (void)_reloadAncestorsView {
   NSMutableArray* commits = [[NSMutableArray alloc] init];
   [commits addObject:_repository.history.HEADCommit];
-  [_repository.history walkAncestorsOfCommits:@[_repository.history.HEADCommit] usingBlock:^(GCHistoryCommit* commit, BOOL* stop) {
-    [commits addObject:commit];
-    if (commits.count == kMaxAncestorCommits) {
-      *stop = YES;
-    }
-  }];
+  [_repository.history walkAncestorsOfCommits:@[ _repository.history.HEADCommit ]
+                                   usingBlock:^(GCHistoryCommit* commit, BOOL* stop) {
+                                     [commits addObject:commit];
+                                     if (commits.count == kMaxAncestorCommits) {
+                                       *stop = YES;
+                                     }
+                                   }];
   _ancestorsViewController.results = commits;
-  
+
   _preventSelectionLoopback = YES;
   _ancestorsViewController.selectedCommit = _mapViewController.selectedCommit;
   _preventSelectionLoopback = NO;
@@ -1922,14 +1941,15 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 
 - (IBAction)toggleAncestors:(id)sender {
   if (_ancestorsView.superview) {
-    [self _removeSideView:_ancestorsView completion:^{
-      _ancestorsViewController.results = nil;
-    }];
+    [self _removeSideView:_ancestorsView
+               completion:^{
+                 _ancestorsViewController.results = nil;
+               }];
     _hiddenWarningView.hidden = YES;  // Hide immediately
     [_mainWindow makeFirstResponder:_mapViewController.preferredFirstResponder];
   } else {
     [self _reloadAncestorsView];
-    
+
     [_mainWindow makeFirstResponder:nil];  // Force end-editing in search field to avoid close button remaining around
     [self _addSideView:_ancestorsView withIdentifier:kSideViewIdentifier_Ancestors completion:NULL];
     [_mainWindow makeFirstResponder:_ancestorsViewController.preferredFirstResponder];
@@ -1946,7 +1966,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
     CFAbsoluteTime time = CFAbsoluteTimeGetCurrent();
     NSArray* results = [_repository findCommitsMatching:query];
     XLOG_VERBOSE(@"Searched %lu commits in \"%@\" for \"%@\" in %.3f seconds finding %lu matches", _repository.history.allCommits.count, _repository.repositoryPath, self.searchField.stringValue, CFAbsoluteTimeGetCurrent() - time, results.count);
-    
+
     _searchResultsViewController.results = results;
     if (_searchView.superview == nil) {
       [self _addSideView:_searchView withIdentifier:kSideViewIdentifier_Search completion:NULL];
@@ -1954,11 +1974,12 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
   } else {
     if (_searchView.superview) {
       _hiddenWarningView.hidden = YES;  // Hide immediately
-      [self _removeSideView:_searchView completion:^{
-        _searchResultsViewController.results = nil;
-      }];
+      [self _removeSideView:_searchView
+                 completion:^{
+                   _searchResultsViewController.results = nil;
+                 }];
     }
-    
+
     [_mainWindow makeFirstResponder:_mapViewController.preferredFirstResponder];
   }
 }
@@ -2002,7 +2023,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
     _checkingForChanges = YES;
     NSString* path = _repository.repositoryPath;  // Avoid race-condition in case _repository is set to nil before block is executed
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-      
+
       NSMutableDictionary* updatedReferences = [[NSMutableDictionary alloc] init];
       GCRepository* repository = [[GCRepository alloc] initWithExistingLocalRepository:path error:NULL];
       repository.delegate = (id<GCRepositoryDelegate>)self.class;  // Don't use self as we don't want to show progress UI nor authentication prompts
@@ -2020,7 +2041,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
         }
       }
       dispatch_async(dispatch_get_main_queue(), ^{
-        
+
         if (_repository) {
           _updatedReferences = updatedReferences;
           if (_updatedReferences.count) {
@@ -2032,16 +2053,16 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
             }
             XLOG_VERBOSE(@"Repository is up-to-date with its remotes");
           }
-          
+
           _checkingForChanges = NO;
           [self _resetCheckTimer];
           [self _updateStatusBar];
         } else {
           XLOG_WARNING(@"Remote check completed after document was closed");
         }
-        
+
       });
-      
+
     });
   } else {
     XLOG_DEBUG_UNREACHABLE();  // Not sure how this can happen but it has in the field
@@ -2086,14 +2107,14 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 
 - (IBAction)editSettings:(id)sender {
   _indexDiffsButton.state = [[_repository userInfoForKey:kRepositoryUserInfoKey_IndexDiffs] boolValue];
-  
+
   [NSApp beginSheet:_settingsWindow modalForWindow:_mainWindow modalDelegate:nil didEndSelector:NULL contextInfo:NULL];
 }
 
 - (IBAction)saveSettings:(id)sender {
   [NSApp endSheet:_settingsWindow];
   [_settingsWindow orderOut:nil];
-  
+
   [_repository setUserInfo:(_indexDiffsButton.state ? @(YES) : @(NO)) forKey:kRepositoryUserInfoKey_IndexDiffs];
 }
 

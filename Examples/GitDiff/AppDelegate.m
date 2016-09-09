@@ -39,7 +39,7 @@
 - (void)viewWillShow {
   // Configure the repo to automatically compute the HEAD to workdir diff (aka "unified status")
   self.repository.statusMode = kGCLiveRepositoryStatusMode_Unified;
-  
+
   // Refresh contents immediately
   [self _reloadContents];
 }
@@ -47,7 +47,7 @@
 - (void)viewDidHide {
   // Unload the diff to save memory
   [self setDeltas:nil usingConflicts:nil];
-  
+
   // Stop watching the repo status as it's not needed anymore
   self.repository.statusMode = kGCLiveRepositoryStatusMode_Disabled;
 }
@@ -76,7 +76,7 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification*)notification {
   NSError* error;
-  
+
   // Prompt user for a directory
   NSOpenPanel* openPanel = [NSOpenPanel openPanel];
   openPanel.canChooseDirectories = YES;
@@ -85,26 +85,26 @@
     [NSApp terminate:nil];
   }
   NSString* path = openPanel.URL.path;
-  
+
   // Attempt to open the directory as a Git repo
   _repository = [[GCLiveRepository alloc] initWithExistingLocalRepository:path error:&error];
   if (_repository == nil) {
     [NSApp presentError:error];
     [NSApp terminate:nil];
   }
-  
+
   // A repo must have an associated NSUndoManager for the undo/redo system to work
   // We simply use the one of the window
   _repository.undoManager = _window.undoManager;
-  
+
   // Each GIWindow expects a GIWindowController around
   _windowController = [[GIWindowController alloc] initWithWindow:_window];
-  
+
   // Create the view controller and add its view to the window
   _viewController = [[LiveDiffViewController alloc] initWithRepository:_repository];
   _viewController.view.frame = [_window.contentView bounds];
   [_window.contentView addSubview:_viewController.view];
-  
+
   // Show the window
   [_window makeKeyAndOrderFront:nil];
 }

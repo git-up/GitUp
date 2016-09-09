@@ -1,4 +1,4 @@
-//  Copyright (C) 2015 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2016 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -29,15 +29,23 @@
       [string appendFormat:@"%@ > %@\n", delta.oldFile.path, delta.newFile.path];
     }
     GCDiffPatch* patch = [self.repository makePatchForDiffDelta:delta isBinary:NULL error:NULL];
-    [patch enumerateUsingBeginHunkHandler:NULL lineHandler:^(GCLineDiffChange change, NSUInteger oldLineNumber, NSUInteger newLineNumber, const char* contentBytes, NSUInteger contentLength) {
-      switch (change) {
-        case kGCLineDiffChange_Unmodified: [string appendString:@"  "]; break;
-        case kGCLineDiffChange_Added: [string appendString:@"+ "]; break;
-        case kGCLineDiffChange_Deleted: [string appendString:@"- "]; break;
-      }
-      NSString* line = [[NSString alloc] initWithBytes:contentBytes length:contentLength encoding:NSUTF8StringEncoding];
-      [string appendString:line];
-    } endHunkHandler:NULL];
+    [patch enumerateUsingBeginHunkHandler:NULL
+                              lineHandler:^(GCLineDiffChange change, NSUInteger oldLineNumber, NSUInteger newLineNumber, const char* contentBytes, NSUInteger contentLength) {
+                                switch (change) {
+                                  case kGCLineDiffChange_Unmodified:
+                                    [string appendString:@"  "];
+                                    break;
+                                  case kGCLineDiffChange_Added:
+                                    [string appendString:@"+ "];
+                                    break;
+                                  case kGCLineDiffChange_Deleted:
+                                    [string appendString:@"- "];
+                                    break;
+                                }
+                                NSString* line = [[NSString alloc] initWithBytes:contentBytes length:contentLength encoding:NSUTF8StringEncoding];
+                                [string appendString:line];
+                              }
+                           endHunkHandler:NULL];
   }
   return string;
 }
@@ -68,44 +76,44 @@
   XCTAssertEqualObjects([self _stringFromDiffingFileInIndexWithHEAD:@"hello_world.txt"], @"");
   XCTAssertEqualObjects([self _stringFromDiffingWorkingDirectoryWithIndex], @"");
   XCTAssertEqualObjects([self _stringFromDiffingIndexWithHEAD], @"");
-  
+
   // Modify file in working directory
   [self updateFileAtPath:@"hello_world.txt" withString:@"Bonjour le monde!\n"];
   XCTAssertEqualObjects([self _stringFromDiffingFileInWorkingDirectoryWithIndex:@"hello_world.txt"], @"- Hello World!\n+ Bonjour le monde!\n");
   XCTAssertEqualObjects([self _stringFromDiffingFileInIndexWithHEAD:@"hello_world.txt"], @"");
   XCTAssertEqualObjects([self _stringFromDiffingWorkingDirectoryWithIndex], @"hello_world.txt > hello_world.txt\n- Hello World!\n+ Bonjour le monde!\n");
   XCTAssertEqualObjects([self _stringFromDiffingIndexWithHEAD], @"");
-  
+
   // Add modified file to index
   XCTAssertTrue([self.repository addFileToIndex:@"hello_world.txt" error:NULL]);
   XCTAssertEqualObjects([self _stringFromDiffingFileInWorkingDirectoryWithIndex:@"hello_world.txt"], @"");
   XCTAssertEqualObjects([self _stringFromDiffingFileInIndexWithHEAD:@"hello_world.txt"], @"- Hello World!\n+ Bonjour le monde!\n");
   XCTAssertEqualObjects([self _stringFromDiffingWorkingDirectoryWithIndex], @"");
   XCTAssertEqualObjects([self _stringFromDiffingIndexWithHEAD], @"hello_world.txt > hello_world.txt\n- Hello World!\n+ Bonjour le monde!\n");
-  
+
   // Add new file to working directory
   [self updateFileAtPath:@"test.txt" withString:@"This is a test\n"];
   XCTAssertEqualObjects([self _stringFromDiffingFileInWorkingDirectoryWithIndex:@"test.txt"], @"+ This is a test\n");
   XCTAssertEqualObjects([self _stringFromDiffingFileInIndexWithHEAD:@"test.txt"], @"");
   XCTAssertEqualObjects([self _stringFromDiffingWorkingDirectoryWithIndex], @"test.txt > (null)\n+ This is a test\n");
   XCTAssertEqualObjects([self _stringFromDiffingIndexWithHEAD], @"hello_world.txt > hello_world.txt\n- Hello World!\n+ Bonjour le monde!\n");
-  
+
   // Add new file to index
   XCTAssertTrue([self.repository addFileToIndex:@"test.txt" error:NULL]);
   XCTAssertEqualObjects([self _stringFromDiffingFileInWorkingDirectoryWithIndex:@"test.txt"], @"");
   XCTAssertEqualObjects([self _stringFromDiffingFileInIndexWithHEAD:@"test.txt"], @"+ This is a test\n");
   XCTAssertEqualObjects([self _stringFromDiffingWorkingDirectoryWithIndex], @"");
   XCTAssertEqualObjects([self _stringFromDiffingIndexWithHEAD], @"hello_world.txt > hello_world.txt\n- Hello World!\n+ Bonjour le monde!\n(null) > test.txt\n+ This is a test\n");
-  
+
   // Strip trailing newline from file in working directory
   [self updateFileAtPath:@"hello_world.txt" withString:@"Bonjour le monde!"];
   XCTAssertEqualObjects([self _stringFromDiffingFileInWorkingDirectoryWithIndex:@"hello_world.txt"], @"- Bonjour le monde!\n+ Bonjour le monde!");
-  
+
   // Commit changes
   XCTAssertTrue([self.repository addFileToIndex:@"hello_world.txt" error:NULL]);
   GCCommit* newCommit = [self.repository createCommitFromHEADWithMessage:@"Update" error:NULL];
   XCTAssertNotNil(newCommit);
-  
+
   // Diff commits
   GCDiff* diff = [self.repository diffCommit:newCommit
                                   withCommit:self.initialCommit
@@ -122,14 +130,16 @@
     XCTAssertNotNil(patch);
     [patch enumerateUsingBeginHunkHandler:^(NSUInteger oldLineNumber, NSUInteger oldLineCount, NSUInteger newLineNumber, NSUInteger newLineCount) {
       ++count;  // 2 x 1 hunks
-    } lineHandler:^(GCLineDiffChange change, NSUInteger oldLineNumber, NSUInteger newLineNumber, const char* contentBytes, NSUInteger contentLength) {
-      ++count;  // 2 + 1 lines
-    } endHunkHandler:^{
-      ;
-    }];
+    }
+        lineHandler:^(GCLineDiffChange change, NSUInteger oldLineNumber, NSUInteger newLineNumber, const char* contentBytes, NSUInteger contentLength) {
+          ++count;  // 2 + 1 lines
+        }
+        endHunkHandler:^{
+          ;
+        }];
   }
   XCTAssertEqual(count, 5);
-  
+
   // Diff commits again
   GCDiff* diff2 = [self.repository diffCommit:newCommit
                                    withCommit:self.initialCommit
@@ -155,7 +165,7 @@
   [self updateFileAtPath:@"type-changed.txt" withString:@""];
   XCTAssertTrue([self.repository addFileToIndex:@"type-changed.txt" error:NULL]);
   XCTAssertNotNil([self.repository createCommitFromHEADWithMessage:@"Update" error:NULL]);
-  
+
   // Touch files
   [self updateFileAtPath:@"ignored.txt" withString:@""];
   [self updateFileAtPath:@"modified.txt" withString:@"Hi there!"];
@@ -165,14 +175,14 @@
   XCTAssertTrue([[NSFileManager defaultManager] removeItemAtPath:[self.repository.workingDirectoryPath stringByAppendingPathComponent:@"type-changed.txt"] error:NULL]);
   XCTAssertTrue([[NSFileManager defaultManager] createSymbolicLinkAtPath:[self.repository.workingDirectoryPath stringByAppendingPathComponent:@"type-changed.txt"] withDestinationPath:@"hello_world.txt" error:NULL]);
   XCTAssertTrue([[NSFileManager defaultManager] copyItemAtPath:[self.repository.workingDirectoryPath stringByAppendingPathComponent:@"hello_world.txt"] toPath:[self.repository.workingDirectoryPath stringByAppendingPathComponent:@"copied.txt"] error:NULL]);
-  
+
   // Stage some files
   XCTAssertTrue([self.repository addFileToIndex:@"modified.txt" error:NULL]);
   XCTAssertTrue([self.repository removeFileFromIndex:@"deleted.txt" error:NULL]);
   XCTAssertTrue([self.repository removeFileFromIndex:@"renamed1.txt" error:NULL]);
   XCTAssertTrue([self.repository addFileToIndex:@"renamed2.txt" error:NULL]);
   XCTAssertTrue([self.repository addFileToIndex:@"added.txt" error:NULL]);
-  
+
   GCDiff* diff = [self.repository diffWorkingDirectoryWithHEAD:nil
                                                        options:(kGCDiffOption_FindTypeChanges | kGCDiffOption_FindRenames | kGCDiffOption_FindCopies | kGCDiffOption_IncludeUnmodified | kGCDiffOption_IncludeUntracked | kGCDiffOption_IncludeIgnored)
                                              maxInterHunkLines:0

@@ -1,4 +1,4 @@
-//  Copyright (C) 2015 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2016 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -26,13 +26,13 @@
     XCTAssertNotNil([self.repository findFilePathForConfigurationLevel:kGCConfigLevel_Global error:NULL]);
   }
   XCTAssertNotNil([self.repository findFilePathForConfigurationLevel:kGCConfigLevel_Local error:NULL]);
-  
+
   XCTAssertNil([self.repository readConfigOptionForVariable:@"unknown" error:NULL]);
-  
+
   GCConfigOption* option = [self.repository readConfigOptionForVariable:@"core.bare" error:NULL];
   XCTAssertEqualObjects(option.value, @"false");
   XCTAssertEqual(option.level, kGCConfigLevel_Local);
-  
+
   XCTAssertTrue([self.repository writeConfigOptionForLevel:kGCConfigLevel_Local variable:@"foo.bar" withValue:@"hello world" error:NULL]);
   option = [self.repository readConfigOptionForVariable:@"foo.bar" error:NULL];
   XCTAssertEqual(option.level, kGCConfigLevel_Local);
@@ -42,10 +42,10 @@
   XCTAssertNotNil([self.repository readConfigOptionForLevel:kGCConfigLevel_Local variable:@"foo.bar" error:NULL]);
   XCTAssertTrue([self.repository writeConfigOptionForLevel:kGCConfigLevel_Local variable:@"foo.bar" withValue:nil error:NULL]);
   XCTAssertNil([self.repository readConfigOptionForVariable:@"foo.bar" error:NULL]);
-  
+
   NSArray* config1 = [self.repository readConfigForLevel:kGCConfigLevel_Local error:NULL];
   XCTAssertEqual(config1.count, 6);
-  
+
   NSArray* config2 = [self.repository readAllConfigs:NULL];
   XCTAssertEqual(config2.count, 8);
   option = config2.firstObject;

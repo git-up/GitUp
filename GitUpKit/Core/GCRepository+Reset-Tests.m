@@ -1,4 +1,4 @@
-//  Copyright (C) 2015 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2016 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -27,20 +27,20 @@
   [self updateFileAtPath:@"hello_world.txt" withString:@"Bonjour le monde!\n"];
   [self updateFileAtPath:@"test.txt" withString:@"This is a test\n"];
   [self assertGitCLTOutputEqualsString:@" M hello_world.txt\n?? test.txt\n" withRepository:self.repository command:@"status", @"--ignored", @"--porcelain", nil];
-  
+
   // Hard reset
   XCTAssertTrue([self.repository resetToCommit:self.initialCommit mode:kGCResetMode_Hard error:NULL]);
   [self assertGitCLTOutputEqualsString:@"?? test.txt\n" withRepository:self.repository command:@"status", @"--ignored", @"--porcelain", nil];
-  
+
   // Modify file in working directory again
   [self updateFileAtPath:@"hello_world.txt" withString:@"Bonjour le monde!\n"];
-  
+
   // Update index and commit changes
   XCTAssertTrue([self.repository addAllFilesToIndex:NULL]);
   GCCommit* commit = [self.repository createCommitFromHEADWithMessage:@"Update 1" error:NULL];
   XCTAssertNotNil(commit);
   [self assertGitCLTOutputEqualsString:@"" withRepository:self.repository command:@"status", @"--ignored", @"--porcelain", nil];
-  
+
   // Soft reset
   XCTAssertTrue([self.repository resetToCommit:self.initialCommit mode:kGCResetMode_Soft error:NULL]);
   [self assertGitCLTOutputEqualsString:@"M  hello_world.txt\nA  test.txt\n" withRepository:self.repository command:@"status", @"--ignored", @"--porcelain", nil];

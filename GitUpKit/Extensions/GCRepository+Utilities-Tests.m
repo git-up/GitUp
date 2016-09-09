@@ -1,4 +1,4 @@
-//  Copyright (C) 2015 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2016 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -32,29 +32,29 @@
   // Move file
   XCTAssertTrue([self.repository moveFileFromPath:@"hello_world.txt" toPath:@"goodbye_world.txt" force:NO error:NULL]);
   [self assertGitCLTOutputEqualsString:@"R  hello_world.txt -> goodbye_world.txt\n" withRepository:self.repository command:@"status", @"--ignored", @"--porcelain", nil];
-  
+
   // Remove file
   XCTAssertTrue([self.repository removeFile:@"goodbye_world.txt" error:NULL]);
   [self assertGitCLTOutputEqualsString:@"D  hello_world.txt\n" withRepository:self.repository command:@"status", @"--ignored", @"--porcelain", nil];
-  
+
   // Hosting service URLs
   GCHostingService service;
   XCTAssertNil([self.repository hostingURLForProject:&service error:NULL]);
-  
+
   XCTAssertTrue([self.repository writeConfigOptionForLevel:kGCConfigLevel_Local variable:@"remote.origin.url" withValue:@"git@github.com:git-up/GitUp-Mac.git" error:NULL]);
   XCTAssertEqualObjects([self.repository hostingURLForProject:&service error:NULL], [NSURL URLWithString:@"https://github.com/git-up/GitUp-Mac"]);
   XCTAssertEqual(service, kGCHostingService_GitHub);
   XCTAssertTrue([self.repository writeConfigOptionForLevel:kGCConfigLevel_Local variable:@"remote.origin.url" withValue:@"https://github.com/git-up/GitUp-Mac.git" error:NULL]);
   XCTAssertEqualObjects([self.repository hostingURLForProject:&service error:NULL], [NSURL URLWithString:@"https://github.com/git-up/GitUp-Mac"]);
   XCTAssertEqual(service, kGCHostingService_GitHub);
-  
+
   XCTAssertTrue([self.repository writeConfigOptionForLevel:kGCConfigLevel_Local variable:@"remote.origin.url" withValue:@"ssh://git@bitbucket.org:gitup/test.git" error:NULL]);
   XCTAssertEqualObjects([self.repository hostingURLForProject:&service error:NULL], [NSURL URLWithString:@"https://bitbucket.org/gitup/test"]);
   XCTAssertEqual(service, kGCHostingService_BitBucket);
   XCTAssertTrue([self.repository writeConfigOptionForLevel:kGCConfigLevel_Local variable:@"remote.origin.url" withValue:@"https://user@bitbucket.org/gitup/test.git" error:NULL]);
   XCTAssertEqualObjects([self.repository hostingURLForProject:&service error:NULL], [NSURL URLWithString:@"https://bitbucket.org/gitup/test"]);
   XCTAssertEqual(service, kGCHostingService_BitBucket);
-  
+
   XCTAssertTrue([self.repository writeConfigOptionForLevel:kGCConfigLevel_Local variable:@"remote.origin.url" withValue:@"git@gitlab.com:gitup/GitUp-Mac.git" error:NULL]);
   XCTAssertEqualObjects([self.repository hostingURLForProject:&service error:NULL], [NSURL URLWithString:@"https://gitlab.com/gitup/GitUp-Mac"]);
   XCTAssertEqual(service, kGCHostingService_GitLab);
@@ -67,7 +67,7 @@
   [self updateFileAtPath:@"temp.txt" withString:@"temp"];
   XCTAssertTrue([self.repository addFileToIndex:@"temp.txt" error:NULL]);
   XCTAssertTrue([self.repository createCommitFromHEADWithMessage:@"temp" error:NULL]);
-  
+
   [self updateFileAtPath:@"new.txt" withString:@"new"];
   [self deleteFileAtPath:@"temp.txt"];
   [self updateFileAtPath:@"hello_world.txt" withString:@"COUCOU"];
@@ -80,7 +80,7 @@
   [self updateFileAtPath:@"temp.txt" withString:@"temp"];
   XCTAssertTrue([self.repository addFileToIndex:@"temp.txt" error:NULL]);
   XCTAssertTrue([self.repository createCommitFromHEADWithMessage:@"temp" error:NULL]);
-  
+
   [self updateFileAtPath:@"new.txt" withString:@"new"];
   [self deleteFileAtPath:@"temp.txt"];
   [self updateFileAtPath:@"hello_world.txt" withString:@"COUCOU"];
@@ -94,7 +94,7 @@
   XCTAssertTrue([self.repository addFileToIndex:@"file1" error:NULL]);
   [self updateFileAtPath:@"file2" withString:@"2"];
   XCTAssertTrue([self.repository cleanWorkingDirectory:NULL]);
-  XCTAssertTrue([[NSFileManager defaultManager] fileExistsAtPath:[self.repository.workingDirectoryPath stringByAppendingPathComponent:@"file1"]]);
+  XCTAssertTrue([[NSFileManager defaultManager] fileExistsAtPath:[self.repository.workingDirectoryPath stringByAppendingPathComponent:@"file1"] followLastSymlink:NO]);
   XCTAssertFalse([[NSFileManager defaultManager] fileExistsAtPath:[self.repository.workingDirectoryPath stringByAppendingPathComponent:@"file2"]]);
 }
 

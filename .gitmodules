@@ -7,3 +7,6 @@
 [submodule "Libraries"]
 	path = GitUpKit/Third-Party/Libraries
 	url = https://github.com/git-up/Libraries.git
+[submodule "GitUp/Third-Party/GARawTracker"]
+	path = GitUp/Third-Party/GARawTracker
+	url = https://github.com/swisspol/GARawTracker.git

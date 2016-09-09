@@ -1,4 +1,4 @@
-//  Copyright (C) 2015 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2016 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -119,17 +119,17 @@ NSString* const GIDiffContentsViewControllerUserDefaultKey_DiffViewMode = @"GIDi
 - (void)drawRect:(NSRect)dirtyRect {
   CGContextRef context = [[NSGraphicsContext currentContext] graphicsPort];
   NSRect bounds = self.bounds;
-  
+
   CGContextSaveGState(context);
   [_backgroundColor set];
-  
+
   CGContextFillRect(context, dirtyRect);
-  
+
   CGContextSetBlendMode(context, kCGBlendModeMultiply);
   CGContextMoveToPoint(context, bounds.origin.x, bounds.origin.y + 0.5);
   CGContextAddLineToPoint(context, bounds.origin.x + bounds.size.width, bounds.origin.y + 0.5);
   CGContextStrokePath(context);
-  
+
   CGContextRestoreGState(context);
 }
 
@@ -216,7 +216,7 @@ static NSColor* _DimColor(NSColor* color) {
   _deletedBackgroundColor = _DimColor([NSColor colorWithDeviceRed:(241.0 / 255.0) green:(115.0 / 255.0) blue:(116.0 / 255.0) alpha:1.0]);
   _renamedBackgroundColor = _DimColor([NSColor colorWithDeviceRed:(133.0 / 255.0) green:(96.0 / 255.0) blue:(168.0 / 255.0) alpha:1.0]);
   _untrackedBackgroundColor = [NSColor colorWithDeviceRed:0.75 green:0.75 blue:0.75 alpha:1.0];
-  
+
   _conflictImage = [[NSBundle bundleForClass:[GIDiffContentsViewController class]] imageForResource:@"icon_file_conflict"];
   _addedImage = [[NSBundle bundleForClass:[GIDiffContentsViewController class]] imageForResource:@"icon_file_a"];
   _modifiedImage = [[NSBundle bundleForClass:[GIDiffContentsViewController class]] imageForResource:@"icon_file_m"];
@@ -234,7 +234,7 @@ static NSColor* _DimColor(NSColor* color) {
 
 - (void)dealloc {
   [[NSNotificationCenter defaultCenter] removeObserver:self name:NSViewBoundsDidChangeNotification object:_tableView.superview];
-  
+
   [[NSUserDefaults standardUserDefaults] removeObserver:self forKeyPath:GIDiffContentsViewControllerUserDefaultKey_DiffViewMode context:(__bridge void*)[GIDiffContentsViewController class]];
 }
 
@@ -246,18 +246,18 @@ static NSColor* _DimColor(NSColor* color) {
 
 - (void)loadView {
   [super loadView];
-  
+
   _tableView.controller = self;
   _tableView.backgroundColor = [NSColor colorWithDeviceRed:0.98 green:0.98 blue:0.98 alpha:1.0];
-  
+
   _emptyTextField.stringValue = @"";
-  
+
   _headerViewHeight = [[_tableView makeViewWithIdentifier:@"header" owner:self] frame].size.height;
   _emptyViewHeight = [[_tableView makeViewWithIdentifier:@"empty" owner:self] frame].size.height;
   _conflictViewHeight = [[_tableView makeViewWithIdentifier:@"conflict" owner:self] frame].size.height;
   _submoduleViewHeight = [[_tableView makeViewWithIdentifier:@"submodule" owner:self] frame].size.height;
   _binaryViewHeight = [[_tableView makeViewWithIdentifier:@"binary" owner:self] frame].size.height;
-  
+
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_viewBoundsDidChange:) name:NSViewBoundsDidChangeNotification object:_tableView.superview];
 }
 
@@ -330,7 +330,7 @@ static NSColor* _DimColor(NSColor* color) {
 
 - (void)_reloadDeltas {
   BOOL flashScrollers = NO;
-  
+
   if (_deltas.count) {
     CFMutableDictionaryRef cache = NULL;
     if (_data) {
@@ -342,7 +342,7 @@ static NSColor* _DimColor(NSColor* color) {
     } else {
       flashScrollers = YES;
     }
-    
+
     NSMutableArray* array = [[NSMutableArray alloc] init];
     for (GCDiffDelta* delta in _deltas) {
       GCIndexConflict* conflict = [_conflicts objectForKey:delta.canonicalPath];
@@ -360,7 +360,7 @@ static NSColor* _DimColor(NSColor* color) {
         data = [[GIDiffContentData alloc] init];
         data.delta = delta;
         data.conflict = conflict;
-        
+
         if (!conflict && !GC_FILE_MODE_IS_SUBMODULE(delta.oldFile.mode) && !GC_FILE_MODE_IS_SUBMODULE(delta.newFile.mode)) {
           NSError* error;
           BOOL isBinary;
@@ -382,7 +382,7 @@ static NSColor* _DimColor(NSColor* color) {
       }
       [array addObject:data];
     }
-    
+
     _data = array;
     if (cache) {
       CFRelease(cache);
@@ -391,9 +391,9 @@ static NSColor* _DimColor(NSColor* color) {
     _data = nil;
   }
   [_tableView reloadData];
-  
+
   _emptyTextField.hidden = _data.count ? YES : NO;
-  
+
   if (flashScrollers && self.viewVisible) {
     [_scrollView flashScrollers];
   }
@@ -472,7 +472,7 @@ static NSColor* _DimColor(NSColor* color) {
   return [[GIDiffRowView alloc] init];
 }
 
-- (void)tableView:(NSTableView *)tableView didRemoveRowView:(NSTableRowView*)rowView forRow:(NSInteger)row {
+- (void)tableView:(NSTableView*)tableView didRemoveRowView:(NSTableRowView*)rowView forRow:(NSInteger)row {
   if (_headerView) {
     row -= 1;
   }
@@ -487,12 +487,18 @@ static NSColor* _DimColor(NSColor* color) {
 
 static inline NSString* _StringFromFileMode(GCFileMode mode) {
   switch (mode) {
-    case kGCFileMode_Unreadable: return NSLocalizedString(@"Unreadable", nil);
-    case kGCFileMode_Tree: return NSLocalizedString(@"Tree", nil);
-    case kGCFileMode_Blob: return NSLocalizedString(@"Blob", nil);
-    case kGCFileMode_BlobExecutable: return NSLocalizedString(@"Executable", nil);
-    case kGCFileMode_Link: return NSLocalizedString(@"Link", nil);
-    case kGCFileMode_Commit: return NSLocalizedString(@"Commit", nil);
+    case kGCFileMode_Unreadable:
+      return NSLocalizedString(@"Unreadable", nil);
+    case kGCFileMode_Tree:
+      return NSLocalizedString(@"Tree", nil);
+    case kGCFileMode_Blob:
+      return NSLocalizedString(@"Blob", nil);
+    case kGCFileMode_BlobExecutable:
+      return NSLocalizedString(@"Executable", nil);
+    case kGCFileMode_Link:
+      return NSLocalizedString(@"Link", nil);
+    case kGCFileMode_Commit:
+      return NSLocalizedString(@"Commit", nil);
   }
   return nil;
 }
@@ -504,10 +510,10 @@ static inline NSString* _StringFromFileMode(GCFileMode mode) {
     }
     row -= 1;
   }
-  
+
   GIDiffContentData* data = _data[row / 2];
   GCDiffDelta* delta = data.delta;
-  
+
   if (row % 2) {
     if (data.diffView) {
       GITextDiffCellView* view = [_tableView makeViewWithIdentifier:@"text" owner:self];
@@ -524,11 +530,21 @@ static inline NSString* _StringFromFileMode(GCFileMode mode) {
     } else if (data.conflict) {
       NSString* status = nil;
       switch (data.conflict.status) {
-        case kGCIndexConflictStatus_None: XLOG_DEBUG_UNREACHABLE(); break;
-        case kGCIndexConflictStatus_BothModified: status = NSLocalizedString(@"both modified", nil); break;
-        case kGCIndexConflictStatus_BothAdded: status = NSLocalizedString(@"both added", nil); break;
-        case kGCIndexConflictStatus_DeletedByUs: status = NSLocalizedString(@"deleted by us", nil); break;
-        case kGCIndexConflictStatus_DeletedByThem: status = NSLocalizedString(@"deleted by them", nil); break;
+        case kGCIndexConflictStatus_None:
+          XLOG_DEBUG_UNREACHABLE();
+          break;
+        case kGCIndexConflictStatus_BothModified:
+          status = NSLocalizedString(@"both modified", nil);
+          break;
+        case kGCIndexConflictStatus_BothAdded:
+          status = NSLocalizedString(@"both added", nil);
+          break;
+        case kGCIndexConflictStatus_DeletedByUs:
+          status = NSLocalizedString(@"deleted by us", nil);
+          break;
+        case kGCIndexConflictStatus_DeletedByThem:
+          status = NSLocalizedString(@"deleted by them", nil);
+          break;
       }
       GIConflictDiffCellView* view = [_tableView makeViewWithIdentifier:@"conflict" owner:self];
       view.statusTextField.stringValue = [NSString stringWithFormat:NSLocalizedString(@"This file has conflicts (%@)", nil), status];
@@ -559,7 +575,7 @@ static inline NSString* _StringFromFileMode(GCFileMode mode) {
       return view;
     }
   }
-  
+
   GIHeaderDiffCellView* view = [_tableView makeViewWithIdentifier:@"header" owner:self];
   NSRange oldPathRange = {0, 0};
   NSRange newPathRange = {0, 0};
@@ -569,22 +585,21 @@ static inline NSString* _StringFromFileMode(GCFileMode mode) {
     view.imageView.image = _conflictImage;
   } else {
     switch (delta.change) {
-      
       case kGCFileDiffChange_Added:
         view.backgroundColor = _addedBackgroundColor;
         view.imageView.image = _addedImage;
         break;
-      
+
       case kGCFileDiffChange_Deleted:
         view.backgroundColor = _deletedBackgroundColor;
         view.imageView.image = _deletedImage;
         break;
-      
+
       case kGCFileDiffChange_Modified:
         view.backgroundColor = _modifiedBackgroundColor;
         view.imageView.image = _modifiedImage;
         break;
-      
+
       case kGCFileDiffChange_Renamed: {
         NSString* oldPath = delta.oldFile.path;
         NSString* newPath = delta.newFile.path;
@@ -595,7 +610,7 @@ static inline NSString* _StringFromFileMode(GCFileMode mode) {
         newPathRange.location += oldPath.length + 3;
         break;
       }
-      
+
       case kGCFileDiffChange_Untracked:
         if (_showsUntrackedAsAdded) {
           view.backgroundColor = _addedBackgroundColor;
@@ -605,19 +620,18 @@ static inline NSString* _StringFromFileMode(GCFileMode mode) {
           view.imageView.image = _untrackedImage;
         }
         break;
-      
+
       default:
         view.imageView.image = nil;
         XLOG_DEBUG_UNREACHABLE();
         break;
-      
     }
   }
   if (!data.conflict && delta.oldFile && delta.newFile && (delta.oldFile.mode != delta.newFile.mode)) {
     label = [label stringByAppendingFormat:@" (%@ ▶ %@)", _StringFromFileMode(delta.oldFile.mode), _StringFromFileMode(delta.newFile.mode)];
   }
   if (oldPathRange.length || newPathRange.length) {
-    NSDictionary* attributes = @{NSUnderlineStyleAttributeName: @(NSUnderlineStyleSingle)};
+    NSDictionary* attributes = @{ NSUnderlineStyleAttributeName : @(NSUnderlineStyleSingle) };
     NSMutableAttributedString* string = [[NSMutableAttributedString alloc] initWithString:label attributes:nil];
     [string beginEditing];
     [string setAttributes:attributes range:oldPathRange];

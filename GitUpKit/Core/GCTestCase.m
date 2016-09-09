@@ -1,4 +1,4 @@
-//  Copyright (C) 2015 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2016 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@ static const void* _associatedObjectKey = &_associatedObjectKey;
 
 - (void)setUp {
   [super setUp];
-  
+
   // Figure out if running as Xcode Server bot or under Travis CI
   _botMode = [NSUserName() isEqualToString:@"_xcsbuildd"] || getenv("TRAVIS");
 }
@@ -38,7 +38,7 @@ static const void* _associatedObjectKey = &_associatedObjectKey;
 - (GCRepository*)createLocalRepositoryAtPath:(NSString*)path bare:(BOOL)bare {
   GCRepository* repo = [[GCRepository alloc] initWithNewLocalRepository:path bare:bare error:NULL];
   XCTAssertNotNil(repo);
-  
+
   NSString* configDirectory = [[NSTemporaryDirectory() stringByAppendingPathComponent:[[NSProcessInfo processInfo] globallyUniqueString]] stringByAppendingPathComponent:@"git"];
   XCTAssertTrue([[NSFileManager defaultManager] createDirectoryAtPath:configDirectory withIntermediateDirectories:YES attributes:nil error:NULL]);
   NSString* configPath = [configDirectory stringByAppendingPathComponent:@"config"];
@@ -47,7 +47,7 @@ static const void* _associatedObjectKey = &_associatedObjectKey;
 	email = bot@example.com\n\
 ";
   XCTAssertTrue([configString writeToFile:configPath atomically:YES encoding:NSASCIIStringEncoding error:NULL]);
-  
+
   git_config* config;
   XCTAssertEqual(git_config_new(&config), GIT_OK);
   if (!repo.bare) {
@@ -56,9 +56,9 @@ static const void* _associatedObjectKey = &_associatedObjectKey;
   XCTAssertEqual(git_config_add_file_ondisk(config, configPath.fileSystemRepresentation, GIT_CONFIG_LEVEL_APP, true), GIT_OK);
   git_repository_set_config(repo.private, config);
   git_config_free(config);
-  
+
   objc_setAssociatedObject(repo, _associatedObjectKey, [configDirectory stringByDeletingLastPathComponent], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-  
+
   return repo;
 }
 
@@ -82,7 +82,7 @@ static const void* _associatedObjectKey = &_associatedObjectKey;
   return [self _runCLTWithPath:kGitCLTPath
                      arguments:array
               currentDirectory:(repository ? (repository.bare ? repository.repositoryPath : repository.workingDirectoryPath) : [[NSFileManager defaultManager] currentDirectoryPath])
-                   environment:(repository ? @{@"XDG_CONFIG_HOME": objc_getAssociatedObject(repository, _associatedObjectKey)} : @{})];
+                   environment:(repository ? @{ @"XDG_CONFIG_HOME" : objc_getAssociatedObject(repository, _associatedObjectKey) } : @{})];
 }
 
 - (NSString*)runGitCLTWithRepository:(GCRepository*)repository command:(NSString*)command, ... {
@@ -130,18 +130,18 @@ static const void* _associatedObjectKey = &_associatedObjectKey;
 
 - (void)setUp {
   [super setUp];
-  
+
   // Create working directory
   if (self.botMode) {
     _temporaryPath = [NSString stringWithFormat:@"/tmp/gitup-%i", getpid()];
   } else {
     _temporaryPath = @"/tmp/gitup";
   }
-  if ([[NSFileManager defaultManager] fileExistsAtPath:_temporaryPath]) {
+  if ([[NSFileManager defaultManager] fileExistsAtPath:_temporaryPath followLastSymlink:NO]) {
     XCTAssertTrue([[NSFileManager defaultManager] removeItemAtPath:_temporaryPath error:NULL]);
   }
   XCTAssertTrue([[NSFileManager defaultManager] createDirectoryAtPath:_temporaryPath withIntermediateDirectories:NO attributes:nil error:NULL]);
-  
+
   // Initialize new repository
   _repository = [self createLocalRepositoryAtPath:_temporaryPath bare:NO];
   XCTAssertNotNil(_repository);
@@ -152,7 +152,7 @@ static const void* _associatedObjectKey = &_associatedObjectKey;
   [self destroyLocalRepository:_repository];
   _repository = nil;
   _temporaryPath = nil;
-  
+
   [super tearDown];
 }
 
@@ -198,10 +198,10 @@ static const void* _associatedObjectKey = &_associatedObjectKey;
 
 - (void)setUp {
   [super setUp];
-  
+
   // Make commits
   _initialCommit = [self makeCommitWithUpdatedFileAtPath:@"hello_world.txt" string:@"Hello World!\n" message:@"Initial commit"];
-  
+
   // Look up HEAD
   GCLocalBranch* branch;  // Use local variable to work around ARC limitation
   GCCommit* commit = [self.repository lookupHEAD:&branch error:NULL];
@@ -213,7 +213,7 @@ static const void* _associatedObjectKey = &_associatedObjectKey;
 - (void)tearDown {
   _masterBranch = nil;
   _initialCommit = nil;
-  
+
   [super tearDown];
 }
 
@@ -226,16 +226,16 @@ static const void* _associatedObjectKey = &_associatedObjectKey;
 
 - (void)setUp {
   [super setUp];
-  
+
   // Make commits
   _commit1 = [self makeCommitWithUpdatedFileAtPath:@"hello_world.txt" string:@"Bonjour Monde!\n" message:@"1"];
   _commit2 = [self makeCommitWithUpdatedFileAtPath:@"hello_world.txt" string:@"Gutentag Welt!\n" message:@"2"];
   _commit3 = [self makeCommitWithUpdatedFileAtPath:@"hello_world.txt" string:@"Hola Mundo!\n" message:@"3"];
-  
+
   // Create topic branch
   _topicBranch = [self.repository createLocalBranchFromCommit:self.initialCommit withName:@"topic" force:NO error:NULL];
   XCTAssertNotNil(_topicBranch);
-  
+
   // Make commit on topic branch
   XCTAssertTrue([self.repository checkoutLocalBranch:_topicBranch options:0 error:NULL]);
   _commitA = [self makeCommitWithUpdatedFileAtPath:@"hello_world.txt" string:@"Goodbye World!\n" message:@"A"];
@@ -248,7 +248,7 @@ static const void* _associatedObjectKey = &_associatedObjectKey;
   _commit2 = nil;
   _commit3 = nil;
   _commitA = nil;
-  
+
   [super tearDown];
 }
 
@@ -261,7 +261,7 @@ static const void* _associatedObjectKey = &_associatedObjectKey;
 
 - (void)setUp {
   [super setUp];
-  
+
   NSString* path;
   if (self.botMode) {
     path = [NSString stringWithFormat:@"/tmp/sqlite-repository-%i", getpid()];
@@ -288,7 +288,7 @@ static const void* _associatedObjectKey = &_associatedObjectKey;
     XCTAssertTrue([[NSFileManager defaultManager] removeItemAtPath:_configPath error:NULL]);
   }
   XCTAssertTrue([[NSFileManager defaultManager] removeItemAtPath:_databasePath error:NULL]);
-  
+
   [super tearDown];
 }
 

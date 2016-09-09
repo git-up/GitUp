@@ -1,4 +1,4 @@
-//  Copyright (C) 2015 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2016 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -41,41 +41,40 @@
 
 #define kMaxFileSizeForTextDiff (32 * 1024 * 1024)  // libgit2 default is 512 MiB
 
-#define IS_ALPHANUMERICAL(c) (((c) >= '0' && (c) <= '9') || ((c) >= 'A' && (c) <= 'Z') || ((c) >= 'a' && (c) <='z'))
+#define IS_ALPHANUMERICAL(c) (((c) >= '0' && (c) <= '9') || ((c) >= 'A' && (c) <= 'Z') || ((c) >= 'a' && (c) <= 'z'))
 #define IS_DELIMITER(c) (((c) < 0x80) && !IS_ALPHANUMERICAL(c) && ((c) != '_'))  // Don't split tokens on '_'
 
 #define SET_BIT(a, n) (a[(n) / CHAR_BIT] |= (1 << ((n) % CHAR_BIT)))
 #define GET_BIT(a, n) (a[(n) / CHAR_BIT] & (1 << ((n) % CHAR_BIT)))
 
-#define LOG_SQLITE_ERROR(__CODE__) \
-  do { \
-    XLOG_DEBUG_CHECK((__CODE__ != SQLITE_OK) && (__CODE__ != SQLITE_DONE)); \
+#define LOG_SQLITE_ERROR(__CODE__)                                              \
+  do {                                                                          \
+    XLOG_DEBUG_CHECK((__CODE__ != SQLITE_OK) && (__CODE__ != SQLITE_DONE));     \
     XLOG_ERROR(@"sqlite3 error (%i): %s", __CODE__, sqlite3_errmsg(_database)); \
-  } \
-  while (0)
+  } while (0)
 
 #define CHECK_SQLITE_FUNCTION_CALL(__FAIL_ACTION__, __STATUS__, __COMPARISON__) \
-  do { \
-    if (!(__STATUS__ __COMPARISON__)) { \
-      LOG_SQLITE_ERROR(__STATUS__); \
-      if (error) { \
-        *error = _NewSQLiteError(__STATUS__, sqlite3_errmsg(_database)); \
-      } \
-      __FAIL_ACTION__; \
-    } \
-  } while(0)
+  do {                                                                          \
+    if (!(__STATUS__ __COMPARISON__)) {                                         \
+      LOG_SQLITE_ERROR(__STATUS__);                                             \
+      if (error) {                                                              \
+        *error = _NewSQLiteError(__STATUS__, sqlite3_errmsg(_database));        \
+      }                                                                         \
+      __FAIL_ACTION__;                                                          \
+    }                                                                           \
+  } while (0)
 
-#define CALL_SQLITE_FUNCTION_RETURN(__RETURN_VALUE_ON_ERROR__, __FUNCTION__, ...) \
-  do { \
-    int __callResult = __FUNCTION__(__VA_ARGS__); \
+#define CALL_SQLITE_FUNCTION_RETURN(__RETURN_VALUE_ON_ERROR__, __FUNCTION__, ...)             \
+  do {                                                                                        \
+    int __callResult = __FUNCTION__(__VA_ARGS__);                                             \
     CHECK_SQLITE_FUNCTION_CALL(return __RETURN_VALUE_ON_ERROR__, __callResult, == SQLITE_OK); \
-  } while(0)
+  } while (0)
 
-#define CALL_SQLITE_FUNCTION_GOTO(__GOTO_LABEL__, __FUNCTION__, ...) \
-  do { \
-    int __callResult = __FUNCTION__(__VA_ARGS__); \
+#define CALL_SQLITE_FUNCTION_GOTO(__GOTO_LABEL__, __FUNCTION__, ...)             \
+  do {                                                                           \
+    int __callResult = __FUNCTION__(__VA_ARGS__);                                \
     CHECK_SQLITE_FUNCTION_CALL(goto __GOTO_LABEL__, __callResult, == SQLITE_OK); \
-  } while(0)
+  } while (0)
 
 typedef NS_ENUM(int, Statement) {
   kStatement_BeginTransaction = 0,
@@ -115,7 +114,7 @@ NSString* const SQLiteErrorDomain = @"SQLiteErrorDomain";
 static NSError* _NewSQLiteError(int code, const char* message) {
   return [NSError errorWithDomain:SQLiteErrorDomain
                              code:code
-                         userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithUTF8String:message]}];
+                         userInfo:@{NSLocalizedDescriptionKey : [NSString stringWithUTF8String:message]}];
 }
 
 // TODO: Consider using triggers to handle retain/release
@@ -141,7 +140,7 @@ static void _SQLiteLog(void* unused, int error, const char* message) {
   XLOG_CHECK(sqlite3_compileoption_used("THREADSAFE=2"));
   XLOG_CHECK(sqlite3_compileoption_used("ENABLE_FTS3"));
   XLOG_CHECK(sqlite3_compileoption_used("ENABLE_FTS3_PARENTHESIS"));
-  
+
   sqlite3_config(SQLITE_CONFIG_LOG, _SQLiteLog, NULL);
 }
 
@@ -184,79 +183,84 @@ static int _CaseInsensitiveUTF8Compare(void* context, int length1, const void* b
 - (BOOL)_initializeSchema:(int)version error:(NSError**)error {
   // Users table
   CALL_SQLITE_FUNCTION_RETURN(NO, sqlite3_exec, _database, "CREATE TABLE " kUsersTableName "("
-                              "_id_ INTEGER PRIMARY KEY,"
-                              "email TEXT NOT NULL COLLATE NOCASE,"
-                              "name TEXT COLLATE utf8"
-                              ")", NULL, NULL, NULL);
-  
+                                                           "_id_ INTEGER PRIMARY KEY,"
+                                                           "email TEXT NOT NULL COLLATE NOCASE,"
+                                                           "name TEXT COLLATE utf8"
+                                                           ")",
+                              NULL, NULL, NULL);
+
   // Index to ensure unique email/name combinations and to search for users
   CALL_SQLITE_FUNCTION_RETURN(NO, sqlite3_exec, _database, "CREATE UNIQUE INDEX " kUsersTableName "_email_name on " kUsersTableName "(email, name)", NULL, NULL, NULL);
-  
+
   // Commits table (with implicit index for "sha1")
   CALL_SQLITE_FUNCTION_RETURN(NO, sqlite3_exec, _database, "CREATE TABLE " kCommitsTableName "("
-                              "_id_ INTEGER PRIMARY KEY,"
-                              "retain_count INTEGER NOT NULL,"
-                              "sha1 BLOB UNIQUE NOT NULL,"
-                              "time INTEGER NOT NULL,"
-                              "offset INTEGER NOT NULL,"
-                              "author INTEGER NOT NULL,"
-                              "committer INTEGER NOT NULL,"
-                              "parent_sha1s BLOB NOT NULL,"
-                              "message TEXT NOT NULL"
-                              ")", NULL, NULL, NULL);
-  
+                                                           "_id_ INTEGER PRIMARY KEY,"
+                                                           "retain_count INTEGER NOT NULL,"
+                                                           "sha1 BLOB UNIQUE NOT NULL,"
+                                                           "time INTEGER NOT NULL,"
+                                                           "offset INTEGER NOT NULL,"
+                                                           "author INTEGER NOT NULL,"
+                                                           "committer INTEGER NOT NULL,"
+                                                           "parent_sha1s BLOB NOT NULL,"
+                                                           "message TEXT NOT NULL"
+                                                           ")",
+                              NULL, NULL, NULL);
+
   // Relations table
   CALL_SQLITE_FUNCTION_RETURN(NO, sqlite3_exec, _database, "CREATE TABLE " kRelationsTableName "("
-                              "_id_ INTEGER PRIMARY KEY,"
-                              "child INTEGER NOT NULL,"
-                              "parent INTEGER NOT NULL"
-                              ")", NULL, NULL, NULL);
-  
-  // Index for finding parents of a given child (works as a covering index too)
+                                                           "_id_ INTEGER PRIMARY KEY,"
+                                                           "child INTEGER NOT NULL,"
+                                                           "parent INTEGER NOT NULL"
+                                                           ")",
+                              NULL, NULL, NULL);
+
+// Index for finding parents of a given child (works as a covering index too)
 #if __UNIQUE_RELATIONS__
   CALL_SQLITE_FUNCTION_RETURN(NO, sqlite3_exec, _database, "CREATE UNIQUE INDEX " kRelationsTableName "_child_parent on " kRelationsTableName "(child, parent)", NULL, NULL, NULL);
 #endif
-  
+
   // Tips table
   CALL_SQLITE_FUNCTION_RETURN(NO, sqlite3_exec, _database, "CREATE TABLE " kTipsTableName "("
-                              "_id_ INTEGER PRIMARY KEY,"
-                              "`commit` INTEGER NOT NULL"
-                              ")", NULL, NULL, NULL);
-  
+                                                           "_id_ INTEGER PRIMARY KEY,"
+                                                           "`commit` INTEGER NOT NULL"
+                                                           ")",
+                              NULL, NULL, NULL);
+
   // FTS for commit messages (external content)
   CALL_SQLITE_FUNCTION_RETURN(NO, sqlite3_exec, _database, "CREATE VIRTUAL TABLE " kFTSMessagesTableName " USING fts4(content='" kCommitsTableName "', message, tokenize=unicode61 'tokenchars=_')", NULL, NULL, NULL);  // Don't split tokens on '_'
-  
+
   // FTS for commit diffs (stored content)
   CALL_SQLITE_FUNCTION_RETURN(NO, sqlite3_exec, _database, "CREATE VIRTUAL TABLE " kFTSDiffsTableName " USING fts4(added, deleted, tokenize=unicode61 'tokenchars=_')", NULL, NULL, NULL);  // Don't split tokens on '_'
-  
+
   // FTS for users (external content)
   CALL_SQLITE_FUNCTION_RETURN(NO, sqlite3_exec, _database, "CREATE VIRTUAL TABLE " kFTSUsersTableName " USING fts4(content='" kUsersTableName "', email, name, tokenize=unicode61)", NULL, NULL, NULL);
-  
+
   // Save version
   CALL_SQLITE_FUNCTION_RETURN(NO, sqlite3_exec, _database, [[NSString stringWithFormat:@"PRAGMA user_version = %i", version] UTF8String], NULL, NULL, NULL);
-  
+
   return YES;
 }
 
 // DELETE triggers are required because we must delete from FTS *before* deleting from content table which is impractical to do in -_removeCommitsForTip
 // We don't need INSERT or UPDATE triggers since we never update content that is indexed by FTS
 - (BOOL)_initializeTriggers:(NSError**)error {
-  
   // Triggers for FTS commits
   CALL_SQLITE_FUNCTION_RETURN(NO, sqlite3_exec, _database, "\
     CREATE TRIGGER " kCommitsTableName "_before_delete BEFORE DELETE ON " kCommitsTableName " BEGIN \
       DELETE FROM " kFTSMessagesTableName " WHERE docid=old.rowid; \
       DELETE FROM " kFTSDiffsTableName " WHERE docid=old.rowid; \
     END; \
-  ", NULL, NULL, NULL);
-  
+  ",
+                              NULL, NULL, NULL);
+
   // Triggers for FTS users
   CALL_SQLITE_FUNCTION_RETURN(NO, sqlite3_exec, _database, "\
     CREATE TRIGGER " kUsersTableName "_before_delete BEFORE DELETE ON " kUsersTableName " BEGIN \
       DELETE FROM " kFTSUsersTableName " WHERE docid=old.rowid; \
     END; \
-  ", NULL, NULL, NULL);
-  
+  ",
+                              NULL, NULL, NULL);
+
   return YES;
 }
 
@@ -264,48 +268,48 @@ static int _CaseInsensitiveUTF8Compare(void* context, int length1, const void* b
   // Indexes for finding commits by author or comitter
   CALL_SQLITE_FUNCTION_RETURN(NO, sqlite3_exec, _database, "CREATE INDEX " kCommitsTableName "_author on " kCommitsTableName "(author)", NULL, NULL, NULL);
   CALL_SQLITE_FUNCTION_RETURN(NO, sqlite3_exec, _database, "CREATE INDEX " kCommitsTableName "_committer on " kCommitsTableName "(committer)", NULL, NULL, NULL);
-  
+
 #if !__UNIQUE_RELATIONS__
   // Index for finding parents of a given child (works as a covering index too)
   CALL_SQLITE_FUNCTION_RETURN(NO, sqlite3_exec, _database, "CREATE INDEX " kRelationsTableName "_child_parent on " kRelationsTableName "(child, parent)", NULL, NULL, NULL);
 #endif
-  
+
   // Index for deleting tips by commit ID
   CALL_SQLITE_FUNCTION_RETURN(NO, sqlite3_exec, _database, "CREATE INDEX " kTipsTableName "_commit on " kTipsTableName "(`commit`)", NULL, NULL, NULL);
-  
+
   return YES;
 }
 
 - (BOOL)_initializeStatements:(NSError**)error {
   _statements = calloc(kNumStatements, sizeof(sqlite3_stmt*));
-  
+
   if (!(_options & kGCCommitDatabaseOptions_QueryOnly)) {
     CALL_SQLITE_FUNCTION_RETURN(NO, sqlite3_prepare_v2, _database, "BEGIN IMMEDIATE TRANSACTION", -1, &_statements[kStatement_BeginTransaction], NULL);
-    
-    CALL_SQLITE_FUNCTION_RETURN(NO, sqlite3_prepare_v2, _database, "SELECT " kCommitsTableName ".sha1 FROM " kCommitsTableName " JOIN " kTipsTableName " ON " kTipsTableName ".`commit`=" kCommitsTableName "._id_" , -1, &_statements[kStatement_ListTipSHA1s], NULL);
+
+    CALL_SQLITE_FUNCTION_RETURN(NO, sqlite3_prepare_v2, _database, "SELECT " kCommitsTableName ".sha1 FROM " kCommitsTableName " JOIN " kTipsTableName " ON " kTipsTableName ".`commit`=" kCommitsTableName "._id_", -1, &_statements[kStatement_ListTipSHA1s], NULL);
     CALL_SQLITE_FUNCTION_RETURN(NO, sqlite3_prepare_v2, _database, "SELECT _id_ FROM " kCommitsTableName " WHERE sha1=?1", -1, &_statements[kStatement_FindCommitID], NULL);
     CALL_SQLITE_FUNCTION_RETURN(NO, sqlite3_prepare_v2, _database, "SELECT parent FROM " kRelationsTableName " WHERE child=?1", -1, &_statements[kStatement_LookupCommitParentIDs], NULL);
     CALL_SQLITE_FUNCTION_RETURN(NO, sqlite3_prepare_v2, _database, "SELECT _id_ FROM " kUsersTableName " WHERE email=?1 AND name=?2", -1, &_statements[kStatement_FindUserID], NULL);
-    
+
     CALL_SQLITE_FUNCTION_RETURN(NO, sqlite3_prepare_v2, _database, "INSERT INTO " kTipsTableName " VALUES (NULL, ?1)", -1, &_statements[kStatement_AddTip], NULL);
     CALL_SQLITE_FUNCTION_RETURN(NO, sqlite3_prepare_v2, _database, "INSERT INTO " kCommitsTableName " VALUES (NULL, ?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)", -1, &_statements[kStatement_AddCommit], NULL);
     CALL_SQLITE_FUNCTION_RETURN(NO, sqlite3_prepare_v2, _database, "INSERT INTO " kUsersTableName " VALUES (NULL, ?1, ?2)", -1, &_statements[kStatement_AddUser], NULL);
     CALL_SQLITE_FUNCTION_RETURN(NO, sqlite3_prepare_v2, _database, "INSERT INTO " kRelationsTableName " VALUES (NULL, ?1, ?2)", -1, &_statements[kStatement_AddRelation], NULL);
-    
+
     CALL_SQLITE_FUNCTION_RETURN(NO, sqlite3_prepare_v2, _database, "UPDATE " kCommitsTableName " SET retain_count=retain_count+1 WHERE _id_=?1", -1, &_statements[kStatement_RetainCommit], NULL);
     CALL_SQLITE_FUNCTION_RETURN(NO, sqlite3_prepare_v2, _database, "UPDATE " kCommitsTableName " SET retain_count=retain_count-1 WHERE _id_=?1", -1, &_statements[kStatement_ReleaseCommit], NULL);
-    
+
     CALL_SQLITE_FUNCTION_RETURN(NO, sqlite3_prepare_v2, _database, "DELETE FROM " kTipsTableName " WHERE `commit`=?1", -1, &_statements[kStatement_DeleteTip], NULL);
     CALL_SQLITE_FUNCTION_RETURN(NO, sqlite3_prepare_v2, _database, "DELETE FROM " kCommitsTableName " WHERE _id_=?1 AND retain_count=0", -1, &_statements[kStatement_DeleteOrphanCommit], NULL);
     CALL_SQLITE_FUNCTION_RETURN(NO, sqlite3_prepare_v2, _database, "DELETE FROM " kRelationsTableName " WHERE child=?1 OR parent=?1", -1, &_statements[kStatement_DeleteCommitRelations], NULL);
-    
+
     CALL_SQLITE_FUNCTION_RETURN(NO, sqlite3_prepare_v2, _database, "INSERT INTO " kFTSUsersTableName "(docid, email, name) VALUES(?1, ?2, ?3)", -1, &_statements[kStatement_AddFTSUser], NULL);
     CALL_SQLITE_FUNCTION_RETURN(NO, sqlite3_prepare_v2, _database, "INSERT INTO " kFTSMessagesTableName "(docid, message) VALUES(?1, ?2)", -1, &_statements[kStatement_AddFTSMessage], NULL);
     CALL_SQLITE_FUNCTION_RETURN(NO, sqlite3_prepare_v2, _database, "INSERT INTO " kFTSDiffsTableName "(docid, added, deleted) VALUES(?1, ?2, ?3)", -1, &_statements[kStatement_AddFTSDiff], NULL);
-    
+
     CALL_SQLITE_FUNCTION_RETURN(NO, sqlite3_prepare_v2, _database, "END TRANSACTION", -1, &_statements[kStatement_EndTransaction], NULL);
   }
-  
+
   CALL_SQLITE_FUNCTION_RETURN(NO, sqlite3_prepare_v2, _database, " \
                               SELECT sha1, time FROM " kFTSMessagesTableName " JOIN " kCommitsTableName " ON " kCommitsTableName ".rowid=" kFTSMessagesTableName ".docid WHERE " kFTSMessagesTableName " MATCH ?1 \
                               UNION \
@@ -314,8 +318,9 @@ static int _CaseInsensitiveUTF8Compare(void* context, int length1, const void* b
                               SELECT sha1, time FROM " kFTSUsersTableName " JOIN " kUsersTableName " ON " kUsersTableName ".rowid=" kFTSUsersTableName ".docid JOIN " kCommitsTableName " ON " kCommitsTableName ".author=" kUsersTableName "._id_ WHERE " kFTSUsersTableName " MATCH ?1 \
                               UNION \
                               SELECT sha1, time FROM " kFTSUsersTableName " JOIN " kUsersTableName " ON " kUsersTableName ".rowid=" kFTSUsersTableName ".docid JOIN " kCommitsTableName " ON " kCommitsTableName ".committer=" kUsersTableName "._id_ WHERE " kFTSUsersTableName " MATCH ?1 \
-                              ORDER BY time DESC", -1, &_statements[kStatement_SearchCommits], NULL);
-  
+                              ORDER BY time DESC",
+                              -1, &_statements[kStatement_SearchCommits], NULL);
+
   return YES;
 }
 
@@ -361,12 +366,12 @@ static int _CaseInsensitiveUTF8Compare(void* context, int length1, const void* b
     _repository = repository;
     _databasePath = [path copy];
     _options = options;
-    
+
     if (![self _initializeDatabase:path error:error]) {
       [self release];
       return nil;
     }
-    
+
     int version = 2 * kSchemaVersion + (_options & kGCCommitDatabaseOptions_IndexDiffs ? 1 : 0);
     if ([self _hasTables]) {
       NSInteger currentVersion = [self _readVersion];
@@ -395,7 +400,7 @@ static int _CaseInsensitiveUTF8Compare(void* context, int length1, const void* b
         return nil;
       }
     }
-    
+
     if (![self _initializeStatements:error]) {
       [self release];
       return nil;
@@ -412,16 +417,17 @@ static int _CaseInsensitiveUTF8Compare(void* context, int length1, const void* b
     free(_statements);
   }
   sqlite3_close(_database);
-  
+
   [_databasePath release];
-  
+
   [super dealloc];
 }
 
 #if DEBUG
 static  // Ensure function is inlined per C99 specs by leaving "static" out
 #endif
-inline unsigned int _hash_buffer(const unsigned char *key, size_t length) {
+    inline unsigned int
+    _hash_buffer(const unsigned char* key, size_t length) {
   unsigned int h = 0;
   const unsigned char* max = key + length;
   while (key < max) {
@@ -442,7 +448,7 @@ static void _ExtractUniqueWordsFromLines(NSMutableData* lines, NSMutableData* wo
   GC_LIST_ALLOCATE(list, kWordCacheSize, Word);
   unsigned char* cache = calloc(kWordCacheSize / CHAR_BIT, sizeof(char));
   Word* wordPtr;
-  
+
   const unsigned char* max = (unsigned char*)lines.bytes + lines.length;
   const unsigned char* current = lines.bytes;
   const unsigned char* start = NULL;
@@ -467,13 +473,13 @@ static void _ExtractUniqueWordsFromLines(NSMutableData* lines, NSMutableData* wo
     }
     ++current;
   } while (current <= max);
-  
+
   char space = ' ';
   GC_LIST_FOR_LOOP_POINTER(list, wordPtr) {
     [words appendBytes:wordPtr->start length:wordPtr->length];
     [words appendBytes:&space length:1];
   }
-  
+
   free(cache);
   GC_LIST_FREE(list);
 }
@@ -563,34 +569,34 @@ static BOOL _ProcessDiff(git_repository* repo, git_commit* commit, git_commit* p
   int status;
   Item item;
   const Item* itemPtr;
-  
+
   // Check if commit is already in database
   CALL_SQLITE_FUNCTION_GOTO(cleanup, sqlite3_bind_blob, statements[kStatement_FindCommitID], 1, tipOID, GIT_OID_RAWSZ, SQLITE_STATIC);
   result = sqlite3_step(statements[kStatement_FindCommitID]);
   if (result == SQLITE_ROW) {
     sqlite3_int64 tipID = sqlite3_column_int64(statements[kStatement_FindCommitID], 0);
     CALL_SQLITE_FUNCTION_GOTO(cleanup, sqlite3_reset, statements[kStatement_FindCommitID]);
-    
+
     // Create tip
     CALL_SQLITE_FUNCTION_GOTO(cleanup, sqlite3_bind_int64, statements[kStatement_AddTip], 1, tipID);
     result = sqlite3_step(statements[kStatement_AddTip]);
     CHECK_SQLITE_FUNCTION_CALL(goto cleanup, result, == SQLITE_DONE);
     CALL_SQLITE_FUNCTION_GOTO(cleanup, sqlite3_reset, statements[kStatement_AddTip]);
     XLOG_DEBUG_CHECK(sqlite3_changes(_database) == 1);
-    
+
     // Retain commit
     CALL_SQLITE_FUNCTION_GOTO(cleanup, sqlite3_bind_int64, statements[kStatement_RetainCommit], 1, tipID);
     result = sqlite3_step(statements[kStatement_RetainCommit]);
     CHECK_SQLITE_FUNCTION_CALL(goto cleanup, result, == SQLITE_DONE);
     CALL_SQLITE_FUNCTION_GOTO(cleanup, sqlite3_reset, statements[kStatement_RetainCommit]);
     XLOG_DEBUG_CHECK(sqlite3_changes(_database) == 1);
-    
+
     success = YES;
     goto cleanup;
   }
   CHECK_SQLITE_FUNCTION_CALL(goto cleanup, result, == SQLITE_DONE);
   CALL_SQLITE_FUNCTION_GOTO(cleanup, sqlite3_reset, statements[kStatement_FindCommitID]);
-  
+
   // Load tip commit and queue it
   status = git_commit_lookup(&commit, _repository.private, tipOID);
   if (status == GIT_ENOTFOUND) {
@@ -602,7 +608,7 @@ static BOOL _ProcessDiff(git_repository* repo, git_commit* commit, git_commit* p
   item.commit = commit;
   item.childID = 0;
   GC_LIST_APPEND(row, &item);
-  
+
   // Create commits for the tip and its ancestors
   while (1) {
     for (size_t i = 0; i < GC_LIST_COUNT(row); ++i) {
@@ -610,17 +616,17 @@ static BOOL _ProcessDiff(git_repository* repo, git_commit* commit, git_commit* p
       unsigned int parentCount = git_commit_parentcount(itemPtr->commit);
       const git_signature* author = git_commit_author(itemPtr->commit);
       const git_signature* committer = git_commit_committer(itemPtr->commit);
-      
+
       // Bind retain count (always 1 as the commit is either retained by the tip or by its parent)
       CALL_SQLITE_FUNCTION_GOTO(cleanup, sqlite3_bind_int, statements[kStatement_AddCommit], 1, 1);
-      
+
       // Bind commit SHA1
       CALL_SQLITE_FUNCTION_GOTO(cleanup, sqlite3_bind_blob, statements[kStatement_AddCommit], 2, git_commit_id(itemPtr->commit), GIT_OID_RAWSZ, SQLITE_STATIC);
-      
+
       // Bind commit date
       CALL_SQLITE_FUNCTION_GOTO(cleanup, sqlite3_bind_int64, statements[kStatement_AddCommit], 3, committer->when.time);
       CALL_SQLITE_FUNCTION_GOTO(cleanup, sqlite3_bind_int, statements[kStatement_AddCommit], 4, committer->when.offset);
-      
+
       // Bind commit author
       sqlite3_int64 authorID;
       CALL_SQLITE_FUNCTION_GOTO(cleanup, sqlite3_bind_text, statements[kStatement_FindUserID], 1, author->email, -1, SQLITE_STATIC);
@@ -630,7 +636,7 @@ static BOOL _ProcessDiff(git_repository* repo, git_commit* commit, git_commit* p
         authorID = sqlite3_column_int64(statements[kStatement_FindUserID], 0);
       } else {
         CHECK_SQLITE_FUNCTION_CALL(goto cleanup, result, == SQLITE_DONE);
-        
+
         // Create user
         CALL_SQLITE_FUNCTION_GOTO(cleanup, sqlite3_bind_text, statements[kStatement_AddUser], 1, author->email, -1, SQLITE_STATIC);
         CALL_SQLITE_FUNCTION_GOTO(cleanup, sqlite3_bind_text, statements[kStatement_AddUser], 2, author->name, -1, SQLITE_STATIC);
@@ -639,7 +645,7 @@ static BOOL _ProcessDiff(git_repository* repo, git_commit* commit, git_commit* p
         authorID = sqlite3_last_insert_rowid(_database);
         CALL_SQLITE_FUNCTION_GOTO(cleanup, sqlite3_reset, statements[kStatement_AddUser]);
         XLOG_DEBUG_CHECK(sqlite3_changes(_database) == 1);
-        
+
         // Update users FTS
         CALL_SQLITE_FUNCTION_GOTO(cleanup, sqlite3_bind_int64, statements[kStatement_AddFTSUser], 1, authorID);
         CALL_SQLITE_FUNCTION_GOTO(cleanup, sqlite3_bind_text, statements[kStatement_AddFTSUser], 2, author->email, -1, SQLITE_STATIC);
@@ -651,7 +657,7 @@ static BOOL _ProcessDiff(git_repository* repo, git_commit* commit, git_commit* p
       }
       CALL_SQLITE_FUNCTION_GOTO(cleanup, sqlite3_bind_int64, statements[kStatement_AddCommit], 5, authorID);
       CALL_SQLITE_FUNCTION_GOTO(cleanup, sqlite3_reset, statements[kStatement_FindUserID]);
-      
+
       // Bind commit committer
       sqlite3_int64 committerID;
       if (!strcmp(committer->email, author->email) && ((committer->name == author->name) || (committer->name && author->name && !strcmp(committer->name, author->name)))) {
@@ -664,7 +670,7 @@ static BOOL _ProcessDiff(git_repository* repo, git_commit* commit, git_commit* p
           committerID = sqlite3_column_int64(statements[kStatement_FindUserID], 0);
         } else {
           CHECK_SQLITE_FUNCTION_CALL(goto cleanup, result, == SQLITE_DONE);
-          
+
           // Create user
           CALL_SQLITE_FUNCTION_GOTO(cleanup, sqlite3_bind_text, statements[kStatement_AddUser], 1, committer->email, -1, SQLITE_STATIC);
           CALL_SQLITE_FUNCTION_GOTO(cleanup, sqlite3_bind_text, statements[kStatement_AddUser], 2, committer->name, -1, SQLITE_STATIC);
@@ -673,7 +679,7 @@ static BOOL _ProcessDiff(git_repository* repo, git_commit* commit, git_commit* p
           committerID = sqlite3_last_insert_rowid(_database);
           CALL_SQLITE_FUNCTION_GOTO(cleanup, sqlite3_reset, statements[kStatement_AddUser]);
           XLOG_DEBUG_CHECK(sqlite3_changes(_database) == 1);
-          
+
           // Update users FTS
           CALL_SQLITE_FUNCTION_GOTO(cleanup, sqlite3_bind_int64, statements[kStatement_AddFTSUser], 1, committerID);
           CALL_SQLITE_FUNCTION_GOTO(cleanup, sqlite3_bind_text, statements[kStatement_AddFTSUser], 2, committer->email, -1, SQLITE_STATIC);
@@ -686,8 +692,8 @@ static BOOL _ProcessDiff(git_repository* repo, git_commit* commit, git_commit* p
         CALL_SQLITE_FUNCTION_GOTO(cleanup, sqlite3_reset, statements[kStatement_FindUserID]);
       }
       CALL_SQLITE_FUNCTION_GOTO(cleanup, sqlite3_bind_int64, statements[kStatement_AddCommit], 6, committerID);
-      
-      // Bind commit parent SHA1s
+
+// Bind commit parent SHA1s
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wvla"
       git_oid parents[parentCount];
@@ -696,7 +702,7 @@ static BOOL _ProcessDiff(git_repository* repo, git_commit* commit, git_commit* p
         git_oid_cpy(&parents[j], git_commit_parent_id(itemPtr->commit, j));
       }
       CALL_SQLITE_FUNCTION_GOTO(cleanup, sqlite3_bind_blob, statements[kStatement_AddCommit], 7, parents, (int)sizeof(parents), SQLITE_STATIC);
-      
+
       // Bind commit message
       const char* message = git_commit_message(itemPtr->commit);  // This already trims leading newlines
       size_t length = strlen(message);
@@ -706,7 +712,7 @@ static BOOL _ProcessDiff(git_repository* repo, git_commit* commit, git_commit* p
         }
       }
       CALL_SQLITE_FUNCTION_GOTO(cleanup, sqlite3_bind_text, statements[kStatement_AddCommit], 8, message, (int)length, SQLITE_STATIC);
-      
+
       // Create commit
       sqlite3_int64 commitID;
       result = sqlite3_step(statements[kStatement_AddCommit]);
@@ -714,30 +720,30 @@ static BOOL _ProcessDiff(git_repository* repo, git_commit* commit, git_commit* p
         XLOG_DEBUG_CHECK(itemPtr->childID);
         XLOG_DEBUG_CHECK(sqlite3_changes(_database) == 0);
         sqlite3_reset(statements[kStatement_AddCommit]);
-        
+
         // Commit already exists in database so just fetch its ID...
         CALL_SQLITE_FUNCTION_GOTO(cleanup, sqlite3_bind_blob, statements[kStatement_FindCommitID], 1, git_commit_id(itemPtr->commit), GIT_OID_RAWSZ, SQLITE_STATIC);
         result = sqlite3_step(statements[kStatement_FindCommitID]);
         CHECK_SQLITE_FUNCTION_CALL(goto cleanup, result, == SQLITE_ROW);
         commitID = sqlite3_column_int64(statements[kStatement_FindCommitID], 0);
         CALL_SQLITE_FUNCTION_GOTO(cleanup, sqlite3_reset, statements[kStatement_FindCommitID]);
-        
+
         // ...and retain it because of relation we are about to create
         CALL_SQLITE_FUNCTION_GOTO(cleanup, sqlite3_bind_int64, statements[kStatement_RetainCommit], 1, commitID);
         result = sqlite3_step(statements[kStatement_RetainCommit]);
         CHECK_SQLITE_FUNCTION_CALL(goto cleanup, result, == SQLITE_DONE);
         CALL_SQLITE_FUNCTION_GOTO(cleanup, sqlite3_reset, statements[kStatement_RetainCommit]);
         XLOG_DEBUG_CHECK(sqlite3_changes(_database) == 1);
-        
+
         // Don't follow parents later on
         parentCount = 0;
-        
+
       } else {
         CHECK_SQLITE_FUNCTION_CALL(goto cleanup, result, == SQLITE_DONE);
         commitID = sqlite3_last_insert_rowid(_database);
         CALL_SQLITE_FUNCTION_GOTO(cleanup, sqlite3_reset, statements[kStatement_AddCommit]);
         XLOG_DEBUG_CHECK(sqlite3_changes(_database) == 1);
-        
+
         // Update messages FTS
         CALL_SQLITE_FUNCTION_GOTO(cleanup, sqlite3_bind_int64, statements[kStatement_AddFTSMessage], 1, commitID);
         CALL_SQLITE_FUNCTION_GOTO(cleanup, sqlite3_bind_text, statements[kStatement_AddFTSMessage], 2, message, (int)length, SQLITE_STATIC);
@@ -745,7 +751,7 @@ static BOOL _ProcessDiff(git_repository* repo, git_commit* commit, git_commit* p
         CHECK_SQLITE_FUNCTION_CALL(goto cleanup, result, == SQLITE_DONE);
         CALL_SQLITE_FUNCTION_GOTO(cleanup, sqlite3_reset, statements[kStatement_AddFTSMessage]);
         XLOG_DEBUG_CHECK(sqlite3_changes(_database) == 1);
-        
+
         // Update diffs FTS
         if (indexDiffs) {
           if (parentCount) {
@@ -773,7 +779,7 @@ static BOOL _ProcessDiff(git_repository* repo, git_commit* commit, git_commit* p
             XLOG_WARNING(@"Unable to compute diff for commit %s from repository \"%@\"", git_oid_tostr_s(git_commit_id(itemPtr->commit)), _repository.repositoryPath);
           }
         }
-        
+
         // Call handler
         if (!handler()) {
           if (error) {
@@ -782,7 +788,7 @@ static BOOL _ProcessDiff(git_repository* repo, git_commit* commit, git_commit* p
           goto cleanup;
         }
       }
-      
+
       // Create relation with child unless currently processing tip commit...
       if (itemPtr->childID) {
         CALL_SQLITE_FUNCTION_GOTO(cleanup, sqlite3_bind_int64, statements[kStatement_AddRelation], 1, itemPtr->childID);
@@ -792,14 +798,14 @@ static BOOL _ProcessDiff(git_repository* repo, git_commit* commit, git_commit* p
         if (result == SQLITE_CONSTRAINT_UNIQUE) {  // This can happen for degenerated commits with duplicate parents
           XLOG_DEBUG_CHECK(sqlite3_changes(_database) == 0);
           sqlite3_reset(statements[kStatement_AddRelation]);
-          
+
           // Release commit that was previously retained
           CALL_SQLITE_FUNCTION_GOTO(cleanup, sqlite3_bind_int64, statements[kStatement_ReleaseCommit], 1, commitID);
           result = sqlite3_step(statements[kStatement_ReleaseCommit]);
           CHECK_SQLITE_FUNCTION_CALL(goto cleanup, result, == SQLITE_DONE);
           CALL_SQLITE_FUNCTION_GOTO(cleanup, sqlite3_reset, statements[kStatement_ReleaseCommit]);
           XLOG_DEBUG_CHECK(sqlite3_changes(_database) == 1);
-          
+
         } else
 #endif
         {
@@ -816,16 +822,15 @@ static BOOL _ProcessDiff(git_repository* repo, git_commit* commit, git_commit* p
         CALL_SQLITE_FUNCTION_GOTO(cleanup, sqlite3_reset, statements[kStatement_AddTip]);
         XLOG_DEBUG_CHECK(sqlite3_changes(_database) == 1);
       }
-      
+
       // Follow parents unless already in database
       for (unsigned int j = 0; j < parentCount; ++j) {
         const git_oid* parentOID = git_commit_parent_id(itemPtr->commit, j);
-        
+
         // Check if parent is already in database
         CALL_SQLITE_FUNCTION_GOTO(cleanup, sqlite3_bind_blob, statements[kStatement_FindCommitID], 1, parentOID, GIT_OID_RAWSZ, SQLITE_STATIC);
         result = sqlite3_step(statements[kStatement_FindCommitID]);
         if (result == SQLITE_DONE) {
-          
           // Load parent commit and queue it
           git_commit* parentCommit;
           if (indexDiffs && (j == 0)) {
@@ -848,11 +853,11 @@ static BOOL _ProcessDiff(git_repository* repo, git_commit* commit, git_commit* p
           } else {
             XLOG_WARNING(@"Missing commit %s from repository \"%@\"", git_oid_tostr_s(parentOID), _repository.repositoryPath);
           }
-          
+
         } else {
           CHECK_SQLITE_FUNCTION_CALL(goto cleanup, result, == SQLITE_ROW);
           sqlite3_int64 parentID = sqlite3_column_int64(statements[kStatement_FindCommitID], 0);
-          
+
           // Create relation with existing parent
           CALL_SQLITE_FUNCTION_GOTO(cleanup, sqlite3_bind_int64, statements[kStatement_AddRelation], 1, commitID);
           CALL_SQLITE_FUNCTION_GOTO(cleanup, sqlite3_bind_int64, statements[kStatement_AddRelation], 2, parentID);
@@ -867,7 +872,7 @@ static BOOL _ProcessDiff(git_repository* repo, git_commit* commit, git_commit* p
             CHECK_SQLITE_FUNCTION_CALL(goto cleanup, result, == SQLITE_DONE);
             CALL_SQLITE_FUNCTION_GOTO(cleanup, sqlite3_reset, statements[kStatement_AddRelation]);
             XLOG_DEBUG_CHECK(sqlite3_changes(_database) == 1);
-            
+
             // Retain existing parent
             CALL_SQLITE_FUNCTION_GOTO(cleanup, sqlite3_bind_int64, statements[kStatement_RetainCommit], 1, parentID);
             result = sqlite3_step(statements[kStatement_RetainCommit]);
@@ -878,7 +883,7 @@ static BOOL _ProcessDiff(git_repository* repo, git_commit* commit, git_commit* p
         }
         CALL_SQLITE_FUNCTION_GOTO(cleanup, sqlite3_reset, statements[kStatement_FindCommitID]);
       }
-      
+
       git_commit_free(mainParent);
       mainParent = NULL;
     }
@@ -886,17 +891,17 @@ static BOOL _ProcessDiff(git_repository* repo, git_commit* commit, git_commit* p
       git_commit_free(itemPtr->commit);
     }
     GC_LIST_RESET(row);
-    
+
     // Check if there are no more commits to follow
     if (GC_LIST_COUNT(newRow) == 0) {
       break;
     }
     GC_LIST_SWAP(newRow, row);
   }
-  
+
   // We're done
   success = YES;
-  
+
 cleanup:
   [deletedWords release];
   [addedWords release];
@@ -921,7 +926,7 @@ cleanup:
   sqlite3_stmt** statements = _statements;
   sqlite3_int64* int64Ptr;
   int result;
-  
+
   // Convert tip commit OID to tip commit ID and queue it
   CALL_SQLITE_FUNCTION_GOTO(cleanup, sqlite3_bind_blob, statements[kStatement_FindCommitID], 1, tipOID, GIT_OID_RAWSZ, SQLITE_STATIC);
   result = sqlite3_step(statements[kStatement_FindCommitID]);
@@ -935,20 +940,20 @@ cleanup:
   sqlite3_int64 tipID = sqlite3_column_int64(statements[kStatement_FindCommitID], 0);
   CALL_SQLITE_FUNCTION_GOTO(cleanup, sqlite3_reset, statements[kStatement_FindCommitID]);
   GC_LIST_APPEND(row, &tipID);
-  
+
   // Delete tip
   CALL_SQLITE_FUNCTION_GOTO(cleanup, sqlite3_bind_int64, statements[kStatement_DeleteTip], 1, tipID);
   result = sqlite3_step(statements[kStatement_DeleteTip]);
   CHECK_SQLITE_FUNCTION_CALL(goto cleanup, result, == SQLITE_DONE);
   CALL_SQLITE_FUNCTION_GOTO(cleanup, sqlite3_reset, statements[kStatement_DeleteTip]);
   XLOG_DEBUG_CHECK(sqlite3_changes(_database) == 1);
-  
+
   // Release commit and all its ancestors
   while (1) {
     GC_LIST_FOR_LOOP_POINTER(row, int64Ptr) {
       sqlite3_int64 commitID = *int64Ptr;
       size_t oldCount = GC_LIST_COUNT(newRow);
-      
+
       // Follow and queue parents
       CALL_SQLITE_FUNCTION_GOTO(cleanup, sqlite3_bind_int64, statements[kStatement_LookupCommitParentIDs], 1, commitID);
       result = sqlite3_step(statements[kStatement_LookupCommitParentIDs]);
@@ -959,14 +964,14 @@ cleanup:
       }
       CHECK_SQLITE_FUNCTION_CALL(goto cleanup, result, == SQLITE_DONE);
       CALL_SQLITE_FUNCTION_GOTO(cleanup, sqlite3_reset, statements[kStatement_LookupCommitParentIDs]);
-      
+
       // Release commit
       CALL_SQLITE_FUNCTION_GOTO(cleanup, sqlite3_bind_int64, statements[kStatement_ReleaseCommit], 1, commitID);
       result = sqlite3_step(statements[kStatement_ReleaseCommit]);
       CHECK_SQLITE_FUNCTION_CALL(goto cleanup, result, == SQLITE_DONE);
       CALL_SQLITE_FUNCTION_GOTO(cleanup, sqlite3_reset, statements[kStatement_ReleaseCommit]);
       XLOG_DEBUG_CHECK(sqlite3_changes(_database) == 1);
-      
+
       // Attempt to delete commit if retain count is zero
       CALL_SQLITE_FUNCTION_GOTO(cleanup, sqlite3_bind_int64, statements[kStatement_DeleteOrphanCommit], 1, commitID);
       result = sqlite3_step(statements[kStatement_DeleteOrphanCommit]);
@@ -981,7 +986,7 @@ cleanup:
         CHECK_SQLITE_FUNCTION_CALL(goto cleanup, result, == SQLITE_DONE);
         CALL_SQLITE_FUNCTION_GOTO(cleanup, sqlite3_reset, statements[kStatement_DeleteCommitRelations]);
         XLOG_DEBUG_CHECK(sqlite3_changes(_database) > 0);
-        
+
         // Call handler
         if (!handler()) {
           if (error) {
@@ -997,10 +1002,10 @@ cleanup:
     GC_LIST_SWAP(newRow, row);
     GC_LIST_RESET(newRow);
   }
-  
+
   // We're done
   success = YES;
-  
+
 cleanup:
   GC_LIST_FREE(newRow);
   GC_LIST_FREE(row);
@@ -1022,7 +1027,7 @@ cleanup:
   __block NSUInteger removedCommits = 0;
   CFAbsoluteTime time = CFAbsoluteTimeGetCurrent();
   int result;
-  
+
   // Load old tip SHA1 (already unique)
   while (1) {
     result = sqlite3_step(statements[kStatement_ListTipSHA1s]);
@@ -1038,104 +1043,110 @@ cleanup:
   }
   CALL_SQLITE_FUNCTION_GOTO(cleanup, sqlite3_reset, statements[kStatement_ListTipSHA1s]);
   XLOG_DEBUG_CHECK(_ready || !GC_LIST_COUNT(oldTips));
-  
+
   // Load new tips (ensure unique)
-  if (![_repository enumerateReferencesWithOptions:kGCReferenceEnumerationOption_IncludeHEAD error:error usingBlock:^BOOL(git_reference* reference) {
-    
-    if (git_reference_type(reference) == GIT_REF_OID) {  // We don't care about symbolic references as they eventually point to a direct one anyway
-      const git_oid* oid = git_reference_target(reference);
-      git_object* object = NULL;
-      git_commit* commit = NULL;
-      int status = git_object_lookup(&object, _repository.private, oid, GIT_OBJ_ANY);
-      if (status == GIT_OK) {
-        if (git_object_type(object) == GIT_OBJ_COMMIT) {
-          commit = (git_commit*)object;
-          object = NULL;
-        } else if (git_object_type(object) == GIT_OBJ_TAG) {
-          status = git_object_peel((git_object**)&commit, object, GIT_OBJ_COMMIT);
-        } else {
-          XLOG_DEBUG_UNREACHABLE();
-          status = GIT_EUSER;
-        }
-      }
-      if (status == GIT_OK) {
-        oid = git_commit_id(commit);
-        if (!CFSetContainsValue(newSet, oid)) {
-          GC_LIST_APPEND(newTips, oid);
-          CFSetAddValue(newSet, oid);
-        }
-      } else if (status != GIT_EUSER) {
-        LOG_LIBGIT2_ERROR(status);
-      }
-      git_commit_free(commit);
-      git_object_free(object);
-    }
-    return YES;
-    
-  }]) {
+  if (![_repository enumerateReferencesWithOptions:kGCReferenceEnumerationOption_IncludeHEAD
+                                             error:error
+                                        usingBlock:^BOOL(git_reference* reference) {
+
+                                          if (git_reference_type(reference) == GIT_REF_OID) {  // We don't care about symbolic references as they eventually point to a direct one anyway
+                                            const git_oid* oid = git_reference_target(reference);
+                                            git_object* object = NULL;
+                                            git_commit* commit = NULL;
+                                            int status = git_object_lookup(&object, _repository.private, oid, GIT_OBJ_ANY);
+                                            if (status == GIT_OK) {
+                                              if (git_object_type(object) == GIT_OBJ_COMMIT) {
+                                                commit = (git_commit*)object;
+                                                object = NULL;
+                                              } else if (git_object_type(object) == GIT_OBJ_TAG) {
+                                                status = git_object_peel((git_object**)&commit, object, GIT_OBJ_COMMIT);
+                                              } else {
+                                                XLOG_DEBUG_UNREACHABLE();
+                                                status = GIT_EUSER;
+                                              }
+                                            }
+                                            if (status == GIT_OK) {
+                                              oid = git_commit_id(commit);
+                                              if (!CFSetContainsValue(newSet, oid)) {
+                                                GC_LIST_APPEND(newTips, oid);
+                                                CFSetAddValue(newSet, oid);
+                                              }
+                                            } else if (status != GIT_EUSER) {
+                                              LOG_LIBGIT2_ERROR(status);
+                                            }
+                                            git_commit_free(commit);
+                                            git_object_free(object);
+                                          }
+                                          return YES;
+
+                                        }]) {
     goto cleanup;
   }
-  
+
   // Begin transaction
   result = sqlite3_step(statements[kStatement_BeginTransaction]);
   CHECK_SQLITE_FUNCTION_CALL(goto cleanup, result, == SQLITE_DONE);
   CALL_SQLITE_FUNCTION_GOTO(cleanup, sqlite3_reset, statements[kStatement_BeginTransaction]);
-  
+
   // Find added tips
   const git_oid* newTip;
   GC_LIST_FOR_LOOP_POINTER(newTips, newTip) {
     if (!CFSetContainsValue(oldSet, newTip)) {
-      if (![self _addCommitsForTip:newTip handler:^BOOL{
-        ++addedCommits;
-        return !handler || handler(!_ready, addedCommits, removedCommits);
-      } error:error]) {
+      if (![self _addCommitsForTip:newTip
+                           handler:^BOOL {
+                             ++addedCommits;
+                             return !handler || handler(!_ready, addedCommits, removedCommits);
+                           }
+                             error:error]) {
         goto cleanup;
       }
     }
   }
-  
+
   // Find removed tips
   const git_oid* oldTip;
   GC_LIST_FOR_LOOP_POINTER(oldTips, oldTip) {
     if (!CFSetContainsValue(newSet, oldTip)) {
-      if (![self _removeCommitsForTip:oldTip handler:^BOOL{
-        ++removedCommits;
-        return !handler || handler(!_ready, addedCommits, removedCommits);
-      } error:error]) {
+      if (![self _removeCommitsForTip:oldTip
+                              handler:^BOOL {
+                                ++removedCommits;
+                                return !handler || handler(!_ready, addedCommits, removedCommits);
+                              }
+                                error:error]) {
         goto cleanup;
       }
     }
   }
-  
+
   // Finish database initialization if needed
   if (!_ready) {
     if (![self _initializeDeferredIndexes:error] || ![self _initializeTriggers:error]) {
       goto cleanup;
     }
   }
-  
+
   // End transaction
   result = sqlite3_step(statements[kStatement_EndTransaction]);
   CHECK_SQLITE_FUNCTION_CALL(goto cleanup, result, == SQLITE_DONE);
   CALL_SQLITE_FUNCTION_GOTO(cleanup, sqlite3_reset, statements[kStatement_EndTransaction]);
-  
+
   // WAL manual checkpoint (ignore errors)
   result = sqlite3_wal_checkpoint_v2(_database, NULL, _ready ? SQLITE_CHECKPOINT_FULL : SQLITE_CHECKPOINT_TRUNCATE, NULL, NULL);
   if (result != SQLITE_OK) {
     XLOG_ERROR(@"Failed checkpointing commit database at \"%@\" (%i): %s", _databasePath, result, sqlite3_errmsg(_database));
     XLOG_DEBUG_UNREACHABLE();
   }
-  
+
   // We're done
   XLOG_VERBOSE(@"Commit database for \"%@\" %s in %.3f seconds (%lu added, %lu removed)", _repository.repositoryPath, _ready ? "updated" : "initialized", CFAbsoluteTimeGetCurrent() - time, (unsigned long)addedCommits, (unsigned long)removedCommits);
   _ready = YES;
   success = YES;
-  
+
 #if __CHECK_CONSISTENCY__
   // Check consistency
   [self _checkConsistency];
 #endif
-  
+
 cleanup:
   if (!success) {
     for (int i = 0; i < kNumStatements; ++i) {
@@ -1157,7 +1168,7 @@ cleanup:
   BOOL success = NO;
   NSMutableArray* results = [NSMutableArray array];
   sqlite3_stmt** statements = _statements;
-  
+
   CALL_SQLITE_FUNCTION_GOTO(cleanup, sqlite3_bind_text, statements[kStatement_SearchCommits], 1, match.UTF8String, -1, SQLITE_STATIC);
   while (1) {
     int result = sqlite3_step(statements[kStatement_SearchCommits]);
@@ -1186,7 +1197,7 @@ cleanup:
   }
   CALL_SQLITE_FUNCTION_GOTO(cleanup, sqlite3_reset, statements[kStatement_SearchCommits]);
   success = YES;
-  
+
 cleanup:
   if (!success) {
     sqlite3_reset(statements[kStatement_SearchCommits]);
@@ -1212,7 +1223,7 @@ cleanup:
           }
           sqlite3_int64 commitID = sqlite3_column_int64(statement1, 0);
           int retainCount = sqlite3_column_int(statement1, 1);
-          
+
           sqlite3_bind_int64(statement2, 1, commitID);
           if (sqlite3_step(statement2) != SQLITE_ROW) {
             XLOG_DEBUG_UNREACHABLE();
@@ -1220,7 +1231,7 @@ cleanup:
           }
           int count = sqlite3_column_int(statement2, 0);
           sqlite3_reset(statement2);
-          
+
           sqlite3_bind_int64(statement3, 1, commitID);
           result = sqlite3_step(statement3);
           if (result == SQLITE_ROW) {
@@ -1229,7 +1240,7 @@ cleanup:
             XLOG_DEBUG_CHECK(result == SQLITE_DONE);
           }
           sqlite3_reset(statement3);
-          
+
           XLOG_DEBUG_CHECK(count == retainCount);
         }
         sqlite3_finalize(statement3);

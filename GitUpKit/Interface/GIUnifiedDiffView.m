@@ -1,4 +1,4 @@
-//  Copyright (C) 2015 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2016 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ typedef struct {
   NSUInteger oldLineNumber;
   NSUInteger newLineNumber;
   CFRange highlighted;  // Relative to line
-  
+
   const char* contentBytes;  // Not valid outside of patch generation
   NSUInteger contentLength;  // Not valid outside of patch generation
 } LineInfo;
@@ -51,7 +51,7 @@ typedef struct {
   CTFramesetterRef _framesetter;
   CTFrameRef _frame;
   NSSize _size;
-  
+
   NSMutableIndexSet* _selectedLines;
   CFRange _selectedText;
   SelectionMode _selectionMode;
@@ -61,7 +61,7 @@ typedef struct {
 
 - (void)didFinishInitializing {
   [super didFinishInitializing];
-  
+
   _selectedLines = [[NSMutableIndexSet alloc] init];
 }
 
@@ -89,11 +89,10 @@ typedef struct {
              oldLineNumber:(NSUInteger)oldLineNumber
              newLineNumber:(NSUInteger)newLineNumber
               contentBytes:(const char*)contentBytes
-             contentLength:(NSUInteger)contentLength
-{
+             contentLength:(NSUInteger)contentLength {
   CFIndex length = CFAttributedStringGetLength(_string);
   CFAttributedStringReplaceString(_string, CFRangeMake(length, 0), string);
-  
+
   if (_lineInfoCount == _lineInfoMax) {
     _lineInfoMax *= 2;
     _lineInfoList = realloc(_lineInfoList, _lineInfoMax * sizeof(LineInfo));
@@ -112,7 +111,7 @@ typedef struct {
 
 - (void)didUpdatePatch {
   [super didUpdatePatch];
-  
+
   if (_frame) {
     CFRelease(_frame);
     _frame = NULL;
@@ -129,13 +128,13 @@ typedef struct {
     free(_lineInfoList);
     _lineInfoList = NULL;
   }
-  
+
   if (self.patch) {
     _string = CFAttributedStringCreateMutable(kCFAllocatorDefault, 0);
     _lineInfoCount = 0;
     _lineInfoMax = 512;
     _lineInfoList = malloc(_lineInfoMax * sizeof(LineInfo));
-    
+
     __block NSUInteger deletedIndex = NSNotFound;
     __block NSUInteger addedIndex = NSNotFound;
     void (^highlightBlock)(NSUInteger) = ^(NSUInteger index) {
@@ -149,53 +148,54 @@ typedef struct {
       }
     };
     [self.patch enumerateUsingBeginHunkHandler:^(NSUInteger oldLineNumber, NSUInteger oldLineCount, NSUInteger newLineNumber, NSUInteger newLineCount) {
-      
+
       CFStringRef string = CFStringCreateWithFormat(kCFAllocatorDefault, NULL, CFSTR("@@ -%lu,%lu +%lu,%lu @@\n"), oldLineNumber, oldLineCount, newLineNumber, newLineCount);
       [self _addLineWithString:string change:NSNotFound oldLineNumber:oldLineNumber newLineNumber:newLineNumber contentBytes:NULL contentLength:0];
       CFRelease(string);
-      
+
       deletedIndex = NSNotFound;
       addedIndex = NSNotFound;
-      
-    } lineHandler:^(GCLineDiffChange change, NSUInteger oldLineNumber, NSUInteger newLineNumber, const char* contentBytes, NSUInteger contentLength) {
-      
-      CFStringRef string;
-      if (contentBytes[contentLength - 1] != '\n') {
-        size_t length = strlen(GIDiffViewMissingNewlinePlaceholder);
-        char* buffer = malloc(contentLength + length);
-        bcopy(contentBytes, buffer, contentLength);
-        bcopy(GIDiffViewMissingNewlinePlaceholder, &buffer[contentLength], length);
-        string = CFStringCreateWithBytesNoCopy(kCFAllocatorDefault, (const UInt8*)buffer, (contentLength + length), kCFStringEncodingUTF8, false, kCFAllocatorMalloc);
-      } else {
-        string = CFStringCreateWithBytesNoCopy(kCFAllocatorDefault, (const UInt8*)contentBytes, contentLength, kCFStringEncodingUTF8, false, kCFAllocatorNull);
-      }
-      if (string == NULL) {
-        string = CFSTR("<LINE IS NOT VALID UTF-8>\n");
-        XLOG_DEBUG_UNREACHABLE();
-      }
-      [self _addLineWithString:string change:change oldLineNumber:oldLineNumber newLineNumber:newLineNumber contentBytes:contentBytes contentLength:contentLength];
-      CFRelease(string);
-      
-      if (change == kGCLineDiffChange_Deleted) {
-        if (deletedIndex == NSNotFound) {
-          deletedIndex = _lineInfoCount - 1;
+
+    }
+        lineHandler:^(GCLineDiffChange change, NSUInteger oldLineNumber, NSUInteger newLineNumber, const char* contentBytes, NSUInteger contentLength) {
+
+          CFStringRef string;
+          if (contentBytes[contentLength - 1] != '\n') {
+            size_t length = strlen(GIDiffViewMissingNewlinePlaceholder);
+            char* buffer = malloc(contentLength + length);
+            bcopy(contentBytes, buffer, contentLength);
+            bcopy(GIDiffViewMissingNewlinePlaceholder, &buffer[contentLength], length);
+            string = CFStringCreateWithBytesNoCopy(kCFAllocatorDefault, (const UInt8*)buffer, (contentLength + length), kCFStringEncodingUTF8, false, kCFAllocatorMalloc);
+          } else {
+            string = CFStringCreateWithBytesNoCopy(kCFAllocatorDefault, (const UInt8*)contentBytes, contentLength, kCFStringEncodingUTF8, false, kCFAllocatorNull);
+          }
+          if (string == NULL) {
+            string = CFSTR("<LINE IS NOT VALID UTF-8>\n");
+            XLOG_DEBUG_UNREACHABLE();
+          }
+          [self _addLineWithString:string change:change oldLineNumber:oldLineNumber newLineNumber:newLineNumber contentBytes:contentBytes contentLength:contentLength];
+          CFRelease(string);
+
+          if (change == kGCLineDiffChange_Deleted) {
+            if (deletedIndex == NSNotFound) {
+              deletedIndex = _lineInfoCount - 1;
+            }
+          } else if (change == kGCLineDiffChange_Added) {
+            if (addedIndex == NSNotFound) {
+              addedIndex = _lineInfoCount - 1;
+            }
+          } else {
+            highlightBlock(_lineInfoCount - 1);
+            deletedIndex = NSNotFound;
+            addedIndex = NSNotFound;
+          }
+
         }
-      } else if (change == kGCLineDiffChange_Added) {
-        if (addedIndex == NSNotFound) {
-          addedIndex = _lineInfoCount - 1;
-        }
-      } else {
-        highlightBlock(_lineInfoCount - 1);
-        deletedIndex = NSNotFound;
-        addedIndex = NSNotFound;
-      }
-      
-    } endHunkHandler:^{
-      
-      highlightBlock(_lineInfoCount);
-      
-    }];
-    
+        endHunkHandler:^{
+
+          highlightBlock(_lineInfoCount);
+
+        }];
   }
 }
 
@@ -239,12 +239,12 @@ typedef struct {
   NSRect bounds = self.bounds;
   CGContextRef context = [[NSGraphicsContext currentContext] graphicsPort];
   CGContextSaveGState(context);
-  
+
   [self updateLayoutForWidth:bounds.size.width];
-  
+
   [self.backgroundColor setFill];
   CGContextFillRect(context, dirtyRect);
-  
+
   if (_frame) {
     NSColor* selectedColor = self.window.keyWindow && (self.window.firstResponder == self) ? [NSColor selectedControlColor] : [NSColor secondarySelectedControlColor];
     CGContextSetTextMatrix(context, CGAffineTransformIdentity);
@@ -258,7 +258,7 @@ typedef struct {
       CFRange lineRange = CTLineGetStringRange(line);
       CGFloat linePosition = (count - 1 - i) * GIDiffViewLineHeight + kTextBottomPadding;
       CGFloat textPosition = linePosition + GIDiffViewLineDescent;
-      
+
       if (info) {
         while (lineRange.location >= info->range.location + info->range.length) {
           XLOG_DEBUG_CHECK(info != &_lineInfoList[_lineInfoCount - 1]);
@@ -270,7 +270,7 @@ typedef struct {
 #ifdef __clang_analyzer__
       if (!info) break;
 #endif
-      
+
       if ((NSUInteger)info->change != NSNotFound) {
         if ([_selectedLines containsIndex:info->index]) {
           [selectedColor setFill];
@@ -282,7 +282,7 @@ typedef struct {
             [GIDiffViewAddedBackgroundColor setFill];
           }
           CGContextFillRect(context, CGRectMake(0, linePosition, bounds.size.width, GIDiffViewLineHeight));
-          
+
           if (info->highlighted.length) {
             if (info->change == kGCLineDiffChange_Deleted) {
               [GIDiffViewDeletedHighlightColor setFill];
@@ -298,7 +298,7 @@ typedef struct {
             }
           }
         }
-        
+
         [GIDiffViewLineNumberColor setFill];
         if ((lineRange.location == info->range.location) && (info->oldLineNumber != NSNotFound)) {
           CFAttributedStringRef string = CFAttributedStringCreate(kCFAllocatorDefault, (CFStringRef)(info->oldLineNumber >= 100000 ? @"9999…" : [NSString stringWithFormat:@"%5lu", info->oldLineNumber]), GIDiffViewAttributes);
@@ -307,7 +307,7 @@ typedef struct {
           CTLineDraw(prefix, context);
           CFRelease(prefix);
           CFRelease(string);
-          
+
           if (info->change == kGCLineDiffChange_Deleted) {
             CGContextSetTextPosition(context, 2 * kTextLineNumberMargin + 4, textPosition);
             CTLineDraw(GIDiffViewDeletedLine, context);
@@ -320,13 +320,13 @@ typedef struct {
           CTLineDraw(prefix, context);
           CFRelease(prefix);
           CFRelease(string);
-          
+
           if (info->change == kGCLineDiffChange_Added) {
             CGContextSetTextPosition(context, 2 * kTextLineNumberMargin + 4, textPosition);
             CTLineDraw(GIDiffViewAddedLine, context);
           }
         }
-        
+
         if (_selectedText.length && (_selectedText.location < lineRange.location + lineRange.length) && (_selectedText.location + _selectedText.length > lineRange.location)) {
           [selectedColor setFill];
           CGFloat startX = 2 * kTextLineNumberMargin + kTextInsetLeft;
@@ -339,14 +339,14 @@ typedef struct {
           }
           CGContextFillRect(context, CGRectMake(startX, linePosition, endX - startX, GIDiffViewLineHeight));
         }
-        
+
         [GIDiffViewPlainTextColor set];
         CGContextSetTextPosition(context, 2 * kTextLineNumberMargin + kTextInsetLeft, textPosition);
         CTLineDraw(line, context);
       } else {
         [GIDiffViewSeparatorBackgroundColor setFill];
         CGContextFillRect(context, CGRectMake(0, linePosition + 1, bounds.size.width, GIDiffViewLineHeight - 1));
-        
+
         [GIDiffViewSeparatorLineColor setStroke];
         CGContextMoveToPoint(context, 0, linePosition + 0.5);
         CGContextAddLineToPoint(context, bounds.size.width, linePosition + 0.5);
@@ -354,14 +354,14 @@ typedef struct {
         CGContextMoveToPoint(context, 0, linePosition + GIDiffViewLineHeight - 0.5);
         CGContextAddLineToPoint(context, bounds.size.width, linePosition + GIDiffViewLineHeight - 0.5);
         CGContextStrokePath(context);
-        
+
         [GIDiffViewSeparatorTextColor setFill];
         CGContextSetTextPosition(context, 2 * kTextLineNumberMargin + 4, textPosition);
         CTLineDraw(line, context);
       }
     }
   }
-  
+
   [GIDiffViewVerticalLineColor setStroke];
   CGContextMoveToPoint(context, kTextLineNumberMargin - 0.5, 0);
   CGContextAddLineToPoint(context, kTextLineNumberMargin - 0.5, bounds.size.height);
@@ -369,7 +369,7 @@ typedef struct {
   CGContextMoveToPoint(context, 2 * kTextLineNumberMargin - 0.5, 0);
   CGContextAddLineToPoint(context, 2 * kTextLineNumberMargin - 0.5, bounds.size.height);
   CGContextStrokePath(context);
-  
+
   CGContextRestoreGState(context);
 }
 
@@ -396,7 +396,7 @@ typedef struct {
     [_selectedLines removeAllIndexes];
     _selectedText.length = 0;
     [self setNeedsDisplay:YES];  // TODO: Only redraw what's needed
-    
+
     [self.delegate diffViewDidChangeSelection:self];
   }
 }
@@ -441,7 +441,7 @@ typedef struct {
 
 - (void)mouseDown:(NSEvent*)event {
   NSPoint location = [self convertPoint:event.locationInWindow fromView:nil];
-  
+
   // Reset state
   _selectionMode = kSelectionMode_None;
   _startLines = nil;
@@ -449,13 +449,13 @@ typedef struct {
   if (_string == NULL) {
     return;
   }
-  
+
   // Check if mouse is in the content area
   CFArrayRef lines = CTFrameGetLines(_frame);
-  CFIndex index  = CFArrayGetCount(lines) - (location.y - kTextBottomPadding) / GIDiffViewLineHeight;
+  CFIndex index = CFArrayGetCount(lines) - (location.y - kTextBottomPadding) / GIDiffViewLineHeight;
   if ((index >= 0) && (index < CFArrayGetCount(lines))) {
     CTLineRef line = CFArrayGetValueAtIndex(lines, index);
-    
+
     // Set selection mode according to modifier flags
     if (event.modifierFlags & NSCommandKeyMask) {
       _selectionMode = kSelectionMode_Inverse;
@@ -464,16 +464,15 @@ typedef struct {
     } else {
       _selectionMode = kSelectionMode_Replace;
     }
-    
+
     // Check if mouse is in the margin area
     if (location.x < 2 * kTextLineNumberMargin) {
-      
       // Reset selection
       _selectedText.length = 0;
       if (_selectionMode == kSelectionMode_Replace) {
         [_selectedLines removeAllIndexes];
       }
-      
+
       // Update selected lines
       const LineInfo* info = [self _infoForLineRange:CTLineGetStringRange(line)];
       if ((NSUInteger)info->change != NSNotFound) {  // Ignore separators
@@ -482,17 +481,16 @@ typedef struct {
         _selectionMode = kSelectionMode_None;
       }
       switch (_selectionMode) {
-        
         case kSelectionMode_None:
           break;
-        
+
         case kSelectionMode_Replace: {
           XLOG_DEBUG_CHECK(_selectedLines.count == 0);
           [_selectedLines addIndex:info->index];
           _startLines = [_selectedLines copy];
           break;
         }
-        
+
         case kSelectionMode_Extend: {
           XLOG_DEBUG_CHECK(_selectedLines.count > 0);
           _startLines = [_selectedLines copy];
@@ -503,7 +501,7 @@ typedef struct {
           }
           break;
         }
-        
+
         case kSelectionMode_Inverse: {
           _startLines = [_selectedLines copy];
           if ([_selectedLines containsIndex:info->index]) {
@@ -513,18 +511,16 @@ typedef struct {
           }
           break;
         }
-        
       }
       [self setNeedsDisplay:YES];  // TODO: Only redraw what's needed
-      
+
     }
     // Otherwise check if mouse is is in the diff area
     else if (location.x >= 2 * kTextLineNumberMargin + kTextInsetLeft) {
-      
       // Reset selection
       _selectedText.length = 0;
       [_selectedLines removeAllIndexes];
-      
+
       // Update selected text
       index = CTLineGetStringIndexForPosition(line, CGPointMake(location.x - (2 * kTextLineNumberMargin + kTextInsetLeft), GIDiffViewLineHeight / 2));
       if (index != kCFNotFound) {
@@ -532,23 +528,25 @@ typedef struct {
         if (event.clickCount > 1) {
           CFRange range = CTLineGetStringRange(line);
           NSString* string = (NSString*)CFAttributedStringGetString(_string);
-          [string enumerateSubstringsInRange:NSMakeRange(range.location, range.length) options:NSStringEnumerationByWords usingBlock:^(NSString* substring, NSRange substringRange, NSRange enclosingRange, BOOL* stop) {
-            if ((index >= (CFIndex)substringRange.location) && (index <= (CFIndex)(substringRange.location + substringRange.length))) {
-              _selectedText = CFRangeMake(substringRange.location, substringRange.length);
-              _deletedIndex = _selectedText.location;
-              *stop = YES;
-            }
-          }];
+          [string enumerateSubstringsInRange:NSMakeRange(range.location, range.length)
+                                     options:NSStringEnumerationByWords
+                                  usingBlock:^(NSString* substring, NSRange substringRange, NSRange enclosingRange, BOOL* stop) {
+                                    if ((index >= (CFIndex)substringRange.location) && (index <= (CFIndex)(substringRange.location + substringRange.length))) {
+                                      _selectedText = CFRangeMake(substringRange.location, substringRange.length);
+                                      _deletedIndex = _selectedText.location;
+                                      *stop = YES;
+                                    }
+                                  }];
         }
       } else {
         _selectionMode = kSelectionMode_None;
       }
       [self setNeedsDisplay:YES];  // TODO: Only redraw what's needed
-      
+
     } else {
       _selectionMode = kSelectionMode_None;
     }
-    
+
   }
   // Otherwise clear entire selection
   else {
@@ -561,24 +559,23 @@ typedef struct {
     return;
   }
   NSPoint location = [self convertPoint:event.locationInWindow fromView:nil];
-  
+
   // Check if mouse is in the content area
   CFArrayRef lines = CTFrameGetLines(_frame);
-  CFIndex index  = CFArrayGetCount(lines) - (location.y - kTextBottomPadding) / GIDiffViewLineHeight;
+  CFIndex index = CFArrayGetCount(lines) - (location.y - kTextBottomPadding) / GIDiffViewLineHeight;
   if ((index >= 0) && (index < CFArrayGetCount(lines))) {
     CTLineRef line = CFArrayGetValueAtIndex(lines, index);
-    
+
     // Check if we are in line-selection mode
     if (_startLines) {
       const LineInfo* info = [self _infoForLineRange:CTLineGetStringRange(line)];
       if ((NSUInteger)info->change != NSNotFound) {  // Ignore separators
-        
+
         // Update selected lines
         switch (_selectionMode) {
-          
           case kSelectionMode_None:
             break;
-          
+
           case kSelectionMode_Replace:
           case kSelectionMode_Extend: {
             XLOG_DEBUG_CHECK(_startLines.count > 0);
@@ -591,7 +588,7 @@ typedef struct {
             }
             break;
           }
-          
+
           case kSelectionMode_Inverse: {
             [_selectedLines removeAllIndexes];
             [_selectedLines addIndexes:_startLines];
@@ -604,17 +601,14 @@ typedef struct {
             }
             break;
           }
-          
         }
         [self setNeedsDisplay:YES];  // TODO: Only redraw what's needed
-        
       }
     }
     // Otherwise we are in text-selection mode
     else {
       index = CTLineGetStringIndexForPosition(line, CGPointMake(location.x - (2 * kTextLineNumberMargin + kTextInsetLeft), GIDiffViewLineHeight / 2));
       if (index != kCFNotFound) {
-        
         // Update selected text
         if (index > (CFIndex)_deletedIndex) {
           _selectedText = CFRangeMake((CFIndex)_deletedIndex, index - (CFIndex)_deletedIndex);
@@ -622,12 +616,10 @@ typedef struct {
           _selectedText = CFRangeMake(index, (CFIndex)_deletedIndex - index);
         }
         [self setNeedsDisplay:YES];  // TODO: Only redraw what's needed
-        
       }
     }
-    
   }
-  
+
   // Scroll if needed
   [self autoscroll:event];
 }

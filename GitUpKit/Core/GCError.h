@@ -1,4 +1,4 @@
-//  Copyright (C) 2015 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2016 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -20,10 +20,10 @@ typedef NS_ENUM(NSInteger, GCErrorCode) {
   kGCErrorCode_RepositoryDirty = 2,
   kGCErrorCode_Generic = 1,
   kGCErrorCode_UserCancelled = 0,
-  kGCErrorCode_NotFound = -3, // GIT_ENOTFOUND,
+  kGCErrorCode_NotFound = -3,  // GIT_ENOTFOUND,
   kGCErrorCode_User = -7,  // GIT_EUSER
   kGCErrorCode_NonFastForward = -11,  // GIT_ENONFASTFORWARD
-  kGCErrorCode_CheckoutConflicts= -13,  // GIT_ECONFLICT
+  kGCErrorCode_CheckoutConflicts = -13,  // GIT_ECONFLICT
   kGCErrorCode_Authentication = -16  // GIT_EAUTH
 };
 
