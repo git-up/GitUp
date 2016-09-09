@@ -198,13 +198,7 @@ static NSString* _diffTemporaryDirectoryPath = nil;
 }
 
 - (void)stageAllChangesForFile:(NSString*)path {
-  NSError* error;
-  BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:[self.repository absolutePathForFile:path] followLastSymlink:NO];
-  if ((fileExists && [self.repository addFileToIndex:path error:&error]) || (!fileExists && [self.repository removeFileFromIndex:path error:&error])) {
-    [self.repository notifyRepositoryChanged];
-  } else {
-    [self presentError:error];
-  }
+  return [self stageAllChangesForFiles:@[path]];
 }
 
 - (void)stageAllChangesForFiles:(NSArray<NSString *> *)paths {
@@ -218,13 +212,17 @@ static NSString* _diffTemporaryDirectoryPath = nil;
       [nonExistingFiles addObject:path];
     }
   }
-  
-  if (![self.repository addFilesToIndex:existingFiles error:&error]){
-    [self presentError:error];
+
+  if (existingFiles.count > 0) {
+    if (![self.repository addFilesToIndex:existingFiles error:&error]){
+      [self presentError:error];
+    }
   }
-  
-  if (![self.repository removeFilesFromIndex:nonExistingFiles error:&error]){
-    [self presentError:error];
+
+  if (nonExistingFiles.count > 0) {
+    if (![self.repository removeFilesFromIndex:nonExistingFiles error:&error]){
+      [self presentError:error];
+    }
   }
   
   [self.repository notifyRepositoryChanged];
@@ -241,7 +239,7 @@ static NSString* _diffTemporaryDirectoryPath = nil;
                                      if (change == kGCLineDiffChange_Deleted) {
                                        return [oldLines containsIndex:oldLineNumber];
                                      }
-                                     return YES;
+    return YES;
                                    }]) {
     [self.repository notifyRepositoryChanged];
   } else {
@@ -282,18 +280,36 @@ static NSString* _diffTemporaryDirectoryPath = nil;
 }
 
 - (BOOL)discardAllChangesForFile:(NSString*)path resetIndex:(BOOL)resetIndex error:(NSError**)error {
+  return [self discardAllChangesForFiles:@[path]
+                              resetIndex:resetIndex
+                                   error:error];
+}
+
+- (BOOL)discardAllChangesForFiles:(NSArray<NSString*>*)paths resetIndex:(BOOL)resetIndex error:(NSError**)error {
   BOOL success = NO;
   if (resetIndex) {
     GCCommit* commit;
-    if ([self.repository lookupHEADCurrentCommit:&commit branch:NULL error:error] && [self.repository resetFileInIndexToHEAD:path error:error]) {
-      if (commit && [self.repository checkTreeForCommit:commit containsFile:path error:NULL]) {
-        success = [self.repository safeDeleteFileIfExists:path error:error] && [self.repository checkoutFileFromIndex:path error:error];
-      } else {
-        success = [self.repository safeDeleteFile:path error:error];
+    if ([self.repository lookupHEADCurrentCommit:&commit branch:NULL error:error] && [self.repository resetFilesInIndexToHEAD:paths error:error]) {
+      success = YES;
+      for (NSString *path in paths) {
+        if (commit && [self.repository checkTreeForCommit:commit containsFile:path error:NULL]) {
+          if (![self.repository safeDeleteFileIfExists:path error:error] && [self.repository checkoutFileFromIndex:path error:error]) {
+            return NO;
+          }
+        } else {
+          if (![self.repository safeDeleteFileIfExists:path error:error]) {
+            return NO;
+          }
+        }
       }
     }
   } else {
-    success = [self.repository safeDeleteFileIfExists:path error:error] && [self.repository checkoutFileFromIndex:path error:error];
+    for (NSString *path in paths) {
+      if (![self.repository safeDeleteFileIfExists:path error:error]) {
+        return NO;
+      }
+    }
+    success = [self.repository checkoutFilesFromIndex:paths error:error];
   }
   return success;
 }
@@ -949,7 +965,7 @@ static NSString* _diffTemporaryDirectoryPath = nil;
   } else if ([identifier isEqualToString:GIViewControllerTool_BeyondCompare]) {
     [self _runBeyondCompareWithArguments:@[ [NSString stringWithFormat:@"-title1=%@", oldTitle], [NSString stringWithFormat:@"-title2=%@", newTitle], oldPath, newPath ]];
   } else if ([identifier isEqualToString:GIViewControllerTool_P4Merge] || [identifier isEqualToString:GIViewControllerTool_GitTool]) {
-    ;  // Handled above
+      // Handled above
   } else if ([identifier isEqualToString:GIViewControllerTool_DiffMerge]) {
     [self _runDiffMergeToolWithArguments:@[ [NSString stringWithFormat:@"-t1=%@", oldTitle], [NSString stringWithFormat:@"-t2=%@", newTitle], oldPath, newPath ]];
   } else {

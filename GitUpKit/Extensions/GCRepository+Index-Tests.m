@@ -68,10 +68,34 @@
   // Re-add file to index
   XCTAssertTrue([self.repository addFileToIndex:@"test.txt" error:NULL]);
   [self assertGitCLTOutputEqualsString:@"A  test.txt\n" withRepository:self.repository command:@"status", @"--ignored", @"--porcelain", nil];
+  
+  // Add multiple files to working directory
+  NSMutableArray *filePaths = [[NSMutableArray alloc] init];
+  NSString *expectedGitCLTOutput = [[NSString alloc] init];
+  for (int i = 0; i < 50; i++) {
+    NSString *filePath = [NSString stringWithFormat:@"hello_world%02d.txt",i];
+    [self updateFileAtPath:filePath withString:@"Bonjour le monde!\n"];
+    [filePaths addObject:filePath];
+    expectedGitCLTOutput = [expectedGitCLTOutput stringByAppendingFormat:@"A  %@\n",filePath];
+  }
+  expectedGitCLTOutput = [expectedGitCLTOutput stringByAppendingString:@"A  test.txt\n"];
+  
+  // Add multiple files to index
+  XCTAssertTrue([self.repository addFilesToIndex:filePaths error:NULL]);
+  [self assertGitCLTOutputEqualsString:expectedGitCLTOutput withRepository:self.repository command:@"status", @"--ignored", @"--porcelain", nil];
+  
+  // Add remove multiple files from index
+  XCTAssertTrue([self.repository removeFilesFromIndex:filePaths error:NULL]);
+  expectedGitCLTOutput = [expectedGitCLTOutput stringByReplacingOccurrencesOfString:@"A  test.txt\n" withString:@""];
+  expectedGitCLTOutput = [expectedGitCLTOutput stringByReplacingOccurrencesOfString:@"A  hello_world" withString:@"?? hello_world"];
+  expectedGitCLTOutput = [@"A  test.txt\n" stringByAppendingString:expectedGitCLTOutput];
+  [self assertGitCLTOutputEqualsString:expectedGitCLTOutput withRepository:self.repository command:@"status", @"--ignored", @"--porcelain", nil];
 
   // Reset index
   XCTAssertTrue([self.repository resetIndexToHEAD:NULL]);
-  [self assertGitCLTOutputEqualsString:@"?? test.txt\n" withRepository:self.repository command:@"status", @"--ignored", @"--porcelain", nil];
+  expectedGitCLTOutput = [expectedGitCLTOutput stringByReplacingOccurrencesOfString:@"A  test.txt\n" withString:@""];
+  expectedGitCLTOutput = [expectedGitCLTOutput stringByAppendingString:@"?? test.txt\n"];
+  [self assertGitCLTOutputEqualsString:expectedGitCLTOutput withRepository:self.repository command:@"status", @"--ignored", @"--porcelain", nil];
 }
 
 - (void)testIndex_Lines {

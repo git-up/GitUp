@@ -39,11 +39,7 @@
 }
 
 - (BOOL)removeFileFromIndex:(NSString*)path error:(NSError**)error {
-  GCIndex* index = [self readRepositoryIndex:error];
-  if (index == nil) {
-    return NO;
-  }
-  return [self removeFile:path fromIndex:index error:error] && [self writeRepositoryIndex:index error:error];
+  return [self removeFilesFromIndex:@[path] error:error];
 }
 
 - (BOOL)removeFilesFromIndex:(NSArray<NSString *> *)paths error:(NSError**)error {
@@ -53,9 +49,8 @@
   }
   
   for (NSString *path in paths) {
-    if (![self removeFile:path fromIndex:index error:error]) {
-      return false;
-    }else if (error) {
+    if (![self removeFile:path fromIndex:index error:error] || (error && *error != nil)) {
+      [self writeRepositoryIndex:index error:error];
       return false;
     }
   }
@@ -64,11 +59,7 @@
 }
 
 - (BOOL)addFileToIndex:(NSString*)path error:(NSError**)error {
-  GCIndex* index = [self readRepositoryIndex:error];
-  if (index == nil) {
-    return NO;
-  }
-  return [self addFileInWorkingDirectory:path toIndex:index error:error] && [self writeRepositoryIndex:index error:error];
+  return [self addFilesToIndex:@[path] error:error];
 }
 
 - (BOOL)addFilesToIndex:(NSArray<NSString *> *)paths error:(NSError**)error {
@@ -76,37 +67,30 @@
   if (index == nil) {
     return NO;
   }
-  
+
+  BOOL failed = NO;
+  BOOL shouldWriteRepository = NO;
   for (NSString *path in paths) {
-    if (![self addFileInWorkingDirectory:path toIndex:index error:error]) {
-      return false;
-    }else if (*error) {
-      return false;
+    if (![self addFileInWorkingDirectory:path toIndex:index error:error] || (error && *error != nil)) {
+      failed = YES;
+      break;
     }
+
+    shouldWriteRepository = true;
   }
-  
+
+  if (failed && shouldWriteRepository) {
+    if (shouldWriteRepository) {
+      [self writeRepositoryIndex:index error:NULL];
+    }
+    return FALSE;
+  }
+
   return [self writeRepositoryIndex:index error:error];
 }
 
 - (BOOL)resetFileInIndexToHEAD:(NSString*)path error:(NSError**)error {
-  GCIndex* index = [self readRepositoryIndex:error];
-  if (index == nil) {
-    return NO;
-  }
-  GCCommit* headCommit;
-  if (![self lookupHEADCurrentCommit:&headCommit branch:NULL error:error]) {
-    return NO;
-  }
-  if (headCommit) {
-    if (![self resetFile:path inIndex:index toCommit:headCommit error:error]) {
-      return NO;
-    }
-  } else {
-    if (![self removeFile:path fromIndex:index error:error]) {
-      return NO;
-    }
-  }
-  return [self writeRepositoryIndex:index error:error];
+  return [self resetFilesInIndexToHEAD:@[path] error:error];
 }
 
 - (BOOL)resetFilesInIndexToHEAD:(NSArray<NSString *> *)paths error:(NSError**)error {
@@ -122,10 +106,12 @@
   for (NSString *path in paths) {
     if (headCommit) {
       if (![self resetFile:path inIndex:index toCommit:headCommit error:error]) {
+        [self writeRepositoryIndex:index error:error];
         return NO;
       }
     } else {
       if (![self removeFile:path fromIndex:index error:error]) {
+        [self writeRepositoryIndex:index error:error];
         return NO;
       }
     }
@@ -135,11 +121,15 @@
 }
 
 - (BOOL)checkoutFileFromIndex:(NSString*)path error:(NSError**)error {
+  return [self checkoutFilesFromIndex:@[path] error:error];
+}
+
+- (BOOL)checkoutFilesFromIndex:(NSArray<NSString*>*)paths error:(NSError**)error {
   GCIndex* index = [self readRepositoryIndex:error];
   if (index == nil) {
     return NO;
   }
-  return [self checkoutFileToWorkingDirectory:path fromIndex:index error:error];
+  return [self checkoutFilesToWorkingDirectory:paths fromIndex:index error:error];
 }
 
 - (BOOL)addLinesFromFileToIndex:(NSString*)path error:(NSError**)error usingFilter:(GCIndexLineFilter)filter {
