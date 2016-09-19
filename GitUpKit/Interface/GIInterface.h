@@ -14,7 +14,9 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #ifndef __GI_HAS_APPKIT__
+// clang-format off
 #if defined(__has_include) && __has_include(<AppKit/AppKit.h>)
+// clang-format on
 #define __GI_HAS_APPKIT__ 1
 #else
 #define __GI_HAS_APPKIT__ 0
