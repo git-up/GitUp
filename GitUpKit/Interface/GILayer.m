@@ -1,4 +1,4 @@
-//  Copyright (C) 2015 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2016 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@
 - (instancetype)initWithIndex:(NSUInteger)index {
   if ((self = [super init])) {
     _index = index;
-    
+
     _nodes = CFArrayCreateMutable(kCFAllocatorDefault, 0, NULL);
     _lines = CFArrayCreateMutable(kCFAllocatorDefault, 0, NULL);
   }
@@ -37,7 +37,7 @@
 - (void)dealloc {
   CFRelease(_lines);
   CFRelease(_nodes);
-  
+
   [super dealloc];
 }
 

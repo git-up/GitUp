@@ -1,4 +1,4 @@
-//  Copyright (C) 2015 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2016 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -26,10 +26,10 @@
   // Test exists(), write() and read()
   GCCommit* commit = [self.repository createCommitFromHEADWithMessage:@"0" error:NULL];
   XCTAssertNotNil(commit);
-  
+
   // Test exists_prefix()
   XCTAssertNotNil([self.repository computeUniqueShortSHA1ForCommit:commit error:NULL]);
-  
+
   // Test read_prefix()
   git_object* object;
   XCTAssertEqual(git_object_lookup_prefix(&object, self.repository.private, git_commit_id(commit.private), 10, GIT_OBJ_COMMIT), GIT_OK);
@@ -39,27 +39,27 @@
 - (void)testSQLite_References {
   // Test lookup()
   XCTAssertNil([self.repository lookupHEAD:NULL error:NULL]);
-  
+
   // Test write() - Symbolic
   XCTAssertNotNil([self.repository createSymbolicReferenceWithFullName:@"HEAD" target:@"refs/heads/master" force:YES error:NULL]);
-  
+
   // Test write() - Direct
   GCCommit* commit = [self.repository createCommitFromHEADWithMessage:@"0" error:NULL];
   XCTAssertNotNil(commit);
   GCLocalBranch* masterBranch;
   XCTAssertNotNil([self.repository lookupHEAD:&masterBranch error:NULL]);
-  
+
   // Create topic branch
   GCLocalBranch* topicBranch = [self.repository createLocalBranchFromCommit:commit withName:@"topic" force:NO error:NULL];
   XCTAssertNotNil(topicBranch);
-  
+
   // Test iterator()
-  NSArray* branches = @[masterBranch, topicBranch];
+  NSArray* branches = @[ masterBranch, topicBranch ];
   XCTAssertEqualObjects([self.repository listAllBranches:NULL], branches);
-  
+
   // Test rename() (and indirectly exists())
   XCTAssertTrue([self.repository setName:@"temp" forLocalBranch:topicBranch force:NO error:NULL]);
-  
+
   // Test del()
   XCTAssertTrue([self.repository deleteLocalBranch:topicBranch error:NULL]);
 }
@@ -70,7 +70,7 @@
 
 - (void)testSQLite_Copy {
   NSString* path = [NSTemporaryDirectory() stringByAppendingPathComponent:[[NSProcessInfo processInfo] globallyUniqueString]];
-  
+
   // Copy repo from test repo
   [[NSFileManager defaultManager] removeItemAtPath:path error:NULL];
   GCSQLiteRepository* repository = [[GCSQLiteRepository alloc] initWithDatabase:path config:nil localRepositoryContents:self.repository.repositoryPath error:NULL];
@@ -81,7 +81,7 @@
   GCLocalBranch* branch;
   XCTAssertNotNil([repository lookupHEAD:&branch error:NULL]);
   XCTAssertEqualObjects(branch.name, @"master");
-  
+
   // Clean up
   repository = nil;
 }

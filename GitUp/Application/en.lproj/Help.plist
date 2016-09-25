@@ -104,7 +104,7 @@ Select an ancestor commit to jump to it in the Map view or press [Spacebar] to e
 	<dict>
 		<key>contents</key>
 		<array>
-			<string>Snaphots are like Time Machine for Git: they automatically capture the state of your repository before any significant change.
+			<string>Snapshots are like Time Machine for Git: they automatically capture the state of your repository before any significant change.
 Select a Snapshot to preview the state of the repository at that time and then click &quot;Restore&quot; to roll back to it.</string>
 		</array>
 		<key>link</key>

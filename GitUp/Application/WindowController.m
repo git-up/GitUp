@@ -1,4 +1,4 @@
-//  Copyright (C) 2015 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2016 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -24,13 +24,13 @@
 
 - (void)windowDidLoad {
   [super windowDidLoad];
-  
+
   self.window.delegate = self;
 }
 
 - (void)synchronizeWindowTitleWithDocumentName {
   [super synchronizeWindowTitleWithDocumentName];
-  
+
   NSString* title = [NSString stringWithFormat:@"%@ • %@", [(Document*)self.document displayName], NSLocalizedString([(Document*)self.document windowMode], nil)];
   [[(Document*)self.document titleTextField] setStringValue:title];
 }

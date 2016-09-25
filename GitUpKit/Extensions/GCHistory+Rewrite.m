@@ -1,4 +1,4 @@
-//  Copyright (C) 2015 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2016 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -34,12 +34,13 @@ typedef NS_ENUM(NSUInteger, ReplayMode) {
     return YES;
   }
   __block BOOL result = NO;
-  [self walkDescendantsOfCommits:@[commit] usingBlock:^(GCHistoryCommit* descendantCommit, BOOL* stop) {
-    if (descendantCommit.localBranches.count) {
-      result = YES;
-      *stop = YES;
-    }
-  }];
+  [self walkDescendantsOfCommits:@[ commit ]
+                      usingBlock:^(GCHistoryCommit* descendantCommit, BOOL* stop) {
+                        if (descendantCommit.localBranches.count) {
+                          result = YES;
+                          *stop = YES;
+                        }
+                      }];
   return result;
 }
 
@@ -53,7 +54,7 @@ typedef NS_ENUM(NSUInteger, ReplayMode) {
   if (revertedCommit == nil) {
     return nil;
   }
-  
+
   NSString* reflogMessage = [NSString stringWithFormat:kGCReflogMessageFormat_GitUp_Revert, commit.shortSHA1];
   GCReferenceTransform* transform = [[GCReferenceTransform alloc] initWithRepository:self.repository reflogMessage:reflogMessage];
   [transform setDirectTarget:revertedCommit forReference:branch];
@@ -73,7 +74,7 @@ typedef NS_ENUM(NSUInteger, ReplayMode) {
   if (pickedCommit == nil) {
     return nil;
   }
-  
+
   NSString* reflogMessage = [NSString stringWithFormat:kGCReflogMessageFormat_GitUp_CherryPick, commit.shortSHA1];
   GCReferenceTransform* transform = [[GCReferenceTransform alloc] initWithRepository:self.repository reflogMessage:reflogMessage];
   [transform setDirectTarget:pickedCommit forReference:branch];
@@ -103,7 +104,7 @@ typedef NS_ENUM(NSUInteger, ReplayMode) {
   if (mergedCommit == nil) {
     return nil;
   }
-  
+
   NSString* reflogMessage = [NSString stringWithFormat:kGCReflogMessageFormat_GitUp_Merge, commit.shortSHA1];
   GCReferenceTransform* transform = [[GCReferenceTransform alloc] initWithRepository:self.repository reflogMessage:reflogMessage];
   [transform setDirectTarget:mergedCommit forReference:branch];
@@ -123,7 +124,7 @@ typedef NS_ENUM(NSUInteger, ReplayMode) {
   if (tipCommit == nil) {
     return nil;
   }
-  
+
   NSString* reflogMessage = [NSString stringWithFormat:kGCReflogMessageFormat_GitUp_Rebase, commit.shortSHA1, branch.name];
   GCReferenceTransform* transform = [[GCReferenceTransform alloc] initWithRepository:self.repository reflogMessage:reflogMessage];
   [transform setDirectTarget:tipCommit forReference:branch];
@@ -141,7 +142,7 @@ typedef NS_ENUM(NSUInteger, ReplayMode) {
       [transform setSymbolicTargetForHEAD:@"refs/heads/master"];  // Make HEAD unborn
     }
   }
-  
+
   if (newCommit) {
     for (GCHistoryLocalBranch* branch in baseCommit.localBranches) {
       [transform setDirectTarget:newCommit forReference:branch];
@@ -167,61 +168,62 @@ typedef NS_ENUM(NSUInteger, ReplayMode) {
     CFDictionarySetValue(mapping, (__bridge const void*)commit, (__bridge const void*)initialMapping[commit]);
   }
   __block BOOL success = YES;
-  [self walkDescendantsOfCommits:@[fromCommit] usingBlock:^(GCHistoryCommit* commit, BOOL* stop) {
-    
-    if ([self isCommitOnAnyLocalBranch:commit]) {
-      if (CFDictionaryContainsKey(mapping, (__bridge const void*)commit)) {
-        return;
-      }
-      
-      NSMutableArray* parents = [[NSMutableArray alloc] init];
-      GCHistoryCommit* ancestorCommit = nil;
-      GCCommit* tipCommit = nil;
-      for (GCHistoryCommit* parent in commit.parents) {
-        GCCommit* newParent = CFDictionaryGetValue(mapping, (__bridge const void*)parent);
-        if ((__bridge void*)newParent != kCFNull) {
-          if (newParent) {
-            if (ancestorCommit == nil) {  // Replay on top of first found replayed parent
-              ancestorCommit = parent;
-              tipCommit = newParent;
-            }
-            [parents addObject:newParent];
-          } else {
-            [parents addObject:parent];
-          }
-        }
-      }
-      GCCommit* newCommit;
-      if (replayMode == kReplayMode_CopyTrees) {
-        newCommit = [self.repository copyCommit:commit
-                             withUpdatedMessage:nil
-                                 updatedParents:parents
-                           updatedTreeFromIndex:nil
-                                updateCommitter:YES
-                                          error:error];
-      } else {
-        newCommit = [self.repository replayCommit:commit
-                                       ontoCommit:tipCommit
-                               withAncestorCommit:ancestorCommit
-                                   updatedMessage:nil
-                                   updatedParents:parents
-                                  updateCommitter:YES
-                                    skipIdentical:(replayMode == kReplayMode_ApplyNewPatchesOnly)
-                                  conflictHandler:handler
-                                            error:error];
-      }
-      if (newCommit == nil) {
-        success = NO;
-        *stop = YES;
-        return;
-      }
-      [self _updateTransform:transform forNewCommit:newCommit withBaseCommit:commit];
-      CFDictionarySetValue(mapping, (__bridge const void*)commit, (__bridge const void*)newCommit);
-    } else {
-      XLOG_DEBUG(@"Skipping replay of commit \"%@\" (%@) not on local branch", commit.summary, commit.shortSHA1);
-    }
-    
-  }];
+  [self walkDescendantsOfCommits:@[ fromCommit ]
+                      usingBlock:^(GCHistoryCommit* commit, BOOL* stop) {
+
+                        if ([self isCommitOnAnyLocalBranch:commit]) {
+                          if (CFDictionaryContainsKey(mapping, (__bridge const void*)commit)) {
+                            return;
+                          }
+
+                          NSMutableArray* parents = [[NSMutableArray alloc] init];
+                          GCHistoryCommit* ancestorCommit = nil;
+                          GCCommit* tipCommit = nil;
+                          for (GCHistoryCommit* parent in commit.parents) {
+                            GCCommit* newParent = CFDictionaryGetValue(mapping, (__bridge const void*)parent);
+                            if ((__bridge void*)newParent != kCFNull) {
+                              if (newParent) {
+                                if (ancestorCommit == nil) {  // Replay on top of first found replayed parent
+                                  ancestorCommit = parent;
+                                  tipCommit = newParent;
+                                }
+                                [parents addObject:newParent];
+                              } else {
+                                [parents addObject:parent];
+                              }
+                            }
+                          }
+                          GCCommit* newCommit;
+                          if (replayMode == kReplayMode_CopyTrees) {
+                            newCommit = [self.repository copyCommit:commit
+                                                 withUpdatedMessage:nil
+                                                     updatedParents:parents
+                                               updatedTreeFromIndex:nil
+                                                    updateCommitter:YES
+                                                              error:error];
+                          } else {
+                            newCommit = [self.repository replayCommit:commit
+                                                           ontoCommit:tipCommit
+                                                   withAncestorCommit:ancestorCommit
+                                                       updatedMessage:nil
+                                                       updatedParents:parents
+                                                      updateCommitter:YES
+                                                        skipIdentical:(replayMode == kReplayMode_ApplyNewPatchesOnly)
+                                                      conflictHandler:handler
+                                                                error:error];
+                          }
+                          if (newCommit == nil) {
+                            success = NO;
+                            *stop = YES;
+                            return;
+                          }
+                          [self _updateTransform:transform forNewCommit:newCommit withBaseCommit:commit];
+                          CFDictionarySetValue(mapping, (__bridge const void*)commit, (__bridge const void*)newCommit);
+                        } else {
+                          XLOG_DEBUG(@"Skipping replay of commit \"%@\" (%@) not on local branch", commit.summary, commit.shortSHA1);
+                        }
+
+                      }];
   CFRelease(mapping);
   return success;
 }
@@ -318,7 +320,7 @@ typedef NS_ENUM(NSUInteger, ReplayMode) {
   GCHistoryCommit* grandParentCommit = parentCommit.parents[0];
   NSString* reflogMessage = [NSString stringWithFormat:kGCReflogMessageFormat_GitUp_Swap, commit.shortSHA1, parentCommit.shortSHA1];
   GCReferenceTransform* transform = [[GCReferenceTransform alloc] initWithRepository:self.repository reflogMessage:reflogMessage];
-  
+
   // Replay commit on top of its grandparent preserving other parents
   NSMutableArray* parents = [[NSMutableArray alloc] initWithArray:commit.parents];
   [parents replaceObjectAtIndex:0 withObject:grandParentCommit];
@@ -335,7 +337,7 @@ typedef NS_ENUM(NSUInteger, ReplayMode) {
     return nil;
   }
   [self _updateTransform:transform forNewCommit:swappedParentCommit withBaseCommit:commit];
-  
+
   // Replay parent commit on top of just replayed commit preserving other parents
   NSMutableArray* grandParents = [[NSMutableArray alloc] initWithArray:parentCommit.parents];
   [grandParents replaceObjectAtIndex:0 withObject:swappedParentCommit];
@@ -352,18 +354,18 @@ typedef NS_ENUM(NSUInteger, ReplayMode) {
     return nil;
   }
   [self _updateTransform:transform forNewCommit:swappedCommit withBaseCommit:parentCommit];
-  
+
   // Replay descendants from parents onto replayed parent skipping commit
   if (![self _replayDescendantsFromCommit:parentCommit
                                ontoCommit:swappedParentCommit
-                       withInitialMapping:@{commit: swappedCommit}
+                       withInitialMapping:@{ commit : swappedCommit }
                            usingTransform:transform
                                replayMode:kReplayMode_ApplyPatches
                           conflictHandler:handler
                                     error:error]) {
     return nil;
   }
-  
+
   // If the commit to swap was a leaf, move its references to the commit that replaces it
   if (commit.leaf) {
     for (GCHistoryLocalBranch* branch in commit.localBranches) {  // Force-update its branch references to point to the new tip instead of following their old commits so that new commits are reachable
@@ -373,7 +375,7 @@ typedef NS_ENUM(NSUInteger, ReplayMode) {
       [transform setDirectTargetForHEAD:swappedCommit];
     }
   }
-  
+
   if (newChildCommit) {
     *newChildCommit = swappedCommit;
   }

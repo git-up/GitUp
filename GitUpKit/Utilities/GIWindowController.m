@@ -1,4 +1,4 @@
-//  Copyright (C) 2015 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2016 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -80,8 +80,7 @@
 static void _WalkViewTree(NSView* view, NSMutableArray* array) {
   for (NSView* subview in view.subviews) {
     if (!subview.hidden) {
-      if ([subview isKindOfClass:[NSTextField class]] || [subview isKindOfClass:[NSTextView class]]
-          || ([subview isKindOfClass:[NSTableView class]] && (![[(NSTableView*)subview delegate] respondsToSelector:@selector(selectionShouldChangeInTableView:)] || [[(NSTableView*)subview delegate] selectionShouldChangeInTableView:(NSTableView*)subview]))  // Allows NSTableView assuming it doesn't return NO for -selectionShouldChangeInTableView:
+      if ([subview isKindOfClass:[NSTextField class]] || [subview isKindOfClass:[NSTextView class]] || ([subview isKindOfClass:[NSTableView class]] && (![[(NSTableView*)subview delegate] respondsToSelector:@selector(selectionShouldChangeInTableView:)] || [[(NSTableView*)subview delegate] selectionShouldChangeInTableView:(NSTableView*)subview]))  // Allows NSTableView assuming it doesn't return NO for -selectionShouldChangeInTableView:
           || [subview isKindOfClass:[GIGraphView class]]) {  // Always allow GIGraphView which can become first-responder
         if (subview.acceptsFirstResponder) {
           [array addObject:subview];
@@ -176,13 +175,13 @@ static void _TimerCallBack(CFRunLoopTimerRef timer, void* info) {
   if ((self = [super initWithWindow:window])) {
     [[NSBundle bundleForClass:[GIWindowController class]] loadNibNamed:@"GIWindowController" owner:self topLevelObjects:NULL];
     XLOG_DEBUG_CHECK(_overlayView);
-    
+
     _area = [[NSTrackingArea alloc] initWithRect:NSZeroRect options:(NSTrackingInVisibleRect | NSTrackingActiveAlways | NSTrackingMouseEnteredAndExited) owner:self userInfo:nil];
     [_overlayView addTrackingArea:_area];
-    
+
     _modalView = [[GIModalView alloc] initWithFrame:NSZeroRect];
     _modalView.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
-    
+
     CFRunLoopTimerContext context = {0, (__bridge void*)self, NULL, NULL, NULL};
     _overlayTimer = CFRunLoopTimerCreate(kCFAllocatorDefault, HUGE_VALF, HUGE_VALF, 0, 0, _TimerCallBack, &context);
     CFRunLoopAddTimer(CFRunLoopGetMain(), _overlayTimer, kCFRunLoopCommonModes);
@@ -204,30 +203,28 @@ static void _TimerCallBack(CFRunLoopTimerRef timer, void* info) {
   va_start(arguments, format);
   NSString* message = [[NSString alloc] initWithFormat:format arguments:arguments];
   va_end(arguments);
-  
+
   [self showOverlayWithStyle:style message:message];
 }
 
 - (void)showOverlayWithStyle:(GIOverlayStyle)style message:(NSString*)message {
   switch (style) {
-    
     case kGIOverlayStyle_Help:
       _overlayView.backgroundColor = _helpColor;
       _overlayDelay = 4.0;
       break;
-    
+
     case kGIOverlayStyle_Informational:
       _overlayView.backgroundColor = _informationalColor;
       _overlayDelay = 3.0;
       break;
-    
+
     case kGIOverlayStyle_Warning:
       _overlayView.backgroundColor = _warningColor;
       _overlayDelay = 5.0;
       break;
-    
   }
-  
+
   if (_overlayView.superview == nil) {
     NSRect bounds = [self.window.contentView bounds];
     NSRect frame = _overlayView.frame;
@@ -235,7 +232,7 @@ static void _TimerCallBack(CFRunLoopTimerRef timer, void* info) {
     [self.window.contentView addSubview:_overlayView];  // Must be above everything else
     _overlayView.hidden = YES;
     [CATransaction flush];
-    
+
     _overlayTextField.stringValue = message;
     [NSAnimationContext beginGrouping];
     [[NSAnimationContext currentContext] setDuration:kOverlayAnimationInDuration];
@@ -247,19 +244,19 @@ static void _TimerCallBack(CFRunLoopTimerRef timer, void* info) {
     [[NSAnimationContext currentContext] setDuration:kOverlayAnimationInDuration];
     [[NSAnimationContext currentContext] setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn]];
     [[NSAnimationContext currentContext] setCompletionHandler:^{
-      
+
       _overlayTextField.stringValue = message;
       [NSAnimationContext beginGrouping];
       [[NSAnimationContext currentContext] setDuration:kOverlayAnimationInDuration];
       [[NSAnimationContext currentContext] setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut]];
       [_overlayTextField.animator setAlphaValue:1.0];
       [NSAnimationContext endGrouping];
-      
+
     }];
     [_overlayTextField.animator setAlphaValue:0.0];
     [NSAnimationContext endGrouping];
   }
-  
+
   CFRunLoopTimerSetNextFireDate(_overlayTimer, CFAbsoluteTimeGetCurrent() + _overlayDelay);
 }
 
@@ -267,7 +264,7 @@ static void _TimerCallBack(CFRunLoopTimerRef timer, void* info) {
   if (_overlayView.superview) {
     NSRect frame = _overlayView.frame;
     NSRect newFrame = NSOffsetRect(frame, 0, frame.size.height);
-    
+
     [NSAnimationContext beginGrouping];
     [[NSAnimationContext currentContext] setDuration:kOverlayAnimationOutDuration];
     [[NSAnimationContext currentContext] setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut]];
@@ -276,7 +273,7 @@ static void _TimerCallBack(CFRunLoopTimerRef timer, void* info) {
     }];
     [_overlayView.animator setFrame:newFrame];
     [NSAnimationContext endGrouping];
-    
+
     CFRunLoopTimerSetNextFireDate(_overlayTimer, HUGE_VALF);
   } else {
     XLOG_DEBUG_UNREACHABLE();
@@ -314,16 +311,16 @@ static void _TimerCallBack(CFRunLoopTimerRef timer, void* info) {
 - (void)runModalView:(NSView*)view withInitialFirstResponder:(NSResponder*)responder completionHandler:(void (^)(BOOL success))handler {
   XLOG_DEBUG_CHECK(_modalView);
   XLOG_DEBUG_CHECK(!_handler);
-  
+
   _previousResponder = self.window.firstResponder;
   [self.window makeFirstResponder:nil];  // Must happen before to abort any text field editing
-  
+
   [[NSProcessInfo processInfo] disableSuddenTermination];
-  
+
   XLOG_DEBUG_CHECK(self.window.areCursorRectsEnabled);
   [self.window disableCursorRects];  // TODO: Looks like cursor rects are automatically re-enabled when resizing the window?!
   [[NSCursor arrowCursor] set];
-  
+
   _modalView.frame = [self.window.contentView bounds];
   if (_overlayView.superview) {  // Must be above everything else except overlay view
     [self.window.contentView addSubview:_modalView positioned:NSWindowBelow relativeTo:_overlayView];
@@ -331,31 +328,31 @@ static void _TimerCallBack(CFRunLoopTimerRef timer, void* info) {
     [self.window.contentView addSubview:_modalView];
   }
   [_delegate windowControllerDidChangeHasModalView:self];
-  
+
   [_modalView presentContentView:view withCompletionHandler:NULL];
-  
+
   [self.window makeFirstResponder:responder];
-  
+
   _handler = handler;
 }
 
 - (void)stopModalView:(BOOL)success {
   XLOG_DEBUG_CHECK(_handler);
-  
+
   [self.window makeFirstResponder:_previousResponder];
   _previousResponder = nil;
-  
+
   [_modalView dismissContentViewWithCompletionHandler:^{
-    
+
     [_modalView removeFromSuperview];
     [_delegate windowControllerDidChangeHasModalView:self];
-    
+
     [self.window enableCursorRects];  // TODO: This hides the cursor until it moves again?!
-    
+
     [[NSProcessInfo processInfo] enableSuddenTermination];
-    
+
   }];
-  
+
   if (_handler) {
     dispatch_async(dispatch_get_main_queue(), ^{  // Defer the callback a bit to ensure animations run in parallel to callback execution
       _handler(success);
@@ -365,7 +362,6 @@ static void _TimerCallBack(CFRunLoopTimerRef timer, void* info) {
 }
 
 @end
-
 
 @implementation GIViewController (GIWindowController)
 

@@ -1,4 +1,4 @@
-//  Copyright (C) 2015 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2016 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -117,7 +117,7 @@ static Boolean _ArrayEqualCallBack(const void* value1, const void* value2) {
   BOOL success = NO;
   git_transaction* transaction = NULL;
   const char* message = _message.UTF8String;
-  
+
   // Apply transform
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_transaction_new, &transaction, _repository.private);
   for (CFIndex i = 0; i < CFArrayGetCount(_operations); ++i) {
@@ -133,7 +133,7 @@ static Boolean _ArrayEqualCallBack(const void* value1, const void* value2) {
   }
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_transaction_commit, transaction);
   success = YES;
-  
+
 cleanup:
   git_transaction_free(transaction);
   return success;

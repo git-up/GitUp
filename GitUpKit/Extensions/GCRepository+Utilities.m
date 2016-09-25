@@ -1,4 +1,4 @@
-//  Copyright (C) 2015 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2016 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -30,10 +30,14 @@ static const void* _associatedObjectKey = &_associatedObjectKey;
 
 NSString* GCNameFromHostingService(GCHostingService service) {
   switch (service) {
-    case kGCHostingService_Unknown: return nil;
-    case kGCHostingService_GitHub: return @"GitHub";
-    case kGCHostingService_GitLab: return @"GitLab";
-    case kGCHostingService_BitBucket: return @"BitBucket";
+    case kGCHostingService_Unknown:
+      return nil;
+    case kGCHostingService_GitHub:
+      return @"GitHub";
+    case kGCHostingService_GitLab:
+      return @"GitLab";
+    case kGCHostingService_BitBucket:
+      return @"BitBucket";
   }
   XLOG_DEBUG_UNREACHABLE();
   return nil;
@@ -50,7 +54,7 @@ NSString* GCNameFromHostingService(GCHostingService service) {
   if (!block(repository, remotes, error)) {
     return NO;
   }
-  
+
   if (recursive) {
     NSArray* submodules = [repository listSubmodules:error];
     if (submodules == nil) {
@@ -72,18 +76,21 @@ NSString* GCNameFromHostingService(GCHostingService service) {
 
 - (BOOL)fetchDefaultRemoteBranchesFromAllRemotes:(GCFetchTagMode)mode recursive:(BOOL)recursive prune:(BOOL)prune updatedTips:(NSUInteger*)updatedTips error:(NSError**)error {
   __block NSUInteger total = 0;
-  if (![self _fetchRepository:self recursive:recursive error:error block:^BOOL(GCRepository* repository, NSArray* remotes, NSError** blockError) {
-    
-    for (GCRemote* remote in remotes) {
-      NSUInteger count;
-      if (![repository fetchDefaultRemoteBranchesFromRemote:remote tagMode:mode prune:prune updatedTips:&count error:blockError]) {
-        return NO;
-      }
-      total += count;
-    }
-    return YES;
-    
-  }]) {
+  if (![self _fetchRepository:self
+                    recursive:recursive
+                        error:error
+                        block:^BOOL(GCRepository* repository, NSArray* remotes, NSError** blockError) {
+
+                          for (GCRemote* remote in remotes) {
+                            NSUInteger count;
+                            if (![repository fetchDefaultRemoteBranchesFromRemote:remote tagMode:mode prune:prune updatedTips:&count error:blockError]) {
+                              return NO;
+                            }
+                            total += count;
+                          }
+                          return YES;
+
+                        }]) {
     return NO;
   }
   if (updatedTips) {
@@ -94,35 +101,38 @@ NSString* GCNameFromHostingService(GCHostingService service) {
 
 - (BOOL)fetchAllTagsFromAllRemotes:(BOOL)recursive prune:(BOOL)prune updatedTips:(NSUInteger*)updatedTips error:(NSError**)error {
   __block NSUInteger total = 0;
-  if (![self _fetchRepository:self recursive:recursive error:error block:^BOOL(GCRepository* repository, NSArray* remotes, NSError** blockError) {
-    
-    NSMutableArray* remoteTags = prune ? [[NSMutableArray alloc] init] : nil;
-    for (GCRemote* remote in remotes) {
-      NSUInteger count;
-      NSArray* tags = [repository fetchTagsFromRemote:remote prune:NO updatedTips:&count error:blockError];  // Don't prune at this time!
-      if (tags == nil) {
-        return NO;
-      }
-      [remoteTags addObjectsFromArray:tags];
-      total += count;
-    }
-    if (remoteTags) {
-      NSArray* repositoryTags = [repository listTags:blockError];
-      if (repositoryTags == nil) {
-        return NO;
-      }
-      for (GCTag* tag in repositoryTags) {
-        if (![remoteTags containsObject:tag]) {
-          if (![repository deleteTag:tag error:blockError]) {
-            return NO;
-          }
-          total += 1;
-        }
-      }
-    }
-    return YES;
-    
-  }]) {
+  if (![self _fetchRepository:self
+                    recursive:recursive
+                        error:error
+                        block:^BOOL(GCRepository* repository, NSArray* remotes, NSError** blockError) {
+
+                          NSMutableArray* remoteTags = prune ? [[NSMutableArray alloc] init] : nil;
+                          for (GCRemote* remote in remotes) {
+                            NSUInteger count;
+                            NSArray* tags = [repository fetchTagsFromRemote:remote prune:NO updatedTips:&count error:blockError];  // Don't prune at this time!
+                            if (tags == nil) {
+                              return NO;
+                            }
+                            [remoteTags addObjectsFromArray:tags];
+                            total += count;
+                          }
+                          if (remoteTags) {
+                            NSArray* repositoryTags = [repository listTags:blockError];
+                            if (repositoryTags == nil) {
+                              return NO;
+                            }
+                            for (GCTag* tag in repositoryTags) {
+                              if (![remoteTags containsObject:tag]) {
+                                if (![repository deleteTag:tag error:blockError]) {
+                                  return NO;
+                                }
+                                total += 1;
+                              }
+                            }
+                          }
+                          return YES;
+
+                        }]) {
     return NO;
   }
   if (updatedTips) {
@@ -135,25 +145,25 @@ NSString* GCNameFromHostingService(GCHostingService service) {
   NSString* sourcePath = [self absolutePathForFile:fromPath];
   NSString* destinationPath = [self absolutePathForFile:toPath];
   BOOL isDirectory;
-  
+
   GCIndex* index = [self readRepositoryIndex:error];
   if (!index) {
     return NO;
   }
-  
+
   if (![[NSFileManager defaultManager] fileExistsAtPath:sourcePath isDirectory:&isDirectory] || isDirectory) {
     GC_SET_GENERIC_ERROR(@"No file at \"%@\"", sourcePath);
     return NO;
   }
-  
+
   if (force && ![self safeDeleteFileIfExists:toPath error:error]) {
     return NO;
   }
-  
+
   if (![[NSFileManager defaultManager] moveItemAtPath:sourcePath toPath:destinationPath error:error]) {
     return NO;
   }
-  
+
   return [self removeFile:fromPath fromIndex:index error:error] && [self addFileInWorkingDirectory:toPath toIndex:index error:error] && [self writeRepositoryIndex:index error:error];
 }
 
@@ -180,7 +190,6 @@ NSString* GCNameFromHostingService(GCHostingService service) {
   }
   for (GCDiffDelta* delta in diff.deltas) {
     switch (delta.change) {
-      
       case kGCFileDiffChange_Deleted: {
         if (![self clearConflictForFile:delta.canonicalPath inIndex:index error:error]) {
           return NO;
@@ -190,7 +199,7 @@ NSString* GCNameFromHostingService(GCHostingService service) {
         }
         break;
       }
-      
+
       case kGCFileDiffChange_Modified:
       case kGCFileDiffChange_Untracked:
       case kGCFileDiffChange_Conflicted: {
@@ -209,11 +218,10 @@ NSString* GCNameFromHostingService(GCHostingService service) {
         }
         break;
       }
-      
+
       default:
         XLOG_DEBUG_UNREACHABLE();
         break;
-      
     }
   }
   return [self writeRepositoryIndex:index error:error];
@@ -246,13 +254,12 @@ NSString* GCNameFromHostingService(GCHostingService service) {
   }
   for (GCDiffDelta* delta in diff.deltas) {
     switch (delta.change) {
-      
       case kGCFileDiffChange_Untracked:
         if (![self safeDeleteFile:delta.canonicalPath error:error]) {
           return NO;
         }
         break;
-      
+
       case kGCFileDiffChange_Deleted:
       case kGCFileDiffChange_Modified:
       case kGCFileDiffChange_Conflicted:
@@ -270,11 +277,10 @@ NSString* GCNameFromHostingService(GCHostingService service) {
           }
         }
         break;
-      
+
       default:
         XLOG_DEBUG_UNREACHABLE();
         break;
-      
     }
   }
   return YES;
@@ -314,7 +320,6 @@ NSString* GCNameFromHostingService(GCHostingService service) {
       value = [value substringFromIndex:6];
     }
     if ([value hasPrefix:@"git@"]) {
-      
       if ([value hasPrefix:@"git@github.com:"] && [value hasSuffix:@".git"]) {  // git@github.com:git-up/git-up.github.io.git
         if (service) {
           *service = kGCHostingService_GitHub;
@@ -333,11 +338,10 @@ NSString* GCNameFromHostingService(GCHostingService service) {
         }
         return [NSURL URLWithString:[@"https://gitlab.com/" stringByAppendingString:[value substringWithRange:NSMakeRange(15, value.length - 15 - 4)]]];
       }
-      
     }
     if ([value hasPrefix:@"https://"]) {
       NSURL* url = [NSURL URLWithString:value];
-      
+
       if ([url.host isEqualToString:@"github.com"]) {  // https://github.com/git-up/git-up.github.io.git
         if (service) {
           *service = kGCHostingService_GitHub;
@@ -356,10 +360,9 @@ NSString* GCNameFromHostingService(GCHostingService service) {
         }
         return [NSURL URLWithString:[NSString stringWithFormat:@"https://gitlab.com%@", [url.path substringToIndex:(url.path.length - 4)]]];
       }
-      
     }
   }
-  
+
   GC_SET_GENERIC_ERROR(@"Origin remote on unknown service");
   return nil;
 }
@@ -382,20 +385,18 @@ NSString* GCNameFromHostingService(GCHostingService service) {
     return nil;
   }
   switch (localService) {
-    
     case kGCHostingService_GitHub:
     case kGCHostingService_GitLab:
       url = [NSURL URLWithString:[url.absoluteString stringByAppendingFormat:@"/commit/%@", commit.SHA1]];  // Using relative URLs doesn't work
       break;
-    
+
     case kGCHostingService_BitBucket:
       url = [NSURL URLWithString:[url.absoluteString stringByAppendingFormat:@"/commits/%@", commit.SHA1]];  // Using relative URLs doesn't work
       break;
-    
+
     case kGCHostingService_Unknown:
       XLOG_DEBUG_UNREACHABLE();
       break;
-    
   }
   if (service) {
     *service = localService;
@@ -420,20 +421,18 @@ NSString* GCNameFromHostingService(GCHostingService service) {
     return nil;
   }
   switch (localService) {
-    
     case kGCHostingService_GitHub:
     case kGCHostingService_GitLab:
       url = [NSURL URLWithString:[url.absoluteString stringByAppendingFormat:@"/tree/%@", name]];  // Using relative URLs doesn't work
       break;
-    
+
     case kGCHostingService_BitBucket:
       url = [NSURL URLWithString:[url.absoluteString stringByAppendingFormat:@"/branch/%@", name]];  // Using relative URLs doesn't work
       break;
-    
+
     case kGCHostingService_Unknown:
       XLOG_DEBUG_UNREACHABLE();
       break;
-    
   }
   if (service) {
     *service = localService;
@@ -464,7 +463,7 @@ NSString* GCNameFromHostingService(GCHostingService service) {
   if (fromURL == nil) {
     return nil;
   }
-  
+
   NSString* toName;
   GCRemote* toRemote = [self lookupRemoteForRemoteBranch:toBranch sourceBranchName:&toName error:error];
   if (toRemote == nil) {
@@ -475,23 +474,22 @@ NSString* GCNameFromHostingService(GCHostingService service) {
   if (toURL == nil) {
     return nil;
   }
-  
+
   if (fromService != toService) {
     GC_SET_GENERIC_ERROR(@"Branches are on different hosting services");
     return nil;
   }
-  
+
   NSURL* url = nil;
   switch (fromService) {
-    
     case kGCHostingService_GitHub:
       url = [NSURL URLWithString:[toURL.absoluteString stringByAppendingFormat:@"/compare/%@...%@:%@?expand=1", toName, fromURL.path.pathComponents[1], fromName]];  // Using relative URLs doesn't work
       break;
-    
+
     case kGCHostingService_BitBucket:
       url = [NSURL URLWithString:[fromURL.absoluteString stringByAppendingFormat:@"/pull-request/new?source=%@%%3A%%3A%@&dest=%@%%3A%%3A%@", [fromURL.path substringFromIndex:1], fromName, [toURL.path substringFromIndex:1], toName]];  // Using relative URLs doesn't work
       break;
-    
+
     case kGCHostingService_GitLab:
       if (![toURL.path isEqualToString:fromURL.path]) {
         GC_SET_GENERIC_ERROR(@"Branches for GitLab merge request are not in the same project");  // TODO: GitLab supports cross-project merge requests but we need to know the project IDs
@@ -499,11 +497,10 @@ NSString* GCNameFromHostingService(GCHostingService service) {
       }
       url = [NSURL URLWithString:[fromURL.absoluteString stringByAppendingFormat:@"/merge_requests/new?merge_request%%5Bsource_branch%%5D=%@&merge_request%%5Btarget_branch%%5D=%@", fromName, toName]];  // Using relative URLs doesn't work
       break;
-    
+
     case kGCHostingService_Unknown:
       XLOG_DEBUG_UNREACHABLE();
       break;
-    
   }
   if (service) {
     *service = fromService;
@@ -512,7 +509,7 @@ NSString* GCNameFromHostingService(GCHostingService service) {
 }
 
 - (BOOL)safeDeleteFileIfExists:(NSString*)path error:(NSError**)error {
-  return ![[NSFileManager defaultManager] fileExistsAtPath:[self absolutePathForFile:path]] || [self safeDeleteFile:path error:error];
+  return ![[NSFileManager defaultManager] fileExistsAtPath:[self absolutePathForFile:path] followLastSymlink:NO] || [self safeDeleteFile:path error:error];
 }
 
 - (NSMutableDictionary*)_readUserInfo {
@@ -520,7 +517,7 @@ NSString* GCNameFromHostingService(GCHostingService service) {
   if (dictionary == nil) {
     dictionary = [[NSMutableDictionary alloc] init];
     objc_setAssociatedObject(self, _associatedObjectKey, dictionary, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-    
+
     NSString* path = [self.privateAppDirectoryPath stringByAppendingPathComponent:kUserInfoFileName];
     if (path) {
       NSData* data = [NSData dataWithContentsOfFile:path];

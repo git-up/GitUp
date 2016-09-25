@@ -1,4 +1,4 @@
-//  Copyright (C) 2015 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2016 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -77,16 +77,16 @@
 
 - (void)loadView {
   [super loadView];
-  
+
   _diffContentsViewController = [[GIDiffContentsViewController alloc] initWithRepository:self.repository];
   _diffContentsViewController.delegate = self;
   _diffContentsViewController.emptyLabel = NSLocalizedString(@"No differences", nil);
   [_contentsView replaceWithView:_diffContentsViewController.view];
-  
+
   _diffFilesViewController = [[GIDiffFilesViewController alloc] initWithRepository:self.repository];
   _diffFilesViewController.delegate = self;
   [_filesView replaceWithView:_diffFilesViewController.view];
-  
+
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_splitViewDidResizeSubviews:) name:NSSplitViewDidResizeSubviewsNotification object:_mainSplitView];
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_splitViewDidResizeSubviews:) name:NSSplitViewDidResizeSubviewsNotification object:_infoSplitView];
 }
@@ -120,7 +120,7 @@ static NSString* _CleanUpCommitMessage(NSString* message) {
     while ((subrange.location + count < range.location + range.length) && ([message characterAtIndex:(subrange.location + count)] == '\n')) {
       ++count;
     }
-    
+
     _AppendStringWithoutTrailingWhiteSpace(string, message, NSMakeRange(range.location, subrange.location - range.location));
     if (count > 1) {
       [string appendString:@"\n\n"];
@@ -132,7 +132,7 @@ static NSString* _CleanUpCommitMessage(NSString* message) {
         [string appendString:@"\n"];
       }
     }
-    
+
     range = NSMakeRange(subrange.location + count, range.location + range.length - subrange.location - count);
   }
   return string;
@@ -144,30 +144,30 @@ static NSString* _CleanUpCommitMessage(NSString* message) {
     if (_commit) {
       _messageTextField.stringValue = _CleanUpCommitMessage(_commit.message);
       [self _recomputeInfoViewFrame];
-      
+
       _sha1TextField.stringValue = _commit.SHA1;
-      
+
       _authorDateTextField.stringValue = [NSString stringWithFormat:@"%@ (%@)", [_dateFormatter stringFromDate:_commit.authorDate], GIFormatDateRelativelyFromNow(_commit.authorDate, NO)];
       _committerDateTextField.stringValue = [NSString stringWithFormat:@"%@ (%@)", [_dateFormatter stringFromDate:_commit.committerDate], GIFormatDateRelativelyFromNow(_commit.committerDate, NO)];
-      
+
       CGFloat authorFontSize = _authorTextField.font.pointSize;
       NSMutableAttributedString* author = [[NSMutableAttributedString alloc] init];
       [author beginEditing];
-      [author appendString:_commit.authorName withAttributes:@{NSFontAttributeName: [NSFont boldSystemFontOfSize:authorFontSize]}];
-      [author appendString:@" " withAttributes:@{NSFontAttributeName: [NSFont systemFontOfSize:authorFontSize]}];
+      [author appendString:_commit.authorName withAttributes:@{NSFontAttributeName : [NSFont boldSystemFontOfSize:authorFontSize]}];
+      [author appendString:@" " withAttributes:@{NSFontAttributeName : [NSFont systemFontOfSize:authorFontSize]}];
       [author appendString:_commit.authorEmail withAttributes:nil];
       [author endEditing];
       _authorTextField.attributedStringValue = author;
-      
+
       CGFloat committerFontSize = _committerTextField.font.pointSize;
       NSMutableAttributedString* committer = [[NSMutableAttributedString alloc] init];
       [committer beginEditing];
-      [committer appendString:_commit.committerName withAttributes:@{NSFontAttributeName: [NSFont boldSystemFontOfSize:committerFontSize]}];
-      [committer appendString:@" " withAttributes:@{NSFontAttributeName: [NSFont systemFontOfSize:committerFontSize]}];
+      [committer appendString:_commit.committerName withAttributes:@{NSFontAttributeName : [NSFont boldSystemFontOfSize:committerFontSize]}];
+      [committer appendString:@" " withAttributes:@{NSFontAttributeName : [NSFont systemFontOfSize:committerFontSize]}];
       [committer appendString:_commit.committerEmail withAttributes:nil];
       [committer endEditing];
       _committerTextField.attributedStringValue = committer;
-      
+
       NSError* error;
       _diff = [self.repository diffCommit:_commit
                                withCommit:_commit.parents.firstObject  // Use main line
@@ -188,7 +188,7 @@ static NSString* _CleanUpCommitMessage(NSString* message) {
       _committerTextField.stringValue = @"";
       _committerDateTextField.stringValue = @"";
       _messageTextField.stringValue = @"";
-      
+
       _diff = nil;
       [_diffContentsViewController setDeltas:nil usingConflicts:nil];
       [_diffFilesViewController setDeltas:nil usingConflicts:nil];
@@ -207,17 +207,18 @@ static NSString* _CleanUpCommitMessage(NSString* message) {
 - (NSMenu*)diffContentsViewController:(GIDiffContentsViewController*)controller willShowContextualMenuForDelta:(GCDiffDelta*)delta conflict:(GCIndexConflict*)conflict {
   XLOG_DEBUG_CHECK(conflict == nil);
   NSMenu* menu = [self contextualMenuForDelta:delta withConflict:nil allowOpen:NO];
-  
+
   [menu addItem:[NSMenuItem separatorItem]];
-  
+
   if (GC_FILE_MODE_IS_FILE(delta.newFile.mode)) {
-    [menu addItemWithTitle:NSLocalizedString(@"Restore File to This Version…", nil) block:^{
-      [self restoreFile:delta.canonicalPath toCommit:_commit];
-    }];
+    [menu addItemWithTitle:NSLocalizedString(@"Restore File to This Version…", nil)
+                     block:^{
+                       [self restoreFile:delta.canonicalPath toCommit:_commit];
+                     }];
   } else {
     [menu addItemWithTitle:NSLocalizedString(@"Restore File to This Version…", nil) block:NULL];
   }
-  
+
   return menu;
 }
 

@@ -1,4 +1,4 @@
-//  Copyright (C) 2015 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2016 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -27,11 +27,11 @@
   XCTAssertEqualObjects([self.repository findCommitWithSHA1:commit.SHA1 error:NULL], commit);
   XCTAssertNil([self.repository findCommitWithSHA1:@"123456" error:NULL]);
   XCTAssertEqualObjects([self.repository findCommitWithSHA1Prefix:commit.shortSHA1 error:NULL], commit);
-  XCTAssertEqualObjects([self.repository lookupParentsForCommit:commit error:NULL], @[self.initialCommit]);
-  
+  XCTAssertEqualObjects([self.repository lookupParentsForCommit:commit error:NULL], @[ self.initialCommit ]);
+
   // Check short-SHA computation
   [self assertGitCLTOutputEqualsString:[NSString stringWithFormat:@"%@\n", [self.repository computeUniqueShortSHA1ForCommit:commit error:NULL]] withRepository:self.repository command:@"rev-parse", @"--short", @"HEAD", nil];
-  
+
   // Check file in commmit
   XCTAssertNotNil([self.repository checkTreeForCommit:commit containsFile:@"hello_world.txt" error:NULL]);
   XCTAssertNil([self.repository checkTreeForCommit:commit containsFile:@"missing.txt" error:NULL]);

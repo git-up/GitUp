@@ -1,4 +1,4 @@
-//  Copyright (C) 2015 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2016 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -45,65 +45,67 @@ static inline NSString* GetLastGitErrorMessage() {
   return __git_error && __git_error->message ? [NSString stringWithUTF8String:__git_error->message] : @"<Unknown error>";
 }
 
-#define LOG_LIBGIT2_ERROR(__CODE__) \
-  do { \
-    XLOG_DEBUG_CHECK(__CODE__ != GIT_OK); \
+#define LOG_LIBGIT2_ERROR(__CODE__)                                            \
+  do {                                                                         \
+    XLOG_DEBUG_CHECK(__CODE__ != GIT_OK);                                      \
     XLOG_ERROR(@"libgit2 error (%i): %@", __CODE__, GetLastGitErrorMessage()); \
-  } \
-  while (0)
+  } while (0)
 
 #ifdef __clang_analyzer__
 
-#define CHECK_LIBGIT2_FUNCTION_CALL(__FAIL_ACTION__, __STATUS__, __COMPARISON__) do { if (__STATUS__) NSLog(@"OK"); } while(0)
+#define CHECK_LIBGIT2_FUNCTION_CALL(__FAIL_ACTION__, __STATUS__, __COMPARISON__) \
+  do {                                                                           \
+    if (__STATUS__) NSLog(@"OK");                                                \
+  } while (0)
 
 #else
 
 #define CHECK_LIBGIT2_FUNCTION_CALL(__FAIL_ACTION__, __STATUS__, __COMPARISON__) \
-  do { \
-    if (!(__STATUS__ __COMPARISON__)) { \
-      LOG_LIBGIT2_ERROR(__STATUS__); \
-      if (error) { \
-        *error = GCNewError(__STATUS__, GetLastGitErrorMessage()); \
-      } \
-      __FAIL_ACTION__; \
-    } \
-  } while(0)
+  do {                                                                           \
+    if (!(__STATUS__ __COMPARISON__)) {                                          \
+      LOG_LIBGIT2_ERROR(__STATUS__);                                             \
+      if (error) {                                                               \
+        *error = GCNewError(__STATUS__, GetLastGitErrorMessage());               \
+      }                                                                          \
+      __FAIL_ACTION__;                                                           \
+    }                                                                            \
+  } while (0)
 
 #endif
 
-#define CALL_LIBGIT2_FUNCTION_RETURN(__RETURN_VALUE_ON_ERROR__, __FUNCTION__, ...) \
-  do { \
-    int __callError = __FUNCTION__(__VA_ARGS__); \
+#define CALL_LIBGIT2_FUNCTION_RETURN(__RETURN_VALUE_ON_ERROR__, __FUNCTION__, ...)         \
+  do {                                                                                     \
+    int __callError = __FUNCTION__(__VA_ARGS__);                                           \
     CHECK_LIBGIT2_FUNCTION_CALL(return __RETURN_VALUE_ON_ERROR__, __callError, == GIT_OK); \
-  } while(0)
+  } while (0)
 
-#define CALL_LIBGIT2_FUNCTION_GOTO(__GOTO_LABEL__, __FUNCTION__, ...) \
-  do { \
-    int __callError = __FUNCTION__(__VA_ARGS__); \
+#define CALL_LIBGIT2_FUNCTION_GOTO(__GOTO_LABEL__, __FUNCTION__, ...)         \
+  do {                                                                        \
+    int __callError = __FUNCTION__(__VA_ARGS__);                              \
     CHECK_LIBGIT2_FUNCTION_CALL(goto __GOTO_LABEL__, __callError, == GIT_OK); \
-  } while(0)
+  } while (0)
 
-#define CHECK_POSIX_FUNCTION_CALL(__FAIL_ACTION__, __STATUS__, __COMPARISON__) \
-  do { \
-    if (!(__STATUS__ __COMPARISON__)) { \
-      if (error) { \
+#define CHECK_POSIX_FUNCTION_CALL(__FAIL_ACTION__, __STATUS__, __COMPARISON__)                 \
+  do {                                                                                         \
+    if (!(__STATUS__ __COMPARISON__)) {                                                        \
+      if (error) {                                                                             \
         *error = GCNewPosixError(__STATUS__, [NSString stringWithUTF8String:strerror(errno)]); \
-      } \
-      __FAIL_ACTION__; \
-    } \
-  } while(0)
+      }                                                                                        \
+      __FAIL_ACTION__;                                                                         \
+    }                                                                                          \
+  } while (0)
 
-#define CALL_POSIX_FUNCTION_RETURN(__RETURN_VALUE_ON_ERROR__, __FUNCTION__, ...) \
-  do { \
-    int __callError = __FUNCTION__(__VA_ARGS__); \
+#define CALL_POSIX_FUNCTION_RETURN(__RETURN_VALUE_ON_ERROR__, __FUNCTION__, ...)    \
+  do {                                                                              \
+    int __callError = __FUNCTION__(__VA_ARGS__);                                    \
     CHECK_POSIX_FUNCTION_CALL(return __RETURN_VALUE_ON_ERROR__, __callError, == 0); \
-  } while(0)
+  } while (0)
 
-#define CALL_POSIX_FUNCTION_GOTO(__GOTO_LABEL__, __FUNCTION__, ...) \
-  do { \
-    int __callError = __FUNCTION__(__VA_ARGS__); \
+#define CALL_POSIX_FUNCTION_GOTO(__GOTO_LABEL__, __FUNCTION__, ...)    \
+  do {                                                                 \
+    int __callError = __FUNCTION__(__VA_ARGS__);                       \
     CHECK_POSIX_FUNCTION_CALL(goto __GOTO_LABEL__, __callError, == 0); \
-  } while(0)
+  } while (0)
 
 typedef NS_OPTIONS(NSUInteger, GCReferenceEnumerationOptions) {
   kGCReferenceEnumerationOption_IncludeHEAD = (1 << 0),
@@ -314,7 +316,7 @@ extern int git_submodule_foreach_block(git_repository* repo, int (^block)(git_su
 @end
 
 @interface GCRepository (GCReference_Private)
-- (id)findReferenceWithFullName:(NSString*)fullname class:(Class)class error:(NSError**)error;
+- (id)findReferenceWithFullName:(NSString*)fullname class:(Class) class error:(NSError**)error;
 - (BOOL)refreshReference:(GCReference*)reference error:(NSError**)error;
 - (BOOL)enumerateReferencesWithOptions:(GCReferenceEnumerationOptions)options error:(NSError**)error usingBlock:(BOOL (^)(git_reference* reference))block;
 - (BOOL)loadTargetOID:(git_oid*)oid fromReference:(git_reference*)reference error:(NSError**)error;

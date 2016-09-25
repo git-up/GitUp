@@ -1,4 +1,4 @@
-//  Copyright (C) 2015 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2016 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -25,9 +25,15 @@
   git_checkout_options options = GIT_CHECKOUT_OPTIONS_INIT;
   git_reset_t resetMode;
   switch (mode) {
-    case kGCResetMode_Soft: resetMode = GIT_RESET_SOFT; break;
-    case kGCResetMode_Mixed: resetMode = GIT_RESET_MIXED; break;
-    case kGCResetMode_Hard: resetMode = GIT_RESET_HARD; break;
+    case kGCResetMode_Soft:
+      resetMode = GIT_RESET_SOFT;
+      break;
+    case kGCResetMode_Mixed:
+      resetMode = GIT_RESET_MIXED;
+      break;
+    case kGCResetMode_Hard:
+      resetMode = GIT_RESET_HARD;
+      break;
   }
   CALL_LIBGIT2_FUNCTION_RETURN(NO, git_reset, self.private, (git_object*)commit, resetMode, &options);  // This calls git_repository_state_cleanup() if MIXED or HARD
   return YES;

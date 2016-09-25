@@ -1,4 +1,4 @@
-//  Copyright (C) 2015 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2016 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@
   GCCommit* newCommit = nil;
   git_commit* parentCommit = NULL;
   git_tree* tree = NULL;
-  
+
   if (git_commit_parentcount(squashCommit.private) != 1) {
     GC_SET_GENERIC_ERROR(@"Commit to squash must have a single parent");
     goto cleanup;
@@ -33,7 +33,7 @@
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_commit_parent, &parentCommit, squashCommit.private, 0);
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_commit_tree, &tree, squashCommit.private);
   newCommit = [self createCommitFromCommit:parentCommit withTree:tree updatedMessage:message updatedParents:nil updateCommitter:YES error:error];
-  
+
 cleanup:
   git_tree_free(tree);
   git_commit_free(parentCommit);
@@ -60,7 +60,7 @@ static inline GCCommit* _CopyCommit(GCRepository* repository, git_commit* commit
   git_tree* ourTree = NULL;
   git_tree* theirTree = NULL;
   git_index* index = NULL;
-  
+
   if (ancestorCommit) {
     CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_commit_tree, &ancestorTree, ancestorCommit);
   }
@@ -80,7 +80,7 @@ static inline GCCommit* _CopyCommit(GCRepository* repository, git_commit* commit
   } else {
     commit = [self createCommitFromIndex:index withParents:parents count:count author:author message:message error:error];
   }
-  
+
 cleanup:
   git_index_free(index);
   git_tree_free(theirTree);
@@ -151,14 +151,14 @@ cleanup:
   git_commit* commit = NULL;
   size_t count = commits.count;
   git_oid* bases = malloc(count * sizeof(git_oid));
-  
+
   for (size_t i = 0; i < count; ++i) {
     bases[i] = *git_commit_id([(GCCommit*)commits[i] private]);
   }
   git_oid oid;
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_merge_base_many, &oid, self.private, count, bases);
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_commit_lookup, &commit, self.private, &oid);
-  
+
 cleanup:
   free(bases);
   return commit ? [[GCCommit alloc] initWithRepository:self commit:commit] : nil;
@@ -166,7 +166,7 @@ cleanup:
 
 // Generic re-implementation of git_merge_analysis()
 - (GCMergeAnalysisResult)analyzeMergingCommit:(GCCommit*)mergeCommit intoCommit:(GCCommit*)intoCommit ancestorCommit:(GCCommit**)ancestorCommit error:(NSError**)error {
-  GCCommit* ancestor = [self findMergeBaseForCommits:@[intoCommit, mergeCommit] error:error];
+  GCCommit* ancestor = [self findMergeBaseForCommits:@[ intoCommit, mergeCommit ] error:error];
   if (ancestor == nil) {
     return kGCMergeAnalysisResult_Unknown;
   }
@@ -218,16 +218,16 @@ cleanup:
 }
 
 - (GCCommit*)copyCommit:(GCCommit*)copyCommit
-     withUpdatedMessage:(NSString*)message
-         updatedParents:(NSArray*)parents
-   updatedTreeFromIndex:(GCIndex*)index
-        updateCommitter:(BOOL)updateCommitter
-                  error:(NSError**)error {
+      withUpdatedMessage:(NSString*)message
+          updatedParents:(NSArray*)parents
+    updatedTreeFromIndex:(GCIndex*)index
+         updateCommitter:(BOOL)updateCommitter
+                   error:(NSError**)error {
   GCCommit* newCommit = nil;
   git_commit* commit = copyCommit.private;
   git_tree* tree = NULL;
   git_oid oid;
-  
+
   if (index) {
     CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_index_write_tree_to, &oid, index.private, self.private);
     CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_tree_lookup, &tree, self.private, &oid);
@@ -235,7 +235,7 @@ cleanup:
     CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_commit_tree, &tree, commit);
   }
   newCommit = [self createCommitFromCommit:commit withTree:tree updatedMessage:message updatedParents:parents updateCommitter:updateCommitter error:error];
-  
+
 cleanup:
   git_tree_free(tree);
   return newCommit;
@@ -258,7 +258,7 @@ cleanup:
   git_tree* mergeTree = NULL;
   git_diff* diff = NULL;
   git_oid oid;
-  
+
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_commit_tree, &replayTree, replayCommit.private);
   if (ontoCommit) {
     CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_commit_tree, &ontoTree, ontoCommit.private);
@@ -297,7 +297,7 @@ cleanup:
       XLOG_VERBOSE(@"Skipping replay of already applied commit \"%@\" (%@) onto commit \"%@\" (%@)", replayCommit.summary, replayCommit.shortSHA1, ontoCommit.summary, ontoCommit.shortSHA1);
     }
   }
-  
+
 cleanup:
   git_diff_free(diff);
   git_tree_free(mergeTree);
@@ -323,7 +323,7 @@ cleanup:
     if (parents == nil) {
       return nil;
     }
-    [stack insertObject:@[walkCommit, parents] atIndex:0];
+    [stack insertObject:@[ walkCommit, parents ] atIndex:0];
     walkCommit = parents.firstObject;  // Follow main line
     if (walkCommit == nil) {
       XLOG_DEBUG_UNREACHABLE();
@@ -334,7 +334,7 @@ cleanup:
       break;
     }
   }
-  
+
   GCCommit* tipCommit = ontoCommit;
   for (NSArray* array in stack) {
     GCCommit* replayCommit = array[0];
@@ -345,7 +345,7 @@ cleanup:
       parents = [[NSMutableArray alloc] initWithArray:replayParents];
       [parents replaceObjectAtIndex:0 withObject:tipCommit];  // Only replace first parent and preserve others
     }
-    tipCommit = [self replayCommit:replayCommit ontoCommit:tipCommit withAncestorCommit:ancestor updatedMessage:nil updatedParents:(parents ? parents : @[tipCommit]) updateCommitter:updateCommitter skipIdentical:skipIdentical conflictHandler:handler error:error];
+    tipCommit = [self replayCommit:replayCommit ontoCommit:tipCommit withAncestorCommit:ancestor updatedMessage:nil updatedParents:(parents ? parents : @[ tipCommit ]) updateCommitter:updateCommitter skipIdentical:skipIdentical conflictHandler:handler error:error];
     if (tipCommit == nil) {
       return nil;
     }
@@ -365,14 +365,14 @@ cleanup:
                             error:(NSError**)error {
   GCCommit* commit = nil;
   git_signature* signature = NULL;
-  
+
   git_oid oid;
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_signature_default, &signature, self.private);
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_commit_create, &oid, self.private, NULL, author ? author : signature, signature, NULL, GCCleanedUpCommitMessage(message).bytes, tree, count, parents);
   git_commit* newCommit = NULL;
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_commit_lookup, &newCommit, self.private, &oid);
   commit = [[GCCommit alloc] initWithRepository:self commit:newCommit];
-  
+
 cleanup:
   git_signature_free(signature);
   return commit;
@@ -386,13 +386,13 @@ cleanup:
                              error:(NSError**)error {
   GCCommit* commit = nil;
   git_tree* tree = NULL;
-  
+
   git_oid oid;
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_index_write_tree_to, &oid, index, self.private);
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_tree_lookup, &tree, self.private, &oid);
-  
+
   commit = [self createCommitFromTree:tree withParents:parents count:count author:author message:message error:error];
-  
+
 cleanup:
   git_tree_free(tree);
   return commit;
@@ -438,11 +438,11 @@ static const git_oid* _CommitParentCallback_Commit(size_t idx, void* payload) {
   git_commit* newCommit = NULL;
   git_signature* signature = NULL;
   git_oid oid;
-  
+
   if (updateCommitter) {
     CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_signature_default, &signature, self.private);
   }
-  
+
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_commit_create_from_callback, &oid, self.private, NULL,
                              git_commit_author(commit),
                              updateCommitter ? signature : git_commit_committer(commit),
@@ -451,7 +451,7 @@ static const git_oid* _CommitParentCallback_Commit(size_t idx, void* payload) {
                              parents ? _CommitParentCallback_Parents : _CommitParentCallback_Commit, parents ? (__bridge void*)parents : (void*)commit);
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_commit_lookup, &newCommit, self.private, &oid);
   XLOG_DEBUG_CHECK(!git_oid_equal(git_commit_id(newCommit), git_commit_id(commit)));
-  
+
 cleanup:
   git_signature_free(signature);
   return newCommit ? [[GCCommit alloc] initWithRepository:self commit:newCommit] : nil;

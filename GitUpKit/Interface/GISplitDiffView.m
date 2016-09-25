@@ -1,4 +1,4 @@
-//  Copyright (C) 2015 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2016 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -79,9 +79,12 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
 
 - (NSString*)description {
   switch (_type) {
-    case kDiffLineType_Separator: return _leftString;
-    case kDiffLineType_Context: return [NSString stringWithFormat:@"[%lu] '%@' | [%lu] '%@'", _leftNumber, _leftString, _rightNumber, _rightString];
-    case kDiffLineType_Change: return [NSString stringWithFormat:@"[%lu] '%@' | [%lu] '%@'", _leftNumber, _leftString, _rightNumber, _rightString];
+    case kDiffLineType_Separator:
+      return _leftString;
+    case kDiffLineType_Context:
+      return [NSString stringWithFormat:@"[%lu] '%@' | [%lu] '%@'", _leftNumber, _leftString, _rightNumber, _rightString];
+    case kDiffLineType_Change:
+      return [NSString stringWithFormat:@"[%lu] '%@' | [%lu] '%@'", _leftNumber, _leftString, _rightNumber, _rightString];
   }
   return nil;
 }
@@ -91,7 +94,7 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
 @implementation GISplitDiffView {
   NSMutableArray* _lines;
   NSSize _size;
-  
+
   BOOL _rightSelection;
   NSMutableIndexSet* _selectedLines;
   NSRange _selectedText;
@@ -105,7 +108,7 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
 
 - (void)didFinishInitializing {
   [super didFinishInitializing];
-  
+
   _lines = [[NSMutableArray alloc] initWithCapacity:1024];
   _selectedLines = [[NSMutableIndexSet alloc] init];
 }
@@ -116,14 +119,14 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
 
 - (void)didUpdatePatch {
   [super didUpdatePatch];
-  
+
   [_lines removeAllObjects];
 }
 
 - (CGFloat)updateLayoutForWidth:(CGFloat)width {
   if (self.patch && (NSInteger)width != (NSInteger)_size.width) {
     [_lines removeAllObjects];
-    
+
     CGFloat lineWidth = floor((width - 2 * kTextLineNumberMargin - 2 * kTextInsetLeft - 2 * kTextInsetRight) / 2);
     __block NSUInteger lineIndex = NSNotFound;
     __block NSUInteger startIndex = NSNotFound;
@@ -177,138 +180,137 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
       }
     };
     [self.patch enumerateUsingBeginHunkHandler:^(NSUInteger oldLineNumber, NSUInteger oldLineCount, NSUInteger newLineNumber, NSUInteger newLineCount) {
-      
+
       NSString* string = [[NSString alloc] initWithFormat:@"@@ -%lu,%lu +%lu,%lu @@", oldLineNumber, oldLineCount, newLineNumber, newLineCount];
       CFAttributedStringRef attributedString = CFAttributedStringCreate(kCFAllocatorDefault, (CFStringRef)string, GIDiffViewAttributes);
       CTLineRef line = CTLineCreateWithAttributedString(attributedString);
       CFRelease(attributedString);
-      
+
       GISplitDiffLine* diffLine = [[GISplitDiffLine alloc] initWithType:kDiffLineType_Separator];
       diffLine.leftString = string;
       diffLine.leftLine = line;  // Transfer ownership to GISplitDiffLine
       [_lines addObject:diffLine];
-      
+
       addedCount = 0;
       deletedCount = 0;
       startIndex = NSNotFound;
-      
-    } lineHandler:^(GCLineDiffChange change, NSUInteger oldLineNumber, NSUInteger newLineNumber, const char* contentBytes, NSUInteger contentLength) {
-      
-      NSString* string;
-      if (contentBytes[contentLength - 1] != '\n') {
-        size_t length = strlen(GIDiffViewMissingNewlinePlaceholder);
-        char* buffer = malloc(contentLength + length);
-        bcopy(contentBytes, buffer, contentLength);
-        bcopy(GIDiffViewMissingNewlinePlaceholder, &buffer[contentLength], length);
-        string = [[NSString alloc] initWithBytesNoCopy:buffer length:(contentLength + length) encoding:NSUTF8StringEncoding freeWhenDone:YES];
-      } else {
-        string = [[NSString alloc] initWithBytesNoCopy:(void*)contentBytes length:contentLength encoding:NSUTF8StringEncoding freeWhenDone:NO];
-      }
-      if (string == nil) {
-        string = @"<LINE IS NOT VALID UTF-8>\n";
-        XLOG_DEBUG_UNREACHABLE();
-      }
-      
-      switch (change) {
-        
-        case kGCLineDiffChange_Unmodified:
-          highlightBlock();
-          addedCount = 0;
-          deletedCount = 0;
-          startIndex = NSNotFound;
-          break;
-        
-        case kGCLineDiffChange_Deleted:
-          ++deletedCount;
-          break;
-        
-        case kGCLineDiffChange_Added:
-          ++addedCount;
-          break;
-        
-      }
-      
-      CFAttributedStringRef attributedString = CFAttributedStringCreate(kCFAllocatorDefault, (CFStringRef)string, GIDiffViewAttributes);
-      CTTypesetterRef typeSetter = CTTypesetterCreateWithAttributedString(attributedString);
-      CFIndex length = CFAttributedStringGetLength(attributedString);
-      CFIndex offset = 0;
-      BOOL isWrappedLine = NO;
-      do {
-        CFIndex index = CTTypesetterSuggestLineBreak(typeSetter, offset, lineWidth);
-        CTLineRef line = CTTypesetterCreateLine(typeSetter, CFRangeMake(offset, index));
-        switch (change) {  // Assume the order of repeating changes is always [unmodified -> deleted -> added -> unmodified]
-          
-          case kGCLineDiffChange_Unmodified: {
-            GISplitDiffLine* diffLine = [[GISplitDiffLine alloc] initWithType:kDiffLineType_Context];
-            [_lines addObject:diffLine];
-            diffLine.leftNumber = oldLineNumber;
-            diffLine.leftString = string;
-            diffLine.leftLine = line;  // Transfer ownership to GISplitDiffLine
-            diffLine.leftWrapped = isWrappedLine;
-            diffLine.rightNumber = newLineNumber;
-            diffLine.rightString = string;
-            diffLine.rightLine = CFRetain(line);  // Transfer ownership to GISplitDiffLine
-            diffLine.rightWrapped = isWrappedLine;
-            lineIndex = NSNotFound;
-            break;
+
+    }
+        lineHandler:^(GCLineDiffChange change, NSUInteger oldLineNumber, NSUInteger newLineNumber, const char* contentBytes, NSUInteger contentLength) {
+
+          NSString* string;
+          if (contentBytes[contentLength - 1] != '\n') {
+            size_t length = strlen(GIDiffViewMissingNewlinePlaceholder);
+            char* buffer = malloc(contentLength + length);
+            bcopy(contentBytes, buffer, contentLength);
+            bcopy(GIDiffViewMissingNewlinePlaceholder, &buffer[contentLength], length);
+            string = [[NSString alloc] initWithBytesNoCopy:buffer length:(contentLength + length) encoding:NSUTF8StringEncoding freeWhenDone:YES];
+          } else {
+            string = [[NSString alloc] initWithBytesNoCopy:(void*)contentBytes length:contentLength encoding:NSUTF8StringEncoding freeWhenDone:NO];
           }
-          
-          case kGCLineDiffChange_Deleted: {
-            if (lineIndex == NSNotFound) {
-              XLOG_DEBUG_CHECK(!isWrappedLine);
-              lineIndex = _lines.count;
-            }
-            GISplitDiffLine* diffLine = [[GISplitDiffLine alloc] initWithType:kDiffLineType_Change];
-            [_lines addObject:diffLine];
-            diffLine.leftNumber = oldLineNumber;
-            diffLine.leftString = string;
-            diffLine.leftLine = line;  // Transfer ownership to GISplitDiffLine
-            diffLine.leftWrapped = isWrappedLine;
-            if (!isWrappedLine) {
-              diffLine.leftContentBytes = contentBytes;
-              diffLine.leftContentLength = contentLength;
-            }
-            break;
+          if (string == nil) {
+            string = @"<LINE IS NOT VALID UTF-8>\n";
+            XLOG_DEBUG_UNREACHABLE();
           }
-          
-          case kGCLineDiffChange_Added: {
-            GISplitDiffLine* diffLine;
-            if (lineIndex != NSNotFound) {
-              if (startIndex == NSNotFound) {
-                startIndex = lineIndex;
-              }
-              diffLine = _lines[lineIndex];
-              lineIndex += 1;
-              if (lineIndex == _lines.count) {
+
+          switch (change) {
+            case kGCLineDiffChange_Unmodified:
+              highlightBlock();
+              addedCount = 0;
+              deletedCount = 0;
+              startIndex = NSNotFound;
+              break;
+
+            case kGCLineDiffChange_Deleted:
+              ++deletedCount;
+              break;
+
+            case kGCLineDiffChange_Added:
+              ++addedCount;
+              break;
+          }
+
+          CFAttributedStringRef attributedString = CFAttributedStringCreate(kCFAllocatorDefault, (CFStringRef)string, GIDiffViewAttributes);
+          CTTypesetterRef typeSetter = CTTypesetterCreateWithAttributedString(attributedString);
+          CFIndex length = CFAttributedStringGetLength(attributedString);
+          CFIndex offset = 0;
+          BOOL isWrappedLine = NO;
+          do {
+            CFIndex index = CTTypesetterSuggestLineBreak(typeSetter, offset, lineWidth);
+            CTLineRef line = CTTypesetterCreateLine(typeSetter, CFRangeMake(offset, index));
+            switch (change) {  // Assume the order of repeating changes is always [unmodified -> deleted -> added -> unmodified]
+
+              case kGCLineDiffChange_Unmodified: {
+                GISplitDiffLine* diffLine = [[GISplitDiffLine alloc] initWithType:kDiffLineType_Context];
+                [_lines addObject:diffLine];
+                diffLine.leftNumber = oldLineNumber;
+                diffLine.leftString = string;
+                diffLine.leftLine = line;  // Transfer ownership to GISplitDiffLine
+                diffLine.leftWrapped = isWrappedLine;
+                diffLine.rightNumber = newLineNumber;
+                diffLine.rightString = string;
+                diffLine.rightLine = CFRetain(line);  // Transfer ownership to GISplitDiffLine
+                diffLine.rightWrapped = isWrappedLine;
                 lineIndex = NSNotFound;
+                break;
               }
-            } else {
-              diffLine = [[GISplitDiffLine alloc] initWithType:kDiffLineType_Change];
-              [_lines addObject:diffLine];
+
+              case kGCLineDiffChange_Deleted: {
+                if (lineIndex == NSNotFound) {
+                  XLOG_DEBUG_CHECK(!isWrappedLine);
+                  lineIndex = _lines.count;
+                }
+                GISplitDiffLine* diffLine = [[GISplitDiffLine alloc] initWithType:kDiffLineType_Change];
+                [_lines addObject:diffLine];
+                diffLine.leftNumber = oldLineNumber;
+                diffLine.leftString = string;
+                diffLine.leftLine = line;  // Transfer ownership to GISplitDiffLine
+                diffLine.leftWrapped = isWrappedLine;
+                if (!isWrappedLine) {
+                  diffLine.leftContentBytes = contentBytes;
+                  diffLine.leftContentLength = contentLength;
+                }
+                break;
+              }
+
+              case kGCLineDiffChange_Added: {
+                GISplitDiffLine* diffLine;
+                if (lineIndex != NSNotFound) {
+                  if (startIndex == NSNotFound) {
+                    startIndex = lineIndex;
+                  }
+                  diffLine = _lines[lineIndex];
+                  lineIndex += 1;
+                  if (lineIndex == _lines.count) {
+                    lineIndex = NSNotFound;
+                  }
+                } else {
+                  diffLine = [[GISplitDiffLine alloc] initWithType:kDiffLineType_Change];
+                  [_lines addObject:diffLine];
+                }
+                diffLine.rightNumber = newLineNumber;
+                diffLine.rightString = string;
+                diffLine.rightLine = line;  // Transfer ownership to GISplitDiffLine
+                diffLine.rightWrapped = isWrappedLine;
+                if (!isWrappedLine) {
+                  diffLine.rightContentBytes = contentBytes;
+                  diffLine.rightContentLength = contentLength;
+                }
+                break;
+              }
             }
-            diffLine.rightNumber = newLineNumber;
-            diffLine.rightString = string;
-            diffLine.rightLine = line;  // Transfer ownership to GISplitDiffLine
-            diffLine.rightWrapped = isWrappedLine;
-            if (!isWrappedLine) {
-              diffLine.rightContentBytes = contentBytes;
-              diffLine.rightContentLength = contentLength;
-            }
-            break;
-          }
-          
+            offset += index;
+            isWrappedLine = YES;
+          } while (offset < length);
+          CFRelease(typeSetter);
+          CFRelease(attributedString);
+
         }
-        offset += index;
-        isWrappedLine = YES;
-      } while (offset < length);
-      CFRelease(typeSetter);
-      CFRelease(attributedString);
-      
-    } endHunkHandler:^{
-      
-      highlightBlock();
-      
-    }];
+        endHunkHandler:^{
+
+          highlightBlock();
+
+        }];
     _size = NSMakeSize(width, _lines.count * GIDiffViewLineHeight + kTextBottomPadding);
   }
   return _size.height;
@@ -319,12 +321,12 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
   CGFloat offset = floor(bounds.size.width / 2);
   CGContextRef context = [[NSGraphicsContext currentContext] graphicsPort];
   CGContextSaveGState(context);
-  
+
   [self updateLayoutForWidth:bounds.size.width];
-  
+
   [self.backgroundColor setFill];
   CGContextFillRect(context, dirtyRect);
-  
+
   if (_lines.count) {
     NSColor* selectedColor = self.window.keyWindow && (self.window.firstResponder == self) ? [NSColor selectedControlColor] : [NSColor secondarySelectedControlColor];
     CGContextSetTextMatrix(context, CGAffineTransformIdentity);
@@ -340,7 +342,7 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
       if (diffLine.type == kDiffLineType_Separator) {
         [GIDiffViewSeparatorBackgroundColor setFill];
         CGContextFillRect(context, CGRectMake(0, linePosition + 1, bounds.size.width, GIDiffViewLineHeight - 1));
-        
+
         [GIDiffViewSeparatorLineColor setStroke];
         CGContextMoveToPoint(context, 0, linePosition + 0.5);
         CGContextAddLineToPoint(context, bounds.size.width, linePosition + 0.5);
@@ -348,7 +350,7 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
         CGContextMoveToPoint(context, 0, linePosition + GIDiffViewLineHeight - 0.5);
         CGContextAddLineToPoint(context, bounds.size.width, linePosition + GIDiffViewLineHeight - 0.5);
         CGContextStrokePath(context);
-        
+
         [GIDiffViewSeparatorTextColor setFill];
         CGContextSetTextPosition(context, kTextLineNumberMargin + 4, textPosition);
         CTLineDraw(leftLine, context);
@@ -360,7 +362,7 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
           } else if (diffLine.type != kDiffLineType_Context) {
             [GIDiffViewDeletedBackgroundColor setFill];
             CGContextFillRect(context, CGRectMake(0, linePosition, offset, GIDiffViewLineHeight));
-            
+
             CFRange highlighted = diffLine.leftHighlighted;
             if (highlighted.length) {
               [GIDiffViewDeletedHighlightColor setFill];
@@ -378,7 +380,7 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
           } else if (diffLine.type != kDiffLineType_Context) {
             [GIDiffViewAddedBackgroundColor setFill];
             CGContextFillRect(context, CGRectMake(offset, linePosition, bounds.size.width, GIDiffViewLineHeight));
-            
+
             CFRange highlighted = diffLine.rightHighlighted;
             if (highlighted.length) {
               [GIDiffViewAddedHighlightColor setFill];
@@ -389,7 +391,7 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
             }
           }
         }
-        
+
         if (leftLine) {
           if (!diffLine.leftWrapped) {
             [GIDiffViewLineNumberColor setFill];
@@ -400,7 +402,7 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
             CFRelease(prefix);
             CFRelease(string);
           }
-          
+
           if (!_rightSelection && _selectedText.length && (i >= _selectedText.location) && (i < _selectedText.location + _selectedText.length)) {
             [selectedColor setFill];
             CGFloat startX = kTextLineNumberMargin + kTextInsetLeft;
@@ -413,7 +415,7 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
             }
             CGContextFillRect(context, CGRectMake(startX, linePosition, endX - startX, GIDiffViewLineHeight));
           }
-          
+
           [GIDiffViewPlainTextColor set];
           CGContextSetTextPosition(context, kTextLineNumberMargin + kTextInsetLeft, textPosition);
           CTLineDraw(leftLine, context);
@@ -428,7 +430,7 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
             CFRelease(prefix);
             CFRelease(string);
           }
-          
+
           if (_rightSelection && _selectedText.length && (i >= _selectedText.location) && (i < _selectedText.location + _selectedText.length)) {
             [selectedColor setFill];
             CGFloat startX = offset + kTextLineNumberMargin + kTextInsetLeft;
@@ -441,7 +443,7 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
             }
             CGContextFillRect(context, CGRectMake(startX, linePosition, endX - startX, GIDiffViewLineHeight));
           }
-          
+
           [GIDiffViewPlainTextColor set];
           CGContextSetTextPosition(context, offset + kTextLineNumberMargin + kTextInsetLeft, textPosition);
           CTLineDraw(rightLine, context);
@@ -449,7 +451,7 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
       }
     }
   }
-  
+
   [GIDiffViewVerticalLineColor setStroke];
   CGContextMoveToPoint(context, kTextLineNumberMargin - 0.5, 0);
   CGContextAddLineToPoint(context, kTextLineNumberMargin - 0.5, bounds.size.height);
@@ -460,7 +462,7 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
   CGContextMoveToPoint(context, offset + kTextLineNumberMargin - 0.5, 0);
   CGContextAddLineToPoint(context, offset + kTextLineNumberMargin - 0.5, bounds.size.height);
   CGContextStrokePath(context);
-  
+
   CGContextRestoreGState(context);
 }
 
@@ -490,7 +492,7 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
     [_selectedLines removeAllIndexes];
     _selectedText.length = 0;
     [self setNeedsDisplay:YES];  // TODO: Only redraw what's needed
-    
+
     [self.delegate diffViewDidChangeSelection:self];
   }
 }
@@ -561,7 +563,7 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
   NSRect bounds = self.bounds;
   CGFloat offset = floor(bounds.size.width / 2);
   NSPoint location = [self convertPoint:event.locationInWindow fromView:nil];
-  
+
   // Reset state
   _selectionMode = kSelectionMode_None;
   _startLines = nil;
@@ -569,12 +571,12 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
   if (!_lines.count) {
     return;
   }
-  
+
   // Check if mouse is in the content area
   NSInteger y = _lines.count - (location.y - kTextBottomPadding) / GIDiffViewLineHeight;
   if ((y >= 0) && (y < (NSInteger)_lines.count)) {
     GISplitDiffLine* diffLine = _lines[y];
-    
+
     // Clear selection if changing side
     BOOL rightSelection = (location.x >= offset);
     if (rightSelection != _rightSelection) {
@@ -582,7 +584,7 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
       _selectedText.length = 0;
     }
     _rightSelection = rightSelection;
-    
+
     // Set selection mode according to modifier flags
     if (event.modifierFlags & NSCommandKeyMask) {
       _selectionMode = kSelectionMode_Inverse;
@@ -591,16 +593,15 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
     } else {
       _selectionMode = kSelectionMode_Replace;
     }
-    
+
     // Check if mouse is in the margin area
     if (((location.x >= 0) && (location.x < kTextLineNumberMargin)) || ((location.x >= offset) && (location.x < offset + kTextLineNumberMargin))) {
-      
       // Reset selection
       _selectedText.length = 0;
       if (_selectionMode == kSelectionMode_Replace) {
         [_selectedLines removeAllIndexes];
       }
-      
+
       // Update selected lines
       NSUInteger index = (_rightSelection ? diffLine.rightNumber : diffLine.leftNumber);
       if (diffLine.type != kDiffLineType_Separator) {  // Ignore separators
@@ -609,17 +610,16 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
         _selectionMode = kSelectionMode_None;
       }
       switch (_selectionMode) {
-        
         case kSelectionMode_None:
           break;
-        
+
         case kSelectionMode_Replace: {
           XLOG_DEBUG_CHECK(_selectedLines.count == 0);
           [_selectedLines addIndex:index];
           _startLines = [_selectedLines copy];
           break;
         }
-        
+
         case kSelectionMode_Extend: {
           XLOG_DEBUG_CHECK(_selectedLines.count > 0);
           _startLines = [_selectedLines copy];
@@ -630,7 +630,7 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
           }
           break;
         }
-        
+
         case kSelectionMode_Inverse: {
           _startLines = [_selectedLines copy];
           if ([_selectedLines containsIndex:index]) {
@@ -640,18 +640,16 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
           }
           break;
         }
-        
       }
       [self setNeedsDisplay:YES];  // TODO: Only redraw what's needed
-      
+
     }
     // Otherwise check if mouse is is in the diff area
     else if (((location.x >= kTextLineNumberMargin + kTextInsetLeft) && (location.x < offset)) || (location.x >= offset + kTextLineNumberMargin + kTextInsetLeft)) {
-      
       // Reset selection
       _selectedText.length = 0;
       [_selectedLines removeAllIndexes];
-      
+
       // Update selected text
       CTLineRef line = _rightSelection ? diffLine.rightLine : diffLine.leftLine;
       CFIndex index = CTLineGetStringIndexForPosition(line, CGPointMake(location.x - ((_rightSelection ? offset : 0) + kTextLineNumberMargin + kTextInsetLeft), GIDiffViewLineHeight / 2));
@@ -661,26 +659,28 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
         if (event.clickCount > 1) {
           NSString* string = _rightSelection ? diffLine.rightString : diffLine.leftString;
           CFRange range = CTLineGetStringRange(line);
-          [string enumerateSubstringsInRange:NSMakeRange(range.location, range.length) options:NSStringEnumerationByWords usingBlock:^(NSString* substring, NSRange substringRange, NSRange enclosingRange, BOOL* stop) {
-            if ((index >= (CFIndex)substringRange.location) && (index <= (CFIndex)(substringRange.location + substringRange.length))) {
-              _selectedText = NSMakeRange(y, 1);
-              _selectedTextStart = substringRange.location;
-              _selectedTextEnd = substringRange.location + substringRange.length;
-              _startIndex = _selectedText.location;
-              _startOffset = _selectedTextStart;
-              *stop = YES;
-            }
-          }];
+          [string enumerateSubstringsInRange:NSMakeRange(range.location, range.length)
+                                     options:NSStringEnumerationByWords
+                                  usingBlock:^(NSString* substring, NSRange substringRange, NSRange enclosingRange, BOOL* stop) {
+                                    if ((index >= (CFIndex)substringRange.location) && (index <= (CFIndex)(substringRange.location + substringRange.length))) {
+                                      _selectedText = NSMakeRange(y, 1);
+                                      _selectedTextStart = substringRange.location;
+                                      _selectedTextEnd = substringRange.location + substringRange.length;
+                                      _startIndex = _selectedText.location;
+                                      _startOffset = _selectedTextStart;
+                                      *stop = YES;
+                                    }
+                                  }];
         }
       } else {
         _selectionMode = kSelectionMode_None;
       }
       [self setNeedsDisplay:YES];  // TODO: Only redraw what's needed
-      
+
     } else {
       _selectionMode = kSelectionMode_None;
     }
-    
+
   }
   // Otherwise clear entire selection
   else {
@@ -695,24 +695,23 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
   NSRect bounds = self.bounds;
   CGFloat offset = floor(bounds.size.width / 2);
   NSPoint location = [self convertPoint:event.locationInWindow fromView:nil];
-  
+
   // Check if mouse is in the content area
   NSInteger y = _lines.count - (location.y - kTextBottomPadding) / GIDiffViewLineHeight;
   if ((y >= 0) && (y < (NSInteger)_lines.count)) {
     GISplitDiffLine* diffLine = _lines[y];
-    
+
     // Check if we are in line-selection mode
     if (_startLines) {
       if (diffLine.type != kDiffLineType_Separator) {  // Ignore separators
-        
+
         // Update selected lines
         if (_rightSelection ? diffLine.rightLine : diffLine.leftLine) {
           NSUInteger index = (_rightSelection ? diffLine.rightNumber : diffLine.leftNumber);
           switch (_selectionMode) {
-            
             case kSelectionMode_None:
               break;
-            
+
             case kSelectionMode_Replace:
             case kSelectionMode_Extend: {
               XLOG_DEBUG_CHECK(_startLines.count > 0);
@@ -725,7 +724,7 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
               }
               break;
             }
-            
+
             case kSelectionMode_Inverse: {
               [_selectedLines removeAllIndexes];
               [_selectedLines addIndexes:_startLines];
@@ -738,11 +737,9 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
               }
               break;
             }
-            
           }
           [self setNeedsDisplay:YES];  // TODO: Only redraw what's needed
         }
-        
       }
     }
     // Otherwise we are in text-selection mode
@@ -750,7 +747,6 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
       CTLineRef line = _rightSelection ? diffLine.rightLine : diffLine.leftLine;
       CFIndex index = CTLineGetStringIndexForPosition(line, CGPointMake(location.x - ((_rightSelection ? offset : 0) + kTextLineNumberMargin + kTextInsetLeft), GIDiffViewLineHeight / 2));
       if (index != kCFNotFound) {
-        
         // Update selected text
         if ((NSUInteger)y > _startIndex) {
           _selectedText = NSMakeRange(_startIndex, y - _startIndex + 1);
@@ -771,12 +767,10 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
           }
         }
         [self setNeedsDisplay:YES];  // TODO: Only redraw what's needed
-        
       }
     }
-    
   }
-  
+
   // Scroll if needed
   [self autoscroll:event];
 }

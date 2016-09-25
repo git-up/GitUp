@@ -1,4 +1,4 @@
-//  Copyright (C) 2015 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2016 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -71,8 +71,8 @@
 
 #define kScrollingInset kSpacingY
 
-#define CONVERT_X(x) (kSpacingX + (x) * kSpacingX)
-#define CONVERT_Y(y) (kSpacingY + (y) * kSpacingY)
+#define CONVERT_X(x) (kSpacingX + (x)*kSpacingX)
+#define CONVERT_Y(y) (kSpacingY + (y)*kSpacingY)
 #define SQUARE(x) ((x) * (x))
 #define SELECTED_NODE_BOUNDS(x, y) NSMakeRect(x - kSpacingX / 2, y - kSelectedLabelMaxHeight / 2, kSelectedLabelMaxWidth + kSpacingX / 2 + 40, kSelectedLabelMaxHeight)
 #define NODE_LABEL_BOUNDS(x, y) NSMakeRect(x - kSpacingX / 2, y - kSpacingY / 2, kNodeLabelMaxWidth + kSpacingX / 2 + 30, kNodeLabelMaxHeight + kSpacingY / 2)
@@ -98,7 +98,7 @@ static const void* _associatedObjectDataKey = &_associatedObjectDataKey;
   _dateFormatter.dateStyle = NSDateFormatterShortStyle;
   _dateFormatter.timeStyle = NSDateFormatterShortStyle;
   _backgroundColor = [[NSColor whiteColor] retain];
-  
+
   self.graph = nil;
 }
 
@@ -118,14 +118,14 @@ static const void* _associatedObjectDataKey = &_associatedObjectDataKey;
 
 - (void)dealloc {
   [self _setSelectedNode:nil display:NO scroll:NO notify:NO];
-  
+
   [[NSNotificationCenter defaultCenter] removeObserver:self name:NSWindowDidResignKeyNotification object:nil];
   [[NSNotificationCenter defaultCenter] removeObserver:self name:NSWindowDidBecomeKeyNotification object:nil];
-  
+
   [_graph release];
   [_backgroundColor release];
   [_dateFormatter release];
-  
+
   [super dealloc];
 }
 
@@ -160,7 +160,7 @@ static const void* _associatedObjectDataKey = &_associatedObjectDataKey;
 
 - (void)viewDidMoveToWindow {
   [super viewDidMoveToWindow];
-  
+
   if (self.window) {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_windowKeyDidChange:) name:NSWindowDidBecomeKeyNotification object:self.window];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_windowKeyDidChange:) name:NSWindowDidResignKeyNotification object:self.window];
@@ -182,16 +182,15 @@ static const void* _associatedObjectDataKey = &_associatedObjectDataKey;
 #pragma mark - Actions
 
 - (BOOL)validateUserInterfaceItem:(id<NSValidatedUserInterfaceItem>)item {
-  
   if (item.action == @selector(copy:)) {
     return _selectedNode ? YES : NO;
   }
-  
+
   return NO;
 }
 
 - (void)copy:(id)sender {
-  [[NSPasteboard generalPasteboard] declareTypes:@[NSPasteboardTypeString] owner:nil];
+  [[NSPasteboard generalPasteboard] declareTypes:@[ NSPasteboardTypeString ] owner:nil];
   [[NSPasteboard generalPasteboard] setString:_selectedNode.commit.SHA1 forType:NSPasteboardTypeString];
 }
 
@@ -208,29 +207,29 @@ static const void* _associatedObjectDataKey = &_associatedObjectDataKey;
     _selectedNode = nil;
     [_graph autorelease];
     _graph = [graph retain];
-    
+
     [self _updateView];
-    
+
     [self _setSelectedNode:nil display:NO scroll:NO notify:YES];
   }
 }
 
 - (void)setShowsTagLabels:(BOOL)flag {
   _showsTagLabels = flag;
-  
+
   [self setNeedsDisplay:YES];
 }
 
 - (void)setShowsBranchLabels:(BOOL)flag {
   _showsBranchLabels = flag;
-  
+
   [self setNeedsDisplay:YES];
 }
 
 - (void)setBackgroundColor:(NSColor*)color {
   [_backgroundColor autorelease];
   _backgroundColor = [color retain];
-  
+
   [self setNeedsDisplay:YES];
 }
 
@@ -240,17 +239,17 @@ static const void* _associatedObjectDataKey = &_associatedObjectDataKey;
   NSArray* layers = _graph.layers;
   if (layers.count) {
     CGFloat offset = _graph.size.height;
-    
+
     GILayer* firstLayer = layers.firstObject;
     if (position > CONVERT_Y(offset - firstLayer.y) + kSpacingY / 2) {
       return closest ? firstLayer : nil;
     }
-    
+
     GILayer* lastLayer = layers.lastObject;
     if (position < CONVERT_Y(offset - lastLayer.y) - kSpacingY / 2) {
       return closest ? lastLayer : nil;
     }
-    
+
     NSRange range = NSMakeRange(0, layers.count);
     while (range.length) {
       NSUInteger index = range.location + range.length / 2;
@@ -283,17 +282,17 @@ static const void* _associatedObjectDataKey = &_associatedObjectDataKey;
   GILayer* layer = [self _findLayerAtPosition:position.y closest:closest];
   if (layer) {
     NSArray* nodes = layer.nodes;
-    
+
     GINode* firstNode = nodes.firstObject;
     if (position.x < CONVERT_X(firstNode.x) - kSpacingX / 2) {
       return closest ? firstNode : nil;
     }
-    
+
     GINode* lastNode = nodes.lastObject;
     if (position.x > CONVERT_X(lastNode.x) + kSpacingX / 2) {
       return closest ? lastNode : nil;
     }
-    
+
     for (GINode* node in nodes) {
       CGFloat x = CONVERT_X(node.x);
       if ((position.x >= x - kSpacingX / 2) && (position.x <= x + kSpacingX / 2)) {
@@ -467,7 +466,6 @@ static const void* _associatedObjectDataKey = &_associatedObjectDataKey;
 
 - (void)keyDown:(NSEvent*)event {
   switch (event.keyCode) {
-    
     case kGIKeyCode_Tab:
       if (event.modifierFlags & NSShiftKeyMask) {
         [self.window selectPreviousKeyView:nil];
@@ -475,11 +473,11 @@ static const void* _associatedObjectDataKey = &_associatedObjectDataKey;
         [self.window selectNextKeyView:nil];
       }
       return;
-    
+
     case kGIKeyCode_Esc:
       [self _setSelectedNode:nil display:YES scroll:NO notify:YES];
       return;
-    
+
     case kGIKeyCode_Left:
       if (event.modifierFlags & NSCommandKeyMask) {
         [self _scrollToLeft];
@@ -489,7 +487,7 @@ static const void* _associatedObjectDataKey = &_associatedObjectDataKey;
         [self _selectDefaultNode];
       }
       return;
-    
+
     case kGIKeyCode_Right:
       if (event.modifierFlags & NSCommandKeyMask) {
         [self _scrollToRight];
@@ -499,7 +497,7 @@ static const void* _associatedObjectDataKey = &_associatedObjectDataKey;
         [self _selectDefaultNode];
       }
       return;
-    
+
     case kGIKeyCode_Down:
       if (event.modifierFlags & NSCommandKeyMask) {
         [self _scrollToBottom];
@@ -509,7 +507,7 @@ static const void* _associatedObjectDataKey = &_associatedObjectDataKey;
         [self _selectDefaultNode];
       }
       return;
-    
+
     case kGIKeyCode_Up:
       if (event.modifierFlags & NSCommandKeyMask) {
         [self _scrollToTop];
@@ -519,15 +517,14 @@ static const void* _associatedObjectDataKey = &_associatedObjectDataKey;
         [self _selectDefaultNode];
       }
       return;
-    
+
     case kGIKeyCode_Home:
       [self _scrollToTop];
       return;
-    
+
     case kGIKeyCode_End:
       [self _scrollToBottom];
       return;
-    
   }
   [self.nextResponder tryToPerform:@selector(keyDown:) with:event];
 }
@@ -598,7 +595,7 @@ static void _DrawLine(GILine* line, CGContextRef context, CGFloat offset, CGFloa
   NSArray* nodes = line.nodes;
   NSUInteger count = nodes.count;
   BOOL recompute = YES;
-  
+
   // Generate list of node coordinates aka points
   size_t pointCount;
   CGPoint* pointList;
@@ -622,7 +619,7 @@ static void _DrawLine(GILine* line, CGContextRef context, CGFloat offset, CGFloa
         node = nodes[i];
         CGFloat x = CONVERT_X(node.x);
         CGFloat y = CONVERT_Y(offset - node.layer.y);
-        
+
         pointList[pointCount].x = x;
         pointList[pointCount].y = y;
         ++pointCount;
@@ -647,7 +644,7 @@ static void _DrawLine(GILine* line, CGContextRef context, CGFloat offset, CGFloa
     free(pointList);
     return;
   }
-  
+
   // Shift corner point positions
   if (recompute) {
     CGPoint* newPointList = malloc(pointCount * sizeof(CGPoint));
@@ -668,7 +665,7 @@ static void _DrawLine(GILine* line, CGContextRef context, CGFloat offset, CGFloa
 #if __SHIFT_CORNERS__
       CGFloat nextX = pointList[i + 1].x;
 #endif
-      
+
 #if __SHIFT_CORNERS__
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wfloat-equal"
@@ -681,7 +678,7 @@ static void _DrawLine(GILine* line, CGContextRef context, CGFloat offset, CGFloa
       }
 #pragma clang diagnostic pop
 #endif
-      
+
       if (newPointCount >= 2) {
         if (_SquareDistanceFromPointToLine(x0, y0, x2, y2, x1, y1) < kEpsilon * kEpsilon) {  // If P2 is very close to the line from P0 to P1, then they are aligned and we can remove P1
           --newPointCount;
@@ -689,11 +686,11 @@ static void _DrawLine(GILine* line, CGContextRef context, CGFloat offset, CGFloa
           y1 = y0;
         }
       }
-      
+
       newPointList[newPointCount].x = x2;
       newPointList[newPointCount].y = y2;
       ++newPointCount;
-      
+
       x0 = x1;
       y0 = y1;
       x1 = x2;
@@ -707,7 +704,7 @@ static void _DrawLine(GILine* line, CGContextRef context, CGFloat offset, CGFloa
     pointList = newPointList;
     pointCount = newPointCount;
   }
-  
+
   // Add intermediary points to line for corners
   if (recompute) {
     size_t newMaxPoints = 2 * (pointCount - 1) + pointCount;
@@ -721,11 +718,11 @@ static void _DrawLine(GILine* line, CGContextRef context, CGFloat offset, CGFloa
     for (size_t i = 1; i < pointCount; ++i) {
       CGFloat x1 = pointList[i].x;
       CGFloat y1 = pointList[i].y;
-      
+
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wfloat-equal"
       CGFloat D = kLineCornerSize;
-      
+
       XLOG_DEBUG_CHECK(y1 != y0);
       CGFloat X0;
       CGFloat Y0;
@@ -734,34 +731,34 @@ static void _DrawLine(GILine* line, CGContextRef context, CGFloat offset, CGFloa
       if (x1 == x0) {
         X0 = x0;
         Y0 = y0 - D;
-        
+
         X1 = x1;
         Y1 = y1 + D;
       } else {
         CGFloat A = (y0 - y1) / (x0 - x1);
         CGFloat B = y1 - A * x1;
-        
-        CGFloat K0 = sqrt(A*A * D*D - A*A * x0*x0 - 2 * A * B * x0 + 2 * A * x0 * y0 - B*B + 2 * B * y0 + D*D - y0*y0);
-        X0 = (K0 - A * B + A * y0 + x0) / (A*A + 1);
+
+        CGFloat K0 = sqrt(A * A * D * D - A * A * x0 * x0 - 2 * A * B * x0 + 2 * A * x0 * y0 - B * B + 2 * B * y0 + D * D - y0 * y0);
+        X0 = (K0 - A * B + A * y0 + x0) / (A * A + 1);
         Y0 = A * X0 + B;
         if (Y0 >= y0) {
-          X0 = (-K0 - A * B + A * y0 + x0) / (A*A + 1);
+          X0 = (-K0 - A * B + A * y0 + x0) / (A * A + 1);
           Y0 = A * X0 + B;
           XLOG_DEBUG_CHECK(Y0 < y0);
         }
-        
-        CGFloat K1 = sqrt(A*A * D*D - A*A * x1*x1 - 2 * A * B * x1 + 2 * A * x1 * y1 - B*B + 2 * B * y1 + D*D - y1*y1);
-        X1 = (K1 - A * B + A * y1 + x1) / (A*A + 1);
+
+        CGFloat K1 = sqrt(A * A * D * D - A * A * x1 * x1 - 2 * A * B * x1 + 2 * A * x1 * y1 - B * B + 2 * B * y1 + D * D - y1 * y1);
+        X1 = (K1 - A * B + A * y1 + x1) / (A * A + 1);
         Y1 = A * X1 + B;
         if (Y1 <= y1) {
-          X1 = (-K1 - A * B + A * y1 + x1) / (A*A + 1);
+          X1 = (-K1 - A * B + A * y1 + x1) / (A * A + 1);
           Y1 = A * X1 + B;
           XLOG_DEBUG_CHECK(Y1 > y1);
         }
       }
       XLOG_DEBUG_CHECK(Y1 < Y0);
 #pragma clang diagnostic pop
-      
+
       newPointList[newPointCount].x = X0;
       newPointList[newPointCount].y = Y0;
       ++newPointCount;
@@ -771,7 +768,7 @@ static void _DrawLine(GILine* line, CGContextRef context, CGFloat offset, CGFloa
       newPointList[newPointCount].x = x1;
       newPointList[newPointCount].y = y1;
       ++newPointCount;
-      
+
       x0 = x1;
       y0 = y1;
     }
@@ -780,12 +777,11 @@ static void _DrawLine(GILine* line, CGContextRef context, CGFloat offset, CGFloa
     pointList = newPointList;
     pointCount = newPointCount;
   }
-  
+
   // Draw line
   BOOL visible = NO;
   size_t i = 0;
   while (1) {
-    
     // Skip points until entering visible area
     if (!visible) {
       CGFloat y = pointList[i + 3].y;
@@ -797,35 +793,35 @@ static void _DrawLine(GILine* line, CGContextRef context, CGFloat offset, CGFloa
         continue;
       }
     }
-    
+
     CGFloat x0 = pointList[i].x;
     CGFloat y0 = pointList[i].y;
     CGFloat x1 = pointList[i + 1].x;
     CGFloat y1 = pointList[i + 1].y;
-    
+
     // Draw line start
     if (!visible) {
       CGContextMoveToPoint(context, x0, y0);
       CGContextAddLineToPoint(context, x1, y1);
       CGContextStrokePath(context);
-      
+
       x0 = x1;
       y0 = y1;
       x1 = pointList[i + 2].x;
       y1 = pointList[i + 2].y;
       i += 1;
     }
-    
+
     // Draw line segment
     CGContextMoveToPoint(context, x0, y0);
     CGContextAddLineToPoint(context, x1, y1);
     CGContextStrokePath(context);
-    
+
     // Check if exiting visible area
     if (y0 < minY) {
       i = pointCount - 3;
     }
-    
+
     // Draw line end
     if (i == pointCount - 3) {
       x0 = x1;
@@ -835,10 +831,10 @@ static void _DrawLine(GILine* line, CGContextRef context, CGFloat offset, CGFloa
       CGContextMoveToPoint(context, x0, y0);
       CGContextAddLineToPoint(context, x1, y1);
       CGContextStrokePath(context);
-      
+
       break;  // We're done
     }
-    
+
     // Draw line corner
     x0 = x1;
     y0 = y1;
@@ -849,11 +845,11 @@ static void _DrawLine(GILine* line, CGContextRef context, CGFloat offset, CGFloa
     CGContextMoveToPoint(context, x0, y0);
     CGContextAddQuadCurveToPoint(context, x1, y1, x2, y2);
     CGContextStrokePath(context);
-    
+
     i += 3;
     visible = YES;
   }
-  
+
   if (recompute) {
     data = [[NSData alloc] initWithBytesNoCopy:pointList length:(pointCount * sizeof(CGPoint)) freeWhenDone:YES];
     objc_setAssociatedObject(line, _associatedObjectDataKey, data, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
@@ -862,16 +858,15 @@ static void _DrawLine(GILine* line, CGContextRef context, CGFloat offset, CGFloa
 }
 
 static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, CGPoint* previousBranchCorner, GIBranch* branch, NSColor* color, GIGraphOptions options) {
-
   // Cache common format for multiline string
   static NSMutableDictionary* multilineTitleAttributes = nil;
   if (multilineTitleAttributes == nil) {
     multilineTitleAttributes = [[NSMutableDictionary alloc] init];
-    
+
     CTFontRef titleFont = CTFontCreateUIFontForLanguage(kCTFontUIFontSystem, 13.0, CFSTR("en-US"));
     multilineTitleAttributes[NSFontAttributeName] = (id)titleFont;
     CFRelease(titleFont);
-    
+
     NSMutableParagraphStyle* style = [[NSMutableParagraphStyle alloc] init];
     style.lineHeightMultiple = 0.85;
     multilineTitleAttributes[NSParagraphStyleAttributeName] = style;
@@ -884,59 +879,58 @@ static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, CGPoint
     boldFont = CTFontCreateUIFontForLanguage(kCTFontUIFontEmphasizedSystem, 13.0, CFSTR("en-US"));
   }
   NSColor* darkColor = [NSColor colorWithDeviceWhite:0.2 alpha:1.0];
-  
+
   // Start new attributed string for the branch title
   NSMutableAttributedString* multilineTitle = [[NSMutableAttributedString alloc] initWithString:@""];
   [multilineTitle beginEditing];
-  
+
   for (GCHistoryLocalBranch* localBranch in branch.localBranches) {
-    
     NSString* branchName = localBranch.name;
     NSRange branchNameRange = NSMakeRange(multilineTitle.length, branchName.length);
     _AppendAttributedString((CFMutableAttributedStringRef)multilineTitle, [NSString stringWithFormat:@"%@\n", branchName], multilineTitleAttributes);
     [multilineTitle addAttribute:NSFontAttributeName value:(id)boldFont range:branchNameRange];
     [multilineTitle addAttribute:NSForegroundColorAttributeName value:darkColor range:branchNameRange];
-    
+
     GCBranch* upstream = localBranch.upstream;
     if (upstream) {
       _AppendAttributedString((CFMutableAttributedStringRef)multilineTitle, [NSString stringWithFormat:@"⬅ %@\n", upstream.name], multilineTitleAttributes);
-      
+
       NSString* upstreamName = [upstream isKindOfClass:GCRemoteBranch.class] ? [(GCRemoteBranch*)upstream branchName] : upstream.name;
-      NSRange upstreamNameRange = NSMakeRange(multilineTitle.length - upstreamName.length - 1, upstreamName.length); // -1 to exclude '\n'
+      NSRange upstreamNameRange = NSMakeRange(multilineTitle.length - upstreamName.length - 1, upstreamName.length);  // -1 to exclude '\n'
       [multilineTitle addAttribute:NSForegroundColorAttributeName value:darkColor range:upstreamNameRange];
     }
-    
+
     _AppendAttributedString((CFMutableAttributedStringRef)multilineTitle, @"\n", nil);
   }
-  
+
   for (GCHistoryRemoteBranch* remoteBranch in branch.remoteBranches) {
     NSString* branchName = remoteBranch.branchName;
     _AppendAttributedString((CFMutableAttributedStringRef)multilineTitle, [NSString stringWithFormat:@"%@\n", remoteBranch.name], multilineTitleAttributes);
-    NSRange branchNameRange = NSMakeRange(multilineTitle.length - branchName.length - 1, branchName.length); // -1 to exclude '\n'
+    NSRange branchNameRange = NSMakeRange(multilineTitle.length - branchName.length - 1, branchName.length);  // -1 to exclude '\n'
     [multilineTitle addAttribute:NSFontAttributeName value:(id)boldFont range:branchNameRange];
     [multilineTitle addAttribute:NSForegroundColorAttributeName value:darkColor range:branchNameRange];
   }
-  
+
   if (branch.remoteBranches.count) {
     _AppendAttributedString((CFMutableAttributedStringRef)multilineTitle, @"\n", nil);
   }
-  
+
   for (GCHistoryTag* tag in branch.tags) {
     NSString* tagName = tag.name;
     _AppendAttributedString((CFMutableAttributedStringRef)multilineTitle, [NSString stringWithFormat:@"[%@]\n", tagName], multilineTitleAttributes);
-    NSRange tagNameRange = NSMakeRange(multilineTitle.length - tagName.length - 2, tagName.length); // -2 to exclude char ']' plus '\n'
+    NSRange tagNameRange = NSMakeRange(multilineTitle.length - tagName.length - 2, tagName.length);  // -2 to exclude char ']' plus '\n'
     [multilineTitle addAttribute:NSFontAttributeName value:(id)boldFont range:tagNameRange];
     [multilineTitle addAttribute:NSForegroundColorAttributeName value:darkColor range:tagNameRange];
   }
-  
+
   if (branch.tags.count) {
     _AppendAttributedString((CFMutableAttributedStringRef)multilineTitle, @"\n", nil);
   }
-  
+
   [multilineTitle endEditing];
   if (multilineTitle.length == 0) {
     [multilineTitle release];
-    return; // This should only happen if we have a detached HEAD with no other references pointing to the commit
+    return;  // This should only happen if we have a detached HEAD with no other references pointing to the commit
   }
 
   // Prepare CoreText string from the rich attributed title
@@ -947,16 +941,16 @@ static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, CGPoint
   CTFrameRef frame = CTFramesetterCreateFrame(framesetter, CFRangeMake(0, multilineTitle.length), path, NULL);
   CFAttributedStringRef ellipsis = CFAttributedStringCreate(kCFAllocatorDefault, CFSTR("\u2026"), (CFDictionaryRef)multilineTitleAttributes);
   CTLineRef ellipsisToken = CTLineCreateWithAttributedString(ellipsis);
-  
+
   // Rotate context to draw labels with angle
   CGContextSaveGState(context);
   CGContextTranslateCTM(context, x, y);
   CGFloat radians = 45.0 / 180.0 * M_PI;
   CGContextRotateCTM(context, radians);
-  
+
   // Make a transform copy to calculate rotated corner coordinates
   CGAffineTransform transform = CGAffineTransformRotate(CGAffineTransformTranslate(CGAffineTransformIdentity, x, y), radians);
-  
+
   // Draw text and separators
   NSColor* separatorColor = [color colorWithAlphaComponent:0.6];
   CGFloat lastLineWidth = 0.0;
@@ -965,14 +959,14 @@ static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, CGPoint
     CTLineRef line = CFArrayGetValueAtIndex(lines, i);
     CGPoint origin;
     CTFrameGetLineOrigins(frame, CFRangeMake(i, 1), &origin);
-    
+
     origin.x += textRect.origin.x + origin.y;
     origin.y += textRect.origin.y;
-    
+
     CGFloat ascent;
     CGFloat descent;
     CGFloat lineWidth = CTLineGetTypographicBounds(line, &ascent, &descent, NULL);
-    
+
     // Draw separator in case of new line which is guaranteed by the building algorithm
     CFRange stringRange = CTLineGetStringRange(line);
     if (stringRange.length == 1) {
@@ -984,28 +978,26 @@ static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, CGPoint
       CGContextStrokePath(context);
       continue;
     }
-    
+
 #if __DEBUG_BOXES__
     CGRect labelRect = CGRectMake(origin.x, origin.y - descent, lineWidth, ascent + descent);
     CGContextSetRGBFillColor(context, 1.0, 0.0, 0.0, 0.333);
     CGContextFillRect(context, labelRect);
 #endif
-    
+
     // Max width will be reduced if it crosses titles of the next branch
     CGFloat maxBranchTitleWidth = kMaxBranchTitleWidth;
     if (previousBranchCorner) {
-      
       // Calculate the bottom-right coordinates for current line in rotated context
       CGPoint currentTitleCorner = CGPointMake(origin.x + lineWidth, origin.y - descent);
       CGPoint rotatedTitleCorner = CGPointApplyAffineTransform(currentTitleCorner, transform);
-      
+
       // Calculate angle between bottom-right corner of the current line and top-left corner of the first title in the next branch
       CGFloat angleInRadians = atan2(rotatedTitleCorner.y - previousBranchCorner->y, rotatedTitleCorner.x - previousBranchCorner->x);
       if ((angleInRadians < M_PI / 4.0) && (angleInRadians > -M_PI / 2.0)) {
-        
         // Reduce allowed width to avoid overlapping
         maxBranchTitleWidth = (previousBranchCorner->x - x - kTitleOffsetX) * sqrt(2.0);
-        
+
 #if __DEBUG_TITLE_CORNERS__
         // Draw a red point where the tail would be
         CGRect dotRect = CGRectMake(currentBranchCorner.x - 1.0, currentBranchCorner.y - 1.0, 2.0, 2.0);
@@ -1014,7 +1006,7 @@ static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, CGPoint
 #endif
       }
     }
-    
+
     // Draw line with ellipsis in the end if needed
     CGContextSetTextPosition(context, origin.x, origin.y);
     if (lineWidth <= maxBranchTitleWidth) {
@@ -1024,14 +1016,14 @@ static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, CGPoint
       CTLineDraw(drawLine, context);
       CFRelease(drawLine);
     }
-    
+
     // Remember last line width for the next separator below
     lastLineWidth = MIN(lineWidth, maxBranchTitleWidth);
   }
-  
+
   // Reset context
   CGContextRestoreGState(context);
-  
+
   if (previousBranchCorner) {
 #if __DEBUG_TITLE_CORNERS__
     // Draw previous corner using semi-transparent red dot for debugging needs
@@ -1039,12 +1031,12 @@ static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, CGPoint
     CGContextSetRGBFillColor(context, 1.0, 0.0, 0.0, 0.333);
     CGContextFillRect(context, dotRect);
 #endif
-    
+
     // Remember top-left title coordinates to limit drawing area for the left branch
     previousBranchCorner->x = x - kTitleOffsetX;
     previousBranchCorner->y = y + (size.height + kTitleOffsetY) * sqrt(2.0);
   }
-  
+
   // Clean up
   [multilineTitle release];
   CGPathRelease(path);
@@ -1056,7 +1048,7 @@ static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, CGPoint
 
 static void _DrawNodeLabels(CGContextRef context, CGFloat x, CGFloat y, GINode* node, NSDictionary* tagAttributes, NSDictionary* branchAttributes) {
   GCHistoryCommit* commit = node.commit;
-  
+
   // Generate text
   NSMutableString* label = [[NSMutableString alloc] init];
   NSUInteger separator = NSNotFound;
@@ -1102,11 +1094,10 @@ static void _DrawNodeLabels(CGContextRef context, CGFloat x, CGFloat y, GINode* 
       ++index;
     }
   }
-  
+
   if (label.length) {
-    
     // Prepare text
-    
+
     CFMutableAttributedStringRef string = CFAttributedStringCreateMutable(kCFAllocatorDefault, label.length);
     CFAttributedStringBeginEditing(string);
     CFAttributedStringReplaceString(string, CFRangeMake(0, 0), (CFStringRef)label);
@@ -1117,7 +1108,7 @@ static void _DrawNodeLabels(CGContextRef context, CGFloat x, CGFloat y, GINode* 
       CFAttributedStringSetAttributes(string, CFRangeMake(0, label.length), (CFDictionaryRef)tagAttributes, true);
     }
     CFAttributedStringEndEditing(string);
-    
+
     CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString(string);
     CGSize size = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0, CFAttributedStringGetLength(string)), NULL, CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX), NULL);
     XLOG_DEBUG_CHECK(size.height <= kNodeLabelMaxHeight);
@@ -1128,14 +1119,14 @@ static void _DrawNodeLabels(CGContextRef context, CGFloat x, CGFloat y, GINode* 
     CTLineRef tagToken = CTLineCreateWithAttributedString(tagCharacter);
     CFAttributedStringRef branchCharacter = CFAttributedStringCreate(kCFAllocatorDefault, CFSTR("\u2026"), (CFDictionaryRef)branchAttributes);
     CTLineRef branchToken = CTLineCreateWithAttributedString(branchCharacter);
-    
+
     // Prepare context
-    
+
     CGContextSaveGState(context);
     CGContextTranslateCTM(context, x, y);
-    
+
     // Draw label
-    
+
     CGRect labelRect = CGRectInset(CGRectMake(textRect.origin.x, textRect.origin.y, MIN(textRect.size.width, kNodeLabelMaxWidth), textRect.size.height), -3.5, -2.5);
     CGContextSetRGBFillColor(context, 1.0, 1.0, 1.0, 0.85);
     GICGContextAddRoundedRect(context, labelRect, 4.0);
@@ -1143,16 +1134,16 @@ static void _DrawNodeLabels(CGContextRef context, CGFloat x, CGFloat y, GINode* 
     CGContextSetRGBStrokeColor(context, 0.4, 0.4, 0.4, 1.0);
     GICGContextAddRoundedRect(context, labelRect, 4.0);
     CGContextStrokePath(context);
-    
+
     CGContextMoveToPoint(context, 0, 0);
     CGContextAddLineToPoint(context, labelRect.origin.x + 1, labelRect.origin.y + 1);
     CGContextStrokePath(context);
-    
+
     CGContextSetRGBFillColor(context, 0.4, 0.4, 0.4, 1.0);
     CGContextFillEllipseInRect(context, CGRectMake(-2, -2, 4, 4));
-    
+
     // Draw text
-    
+
     CGContextSetRGBFillColor(context, 0.4, 0.4, 0.4, 1.0);
     CFArrayRef lines = CTFrameGetLines(frame);
     for (CFIndex i = 0, count = CFArrayGetCount(lines); i < count; ++i) {
@@ -1169,13 +1160,13 @@ static void _DrawNodeLabels(CGContextRef context, CGFloat x, CGFloat y, GINode* 
         CFRelease(drawLine);
       }
     }
-    
+
     // Reset context
-    
+
     CGContextRestoreGState(context);
-    
+
     // Clean up
-    
+
     CFRelease(branchToken);
     CFRelease(branchCharacter);
     CFRelease(tagToken);
@@ -1184,23 +1175,22 @@ static void _DrawNodeLabels(CGContextRef context, CGFloat x, CGFloat y, GINode* 
     CGPathRelease(path);
     CFRelease(framesetter);
     CFRelease(string);
-
   }
-  
+
   // Clean up
   [label release];
 }
 
 static void _DrawHead(CGContextRef context, CGFloat x, CGFloat y, BOOL isDetached, CGColorRef color, NSDictionary* attributes) {
   CGRect rect = CGRectMake(-18, -9, 36, 18);
-  
+
   // Prepare context
-  
+
   CGContextSaveGState(context);
   CGContextTranslateCTM(context, x, y);
-  
+
   // Draw label
-  
+
   if (isDetached) {
     CGContextSetRGBFillColor(context, 0.4, 0.4, 0.4, 1.0);
   } else {
@@ -1208,16 +1198,16 @@ static void _DrawHead(CGContextRef context, CGFloat x, CGFloat y, BOOL isDetache
   }
   GICGContextAddRoundedRect(context, rect, 4.0);
   CGContextFillPath(context);
-  
+
   if (!isDetached) {
     CGContextSetRGBStrokeColor(context, 0.4, 0.4, 0.4, 1.0);
     CGContextSetLineWidth(context, 2);
     GICGContextAddRoundedRect(context, rect, 4.0);
     CGContextStrokePath(context);
   }
-  
+
   // Draw text
-  
+
   CFAttributedStringRef string = CFAttributedStringCreate(kCFAllocatorDefault, CFSTR("HEAD"), (CFDictionaryRef)attributes);
   CTLineRef line = CTLineCreateWithAttributedString(string);
   CGContextSetRGBFillColor(context, 1.0, 1.0, 1.0, 1.0);
@@ -1225,9 +1215,9 @@ static void _DrawHead(CGContextRef context, CGFloat x, CGFloat y, BOOL isDetache
   CTLineDraw(line, context);
   CFRelease(line);
   CFRelease(string);
-  
+
   // Reset context
-  
+
   CGContextRestoreGState(context);
 }
 
@@ -1241,9 +1231,9 @@ static inline void _AppendAttributedString(CFMutableAttributedStringRef string, 
 
 static void _DrawSelectedNode(CGContextRef context, CGFloat x, CGFloat y, GINode* node, NSDictionary* attributes1, NSDictionary* attributes2, NSDateFormatter* dateFormatter, BOOL isFirstResponder) {
   GCHistoryCommit* commit = node.commit;
-  
+
   // Generate text
-  
+
   CFMutableAttributedStringRef string = CFAttributedStringCreateMutable(kCFAllocatorDefault, 0);
   CFAttributedStringBeginEditing(string);
 #if DEBUG
@@ -1291,9 +1281,9 @@ static void _DrawSelectedNode(CGContextRef context, CGFloat x, CGFloat y, GINode
     }
   }
   CFAttributedStringEndEditing(string);
-  
+
   // Prepare text
-  
+
   CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString(string);
   CGSize size = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0, CFAttributedStringGetLength(string)), NULL, CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX), NULL);
   XLOG_DEBUG_CHECK(size.height <= kSelectedLabelMaxHeight);
@@ -1302,37 +1292,37 @@ static void _DrawSelectedNode(CGContextRef context, CGFloat x, CGFloat y, GINode
   CTFrameRef frame = CTFramesetterCreateFrame(framesetter, CFRangeMake(0, CFAttributedStringGetLength(string)), path, NULL);
   CFAttributedStringRef character = CFAttributedStringCreate(kCFAllocatorDefault, CFSTR("\u2026"), (CFDictionaryRef)attributes1);
   CTLineRef token = CTLineCreateWithAttributedString(character);
-  
+
   // Prepare label
-  
+
   CGRect labelRect = CGRectMake(textRect.origin.x, textRect.origin.y, MIN(textRect.size.width, kSelectedLabelMaxWidth), textRect.size.height);
   labelRect.origin.x -= 1;
   labelRect.size.width += 5;
   labelRect.origin.y -= 4;
   labelRect.size.height += 8;
-  
+
   CGMutablePathRef labelPath = CGPathCreateMutable();
-  
+
   CGPathMoveToPoint(labelPath, NULL, labelRect.origin.x + kSelectedCornerRadius, labelRect.origin.y);
   CGPathAddLineToPoint(labelPath, NULL, labelRect.origin.x + labelRect.size.width - kSelectedCornerRadius, labelRect.origin.y);
   CGPathAddQuadCurveToPoint(labelPath, NULL, labelRect.origin.x + labelRect.size.width, labelRect.origin.y, labelRect.origin.x + labelRect.size.width, labelRect.origin.y + kSelectedCornerRadius);
   CGPathAddLineToPoint(labelPath, NULL, labelRect.origin.x + labelRect.size.width, labelRect.origin.y + labelRect.size.height - kSelectedCornerRadius);
   CGPathAddQuadCurveToPoint(labelPath, NULL, labelRect.origin.x + labelRect.size.width, labelRect.origin.y + labelRect.size.height, labelRect.origin.x + labelRect.size.width - kSelectedCornerRadius, labelRect.origin.y + labelRect.size.height);
   CGPathAddLineToPoint(labelPath, NULL, labelRect.origin.x + kSelectedCornerRadius, labelRect.origin.y + labelRect.size.height);
-  
+
   CGPathAddCurveToPoint(labelPath, NULL, 14, labelRect.origin.y + labelRect.size.height, labelRect.origin.x + kSelectedCornerRadius, kSelectedTipHeight, 5, kSelectedTipHeight);
   CGPathAddLineToPoint(labelPath, NULL, 0, kSelectedTipHeight);
   CGPathAddArc(labelPath, NULL, 0, 0, kSelectedTipHeight, M_PI_2, -M_PI_2, false);
   CGPathAddLineToPoint(labelPath, NULL, 5, -kSelectedTipHeight);
   CGPathAddCurveToPoint(labelPath, NULL, labelRect.origin.x + kSelectedCornerRadius, -kSelectedTipHeight, 14, labelRect.origin.y, labelRect.origin.x + kSelectedCornerRadius, labelRect.origin.y);
-  
+
   // Prepare context
-  
+
   CGContextSaveGState(context);
   CGContextTranslateCTM(context, x, y);
-  
+
   // Draw label
-  
+
   if (isFirstResponder) {
     CGContextSetFillColorWithColor(context, [[NSColor alternateSelectedControlColor] CGColor]);  // NSTableView focused highlight color
   } else {
@@ -1340,19 +1330,19 @@ static void _DrawSelectedNode(CGContextRef context, CGFloat x, CGFloat y, GINode
   }
   CGContextAddPath(context, labelPath);
   CGContextFillPath(context);
-  
+
   CGContextSetRGBStrokeColor(context, 1.0, 1.0, 1.0, 1.0);
   CGContextSetLineWidth(context, 2);
   CGContextAddPath(context, labelPath);
   CGContextStrokePath(context);
-  
+
   // Draw node
-  
+
   CGContextSetRGBFillColor(context, 1.0, 1.0, 1.0, 1.0);
   CGContextFillEllipseInRect(context, CGRectMake(-4, -4, 8, 8));
-  
+
   // Draw text
-  
+
   if (isFirstResponder) {
     CGContextSetFillColorWithColor(context, [[NSColor alternateSelectedControlTextColor] CGColor]);
   } else {
@@ -1372,13 +1362,13 @@ static void _DrawSelectedNode(CGContextRef context, CGFloat x, CGFloat y, GINode
       CFRelease(drawLine);
     }
   }
-  
+
   // Reset context
-  
+
   CGContextRestoreGState(context);
-  
+
   // Clean up
-  
+
   CGPathRelease(labelPath);
   CFRelease(token);
   CFRelease(character);
@@ -1392,17 +1382,17 @@ static void _DrawSelectedNode(CGContextRef context, CGFloat x, CGFloat y, GINode
   XLOG_DEBUG_CHECK(_graph.layers.count);
   NSArray* layers = _graph.layers;
   CGFloat offset = _graph.size.height;
-  
+
   GILayer* firstLayer = layers.firstObject;
   if (position > CONVERT_Y(offset - firstLayer.y)) {
     return firstLayer.index;
   }
-  
+
   GILayer* lastLayer = layers.lastObject;
   if (position < CONVERT_Y(offset - lastLayer.y)) {
     return lastLayer.index;
   }
-  
+
   NSRange range = NSMakeRange(0, layers.count);
   while (1) {
     NSUInteger index = range.location + range.length / 2;
@@ -1432,25 +1422,29 @@ static void _DrawSelectedNode(CGContextRef context, CGFloat x, CGFloat y, GINode
   static NSDictionary* tagAttributes = nil;
   if (tagAttributes == nil) {
     CTFontRef font = CTFontCreateUIFontForLanguage(kCTFontUIFontSystem, 11.0, CFSTR("en-US"));
-    tagAttributes = [@{(id)kCTForegroundColorFromContextAttributeName: (id)kCFBooleanTrue, (id)kCTFontAttributeName: (id)font} retain];
+    tagAttributes = [@{(id)kCTForegroundColorFromContextAttributeName : (id)kCFBooleanTrue,
+                       (id)kCTFontAttributeName : (id)font } retain];
     CFRelease(font);
   }
   static NSDictionary* branchAttributes = nil;
   if (branchAttributes == nil) {
     CTFontRef font = CTFontCreateUIFontForLanguage(kCTFontUIFontEmphasizedSystem, 11.0, CFSTR("en-US"));
-    branchAttributes = [@{(id)kCTForegroundColorFromContextAttributeName: (id)kCFBooleanTrue, (id)kCTFontAttributeName: (id)font} retain];
+    branchAttributes = [@{(id)kCTForegroundColorFromContextAttributeName : (id)kCFBooleanTrue,
+                          (id)kCTFontAttributeName : (id)font } retain];
     CFRelease(font);
   }
   static NSDictionary* selectedAttributes1 = nil;
   if (selectedAttributes1 == nil) {
     CTFontRef font = CTFontCreateUIFontForLanguage(kCTFontUIFontSystem, 10.0, CFSTR("en-US"));
-    selectedAttributes1 = [@{(id)kCTForegroundColorFromContextAttributeName: (id)kCFBooleanTrue, (id)kCTFontAttributeName: (id)font} retain];
+    selectedAttributes1 = [@{(id)kCTForegroundColorFromContextAttributeName : (id)kCFBooleanTrue,
+                             (id)kCTFontAttributeName : (id)font } retain];
     CFRelease(font);
   }
   static NSDictionary* selectedAttributes2 = nil;
   if (selectedAttributes2 == nil) {
     CTFontRef font = CTFontCreateUIFontForLanguage(kCTFontUIFontEmphasizedSystem, 10.0, CFSTR("en-US"));
-    selectedAttributes2 = [@{(id)kCTForegroundColorFromContextAttributeName: (id)kCFBooleanTrue, (id)kCTFontAttributeName: (id)font} retain];
+    selectedAttributes2 = [@{(id)kCTForegroundColorFromContextAttributeName : (id)kCFBooleanTrue,
+                             (id)kCTFontAttributeName : (id)font } retain];
     CFRelease(font);
   }
 
@@ -1459,15 +1453,15 @@ static void _DrawSelectedNode(CGContextRef context, CGFloat x, CGFloat y, GINode
   CGContextSaveGState(context);
   CGContextSetTextDrawingMode(context, kCGTextFill);
   CGContextSetTextMatrix(context, CGAffineTransformIdentity);
-  
-  // Draw background
+
+// Draw background
 #if __DEBUG_DRAWING__
   CGContextSetFillColorWithColor(context, [[NSColor colorWithDeviceHue:(CGFloat)(random() % 1000) / 1000.0 saturation:0.25 brightness:0.75 alpha:1.0] CGColor]);
 #else
   CGContextSetFillColorWithColor(context, _backgroundColor.CGColor);
 #endif
   CGContextFillRect(context, dirtyRect);
-  
+
 #if __DEBUG_DRAWING__
   // Draw grid
   CGContextSetLineWidth(context, 1);
@@ -1486,7 +1480,7 @@ static void _DrawSelectedNode(CGContextRef context, CGFloat x, CGFloat y, GINode
     CGContextStrokePath(context);
   }
 #endif
-  
+
   // Find all lines in the drawing area
   for (NSUInteger index = startIndex; index <= endIndex; ++index) {
     GILayer* layer = layers[index];
@@ -1496,7 +1490,7 @@ static void _DrawSelectedNode(CGContextRef context, CGFloat x, CGFloat y, GINode
       }
     }
   }
-  
+
   // Draw lines
   if (lines.count) {
     CGContextSetLineJoin(context, kCGLineJoinMiter);
@@ -1522,7 +1516,7 @@ static void _DrawSelectedNode(CGContextRef context, CGFloat x, CGFloat y, GINode
     }
     CGContextSetBlendMode(context, kCGBlendModeNormal);
   }
-  
+
   // Draw nodes
   CGContextSetLineWidth(context, 1);
   for (NSUInteger index = startIndex; index <= endIndex; ++index) {
@@ -1530,12 +1524,12 @@ static void _DrawSelectedNode(CGContextRef context, CGFloat x, CGFloat y, GINode
     CGFloat y = CONVERT_Y(offset - layer.y);
     for (GINode* node in layer.nodes) {
       CGFloat x = CONVERT_X(node.x);
-      
+
       if (layer.index == 0) {
         _DrawTipNode(node, context, x, y);
         continue;
       }
-      
+
       if (node.dummy) {
 #if __DEBUG_DRAWING__
         CGContextSetRGBFillColor(context, 1.0, 1.0, 1.0, 1.0);
@@ -1545,32 +1539,33 @@ static void _DrawSelectedNode(CGContextRef context, CGFloat x, CGFloat y, GINode
 #endif
         continue;
       }
-      
+
       if (node.commit.root) {
         _DrawRootNode(node, context, x, y);
         continue;
       }
-      
+
       _DrawNode(node, context, x, y);
     }
   }
-  
+
 #if __DEBUG_MAIN_LINE__ || __DEBUG_DESCENDANTS__ || __DEBUG_ANCESTORS__
   // Draw highlighted debug nodes
   if (_selectedNode) {
     CGContextSetLineWidth(context, 3);
     CGContextSetRGBStrokeColor(context, 0.0, 0.0, 0.0, 1.0);
 #if __DEBUG_MAIN_LINE__
-    [_graph walkMainLineForAncestorsOfNode:_selectedNode usingBlock:^(GINode* node, BOOL* stop) {
-      CGFloat x = CONVERT_X(node.x);
-      CGFloat y = CONVERT_Y(offset - node.layer.y);
-      if (y < dirtyRect.origin.y + dirtyRect.size.height + kSpacingY / 2) {
-        CGContextStrokeEllipseInRect(context, CGRectMake(x - 5, y - 5, 10, 10));
-        if (y < dirtyRect.origin.y - kSpacingY / 2) {
-          *stop = YES;
-        }
-      }
-    }];
+    [_graph walkMainLineForAncestorsOfNode:_selectedNode
+                                usingBlock:^(GINode* node, BOOL* stop) {
+                                  CGFloat x = CONVERT_X(node.x);
+                                  CGFloat y = CONVERT_Y(offset - node.layer.y);
+                                  if (y < dirtyRect.origin.y + dirtyRect.size.height + kSpacingY / 2) {
+                                    CGContextStrokeEllipseInRect(context, CGRectMake(x - 5, y - 5, 10, 10));
+                                    if (y < dirtyRect.origin.y - kSpacingY / 2) {
+                                      *stop = YES;
+                                    }
+                                  }
+                                }];
 #elif __DEBUG_DESCENDANTS__ || __DEBUG_ANCESTORS__
     __block NSUInteger count = 1;
     void (^commitBlock)(GCHistoryCommit*, BOOL*) = ^(GCHistoryCommit* commit, BOOL* stop) {
@@ -1591,9 +1586,11 @@ static void _DrawSelectedNode(CGContextRef context, CGFloat x, CGFloat y, GINode
       }
     };
 #if __DEBUG_DESCENDANTS__
-    [_graph.history walkDescendantsOfCommits:@[_selectedNode.commit] usingBlock:commitBlock];
+    [_graph.history walkDescendantsOfCommits:@[ _selectedNode.commit ]
+                                  usingBlock:commitBlock];
 #elif __DEBUG_ANCESTORS__
-    [_graph.history walkAncestorsOfCommits:@[_selectedNode.commit] usingBlock:commitBlock];
+    [_graph.history walkAncestorsOfCommits:@[ _selectedNode.commit ]
+                                usingBlock:commitBlock];
 #else
 #error
 #endif
@@ -1602,7 +1599,7 @@ static void _DrawSelectedNode(CGContextRef context, CGFloat x, CGFloat y, GINode
 #endif
   }
 #endif
-  
+
   // Draw node labels
   if (_showsTagLabels || _showsBranchLabels) {
     CGContextSetLineWidth(context, 1);
@@ -1623,7 +1620,7 @@ static void _DrawSelectedNode(CGContextRef context, CGFloat x, CGFloat y, GINode
       }
     }
   }
-  
+
   // Draw HEAD
   GCHistoryCommit* headCommit = _graph.history.HEADCommit;
   if (headCommit) {
@@ -1650,10 +1647,9 @@ static void _DrawSelectedNode(CGContextRef context, CGFloat x, CGFloat y, GINode
       }
     }
   }
-  
+
   // Draw branch titles in reverse order
   if (startIndex == 0) {
-    
     // Avoid overlapping by remembering coordinates of the previous title corner
     CGPoint previousBranchCorner = CGPointMake(CGFLOAT_MAX, 0.0);
     for (GIBranch* branch in _graph.branches.reverseObjectEnumerator) {
@@ -1663,7 +1659,7 @@ static void _DrawSelectedNode(CGContextRef context, CGFloat x, CGFloat y, GINode
       _DrawBranchTitle(context, x, y, &previousBranchCorner, branch, node.primaryLine.color, graphOptions);
     }
   }
-  
+
   // Draw selected node if any
   if (_selectedNode) {
     CGFloat x = CONVERT_X(_selectedNode.x);
@@ -1676,10 +1672,10 @@ static void _DrawSelectedNode(CGContextRef context, CGFloat x, CGFloat y, GINode
       _DrawSelectedNode(context, x, y, _selectedNode, selectedAttributes1, selectedAttributes2, _dateFormatter, self.window.keyWindow && (self.window.firstResponder == self));
     }
   }
-  
+
   // Restore graphics context
   CGContextRestoreGState(context);
-  
+
   // Clean up
   [lines release];
 }

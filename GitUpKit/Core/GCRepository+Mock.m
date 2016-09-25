@@ -1,4 +1,4 @@
-//  Copyright (C) 2015 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2016 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -40,11 +40,11 @@ static const git_oid* _CommitParentCallback(size_t idx, void* payload) {
   git_signature* signature = NULL;
   git_treebuilder* builder = NULL;
   git_oid treeOID;
-  
+
   // Create empty tree
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_treebuilder_new, &builder, self.private, NULL);
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_treebuilder_write, &treeOID, builder);
-  
+
   // Parse notation lines
   for (NSString* line in [notation componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]]) {
     if (!line.length || ([line characterAtIndex:0] == '#')) {
@@ -58,7 +58,7 @@ static const git_oid* _CommitParentCallback(size_t idx, void* payload) {
       if (![scanner scanUpToCharactersFromSet:[NSCharacterSet whitespaceCharacterSet] intoString:&string]) {
         break;
       }
-      
+
       // Parse commit description
       NSString* message = nil;
       NSString* tag = nil;
@@ -71,7 +71,6 @@ static const git_oid* _CommitParentCallback(size_t idx, void* payload) {
         NSUInteger index = range.location;
         while (index < string.length) {
           switch ([string characterAtIndex:index]) {
-            
             // Parents
             case '(': {
               range = [string rangeOfString:@")" options:0 range:NSMakeRange(index, string.length - index)];
@@ -85,7 +84,7 @@ static const git_oid* _CommitParentCallback(size_t idx, void* payload) {
               index = range.location + range.length;
               break;
             }
-            
+
             // Tag
             case '{': {
               range = [string rangeOfString:@"}" options:0 range:NSMakeRange(index, string.length - index)];
@@ -97,7 +96,7 @@ static const git_oid* _CommitParentCallback(size_t idx, void* payload) {
               index = range.location + range.length;
               break;
             }
-            
+
             // Local branch
             case '<': {
               range = [string rangeOfString:@">" options:0 range:NSMakeRange(index, string.length - index)];
@@ -109,7 +108,7 @@ static const git_oid* _CommitParentCallback(size_t idx, void* payload) {
               index = range.location + range.length;
               break;
             }
-            
+
             // Remote branch
             case '[': {
               range = [string rangeOfString:@"]" options:0 range:NSMakeRange(index, string.length - index)];
@@ -121,13 +120,12 @@ static const git_oid* _CommitParentCallback(size_t idx, void* payload) {
               index = range.location + range.length;
               break;
             }
-            
+
             default: {
               XLOG_DEBUG_UNREACHABLE();
               GC_SET_GENERIC_ERROR(@"Invalid token");
               goto cleanup;
             }
-            
           }
         }
       } else {
@@ -142,7 +140,7 @@ static const git_oid* _CommitParentCallback(size_t idx, void* payload) {
           }
         }
       }
-      
+
       // Create commit with empty tree
       CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_signature_new, &signature, "user", "user@domain.com", NSTimeIntervalSince1970 + commits.count, 0);
       git_oid oid;
@@ -156,7 +154,7 @@ static const git_oid* _CommitParentCallback(size_t idx, void* payload) {
       [commits addObject:commit];
       XLOG_DEBUG_CHECK(!CFDictionaryContainsValue(cache, (__bridge const void*)message));
       CFDictionarySetValue(cache, (__bridge const void*)message, (__bridge const void*)commit);
-      
+
       // Create lightweight tag if necessary
       if (tag) {
         const char* refName = [[@kTagsNamespace stringByAppendingString:tag] UTF8String];
@@ -164,7 +162,7 @@ static const git_oid* _CommitParentCallback(size_t idx, void* payload) {
         CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_reference_create, &reference, self.private, refName, &oid, force, NULL);
         git_reference_free(reference);
       }
-      
+
       // Create local branch if necessary
       if (localBranch) {
         const char* refName = [[@kHeadsNamespace stringByAppendingString:localBranch] UTF8String];
@@ -172,7 +170,7 @@ static const git_oid* _CommitParentCallback(size_t idx, void* payload) {
         CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_reference_create, &reference, self.private, refName, &oid, force, NULL);
         git_reference_free(reference);
       }
-      
+
       // Create remote branch if necessary
       if (remoteBranch) {
         const char* refName = [[@kRemotesNamespace stringByAppendingString:remoteBranch] UTF8String];
@@ -183,7 +181,7 @@ static const git_oid* _CommitParentCallback(size_t idx, void* payload) {
     }
   }
   success = YES;
-  
+
 cleanup:
   git_treebuilder_free(builder);
   git_signature_free(signature);
@@ -200,7 +198,7 @@ cleanup:
   for (GCHistoryCommit* commit in self.allCommits) {
     NSMutableString* string = [[NSMutableString alloc] init];
     [string appendString:commit.summary];
-    
+
     NSArray* parents = commit.parents;
     if (parents.count) {
       [string appendString:@"("];
@@ -213,7 +211,7 @@ cleanup:
       }
       [string appendString:@")"];
     }
-    
+
     for (GCHistoryTag* tag in commit.tags) {
       [string appendFormat:@"{%@}", tag.name];
     }
@@ -223,7 +221,7 @@ cleanup:
     for (GCHistoryRemoteBranch* remoteBranch in commit.remoteBranches) {
       [string appendFormat:@"[%@]", remoteBranch.name];
     }
-    
+
     [array addObject:string];
   }
   return [[array sortedArrayUsingSelector:@selector(localizedStandardCompare:)] componentsJoinedByString:@" "];
@@ -240,4 +238,3 @@ cleanup:
 }
 
 @end
-

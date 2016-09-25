@@ -1,4 +1,4 @@
-//  Copyright (C) 2015 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2016 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -116,7 +116,7 @@
   if (index == nil) {
     return NO;
   }
-  if ([[NSFileManager defaultManager] fileExistsAtPath:[self absolutePathForFile:path]] && ![self addFileInWorkingDirectory:path toIndex:index error:error]) {
+  if ([[NSFileManager defaultManager] fileExistsAtPath:[self absolutePathForFile:path] followLastSymlink:NO] && ![self addFileInWorkingDirectory:path toIndex:index error:error]) {
     return NO;
   }
   return [self clearConflictForFile:path inIndex:index error:error] && [self writeRepositoryIndex:index error:error];

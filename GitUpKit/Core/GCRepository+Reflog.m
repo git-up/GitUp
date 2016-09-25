@@ -1,4 +1,4 @@
-//  Copyright (C) 2015 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2016 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -41,7 +41,7 @@ static inline GCCommit* _LoadCommit(GCRepository* repository, const git_oid* oid
 - (id)initWithRepository:(GCRepository*)repository entry:(const git_reflog_entry*)entry {
   if ((self = [super init])) {
     _repository = repository;
-    
+
     git_oid_cpy(&_fromOID, git_reflog_entry_id_old(entry));
     if (!git_oid_iszero(&_fromOID)) {
       _fromSHA1 = [GCGitOIDToSHA1(&_fromOID) retain];
@@ -58,7 +58,7 @@ static inline GCCommit* _LoadCommit(GCRepository* repository, const git_oid* oid
     _time = signature->when;
     _committerName = [[NSString alloc] initWithUTF8String:signature->name];
     _committerEmail = [[NSString alloc] initWithUTF8String:signature->email];
-    
+
     _references = [[NSMutableArray alloc] init];
     _messages = [[NSMutableArray alloc] init];
   }
@@ -72,10 +72,10 @@ static inline GCCommit* _LoadCommit(GCRepository* repository, const git_oid* oid
   [_toCommit release];
   [_committerName release];
   [_committerEmail release];
-  
+
   [_references release];
   [_messages release];
-  
+
   [super dealloc];
 }
 
@@ -100,11 +100,10 @@ static inline BOOL _CStringHasPrefix(const char* string, const char* prefix) {
 }
 
 static inline GCReflogActions _ActionsFromMessage(const char* message) {
-  
   if (_CStringHasPrefix(message, kGCReflogCustomPrefix)) {
     return kGCReflogAction_GitUp;
   }
-  
+
   if (_CStringHasPrefix(message, kGCReflogMessagePrefix_Git_Commit)) {
     return kGCReflogAction_Commit;
   }
@@ -114,18 +113,18 @@ static inline GCReflogActions _ActionsFromMessage(const char* message) {
   if (_CStringHasPrefix(message, kGCReflogMessagePrefix_Git_Commit_Amend)) {
     return kGCReflogAction_AmendCommit;
   }
-  
+
   if (_CStringHasPrefix(message, kGCReflogMessagePrefix_Git_Checkout)) {
     return kGCReflogAction_Checkout;
   }
-  
+
   if (_CStringHasPrefix(message, kGCReflogMessagePrefix_Git_Branch_Created)) {
     return kGCReflogAction_CreateBranch;
   }
   if (_CStringHasPrefix(message, kGCReflogMessagePrefix_Git_Branch_Renamed)) {
     return kGCReflogAction_RenameBranch;
   }
-  
+
   if (_CStringHasPrefix(message, kGCReflogMessagePrefix_Git_Merge)) {
     return kGCReflogAction_Merge;
   }
@@ -141,7 +140,7 @@ static inline GCReflogActions _ActionsFromMessage(const char* message) {
   if (_CStringHasPrefix(message, kGCReflogMessagePrefix_Git_Revert)) {
     return kGCReflogAction_Revert;
   }
-  
+
   if (_CStringHasPrefix(message, kGCReflogMessagePrefix_Git_Fetch)) {
     return kGCReflogAction_Fetch;
   }
@@ -154,7 +153,7 @@ static inline GCReflogActions _ActionsFromMessage(const char* message) {
   if (_CStringHasPrefix(message, kGCReflogMessagePrefix_Git_Clone)) {
     return kGCReflogAction_Clone;
   }
-  
+
   return 0;
 }
 
@@ -252,49 +251,51 @@ static CFHashCode _EntryHashCallBack(const void* value) {
   NSMutableArray* entries = [[NSMutableArray alloc] init];
   CFSetCallBacks callbacks = {0, NULL, NULL, NULL, _EntryEqualCallBack, _EntryHashCallBack};
   CFMutableSetRef cache = CFSetCreateMutable(kCFAllocatorDefault, 0, &callbacks);
-  BOOL success = [self enumerateReferencesWithOptions:(kGCReferenceEnumerationOption_IncludeHEAD | kGCReferenceEnumerationOption_RetainReferences) error:error usingBlock:^BOOL(git_reference* rawReference) {
-    
-    if (git_reference_has_log(self.private, git_reference_name(rawReference))) {
-      git_reflog* reflog;
-      CALL_LIBGIT2_FUNCTION_RETURN(NO, git_reflog_read, &reflog, self.private, git_reference_name(rawReference));
-      GCReference* reference = nil;
-      if (git_reference_is_tag(rawReference)) {
-        reference = [[GCHistoryTag alloc] initWithRepository:self reference:rawReference];
-      } else if (git_reference_is_branch(rawReference)) {
-        reference = [[GCHistoryLocalBranch alloc] initWithRepository:self reference:rawReference];
-      } else if (git_reference_is_remote(rawReference)) {
-        reference = [[GCHistoryRemoteBranch alloc] initWithRepository:self reference:rawReference];
-      } else {
-        reference = [[GCReference alloc] initWithRepository:self reference:rawReference];
-      }
-      
-      for (size_t i = 0, count = git_reflog_entrycount(reflog); i < count; ++i) {
-        const git_reflog_entry* entry = git_reflog_entry_byindex(reflog, i);
-        if (!git_oid_equal(git_reflog_entry_id_new(entry), git_reflog_entry_id_old(entry))) {  // Skip no-op entries
-          GCReflogEntry* reflogEntry = [[GCReflogEntry alloc] initWithRepository:self entry:entry];
-          GCReflogEntry* existingEntry = CFSetGetValue(cache, (const void*)reflogEntry);
-          if (existingEntry) {
-            XLOG_DEBUG_CHECK([existingEntry.date isEqualToDate:reflogEntry.date]);
-            XLOG_DEBUG_CHECK([existingEntry.committerName isEqualToString:reflogEntry.committerName]);
-            XLOG_DEBUG_CHECK([existingEntry.committerEmail isEqualToString:reflogEntry.committerEmail]);
-            [existingEntry addReference:reference withMessage:git_reflog_entry_message(entry)];
-          } else {
-            [reflogEntry addReference:reference withMessage:git_reflog_entry_message(entry)];
-            [entries addObject:reflogEntry];
-            CFSetAddValue(cache, (const void*)reflogEntry);
-          }
-          [reflogEntry release];
-        }
-      }
-      
-      [reference release];
-      git_reflog_free(reflog);
-    } else {
-      git_reference_free(rawReference);
-    }
-    return YES;
-    
-  }];
+  BOOL success = [self enumerateReferencesWithOptions:(kGCReferenceEnumerationOption_IncludeHEAD | kGCReferenceEnumerationOption_RetainReferences)
+                                                error:error
+                                           usingBlock:^BOOL(git_reference* rawReference) {
+
+                                             if (git_reference_has_log(self.private, git_reference_name(rawReference))) {
+                                               git_reflog* reflog;
+                                               CALL_LIBGIT2_FUNCTION_RETURN(NO, git_reflog_read, &reflog, self.private, git_reference_name(rawReference));
+                                               GCReference* reference = nil;
+                                               if (git_reference_is_tag(rawReference)) {
+                                                 reference = [[GCHistoryTag alloc] initWithRepository:self reference:rawReference];
+                                               } else if (git_reference_is_branch(rawReference)) {
+                                                 reference = [[GCHistoryLocalBranch alloc] initWithRepository:self reference:rawReference];
+                                               } else if (git_reference_is_remote(rawReference)) {
+                                                 reference = [[GCHistoryRemoteBranch alloc] initWithRepository:self reference:rawReference];
+                                               } else {
+                                                 reference = [[GCReference alloc] initWithRepository:self reference:rawReference];
+                                               }
+
+                                               for (size_t i = 0, count = git_reflog_entrycount(reflog); i < count; ++i) {
+                                                 const git_reflog_entry* entry = git_reflog_entry_byindex(reflog, i);
+                                                 if (!git_oid_equal(git_reflog_entry_id_new(entry), git_reflog_entry_id_old(entry))) {  // Skip no-op entries
+                                                   GCReflogEntry* reflogEntry = [[GCReflogEntry alloc] initWithRepository:self entry:entry];
+                                                   GCReflogEntry* existingEntry = CFSetGetValue(cache, (const void*)reflogEntry);
+                                                   if (existingEntry) {
+                                                     XLOG_DEBUG_CHECK([existingEntry.date isEqualToDate:reflogEntry.date]);
+                                                     XLOG_DEBUG_CHECK([existingEntry.committerName isEqualToString:reflogEntry.committerName]);
+                                                     XLOG_DEBUG_CHECK([existingEntry.committerEmail isEqualToString:reflogEntry.committerEmail]);
+                                                     [existingEntry addReference:reference withMessage:git_reflog_entry_message(entry)];
+                                                   } else {
+                                                     [reflogEntry addReference:reference withMessage:git_reflog_entry_message(entry)];
+                                                     [entries addObject:reflogEntry];
+                                                     CFSetAddValue(cache, (const void*)reflogEntry);
+                                                   }
+                                                   [reflogEntry release];
+                                                 }
+                                               }
+
+                                               [reference release];
+                                               git_reflog_free(reflog);
+                                             } else {
+                                               git_reference_free(rawReference);
+                                             }
+                                             return YES;
+
+                                           }];
   CFRelease(cache);
   if (!success) {
     [entries release];

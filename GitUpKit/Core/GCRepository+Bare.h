@@ -1,4 +1,4 @@
-//  Copyright (C) 2015 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2016 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -69,11 +69,11 @@ typedef GCCommit* (^GCConflictHandler)(GCIndex* index, GCCommit* ourCommit, GCCo
                              error:(NSError**)error;
 
 - (GCCommit*)copyCommit:(GCCommit*)copyCommit
-     withUpdatedMessage:(NSString*)message
-         updatedParents:(NSArray*)parents
-   updatedTreeFromIndex:(GCIndex*)index
-        updateCommitter:(BOOL)updateCommitter
-                  error:(NSError**)error;
+      withUpdatedMessage:(NSString*)message
+          updatedParents:(NSArray*)parents
+    updatedTreeFromIndex:(GCIndex*)index
+         updateCommitter:(BOOL)updateCommitter
+                   error:(NSError**)error;
 
 - (GCCommit*)replayCommit:(GCCommit*)replayCommit
                ontoCommit:(GCCommit*)ontoCommit

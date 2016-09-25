@@ -1,4 +1,4 @@
-//  Copyright (C) 2015 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2016 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -51,7 +51,7 @@ static int _DiffNotifyCallback(const git_diff* diff_so_far, const git_diff_delta
   git_diff_options diffOptions = GIT_DIFF_OPTIONS_INIT;
   git_delta_t delta_status = GIT_DELTA_UNMODIFIED;
   int status;
-  
+
   // Prepare
   diffOptions.flags = GIT_DIFF_SKIP_BINARY_CHECK;  // This should not be needed since not generating patches anyway
   diffOptions.notify_cb = _DiffNotifyCallback;
@@ -60,7 +60,7 @@ static int _DiffNotifyCallback(const git_diff* diff_so_far, const git_diff_delta
   if (index == NULL) {
     goto cleanup;
   }
-  
+
   // Check repository state
   if (!(options & kGCCleanCheckOption_IgnoreState)) {
     if (git_repository_state(self.private) != GIT_REPOSITORY_STATE_NONE) {
@@ -68,7 +68,7 @@ static int _DiffNotifyCallback(const git_diff* diff_so_far, const git_diff_delta
       goto cleanup;
     }
   }
-  
+
   // Check index conflicts
   if (!(options & kGCCleanCheckOption_IgnoreIndexConflicts)) {
     if (git_index_has_conflicts(index)) {
@@ -76,7 +76,7 @@ static int _DiffNotifyCallback(const git_diff* diff_so_far, const git_diff_delta
       goto cleanup;
     }
   }
-  
+
   // Check index changes
   if (!(options & kGCCleanCheckOption_IgnoreIndexChanges)) {
     if (![self loadHEADCommit:&commit resolvedReference:NULL error:error]) {
@@ -92,7 +92,7 @@ static int _DiffNotifyCallback(const git_diff* diff_so_far, const git_diff_delta
     }
     CHECK_LIBGIT2_FUNCTION_CALL(goto cleanup, status, == GIT_OK);
   }
-  
+
   // Check working directory changes
   if (!(options & kGCCleanCheckOption_IgnoreWorkingDirectoryChanges)) {
     if (!(options & kGCCleanCheckOption_IgnoreUntrackedFiles)) {
@@ -113,10 +113,10 @@ static int _DiffNotifyCallback(const git_diff* diff_so_far, const git_diff_delta
     }
     CHECK_LIBGIT2_FUNCTION_CALL(goto cleanup, status, == GIT_OK);
   }
-  
+
   // We're clean
   clean = YES;
-  
+
 cleanup:
   git_diff_free(diff2);
   git_diff_free(diff1);

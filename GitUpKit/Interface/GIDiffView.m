@@ -1,4 +1,4 @@
-//  Copyright (C) 2015 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2016 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -47,23 +47,23 @@ const char* GIDiffViewMissingNewlinePlaceholder = "🚫\n";
 @implementation GIDiffView
 
 + (void)initialize {
-  GIDiffViewAttributes = CFBridgingRetain(@{(id)kCTFontAttributeName: [NSFont userFixedPitchFontOfSize:kTextFontSize], (id)kCTForegroundColorFromContextAttributeName: (id)kCFBooleanTrue});
-  
+  GIDiffViewAttributes = CFBridgingRetain(@{(id)kCTFontAttributeName : [NSFont userFixedPitchFontOfSize:kTextFontSize], (id)kCTForegroundColorFromContextAttributeName : (id)kCFBooleanTrue});
+
   CFAttributedStringRef addedString = CFAttributedStringCreate(kCFAllocatorDefault, CFSTR("+"), GIDiffViewAttributes);
   GIDiffViewAddedLine = CTLineCreateWithAttributedString(addedString);
   CFRelease(addedString);
-  
+
   CFAttributedStringRef deletedString = CFAttributedStringCreate(kCFAllocatorDefault, CFSTR("-"), GIDiffViewAttributes);
   GIDiffViewDeletedLine = CTLineCreateWithAttributedString(deletedString);
   CFRelease(deletedString);
-  
+
   CGFloat ascent;
   CGFloat descent;
   CGFloat leading;
   CTLineGetTypographicBounds(GIDiffViewAddedLine, &ascent, &descent, &leading);
   GIDiffViewLineHeight = ceilf(ascent + descent + leading) + kTextLineHeightPadding;
   GIDiffViewLineDescent = ceilf(descent) + kTextLineDescentAdjustment;
-  
+
   GIDiffViewDeletedBackgroundColor = [NSColor colorWithDeviceRed:1.0 green:0.9 blue:0.9 alpha:1.0];
   GIDiffViewDeletedHighlightColor = [NSColor colorWithDeviceRed:1.0 green:0.7 blue:0.7 alpha:1.0];
   GIDiffViewAddedBackgroundColor = [NSColor colorWithDeviceRed:0.85 green:1.0 blue:0.85 alpha:1.0];
@@ -84,7 +84,7 @@ const char* GIDiffViewMissingNewlinePlaceholder = "🚫\n";
 
 - (void)viewDidMoveToWindow {
   [super viewDidMoveToWindow];
-  
+
   if (self.window) {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_windowKeyDidChange:) name:NSWindowDidBecomeKeyNotification object:self.window];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_windowKeyDidChange:) name:NSWindowDidResignKeyNotification object:self.window];
@@ -134,7 +134,7 @@ const char* GIDiffViewMissingNewlinePlaceholder = "🚫\n";
   if (patch != _patch) {
     _patch = patch;
     [self didUpdatePatch];
-    
+
     [self setNeedsDisplay:YES];
   }
 }
@@ -190,16 +190,15 @@ const char* GIDiffViewMissingNewlinePlaceholder = "🚫\n";
 }
 
 - (BOOL)validateUserInterfaceItem:(id<NSValidatedUserInterfaceItem>)item {
-  
   if (item.action == @selector(copy:)) {
     return [self hasSelection];
   }
-  
+
   return NO;
 }
 
 - (void)copy:(id)sender {
-  [[NSPasteboard generalPasteboard] declareTypes:@[NSPasteboardTypeString] owner:nil];
+  [[NSPasteboard generalPasteboard] declareTypes:@[ NSPasteboardTypeString ] owner:nil];
   NSString* text;
   [self getSelectedText:&text oldLines:NULL newLines:NULL];
   [[NSPasteboard generalPasteboard] setString:text forType:NSPasteboardTypeString];

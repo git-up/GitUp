@@ -1,4 +1,4 @@
-//  Copyright (C) 2015 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2016 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ static inline void __GCItemListInitialize(GCItemList* list, size_t initialCapaci
 #define GC_LIST_INITIALIZE(name, initialCapacity, itemType) __GCItemListInitialize(&name, initialCapacity, sizeof(itemType))
 
 #define GC_LIST_ALLOCATE(name, initialCapacity, itemType) \
-  __block GCItemList name; \
+  __block GCItemList name;                                \
   GC_LIST_INITIALIZE(name, initialCapacity, itemType)
 
 #define GC_LIST_ROOT_POINTER(name) name.items
@@ -46,7 +46,7 @@ static inline void __GCItemListInitialize(GCItemList* list, size_t initialCapaci
 
 #define GC_LIST_CAPACITY(name) name.capacity
 
-#define GC_LIST_ITEM_POINTER(name, index) (name.items + (index) * name.size)
+#define GC_LIST_ITEM_POINTER(name, index) (name.items + (index)*name.size)
 
 static inline void __GCItemListAppend(GCItemList* list, const void* itemPointer) {
   if (list->count == list->capacity) {
@@ -67,7 +67,7 @@ static inline void __GCItemListAppend(GCItemList* list, const void* itemPointer)
 #define GC_LIST_APPEND(name, itemPointer) __GCItemListAppend(&name, itemPointer)
 
 #define GC_LIST_FOR_LOOP_POINTER(name, pointer) \
-  pointer = (typeof(pointer))name.items; \
+  pointer = (typeof(pointer))name.items;        \
   for (size_t __##name = 0; (__##name < name.count) && (pointer = (typeof(pointer))GC_LIST_ITEM_POINTER(name, __##name), 1); ++__##name)
 
 #define GC_LIST_TRUNCATE(name, newCount) name.count = newCount
@@ -108,7 +108,7 @@ static inline void __GCPointerListInitialize(GCPointerList* list, size_t initial
 #define GC_POINTER_LIST_INITIALIZE(name, initialSize) __GCPointerListInitialize(&name, initialSize)
 
 #define GC_POINTER_LIST_ALLOCATE(name, initialSize) \
-  __block GCPointerList name; \
+  __block GCPointerList name;                       \
   GC_POINTER_LIST_INITIALIZE(name, initialSize)
 
 #define GC_POINTER_LIST_ROOT(name) name.pointers
@@ -178,14 +178,14 @@ static inline BOOL __GCPointerListContains(GCPointerList* list, void* pointer) {
 #define GC_POINTER_LIST_CONTAINS(name, pointer) __GCPointerListContains(&name, pointer)
 
 #define GC_POINTER_LIST_FOR_LOOP_VARIABLE(name, variable) \
-  variable = GC_POINTER_LIST_GET(name, 0); \
+  variable = GC_POINTER_LIST_GET(name, 0);                \
   for (size_t __##variable = 0; (__##variable < name.count) && (variable = GC_POINTER_LIST_GET(name, __##variable), 1); ++__##variable)
 
 #define GC_POINTER_LIST_FOR_LOOP(name, type, variable) \
-  type variable; \
+  type variable;                                       \
   GC_POINTER_LIST_FOR_LOOP_VARIABLE(name, variable)
 
-#define GC_POINTER_LIST_REVERSE_FOR_LOOP(name, type, variable) \
+#define GC_POINTER_LIST_REVERSE_FOR_LOOP(name, type, variable)                   \
   type variable = name.count ? GC_POINTER_LIST_GET(name, name.count - 1) : NULL; \
   for (ssize_t __##variable = name.count - 1; (__##variable >= 0) && (variable = GC_POINTER_LIST_GET(name, __##variable), 1); --__##variable)
 

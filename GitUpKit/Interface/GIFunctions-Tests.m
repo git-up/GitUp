@@ -1,4 +1,4 @@
-//  Copyright (C) 2015 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2016 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -23,29 +23,29 @@
 @implementation GCTests (GIFunctions)
 
 #define TEST_DATE_FORMATTING(year1, month1, day1, hour1, minute1, second1, year2, month2, day2, hour2, minute2, second2, expected) \
-do { \
-  NSCalendar* calendar = [NSCalendar currentCalendar]; \
-  \
-  NSDateComponents* components1 = [[NSDateComponents alloc] init]; \
-  components1.year = year1; \
-  components1.month = month1; \
-  components1.day = day1; \
-  components1.hour = hour1; \
-  components1.minute = minute1; \
-  components1.second = second1; \
-  NSDate* date1 = [calendar dateFromComponents:components1]; \
-  \
-  NSDateComponents* components2 = [[NSDateComponents alloc] init]; \
-  components2.year = year2; \
-  components2.month = month2; \
-  components2.day = day2; \
-  components2.hour = hour2; \
-  components2.minute = minute2; \
-  components2.second = second2; \
-  NSDate* date2 = [calendar dateFromComponents:components2]; \
-  \
-  XCTAssertEqualObjects(GIFormatRelativeDateDifference(date1, date2, YES), expected); \
-} while (0)
+  do {                                                                                                                             \
+    NSCalendar* calendar = [NSCalendar currentCalendar];                                                                           \
+                                                                                                                                   \
+    NSDateComponents* components1 = [[NSDateComponents alloc] init];                                                               \
+    components1.year = year1;                                                                                                      \
+    components1.month = month1;                                                                                                    \
+    components1.day = day1;                                                                                                        \
+    components1.hour = hour1;                                                                                                      \
+    components1.minute = minute1;                                                                                                  \
+    components1.second = second1;                                                                                                  \
+    NSDate* date1 = [calendar dateFromComponents:components1];                                                                     \
+                                                                                                                                   \
+    NSDateComponents* components2 = [[NSDateComponents alloc] init];                                                               \
+    components2.year = year2;                                                                                                      \
+    components2.month = month2;                                                                                                    \
+    components2.day = day2;                                                                                                        \
+    components2.hour = hour2;                                                                                                      \
+    components2.minute = minute2;                                                                                                  \
+    components2.second = second2;                                                                                                  \
+    NSDate* date2 = [calendar dateFromComponents:components2];                                                                     \
+                                                                                                                                   \
+    XCTAssertEqualObjects(GIFormatRelativeDateDifference(date1, date2, YES), expected);                                            \
+  } while (0)
 
 - (void)testDateFormatting {
   TEST_DATE_FORMATTING(2000, 1, 1, 0, 0, 0,

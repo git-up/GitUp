@@ -1,4 +1,4 @@
-//  Copyright (C) 2015 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2016 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -15,12 +15,12 @@
 
 #import "GCError.h"
 
-#define GC_SET_ERROR(code, ...) \
-  do { \
+#define GC_SET_ERROR(code, ...)                                    \
+  do {                                                             \
     NSString* __message = [NSString stringWithFormat:__VA_ARGS__]; \
-    if (error) { \
-      *error = GCNewError(code, __message); \
-    } \
+    if (error) {                                                   \
+      *error = GCNewError(code, __message);                        \
+    }                                                              \
   } while (0)
 
 #define GC_SET_GENERIC_ERROR(...) GC_SET_ERROR(kGCErrorCode_Generic, __VA_ARGS__)
@@ -42,7 +42,7 @@ NSString* GCGitURLFromURL(NSURL* url);
 void GCArrayApplyBlock(CFArrayRef array, void (^block)(const void* value));
 void GCSetApplyBlock(CFSetRef set, void (^block)(const void* value));
 void GCDictionaryApplyBlock(CFDictionaryRef dict, void (^block)(const void* key, const void* value));
-  
+
 #ifdef __cplusplus
 }
 #endif

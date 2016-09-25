@@ -1,4 +1,4 @@
-//  Copyright (C) 2015 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2016 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -96,20 +96,22 @@
 
 - (NSArray*)_listBranches:(NSError**)error flags:(git_branch_t)flags {
   NSMutableArray* array = [[NSMutableArray alloc] init];
-  BOOL success = [self enumerateReferencesWithOptions:kGCReferenceEnumerationOption_RetainReferences error:error usingBlock:^BOOL(git_reference* reference) {
-    
-    if ((flags & GIT_BRANCH_LOCAL) && git_reference_is_branch(reference)) {
-      GCLocalBranch* branch = [[GCLocalBranch alloc] initWithRepository:self reference:reference];
-      [array addObject:branch];
-    } else if ((flags & GIT_BRANCH_REMOTE) && git_reference_is_remote(reference)) {
-      GCRemoteBranch* branch = [[GCRemoteBranch alloc] initWithRepository:self reference:reference];
-      [array addObject:branch];
-    } else {
-      git_reference_free(reference);
-    }
-    return YES;
-    
-  }];
+  BOOL success = [self enumerateReferencesWithOptions:kGCReferenceEnumerationOption_RetainReferences
+                                                error:error
+                                           usingBlock:^BOOL(git_reference* reference) {
+
+                                             if ((flags & GIT_BRANCH_LOCAL) && git_reference_is_branch(reference)) {
+                                               GCLocalBranch* branch = [[GCLocalBranch alloc] initWithRepository:self reference:reference];
+                                               [array addObject:branch];
+                                             } else if ((flags & GIT_BRANCH_REMOTE) && git_reference_is_remote(reference)) {
+                                               GCRemoteBranch* branch = [[GCRemoteBranch alloc] initWithRepository:self reference:reference];
+                                               [array addObject:branch];
+                                             } else {
+                                               git_reference_free(reference);
+                                             }
+                                             return YES;
+
+                                           }];
   return success ? array : nil;
 }
 

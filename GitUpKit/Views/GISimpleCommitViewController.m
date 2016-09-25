@@ -1,4 +1,4 @@
-//  Copyright (C) 2015 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2016 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -42,47 +42,47 @@
 
 - (void)loadView {
   [super loadView];
-  
+
   _diffContentsViewController = [[GIDiffContentsViewController alloc] initWithRepository:self.repository];
   _diffContentsViewController.delegate = self;
   _diffContentsViewController.showsUntrackedAsAdded = YES;
   _diffContentsViewController.emptyLabel = NSLocalizedString(@"No changes in working directory", nil);
   [_contentsView replaceWithView:_diffContentsViewController.view];
-  
+
   _diffFilesViewController = [[GIDiffFilesViewController alloc] initWithRepository:self.repository];
   _diffFilesViewController.delegate = self;
   _diffFilesViewController.showsUntrackedAsAdded = YES;
   _diffFilesViewController.emptyLabel = NSLocalizedString(@"No changes in working directory", nil);
   [_filesView replaceWithView:_diffFilesViewController.view];
-  
+
   self.messageTextView.string = @"";
 }
 
 - (void)viewWillShow {
   [super viewWillShow];
-  
+
   XLOG_DEBUG_CHECK(self.repository.statusMode == kGCLiveRepositoryStatusMode_Disabled);
   self.repository.statusMode = kGCLiveRepositoryStatusMode_Unified;
-  
+
   [self _reloadContents];
 }
 
 - (void)viewDidHide {
   [super viewDidHide];
-  
+
   _unifiedStatus = nil;
   _indexConflicts = nil;
-  
+
   [_diffContentsViewController setDeltas:nil usingConflicts:nil];
   [_diffFilesViewController setDeltas:nil usingConflicts:nil];
-  
+
   XLOG_DEBUG_CHECK(self.repository.statusMode == kGCLiveRepositoryStatusMode_Unified);
   self.repository.statusMode = kGCLiveRepositoryStatusMode_Disabled;
 }
 
 - (void)repositoryStatusDidUpdate {
   [super repositoryStatusDidUpdate];
-  
+
   if (self.viewVisible) {
     [self _reloadContents];
   }
@@ -91,14 +91,14 @@
 - (void)_reloadContents {
   CGFloat offset;
   GCDiffDelta* topDelta = [_diffContentsViewController topVisibleDelta:&offset];
-  
+
   _unifiedStatus = self.repository.unifiedStatus;
   _indexConflicts = self.repository.indexConflicts;
   [_diffContentsViewController setDeltas:_unifiedStatus.deltas usingConflicts:_indexConflicts];
   [_diffFilesViewController setDeltas:_unifiedStatus.deltas usingConflicts:_indexConflicts];
-  
+
   [_diffContentsViewController setTopVisibleDelta:topDelta offset:offset];
-  
+
   _commitButton.enabled = _unifiedStatus.modified || (self.repository.state == kGCRepositoryState_Merge);  // Creating an empty commit is OK for a merge
 }
 

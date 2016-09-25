@@ -1,4 +1,4 @@
-//  Copyright (C) 2015 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2016 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -99,7 +99,7 @@
   git_commit* headCommit = NULL;
   git_index* index = NULL;
   NSString* reflogMessage;
-  
+
   int status = git_repository_head(&headReference, self.private);  // Returns a direct reference or GIT_EUNBORNBRANCH
   if (status != GIT_EUNBORNBRANCH) {
     CHECK_LIBGIT2_FUNCTION_CALL(goto cleanup, status, == GIT_OK);
@@ -109,18 +109,18 @@
     GC_SET_GENERIC_ERROR(@"Secondary parent not allowed for unborn HEAD");
     goto cleanup;
   }
-  
+
   index = [self reloadRepositoryIndex:error];
   if (index == NULL) {
     goto cleanup;
   }
-  
+
   const git_commit* parents[2] = {headCommit, parent.private};
   commit = [self createCommitFromIndex:index withParents:parents count:(headCommit ? (parent ? 2 : 1) : 0) author:NULL message:message error:error];
   if (commit == nil) {
     goto cleanup;
   }
-  
+
   if (headReference == NULL) {
     CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_reference_lookup, &headReference, self.private, kHEADReferenceFullName);
   }
@@ -132,12 +132,12 @@
   if (![self setTargetOID:git_commit_id(commit.private) forReference:headReference reflogMessage:reflogMessage newReference:NULL error:error]) {
     goto cleanup;
   }
-  
+
   if (![self cleanupState:error]) {
     goto cleanup;
   }
   success = YES;
-  
+
 cleanup:
   git_index_free(index);
   git_commit_free(headCommit);
@@ -152,31 +152,31 @@ cleanup:
   git_commit* headCommit = NULL;
   git_index* index = NULL;
   NSString* reflogMessage;
-  
+
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_repository_head, &headReference, self.private);  // Returns a direct reference or GIT_EUNBORNBRANCH
   XLOG_DEBUG_CHECK(git_reference_type(headReference) == GIT_REF_OID);
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_commit_lookup, &headCommit, self.private, git_reference_target(headReference));
-  
+
   index = [self reloadRepositoryIndex:error];
   if (index == NULL) {
     goto cleanup;
   }
-  
+
   commit = [self createCommitFromCommit:headCommit withIndex:index updatedMessage:message updatedParents:nil updateCommitter:YES error:error];
   if (commit == nil) {
     goto cleanup;
   }
-  
+
   reflogMessage = [NSString stringWithFormat:kGCReflogMessageFormat_Git_Commit_Amend, commit.summary];
   if (![self setTargetOID:git_commit_id(commit.private) forReference:headReference reflogMessage:reflogMessage newReference:NULL error:error]) {
     goto cleanup;
   }
-  
+
   if (![self cleanupState:error]) {
     goto cleanup;
   }
   success = YES;
-  
+
 cleanup:
   git_index_free(index);
   git_commit_free(headCommit);
@@ -284,7 +284,7 @@ cleanup:
 - (BOOL)loadHEADCommit:(git_commit**)commit resolvedReference:(git_reference**)resolvedReference error:(NSError**)error {
   BOOL success = NO;
   git_reference* headReference = NULL;
-  
+
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_reference_lookup, &headReference, self.private, kHEADReferenceFullName);
   // Check if HEAD is attached or unborn
   if (git_reference_type(headReference) == GIT_REF_SYMBOLIC) {
@@ -329,7 +329,7 @@ cleanup:
     }
   }
   success = YES;
-  
+
 cleanup:
   git_reference_free(headReference);
   return success;
@@ -340,14 +340,14 @@ cleanup:
 - (BOOL)mergeCommitToHEAD:(GCCommit*)commit error:(NSError**)error {
   BOOL success = NO;
   git_annotated_commit* annotatedCommit = NULL;
-  
+
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_annotated_commit_lookup, &annotatedCommit, self.private, git_commit_id(commit.private));
   git_merge_options mergeOptions = GIT_MERGE_OPTIONS_INIT;
   git_checkout_options checkoutOptions = GIT_CHECKOUT_OPTIONS_INIT;
   checkoutOptions.checkout_strategy = GIT_CHECKOUT_SAFE;
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_merge, self.private, (const git_annotated_commit**)&annotatedCommit, 1, &mergeOptions, &checkoutOptions);
   success = YES;
-  
+
 cleanup:
   git_annotated_commit_free(annotatedCommit);
   return success;
