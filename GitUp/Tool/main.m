@@ -26,7 +26,7 @@
 #define kCommunicationTimeOut 3.0
 
 static char* _help = "\
-Usage: %s [command [options]]\n\
+Usage: %s [command]\n\
 \n\
 Commands:\n\
 \n\
