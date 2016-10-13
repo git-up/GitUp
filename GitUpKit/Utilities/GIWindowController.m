@@ -216,7 +216,7 @@ static void _TimerCallBack(CFRunLoopTimerRef timer, void* info) {
 
     case kGIOverlayStyle_Informational:
       _overlayView.backgroundColor = _informationalColor;
-      _overlayDelay = 3.0;
+      _overlayDelay = 1.25;
       break;
 
     case kGIOverlayStyle_Warning:
