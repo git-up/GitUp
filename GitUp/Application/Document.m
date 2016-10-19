@@ -1958,7 +1958,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 - (void)_setSearchFieldPlaceholder:(NSString*)placeholder {
   // 10.11 and earlier: search placeholders have the same length to work around incorrect centering.
   if (kCFCoreFoundationVersionNumber < kCFCoreFoundationVersionNumber10_12) {
-    placeholder = [placeholder stringByPaddingToLength:18 withString:@" " startingAtIndex:placeholder.length > 0 ? placeholder.length - 1 : 0];
+    placeholder = [placeholder stringByPaddingToLength:18 withString:@" " startingAtIndex:0];
   }
   [(NSTextFieldCell*)_searchField.cell setPlaceholderString:placeholder];
   // 10.12: there are more centering issues, and all are fixed by triggering a layout pass.
