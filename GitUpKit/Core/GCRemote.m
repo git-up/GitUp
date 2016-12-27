@@ -173,7 +173,7 @@ cleanup:
 
   git_remote_callbacks callbacks = GIT_REMOTE_CALLBACKS_INIT;
   [self setRemoteCallbacks:&callbacks];
-  int status = git_remote_connect(remote, direction, &callbacks, NULL);
+  int status = git_remote_connect(remote, direction, &callbacks, NULL, NULL);
   if (status != GIT_OK) {
     LOG_LIBGIT2_ERROR(status);
     if (error) {
