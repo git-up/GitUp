@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 48;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -148,7 +148,7 @@
 		E267E2771B84EF1700BAB377 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0700;
+				LastUpgradeCheck = 0820;
 				ORGANIZATIONNAME = "";
 				TargetAttributes = {
 					E267E27E1B84EF1700BAB377 = {
@@ -157,7 +157,7 @@
 				};
 			};
 			buildConfigurationList = E267E27A1B84EF1700BAB377 /* Build configuration list for PBXProject "GitDiff" */;
-			compatibilityVersion = "Xcode 3.2";
+			compatibilityVersion = "Xcode 8.0";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (

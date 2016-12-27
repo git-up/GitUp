@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 48;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -1251,11 +1251,12 @@
 		E2C338A319F8562F00063D95 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0800;
+				LastUpgradeCheck = 0820;
 				ORGANIZATIONNAME = "";
 				TargetAttributes = {
 					E217531A1B91613300BE234A = {
 						CreatedOnToolsVersion = 6.4;
+						ProvisioningStyle = Manual;
 					};
 					E267E1A71B84D6C500BAB377 = {
 						CreatedOnToolsVersion = 7.0;
@@ -1268,7 +1269,7 @@
 				};
 			};
 			buildConfigurationList = E2C338A619F8562F00063D95 /* Build configuration list for PBXProject "GitUpKit" */;
-			compatibilityVersion = "Xcode 3.2";
+			compatibilityVersion = "Xcode 8.0";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -1750,7 +1751,6 @@
 		E217532F1B91613300BE234A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -1771,7 +1771,6 @@
 		E21753301B91613300BE234A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -1792,7 +1791,6 @@
 		E21753311B91613300BE234A /* Distribution */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
