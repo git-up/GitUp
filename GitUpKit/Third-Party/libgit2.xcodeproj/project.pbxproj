@@ -617,6 +617,7 @@
 		E2DC03131E126F6100CC091F /* varint.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = varint.c; sourceTree = "<group>"; };
 		E2DC03141E126F6100CC091F /* varint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = varint.h; sourceTree = "<group>"; };
 		E2DC03171E126F7000CC091F /* pthread.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = pthread.h; sourceTree = "<group>"; };
+		E2DC031A1E13C6E600CC091F /* time.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = time.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1064,6 +1065,7 @@
 				E2DC03121E126F0600CC091F /* remote.h */,
 				E21752E21B914B9600BE234A /* repository.h */,
 				E21752E31B914B9600BE234A /* stream.h */,
+				E2DC031A1E13C6E600CC091F /* time.h */,
 				E21752E41B914B9600BE234A /* transport.h */,
 			);
 			path = sys;

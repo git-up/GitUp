@@ -95,7 +95,7 @@
   [history walkAllCommitsFromRootsUsingBlock:^(GCHistoryCommit* commit, BOOL* stop) {
     [walk2 addObject:commit];
   }];
-  NSArray* array2 = @[ commits[0], commits[1], commits[2], commits[3], commits[4], commits[5], commits[6], commits[7], commits[8], commits[9] ];
+  NSArray* array2 = @[ commits[0], commits[1], commits[3], commits[2], commits[5], commits[4], commits[6], commits[7], commits[8], commits[9] ];
   XCTAssertTrue([walk2 isEqualToArray:array2]);
 
   // Check walking history through children from commit #2
