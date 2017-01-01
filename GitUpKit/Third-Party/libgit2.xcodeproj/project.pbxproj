@@ -1551,65 +1551,6 @@
 			};
 			name = Release;
 		};
-		E21751F01B912CA500BE234A /* Distribution */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				EXECUTABLE_PREFIX = lib;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"_FILE_OFFSET_BITS=64",
-					GIT_THREADS,
-					GIT_USE_ICONV,
-					GIT_COMMON_CRYPTO,
-					GIT_SECURE_TRANSPORT,
-					GIT_SSH,
-					GIT_USE_STAT_MTIMESPEC,
-				);
-				HEADER_SEARCH_PATHS = (
-					"Libraries/libssh2/$(PLATFORM_NAME)/include",
-					libgit2/src,
-					libgit2/include,
-					"libgit2/deps/http-parser",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.github.libgit2;
-				PRODUCT_NAME = git2;
-				SKIP_INSTALL = YES;
-				USE_HEADERMAP = NO;
-				WARNING_CFLAGS = (
-					"-Wall",
-					"-Wextra",
-					"-Wno-deprecated-declarations",
-					"-Wno-missing-field-initializers",
-					"-Wno-unused-function",
-					"-Wno-unused-const-variable",
-					"-Wno-incompatible-pointer-types",
-					"-Wno-shorten-64-to-32",
-				);
-			};
-			name = Distribution;
-		};
-		E21751F11B912CA500BE234A /* Distribution */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					GIT_ARCH_64,
-				);
-				MACOSX_DEPLOYMENT_TARGET = 10.8;
-				SDKROOT = macosx;
-			};
-			name = Distribution;
-		};
-		E21751F21B912CA500BE234A /* Distribution */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				SDKROOT = iphoneos;
-			};
-			name = Distribution;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1618,7 +1559,6 @@
 			buildConfigurations = (
 				E217486A1B911B5200BE234A /* Debug */,
 				E217486B1B911B5200BE234A /* Release */,
-				E21751F01B912CA500BE234A /* Distribution */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1628,7 +1568,6 @@
 			buildConfigurations = (
 				E2174BD71B91240400BE234A /* Debug */,
 				E2174BD81B91240400BE234A /* Release */,
-				E21751F11B912CA500BE234A /* Distribution */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1638,7 +1577,6 @@
 			buildConfigurations = (
 				E2174C701B9125C600BE234A /* Debug */,
 				E2174C711B9125C600BE234A /* Release */,
-				E21751F21B912CA500BE234A /* Distribution */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
