@@ -27,7 +27,9 @@
 
 #import "GCPrivate.h"
 
+#if !TARGET_OS_IPHONE
 static const char* _GitLFSPath = "/usr/local/bin/git-lfs";
+#endif
 
 static inline BOOL _IsDirectoryWritable(const char* path) {
   int status = access(path, W_OK);
