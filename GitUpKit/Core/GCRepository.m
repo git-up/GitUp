@@ -17,10 +17,17 @@
 #error This file requires ARC
 #endif
 
+#import <TargetConditionals.h>
 #import <libssh2.h>
 #import <pthread.h>
+#if !TARGET_OS_IPHONE
+#import <git2/sys/filter.h>
+#import <sys/stat.h>
+#endif
 
 #import "GCPrivate.h"
+
+static const char* _GitLFSPath = "/usr/local/bin/git-lfs";
 
 static inline BOOL _IsDirectoryWritable(const char* path) {
   int status = access(path, W_OK);
@@ -46,6 +53,49 @@ static inline NSString* _MakeDirectoryPath(const char* path) {
   return [[NSFileManager defaultManager] stringWithFileSystemRepresentation:path length:length];
 }
 
+#if !TARGET_OS_IPHONE
+
+static int _GitLFSApply(git_filter* self, void** payload, git_buf* to, const git_buf* from, const git_filter_source* src) {
+  if (from->size > 0) {
+    @autoreleasepool {
+      CFAbsoluteTime time = CFAbsoluteTimeGetCurrent();
+      NSMutableArray* arguments = [[NSMutableArray alloc] init];
+      if (git_filter_source_mode(src) == GIT_FILTER_SMUDGE) {  // ODB -> Worktree
+        [arguments addObject:@"smudge"];
+      } else if (git_filter_source_mode(src) == GIT_FILTER_CLEAN) {  // Worktree -> ODB
+        [arguments addObject:@"clean"];
+      } else {
+        XLOG_DEBUG_UNREACHABLE();
+        return -1;
+      }
+      [arguments addObject:@"--"];
+      [arguments addObject:GCFileSystemPathFromGitPath(git_filter_source_path(src))];
+      GCTask* task = [[GCTask alloc] initWithExecutablePath:[NSString stringWithUTF8String:_GitLFSPath]];
+      task.currentDirectoryPath = _MakeDirectoryPath(git_repository_path(git_filter_source_repo(src)));  // TODO: Is this the right working directory?
+      int status;
+      NSData* stdinData = [[NSData alloc] initWithBytesNoCopy:from->ptr length:from->size freeWhenDone:NO];
+      NSData* stdoutData;
+      if (![task runWithArguments:arguments stdin:stdinData stdout:&stdoutData stderr:NULL exitStatus:&status error:NULL]) {
+        XLOG_ERROR(@"git-lfs tool failed executing");
+        giterr_set_str(GITERR_FILTER, "git-lfs tool failed executing");
+        return -1;
+      }
+      XLOG_VERBOSE(@"Executed git-lfs tool in %.3f seconds", CFAbsoluteTimeGetCurrent() - time);
+      if (status != 0) {
+        XLOG_ERROR(@"git-lfs tool exited with non-zero status (%i)", status);
+        giterr_set_str(GITERR_FILTER, "git-lfs tool exited with non-zero status");
+        return -1;
+      }
+      if (git_buf_set(to, stdoutData.bytes, stdoutData.length) < 0) {  // TODO: Avoid copying data
+        return -1;
+      }
+    }
+  }
+  return 0;
+}
+
+#endif
+
 @implementation GCRepository {
 #if !TARGET_OS_IPHONE
   BOOL _didTrySSHAgent;
@@ -69,6 +119,17 @@ static inline NSString* _MakeDirectoryPath(const char* path) {
   assert(git_libgit2_init() >= 1);
   assert(libssh2_init(0) == 0);  // We can't have libgit2 using libssh2_session_init() and in turn calling this function on an arbitrary thread later on
   assert(git_openssl_set_locking() == -1);
+
+#if !TARGET_OS_IPHONE
+  struct stat info;
+  if (lstat(_GitLFSPath, &info) == 0) {
+    git_filter* filter = calloc(1, sizeof(git_filter));
+    filter->version = GIT_FILTER_VERSION;
+    filter->attributes = "filter=lfs";
+    filter->apply = _GitLFSApply;
+    assert(git_filter_register("lfs", filter, -1) == 0);  // Priority must be lower than CRLF and IDENT built-in filters
+  }
+#endif
 }
 
 - (instancetype)initWithRepository:(git_repository*)repository error:(NSError**)error {
