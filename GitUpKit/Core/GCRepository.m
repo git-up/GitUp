@@ -31,6 +31,21 @@ static inline BOOL _IsDirectoryWritable(const char* path) {
   return NO;
 }
 
+static inline NSString* _MakeDirectoryPath(const char* path) {
+  if (!path) {
+    return nil;
+  }
+  size_t length = strlen(path);
+  if (length && (path[length - 1] == '/')) {
+    --length;
+  }
+  if (!length) {
+    XLOG_DEBUG_UNREACHABLE();
+    return nil;
+  }
+  return [[NSFileManager defaultManager] stringWithFileSystemRepresentation:path length:length];
+}
+
 @implementation GCRepository {
 #if !TARGET_OS_IPHONE
   BOOL _didTrySSHAgent;
@@ -65,21 +80,6 @@ static inline BOOL _IsDirectoryWritable(const char* path) {
 
 - (void)dealloc {
   git_repository_free(_private);
-}
-
-static inline NSString* _MakeDirectoryPath(const char* path) {
-  if (!path) {
-    return nil;
-  }
-  size_t length = strlen(path);
-  if (length && (path[length - 1] == '/')) {
-    --length;
-  }
-  if (!length) {
-    XLOG_DEBUG_UNREACHABLE();
-    return nil;
-  }
-  return [[NSFileManager defaultManager] stringWithFileSystemRepresentation:path length:length];
 }
 
 // TODO: Should we really have this method? There might still be a bunch of libgit2 objects around that refer to the old git_repository*
