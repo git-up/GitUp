@@ -1,12 +1,12 @@
-#!/bin/sh
-set -ex
+#!/bin/sh -ex
 
 VERSION="$1"
-CHANNEL="$2"
-if [ "$VERSION" == "" ] || [ "$CHANNEL" == "" ]; then
-  echo "Usage $0 version channel"
+if [ "$VERSION" == "" ]; then
+  echo "Usage $0 version"
   exit 1
 fi
+
+CHANNEL="stable"
 
 PRODUCT_NAME="GitUp"
 APPCAST_NAME="appcast.xml"
@@ -18,13 +18,15 @@ BACKUP_ARCHIVE_NAME="$PRODUCT_NAME-$VERSION.zip"
 APPCAST_URL="https://s3-us-west-2.amazonaws.com/gitup-builds/$CHANNEL/$APPCAST_NAME"
 ARCHIVE_URL="https://s3-us-west-2.amazonaws.com/gitup-builds/$CHANNEL/$ARCHIVE_NAME"
 
-ARCHIVE_PATH="$TMPDIR/$ARCHIVE_NAME"
-PAYLOAD_PATH="$TMPDIR/payload"
+ARCHIVE_PATH="build/$ARCHIVE_NAME"
+PAYLOAD_PATH="build/payload"
 APPCAST_PATH="GitUp/SparkleAppcast.xml"
 
 ##### Download build
 
-/usr/local/bin/aws s3 cp "s3://gitup-builds/continuous/GitUp-$VERSION.zip" "$ARCHIVE_PATH"
+rm -rf "build"
+mkdir "build"
+aws s3 cp "s3://gitup-builds/continuous/GitUp-$VERSION.zip" "$ARCHIVE_PATH"
 
 ARCHIVE_SIZE=`stat -f "%z" "$ARCHIVE_PATH"`
 
@@ -49,12 +51,12 @@ fi
 
 ##### Upload to S3 and update Appcast
 
-EDITED_APPCAST_PATH="$TMPDIR/appcast.xml"
+EDITED_APPCAST_PATH="build/appcast.xml"
 /usr/bin/perl -p -e "s|__APPCAST_TITLE__|$PRODUCT_NAME|g;s|__APPCAST_URL__|$APPCAST_URL|g;s|__VERSION_ID__|$VERSION_ID|g;s|__VERSION_STRING__|$VERSION_STRING|g;s|__ARCHIVE_URL__|$ARCHIVE_URL|g;s|__ARCHIVE_SIZE__|$ARCHIVE_SIZE|g;s|__MIN_OS__|$MIN_OS|g" "$APPCAST_PATH" > "$EDITED_APPCAST_PATH"
 
-/usr/local/bin/aws s3 cp "$ARCHIVE_PATH" "s3://gitup-builds/$CHANNEL/$BACKUP_ARCHIVE_NAME"
-/usr/local/bin/aws s3 cp "s3://gitup-builds/$CHANNEL/$BACKUP_ARCHIVE_NAME" "s3://gitup-builds/$CHANNEL/$ARCHIVE_NAME"
-/usr/local/bin/aws s3 cp "$EDITED_APPCAST_PATH" "s3://gitup-builds/$CHANNEL/$APPCAST_NAME"
+aws s3 cp "$ARCHIVE_PATH" "s3://gitup-builds/$CHANNEL/$BACKUP_ARCHIVE_NAME"
+aws s3 cp "s3://gitup-builds/$CHANNEL/$BACKUP_ARCHIVE_NAME" "s3://gitup-builds/$CHANNEL/$ARCHIVE_NAME"
+aws s3 cp "$EDITED_APPCAST_PATH" "s3://gitup-builds/$CHANNEL/$APPCAST_NAME"
 
 ##### Tag release
 
