@@ -1,9 +1,10 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="10117" systemVersion="15G31" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" customObjectInstantitationMethod="direct">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11762" systemVersion="16C67" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <development version="6300" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="10117"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11762"/>
+        <capability name="box content view" minToolsVersion="7.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NSApplication">
@@ -15,10 +16,10 @@
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <window title="GitUp Preferences" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="preferences" animationBehavior="default" id="3qV-q4-a6k">
             <windowStyleMask key="styleMask" titled="YES" closable="YES"/>
-            <rect key="contentRect" x="940" y="240" width="500" height="400"/>
+            <rect key="contentRect" x="940" y="240" width="500" height="420"/>
             <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1417"/>
-            <view key="contentView" id="uEJ-lO-PMl">
-                <rect key="frame" x="0.0" y="0.0" width="500" height="400"/>
+            <view key="contentView" misplaced="YES" id="uEJ-lO-PMl">
+                <rect key="frame" x="0.0" y="0.0" width="500" height="420"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <userGuides>
                     <userLayoutGuide location="138" affinity="minX"/>
@@ -26,17 +27,17 @@
                 </userGuides>
                 <subviews>
                     <tabView type="noTabsNoBorder" id="anN-jw-l7x">
-                        <rect key="frame" x="0.0" y="0.0" width="500" height="400"/>
+                        <rect key="frame" x="0.0" y="0.0" width="500" height="420"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <font key="font" metaFont="system"/>
                         <tabViewItems>
-                            <tabViewItem label="{500, 388}" identifier="general" id="M8N-WY-xpP">
+                            <tabViewItem label="{500, 420}" identifier="general" id="M8N-WY-xpP">
                                 <view key="view" id="ZJf-t1-iGB">
-                                    <rect key="frame" x="0.0" y="0.0" width="500" height="400"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="500" height="420"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="EBQ-WH-0CZ">
-                                            <rect key="frame" x="12" y="363" width="120" height="17"/>
+                                            <rect key="frame" x="12" y="383" width="120" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Appearance:" id="KoF-W9-skh">
                                                 <font key="font" metaFont="system"/>
@@ -45,7 +46,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <button id="FHl-t5-4zJ">
-                                            <rect key="frame" x="137" y="362" width="169" height="18"/>
+                                            <rect key="frame" x="137" y="382" width="169" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="check" title="Enable visual effects" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="s0v-Nh-NIo">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -62,7 +63,7 @@
                                             </connections>
                                         </button>
                                         <button id="2WQ-hK-j2t">
-                                            <rect key="frame" x="137" y="342" width="162" height="18"/>
+                                            <rect key="frame" x="137" y="362" width="162" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="check" title="Show welcome window" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="x90-KD-anh">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -78,8 +79,8 @@
                                                 </binding>
                                             </connections>
                                         </button>
-                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="lyZ-cf-MT6">
-                                            <rect key="frame" x="12" y="173" width="120" height="17"/>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" id="lyZ-cf-MT6">
+                                            <rect key="frame" x="12" y="149" width="120" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="right" title="Commits:" id="6J8-35-XZI">
                                                 <font key="font" metaFont="system"/>
@@ -87,8 +88,8 @@
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
-                                        <button id="CQY-oC-oQ8">
-                                            <rect key="frame" x="137" y="172" width="146" height="18"/>
+                                        <button misplaced="YES" id="CQY-oC-oQ8">
+                                            <rect key="frame" x="137" y="148" width="146" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="check" title="Use Simple mode" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="rMb-zc-NF1">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -104,8 +105,8 @@
                                                 </binding>
                                             </connections>
                                         </button>
-                                        <button id="T1B-3i-hRB">
-                                            <rect key="frame" x="137" y="82" width="191" height="18"/>
+                                        <button misplaced="YES" id="T1B-3i-hRB">
+                                            <rect key="frame" x="137" y="58" width="191" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="check" title="Show invisible characters" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="omy-Qf-vg9">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -121,8 +122,8 @@
                                                 </binding>
                                             </connections>
                                         </button>
-                                        <button id="SyF-mN-F3q">
-                                            <rect key="frame" x="137" y="62" width="270" height="18"/>
+                                        <button misplaced="YES" id="SyF-mN-F3q">
+                                            <rect key="frame" x="137" y="38" width="270" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="check" title="Show margins at 50 and 72 characters" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="AMR-Ne-0QY">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -138,8 +139,8 @@
                                                 </binding>
                                             </connections>
                                         </button>
-                                        <button id="ag6-rb-zPH">
-                                            <rect key="frame" x="137" y="42" width="176" height="18"/>
+                                        <button misplaced="YES" id="ag6-rb-zPH">
+                                            <rect key="frame" x="137" y="18" width="176" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="check" title="Enable spell checking" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="G82-Jf-2sb">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -155,8 +156,8 @@
                                                 </binding>
                                             </connections>
                                         </button>
-                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="jee-vl-BUt">
-                                            <rect key="frame" x="137" y="110" width="345" height="56"/>
+                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" misplaced="YES" id="jee-vl-BUt">
+                                            <rect key="frame" x="137" y="86" width="345" height="56"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" id="v99-tx-ohB">
                                                 <font key="font" metaFont="smallSystem"/>
@@ -166,8 +167,8 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
-                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="YZU-dx-gjr">
-                                            <rect key="frame" x="12" y="244" width="120" height="17"/>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" id="YZU-dx-gjr">
+                                            <rect key="frame" x="12" y="220" width="120" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Diffs Layout:" id="B0V-bN-usw">
                                                 <font key="font" metaFont="system"/>
@@ -175,8 +176,8 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
-                                        <matrix verticalHuggingPriority="750" allowsEmptySelection="NO" autorecalculatesCellSize="YES" id="pP3-w2-KOs">
-                                            <rect key="frame" x="139" y="204" width="341" height="58"/>
+                                        <matrix verticalHuggingPriority="750" misplaced="YES" allowsEmptySelection="NO" autorecalculatesCellSize="YES" id="pP3-w2-KOs">
+                                            <rect key="frame" x="139" y="180" width="341" height="58"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                             <size key="cellSize" width="276" height="18"/>
@@ -211,8 +212,8 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                                 </binding>
                                             </connections>
                                         </matrix>
-                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="mC1-sE-MTH">
-                                            <rect key="frame" x="12" y="83" width="120" height="17"/>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" id="mC1-sE-MTH">
+                                            <rect key="frame" x="12" y="59" width="120" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="right" title="Message Editor:" id="5Hr-DF-QKw">
                                                 <font key="font" metaFont="system"/>
@@ -220,8 +221,8 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
-                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="IO8-Wx-DRo">
-                                            <rect key="frame" x="12" y="318" width="120" height="17"/>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" id="IO8-Wx-DRo">
+                                            <rect key="frame" x="12" y="294" width="120" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Diff Generation:" id="cxW-C3-fIQ">
                                                 <font key="font" metaFont="system"/>
@@ -229,8 +230,8 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
-                                        <matrix verticalHuggingPriority="750" allowsEmptySelection="NO" autorecalculatesCellSize="YES" id="zwg-99-t9E">
-                                            <rect key="frame" x="139" y="278" width="341" height="58"/>
+                                        <matrix verticalHuggingPriority="750" misplaced="YES" allowsEmptySelection="NO" autorecalculatesCellSize="YES" id="zwg-99-t9E">
+                                            <rect key="frame" x="139" y="254" width="341" height="58"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                             <size key="cellSize" width="268" height="18"/>
@@ -265,16 +266,65 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                                 </binding>
                                             </connections>
                                         </matrix>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="NO" id="Fvw-03-7cb">
+                                            <rect key="frame" x="139" y="327" width="239" height="22"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" enabled="NO" sendsActionOnEndEditing="YES" borderStyle="bezel" alignment="center" drawsBackground="YES" usesSingleLineMode="YES" id="xQw-NL-I0N">
+                                                <customFormatter key="formatter" id="7cu-OB-wtw" customClass="FontFormatter"/>
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                <connections>
+                                                    <binding destination="AR1-cq-KNa" name="value" keyPath="values.GIDiffViewUserDefaultKey_UserFont.fontName" id="g5k-7l-Xng">
+                                                        <dictionary key="options">
+                                                            <string key="NSValueTransformerName">NSUnarchiveFromData</string>
+                                                        </dictionary>
+                                                    </binding>
+                                                </connections>
+                                            </textFieldCell>
+                                            <connections>
+                                                <binding destination="AR1-cq-KNa" name="font" keyPath="values.GIDiffViewUserDefaultKey_UserFont" id="Y2t-vX-AxC">
+                                                    <dictionary key="options">
+                                                        <string key="NSValueTransformerName">NSUnarchiveFromData</string>
+                                                    </dictionary>
+                                                </binding>
+                                                <binding destination="AR1-cq-KNa" name="value" keyPath="values.GIDiffViewUserDefaultKey_UserFont" id="qnV-5t-8fk">
+                                                    <dictionary key="options">
+                                                        <string key="NSValueTransformerName">NSUnarchiveFromData</string>
+                                                    </dictionary>
+                                                </binding>
+                                            </connections>
+                                        </textField>
+                                        <button verticalHuggingPriority="750" misplaced="YES" id="345-Dn-KS9">
+                                            <rect key="frame" x="386" y="327" width="70" height="22"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="square" title="Select..." bezelStyle="shadowlessSquare" alignment="center" controlSize="small" scrollable="YES" lineBreakMode="clipping" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="HRm-s9-ARs">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="smallSystem"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="orderFrontFontPanel:" target="-1" id="5zo-xt-yA9"/>
+                                            </connections>
+                                        </button>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="NO" id="Z9W-ut-36p">
+                                            <rect key="frame" x="71" y="327" width="61" height="20"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Diff Font:" id="5Un-bg-kyT">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
                                     </subviews>
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="{500, 262}" identifier="advanced" id="Qdl-lQ-O4q">
                                 <view key="view" id="8CG-H0-Xhk">
-                                    <rect key="frame" x="0.0" y="0.0" width="500" height="400"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="500" height="420"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <popUpButton verticalHuggingPriority="750" id="7N4-S9-iWL">
-                                            <rect key="frame" x="136" y="192" width="200" height="26"/>
+                                            <rect key="frame" x="136" y="212" width="200" height="26"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <popUpButtonCell key="cell" type="push" title="&lt;RELEASE CHANNEL&gt;" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" autoenablesItems="NO" selectedItem="xdx-IX-FK6" id="Sdr-Ep-kPW">
                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -292,7 +342,7 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                             </connections>
                                         </popUpButton>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="mi3-Eg-51i">
-                                            <rect key="frame" x="12" y="198" width="120" height="17"/>
+                                            <rect key="frame" x="12" y="218" width="120" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="right" title="Release Channel:" id="M0A-b6-dhN">
                                                 <font key="font" metaFont="system"/>
@@ -301,7 +351,7 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="b9G-MU-MDn">
-                                            <rect key="frame" x="12" y="295" width="120" height="17"/>
+                                            <rect key="frame" x="12" y="315" width="120" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="right" title="Remotes:" id="LAp-ea-WLX">
                                                 <font key="font" metaFont="system"/>
@@ -310,7 +360,7 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                             </textFieldCell>
                                         </textField>
                                         <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="PtA-hG-Qmn">
-                                            <rect key="frame" x="137" y="154" width="345" height="34"/>
+                                            <rect key="frame" x="137" y="174" width="345" height="34"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="The &quot;Continuous&quot; release channel installs builds directly from GitUp Continuous Integration. Use at your own risk!" id="qB2-E4-Yuu">
                                                 <font key="font" metaFont="smallSystem"/>
@@ -319,7 +369,7 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="w2N-io-xkS">
-                                            <rect key="frame" x="137" y="295" width="130" height="17"/>
+                                            <rect key="frame" x="137" y="315" width="130" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="left" title="Automatically check" id="X1v-BK-dAQ">
                                                 <font key="font" metaFont="system"/>
@@ -328,7 +378,7 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                             </textFieldCell>
                                         </textField>
                                         <popUpButton verticalHuggingPriority="750" id="ZYX-Yt-1fl">
-                                            <rect key="frame" x="271" y="289" width="145" height="26"/>
+                                            <rect key="frame" x="271" y="309" width="145" height="26"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <popUpButtonCell key="cell" type="push" title="Never" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" autoenablesItems="NO" altersStateOfSelectedItem="NO" selectedItem="KgR-3b-gT5" id="Pdg-S3-YXJ">
                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -353,7 +403,7 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                             </connections>
                                         </popUpButton>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="vpU-gW-P72">
-                                            <rect key="frame" x="12" y="369" width="120" height="17"/>
+                                            <rect key="frame" x="12" y="389" width="120" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="right" title="External Diff:" id="WZ7-h0-Fpb">
                                                 <font key="font" metaFont="system"/>
@@ -362,7 +412,7 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                             </textFieldCell>
                                         </textField>
                                         <popUpButton verticalHuggingPriority="750" id="mZX-yf-dtK">
-                                            <rect key="frame" x="136" y="363" width="165" height="26"/>
+                                            <rect key="frame" x="136" y="383" width="165" height="26"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <popUpButtonCell key="cell" type="push" title="FileMerge" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" autoenablesItems="NO" altersStateOfSelectedItem="NO" selectedItem="szc-39-qmN" id="yfJ-9J-pbb">
                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -389,7 +439,7 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                             </connections>
                                         </popUpButton>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="2WJ-iR-f3R">
-                                            <rect key="frame" x="12" y="336" width="120" height="17"/>
+                                            <rect key="frame" x="12" y="356" width="120" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="right" title="External Merge:" id="2DT-l7-dgY">
                                                 <font key="font" metaFont="system"/>
@@ -398,7 +448,7 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                             </textFieldCell>
                                         </textField>
                                         <popUpButton verticalHuggingPriority="750" id="Ud9-w0-9vK">
-                                            <rect key="frame" x="136" y="330" width="165" height="26"/>
+                                            <rect key="frame" x="136" y="350" width="165" height="26"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <popUpButtonCell key="cell" type="push" title="FileMerge" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" autoenablesItems="NO" altersStateOfSelectedItem="NO" selectedItem="Zln-Lm-NeH" id="NHJ-tA-W14">
                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -425,7 +475,7 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                             </connections>
                                         </popUpButton>
                                         <button id="Xxa-CO-ELY">
-                                            <rect key="frame" x="136" y="269" width="346" height="18"/>
+                                            <rect key="frame" x="136" y="289" width="346" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="check" title="Allow quick confirmation of dangerous operations" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="uJq-iS-sPr">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -436,7 +486,7 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                             </connections>
                                         </button>
                                         <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="Ad9-ef-Jqv">
-                                            <rect key="frame" x="137" y="237" width="345" height="28"/>
+                                            <rect key="frame" x="137" y="257" width="345" height="28"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="This allows dangerous operations on remotes, like force push, to be confirmed by pressing the Return key in dialogs." id="LQY-Xb-bQ5">
                                                 <font key="font" metaFont="smallSystem"/>
@@ -469,7 +519,7 @@ You must close and reopen any opened repositories in GitUp after changing this s
                     <toolbarItem reference="doU-9n-plE"/>
                 </defaultToolbarItems>
             </toolbar>
-            <point key="canvasLocation" x="-8" y="1086"/>
+            <point key="canvasLocation" x="-8" y="1096"/>
         </window>
         <customObject id="Voe-Tx-rLC" customClass="AppDelegate">
             <connections>
@@ -1149,17 +1199,14 @@ UI design by Wayne Fan</string>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <box verticalHuggingPriority="750" title="Box" boxType="separator" titlePosition="noTitle" id="zd1-ko-kkJ">
+                    <box verticalHuggingPriority="750" boxType="separator" id="zd1-ko-kkJ">
                         <rect key="frame" x="0.0" y="121" width="280" height="5"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
-                        <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                        <font key="titleFont" metaFont="system"/>
                     </box>
-                    <box autoresizesSubviews="NO" title="Box" boxType="custom" borderType="none" titlePosition="noTitle" id="Yk1-Lc-GjF">
+                    <box autoresizesSubviews="NO" boxType="custom" borderType="none" title="Box" titlePosition="noTitle" id="Yk1-Lc-GjF">
                         <rect key="frame" x="0.0" y="88" width="280" height="35"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <view key="contentView">
+                        <view key="contentView" id="cJ0-nq-Rl4">
                             <rect key="frame" x="0.0" y="0.0" width="280" height="35"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
@@ -1181,20 +1228,16 @@ UI design by Wayne Fan</string>
                                 </customView>
                             </subviews>
                         </view>
-                        <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
                         <color key="fillColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </box>
-                    <box verticalHuggingPriority="750" title="Box" boxType="separator" titlePosition="noTitle" id="FXE-km-lcD">
+                    <box verticalHuggingPriority="750" boxType="separator" id="FXE-km-lcD">
                         <rect key="frame" x="0.0" y="85" width="280" height="5"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
-                        <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                        <font key="titleFont" metaFont="system"/>
                     </box>
-                    <box autoresizesSubviews="NO" title="Box" boxType="custom" borderType="none" titlePosition="noTitle" id="ll1-UT-nBS">
+                    <box autoresizesSubviews="NO" boxType="custom" borderType="none" title="Box" titlePosition="noTitle" id="ll1-UT-nBS">
                         <rect key="frame" x="0.0" y="52" width="280" height="35"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <view key="contentView">
+                        <view key="contentView" id="iMk-sH-SwT">
                             <rect key="frame" x="0.0" y="0.0" width="280" height="35"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
@@ -1214,15 +1257,11 @@ UI design by Wayne Fan</string>
                                 </popUpButton>
                             </subviews>
                         </view>
-                        <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
                         <color key="fillColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </box>
-                    <box verticalHuggingPriority="750" title="Box" boxType="separator" titlePosition="noTitle" id="3Ya-QW-NlZ">
+                    <box verticalHuggingPriority="750" boxType="separator" id="3Ya-QW-NlZ">
                         <rect key="frame" x="0.0" y="49" width="280" height="5"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
-                        <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                        <font key="titleFont" metaFont="system"/>
                     </box>
                     <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" id="TgX-Ty-AUa">
                         <rect key="frame" x="45" y="20" width="12" height="12"/>

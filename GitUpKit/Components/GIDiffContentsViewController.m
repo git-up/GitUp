@@ -228,6 +228,7 @@ static NSColor* _DimColor(NSColor* color) {
 - (instancetype)initWithRepository:(GCLiveRepository*)repository {
   if ((self = [super initWithRepository:repository])) {
     [[NSUserDefaults standardUserDefaults] addObserver:self forKeyPath:GIDiffContentsViewControllerUserDefaultKey_DiffViewMode options:0 context:(__bridge void*)[GIDiffContentsViewController class]];
+    [[NSUserDefaults standardUserDefaults] addObserver:self forKeyPath:GIDiffViewUserDefaultKey_UserFont options:0 context:(__bridge void*)[GIDiffContentsViewController class]];
   }
   return self;
 }
@@ -294,6 +295,22 @@ static NSColor* _DimColor(NSColor* color) {
   }
 }
 
+- (void)_recreateDiffViews {
+  for (GIDiffContentData* data in _data) {
+    if (!data.diffView) {
+      continue;
+    }
+    Class diffViewClass = [self _diffViewClassForChange:data.delta.change];
+    GIDiffView* diffView = [[diffViewClass alloc] initWithFrame:NSZeroRect];
+    diffView.delegate = self;
+    diffView.patch = data.diffView.patch;
+    data.diffView.delegate = nil;
+    data.diffView.patch = nil;
+    data.diffView = diffView;
+  }
+  [_tableView reloadData];
+}
+
 - (void)viewDidResize {
   if (self.viewVisible && !self.liveResizing) {
     [self _updateDiffViews];
@@ -310,10 +327,18 @@ static NSColor* _DimColor(NSColor* color) {
 }
 
 // WARNING: This is called *several* times when the default has been changed
+// because no options are specified in the observeValue:forKeyPath registration
 - (void)observeValueForKeyPath:(NSString*)keyPath ofObject:(id)object change:(NSDictionary*)change context:(void*)context {
   if (context == (__bridge void*)[GIDiffContentsViewController class]) {
     if (self.viewVisible) {
-      [self _updateDiffViews];  // This is idempotent
+      if ([keyPath isEqualToString:GIDiffViewUserDefaultKey_UserFont]) {
+        // diff font has changed
+        [GIDiffView updateSharedFontAttributes];
+        [self _recreateDiffViews];
+      } else {
+        // diff view type (unified/side-by-side) change
+        [self _updateDiffViews];  // This is idempotent
+      }
     }
   } else {
     [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];

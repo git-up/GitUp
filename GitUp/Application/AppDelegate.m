@@ -37,6 +37,8 @@
 
 #define kWelcomeWindowCornerRadius 10
 
+#define kDefaultFontSize 11
+
 #define kInstallerName @"install.sh"
 #define kToolName @"gitup"
 #define kToolInstallPath @"/usr/local/bin/" kToolName
@@ -86,6 +88,18 @@
 
 @end
 
+@interface FontFormatter : NSFormatter
+@end
+
+@implementation FontFormatter
+
+- (NSString*)stringForObjectValue:(id)obj {
+  NSFont* font = (NSFont*)obj;
+  return [NSString stringWithFormat:@"%@ – %0.0f", [font fontName], [font pointSize]];
+}
+
+@end
+
 @implementation AppDelegate {
   SUUpdater* _updater;
   BOOL _updatePending;
@@ -106,6 +120,7 @@
     GICommitMessageViewUserDefaultKey_ShowInvisibleCharacters : @(YES),
     GICommitMessageViewUserDefaultKey_ShowMargins : @(YES),
     GICommitMessageViewUserDefaultKey_EnableSpellChecking : @(YES),
+    GIDiffViewUserDefaultKey_UserFont : [NSArchiver archivedDataWithRootObject:[NSFont userFixedPitchFontOfSize:kDefaultFontSize]],
     kUserDefaultsKey_ReleaseChannel : kReleaseChannel_Stable,
     kUserDefaultsKey_CheckInterval : @(15 * 60),
     kUserDefaultsKey_FirstLaunch : @(YES),
@@ -547,6 +562,16 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
 - (IBAction)showPreferences:(id)sender {
   [self _updatePreferencePanel];
   [_preferencesWindow makeKeyAndOrderFront:nil];
+}
+
+- (void)changeFont:(id)sender {
+  NSData* fontData = [[NSUserDefaults standardUserDefaults] valueForKey:GIDiffViewUserDefaultKey_UserFont];
+  NSFont* font = [NSUnarchiver unarchiveObjectWithData:fontData];
+
+  font = [sender convertFont:font];
+  NSLog(@"Setting Diff View font to %@", font);
+
+  [[NSUserDefaults standardUserDefaults] setValue:[NSArchiver archivedDataWithRootObject:font] forKey:GIDiffViewUserDefaultKey_UserFont];
 }
 
 - (IBAction)selectPreferencePane:(id)sender {

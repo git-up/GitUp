@@ -15,6 +15,8 @@
 
 #import <AppKit/AppKit.h>
 
+extern NSString* const GIDiffViewUserDefaultKey_UserFont;
+
 @class GIDiffView, GCDiffPatch;
 
 @protocol GIDiffViewDelegate <NSObject>
@@ -23,6 +25,8 @@
 
 // Base class
 @interface GIDiffView : NSView <NSUserInterfaceValidations>
++ (void)updateSharedFontAttributes;
+
 - (void)didFinishInitializing;  // For subclasses only
 - (void)didUpdatePatch;  // For subclasses only
 
