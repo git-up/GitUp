@@ -34,6 +34,14 @@
 NSString* const GICommitMessageViewUserDefaultKey_ShowInvisibleCharacters = @"GICommitMessageViewUserDefaultKey_ShowInvisibleCharacters";
 NSString* const GICommitMessageViewUserDefaultKey_ShowMargins = @"GICommitMessageViewUserDefaultKey_ShowMargins";
 NSString* const GICommitMessageViewUserDefaultKey_EnableSpellChecking = @"GICommitMessageViewUserDefaultKey_EnableSpellChecking";
+NSString* const GIUserDefaultKey_FontSize = @"GIUserDefaultKey_FontSize";
+
+CGFloat const GIDefaultFontSize = 10;
+
+CGFloat GIFontSize(void) {
+  CGFloat size = [[NSUserDefaults standardUserDefaults] floatForKey:GIUserDefaultKey_FontSize];
+  return size > 0 ? size : GIDefaultFontSize;
+}
 
 static const void* _associatedObjectCommitKey = &_associatedObjectCommitKey;
 
