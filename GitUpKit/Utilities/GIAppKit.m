@@ -149,6 +149,7 @@ static const void* _associatedObjectCommitKey = &_associatedObjectCommitKey;
 @implementation GICommitMessageView
 
 - (void)dealloc {
+  [[NSUserDefaults standardUserDefaults] removeObserver:self forKeyPath:GIUserDefaultKey_FontSize context:(__bridge void*)[GICommitMessageView class]];
   [[NSUserDefaults standardUserDefaults] removeObserver:self forKeyPath:GICommitMessageViewUserDefaultKey_EnableSpellChecking context:(__bridge void*)[GICommitMessageView class]];
   [[NSUserDefaults standardUserDefaults] removeObserver:self forKeyPath:GICommitMessageViewUserDefaultKey_ShowMargins context:(__bridge void*)[GICommitMessageView class]];
   [[NSUserDefaults standardUserDefaults] removeObserver:self forKeyPath:GICommitMessageViewUserDefaultKey_ShowInvisibleCharacters context:(__bridge void*)[GICommitMessageView class]];
@@ -157,7 +158,7 @@ static const void* _associatedObjectCommitKey = &_associatedObjectCommitKey;
 - (void)awakeFromNib {
   [super awakeFromNib];
 
-  self.font = [NSFont userFixedPitchFontOfSize:11];
+  [self updateFont];
   self.continuousSpellCheckingEnabled = [[NSUserDefaults standardUserDefaults] boolForKey:GICommitMessageViewUserDefaultKey_EnableSpellChecking];
   self.automaticSpellingCorrectionEnabled = NO;  // Don't trust IB
   self.grammarCheckingEnabled = NO;  // Don't trust IB
@@ -174,6 +175,13 @@ static const void* _associatedObjectCommitKey = &_associatedObjectCommitKey;
   [[NSUserDefaults standardUserDefaults] addObserver:self forKeyPath:GICommitMessageViewUserDefaultKey_ShowInvisibleCharacters options:0 context:(__bridge void*)[GICommitMessageView class]];
   [[NSUserDefaults standardUserDefaults] addObserver:self forKeyPath:GICommitMessageViewUserDefaultKey_ShowMargins options:0 context:(__bridge void*)[GICommitMessageView class]];
   [[NSUserDefaults standardUserDefaults] addObserver:self forKeyPath:GICommitMessageViewUserDefaultKey_EnableSpellChecking options:0 context:(__bridge void*)[GICommitMessageView class]];
+  [[NSUserDefaults standardUserDefaults] addObserver:self forKeyPath:GIUserDefaultKey_FontSize options:0 context:(__bridge void*)[GICommitMessageView class]];
+}
+
+- (void)updateFont {
+  // To match the original design, the commit message font should be 10% larger than the diff view font.
+  self.font = [NSFont userFixedPitchFontOfSize:round(1.1 * GIFontSize())];
+  [self setNeedsDisplay:YES];
 }
 
 - (void)drawRect:(NSRect)dirtyRect {
@@ -226,6 +234,8 @@ static const void* _associatedObjectCommitKey = &_associatedObjectCommitKey;
         self.continuousSpellCheckingEnabled = flag;
         [self setNeedsDisplay:YES];  // TODO: Why is this needed to refresh?
       }
+    } else if ([keyPath isEqualToString:GIUserDefaultKey_FontSize]) {
+      [self updateFont];
     } else {
       XLOG_DEBUG_UNREACHABLE();
     }
