@@ -1,9 +1,10 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="10117" systemVersion="15G31" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" customObjectInstantitationMethod="direct">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <development version="6300" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="10117"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11762"/>
+        <capability name="box content view" minToolsVersion="7.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NSApplication">
@@ -1149,17 +1150,14 @@ UI design by Wayne Fan</string>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <box verticalHuggingPriority="750" title="Box" boxType="separator" titlePosition="noTitle" id="zd1-ko-kkJ">
+                    <box verticalHuggingPriority="750" boxType="separator" id="zd1-ko-kkJ">
                         <rect key="frame" x="0.0" y="121" width="280" height="5"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
-                        <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                        <font key="titleFont" metaFont="system"/>
                     </box>
-                    <box autoresizesSubviews="NO" title="Box" boxType="custom" borderType="none" titlePosition="noTitle" id="Yk1-Lc-GjF">
+                    <box autoresizesSubviews="NO" boxType="custom" borderType="none" title="Box" titlePosition="noTitle" id="Yk1-Lc-GjF">
                         <rect key="frame" x="0.0" y="88" width="280" height="35"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <view key="contentView">
+                        <view key="contentView" id="sDO-dg-ir8">
                             <rect key="frame" x="0.0" y="0.0" width="280" height="35"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
@@ -1181,20 +1179,16 @@ UI design by Wayne Fan</string>
                                 </customView>
                             </subviews>
                         </view>
-                        <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
                         <color key="fillColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </box>
-                    <box verticalHuggingPriority="750" title="Box" boxType="separator" titlePosition="noTitle" id="FXE-km-lcD">
+                    <box verticalHuggingPriority="750" boxType="separator" id="FXE-km-lcD">
                         <rect key="frame" x="0.0" y="85" width="280" height="5"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
-                        <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                        <font key="titleFont" metaFont="system"/>
                     </box>
-                    <box autoresizesSubviews="NO" title="Box" boxType="custom" borderType="none" titlePosition="noTitle" id="ll1-UT-nBS">
+                    <box autoresizesSubviews="NO" boxType="custom" borderType="none" title="Box" titlePosition="noTitle" id="ll1-UT-nBS">
                         <rect key="frame" x="0.0" y="52" width="280" height="35"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <view key="contentView">
+                        <view key="contentView" id="J3B-5Z-dcx">
                             <rect key="frame" x="0.0" y="0.0" width="280" height="35"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
@@ -1214,15 +1208,11 @@ UI design by Wayne Fan</string>
                                 </popUpButton>
                             </subviews>
                         </view>
-                        <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
                         <color key="fillColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </box>
-                    <box verticalHuggingPriority="750" title="Box" boxType="separator" titlePosition="noTitle" id="3Ya-QW-NlZ">
+                    <box verticalHuggingPriority="750" boxType="separator" id="3Ya-QW-NlZ">
                         <rect key="frame" x="0.0" y="49" width="280" height="5"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
-                        <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                        <font key="titleFont" metaFont="system"/>
                     </box>
                     <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" id="TgX-Ty-AUa">
                         <rect key="frame" x="45" y="20" width="12" height="12"/>
