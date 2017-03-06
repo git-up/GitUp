@@ -18,8 +18,8 @@ BACKUP_ARCHIVE_NAME="$PRODUCT_NAME-$VERSION.zip"
 APPCAST_URL="https://s3-us-west-2.amazonaws.com/gitup-builds/$CHANNEL/$APPCAST_NAME"
 ARCHIVE_URL="https://s3-us-west-2.amazonaws.com/gitup-builds/$CHANNEL/$ARCHIVE_NAME"
 
-ARCHIVE_PATH="build/$ARCHIVE_NAME"
-PAYLOAD_PATH="build/payload"
+ARCHIVE_PATH="`pwd`/build/$ARCHIVE_NAME"
+PAYLOAD_PATH="`pwd`/build/payload"
 APPCAST_PATH="GitUp/SparkleAppcast.xml"
 
 ##### Download build
