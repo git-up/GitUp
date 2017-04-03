@@ -36,6 +36,7 @@
 		E2E3C9A21D771E9D00AA9A62 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2E3C9A11D771E9D00AA9A62 /* SystemConfiguration.framework */; };
 		E2E3C9A41D77227F00AA9A62 /* HockeySDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2E3C9A31D77227F00AA9A62 /* HockeySDK.framework */; };
 		E2E3C9A51D77228F00AA9A62 /* HockeySDK.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = E2E3C9A31D77227F00AA9A62 /* HockeySDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		FA78E1291E92D1D800C60FEB /* GitFlowInitWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = FA78E1281E92D1D800C60FEB /* GitFlowInitWindow.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -144,6 +145,8 @@
 		E2E3C99F1D771E7600AA9A62 /* GARawTracker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GARawTracker.m; sourceTree = "<group>"; };
 		E2E3C9A11D771E9D00AA9A62 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		E2E3C9A31D77227F00AA9A62 /* HockeySDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HockeySDK.framework; path = "Third-Party/HockeySDK.framework"; sourceTree = "<group>"; };
+		FA78E1271E92D1D800C60FEB /* GitFlowInitWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GitFlowInitWindow.h; sourceTree = "<group>"; };
+		FA78E1281E92D1D800C60FEB /* GitFlowInitWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GitFlowInitWindow.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -254,6 +257,7 @@
 		E2C338AD19F8562F00063D95 /* Application */ = {
 			isa = PBXGroup;
 			children = (
+				FA78E1261E92D1D800C60FEB /* GitFlow */,
 				E2C338B019F8562F00063D95 /* AppDelegate.h */,
 				E2C338B119F8562F00063D95 /* AppDelegate.m */,
 				E25EBCEA1AA3F8B700D3AF44 /* Application.xcassets */,
@@ -282,6 +286,15 @@
 			);
 			name = GARawTracker;
 			path = "Third-Party/GARawTracker/GARawTracker";
+			sourceTree = "<group>";
+		};
+		FA78E1261E92D1D800C60FEB /* GitFlow */ = {
+			isa = PBXGroup;
+			children = (
+				FA78E1271E92D1D800C60FEB /* GitFlowInitWindow.h */,
+				FA78E1281E92D1D800C60FEB /* GitFlowInitWindow.m */,
+			);
+			path = GitFlow;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -338,7 +351,6 @@
 					};
 					E2C338AA19F8562F00063D95 = {
 						CreatedOnToolsVersion = 6.1;
-						DevelopmentTeam = 88W3E55T4B;
 					};
 				};
 			};
@@ -422,6 +434,7 @@
 				E2E3C9A01D771E7600AA9A62 /* GARawTracker.m in Sources */,
 				E2C338B419F8562F00063D95 /* main.m in Sources */,
 				E2C5672D1A6D98BC00ECFE07 /* WindowController.m in Sources */,
+				FA78E1291E92D1D800C60FEB /* GitFlowInitWindow.m in Sources */,
 				E2C338B219F8562F00063D95 /* AppDelegate.m in Sources */,
 				E2C338B719F8562F00063D95 /* Document.m in Sources */,
 			);
@@ -531,6 +544,7 @@
 				BUNDLE_VERSION = 0;
 				BUNDLE_VERSION_STRING = 1.0.7;
 				CODE_SIGN_IDENTITY = "Mac Developer";
+				DEVELOPMENT_TEAM = 6L38SZDJ22;
 				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/Third-Party";
 				GCC_DYNAMIC_NO_PIC = YES;
 				INFOPLIST_FILE = Application/Info.plist;
@@ -548,6 +562,7 @@
 				BUNDLE_VERSION = 0;
 				BUNDLE_VERSION_STRING = 1.0.7;
 				CODE_SIGN_IDENTITY = "Mac Developer";
+				DEVELOPMENT_TEAM = 6L38SZDJ22;
 				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/Third-Party";
 				GCC_DYNAMIC_NO_PIC = YES;
 				INFOPLIST_FILE = Application/Info.plist;
