@@ -1,4 +1,4 @@
-//  Copyright (C) 2015-2016 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2017 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -173,7 +173,7 @@ cleanup:
 
   git_remote_callbacks callbacks = GIT_REMOTE_CALLBACKS_INIT;
   [self setRemoteCallbacks:&callbacks];
-  int status = git_remote_connect(remote, direction, &callbacks, NULL);
+  int status = git_remote_connect(remote, direction, &callbacks, NULL, NULL);
   if (status != GIT_OK) {
     LOG_LIBGIT2_ERROR(status);
     if (error) {

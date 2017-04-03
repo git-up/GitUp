@@ -3,7 +3,7 @@
 # brew install clang-format
 
 CLANG_FORMAT_VERSION=`clang-format -version | awk '{ print $3 }'`
-if [[ "$CLANG_FORMAT_VERSION" != "3.9.0" ]]; then
+if [[ "$CLANG_FORMAT_VERSION" != "4.0.0" ]]; then
   echo "Unsupported clang-format version"
   exit 1
 fi
@@ -14,7 +14,6 @@ find "GitUpKit/Extensions" -type f -iname *.h -o  -iname *.m | xargs clang-forma
 find "GitUpKit/Interface" -type f -iname *.h -o  -iname *.m | xargs clang-format -style=file -i
 find "GitUpKit/Utilities" -type f -iname *.h -o  -iname *.m | xargs clang-format -style=file -i
 find "GitUpKit/Views" -type f -iname *.h -o  -iname *.m | xargs clang-format -style=file -i
-perl -p -i -e "s|AppKit / AppKit|AppKit/AppKit|g" "GitUpKit/Interface/GIInterface.h"
 
 find "GitUp/Application" -type f -iname *.h -o  -iname *.m | xargs clang-format -style=file -i
 find "GitUp/Tool" -type f -iname *.h -o  -iname *.m | xargs clang-format -style=file -i

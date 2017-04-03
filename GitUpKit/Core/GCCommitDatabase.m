@@ -1,4 +1,4 @@
-//  Copyright (C) 2015-2016 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2017 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -446,7 +446,7 @@ static  // Ensure function is inlined per C99 specs by leaving "static" out
 // There can be false positives i.e. words repeated more than once in the result, but that's an acceptable speed trade-off considering SQLite FTS will fix this anyway
 static void _ExtractUniqueWordsFromLines(NSMutableData* lines, NSMutableData* words) {
   GC_LIST_ALLOCATE(list, kWordCacheSize, Word);
-  unsigned char* cache = calloc(kWordCacheSize / CHAR_BIT, sizeof(char));
+  unsigned char* cache = calloc(kWordCacheSize / CHAR_BIT, sizeof(unsigned char));
   Word* wordPtr;
 
   const unsigned char* max = (unsigned char*)lines.bytes + lines.length;

@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 48;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -330,7 +330,7 @@
 		E2C338A319F8562F00063D95 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0800;
+				LastUpgradeCheck = 0820;
 				ORGANIZATIONNAME = "";
 				TargetAttributes = {
 					E21DCAE71B253847006424E8 = {
@@ -343,7 +343,7 @@
 				};
 			};
 			buildConfigurationList = E2C338A619F8562F00063D95 /* Build configuration list for PBXProject "GitUp" */;
-			compatibilityVersion = "Xcode 3.2";
+			compatibilityVersion = "Xcode 8.0";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -508,21 +508,6 @@
 			};
 			name = Release;
 		};
-		E21DCAEE1B253847006424E8 /* Distribution */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				GCC_DYNAMIC_NO_PIC = YES;
-				HEADER_SEARCH_PATHS = "../GitUpKit/Third-Party/libgit2/include";
-				OTHER_LDFLAGS = (
-					"$(BUILD_DIR)/$(CONFIGURATION)/libgit2.a",
-					"../GitUpKit/Third-Party/Libraries/libssl/$(PLATFORM_NAME)/lib/libcrypto.a",
-					"../GitUpKit/Third-Party/Libraries/libssh2/$(PLATFORM_NAME)/lib/libssh2.a",
-				);
-				PRODUCT_NAME = gitup;
-				SKIP_INSTALL = YES;
-			};
-			name = Distribution;
-		};
 		E2C338CC19F8562F00063D95 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E27E37571B86F670000A551A /* Debug.xcconfig */;
@@ -573,31 +558,6 @@
 			};
 			name = Release;
 		};
-		E2DC61F61A5A694E0091BC03 /* Distribution */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = E27E37581B86F670000A551A /* Distribution.xcconfig */;
-			buildSettings = {
-				SDKROOT = macosx;
-			};
-			name = Distribution;
-		};
-		E2DC61F71A5A694E0091BC03 /* Distribution */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				BUNDLE_VERSION = 0;
-				BUNDLE_VERSION_STRING = 1.0.7;
-				CODE_SIGN_IDENTITY = "Developer ID Application";
-				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/Third-Party";
-				GCC_DYNAMIC_NO_PIC = YES;
-				INFOPLIST_FILE = Application/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				OTHER_LDFLAGS = "-Wl,-rpath,@loader_path/../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = co.gitup.mac;
-				PRODUCT_NAME = GitUp;
-			};
-			name = Distribution;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -606,7 +566,6 @@
 			buildConfigurations = (
 				E21DCAEC1B253847006424E8 /* Debug */,
 				E21DCAED1B253847006424E8 /* Release */,
-				E21DCAEE1B253847006424E8 /* Distribution */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -616,7 +575,6 @@
 			buildConfigurations = (
 				E2C338CC19F8562F00063D95 /* Debug */,
 				E2C338CD19F8562F00063D95 /* Release */,
-				E2DC61F61A5A694E0091BC03 /* Distribution */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -626,7 +584,6 @@
 			buildConfigurations = (
 				E2C338CF19F8562F00063D95 /* Debug */,
 				E2C338D019F8562F00063D95 /* Release */,
-				E2DC61F71A5A694E0091BC03 /* Distribution */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
