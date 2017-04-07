@@ -73,7 +73,7 @@ static int _GitLFSApply(git_filter* self, void** payload, git_buf* to, const git
       [arguments addObject:@"--"];
       [arguments addObject:GCFileSystemPathFromGitPath(git_filter_source_path(src))];
       GCTask* task = [[GCTask alloc] initWithExecutablePath:[NSString stringWithUTF8String:_GitLFSPath]];
-      task.currentDirectoryPath = _MakeDirectoryPath(git_repository_path(git_filter_source_repo(src)));  // TODO: Is this the right working directory?
+      task.currentDirectoryPath = _MakeDirectoryPath(git_repository_workdir(git_filter_source_repo(src)));
       int status;
       NSData* stdinData = [[NSData alloc] initWithBytesNoCopy:from->ptr length:from->size freeWhenDone:NO];
       NSData* stdoutData;
