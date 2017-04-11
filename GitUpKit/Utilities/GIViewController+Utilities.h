@@ -45,6 +45,7 @@ extern NSString* const GIViewController_MergeTool;
 - (void)unstageAllChangesForFile:(NSString*)path;
 - (void)unstageSelectedChangesForFile:(NSString*)path oldLines:(NSIndexSet*)oldLines newLines:(NSIndexSet*)newLines;
 
+- (void)discardAllChangesForFiles:(NSArray<NSString*>*)paths resetIndex:(BOOL)resetIndex;
 - (BOOL)discardAllChangesForFile:(NSString*)path resetIndex:(BOOL)resetIndex error:(NSError**)error;
 - (void)discardAllChangesForFile:(NSString*)path resetIndex:(BOOL)resetIndex;  // Prompts user
 - (BOOL)discardSelectedChangesForFile:(NSString*)path oldLines:(NSIndexSet*)oldLines newLines:(NSIndexSet*)newLines resetIndex:(BOOL)resetIndex error:(NSError**)error;

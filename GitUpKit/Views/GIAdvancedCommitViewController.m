@@ -176,6 +176,11 @@
     if (controller == _workdirFilesViewController) {
       [_diffContentsViewController setDeltas:_workdirFilesViewController.selectedDeltas usingConflicts:_indexConflicts];
       _indexActive = NO;
+      if (controller.selectedDeltas.count > 0 && controller.deltas.count != controller.selectedDeltas.count) {
+        _discardButton.title = NSLocalizedString(@"Discard Selected...", nil);
+      } else {
+        _discardButton.title = NSLocalizedString(@"Discard All...", nil);
+      }
     } else if (controller == _indexFilesViewController) {
       [_diffContentsViewController setDeltas:_indexFilesViewController.selectedDeltas usingConflicts:_indexConflicts];
       _indexActive = YES;
@@ -552,7 +557,13 @@
 }
 
 - (IBAction)discardAll:(id)sender {
-  [self discardAllFiles];
+  GIDiffFilesViewController *controller = _workdirFilesViewController;
+  if (controller.selectedDeltas.count > 0 && controller.deltas.count != controller.selectedDeltas.count) {
+    NSArray* pathsToDiscard = [controller.selectedDeltas valueForKeyPath:@"@unionOfObjects.canonicalPath"];
+    [self discardAllChangesForFiles:pathsToDiscard resetIndex:NO];
+  } else {
+    [self discardAllFiles];
+  }
 }
 
 - (IBAction)stageAll:(id)sender {
