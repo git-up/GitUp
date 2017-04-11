@@ -1,9 +1,9 @@
-[![Build Status](https://travis-ci.org/git-up/GitUp.svg?branch=master)](https://travis-ci.org/git-up/GitUp)
+﻿[![Build Status](https://travis-ci.org/git-up/GitUp.svg?branch=master)](https://travis-ci.org/git-up/GitUp)
 
 GitUp
 =====
 
-**Work quickly, safely, and without headaches. The Git interface you've been missing all your life has finally arrived.**
+***Work quickly, safely, and without headaches. The Git interface you've been missing all your life has finally arrived.***
 
 <p align="center">
 <img src="http://i.imgur.com/t6iC9TC.png">
