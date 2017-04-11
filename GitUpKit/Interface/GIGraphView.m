@@ -526,6 +526,42 @@ static const void* _associatedObjectDataKey = &_associatedObjectDataKey;
       [self _scrollToBottom];
       return;
   }
+  
+  // Vim keystroke support
+  NSString* characters = event.charactersIgnoringModifiers;
+  if ([characters isEqualToString:@"h"]) {
+    if (_selectedNode) {
+      [self _selectPreviousSiblingNode];
+    } else {
+      [self _selectDefaultNode];
+    }
+    return;
+  }
+  else if ([characters isEqualToString:@"j"]) {
+    if (_selectedNode) {
+      [self _selectParentNode];
+    } else {
+      [self _selectDefaultNode];
+    }
+    return;
+  }
+  else if ([characters isEqualToString:@"k"]) {
+    if (_selectedNode) {
+      [self _selectChildNode];
+    } else {
+      [self _selectDefaultNode];
+    }
+    return;
+  }
+  else if ([characters isEqualToString:@"l"]) {
+    if (_selectedNode) {
+      [self _selectNextSiblingNode];
+    } else {
+      [self _selectDefaultNode];
+    }
+    return;
+  }
+  
   [self.nextResponder tryToPerform:@selector(keyDown:) with:event];
 }
 
