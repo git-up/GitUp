@@ -18,11 +18,25 @@
 #endif
 
 #import "GIPrivate.h"
+#import "GIAppKit.h"
 
-#define kTextLineNumberMargin (5 * 8)
-#define kTextInsetLeft 15
-#define kTextInsetRight 5
 #define kTextBottomPadding 0
+
+static CGFloat textLineNumberMargin(void) {
+  return roundf(4 * GIFontSize());
+}
+
+static CGFloat textInsetLeft(void) {
+  return roundf(1.5f * GIFontSize());
+}
+
+static CGFloat textInsetRight(void) {
+  return roundf(0.5f * GIFontSize());
+}
+
+static CGFloat textLineStartX(void) {
+  return 2 * textLineNumberMargin() + textInsetLeft();
+}
 
 typedef NS_ENUM(NSUInteger, SelectionMode) {
   kSelectionMode_None = 0,
@@ -200,20 +214,22 @@ typedef struct {
 }
 
 - (CGFloat)updateLayoutForWidth:(CGFloat)width {
-  if (_string && (NSInteger)width != (NSInteger)_size.width) {
+  if (_string &&
+      ((NSInteger)width != (NSInteger)_size.width ||
+       (CFAttributedStringGetLength(_string) > 0 && !CFEqual(CFAttributedStringGetAttributes(_string, 0, NULL), self.textAttributes)))) {
     if (_frame) {
       CFRelease(_frame);
     }
     if (_framesetter) {
       CFRelease(_framesetter);
     }
-    CFAttributedStringSetAttributes(_string, CFRangeMake(0, CFAttributedStringGetLength(_string)), GIDiffViewAttributes, false);
+    CFAttributedStringSetAttributes(_string, CFRangeMake(0, CFAttributedStringGetLength(_string)), self.textAttributes, false);
     _framesetter = CTFramesetterCreateWithAttributedString(_string);
-    CGFloat textWidth = width - 2 * kTextLineNumberMargin - kTextInsetLeft - kTextInsetRight;
+    CGFloat textWidth = width - 2 * textLineNumberMargin() - textInsetLeft() - textInsetRight();
     CGPathRef path = CGPathCreateWithRect(CGRectMake(0, 0, textWidth, CGFLOAT_MAX), NULL);
     _frame = CTFramesetterCreateFrame(_framesetter, CFRangeMake(0, CFAttributedStringGetLength(_string)), path, NULL);
     CGPathRelease(path);
-    _size = NSMakeSize(width, CFArrayGetCount(CTFrameGetLines(_frame)) * GIDiffViewLineHeight + kTextBottomPadding);
+    _size = NSMakeSize(width, CFArrayGetCount(CTFrameGetLines(_frame)) * self.lineHeight + kTextBottomPadding);
   }
   return _size.height;
 }
@@ -245,19 +261,22 @@ typedef struct {
   [self.backgroundColor setFill];
   CGContextFillRect(context, dirtyRect);
 
+  CGFloat lineNumberMargin = textLineNumberMargin();
+  CGFloat lineStartX = textLineStartX();
+
   if (_frame) {
     NSColor* selectedColor = self.window.keyWindow && (self.window.firstResponder == self) ? [NSColor selectedControlColor] : [NSColor secondarySelectedControlColor];
     CGContextSetTextMatrix(context, CGAffineTransformIdentity);
     CFArrayRef lines = CTFrameGetLines(_frame);
     CFIndex count = CFArrayGetCount(lines);
-    CFIndex start = MIN(MAX(count - (dirtyRect.origin.y + dirtyRect.size.height - kTextBottomPadding) / GIDiffViewLineHeight, 0), count);
-    CFIndex end = MIN(MAX(count - (dirtyRect.origin.y - kTextBottomPadding) / GIDiffViewLineHeight + 1, 0), count);
+    CFIndex start = MIN(MAX(count - (dirtyRect.origin.y + dirtyRect.size.height - kTextBottomPadding) / self.lineHeight, 0), count);
+    CFIndex end = MIN(MAX(count - (dirtyRect.origin.y - kTextBottomPadding) / self.lineHeight + 1, 0), count);
     const LineInfo* info = NULL;
     for (CFIndex i = start; i < end; ++i) {
       CTLineRef line = CFArrayGetValueAtIndex(lines, i);
       CFRange lineRange = CTLineGetStringRange(line);
-      CGFloat linePosition = (count - 1 - i) * GIDiffViewLineHeight + kTextBottomPadding;
-      CGFloat textPosition = linePosition + GIDiffViewLineDescent;
+      CGFloat linePosition = (count - 1 - i) * self.lineHeight + kTextBottomPadding;
+      CGFloat textPosition = linePosition + self.lineDescent;
 
       if (info) {
         while (lineRange.location >= info->range.location + info->range.length) {
@@ -274,14 +293,14 @@ typedef struct {
       if ((NSUInteger)info->change != NSNotFound) {
         if ([_selectedLines containsIndex:info->index]) {
           [selectedColor setFill];
-          CGContextFillRect(context, CGRectMake(0, linePosition, bounds.size.width, GIDiffViewLineHeight));
+          CGContextFillRect(context, CGRectMake(0, linePosition, bounds.size.width, self.lineHeight));
         } else if (info->change != kGCLineDiffChange_Unmodified) {
           if (info->change == kGCLineDiffChange_Deleted) {
             [GIDiffViewDeletedBackgroundColor setFill];
           } else {
             [GIDiffViewAddedBackgroundColor setFill];
           }
-          CGContextFillRect(context, CGRectMake(0, linePosition, bounds.size.width, GIDiffViewLineHeight));
+          CGContextFillRect(context, CGRectMake(0, linePosition, bounds.size.width, self.lineHeight));
 
           if (info->highlighted.length) {
             if (info->change == kGCLineDiffChange_Deleted) {
@@ -292,82 +311,86 @@ typedef struct {
             CGFloat startX = CTLineGetOffsetForStringIndex(line, info->range.location + info->highlighted.location, NULL);
             CGFloat endX = CTLineGetOffsetForStringIndex(line, info->range.location + info->highlighted.location + info->highlighted.length, NULL);
             if (endX > startX) {
-              startX = 2 * kTextLineNumberMargin + kTextInsetLeft + round(startX);
-              endX = 2 * kTextLineNumberMargin + kTextInsetLeft + round(endX);
-              CGContextFillRect(context, CGRectMake(startX, linePosition, endX - startX, GIDiffViewLineHeight));
+              startX = lineStartX + round(startX);
+              endX = lineStartX + round(endX);
+              CGContextFillRect(context, CGRectMake(startX, linePosition, endX - startX, self.lineHeight));
             }
           }
         }
 
+        CGFloat lineNumberTextInset = roundf(0.5f * GIFontSize());
+        CGFloat plusMinusInset = roundf(0.4f * GIFontSize());
+
         [GIDiffViewLineNumberColor setFill];
         if ((lineRange.location == info->range.location) && (info->oldLineNumber != NSNotFound)) {
-          CFAttributedStringRef string = CFAttributedStringCreate(kCFAllocatorDefault, (CFStringRef)(info->oldLineNumber >= 100000 ? @"9999…" : [NSString stringWithFormat:@"%5lu", info->oldLineNumber]), GIDiffViewAttributes);
+          CFAttributedStringRef string = CFAttributedStringCreate(kCFAllocatorDefault, (CFStringRef)(info->oldLineNumber >= 100000 ? @"9999…" : [NSString stringWithFormat:@"%5lu", info->oldLineNumber]), self.textAttributes);
           CTLineRef prefix = CTLineCreateWithAttributedString(string);
-          CGContextSetTextPosition(context, 5, textPosition);
+          CGContextSetTextPosition(context, lineNumberTextInset, textPosition);
           CTLineDraw(prefix, context);
           CFRelease(prefix);
           CFRelease(string);
 
           if (info->change == kGCLineDiffChange_Deleted) {
-            CGContextSetTextPosition(context, 2 * kTextLineNumberMargin + 4, textPosition);
-            CTLineDraw(GIDiffViewDeletedLine, context);
+            CGContextSetTextPosition(context, 2 * lineNumberMargin + plusMinusInset, textPosition);
+            CTLineDraw(self.deletedLine, context);
           }
         }
         if ((lineRange.location == info->range.location) && (info->newLineNumber != NSNotFound)) {
-          CFAttributedStringRef string = CFAttributedStringCreate(kCFAllocatorDefault, (CFStringRef)(info->newLineNumber >= 100000 ? @"9999…" : [NSString stringWithFormat:@"%5lu", info->newLineNumber]), GIDiffViewAttributes);
+          CFAttributedStringRef string = CFAttributedStringCreate(kCFAllocatorDefault, (CFStringRef)(info->newLineNumber >= 100000 ? @"9999…" : [NSString stringWithFormat:@"%5lu", info->newLineNumber]), self.textAttributes);
           CTLineRef prefix = CTLineCreateWithAttributedString(string);
-          CGContextSetTextPosition(context, kTextLineNumberMargin + 5, textPosition);
+          CGContextSetTextPosition(context, lineNumberMargin + lineNumberTextInset, textPosition);
           CTLineDraw(prefix, context);
           CFRelease(prefix);
           CFRelease(string);
 
           if (info->change == kGCLineDiffChange_Added) {
-            CGContextSetTextPosition(context, 2 * kTextLineNumberMargin + 4, textPosition);
-            CTLineDraw(GIDiffViewAddedLine, context);
+            CGContextSetTextPosition(context, 2 * lineNumberMargin + plusMinusInset, textPosition);
+            CTLineDraw(self.addedLine, context);
           }
         }
 
         if (_selectedText.length && (_selectedText.location < lineRange.location + lineRange.length) && (_selectedText.location + _selectedText.length > lineRange.location)) {
           [selectedColor setFill];
-          CGFloat startX = 2 * kTextLineNumberMargin + kTextInsetLeft;
+          CGFloat startX = lineStartX;
           CGFloat endX = bounds.size.width;
           if (_selectedText.location > lineRange.location) {
-            startX = 2 * kTextLineNumberMargin + kTextInsetLeft + round(CTLineGetOffsetForStringIndex(line, _selectedText.location, NULL));
+            startX = lineStartX + round(CTLineGetOffsetForStringIndex(line, _selectedText.location, NULL));
           }
           if (_selectedText.location + _selectedText.length < lineRange.location + lineRange.length) {
-            endX = 2 * kTextLineNumberMargin + kTextInsetLeft + round(CTLineGetOffsetForStringIndex(line, _selectedText.location + _selectedText.length, NULL));
+            endX = lineStartX + round(CTLineGetOffsetForStringIndex(line, _selectedText.location + _selectedText.length, NULL));
           }
-          CGContextFillRect(context, CGRectMake(startX, linePosition, endX - startX, GIDiffViewLineHeight));
+          CGContextFillRect(context, CGRectMake(startX, linePosition, endX - startX, self.lineHeight));
         }
 
         [GIDiffViewPlainTextColor set];
-        CGContextSetTextPosition(context, 2 * kTextLineNumberMargin + kTextInsetLeft, textPosition);
+        CGContextSetTextPosition(context, lineStartX, textPosition);
         CTLineDraw(line, context);
       } else {
         [GIDiffViewSeparatorBackgroundColor setFill];
-        CGContextFillRect(context, CGRectMake(0, linePosition + 1, bounds.size.width, GIDiffViewLineHeight - 1));
+        CGContextFillRect(context, CGRectMake(0, linePosition + 1, bounds.size.width, self.lineHeight - 1));
 
         [GIDiffViewSeparatorLineColor setStroke];
         CGContextMoveToPoint(context, 0, linePosition + 0.5);
         CGContextAddLineToPoint(context, bounds.size.width, linePosition + 0.5);
         CGContextStrokePath(context);
-        CGContextMoveToPoint(context, 0, linePosition + GIDiffViewLineHeight - 0.5);
-        CGContextAddLineToPoint(context, bounds.size.width, linePosition + GIDiffViewLineHeight - 0.5);
+        CGContextMoveToPoint(context, 0, linePosition + self.lineHeight - 0.5);
+        CGContextAddLineToPoint(context, bounds.size.width, linePosition + self.lineHeight - 0.5);
         CGContextStrokePath(context);
 
         [GIDiffViewSeparatorTextColor setFill];
-        CGContextSetTextPosition(context, 2 * kTextLineNumberMargin + 4, textPosition);
+        CGContextSetTextPosition(context, 2 * lineNumberMargin + roundf(0.4f * GIFontSize()), textPosition);
         CTLineDraw(line, context);
       }
     }
   }
 
   [GIDiffViewVerticalLineColor setStroke];
-  CGContextMoveToPoint(context, kTextLineNumberMargin - 0.5, 0);
-  CGContextAddLineToPoint(context, kTextLineNumberMargin - 0.5, bounds.size.height);
+  CGFloat lineHorizontalPosition = lineNumberMargin - 0.5;
+  CGContextMoveToPoint(context, lineHorizontalPosition, 0);
+  CGContextAddLineToPoint(context, lineHorizontalPosition, bounds.size.height);
   CGContextStrokePath(context);
-  CGContextMoveToPoint(context, 2 * kTextLineNumberMargin - 0.5, 0);
-  CGContextAddLineToPoint(context, 2 * kTextLineNumberMargin - 0.5, bounds.size.height);
+  CGContextMoveToPoint(context, 2 * lineHorizontalPosition, 0);
+  CGContextAddLineToPoint(context, 2 * lineHorizontalPosition, bounds.size.height);
   CGContextStrokePath(context);
 
   CGContextRestoreGState(context);
@@ -375,7 +398,8 @@ typedef struct {
 
 - (void)resetCursorRects {
   NSRect bounds = self.bounds;
-  [self addCursorRect:NSMakeRect(2 * kTextLineNumberMargin + kTextInsetLeft, 0, bounds.size.width - 2 * kTextLineNumberMargin - kTextInsetLeft, bounds.size.height)
+  CGFloat lineNumberMargin = textLineNumberMargin();
+  [self addCursorRect:NSMakeRect(textLineStartX(), 0, bounds.size.width - 2 * lineNumberMargin - textInsetLeft(), bounds.size.height)
                cursor:[NSCursor IBeamCursor]];
 }
 
@@ -452,7 +476,7 @@ typedef struct {
 
   // Check if mouse is in the content area
   CFArrayRef lines = CTFrameGetLines(_frame);
-  CFIndex index = CFArrayGetCount(lines) - (location.y - kTextBottomPadding) / GIDiffViewLineHeight;
+  CFIndex index = CFArrayGetCount(lines) - (location.y - kTextBottomPadding) / self.lineHeight;
   if ((index >= 0) && (index < CFArrayGetCount(lines))) {
     CTLineRef line = CFArrayGetValueAtIndex(lines, index);
 
@@ -465,8 +489,10 @@ typedef struct {
       _selectionMode = kSelectionMode_Replace;
     }
 
+    CGFloat lineNumberMargin = textLineNumberMargin();
+
     // Check if mouse is in the margin area
-    if (location.x < 2 * kTextLineNumberMargin) {
+    if (location.x < 2 * lineNumberMargin) {
       // Reset selection
       _selectedText.length = 0;
       if (_selectionMode == kSelectionMode_Replace) {
@@ -516,13 +542,13 @@ typedef struct {
 
     }
     // Otherwise check if mouse is is in the diff area
-    else if (location.x >= 2 * kTextLineNumberMargin + kTextInsetLeft) {
+    else if (location.x >= textLineStartX()) {
       // Reset selection
       _selectedText.length = 0;
       [_selectedLines removeAllIndexes];
 
       // Update selected text
-      index = CTLineGetStringIndexForPosition(line, CGPointMake(location.x - (2 * kTextLineNumberMargin + kTextInsetLeft), GIDiffViewLineHeight / 2));
+      index = CTLineGetStringIndexForPosition(line, CGPointMake(location.x - (textLineStartX()), self.lineHeight / 2));
       if (index != kCFNotFound) {
         _deletedIndex = index;
         if (event.clickCount > 1) {
@@ -562,7 +588,7 @@ typedef struct {
 
   // Check if mouse is in the content area
   CFArrayRef lines = CTFrameGetLines(_frame);
-  CFIndex index = CFArrayGetCount(lines) - (location.y - kTextBottomPadding) / GIDiffViewLineHeight;
+  CFIndex index = CFArrayGetCount(lines) - (location.y - kTextBottomPadding) / self.lineHeight;
   if ((index >= 0) && (index < CFArrayGetCount(lines))) {
     CTLineRef line = CFArrayGetValueAtIndex(lines, index);
 
@@ -607,7 +633,7 @@ typedef struct {
     }
     // Otherwise we are in text-selection mode
     else {
-      index = CTLineGetStringIndexForPosition(line, CGPointMake(location.x - (2 * kTextLineNumberMargin + kTextInsetLeft), GIDiffViewLineHeight / 2));
+      index = CTLineGetStringIndexForPosition(line, CGPointMake(location.x - (textLineStartX()), self.lineHeight / 2));
       if (index != kCFNotFound) {
         // Update selected text
         if (index > (CFIndex)_deletedIndex) {
