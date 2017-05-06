@@ -29,6 +29,9 @@
 #import "ToolProtocol.h"
 #import "GARawTracker.h"
 
+#define OFFICIAL 0
+#define OFFICIAL_RELEASE !DEBUG && OFFICIAL
+
 #define __ENABLE_SUDDEN_TERMINATION__ 1
 
 #define kNotificationUserInfoKey_Action @"action"  // NSString
@@ -337,7 +340,7 @@
   // Initialize custom subclass of NSDocumentController
   [DocumentController sharedDocumentController];
 
-#if !DEBUG
+#if OFFICIAL_RELEASE
   // Initialize HockeyApp
   [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"65233b0e034e4fcbaf6754afba3b2b23"];
   [[BITHockeyManager sharedHockeyManager] setDisableMetricsManager:YES];
@@ -350,7 +353,7 @@
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification*)notification {
-#if !DEBUG
+#if OFFICIAL_RELEASE
   // Initialize Sparkle and check for update immediately
   if (![[NSUserDefaults standardUserDefaults] boolForKey:kUserDefaultsKey_DisableSparkle]) {
     _updater = [SUUpdater sharedUpdater];
@@ -441,7 +444,7 @@
   }
   [self handleDocumentCountChanged];
 
-#if !DEBUG
+#if OFFICIAL_RELEASE
   [[GARawTracker sharedTracker] sendEventWithCategory:@"application"
                                                action:@"activate"
                                                 label:nil
