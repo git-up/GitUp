@@ -29,7 +29,7 @@
 #import "ToolProtocol.h"
 #import "GARawTracker.h"
 
-#define OFFICIAL 1
+#define OFFICIAL 0
 #define OFFICIAL_RELEASE !DEBUG && OFFICIAL
 
 #define __ENABLE_SUDDEN_TERMINATION__ 1
