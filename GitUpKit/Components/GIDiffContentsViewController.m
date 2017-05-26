@@ -606,7 +606,8 @@ static inline NSString* _StringFromFileMode(GCFileMode mode) {
         view.backgroundColor = _renamedBackgroundColor;
         view.imageView.image = _renamedImage;
         label = [NSString stringWithFormat:@"%@ ▶ %@", oldPath, newPath];  // TODO: Handle truncation
-        GIComputeModifiedRanges(oldPath, &oldPathRange, newPath, &newPathRange);
+        // This crashes with certain input. The code is hard to understand and does not do anything particulatly important so disable it.  
+//        GIComputeModifiedRanges(oldPath, &oldPathRange, newPath, &newPathRange);
         newPathRange.location += oldPath.length + 3;
         break;
       }
