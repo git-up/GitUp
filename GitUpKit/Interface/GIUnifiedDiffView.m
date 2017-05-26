@@ -171,7 +171,7 @@ typedef struct {
           }
           if (string == NULL) {
             string = CFSTR("<LINE IS NOT VALID UTF-8>\n");
-            XLOG_DEBUG_UNREACHABLE();
+            XLOG_WARNING(@"Line is not valid UTF-8");
           }
           [self _addLineWithString:string change:change oldLineNumber:oldLineNumber newLineNumber:newLineNumber contentBytes:contentBytes contentLength:contentLength];
           CFRelease(string);
