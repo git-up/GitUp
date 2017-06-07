@@ -500,15 +500,10 @@ static void _StreamCallback(ConstFSEventStreamRef streamRef, void* clientCallBac
   if (path) {
     NSString* tempPath = [path stringByAppendingString:@"~"];
     if ([NSKeyedArchiver archiveRootObject:_snapshots toFile:tempPath]) {
-      struct stat info;
-      if (lstat(path.fileSystemRepresentation, &info) == 0) {
-        if (exchangedata(tempPath.fileSystemRepresentation, path.fileSystemRepresentation, FSOPT_NOFOLLOW) == 0) {
-          success = YES;
-        }
-      } else {
-        if (rename(tempPath.fileSystemRepresentation, path.fileSystemRepresentation) == 0) {
-          success = YES;
-        }
+      if (GCExchangeFileData(tempPath.fileSystemRepresentation, path.fileSystemRepresentation) == 0) {
+        success = YES;
+      } else if (rename(tempPath.fileSystemRepresentation, path.fileSystemRepresentation) == 0) {
+        success = YES;
       }
       if (!success) {
         XLOG_ERROR(@"Failed archiving snapshots: %s", strerror(errno));
