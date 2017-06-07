@@ -19,6 +19,7 @@
 
 #import <sys/stat.h>
 #import <sys/attr.h>
+#import <sys/mount.h>
 
 #import "GCPrivate.h"
 
@@ -500,10 +501,20 @@ static void _StreamCallback(ConstFSEventStreamRef streamRef, void* clientCallBac
   if (path) {
     NSString* tempPath = [path stringByAppendingString:@"~"];
     if ([NSKeyedArchiver archiveRootObject:_snapshots toFile:tempPath]) {
-      struct stat info;
-      if (lstat(path.fileSystemRepresentation, &info) == 0) {
-        if (exchangedata(tempPath.fileSystemRepresentation, path.fileSystemRepresentation, FSOPT_NOFOLLOW) == 0) {
-          success = YES;
+      struct statfs stat;
+      if (statfs(path.fileSystemRepresentation, &stat) == 0) {
+        struct attrlist attrList = { ATTR_BIT_MAP_COUNT, 0, 0, ATTR_VOL_CAPABILITIES, 0, 0, 0 };
+        struct { u_int32_t length; vol_capabilities_attr_t attr; } attrBuf;
+        if (getattrlist(stat.f_mntonname, &attrList, &attrBuf, sizeof(attrBuf), 0) == 0) {
+            if ((attrBuf.attr.capabilities[VOL_CAPABILITIES_INTERFACES] & VOL_CAP_INT_EXCHANGEDATA) == VOL_CAP_INT_EXCHANGEDATA) {
+              if (exchangedata(tempPath.fileSystemRepresentation, path.fileSystemRepresentation, FSOPT_NOFOLLOW) == 0) {
+                success = YES;
+              }
+            } else {
+              if (remove(path.fileSystemRepresentation) == 0 && rename(tempPath.fileSystemRepresentation, path.fileSystemRepresentation) == 0) {
+                success = YES;
+              }
+            }
         }
       } else {
         if (rename(tempPath.fileSystemRepresentation, path.fileSystemRepresentation) == 0) {
