@@ -498,21 +498,10 @@ static void _StreamCallback(ConstFSEventStreamRef streamRef, void* clientCallBac
   BOOL success = NO;
   NSString* path = [self.privateAppDirectoryPath stringByAppendingPathComponent:kSnapshotsFileName];
   if (path) {
-    NSString* tempPath = [path stringByAppendingString:@"~"];
-    if ([NSKeyedArchiver archiveRootObject:_snapshots toFile:tempPath]) {
-      struct stat info;
-      if (lstat(path.fileSystemRepresentation, &info) == 0) {
-        if (exchangedata(tempPath.fileSystemRepresentation, path.fileSystemRepresentation, FSOPT_NOFOLLOW) == 0) {
-          success = YES;
-        }
-      } else {
-        if (rename(tempPath.fileSystemRepresentation, path.fileSystemRepresentation) == 0) {
-          success = YES;
-        }
-      }
-      if (!success) {
-        XLOG_ERROR(@"Failed archiving snapshots: %s", strerror(errno));
-      }
+    NSError* error = nil;
+    success = [[NSKeyedArchiver archivedDataWithRootObject:_snapshots] writeToFile:path options:NSDataWritingAtomic error:&error];
+    if (!success) {
+      XLOG_ERROR(@"Failed archiving snapshots: %@", error);
     }
   }
   if (!success && [self.delegate respondsToSelector:@selector(repository:snapshotsUpdateDidFailWithError:)]) {

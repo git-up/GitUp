@@ -581,8 +581,8 @@ cleanup:
   copyfile_state_free(state);
   CHECK_POSIX_FUNCTION_CALL(goto cleanup, status, == 0);
 
-  // Swap temporary copy and original file
-  CALL_POSIX_FUNCTION_GOTO(cleanup, exchangedata, fullPath, tempPath, FSOPT_NOFOLLOW);
+  // Move temporary copy.
+  CALL_POSIX_FUNCTION_GOTO(cleanup, rename, tempPath, fullPath);
   CALL_POSIX_FUNCTION_GOTO(cleanup, utimes, fullPath, NULL);  // Touch file to make sure any cached information in the index gets invalidated
 
   success = YES;
