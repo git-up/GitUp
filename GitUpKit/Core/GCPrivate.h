@@ -75,13 +75,13 @@ static inline NSString* GetLastGitErrorMessage() {
 
 #define CALL_LIBGIT2_FUNCTION_RETURN(__RETURN_VALUE_ON_ERROR__, __FUNCTION__, ...)         \
   do {                                                                                     \
-    int __callError = __FUNCTION__(__VA_ARGS__);                                           \
+    git_error_code __callError = __FUNCTION__(__VA_ARGS__);                                \
     CHECK_LIBGIT2_FUNCTION_CALL(return __RETURN_VALUE_ON_ERROR__, __callError, == GIT_OK); \
   } while (0)
 
 #define CALL_LIBGIT2_FUNCTION_GOTO(__GOTO_LABEL__, __FUNCTION__, ...)         \
   do {                                                                        \
-    int __callError = __FUNCTION__(__VA_ARGS__);                              \
+    git_error_code __callError = __FUNCTION__(__VA_ARGS__);                   \
     CHECK_LIBGIT2_FUNCTION_CALL(goto __GOTO_LABEL__, __callError, == GIT_OK); \
   } while (0)
 

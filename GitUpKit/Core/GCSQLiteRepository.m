@@ -507,8 +507,8 @@ static int _refdb_exists(int* exists, git_refdb_backend* _backend, const char* r
   return error;
 }
 
-static git_reference* _refdb_create_reference(git_reference** reference_out, sqlite3_stmt* statement) {
-  int error = GIT_ERROR;
+static git_error_code _refdb_create_reference(git_reference** reference_out, sqlite3_stmt* statement) {
+  git_error_code error = GIT_ERROR;
   const char* name = (const char*)sqlite3_column_text(statement, 0);
   const void* oid = sqlite3_column_blob(statement, 1);
   XLOG_DEBUG_CHECK(!oid || (sqlite3_column_bytes(statement, 1) == GIT_OID_RAWSZ));
@@ -523,10 +523,10 @@ static git_reference* _refdb_create_reference(git_reference** reference_out, sql
   return error;
 }
 
-static int _refdb_lookup(git_reference** reference_out, git_refdb_backend* _backend, const char* ref_name) {
+static git_error_code _refdb_lookup(git_reference** reference_out, git_refdb_backend* _backend, const char* ref_name) {
   XLOG_DEBUG_CHECK(reference_out && _backend && ref_name);
   sqlite3_refdb* backend = (sqlite3_refdb*)_backend;
-  int error = GIT_ERROR;
+  git_error_code error = GIT_ERROR;
 
   *reference_out = NULL;
 
