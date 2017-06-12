@@ -548,9 +548,9 @@ static inline NSString* _StringFromFileMode(GCFileMode mode) {
       }
       GIConflictDiffCellView* view = [_tableView makeViewWithIdentifier:@"conflict" owner:self];
       view.statusTextField.stringValue = [NSString stringWithFormat:NSLocalizedString(@"This file has conflicts (%@)", nil), status];
-      view.openButton.tag = data;
-      view.mergeButton.tag = data;
-      view.resolveButton.tag = data;
+      view.openButton.tag = (uintptr_t)((__bridge void*)data);
+      view.mergeButton.tag = (uintptr_t)((__bridge void*)data);
+      view.resolveButton.tag = (uintptr_t)((__bridge void*)data);
       return view;
     } else if (GC_FILE_MODE_IS_SUBMODULE(delta.oldFile.mode) || GC_FILE_MODE_IS_SUBMODULE(delta.newFile.mode)) {
       GISubmoduleDiffCellView* view = [_tableView makeViewWithIdentifier:@"submodule" owner:self];
@@ -643,10 +643,10 @@ static inline NSString* _StringFromFileMode(GCFileMode mode) {
   }
   BOOL hasActionMenu = [_delegate respondsToSelector:@selector(diffContentsViewController:willShowContextualMenuForDelta:conflict:)];
   view.menuButton.hidden = !hasActionMenu;
-  view.menuButton.tag = data;
+  view.menuButton.tag = (uintptr_t)((__bridge void*)data);
   BOOL hasActionButton = [_delegate respondsToSelector:@selector(diffContentsViewController:actionButtonLabelForDelta:conflict:)];
   [view setActionButtonLabel:(hasActionButton ? [_delegate diffContentsViewController:self actionButtonLabelForDelta:delta conflict:data.conflict] : nil)];
-  view.actionButton.tag = data;
+  view.actionButton.tag = (uintptr_t)((__bridge void*)data);
   return view;
 }
 
