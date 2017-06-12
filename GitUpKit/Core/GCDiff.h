@@ -62,7 +62,7 @@ typedef NS_ENUM(NSUInteger, GCFileDiffChange) {
 
 typedef void (^GCDiffBeginHunkHandler)(NSUInteger oldLineNumber, NSUInteger oldLineCount, NSUInteger newLineNumber, NSUInteger newLineCount);
 typedef void (^GCDiffLineHandler)(GCLineDiffChange change, NSUInteger oldLineNumber, NSUInteger newLineNumber, const char* contentBytes, NSUInteger contentLength);
-typedef void (^GCDiffEndHunkHandler)();
+typedef void (^GCDiffEndHunkHandler)(void);
 
 @interface GCDiffFile : NSObject
 @property(nonatomic, readonly) NSString* path;
