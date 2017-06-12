@@ -113,7 +113,7 @@ static Boolean _ArrayEqualCallBack(const void* value1, const void* value2) {
   [self setDirectTarget:git_object_id(target.private) forReferenceWithName:kHEADReferenceFullName];
 }
 
-- (BOOL)apply:(NSError**)error {
+- (BOOL)apply:(NSError**)outError {
   BOOL success = NO;
   git_transaction* transaction = NULL;
   const char* message = _message.UTF8String;
@@ -158,8 +158,8 @@ cleanup:
 
 @implementation GCRepository (GCReferenceTransform)
 
-- (BOOL)applyReferenceTransform:(GCReferenceTransform*)transform error:(NSError**)error {
-  return [transform apply:error];
+- (BOOL)applyReferenceTransform:(GCReferenceTransform*)transform error:(NSError**)outError {
+  return [transform apply:outError];
 }
 
 @end

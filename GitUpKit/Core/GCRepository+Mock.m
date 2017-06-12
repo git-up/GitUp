@@ -33,7 +33,7 @@ static const git_oid* _CommitParentCallback(size_t idx, void* payload) {
   return NULL;
 }
 
-- (NSArray*)createMockCommitHierarchyFromNotation:(NSString*)notation force:(BOOL)force error:(NSError**)error {
+- (NSArray*)createMockCommitHierarchyFromNotation:(NSString*)notation force:(BOOL)force error:(NSError**)outError {
   BOOL success = NO;
   NSMutableArray* commits = [[NSMutableArray alloc] init];
   CFMutableDictionaryRef cache = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, &kCFTypeDictionaryKeyCallBacks, NULL);

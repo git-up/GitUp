@@ -212,8 +212,8 @@ static void _StreamCallback(ConstFSEventStreamRef streamRef, void* clientCallBac
   }
 }
 
-- (instancetype)initWithRepository:(git_repository*)repository error:(NSError**)error {
-  if ((self = [super initWithRepository:repository error:error])) {
+- (instancetype)initWithRepository:(git_repository*)repository error:(NSError**)outError {
+  if ((self = [super initWithRepository:repository error:outError])) {
     _diffWhitespaceMode = kGCLiveRepositoryDiffWhitespaceMode_Normal;
     _diffMaxInterHunkLines = 0;
     _diffMaxContextLines = 3;
@@ -221,7 +221,7 @@ static void _StreamCallback(ConstFSEventStreamRef streamRef, void* clientCallBac
     _state = [super state];
 
     CFAbsoluteTime time = CFAbsoluteTimeGetCurrent();
-    _history = [self loadHistoryUsingSorting:[self.class historySorting] error:error];
+    _history = [self loadHistoryUsingSorting:[self.class historySorting] error:outError];
     if (_history == nil) {
       return nil;
     }
@@ -905,15 +905,15 @@ static void _StreamCallback(ConstFSEventStreamRef streamRef, void* clientCallBac
 
 - (BOOL)performReferenceTransformWithReason:(NSString*)reason
                                    argument:(id<NSCoding>)argument
-                                      error:(NSError**)error
+                                      error:(NSError**)outError
                                  usingBlock:(GCReferenceTransform* (^)(GCLiveRepository* repository, NSError** outError))block {
   return [self performOperationWithReason:reason
                                  argument:argument
                        skipCheckoutOnUndo:NO
-                                    error:error
-                               usingBlock:^BOOL(GCLiveRepository* repository, NSError** outError) {
+                                    error:outError
+                               usingBlock:^BOOL(GCLiveRepository* repository, NSError** error) {
 
-                                 GCReferenceTransform* transform = block(repository, outError);
+                                 GCReferenceTransform* transform = block(repository, error);
                                  if (!transform) {
                                    return NO;
                                  }
@@ -921,7 +921,7 @@ static void _StreamCallback(ConstFSEventStreamRef streamRef, void* clientCallBac
                                  if (![repository lookupHEADCurrentCommit:&oldHeadCommit branch:NULL error:error]) {
                                    return NO;
                                  }
-                                 if (![repository applyReferenceTransform:transform error:outError]) {
+                                 if (![repository applyReferenceTransform:transform error:error]) {
                                    return NO;
                                  }
                                  GCCommit* newHeadCommit;
@@ -929,22 +929,22 @@ static void _StreamCallback(ConstFSEventStreamRef streamRef, void* clientCallBac
                                    return NO;
                                  }
                                  if (newHeadCommit && (!oldHeadCommit || ![newHeadCommit isEqualToCommit:oldHeadCommit])) {
-                                   return [self checkoutTreeForCommit:nil withBaseline:oldHeadCommit options:kGCCheckoutOption_UpdateSubmodulesRecursively error:outError];
+                                   return [self checkoutTreeForCommit:nil withBaseline:oldHeadCommit options:kGCCheckoutOption_UpdateSubmodulesRecursively error:error];
                                  }
                                  return YES;
 
                                }];
 }
 
-- (GCCommit*)performCommitCreationFromHEADAndOtherParent:(GCCommit*)parent withMessage:(NSString*)message error:(NSError**)error {
+- (GCCommit*)performCommitCreationFromHEADAndOtherParent:(GCCommit*)parent withMessage:(NSString*)message error:(NSError**)outError {
   __block GCCommit* newCommit = nil;
   if (![self performOperationWithReason:GCLiveRepositoryCommitOperationReason
                                argument:nil
                      skipCheckoutOnUndo:YES
-                                  error:error
-                             usingBlock:^BOOL(GCLiveRepository* repository, NSError** outError) {
+                                  error:outError
+                             usingBlock:^BOOL(GCLiveRepository* repository, NSError** error) {
 
-                               newCommit = [repository createCommitFromHEADAndOtherParent:parent withMessage:message error:outError];
+                               newCommit = [repository createCommitFromHEADAndOtherParent:parent withMessage:message error:error];
                                return newCommit ? YES : NO;
 
                              }]) {
@@ -953,13 +953,13 @@ static void _StreamCallback(ConstFSEventStreamRef streamRef, void* clientCallBac
   return newCommit;
 }
 
-- (GCCommit*)performHEADCommitAmendingWithMessage:(NSString*)message error:(NSError**)error {
+- (GCCommit*)performHEADCommitAmendingWithMessage:(NSString*)message error:(NSError**)outError {
   __block GCCommit* newCommit = nil;
   if (![self performOperationWithReason:GCLiveRepositoryAmendOperationReason
                                argument:nil
                      skipCheckoutOnUndo:YES
-                                  error:error
-                             usingBlock:^BOOL(GCLiveRepository* repository, NSError** outError) {
+                                  error:outError
+                             usingBlock:^BOOL(GCLiveRepository* repository, NSError** error) {
 
                                newCommit = [repository createCommitByAmendingHEADWithMessage:message error:error];
                                return newCommit ? YES : NO;

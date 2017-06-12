@@ -132,7 +132,7 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
     __block NSUInteger startIndex = NSNotFound;
     __block NSUInteger addedCount = 0;
     __block NSUInteger deletedCount = 0;
-    void (^highlightBlock)() = ^() {
+    void (^highlightBlock)(void) = ^{
       if ((addedCount == deletedCount) && (startIndex != NSNotFound)) {
         NSUInteger deletedIndex = startIndex;
         NSUInteger addedIndex = startIndex;
@@ -497,7 +497,7 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
   }
 }
 
-- (void)getSelectedText:(NSString**)text oldLines:(NSIndexSet**)oldLines newLines:(NSIndexSet**)newLines {
+- (void)getSelectedText:(NSString* __autoreleasing *)text oldLines:(NSIndexSet* __autoreleasing *)oldLines newLines:(NSIndexSet* __autoreleasing *)newLines {
   if (text) {
     if (_selectedText.length > 0) {
       XLOG_DEBUG_CHECK(!_selectedLines.count);

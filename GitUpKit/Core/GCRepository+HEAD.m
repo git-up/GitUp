@@ -35,15 +35,15 @@
   return NO;
 }
 
-- (GCReference*)lookupHEADReference:(NSError**)error {
+- (GCReference*)lookupHEADReference:(NSError**)outError {
   git_reference* reference;
   CALL_LIBGIT2_FUNCTION_RETURN(nil, git_reference_lookup, &reference, self.private, kHEADReferenceFullName);
   return [[GCReference alloc] initWithRepository:self reference:reference];
 }
 
-- (GCCommit*)lookupHEAD:(GCLocalBranch**)currentBranch error:(NSError**)error {
+- (GCCommit*)lookupHEAD:(GCLocalBranch**)currentBranch error:(NSError**)outError {
   git_reference* headReference = NULL;
-  git_commit* headCommit = [self loadHEADCommit:(currentBranch ? &headReference : NULL) error:error];
+  git_commit* headCommit = [self loadHEADCommit:(currentBranch ? &headReference : NULL) error:outError];
   if (headCommit == NULL) {
     return NULL;
   }
@@ -53,10 +53,10 @@
   return [[GCCommit alloc] initWithRepository:self commit:headCommit];
 }
 
-- (BOOL)lookupHEADCurrentCommit:(GCCommit**)commit branch:(GCLocalBranch**)branch error:(NSError**)error {
+- (BOOL)lookupHEADCurrentCommit:(GCCommit**)commit branch:(GCLocalBranch**)branch error:(NSError**)outError {
   git_commit* headCommit = NULL;
   git_reference* headReference = NULL;
-  if (![self loadHEADCommit:(commit ? &headCommit : NULL) resolvedReference:(branch ? &headReference : NULL) error:error]) {
+  if (![self loadHEADCommit:(commit ? &headCommit : NULL) resolvedReference:(branch ? &headReference : NULL) error:outError]) {
     return NO;
   }
   if (commit) {
@@ -68,31 +68,31 @@
   return YES;
 }
 
-- (BOOL)setHEADToReference:(GCReference*)reference error:(NSError**)error {
+- (BOOL)setHEADToReference:(GCReference*)reference error:(NSError**)outError {
   CALL_LIBGIT2_FUNCTION_RETURN(NO, git_repository_set_head, self.private, git_reference_name(reference.private));  // This uses a "checkout: " reflog message
   return YES;
 }
 
-- (BOOL)setDetachedHEADToCommit:(GCCommit*)commit error:(NSError**)error {
+- (BOOL)setDetachedHEADToCommit:(GCCommit*)commit error:(NSError**)outError {
   CALL_LIBGIT2_FUNCTION_RETURN(NO, git_repository_set_head_detached, self.private, git_commit_id(commit.private));  // This uses a "checkout: " reflog message
   return YES;
 }
 
-- (BOOL)moveHEADToCommit:(GCCommit*)commit reflogMessage:(NSString*)message error:(NSError**)error {
+- (BOOL)moveHEADToCommit:(GCCommit*)commit reflogMessage:(NSString*)message error:(NSError**)outError {
   git_reference* headReference;
   CALL_LIBGIT2_FUNCTION_RETURN(NO, git_repository_head, &headReference, self.private);
-  BOOL success = [self setTargetOID:git_commit_id(commit.private) forReference:headReference reflogMessage:message newReference:NULL error:error];
+  BOOL success = [self setTargetOID:git_commit_id(commit.private) forReference:headReference reflogMessage:message newReference:NULL error:outError];
   git_reference_free(headReference);
   return success;
 }
 
 #pragma mark - Commit Creation
 
-- (GCCommit*)createCommitFromHEADWithMessage:(NSString*)message error:(NSError**)error {
-  return [self createCommitFromHEADAndOtherParent:nil withMessage:message error:error];
+- (GCCommit*)createCommitFromHEADWithMessage:(NSString*)message error:(NSError**)outError {
+  return [self createCommitFromHEADAndOtherParent:nil withMessage:message error:outError];
 }
 
-- (GCCommit*)createCommitFromHEADAndOtherParent:(GCCommit*)parent withMessage:(NSString*)message error:(NSError**)error {
+- (GCCommit*)createCommitFromHEADAndOtherParent:(GCCommit*)parent withMessage:(NSString*)message error:(NSError**)outError {
   BOOL success = NO;
   GCCommit* commit = nil;
   git_reference* headReference = NULL;
@@ -110,13 +110,13 @@
     goto cleanup;
   }
 
-  index = [self reloadRepositoryIndex:error];
+  index = [self reloadRepositoryIndex:outError];
   if (index == NULL) {
     goto cleanup;
   }
 
   const git_commit* parents[2] = {headCommit, parent.private};
-  commit = [self createCommitFromIndex:index withParents:parents count:(headCommit ? (parent ? 2 : 1) : 0) author:NULL message:message error:error];
+  commit = [self createCommitFromIndex:index withParents:parents count:(headCommit ? (parent ? 2 : 1) : 0) author:NULL message:message error:outError];
   if (commit == nil) {
     goto cleanup;
   }
@@ -129,11 +129,11 @@
   } else {
     reflogMessage = [NSString stringWithFormat:kGCReflogMessageFormat_Git_Commit_Initial, commit.summary];
   }
-  if (![self setTargetOID:git_commit_id(commit.private) forReference:headReference reflogMessage:reflogMessage newReference:NULL error:error]) {
+  if (![self setTargetOID:git_commit_id(commit.private) forReference:headReference reflogMessage:reflogMessage newReference:NULL error:outError]) {
     goto cleanup;
   }
 
-  if (![self cleanupState:error]) {
+  if (![self cleanupState:outError]) {
     goto cleanup;
   }
   success = YES;
@@ -145,7 +145,7 @@ cleanup:
   return success ? commit : nil;
 }
 
-- (GCCommit*)createCommitByAmendingHEADWithMessage:(NSString*)message error:(NSError**)error {
+- (GCCommit*)createCommitByAmendingHEADWithMessage:(NSString*)message error:(NSError**)outError {
   BOOL success = NO;
   GCCommit* commit = nil;
   git_reference* headReference = NULL;
@@ -157,22 +157,22 @@ cleanup:
   XLOG_DEBUG_CHECK(git_reference_type(headReference) == GIT_REF_OID);
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_commit_lookup, &headCommit, self.private, git_reference_target(headReference));
 
-  index = [self reloadRepositoryIndex:error];
+  index = [self reloadRepositoryIndex:outError];
   if (index == NULL) {
     goto cleanup;
   }
 
-  commit = [self createCommitFromCommit:headCommit withIndex:index updatedMessage:message updatedParents:nil updateCommitter:YES error:error];
+  commit = [self createCommitFromCommit:headCommit withIndex:index updatedMessage:message updatedParents:nil updateCommitter:YES error:outError];
   if (commit == nil) {
     goto cleanup;
   }
 
   reflogMessage = [NSString stringWithFormat:kGCReflogMessageFormat_Git_Commit_Amend, commit.summary];
-  if (![self setTargetOID:git_commit_id(commit.private) forReference:headReference reflogMessage:reflogMessage newReference:NULL error:error]) {
+  if (![self setTargetOID:git_commit_id(commit.private) forReference:headReference reflogMessage:reflogMessage newReference:NULL error:outError]) {
     goto cleanup;
   }
 
-  if (![self cleanupState:error]) {
+  if (![self cleanupState:outError]) {
     goto cleanup;
   }
   success = YES;
@@ -189,7 +189,7 @@ cleanup:
 - (BOOL)_checkoutTreeForCommit:(GCCommit*)commit
                   withBaseline:(GCCommit*)baseline
                        options:(GCCheckoutOptions)options
-                         error:(NSError**)error {
+                         error:(NSError**)outError {
   CFAbsoluteTime time = CFAbsoluteTimeGetCurrent();
   git_tree* tree = NULL;
   git_checkout_options checkoutOptions = GIT_CHECKOUT_OPTIONS_INIT;
@@ -206,24 +206,24 @@ cleanup:
 }
 
 // Because by default git_checkout_tree() assumes the baseline (i.e. expected content of workdir) is HEAD we must checkout first, then update HEAD
-- (BOOL)checkoutCommit:(GCCommit*)commit options:(GCCheckoutOptions)options error:(NSError**)error {
-  if (![self _checkoutTreeForCommit:commit withBaseline:nil options:options error:error] || ![self setDetachedHEADToCommit:commit error:error]) {
+- (BOOL)checkoutCommit:(GCCommit*)commit options:(GCCheckoutOptions)options error:(NSError**)outError {
+  if (![self _checkoutTreeForCommit:commit withBaseline:nil options:options error:outError] || ![self setDetachedHEADToCommit:commit error:outError]) {
     return NO;
   }
   if (options & kGCCheckoutOption_UpdateSubmodulesRecursively) {
-    return [self updateAllSubmodulesResursively:(options & kGCCheckoutOption_Force ? YES : NO) error:error];  // This must happen after moving HEAD
+    return [self updateAllSubmodulesResursively:(options & kGCCheckoutOption_Force ? YES : NO) error:outError];  // This must happen after moving HEAD
   }
   return YES;
 }
 
 // Because by default git_checkout_tree() assumes the baseline (i.e. expected content of workdir) is HEAD we must checkout first, then update HEAD
-- (BOOL)checkoutLocalBranch:(GCLocalBranch*)branch options:(GCCheckoutOptions)options error:(NSError**)error {
-  GCCommit* tipCommit = [self lookupTipCommitForBranch:branch error:error];
-  if (!tipCommit || ![self _checkoutTreeForCommit:tipCommit withBaseline:nil options:options error:error] || ![self setHEADToReference:branch error:error]) {
+- (BOOL)checkoutLocalBranch:(GCLocalBranch*)branch options:(GCCheckoutOptions)options error:(NSError**)outError {
+  GCCommit* tipCommit = [self lookupTipCommitForBranch:branch error:outError];
+  if (!tipCommit || ![self _checkoutTreeForCommit:tipCommit withBaseline:nil options:options error:outError] || ![self setHEADToReference:branch error:outError]) {
     return NO;
   }
   if (options & kGCCheckoutOption_UpdateSubmodulesRecursively) {
-    return [self updateAllSubmodulesResursively:(options & kGCCheckoutOption_Force ? YES : NO) error:error];  // This must happen after moving HEAD
+    return [self updateAllSubmodulesResursively:(options & kGCCheckoutOption_Force ? YES : NO) error:outError];  // This must happen after moving HEAD
   }
   return YES;
 }
@@ -231,28 +231,28 @@ cleanup:
 - (BOOL)checkoutTreeForCommit:(GCCommit*)commit
                  withBaseline:(GCCommit*)baseline
                       options:(GCCheckoutOptions)options
-                        error:(NSError**)error {
-  if (![self _checkoutTreeForCommit:commit withBaseline:baseline options:options error:error]) {
+                        error:(NSError**)outError {
+  if (![self _checkoutTreeForCommit:commit withBaseline:baseline options:options error:outError]) {
     return NO;
   }
   if (options & kGCCheckoutOption_UpdateSubmodulesRecursively) {
-    return [self updateAllSubmodulesResursively:(options & kGCCheckoutOption_Force ? YES : NO) error:error];
+    return [self updateAllSubmodulesResursively:(options & kGCCheckoutOption_Force ? YES : NO) error:outError];
   }
   return YES;
 }
 
-- (BOOL)checkoutIndex:(GCIndex*)index withOptions:(GCCheckoutOptions)options error:(NSError**)error {
+- (BOOL)checkoutIndex:(GCIndex*)index withOptions:(GCCheckoutOptions)options error:(NSError**)outError {
   git_checkout_options checkoutOptions = GIT_CHECKOUT_OPTIONS_INIT;
   checkoutOptions.checkout_strategy = options & kGCCheckoutOption_Force ? GIT_CHECKOUT_FORCE : GIT_CHECKOUT_SAFE;
   checkoutOptions.checkout_strategy |= GIT_CHECKOUT_ALLOW_CONFLICTS;
   CALL_LIBGIT2_FUNCTION_RETURN(NO, git_checkout_index, self.private, index.private, &checkoutOptions);
   if (options & kGCCheckoutOption_UpdateSubmodulesRecursively) {
-    return [self updateAllSubmodulesResursively:(options & kGCCheckoutOption_Force ? YES : NO) error:error];
+    return [self updateAllSubmodulesResursively:(options & kGCCheckoutOption_Force ? YES : NO) error:outError];
   }
   return YES;
 }
 
-- (BOOL)checkoutFileToWorkingDirectory:(NSString*)path fromCommit:(GCCommit*)commit skipIndex:(BOOL)skipIndex error:(NSError**)error {
+- (BOOL)checkoutFileToWorkingDirectory:(NSString*)path fromCommit:(GCCommit*)commit skipIndex:(BOOL)skipIndex error:(NSError**)outError {
   git_checkout_options options = GIT_CHECKOUT_OPTIONS_INIT;
   options.checkout_strategy = GIT_CHECKOUT_FORCE | GIT_CHECKOUT_DISABLE_PATHSPEC_MATCH;
   if (skipIndex) {
@@ -269,9 +269,9 @@ cleanup:
 
 @implementation GCRepository (HEAD_Private)
 
-- (git_commit*)loadHEADCommit:(git_reference**)resolvedReference error:(NSError**)error {
+- (git_commit*)loadHEADCommit:(git_reference**)resolvedReference error:(NSError**)outError {
   git_commit* commit;
-  if (![self loadHEADCommit:&commit resolvedReference:resolvedReference error:error]) {
+  if (![self loadHEADCommit:&commit resolvedReference:resolvedReference error:outError]) {
     return NULL;
   }
   if (commit == NULL) {
@@ -281,7 +281,7 @@ cleanup:
   return commit;
 }
 
-- (BOOL)loadHEADCommit:(git_commit**)commit resolvedReference:(git_reference**)resolvedReference error:(NSError**)error {
+- (BOOL)loadHEADCommit:(git_commit**)commit resolvedReference:(git_reference**)resolvedReference error:(NSError**)outError {
   BOOL success = NO;
   git_reference* headReference = NULL;
 
@@ -303,7 +303,7 @@ cleanup:
     else {
       CHECK_LIBGIT2_FUNCTION_CALL(goto cleanup, status, == GIT_OK);
       if (commit) {
-        *commit = [self loadCommitFromBranchReference:branchReference error:error];
+        *commit = [self loadCommitFromBranchReference:branchReference error:outError];
         if (*commit == NULL) {
           goto cleanup;
         }
@@ -319,7 +319,7 @@ cleanup:
   else {
     XLOG_DEBUG_CHECK(git_reference_type(headReference) == GIT_REF_OID);
     if (commit) {
-      *commit = [self loadCommitFromBranchReference:headReference error:error];
+      *commit = [self loadCommitFromBranchReference:headReference error:outError];
       if (*commit == NULL) {
         goto cleanup;
       }
@@ -337,7 +337,7 @@ cleanup:
 
 #if DEBUG
 
-- (BOOL)mergeCommitToHEAD:(GCCommit*)commit error:(NSError**)error {
+- (BOOL)mergeCommitToHEAD:(GCCommit*)commit error:(NSError**)outError {
   BOOL success = NO;
   git_annotated_commit* annotatedCommit = NULL;
 

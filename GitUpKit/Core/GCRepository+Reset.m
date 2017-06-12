@@ -21,7 +21,7 @@
 
 @implementation GCRepository (Reset)
 
-- (BOOL)_resetToCommit:(git_commit*)commit mode:(GCResetMode)mode error:(NSError**)error {
+- (BOOL)_resetToCommit:(git_commit*)commit mode:(GCResetMode)mode error:(NSError**)outError {
   git_checkout_options options = GIT_CHECKOUT_OPTIONS_INIT;
   git_reset_t resetMode;
   switch (mode) {
@@ -39,18 +39,18 @@
   return YES;
 }
 
-- (BOOL)resetToHEAD:(GCResetMode)mode error:(NSError**)error {
-  git_commit* commit = [self loadHEADCommit:NULL error:error];
-  return commit ? [self _resetToCommit:commit mode:mode error:error] : NO;
+- (BOOL)resetToHEAD:(GCResetMode)mode error:(NSError**)outError {
+  git_commit* commit = [self loadHEADCommit:NULL error:outError];
+  return commit ? [self _resetToCommit:commit mode:mode error:outError] : NO;
 }
 
-- (BOOL)resetToTag:(GCTag*)tag mode:(GCResetMode)mode error:(NSError**)error {
-  GCCommit* commit = [self lookupCommitForTag:tag annotation:NULL error:error];
-  return commit ? [self _resetToCommit:commit.private mode:mode error:error] : NO;
+- (BOOL)resetToTag:(GCTag*)tag mode:(GCResetMode)mode error:(NSError**)outError {
+  GCCommit* commit = [self lookupCommitForTag:tag annotation:NULL error:outError];
+  return commit ? [self _resetToCommit:commit.private mode:mode error:outError] : NO;
 }
 
-- (BOOL)resetToCommit:(GCCommit*)commit mode:(GCResetMode)mode error:(NSError**)error {
-  return [self _resetToCommit:commit.private mode:mode error:error];
+- (BOOL)resetToCommit:(GCCommit*)commit mode:(GCResetMode)mode error:(NSError**)outError {
+  return [self _resetToCommit:commit.private mode:mode error:outError];
 }
 
 @end

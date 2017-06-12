@@ -227,7 +227,7 @@ static CFHashCode _EntryHashCallBack(const void* value) {
 
 @implementation GCRepository (Reflog)
 
-- (NSArray*)loadReflogEntriesForReference:(GCReference*)reference error:(NSError**)error {
+- (NSArray*)loadReflogEntriesForReference:(GCReference*)reference error:(NSError**)outError {
   NSMutableArray* entries = [[NSMutableArray alloc] init];
   if (git_reference_has_log(self.private, git_reference_name(reference.private))) {
     git_reflog* reflog;
@@ -247,13 +247,13 @@ static CFHashCode _EntryHashCallBack(const void* value) {
   return [entries autorelease];
 }
 
-- (NSArray*)loadAllReflogEntries:(NSError**)error {
+- (NSArray*)loadAllReflogEntries:(NSError**)outError {
   NSMutableArray* entries = [[NSMutableArray alloc] init];
   CFSetCallBacks callbacks = {0, NULL, NULL, NULL, _EntryEqualCallBack, _EntryHashCallBack};
   CFMutableSetRef cache = CFSetCreateMutable(kCFAllocatorDefault, 0, &callbacks);
   BOOL success = [self enumerateReferencesWithOptions:(kGCReferenceEnumerationOption_IncludeHEAD | kGCReferenceEnumerationOption_RetainReferences)
-                                                error:error
-                                           usingBlock:^BOOL(git_reference* rawReference) {
+                                                error:outError
+                                           usingBlock:^BOOL(git_reference* rawReference, NSError** error) {
 
                                              if (git_reference_has_log(self.private, git_reference_name(rawReference))) {
                                                git_reflog* reflog;

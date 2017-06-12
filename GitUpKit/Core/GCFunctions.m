@@ -42,17 +42,17 @@ NSString* GCGitOIDToSHA1(const git_oid* oid) {
   return [NSString stringWithCString:sha1 encoding:NSASCIIStringEncoding];
 }
 
-BOOL GCGitOIDFromSHA1(NSString* sha1, git_oid* oid, NSError** error) {
+BOOL GCGitOIDFromSHA1(NSString* sha1, git_oid* oid, NSError** outError) {
   const char* string = sha1.UTF8String;
   if (strlen(string) != GIT_OID_HEXSZ) {
-    if (error) {
+    if (outError) {
       GC_SET_GENERIC_ERROR(@"Invalid SHA1 length");
     }
     return NO;
   }
   int status = git_oid_fromstr(oid, string);
   if (status != GIT_OK) {
-    if (error) {
+    if (outError) {
       CHECK_LIBGIT2_FUNCTION_CALL(return NO, status, == GIT_OK);  // Prevent logging unless "error" is set
     }
     return NO;
@@ -60,11 +60,11 @@ BOOL GCGitOIDFromSHA1(NSString* sha1, git_oid* oid, NSError** error) {
   return YES;
 }
 
-BOOL GCGitOIDFromSHA1Prefix(NSString* prefix, git_oid* oid, NSError** error) {
+BOOL GCGitOIDFromSHA1Prefix(NSString* prefix, git_oid* oid, NSError** outError) {
   const char* string = prefix.UTF8String;
   int status = git_oid_fromstrp(oid, string);
   if (status != GIT_OK) {
-    if (error) {
+    if (outError) {
       CHECK_LIBGIT2_FUNCTION_CALL(return NO, status, == GIT_OK);  // Prevent logging unless "error" is set
     }
     return NO;
@@ -200,7 +200,7 @@ static void _DictionaryApplierFunction(const void* key, const void* value, void*
   block(key, value);
 }
 
-void GCDictionaryApplyBlock(CFDictionaryRef dict, void (^block)(const void* key, const void* value)) {
+void GCDictionaryApplyBlock(CFDictionaryRef dict, void (^NS_NOESCAPE block)(const void* key, const void* value)) {
   CFDictionaryApplyFunction(dict, _DictionaryApplierFunction, (void*)block);
 }
 

@@ -203,7 +203,7 @@ static inline GCFileDiffChange _FileDiffChangeFromStatus(git_delta_t status) {
   return self;
 }
 
-- (GCDiffPatch*)makePatch:(BOOL*)isBinary error:(NSError**)error {
+- (GCDiffPatch*)makePatch:(BOOL*)isBinary error:(NSError**)outError {
   if (_patch == nil) {
     git_patch* patch;
     CALL_LIBGIT2_FUNCTION_RETURN(nil, git_patch_from_diff, &patch, _diff.private, _index);
@@ -437,7 +437,7 @@ static inline BOOL _EqualDiffs(git_diff* diff1, git_diff* diff2) {
                  options:(GCDiffOptions)options
        maxInterHunkLines:(NSUInteger)maxInterHunkLines
          maxContextLines:(NSUInteger)maxContextLines
-                   error:(NSError**)error
+                   error:(NSError**)outError
                    block:(int (^)(git_diff** outDiff, git_diff_options* diffOptions))block {
   GCDiff* gcDiff = nil;
   git_diff* diff = NULL;
@@ -514,9 +514,9 @@ cleanup:
                                   options:(GCDiffOptions)options
                         maxInterHunkLines:(NSUInteger)maxInterHunkLines
                           maxContextLines:(NSUInteger)maxContextLines
-                                    error:(NSError**)error {
+                                    error:(NSError**)outError {
   if (index == nil) {
-    index = [self readRepositoryIndex:error];
+    index = [self readRepositoryIndex:outError];
     if (index == nil) {
       return nil;
     }
@@ -530,7 +530,7 @@ cleanup:
                              options:options
                    maxInterHunkLines:maxInterHunkLines
                      maxContextLines:maxContextLines
-                               error:error
+                               error:outError
                                block:^int(git_diff** outDiff, git_diff_options* diffOptions) {
 
                                  int status = git_diff_tree_to_index(outDiff, self.private, tree, index.private, diffOptions);
@@ -563,9 +563,9 @@ cleanup:
                                  options:(GCDiffOptions)options
                        maxInterHunkLines:(NSUInteger)maxInterHunkLines
                          maxContextLines:(NSUInteger)maxContextLines
-                                   error:(NSError**)error {
+                                   error:(NSError**)outError {
   if (index == nil) {
-    index = [self readRepositoryIndex:error];
+    index = [self readRepositoryIndex:outError];
     if (index == nil) {
       return nil;
     }
@@ -575,7 +575,7 @@ cleanup:
                      options:options
            maxInterHunkLines:maxInterHunkLines
              maxContextLines:maxContextLines
-                       error:error
+                       error:outError
                        block:^int(git_diff** outDiff, git_diff_options* diffOptions) {
 
                          diffOptions->flags |= GIT_DIFF_UPDATE_INDEX;
@@ -594,9 +594,9 @@ cleanup:
               options:(GCDiffOptions)options
     maxInterHunkLines:(NSUInteger)maxInterHunkLines
       maxContextLines:(NSUInteger)maxContextLines
-                error:(NSError**)error {
+                error:(NSError**)outError {
   if (index == nil) {
-    index = [self readRepositoryIndex:error];
+    index = [self readRepositoryIndex:outError];
     if (index == nil) {
       return nil;
     }
@@ -610,7 +610,7 @@ cleanup:
                              options:options
                    maxInterHunkLines:maxInterHunkLines
                      maxContextLines:maxContextLines
-                               error:error
+                               error:outError
                                block:^int(git_diff** outDiff, git_diff_options* diffOptions) {
 
                                  return git_diff_tree_to_index(outDiff, self.private, tree, index.private, diffOptions);
@@ -626,7 +626,7 @@ cleanup:
               options:(GCDiffOptions)options
     maxInterHunkLines:(NSUInteger)maxInterHunkLines
       maxContextLines:(NSUInteger)maxContextLines
-                error:(NSError**)error {
+                error:(NSError**)outError {
   git_tree* oldTree = NULL;
   if (oldCommit) {
     CALL_LIBGIT2_FUNCTION_RETURN(nil, git_commit_tree, &oldTree, oldCommit.private);
@@ -642,7 +642,7 @@ cleanup:
                              options:options
                    maxInterHunkLines:maxInterHunkLines
                      maxContextLines:maxContextLines
-                               error:error
+                               error:outError
                                block:^int(git_diff** outDiff, git_diff_options* diffOptions) {
 
                                  return git_diff_tree_to_tree(outDiff, self.private, oldTree, newTree, diffOptions);
@@ -659,13 +659,13 @@ cleanup:
               options:(GCDiffOptions)options
     maxInterHunkLines:(NSUInteger)maxInterHunkLines
       maxContextLines:(NSUInteger)maxContextLines
-                error:(NSError**)error {
+                error:(NSError**)outError {
   return [self _diffWithType:kGCDiffType_IndexWithIndex
                  filePattern:filePattern
                      options:options
            maxInterHunkLines:maxInterHunkLines
              maxContextLines:maxContextLines
-                       error:error
+                       error:outError
                        block:^int(git_diff** outDiff, git_diff_options* diffOptions) {
 
                          return git_diff_index_to_index(outDiff, self.private, oldIndex.private, newIndex.private, diffOptions);
@@ -673,13 +673,13 @@ cleanup:
                        }];
 }
 
-- (BOOL)mergeDiff:(GCDiff*)diff ontoDiff:(GCDiff*)ontoDiff error:(NSError**)error {
+- (BOOL)mergeDiff:(GCDiff*)diff ontoDiff:(GCDiff*)ontoDiff error:(NSError**)outError {
   CALL_LIBGIT2_FUNCTION_RETURN(NO, git_diff_merge, ontoDiff.private, diff.private);
   return YES;
 }
 
-- (GCDiffPatch*)makePatchForDiffDelta:(GCDiffDelta*)delta isBinary:(BOOL*)isBinary error:(NSError**)error {
-  return [delta makePatch:isBinary error:error];
+- (GCDiffPatch*)makePatchForDiffDelta:(GCDiffDelta*)delta isBinary:(BOOL*)isBinary error:(NSError**)outError {
+  return [delta makePatch:isBinary error:outError];
 }
 
 #pragma mark - Convenience
@@ -688,32 +688,32 @@ cleanup:
                                 options:(GCDiffOptions)options
                       maxInterHunkLines:(NSUInteger)maxInterHunkLines
                         maxContextLines:(NSUInteger)maxContextLines
-                                  error:(NSError**)error {
+                                  error:(NSError**)outError {
   GCCommit* headCommit;
-  if (![self lookupHEADCurrentCommit:&headCommit branch:NULL error:error]) {
+  if (![self lookupHEADCurrentCommit:&headCommit branch:NULL error:outError]) {
     return nil;
   }
-  return [self diffWorkingDirectoryWithCommit:headCommit usingIndex:nil filePattern:filePattern options:options maxInterHunkLines:maxInterHunkLines maxContextLines:maxContextLines error:error];
+  return [self diffWorkingDirectoryWithCommit:headCommit usingIndex:nil filePattern:filePattern options:options maxInterHunkLines:maxInterHunkLines maxContextLines:maxContextLines error:outError];
 }
 
 - (GCDiff*)diffWorkingDirectoryWithRepositoryIndex:(NSString*)filePattern
                                            options:(GCDiffOptions)options
                                  maxInterHunkLines:(NSUInteger)maxInterHunkLines
                                    maxContextLines:(NSUInteger)maxContextLines
-                                             error:(NSError**)error {
-  return [self diffWorkingDirectoryWithIndex:nil filePattern:filePattern options:options maxInterHunkLines:maxInterHunkLines maxContextLines:maxContextLines error:error];
+                                             error:(NSError**)outError {
+  return [self diffWorkingDirectoryWithIndex:nil filePattern:filePattern options:options maxInterHunkLines:maxInterHunkLines maxContextLines:maxContextLines error:outError];
 }
 
 - (GCDiff*)diffRepositoryIndexWithHEAD:(NSString*)filePattern
                                options:(GCDiffOptions)options
                      maxInterHunkLines:(NSUInteger)maxInterHunkLines
                        maxContextLines:(NSUInteger)maxContextLines
-                                 error:(NSError**)error {
+                                 error:(NSError**)outError {
   GCCommit* headCommit;
-  if (![self lookupHEADCurrentCommit:&headCommit branch:NULL error:error]) {
+  if (![self lookupHEADCurrentCommit:&headCommit branch:NULL error:outError]) {
     return nil;
   }
-  return [self diffIndex:nil withCommit:headCommit filePattern:filePattern options:options maxInterHunkLines:maxInterHunkLines maxContextLines:maxContextLines error:error];
+  return [self diffIndex:nil withCommit:headCommit filePattern:filePattern options:options maxInterHunkLines:maxInterHunkLines maxContextLines:maxContextLines error:outError];
 }
 
 @end

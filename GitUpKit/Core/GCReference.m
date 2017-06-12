@@ -83,28 +83,28 @@
 
 @implementation GCRepository (GCReference_Private)
 
-- (id)findReferenceWithFullName:(NSString*)fullname class:(Class) class error:(NSError**)error {
+- (id)findReferenceWithFullName:(NSString*)fullname class:(Class) class error:(NSError**)outError {
   XLOG_DEBUG_CHECK([class isSubclassOfClass:[GCReference class]]);
   git_reference* reference;
   CALL_LIBGIT2_FUNCTION_RETURN(nil, git_reference_lookup, &reference, self.private, fullname.UTF8String);
   return [[class alloc] initWithRepository:self reference:reference];
 }
 
-    - (BOOL)refreshReference : (GCReference*)reference error : (NSError**)error {
+    - (BOOL)refreshReference : (GCReference*)reference error : (NSError**)outError {
   git_reference* newReference;
   CALL_LIBGIT2_FUNCTION_RETURN(NO, git_reference_lookup, &newReference, self.private, git_reference_name(reference.private));
   [reference updateReference:newReference];
   return YES;
 }
 
-- (BOOL)enumerateReferencesWithOptions:(GCReferenceEnumerationOptions)options error:(NSError**)error usingBlock:(BOOL (^)(git_reference* reference))block {
+- (BOOL)enumerateReferencesWithOptions:(GCReferenceEnumerationOptions)options error:(NSError**)outError usingBlock:(BOOL (^)(git_reference* reference, NSError** error))block {
   BOOL success = NO;
   git_reference_iterator* iterator = NULL;
 
   if (options & kGCReferenceEnumerationOption_IncludeHEAD) {
     git_reference* headReference;
     CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_reference_lookup, &headReference, self.private, kHEADReferenceFullName);
-    BOOL result = block(headReference);
+    BOOL result = block(headReference, outError);
     if (!(options & kGCReferenceEnumerationOption_RetainReferences)) {
       git_reference_free(headReference);
     }
@@ -121,7 +121,7 @@
       break;
     }
     CHECK_LIBGIT2_FUNCTION_CALL(goto cleanup, status, == GIT_OK);
-    BOOL result = block(reference);
+    BOOL result = block(reference, outError);
     if (!(options & kGCReferenceEnumerationOption_RetainReferences)) {
       git_reference_free(reference);
     }
@@ -136,7 +136,7 @@ cleanup:
   return success;
 }
 
-- (BOOL)loadTargetOID:(git_oid*)oid fromReference:(git_reference*)reference error:(NSError**)error {
+- (BOOL)loadTargetOID:(git_oid*)oid fromReference:(git_reference*)reference error:(NSError**)outError {
   BOOL success = NO;
   git_reference* resolvedReference = reference;
 
@@ -155,7 +155,7 @@ cleanup:
 }
 
 // Reimplementation of the SPI git_reference__update_for_commit()
-- (BOOL)setTargetOID:(const git_oid*)oid forReference:(git_reference*)reference reflogMessage:(NSString*)message newReference:(git_reference**)newReference error:(NSError**)error {
+- (BOOL)setTargetOID:(const git_oid*)oid forReference:(git_reference*)reference reflogMessage:(NSString*)message newReference:(git_reference**)newReference error:(NSError**)outError {
   BOOL success = NO;
   NSUInteger level = 0;
   git_reference* currentReference = reference;
@@ -205,13 +205,13 @@ cleanup:
   return success;
 }
 
-- (GCReference*)createDirectReferenceWithFullName:(NSString*)name target:(GCObject*)target force:(BOOL)force error:(NSError**)error {
+- (GCReference*)createDirectReferenceWithFullName:(NSString*)name target:(GCObject*)target force:(BOOL)force error:(NSError**)outError {
   git_reference* reference;
   CALL_LIBGIT2_FUNCTION_RETURN(nil, git_reference_create, &reference, self.private, name.UTF8String, git_object_id(target.private), force, NULL);
   return [[GCReference alloc] initWithRepository:self reference:reference];
 }
 
-- (GCReference*)createSymbolicReferenceWithFullName:(NSString*)name target:(NSString*)target force:(BOOL)force error:(NSError**)error {
+- (GCReference*)createSymbolicReferenceWithFullName:(NSString*)name target:(NSString*)target force:(BOOL)force error:(NSError**)outError {
   git_reference* reference;
   CALL_LIBGIT2_FUNCTION_RETURN(nil, git_reference_symbolic_create, &reference, self.private, name.UTF8String, target.UTF8String, force, NULL);
   return [[GCReference alloc] initWithRepository:self reference:reference];

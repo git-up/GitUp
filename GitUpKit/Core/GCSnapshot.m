@@ -237,7 +237,7 @@ static BOOL _CompareSerializedReferences(GCSerializedReference* serializedRefere
 }
 
 // TODO: Handle duplicate config entries for the same variable
-static NSMutableDictionary* _LoadRepositoryConfig(GCRepository* repository, NSError** error) {
+static NSMutableDictionary* _LoadRepositoryConfig(GCRepository* repository, NSError** outError) {
   NSMutableDictionary* dictionary = [NSMutableDictionary dictionary];
   BOOL success = NO;
   git_config* config1 = NULL;
@@ -265,10 +265,10 @@ cleanup:
   return success ? dictionary : nil;
 }
 
-- (id)initWithRepository:(GCRepository*)repository error:(NSError**)error {
+- (id)initWithRepository:(GCRepository*)repository error:(NSError**)outError {
   if ((self = [super init])) {
     // Capture local config
-    _config = [_LoadRepositoryConfig(repository, error) retain];
+    _config = [_LoadRepositoryConfig(repository, outError) retain];
     if (_config == nil) {
       return nil;
     }
@@ -278,8 +278,8 @@ cleanup:
     CFDictionaryKeyCallBacks callbacks = {0, NULL, NULL, NULL, GCCStringEqualCallBack, GCCStringHashCallBack};
     _cache = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, &callbacks, NULL);
     BOOL success = [repository enumerateReferencesWithOptions:kGCReferenceEnumerationOption_IncludeHEAD
-                                                        error:error
-                                                   usingBlock:^BOOL(git_reference* reference) {
+                                                        error:outError
+                                                   usingBlock:^BOOL(git_reference* reference, NSError** error) {
 
                                                      git_object* object = NULL;
                                                      git_oid oid;
@@ -470,11 +470,11 @@ static inline BOOL _EqualSnapshots(GCSnapshot* snapshot1, GCSnapshot* snapshot2,
 
 @implementation GCRepository (GCSnapshot)
 
-- (GCSnapshot*)takeSnapshot:(NSError**)error {
-  return [[[GCSnapshot alloc] initWithRepository:self error:error] autorelease];
+- (GCSnapshot*)takeSnapshot:(NSError**)outError {
+  return [[[GCSnapshot alloc] initWithRepository:self error:outError] autorelease];
 }
 
-static BOOL _UpdateRepositoryConfig(GCRepository* repository, NSDictionary* changes, NSError** error) {
+static BOOL _UpdateRepositoryConfig(GCRepository* repository, NSDictionary* changes, NSError** outError) {
   BOOL success = NO;
   git_config* config1 = NULL;
   git_config* config2 = NULL;
@@ -536,7 +536,7 @@ static void _DiffConfigsForLocalBranch(const char* name, NSDictionary* fromConfi
                    withOptions:(GCSnapshotOptions)options
                  reflogMessage:(NSString*)message
            didUpdateReferences:(BOOL*)didUpdateReferences
-                         error:(NSError**)error {
+                         error:(NSError**)outError {
   BOOL success = NO;
   GCReferenceTransform* transform = [[GCReferenceTransform alloc] initWithRepository:self reflogMessage:message];
   CFMutableDictionaryRef copy = CFDictionaryCreateMutableCopy(kCFAllocatorDefault, 0, toSnapshot.cache);
@@ -608,7 +608,7 @@ static void _DiffConfigsForLocalBranch(const char* name, NSDictionary* fromConfi
       *didUpdateReferences = NO;
     }
   } else {
-    if (![self applyReferenceTransform:transform error:error]) {
+    if (![self applyReferenceTransform:transform error:outError]) {
       goto cleanup;
     }
     if (didUpdateReferences) {
@@ -635,15 +635,15 @@ cleanup:
             withOptions:(GCSnapshotOptions)options
           reflogMessage:(NSString*)message
     didUpdateReferences:(BOOL*)didUpdateReferences
-                  error:(NSError**)error {
-  NSMutableDictionary* config = _LoadRepositoryConfig(self, error);
+                  error:(NSError**)outError {
+  NSMutableDictionary* config = _LoadRepositoryConfig(self, outError);
   if (config == nil) {
     return NO;
   }
   NSMutableArray* references = [[NSMutableArray alloc] init];
   BOOL result = [self enumerateReferencesWithOptions:kGCReferenceEnumerationOption_IncludeHEAD
-                                               error:error
-                                          usingBlock:^BOOL(git_reference* reference) {
+                                               error:outError
+                                          usingBlock:^BOOL(git_reference* reference, NSError** error) {
 
                                             GCSerializedReference* serializedReference = [[GCSerializedReference alloc] initWithReference:reference resolvedObject:NULL];
                                             [references addObject:serializedReference];
@@ -652,7 +652,7 @@ cleanup:
 
                                           }];
   if (result) {
-    result = [self _restoreFromReferences:references andConfig:config toSnapshot:snapshot withOptions:options reflogMessage:message didUpdateReferences:didUpdateReferences error:error];
+    result = [self _restoreFromReferences:references andConfig:config toSnapshot:snapshot withOptions:options reflogMessage:message didUpdateReferences:didUpdateReferences error:outError];
   }
   [references release];
   return result;
@@ -663,8 +663,8 @@ cleanup:
                    withOptions:(GCSnapshotOptions)options
                  reflogMessage:(NSString*)message
            didUpdateReferences:(BOOL*)didUpdateReferences
-                         error:(NSError**)error {
-  return [self _restoreFromReferences:fromSnapshot.serializedReferences andConfig:fromSnapshot.config toSnapshot:toSnapshot withOptions:options reflogMessage:message didUpdateReferences:didUpdateReferences error:error];
+                         error:(NSError**)outError {
+  return [self _restoreFromReferences:fromSnapshot.serializedReferences andConfig:fromSnapshot.config toSnapshot:toSnapshot withOptions:options reflogMessage:message didUpdateReferences:didUpdateReferences error:outError];
 }
 
 @end

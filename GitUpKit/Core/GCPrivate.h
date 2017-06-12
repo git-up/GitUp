@@ -64,8 +64,8 @@ static inline NSString* GetLastGitErrorMessage() {
   do {                                                                           \
     if (!(__STATUS__ __COMPARISON__)) {                                          \
       LOG_LIBGIT2_ERROR(__STATUS__);                                             \
-      if (error) {                                                               \
-        *error = GCNewError(__STATUS__, GetLastGitErrorMessage());               \
+      if (outError) {                                                            \
+        *outError = GCNewError(__STATUS__, GetLastGitErrorMessage());            \
       }                                                                          \
       __FAIL_ACTION__;                                                           \
     }                                                                            \
@@ -75,24 +75,24 @@ static inline NSString* GetLastGitErrorMessage() {
 
 #define CALL_LIBGIT2_FUNCTION_RETURN(__RETURN_VALUE_ON_ERROR__, __FUNCTION__, ...)         \
   do {                                                                                     \
-    int __callError = __FUNCTION__(__VA_ARGS__);                                           \
+    git_error_code __callError = __FUNCTION__(__VA_ARGS__);                                \
     CHECK_LIBGIT2_FUNCTION_CALL(return __RETURN_VALUE_ON_ERROR__, __callError, == GIT_OK); \
   } while (0)
 
 #define CALL_LIBGIT2_FUNCTION_GOTO(__GOTO_LABEL__, __FUNCTION__, ...)         \
   do {                                                                        \
-    int __callError = __FUNCTION__(__VA_ARGS__);                              \
+    git_error_code __callError = __FUNCTION__(__VA_ARGS__);                   \
     CHECK_LIBGIT2_FUNCTION_CALL(goto __GOTO_LABEL__, __callError, == GIT_OK); \
   } while (0)
 
-#define CHECK_POSIX_FUNCTION_CALL(__FAIL_ACTION__, __STATUS__, __COMPARISON__)                 \
-  do {                                                                                         \
-    if (!(__STATUS__ __COMPARISON__)) {                                                        \
-      if (error) {                                                                             \
-        *error = GCNewPosixError(__STATUS__, [NSString stringWithUTF8String:strerror(errno)]); \
-      }                                                                                        \
-      __FAIL_ACTION__;                                                                         \
-    }                                                                                          \
+#define CHECK_POSIX_FUNCTION_CALL(__FAIL_ACTION__, __STATUS__, __COMPARISON__)                    \
+  do {                                                                                            \
+    if (!(__STATUS__ __COMPARISON__)) {                                                           \
+      if (outError) {                                                                             \
+        *outError = GCNewPosixError(__STATUS__, [NSString stringWithUTF8String:strerror(errno)]); \
+      }                                                                                           \
+      __FAIL_ACTION__;                                                                            \
+    }                                                                                             \
   } while (0)
 
 #define CALL_POSIX_FUNCTION_RETURN(__RETURN_VALUE_ON_ERROR__, __FUNCTION__, ...)    \
@@ -318,7 +318,7 @@ extern int git_submodule_foreach_block(git_repository* repo, int (^block)(git_su
 @interface GCRepository (GCReference_Private)
 - (id)findReferenceWithFullName:(NSString*)fullname class:(Class) class error:(NSError**)error;
 - (BOOL)refreshReference:(GCReference*)reference error:(NSError**)error;
-- (BOOL)enumerateReferencesWithOptions:(GCReferenceEnumerationOptions)options error:(NSError**)error usingBlock:(BOOL (^)(git_reference* reference))block;
+- (BOOL)enumerateReferencesWithOptions:(GCReferenceEnumerationOptions)options error:(NSError**)error usingBlock:(BOOL (^)(git_reference* reference, NSError** error))block;
 - (BOOL)loadTargetOID:(git_oid*)oid fromReference:(git_reference*)reference error:(NSError**)error;
 - (BOOL)setTargetOID:(const git_oid*)oid forReference:(git_reference*)reference reflogMessage:(NSString*)message newReference:(git_reference**)newReference error:(NSError**)error;  // Follows reference chain until a direct reference and force update its target
 - (GCReference*)createDirectReferenceWithFullName:(NSString*)name target:(GCObject*)target force:(BOOL)force error:(NSError**)error;

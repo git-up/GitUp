@@ -165,11 +165,11 @@ static inline NSComparisonResult _TimeCompare(GCCommit* commit1, GCCommit* commi
 
 @implementation GCRepository (GCCommit)
 
-- (NSString*)computeUniqueShortSHA1ForCommit:(GCCommit*)commit error:(NSError**)error {
-  return [self computeUniqueOIDForCommit:commit.private error:error];
+- (NSString*)computeUniqueShortSHA1ForCommit:(GCCommit*)commit error:(NSError**)outError {
+  return [self computeUniqueOIDForCommit:commit.private error:outError];
 }
 
-- (GCCommit*)findCommitWithSHA1:(NSString*)sha1 error:(NSError**)error {
+- (GCCommit*)findCommitWithSHA1:(NSString*)sha1 error:(NSError**)outError {
   git_oid oid;
   if (!GCGitOIDFromSHA1(sha1, &oid, NULL)) {
     return nil;
@@ -179,11 +179,11 @@ static inline NSComparisonResult _TimeCompare(GCCommit* commit1, GCCommit* commi
   return [[GCCommit alloc] initWithRepository:self commit:commit];
 }
 
-- (GCCommit*)findCommitWithSHA1Prefix:(NSString*)prefix error:(NSError**)error {
+- (GCCommit*)findCommitWithSHA1Prefix:(NSString*)prefix error:(NSError**)outError {
   size_t length = strlen(prefix.UTF8String);
   XLOG_DEBUG_CHECK(length >= GIT_OID_MINPREFIXLEN);
   git_oid oid;
-  if (!GCGitOIDFromSHA1Prefix(prefix, &oid, error)) {
+  if (!GCGitOIDFromSHA1Prefix(prefix, &oid, outError)) {
     return nil;
   }
   git_commit* commit;
@@ -191,7 +191,7 @@ static inline NSComparisonResult _TimeCompare(GCCommit* commit1, GCCommit* commi
   return [[GCCommit alloc] initWithRepository:self commit:commit];
 }
 
-- (NSArray*)lookupParentsForCommit:(GCCommit*)commit error:(NSError**)error {
+- (NSArray*)lookupParentsForCommit:(GCCommit*)commit error:(NSError**)outError {
   NSMutableArray* array = [[NSMutableArray alloc] init];
   for (unsigned int i = 0, count = git_commit_parentcount(commit.private); i < count; ++i) {
     git_commit* gitCommit;
@@ -202,7 +202,7 @@ static inline NSComparisonResult _TimeCompare(GCCommit* commit1, GCCommit* commi
   return array;
 }
 
-- (NSString*)checkTreeForCommit:(GCCommit*)commit containsFile:(NSString*)path error:(NSError**)error {
+- (NSString*)checkTreeForCommit:(GCCommit*)commit containsFile:(NSString*)path error:(NSError**)outError {
   NSString* sha1 = nil;
   git_tree* tree = NULL;
   git_tree_entry* entry = NULL;
@@ -221,7 +221,7 @@ cleanup:
 
 @implementation GCRepository (GCCommit_Private)
 
-- (NSString*)computeUniqueOIDForCommit:(git_commit*)commit error:(NSError**)error {
+- (NSString*)computeUniqueOIDForCommit:(git_commit*)commit error:(NSError**)outError {
   git_buf buffer = {0};
   CALL_LIBGIT2_FUNCTION_RETURN(nil, git_object_short_id, &buffer, (git_object*)commit);
   NSString* string = [NSString stringWithCString:buffer.ptr encoding:NSASCIIStringEncoding];

@@ -99,13 +99,13 @@ extern int git_path_make_relative(git_buf* path, const char* parent);  // SPI
 
 @implementation GCRepository (GCSubmodule)
 
-- (instancetype)initWithSubmodule:(GCSubmodule*)submodule error:(NSError**)error {
+- (instancetype)initWithSubmodule:(GCSubmodule*)submodule error:(NSError**)outError {
   git_repository* repository;
   CALL_LIBGIT2_FUNCTION_RETURN(nil, git_submodule_open, &repository, submodule.private);
-  return [self initWithRepository:repository error:error];
+  return [self initWithRepository:repository error:outError];
 }
 
-- (BOOL)checkSubmoduleInitialized:(GCSubmodule*)submodule error:(NSError**)error {
+- (BOOL)checkSubmoduleInitialized:(GCSubmodule*)submodule error:(NSError**)outError {
   unsigned int status;
   CALL_LIBGIT2_FUNCTION_RETURN(NO, git_submodule_status, &status, self.private, git_submodule_name(submodule.private), GIT_SUBMODULE_IGNORE_DIRTY);
   if (status & GIT_SUBMODULE_STATUS_WD_UNINITIALIZED) {
@@ -115,28 +115,28 @@ extern int git_path_make_relative(git_buf* path, const char* parent);  // SPI
   return YES;
 }
 
-- (BOOL)checkAllSubmodulesInitialized:(BOOL)recursive error:(NSError**)error {
-  NSArray* submodules = [self listSubmodules:error];
+- (BOOL)checkAllSubmodulesInitialized:(BOOL)recursive error:(NSError**)outError {
+  NSArray* submodules = [self listSubmodules:outError];
   if (submodules == nil) {
     return NO;
   }
   for (GCSubmodule* submodule in submodules) {
-    if (![self checkSubmoduleInitialized:submodule error:error]) {
+    if (![self checkSubmoduleInitialized:submodule error:outError]) {
       return NO;
     }
     if (recursive) {
-      NSError* localError;
-      GCRepository* repository = [[GCRepository alloc] initWithSubmodule:submodule error:&localError];
+      NSError* error;
+      GCRepository* repository = [[GCRepository alloc] initWithSubmodule:submodule error:&error];
       if (repository == nil) {
-        if ([localError.domain isEqualToString:GCErrorDomain] && (localError.code == kGCErrorCode_NotFound)) {
+        if ([error.domain isEqualToString:GCErrorDomain] && (error.code == kGCErrorCode_NotFound)) {
           continue;
         }
-        if (error) {
-          *error = localError;
+        if (outError) {
+          *outError = error;
         }
         return NO;
       }
-      if (![repository checkAllSubmodulesInitialized:recursive error:error]) {
+      if (![repository checkAllSubmodulesInitialized:recursive error:outError]) {
         return NO;
       }
     }
@@ -144,7 +144,7 @@ extern int git_path_make_relative(git_buf* path, const char* parent);  // SPI
   return YES;
 }
 
-- (GCSubmodule*)addSubmoduleWithURL:(NSURL*)url atPath:(NSString*)path recursive:(BOOL)recursive error:(NSError**)error {
+- (GCSubmodule*)addSubmoduleWithURL:(NSURL*)url atPath:(NSString*)path recursive:(BOOL)recursive error:(NSError**)outError {
   BOOL success = NO;
   git_submodule* submodule = NULL;
   GCRepository* repository;
@@ -153,16 +153,16 @@ extern int git_path_make_relative(git_buf* path, const char* parent);  // SPI
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_submodule_add_setup, &submodule, self.private, GCGitURLFromURL(url).UTF8String, GCGitPathFromFileSystemPath(path), true);
   git_repository* subRepository;
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_submodule_open, &subRepository, submodule);
-  repository = [[GCRepository alloc] initWithRepository:subRepository error:error];
+  repository = [[GCRepository alloc] initWithRepository:subRepository error:outError];
   if (repository == nil) {
     goto cleanup;
   }
   repository.delegate = self.delegate;
-  remote = [repository lookupRemoteWithName:@"origin" error:error];
+  remote = [repository lookupRemoteWithName:@"origin" error:outError];
   if (remote == nil) {
     goto cleanup;
   }
-  if (![repository cloneUsingRemote:remote recursive:recursive error:error]) {
+  if (![repository cloneUsingRemote:remote recursive:recursive error:outError]) {
     goto cleanup;
   }
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_submodule_add_finalize, submodule);  // This just calls git_submodule_add_to_index()
@@ -175,11 +175,11 @@ cleanup:
   return success ? [[GCSubmodule alloc] initWithRepository:self submodule:submodule] : nil;
 }
 
-- (BOOL)initializeSubmodule:(GCSubmodule*)submodule recursive:(BOOL)recursive error:(NSError**)error {
+- (BOOL)initializeSubmodule:(GCSubmodule*)submodule recursive:(BOOL)recursive error:(NSError**)outError {
   XLOG_DEBUG_CHECK(![self checkSubmoduleInitialized:submodule error:NULL]);
 
   NSString* modulePath = [[self.repositoryPath stringByAppendingPathComponent:@"modules"] stringByAppendingPathComponent:submodule.path];
-  if ([[NSFileManager defaultManager] fileExistsAtPath:modulePath followLastSymlink:NO] && ![[NSFileManager defaultManager] removeItemAtPath:modulePath error:error]) {
+  if ([[NSFileManager defaultManager] fileExistsAtPath:modulePath followLastSymlink:NO] && ![[NSFileManager defaultManager] removeItemAtPath:modulePath error:outError]) {
     return NO;
   }
 
@@ -191,12 +191,12 @@ cleanup:
   CHECK_LIBGIT2_FUNCTION_CALL(return NO, status, == GIT_OK);
 
   if (recursive) {
-    GCRepository* repository = [[GCRepository alloc] initWithSubmodule:submodule error:error];
+    GCRepository* repository = [[GCRepository alloc] initWithSubmodule:submodule error:outError];
     if (repository == nil) {
       return NO;
     }
     repository.delegate = self.delegate;
-    if (![repository initializeAllSubmodules:recursive error:error]) {
+    if (![repository initializeAllSubmodules:recursive error:outError]) {
       return NO;
     }
   }
@@ -204,23 +204,23 @@ cleanup:
   return YES;
 }
 
-- (BOOL)initializeAllSubmodules:(BOOL)recursive error:(NSError**)error {
-  NSArray* submodules = [self listSubmodules:error];
+- (BOOL)initializeAllSubmodules:(BOOL)recursive error:(NSError**)outError {
+  NSArray* submodules = [self listSubmodules:outError];
   if (submodules == nil) {
     return NO;
   }
   for (GCSubmodule* submodule in submodules) {
     if (![self checkSubmoduleInitialized:submodule error:NULL]) {  // Ignore errors
-      if (![self initializeSubmodule:submodule recursive:recursive error:error]) {
+      if (![self initializeSubmodule:submodule recursive:recursive error:outError]) {
         return NO;
       }
     }
     if (recursive) {
-      GCRepository* repository = [[GCRepository alloc] initWithSubmodule:submodule error:error];
+      GCRepository* repository = [[GCRepository alloc] initWithSubmodule:submodule error:outError];
       if (repository == nil) {
         return NO;
       }
-      if (![repository initializeAllSubmodules:recursive error:error]) {
+      if (![repository initializeAllSubmodules:recursive error:outError]) {
         return NO;
       }
     }
@@ -228,13 +228,13 @@ cleanup:
   return YES;
 }
 
-- (GCSubmodule*)lookupSubmoduleWithName:(NSString*)name error:(NSError**)error {
+- (GCSubmodule*)lookupSubmoduleWithName:(NSString*)name error:(NSError**)outError {
   git_submodule* submodule;
   CALL_LIBGIT2_FUNCTION_RETURN(nil, git_submodule_lookup, &submodule, self.private, name.UTF8String);
   return [[GCSubmodule alloc] initWithRepository:self submodule:submodule];
 }
 
-- (NSArray*)listSubmodules:(NSError**)error {
+- (NSArray*)listSubmodules:(NSError**)outError {
   NSMutableArray* submodules = [[NSMutableArray alloc] init];
   int status = git_submodule_foreach_block(self.private, ^int(git_submodule* submodule, const char* name) {  // This calls git_submodule_reload_all(false)
     git_submodule_retain(submodule);
@@ -245,7 +245,7 @@ cleanup:
   return submodules;
 }
 
-- (BOOL)updateSubmodule:(GCSubmodule*)submodule force:(BOOL)force error:(NSError**)error {
+- (BOOL)updateSubmodule:(GCSubmodule*)submodule force:(BOOL)force error:(NSError**)outError {
   BOOL success = NO;
   git_repository* subRepository = NULL;
   git_index* index = NULL;
@@ -261,7 +261,7 @@ cleanup:
     case GIT_SUBMODULE_UPDATE_CHECKOUT: {
       CFAbsoluteTime time = CFAbsoluteTimeGetCurrent();
       BOOL recreate = NO;
-      index = [self reloadRepositoryIndex:error];
+      index = [self reloadRepositoryIndex:outError];
       if (index == NULL) {
         goto cleanup;
       }
@@ -305,32 +305,32 @@ cleanup:
   return success;
 }
 
-- (BOOL)updateAllSubmodulesResursively:(BOOL)force error:(NSError**)error {
-  NSArray* submodules = [self listSubmodules:error];
+- (BOOL)updateAllSubmodulesResursively:(BOOL)force error:(NSError**)outError {
+  NSArray* submodules = [self listSubmodules:outError];
   if (submodules == nil) {
     return NO;
   }
   for (GCSubmodule* submodule in submodules) {
-    NSError* localError;
-    if (![self updateSubmodule:submodule force:force error:&localError]) {
-      if ([localError.domain isEqualToString:GCErrorDomain] && (localError.code == kGCErrorCode_NotFound)) {
+    NSError* error;
+    if (![self updateSubmodule:submodule force:force error:&error]) {
+      if ([error.domain isEqualToString:GCErrorDomain] && (error.code == kGCErrorCode_NotFound)) {
         continue;
       }
-      if (error) {
-        *error = localError;
+      if (outError) {
+        *outError = error;
       }
       return NO;
     }
-    GCRepository* repository = [[GCRepository alloc] initWithSubmodule:submodule error:error];
-    if (![repository updateAllSubmodulesResursively:force error:error]) {
+    GCRepository* repository = [[GCRepository alloc] initWithSubmodule:submodule error:outError];
+    if (![repository updateAllSubmodulesResursively:force error:outError]) {
       return NO;
     }
   }
   return YES;
 }
 
-- (BOOL)addSubmoduleToRepositoryIndex:(GCSubmodule*)submodule error:(NSError**)error {
-  git_index* index = [self reloadRepositoryIndex:error];
+- (BOOL)addSubmoduleToRepositoryIndex:(GCSubmodule*)submodule error:(NSError**)outError {
+  git_index* index = [self reloadRepositoryIndex:outError];
   if (index == NULL) {
     return NO;
   }

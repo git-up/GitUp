@@ -18,8 +18,8 @@
 #define GC_SET_ERROR(code, ...)                                    \
   do {                                                             \
     NSString* __message = [NSString stringWithFormat:__VA_ARGS__]; \
-    if (error) {                                                   \
-      *error = GCNewError(code, __message);                        \
+    if (outError) {                                                   \
+      *outError = GCNewError(code, __message);                        \
     }                                                              \
   } while (0)
 
@@ -39,9 +39,9 @@ NSString* GCFileSystemPathFromGitPath(const char* string);
 NSURL* GCURLFromGitURL(NSString* url);
 NSString* GCGitURLFromURL(NSURL* url);
 
-void GCArrayApplyBlock(CFArrayRef array, void (^block)(const void* value));
-void GCSetApplyBlock(CFSetRef set, void (^block)(const void* value));
-void GCDictionaryApplyBlock(CFDictionaryRef dict, void (^block)(const void* key, const void* value));
+void GCArrayApplyBlock(CFArrayRef array, void (^NS_NOESCAPE block)(const void* value));
+void GCSetApplyBlock(CFSetRef set, void (^NS_NOESCAPE block)(const void* value));
+void GCDictionaryApplyBlock(CFDictionaryRef dict, void (^NS_NOESCAPE block)(const void* key, const void* value));
 
 #ifdef __cplusplus
 }

@@ -98,7 +98,7 @@ static inline int _FindConfig(git_repository* repo, GCConfigLevel level, git_buf
   return GIT_ERROR;
 }
 
-- (NSString*)findFilePathForConfigurationLevel:(GCConfigLevel)level error:(NSError**)error {
+- (NSString*)findFilePathForConfigurationLevel:(GCConfigLevel)level error:(NSError**)outError {
   git_buf buffer = {0};
   CALL_LIBGIT2_FUNCTION_RETURN(nil, _FindConfig, self.private, level, &buffer);
   NSString* path = [NSString stringWithUTF8String:buffer.ptr];
@@ -106,11 +106,11 @@ static inline int _FindConfig(git_repository* repo, GCConfigLevel level, git_buf
   return path;
 }
 
-- (GCConfigOption*)readConfigOptionForVariable:(NSString*)variable error:(NSError**)error {
-  return [self readConfigOptionForLevel:NSNotFound variable:variable error:error];
+- (GCConfigOption*)readConfigOptionForVariable:(NSString*)variable error:(NSError**)outError {
+  return [self readConfigOptionForLevel:NSNotFound variable:variable error:outError];
 }
 
-- (GCConfigOption*)readConfigOptionForLevel:(GCConfigLevel)level variable:(NSString*)variable error:(NSError**)error {
+- (GCConfigOption*)readConfigOptionForLevel:(GCConfigLevel)level variable:(NSString*)variable error:(NSError**)outError {
   GCConfigOption* option = nil;
   git_config* multiConfig = NULL;
   git_config* levelConfig = NULL;
@@ -132,7 +132,7 @@ cleanup:
   return option;
 }
 
-- (BOOL)writeConfigOptionForLevel:(GCConfigLevel)level variable:(NSString*)variable withValue:(NSString*)value error:(NSError**)error {
+- (BOOL)writeConfigOptionForLevel:(GCConfigLevel)level variable:(NSString*)variable withValue:(NSString*)value error:(NSError**)outError {
   BOOL success = NO;
   git_config* multiConfig = NULL;
   git_config* levelConfig = NULL;
@@ -152,7 +152,7 @@ cleanup:
   return success;
 }
 
-static NSArray* _ReadConfig(git_config* config, NSError** error) {
+static NSArray* _ReadConfig(git_config* config, NSError** outError) {
   BOOL success = NO;
   NSMutableArray* array = [NSMutableArray array];
   git_config_iterator* iterator = NULL;
@@ -174,14 +174,14 @@ cleanup:
   return success ? array : nil;
 }
 
-- (NSArray*)readConfigForLevel:(GCConfigLevel)level error:(NSError**)error {
+- (NSArray*)readConfigForLevel:(GCConfigLevel)level error:(NSError**)outError {
   NSArray* array = nil;
   git_config* config1 = NULL;
   git_config* config2 = NULL;
 
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_repository_config, &config1, self.private);
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_config_open_level, &config2, config1, _ConfigLevelToLevel(level));
-  array = _ReadConfig(config2, error);
+  array = _ReadConfig(config2, outError);
 
 cleanup:
   git_config_free(config1);
@@ -189,12 +189,12 @@ cleanup:
   return array;
 }
 
-- (NSArray*)readAllConfigs:(NSError**)error {
+- (NSArray*)readAllConfigs:(NSError**)outError {
   NSArray* array = nil;
   git_config* config = NULL;
 
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_repository_config, &config, self.private);
-  array = _ReadConfig(config, error);
+  array = _ReadConfig(config, outError);
 
 cleanup:
   git_config_free(config);

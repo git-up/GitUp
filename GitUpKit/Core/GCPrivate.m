@@ -67,7 +67,7 @@
   }
 }
 
-- (BOOL)runWithArguments:(NSArray*)arguments stdin:(NSData*)stdin stdout:(NSData**)stdout stderr:(NSData**)stderr exitStatus:(int*)exitStatus error:(NSError**)error {
+- (BOOL)runWithArguments:(NSArray*)arguments stdin:(NSData*)stdin stdout:(NSData**)stdout stderr:(NSData**)stderr exitStatus:(int*)exitStatus error:(NSError**)outError {
   BOOL success = NO;
   NSPipe* inPipe = nil;
   NSPipe* outPipe = nil;

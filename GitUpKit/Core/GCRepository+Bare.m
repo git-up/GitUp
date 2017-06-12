@@ -21,7 +21,7 @@
 
 @implementation GCRepository (Bare)
 
-- (GCCommit*)squashCommitOntoParent:(GCCommit*)squashCommit withUpdatedMessage:(NSString*)message error:(NSError**)error {
+- (GCCommit*)squashCommitOntoParent:(GCCommit*)squashCommit withUpdatedMessage:(NSString*)message error:(NSError**)outError {
   GCCommit* newCommit = nil;
   git_commit* parentCommit = NULL;
   git_tree* tree = NULL;
@@ -32,7 +32,7 @@
   }
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_commit_parent, &parentCommit, squashCommit.private, 0);
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_commit_tree, &tree, squashCommit.private);
-  newCommit = [self createCommitFromCommit:parentCommit withTree:tree updatedMessage:message updatedParents:nil updateCommitter:YES error:error];
+  newCommit = [self createCommitFromCommit:parentCommit withTree:tree updatedMessage:message updatedParents:nil updateCommitter:YES error:outError];
 
 cleanup:
   git_tree_free(tree);
@@ -54,7 +54,7 @@ static inline GCCommit* _CopyCommit(GCRepository* repository, git_commit* commit
                         author:(const git_signature*)author
                        message:(NSString*)message
                conflictHandler:(GCConflictHandler)handler
-                         error:(NSError**)error {
+                         error:(NSError**)outError {
   GCCommit* commit = nil;
   git_tree* ancestorTree = NULL;
   git_tree* ourTree = NULL;
@@ -75,10 +75,10 @@ static inline GCCommit* _CopyCommit(GCRepository* repository, git_commit* commit
     for (NSUInteger i = 0; i < count; ++i) {
       [array addObject:_CopyCommit(self, (git_commit*)parents[i])];
     }
-    commit = handler([[GCIndex alloc] initWithRepository:nil index:index], _CopyCommit(self, ourCommit), _CopyCommit(self, theirCommit), array, message, error);  // Doesn't make sense to specify a custom author on conflict anyway
+    commit = handler([[GCIndex alloc] initWithRepository:nil index:index], _CopyCommit(self, ourCommit), _CopyCommit(self, theirCommit), array, message, outError);  // Doesn't make sense to specify a custom author on conflict anyway
     index = NULL;  // Ownership has been transferred to GCIndex instance
   } else {
-    commit = [self createCommitFromIndex:index withParents:parents count:count author:author message:message error:error];
+    commit = [self createCommitFromIndex:index withParents:parents count:count author:author message:message error:outError];
   }
 
 cleanup:
@@ -94,7 +94,7 @@ cleanup:
            withAncestorCommit:(GCCommit*)ancestorCommit
                       message:(NSString*)message
               conflictHandler:(GCConflictHandler)handler
-                        error:(NSError**)error {
+                        error:(NSError**)outError {
   const git_commit* parents[] = {againstCommit.private};
   return [self _mergeTheirCommit:pickCommit.private
                    intoOurCommit:againstCommit.private
@@ -104,7 +104,7 @@ cleanup:
                           author:git_commit_author(pickCommit.private)
                          message:message
                  conflictHandler:handler
-                           error:error];
+                           error:outError];
 }
 
 - (GCCommit*)revertCommit:(GCCommit*)revertCommit
@@ -112,7 +112,7 @@ cleanup:
        withAncestorCommit:(GCCommit*)ancestorCommit
                   message:(NSString*)message
           conflictHandler:(GCConflictHandler)handler
-                    error:(NSError**)error {
+                    error:(NSError**)outError {
   const git_commit* parents[] = {againstCommit.private};
   return [self _mergeTheirCommit:ancestorCommit.private
                    intoOurCommit:againstCommit.private
@@ -122,10 +122,10 @@ cleanup:
                           author:NULL
                          message:message
                  conflictHandler:handler
-                           error:error];
+                           error:outError];
 }
 
-- (GCCommitRelation)findRelationOfCommit:(GCCommit*)ofCommit relativeToCommit:(GCCommit*)toCommit error:(NSError**)error {
+- (GCCommitRelation)findRelationOfCommit:(GCCommit*)ofCommit relativeToCommit:(GCCommit*)toCommit error:(NSError**)outError {
   const git_oid* ofOID = git_commit_id(ofCommit.private);
   const git_oid* toOID = git_commit_id(toCommit.private);
   if (!git_oid_equal(ofOID, toOID)) {
@@ -147,7 +147,7 @@ cleanup:
   return kGCCommitRelation_Identical;
 }
 
-- (GCCommit*)findMergeBaseForCommits:(NSArray*)commits error:(NSError**)error {
+- (GCCommit*)findMergeBaseForCommits:(NSArray*)commits error:(NSError**)outError {
   git_commit* commit = NULL;
   size_t count = commits.count;
   git_oid* bases = malloc(count * sizeof(git_oid));
@@ -165,8 +165,8 @@ cleanup:
 }
 
 // Generic re-implementation of git_merge_analysis()
-- (GCMergeAnalysisResult)analyzeMergingCommit:(GCCommit*)mergeCommit intoCommit:(GCCommit*)intoCommit ancestorCommit:(GCCommit**)ancestorCommit error:(NSError**)error {
-  GCCommit* ancestor = [self findMergeBaseForCommits:@[ intoCommit, mergeCommit ] error:error];
+- (GCMergeAnalysisResult)analyzeMergingCommit:(GCCommit*)mergeCommit intoCommit:(GCCommit*)intoCommit ancestorCommit:(GCCommit**)ancestorCommit error:(NSError**)outError {
+  GCCommit* ancestor = [self findMergeBaseForCommits:@[ intoCommit, mergeCommit ] error:outError];
   if (ancestor == nil) {
     return kGCMergeAnalysisResult_Unknown;
   }
@@ -189,7 +189,7 @@ cleanup:
       withAncestorCommit:(GCCommit*)ancestorCommit
                  message:(NSString*)message
          conflictHandler:(GCConflictHandler)handler
-                   error:(NSError**)error {
+                   error:(NSError**)outError {
   const git_commit* parents[] = {intoCommit.private, mergeCommit.private};
   return [self _mergeTheirCommit:mergeCommit.private
                    intoOurCommit:intoCommit.private
@@ -199,13 +199,13 @@ cleanup:
                           author:NULL
                          message:message
                  conflictHandler:handler
-                           error:error];
+                           error:outError];
 }
 
 - (GCCommit*)createCommitFromIndex:(GCIndex*)index
                        withParents:(NSArray*)parents
                            message:(NSString*)message
-                             error:(NSError**)error {
+                             error:(NSError**)outError {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wvla"
   const git_commit* commits[parents.count];
@@ -214,7 +214,7 @@ cleanup:
   for (GCCommit* parent in parents) {
     commits[count++] = parent.private;
   }
-  return [self createCommitFromIndex:index.private withParents:commits count:count author:NULL message:message error:error];
+  return [self createCommitFromIndex:index.private withParents:commits count:count author:NULL message:message error:outError];
 }
 
 - (GCCommit*)copyCommit:(GCCommit*)copyCommit
@@ -222,7 +222,7 @@ cleanup:
           updatedParents:(NSArray*)parents
     updatedTreeFromIndex:(GCIndex*)index
          updateCommitter:(BOOL)updateCommitter
-                   error:(NSError**)error {
+                   error:(NSError**)outError {
   GCCommit* newCommit = nil;
   git_commit* commit = copyCommit.private;
   git_tree* tree = NULL;
@@ -234,7 +234,7 @@ cleanup:
   } else {
     CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_commit_tree, &tree, commit);
   }
-  newCommit = [self createCommitFromCommit:commit withTree:tree updatedMessage:message updatedParents:parents updateCommitter:updateCommitter error:error];
+  newCommit = [self createCommitFromCommit:commit withTree:tree updatedMessage:message updatedParents:parents updateCommitter:updateCommitter error:outError];
 
 cleanup:
   git_tree_free(tree);
@@ -249,7 +249,7 @@ cleanup:
           updateCommitter:(BOOL)updateCommitter
             skipIdentical:(BOOL)skipIdentical
           conflictHandler:(GCConflictHandler)handler
-                    error:(NSError**)error {
+                    error:(NSError**)outError {
   GCCommit* newCommit = nil;
   git_tree* replayTree = NULL;
   git_tree* ontoTree = NULL;
@@ -280,7 +280,7 @@ cleanup:
     if (message == nil) {
       message = replayCommit.message;
     }
-    newCommit = handler([[GCIndex alloc] initWithRepository:nil index:mergeIndex], ontoCommit, replayCommit, parents, message, error);  // TODO: This ignores "updateCommitter" and "skipIdentical"
+    newCommit = handler([[GCIndex alloc] initWithRepository:nil index:mergeIndex], ontoCommit, replayCommit, parents, message, outError);  // TODO: This ignores "updateCommitter" and "skipIdentical"
     mergeIndex = NULL;  // Ownership has been transferred to GCIndex instance
   } else {
     if (skipIdentical) {
@@ -291,7 +291,7 @@ cleanup:
     if (!diff || git_diff_num_deltas(diff)) {
       CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_index_write_tree_to, &oid, mergeIndex, self.private);
       CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_tree_lookup, &mergeTree, self.private, &oid);
-      newCommit = [self createCommitFromCommit:replayCommit.private withTree:mergeTree updatedMessage:message updatedParents:parents updateCommitter:updateCommitter error:error];
+      newCommit = [self createCommitFromCommit:replayCommit.private withTree:mergeTree updatedMessage:message updatedParents:parents updateCommitter:updateCommitter error:outError];
     } else {
       newCommit = ontoCommit;
       XLOG_VERBOSE(@"Skipping replay of already applied commit \"%@\" (%@) onto commit \"%@\" (%@)", replayCommit.summary, replayCommit.shortSHA1, ontoCommit.summary, ontoCommit.shortSHA1);
@@ -315,11 +315,11 @@ cleanup:
                              updateCommitter:(BOOL)updateCommitter
                                skipIdentical:(BOOL)skipIdentical
                              conflictHandler:(GCConflictHandler)handler
-                                       error:(NSError**)error {
+                                       error:(NSError**)outError {
   NSMutableArray* stack = [[NSMutableArray alloc] init];
   GCCommit* walkCommit = fromCommit;
   while (1) {
-    NSArray* parents = [self lookupParentsForCommit:walkCommit error:error];
+    NSArray* parents = [self lookupParentsForCommit:walkCommit error:outError];
     if (parents == nil) {
       return nil;
     }
@@ -345,7 +345,7 @@ cleanup:
       parents = [[NSMutableArray alloc] initWithArray:replayParents];
       [parents replaceObjectAtIndex:0 withObject:tipCommit];  // Only replace first parent and preserve others
     }
-    tipCommit = [self replayCommit:replayCommit ontoCommit:tipCommit withAncestorCommit:ancestor updatedMessage:nil updatedParents:(parents ? parents : @[ tipCommit ]) updateCommitter:updateCommitter skipIdentical:skipIdentical conflictHandler:handler error:error];
+    tipCommit = [self replayCommit:replayCommit ontoCommit:tipCommit withAncestorCommit:ancestor updatedMessage:nil updatedParents:(parents ? parents : @[ tipCommit ]) updateCommitter:updateCommitter skipIdentical:skipIdentical conflictHandler:handler error:outError];
     if (tipCommit == nil) {
       return nil;
     }
@@ -362,7 +362,7 @@ cleanup:
                             count:(NSUInteger)count
                            author:(const git_signature*)author
                           message:(NSString*)message
-                            error:(NSError**)error {
+                            error:(NSError**)outError {
   GCCommit* commit = nil;
   git_signature* signature = NULL;
 
@@ -383,7 +383,7 @@ cleanup:
                              count:(NSUInteger)count
                             author:(const git_signature*)author
                            message:(NSString*)message
-                             error:(NSError**)error {
+                             error:(NSError**)outError {
   GCCommit* commit = nil;
   git_tree* tree = NULL;
 
@@ -391,7 +391,7 @@ cleanup:
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_index_write_tree_to, &oid, index, self.private);
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_tree_lookup, &tree, self.private, &oid);
 
-  commit = [self createCommitFromTree:tree withParents:parents count:count author:author message:message error:error];
+  commit = [self createCommitFromTree:tree withParents:parents count:count author:author message:message error:outError];
 
 cleanup:
   git_tree_free(tree);
@@ -419,12 +419,12 @@ static const git_oid* _CommitParentCallback_Commit(size_t idx, void* payload) {
                      updatedMessage:(NSString*)message
                      updatedParents:(NSArray*)parents
                     updateCommitter:(BOOL)updateCommitter
-                              error:(NSError**)error {
+                              error:(NSError**)outError {
   git_oid oid;
   CALL_LIBGIT2_FUNCTION_RETURN(nil, git_index_write_tree_to, &oid, index, self.private);
   git_tree* tree;
   CALL_LIBGIT2_FUNCTION_RETURN(nil, git_tree_lookup, &tree, self.private, &oid);
-  GCCommit* newCommit = [self createCommitFromCommit:commit withTree:tree updatedMessage:message updatedParents:parents updateCommitter:updateCommitter error:error];
+  GCCommit* newCommit = [self createCommitFromCommit:commit withTree:tree updatedMessage:message updatedParents:parents updateCommitter:updateCommitter error:outError];
   git_tree_free(tree);
   return newCommit;
 }
@@ -434,7 +434,7 @@ static const git_oid* _CommitParentCallback_Commit(size_t idx, void* payload) {
                      updatedMessage:(NSString*)message
                      updatedParents:(NSArray*)parents
                     updateCommitter:(BOOL)updateCommitter
-                              error:(NSError**)error {
+                              error:(NSError**)outError {
   git_commit* newCommit = NULL;
   git_signature* signature = NULL;
   git_oid oid;

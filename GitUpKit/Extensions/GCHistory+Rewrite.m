@@ -161,13 +161,14 @@ typedef NS_ENUM(NSUInteger, ReplayMode) {
                       usingTransform:(GCReferenceTransform*)transform
                           replayMode:(ReplayMode)replayMode
                      conflictHandler:(GCConflictHandler)handler
-                               error:(NSError**)error {
+                               error:(NSError**)outError {
   CFMutableDictionaryRef mapping = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, NULL, &kCFTypeDictionaryValueCallBacks);
   CFDictionarySetValue(mapping, (__bridge const void*)fromCommit, ontoCommit ? (__bridge const void*)ontoCommit : kCFNull);
   for (GCHistoryCommit* commit in initialMapping) {
     CFDictionarySetValue(mapping, (__bridge const void*)commit, (__bridge const void*)initialMapping[commit]);
   }
   __block BOOL success = YES;
+  __block NSError *error = nil;
   [self walkDescendantsOfCommits:@[ fromCommit ]
                       usingBlock:^(GCHistoryCommit* commit, BOOL* stop) {
 
@@ -200,7 +201,7 @@ typedef NS_ENUM(NSUInteger, ReplayMode) {
                                                      updatedParents:parents
                                                updatedTreeFromIndex:nil
                                                     updateCommitter:YES
-                                                              error:error];
+                                                              error:&error];
                           } else {
                             newCommit = [self.repository replayCommit:commit
                                                            ontoCommit:tipCommit
@@ -210,7 +211,7 @@ typedef NS_ENUM(NSUInteger, ReplayMode) {
                                                       updateCommitter:YES
                                                         skipIdentical:(replayMode == kReplayMode_ApplyNewPatchesOnly)
                                                       conflictHandler:handler
-                                                                error:error];
+                                                                error:&error];
                           }
                           if (newCommit == nil) {
                             success = NO;
@@ -225,6 +226,9 @@ typedef NS_ENUM(NSUInteger, ReplayMode) {
 
                       }];
   CFRelease(mapping);
+  if (outError != nil) {
+    *outError = error;
+  }
   return success;
 }
 
@@ -307,7 +311,7 @@ typedef NS_ENUM(NSUInteger, ReplayMode) {
                                  conflictHandler:(GCConflictHandler)handler
                                   newChildCommit:(GCCommit**)newChildCommit
                                  newParentCommit:(GCCommit**)newParentCommit
-                                           error:(NSError**)error {
+                                           error:(NSError**)outError {
   if (commit.parents.count == 0) {
     GC_SET_GENERIC_ERROR(@"Commit cannot be a root commit");
     return nil;
@@ -332,7 +336,7 @@ typedef NS_ENUM(NSUInteger, ReplayMode) {
                                                 updateCommitter:YES
                                                   skipIdentical:NO
                                                 conflictHandler:handler
-                                                          error:error];
+                                                          error:outError];
   if (swappedParentCommit == nil) {
     return nil;
   }
@@ -349,7 +353,7 @@ typedef NS_ENUM(NSUInteger, ReplayMode) {
                                           updateCommitter:YES
                                             skipIdentical:NO
                                           conflictHandler:handler
-                                                    error:error];
+                                                    error:outError];
   if (swappedCommit == nil) {
     return nil;
   }
@@ -362,7 +366,7 @@ typedef NS_ENUM(NSUInteger, ReplayMode) {
                            usingTransform:transform
                                replayMode:kReplayMode_ApplyPatches
                           conflictHandler:handler
-                                    error:error]) {
+                                    error:outError]) {
     return nil;
   }
 

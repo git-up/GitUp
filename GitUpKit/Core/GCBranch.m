@@ -86,19 +86,19 @@
 
 #pragma mark - Browsing
 
-- (GCLocalBranch*)findLocalBranchWithName:(NSString*)name error:(NSError**)error {
-  return [self findReferenceWithFullName:[@kHeadsNamespace stringByAppendingString:name] class:[GCLocalBranch class] error:error];
+- (GCLocalBranch*)findLocalBranchWithName:(NSString*)name error:(NSError**)outError {
+  return [self findReferenceWithFullName:[@kHeadsNamespace stringByAppendingString:name] class:[GCLocalBranch class] error:outError];
 }
 
-- (GCRemoteBranch*)findRemoteBranchWithName:(NSString*)name error:(NSError**)error {
-  return [self findReferenceWithFullName:[@kRemotesNamespace stringByAppendingString:name] class:[GCRemoteBranch class] error:error];
+- (GCRemoteBranch*)findRemoteBranchWithName:(NSString*)name error:(NSError**)outError {
+  return [self findReferenceWithFullName:[@kRemotesNamespace stringByAppendingString:name] class:[GCRemoteBranch class] error:outError];
 }
 
-- (NSArray*)_listBranches:(NSError**)error flags:(git_branch_t)flags {
+- (NSArray*)_listBranches:(NSError**)outError flags:(git_branch_t)flags {
   NSMutableArray* array = [[NSMutableArray alloc] init];
   BOOL success = [self enumerateReferencesWithOptions:kGCReferenceEnumerationOption_RetainReferences
-                                                error:error
-                                           usingBlock:^BOOL(git_reference* reference) {
+                                                error:outError
+                                           usingBlock:^BOOL(git_reference* reference, NSError** error) {
 
                                              if ((flags & GIT_BRANCH_LOCAL) && git_reference_is_branch(reference)) {
                                                GCLocalBranch* branch = [[GCLocalBranch alloc] initWithRepository:self reference:reference];
@@ -115,39 +115,39 @@
   return success ? array : nil;
 }
 
-- (NSArray*)listLocalBranches:(NSError**)error {
-  return [self _listBranches:error flags:GIT_BRANCH_LOCAL];
+- (NSArray*)listLocalBranches:(NSError**)outError {
+  return [self _listBranches:outError flags:GIT_BRANCH_LOCAL];
 }
 
-- (NSArray*)listRemoteBranches:(NSError**)error {
-  return [self _listBranches:error flags:GIT_BRANCH_REMOTE];
+- (NSArray*)listRemoteBranches:(NSError**)outError {
+  return [self _listBranches:outError flags:GIT_BRANCH_REMOTE];
 }
 
-- (NSArray*)listAllBranches:(NSError**)error {
-  return [self _listBranches:error flags:GIT_BRANCH_ALL];
+- (NSArray*)listAllBranches:(NSError**)outError {
+  return [self _listBranches:outError flags:GIT_BRANCH_ALL];
 }
 
 #pragma mark - Utilities
 
-- (GCCommit*)lookupTipCommitForBranch:(GCBranch*)branch error:(NSError**)error {
-  if (![self refreshReference:branch error:error]) {
+- (GCCommit*)lookupTipCommitForBranch:(GCBranch*)branch error:(NSError**)outError {
+  if (![self refreshReference:branch error:outError]) {
     return nil;
   }
-  git_commit* commit = [self loadCommitFromBranchReference:branch.private error:error];
+  git_commit* commit = [self loadCommitFromBranchReference:branch.private error:outError];
   return commit ? [[GCCommit alloc] initWithRepository:self commit:commit] : nil;
 }
 
 #pragma mark - Editing
 
-- (GCLocalBranch*)createLocalBranchFromCommit:(GCCommit*)commit withName:(NSString*)name force:(BOOL)force error:(NSError**)error {
+- (GCLocalBranch*)createLocalBranchFromCommit:(GCCommit*)commit withName:(NSString*)name force:(BOOL)force error:(NSError**)outError {
   git_reference* reference;
   CALL_LIBGIT2_FUNCTION_RETURN(nil, git_branch_create, &reference, self.private, name.UTF8String, commit.private, force);
   return [[GCLocalBranch alloc] initWithRepository:self reference:reference];
 }
 
-- (BOOL)setTipCommit:(GCCommit*)commit forBranch:(GCBranch*)branch reflogMessage:(NSString*)message error:(NSError**)error {
+- (BOOL)setTipCommit:(GCCommit*)commit forBranch:(GCBranch*)branch reflogMessage:(NSString*)message error:(NSError**)outError {
   git_reference* reference;
-  if (![self setTargetOID:git_commit_id(commit.private) forReference:branch.private reflogMessage:message newReference:&reference error:error]) {  // TODO: Should we pass a reflog message?
+  if (![self setTargetOID:git_commit_id(commit.private) forReference:branch.private reflogMessage:message newReference:&reference error:outError]) {  // TODO: Should we pass a reflog message?
     return NO;
   }
   [branch updateReference:reference];
@@ -155,15 +155,15 @@
 }
 
 // We have to use the official API instead of directly git_reference_rename() as renaming a branch reference requires a lot of additional bookkeeping
-- (BOOL)setName:(NSString*)name forLocalBranch:(GCLocalBranch*)branch force:(BOOL)force error:(NSError**)error {
+- (BOOL)setName:(NSString*)name forLocalBranch:(GCLocalBranch*)branch force:(BOOL)force error:(NSError**)outError {
   git_reference* reference;
   CALL_LIBGIT2_FUNCTION_RETURN(NO, git_branch_move, &reference, branch.private, name.UTF8String, force);  // This uses git_reference_rename() under the hood
   [branch updateReference:reference];
   return YES;
 }
 
-- (BOOL)deleteLocalBranch:(GCLocalBranch*)branch error:(NSError**)error {
-  if (![self refreshReference:branch error:error]) {  // Works around "old reference value does not match" errors if underlying reference is out of sync
+- (BOOL)deleteLocalBranch:(GCLocalBranch*)branch error:(NSError**)outError {
+  if (![self refreshReference:branch error:outError]) {  // Works around "old reference value does not match" errors if underlying reference is out of sync
     return NO;
   }
   CALL_LIBGIT2_FUNCTION_RETURN(NO, git_branch_delete, branch.private);  // This uses git_reference_delete() under the hood
@@ -172,7 +172,7 @@
 
 #pragma mark - Upstream
 
-- (GCBranch*)lookupUpstreamForLocalBranch:(GCLocalBranch*)branch error:(NSError**)error {
+- (GCBranch*)lookupUpstreamForLocalBranch:(GCLocalBranch*)branch error:(NSError**)outError {
   git_reference* upstream;
   CALL_LIBGIT2_FUNCTION_RETURN(nil, git_branch_upstream, &upstream, branch.private);
   if (git_reference_is_branch(upstream)) {
@@ -186,12 +186,12 @@
   return nil;
 }
 
-- (BOOL)setUpstream:(GCBranch*)upstreamBranch forLocalBranch:(GCLocalBranch*)branchBranch error:(NSError**)error {
+- (BOOL)setUpstream:(GCBranch*)upstreamBranch forLocalBranch:(GCLocalBranch*)branchBranch error:(NSError**)outError {
   CALL_LIBGIT2_FUNCTION_RETURN(NO, git_branch_set_upstream, branchBranch.private, git_reference_shorthand(upstreamBranch.private));
   return YES;
 }
 
-- (BOOL)unsetUpstreamForLocalBranch:(GCLocalBranch*)branchBranch error:(NSError**)error {
+- (BOOL)unsetUpstreamForLocalBranch:(GCLocalBranch*)branchBranch error:(NSError**)outError {
   CALL_LIBGIT2_FUNCTION_RETURN(NO, git_branch_set_upstream, branchBranch.private, NULL);
   return YES;
 }
@@ -200,9 +200,9 @@
 
 @implementation GCRepository (GCBranch_Private)
 
-- (git_commit*)loadCommitFromBranchReference:(git_reference*)reference error:(NSError**)error {
+- (git_commit*)loadCommitFromBranchReference:(git_reference*)reference error:(NSError**)outError {
   git_oid oid;
-  if (![self loadTargetOID:&oid fromReference:reference error:error]) {
+  if (![self loadTargetOID:&oid fromReference:reference error:outError]) {
     return nil;
   }
   git_commit* commit;
