@@ -497,7 +497,7 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
   }
 }
 
-- (void)getSelectedText:(NSString**)text oldLines:(NSIndexSet**)oldLines newLines:(NSIndexSet**)newLines {
+- (void)getSelectedText:(NSString* __autoreleasing *)text oldLines:(NSIndexSet* __autoreleasing *)oldLines newLines:(NSIndexSet* __autoreleasing *)newLines {
   if (text) {
     if (_selectedText.length > 0) {
       XLOG_DEBUG_CHECK(!_selectedLines.count);

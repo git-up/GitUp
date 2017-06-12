@@ -39,9 +39,9 @@ NSString* GCFileSystemPathFromGitPath(const char* string);
 NSURL* GCURLFromGitURL(NSString* url);
 NSString* GCGitURLFromURL(NSURL* url);
 
-void GCArrayApplyBlock(CFArrayRef array, void (^block)(const void* value));
-void GCSetApplyBlock(CFSetRef set, void (^block)(const void* value));
-void GCDictionaryApplyBlock(CFDictionaryRef dict, void (^block)(const void* key, const void* value));
+void GCArrayApplyBlock(CFArrayRef array, void (^NS_NOESCAPE block)(const void* value));
+void GCSetApplyBlock(CFSetRef set, void (^NS_NOESCAPE block)(const void* value));
+void GCDictionaryApplyBlock(CFDictionaryRef dict, void (^NS_NOESCAPE block)(const void* key, const void* value));
 
 #ifdef __cplusplus
 }
