@@ -18,8 +18,8 @@
 #define GC_SET_ERROR(code, ...)                                    \
   do {                                                             \
     NSString* __message = [NSString stringWithFormat:__VA_ARGS__]; \
-    if (error) {                                                   \
-      *error = GCNewError(code, __message);                        \
+    if (outError) {                                                   \
+      *outError = GCNewError(code, __message);                        \
     }                                                              \
   } while (0)
 

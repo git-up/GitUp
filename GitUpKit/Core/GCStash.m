@@ -30,7 +30,7 @@
   git_reflog* _reflog;
 }
 
-- (id)initWithRepository:(git_repository*)repository error:(NSError**)error {
+- (id)initWithRepository:(git_repository*)repository error:(NSError**)outError {
   if ((self = [super init])) {
     git_reference* reference;
     int status = git_reference_lookup(&reference, repository, kStashReferenceFullName);
@@ -55,7 +55,7 @@
   git_reflog_free(_reflog);
 }
 
-- (BOOL)restoreWithRepository:(git_repository*)repository error:(NSError**)error {
+- (BOOL)restoreWithRepository:(git_repository*)repository error:(NSError**)outError {
   if (_reflog) {
     git_reference* reference;
     CALL_LIBGIT2_FUNCTION_RETURN(NO, git_reference_create, &reference, repository, kStashReferenceFullName, &_target, 1, NULL);  // Reflog message doesn't matter
@@ -75,7 +75,7 @@
 // TODO: Handle submodules
 @implementation GCRepository (GCStash)
 
-- (GCStash*)_newStashFromOID:(const git_oid*)oid error:(NSError**)error {
+- (GCStash*)_newStashFromOID:(const git_oid*)oid error:(NSError**)outError {
   git_commit* commit;
   CALL_LIBGIT2_FUNCTION_RETURN(nil, git_commit_lookup, &commit, self.private, oid);
   GCStash* stash = [[GCStash alloc] initWithRepository:self commit:commit];
@@ -106,12 +106,12 @@
  - Create a new commit with the deleted or modified files between the base commit and the working directory
   - This commit has the base commit as its first parent, the index commit as the second parent and the optional untracked commit as the third parent
 */
-- (GCStash*)saveStashWithMessage:(NSString*)message keepIndex:(BOOL)keepIndex includeUntracked:(BOOL)includeUntracked error:(NSError**)error {
+- (GCStash*)saveStashWithMessage:(NSString*)message keepIndex:(BOOL)keepIndex includeUntracked:(BOOL)includeUntracked error:(NSError**)outError {
   GCStash* stash = nil;
   git_index* index = NULL;
   git_signature* signature = NULL;
 
-  index = [self reloadRepositoryIndex:error];  // git_stash_save() doesn't reload the repository index
+  index = [self reloadRepositoryIndex:outError];  // git_stash_save() doesn't reload the repository index
   if (index == NULL) {
     goto cleanup;
   }
@@ -125,7 +125,7 @@
   }
   git_oid oid;
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_stash_save, &oid, self.private, signature, GCCleanedUpCommitMessage(message).bytes, flags);
-  stash = [self _newStashFromOID:&oid error:error];
+  stash = [self _newStashFromOID:&oid error:outError];
 
 cleanup:
   git_signature_free(signature);
@@ -133,12 +133,13 @@ cleanup:
   return stash;
 }
 
-- (NSArray*)listStashes:(NSError**)error {
+- (NSArray*)listStashes:(NSError**)outError {
   NSMutableArray* array = [[NSMutableArray alloc] init];
+  __block NSError* error = nil;
   CALL_LIBGIT2_FUNCTION_RETURN(nil, git_stash_foreach_block, self.private, ^int(size_t index, const char* message, const git_oid* stash_id) {
 
     XLOG_DEBUG_CHECK(array.count == index);
-    GCStash* stash = [self _newStashFromOID:stash_id error:error];
+    GCStash* stash = [self _newStashFromOID:stash_id error:&error];
     if (stash == nil) {
       return GIT_ERROR;
     }
@@ -146,10 +147,13 @@ cleanup:
     return GIT_OK;
 
   });
+  if (outError != nil) {
+    *outError = error;
+  }
   return array;
 }
 
-- (NSUInteger)_indexOfStash:(GCStash*)stash error:(NSError**)error {
+- (NSUInteger)_indexOfStash:(GCStash*)stash error:(NSError**)outError {
   const git_oid* oid = git_commit_id(stash.private);
   __block NSUInteger stashIndex = NSNotFound;
   CALL_LIBGIT2_FUNCTION_RETURN(NSNotFound, git_stash_foreach_block, self.private, ^int(size_t index, const char* message, const git_oid* stash_id) {
@@ -167,14 +171,14 @@ cleanup:
   return stashIndex;
 }
 
-- (BOOL)applyStash:(GCStash*)stash restoreIndex:(BOOL)restoreIndex error:(NSError**)error {
-  git_index* index = [self reloadRepositoryIndex:error];  // git_stash_apply() doesn't reload the repository index
+- (BOOL)applyStash:(GCStash*)stash restoreIndex:(BOOL)restoreIndex error:(NSError**)outError {
+  git_index* index = [self reloadRepositoryIndex:outError];  // git_stash_apply() doesn't reload the repository index
   if (index == NULL) {
     return NO;
   }
   git_index_free(index);
 
-  NSUInteger i = [self _indexOfStash:stash error:error];
+  NSUInteger i = [self _indexOfStash:stash error:outError];
   if (i == NSNotFound) {
     return NO;
   }
@@ -188,8 +192,8 @@ cleanup:
   return YES;
 }
 
-- (BOOL)dropStash:(GCStash*)stash error:(NSError**)error {
-  NSUInteger i = [self _indexOfStash:stash error:error];
+- (BOOL)dropStash:(GCStash*)stash error:(NSError**)outError {
+  NSUInteger i = [self _indexOfStash:stash error:outError];
   if (i == NSNotFound) {
     return NO;
   }
@@ -197,14 +201,14 @@ cleanup:
   return YES;
 }
 
-- (BOOL)popStash:(GCStash*)stash restoreIndex:(BOOL)restoreIndex error:(NSError**)error {
-  git_index* index = [self reloadRepositoryIndex:error];  // git_stash_pop() doesn't reload the repository index
+- (BOOL)popStash:(GCStash*)stash restoreIndex:(BOOL)restoreIndex error:(NSError**)outError {
+  git_index* index = [self reloadRepositoryIndex:outError];  // git_stash_pop() doesn't reload the repository index
   if (index == NULL) {
     return NO;
   }
   git_index_free(index);
 
-  NSUInteger i = [self _indexOfStash:stash error:error];
+  NSUInteger i = [self _indexOfStash:stash error:outError];
   if (i == NSNotFound) {
     return NO;
   }
@@ -218,12 +222,12 @@ cleanup:
   return YES;
 }
 
-- (GCStashState*)saveStashState:(NSError**)error {
-  return [[GCStashState alloc] initWithRepository:self.private error:error];
+- (GCStashState*)saveStashState:(NSError**)outError {
+  return [[GCStashState alloc] initWithRepository:self.private error:outError];
 }
 
-- (BOOL)restoreStashState:(GCStashState*)state error:(NSError**)error {
-  return [state restoreWithRepository:self.private error:error];
+- (BOOL)restoreStashState:(GCStashState*)state error:(NSError**)outError {
+  return [state restoreWithRepository:self.private error:outError];
 }
 
 @end

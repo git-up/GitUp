@@ -57,8 +57,8 @@
   do {                                                                          \
     if (!(__STATUS__ __COMPARISON__)) {                                         \
       LOG_SQLITE_ERROR(__STATUS__);                                             \
-      if (error) {                                                              \
-        *error = _NewSQLiteError(__STATUS__, sqlite3_errmsg(_database));        \
+      if (outError) {                                                           \
+        *outError = _NewSQLiteError(__STATUS__, sqlite3_errmsg(_database));     \
       }                                                                         \
       __FAIL_ACTION__;                                                          \
     }                                                                           \
@@ -164,7 +164,7 @@ static int _CaseInsensitiveUTF8Compare(void* context, int length1, const void* b
   return result;
 }
 
-- (BOOL)_initializeDatabase:(NSString*)path error:(NSError**)error {
+- (BOOL)_initializeDatabase:(NSString*)path error:(NSError**)outError {
   CALL_SQLITE_FUNCTION_RETURN(NO, sqlite3_open_v2, path.fileSystemRepresentation, &_database, SQLITE_OPEN_CREATE | SQLITE_OPEN_READWRITE | SQLITE_OPEN_NOMUTEX | SQLITE_OPEN_SHAREDCACHE, NULL);
   CALL_SQLITE_FUNCTION_RETURN(NO, sqlite3_extended_result_codes, _database, true);
   CALL_SQLITE_FUNCTION_RETURN(NO, sqlite3_exec, _database, "PRAGMA page_size = 32768", NULL, NULL, NULL);  // Default appears to be 4096 on OS X
@@ -180,7 +180,7 @@ static int _CaseInsensitiveUTF8Compare(void* context, int length1, const void* b
 
 // Emails are considered case-insensitive with "COLLATE NOCASE" which only works with ASCII characters but that should be fine for emails
 // TODO: Does the order of columns inside a table affect performance?
-- (BOOL)_initializeSchema:(int)version error:(NSError**)error {
+- (BOOL)_initializeSchema:(int)version error:(NSError**)outError {
   // Users table
   CALL_SQLITE_FUNCTION_RETURN(NO, sqlite3_exec, _database, "CREATE TABLE " kUsersTableName "("
                                                            "_id_ INTEGER PRIMARY KEY,"
@@ -243,7 +243,7 @@ static int _CaseInsensitiveUTF8Compare(void* context, int length1, const void* b
 
 // DELETE triggers are required because we must delete from FTS *before* deleting from content table which is impractical to do in -_removeCommitsForTip
 // We don't need INSERT or UPDATE triggers since we never update content that is indexed by FTS
-- (BOOL)_initializeTriggers:(NSError**)error {
+- (BOOL)_initializeTriggers:(NSError**)outError {
   // Triggers for FTS commits
   CALL_SQLITE_FUNCTION_RETURN(NO, sqlite3_exec, _database, "\
     CREATE TRIGGER " kCommitsTableName "_before_delete BEFORE DELETE ON " kCommitsTableName " BEGIN \
@@ -264,7 +264,7 @@ static int _CaseInsensitiveUTF8Compare(void* context, int length1, const void* b
   return YES;
 }
 
-- (BOOL)_initializeDeferredIndexes:(NSError**)error {
+- (BOOL)_initializeDeferredIndexes:(NSError**)outError {
   // Indexes for finding commits by author or comitter
   CALL_SQLITE_FUNCTION_RETURN(NO, sqlite3_exec, _database, "CREATE INDEX " kCommitsTableName "_author on " kCommitsTableName "(author)", NULL, NULL, NULL);
   CALL_SQLITE_FUNCTION_RETURN(NO, sqlite3_exec, _database, "CREATE INDEX " kCommitsTableName "_committer on " kCommitsTableName "(committer)", NULL, NULL, NULL);
@@ -280,7 +280,7 @@ static int _CaseInsensitiveUTF8Compare(void* context, int length1, const void* b
   return YES;
 }
 
-- (BOOL)_initializeStatements:(NSError**)error {
+- (BOOL)_initializeStatements:(NSError**)outError {
   _statements = calloc(kNumStatements, sizeof(sqlite3_stmt*));
 
   if (!(_options & kGCCommitDatabaseOptions_QueryOnly)) {
@@ -348,7 +348,7 @@ static int _CaseInsensitiveUTF8Compare(void* context, int length1, const void* b
   return version;
 }
 
-- (BOOL)_checkReady:(NSError**)error {
+- (BOOL)_checkReady:(NSError**)outError {
   sqlite3_stmt* statement;
   CALL_LIBGIT2_FUNCTION_RETURN(NO, sqlite3_prepare_v2, _database, "SELECT 1 FROM sqlite_master WHERE type='trigger'", -1, &statement, NULL);
   int result = sqlite3_step(statement);
@@ -361,13 +361,13 @@ static int _CaseInsensitiveUTF8Compare(void* context, int length1, const void* b
   return YES;
 }
 
-- (instancetype)initWithRepository:(GCRepository*)repository databasePath:(NSString*)path options:(GCCommitDatabaseOptions)options error:(NSError**)error {
+- (instancetype)initWithRepository:(GCRepository*)repository databasePath:(NSString*)path options:(GCCommitDatabaseOptions)options error:(NSError**)outError {
   if ((self = [super init])) {
     _repository = repository;
     _databasePath = [path copy];
     _options = options;
 
-    if (![self _initializeDatabase:path error:error]) {
+    if (![self _initializeDatabase:path error:outError]) {
       [self release];
       return nil;
     }
@@ -376,7 +376,7 @@ static int _CaseInsensitiveUTF8Compare(void* context, int length1, const void* b
     if ([self _hasTables]) {
       NSInteger currentVersion = [self _readVersion];
       if (currentVersion == version) {
-        if (![self _checkReady:error]) {
+        if (![self _checkReady:outError]) {
           [self release];
           return nil;
         }
@@ -389,19 +389,19 @@ static int _CaseInsensitiveUTF8Compare(void* context, int length1, const void* b
         sqlite3_close(_database);
         _database = NULL;
         XLOG_WARNING(@"Commit database for \"%@\" has an incompatible version (%li) and must be regenerated", _repository.repositoryPath, (long)currentVersion);
-        if (![[NSFileManager defaultManager] removeItemAtPath:path error:error] || ![self _initializeDatabase:path error:error] || ![self _initializeSchema:version error:error]) {
+        if (![[NSFileManager defaultManager] removeItemAtPath:path error:outError] || ![self _initializeDatabase:path error:outError] || ![self _initializeSchema:version error:outError]) {
           [self release];
           return nil;
         }
       }
     } else {
-      if (![self _initializeSchema:version error:error]) {
+      if (![self _initializeSchema:version error:outError]) {
         [self release];
         return nil;
       }
     }
 
-    if (![self _initializeStatements:error]) {
+    if (![self _initializeStatements:outError]) {
       [self release];
       return nil;
     }
@@ -553,7 +553,7 @@ static BOOL _ProcessDiff(git_repository* repo, git_commit* commit, git_commit* p
   return success;
 }
 
-- (BOOL)_addCommitsForTip:(const git_oid*)tipOID handler:(BOOL (^)())handler error:(NSError**)error {
+- (BOOL)_addCommitsForTip:(const git_oid*)tipOID handler:(BOOL (^)(void))handler error:(NSError**)outError {
   BOOL success = NO;
   GC_LIST_ALLOCATE(row, 16, Item);
   GC_LIST_ALLOCATE(newRow, 16, Item);
@@ -782,8 +782,8 @@ static BOOL _ProcessDiff(git_repository* repo, git_commit* commit, git_commit* p
 
         // Call handler
         if (!handler()) {
-          if (error) {
-            *error = GCNewError(kGCErrorCode_UserCancelled, @"");
+          if (outError) {
+            *outError = GCNewError(kGCErrorCode_UserCancelled, @"");
           }
           goto cleanup;
         }
@@ -919,7 +919,7 @@ cleanup:
   return success;
 }
 
-- (BOOL)_removeCommitsForTip:(const git_oid*)tipOID handler:(BOOL (^)())handler error:(NSError**)error {
+- (BOOL)_removeCommitsForTip:(const git_oid*)tipOID handler:(BOOL (^)(void))handler error:(NSError**)outError {
   BOOL success = NO;
   GC_LIST_ALLOCATE(row, 16, sqlite3_int64);
   GC_LIST_ALLOCATE(newRow, 16, sqlite3_int64);
@@ -989,8 +989,8 @@ cleanup:
 
         // Call handler
         if (!handler()) {
-          if (error) {
-            *error = GCNewError(kGCErrorCode_UserCancelled, @"");
+          if (outError) {
+            *outError = GCNewError(kGCErrorCode_UserCancelled, @"");
           }
           goto cleanup;
         }
@@ -1014,7 +1014,7 @@ cleanup:
 
 // TODO: Use a custom container instead of GC_LIST + CFSet combo
 // TODO: Vacuum database when needed (this is expensive as it actually copies the database to rebuild it)
-- (BOOL)updateWithProgressHandler:(GCCommitDatabaseProgressHandler)handler error:(NSError**)error {
+- (BOOL)updateWithProgressHandler:(GCCommitDatabaseProgressHandler)handler error:(NSError**)outError {
   XLOG_DEBUG_CHECK(!(_options & kGCCommitDatabaseOptions_QueryOnly));
   BOOL success = NO;
   GC_LIST_ALLOCATE(oldTips, 64, git_oid);
@@ -1046,8 +1046,8 @@ cleanup:
 
   // Load new tips (ensure unique)
   if (![_repository enumerateReferencesWithOptions:kGCReferenceEnumerationOption_IncludeHEAD
-                                             error:error
-                                        usingBlock:^BOOL(git_reference* reference) {
+                                             error:outError
+                                        usingBlock:^BOOL(git_reference* reference, NSError** error) {
 
                                           if (git_reference_type(reference) == GIT_REF_OID) {  // We don't care about symbolic references as they eventually point to a direct one anyway
                                             const git_oid* oid = git_reference_target(reference);
@@ -1097,7 +1097,7 @@ cleanup:
                              ++addedCommits;
                              return !handler || handler(!_ready, addedCommits, removedCommits);
                            }
-                             error:error]) {
+                             error:outError]) {
         goto cleanup;
       }
     }
@@ -1112,7 +1112,7 @@ cleanup:
                                 ++removedCommits;
                                 return !handler || handler(!_ready, addedCommits, removedCommits);
                               }
-                                error:error]) {
+                                error:outError]) {
         goto cleanup;
       }
     }
@@ -1120,7 +1120,7 @@ cleanup:
 
   // Finish database initialization if needed
   if (!_ready) {
-    if (![self _initializeDeferredIndexes:error] || ![self _initializeTriggers:error]) {
+    if (![self _initializeDeferredIndexes:outError] || ![self _initializeTriggers:outError]) {
       goto cleanup;
     }
   }
@@ -1160,11 +1160,11 @@ cleanup:
   return success;
 }
 
-- (NSArray*)findCommitsMatching:(NSString*)match error:(NSError**)error {
-  return [self findCommitsUsingHistory:nil matching:match error:error];
+- (NSArray*)findCommitsMatching:(NSString*)match error:(NSError**)outError {
+  return [self findCommitsUsingHistory:nil matching:match error:outError];
 }
 
-- (NSArray*)findCommitsUsingHistory:(GCHistory*)history matching:(NSString*)match error:(NSError**)error {
+- (NSArray*)findCommitsUsingHistory:(GCHistory*)history matching:(NSString*)match error:(NSError**)outError {
   BOOL success = NO;
   NSMutableArray* results = [NSMutableArray array];
   sqlite3_stmt** statements = _statements;

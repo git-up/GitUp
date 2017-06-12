@@ -689,7 +689,7 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
     referencesDidChange:(BOOL*)outReferencesDidChange
            addedCommits:(NSArray**)outAddedCommits
          removedCommits:(NSArray**)outRemovedCommits
-                  error:(NSError**)error {
+                  error:(NSError**)outError {
   XLOG_DEBUG_CHECK([NSThread isMainThread]);  // This could work from any thread but it really shouldn't happen in practice
   BOOL success = NO;
   NSUInteger nextAutoIncrementID = history.nextAutoIncrementID;
@@ -726,7 +726,7 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
   if (snapshot) {
     config = snapshot.config;
   } else {
-    NSArray* options = [self readConfigForLevel:kGCConfigLevel_Local error:error];
+    NSArray* options = [self readConfigForLevel:kGCConfigLevel_Local error:outError];
     if (options == nil) {
       goto cleanup;
     }
@@ -761,7 +761,7 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
       }
     }
   } else {
-    if (![self loadHEADCommit:&headCommit resolvedReference:&headReference error:error]) {  // Allow unborn HEAD
+    if (![self loadHEADCommit:&headCommit resolvedReference:&headReference error:outError]) {  // Allow unborn HEAD
       goto cleanup;
     }
     if (headCommit) {
@@ -780,7 +780,7 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
 
   // Find all other tips
   BOOL (^enumerateBlock)
-  (git_reference*) = ^(git_reference* reference) {
+  (git_reference*, NSError**) = ^(git_reference* reference, NSError** error) {
 
     GCReference* referenceObject = nil;
     if (git_reference_type(reference) != GIT_REF_SYMBOLIC) {  // Skip symbolic refs like "remote/origin/HEAD"
@@ -888,13 +888,13 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
           XLOG_DEBUG_UNREACHABLE();
           goto cleanup;
       }
-      if (!enumerateBlock(reference)) {
+      if (!enumerateBlock(reference, outError)) {
         git_reference_free(reference);
         goto cleanup;
       }
     }
   } else {
-    if (![self enumerateReferencesWithOptions:kGCReferenceEnumerationOption_RetainReferences error:error usingBlock:enumerateBlock]) {
+    if (![self enumerateReferencesWithOptions:kGCReferenceEnumerationOption_RetainReferences error:outError usingBlock:enumerateBlock]) {
       goto cleanup;
     }
   }
@@ -1199,23 +1199,23 @@ cleanup:
   return success;
 }
 
-- (GCHistory*)loadHistoryUsingSorting:(GCHistorySorting)sorting error:(NSError**)error {
+- (GCHistory*)loadHistoryUsingSorting:(GCHistorySorting)sorting error:(NSError**)outError {
   GCHistory* history = [[[GCHistory alloc] initWithRepository:self sorting:sorting] autorelease];
-  return [self _reloadHistory:history usingSnapshot:nil referencesDidChange:NULL addedCommits:NULL removedCommits:NULL error:error] ? history : nil;
+  return [self _reloadHistory:history usingSnapshot:nil referencesDidChange:NULL addedCommits:NULL removedCommits:NULL error:outError] ? history : nil;
 }
 
-- (BOOL)reloadHistory:(GCHistory*)history referencesDidChange:(BOOL*)referencesDidChange addedCommits:(NSArray**)addedCommits removedCommits:(NSArray**)removedCommits error:(NSError**)error {
-  return [self _reloadHistory:history usingSnapshot:nil referencesDidChange:referencesDidChange addedCommits:addedCommits removedCommits:removedCommits error:error];
+- (BOOL)reloadHistory:(GCHistory*)history referencesDidChange:(BOOL*)referencesDidChange addedCommits:(NSArray**)addedCommits removedCommits:(NSArray**)removedCommits error:(NSError**)outError {
+  return [self _reloadHistory:history usingSnapshot:nil referencesDidChange:referencesDidChange addedCommits:addedCommits removedCommits:removedCommits error:outError];
 }
 
-- (GCHistory*)loadHistoryFromSnapshot:(GCSnapshot*)snapshot usingSorting:(GCHistorySorting)sorting error:(NSError**)error {
+- (GCHistory*)loadHistoryFromSnapshot:(GCSnapshot*)snapshot usingSorting:(GCHistorySorting)sorting error:(NSError**)outError {
   GCHistory* history = [[[GCHistory alloc] initWithRepository:self sorting:sorting] autorelease];
-  return [self _reloadHistory:history usingSnapshot:snapshot referencesDidChange:NULL addedCommits:NULL removedCommits:NULL error:error] ? history : nil;
+  return [self _reloadHistory:history usingSnapshot:snapshot referencesDidChange:NULL addedCommits:NULL removedCommits:NULL error:outError] ? history : nil;
 }
 
 #pragma mark - File
 
-- (NSArray*)lookupCommitsForFile:(NSString*)path followRenames:(BOOL)follow error:(NSError**)error {
+- (NSArray*)lookupCommitsForFile:(NSString*)path followRenames:(BOOL)follow error:(NSError**)outError {
   NSMutableArray* commits = nil;
   char* fileName = strdup(GCGitPathFromFileSystemPath(path));
   git_revwalk* walker = NULL;

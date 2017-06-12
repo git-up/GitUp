@@ -141,12 +141,12 @@ NSString* GCNameFromHostingService(GCHostingService service) {
   return YES;
 }
 
-- (BOOL)moveFileFromPath:(NSString*)fromPath toPath:(NSString*)toPath force:(BOOL)force error:(NSError**)error {
+- (BOOL)moveFileFromPath:(NSString*)fromPath toPath:(NSString*)toPath force:(BOOL)force error:(NSError**)outError {
   NSString* sourcePath = [self absolutePathForFile:fromPath];
   NSString* destinationPath = [self absolutePathForFile:toPath];
   BOOL isDirectory;
 
-  GCIndex* index = [self readRepositoryIndex:error];
+  GCIndex* index = [self readRepositoryIndex:outError];
   if (!index) {
     return NO;
   }
@@ -156,15 +156,15 @@ NSString* GCNameFromHostingService(GCHostingService service) {
     return NO;
   }
 
-  if (force && ![self safeDeleteFileIfExists:toPath error:error]) {
+  if (force && ![self safeDeleteFileIfExists:toPath error:outError]) {
     return NO;
   }
 
-  if (![[NSFileManager defaultManager] moveItemAtPath:sourcePath toPath:destinationPath error:error]) {
+  if (![[NSFileManager defaultManager] moveItemAtPath:sourcePath toPath:destinationPath error:outError]) {
     return NO;
   }
 
-  return [self removeFile:fromPath fromIndex:index error:error] && [self addFileInWorkingDirectory:toPath toIndex:index error:error] && [self writeRepositoryIndex:index error:error];
+  return [self removeFile:fromPath fromIndex:index error:outError] && [self addFileInWorkingDirectory:toPath toIndex:index error:outError] && [self writeRepositoryIndex:index error:outError];
 }
 
 - (BOOL)removeFile:(NSString*)path error:(NSError**)error {
@@ -308,7 +308,7 @@ NSString* GCNameFromHostingService(GCHostingService service) {
  - BitBucket: https://bitbucket.org/gitup/test
  - GitLab: https://gitlab.com/gitup/GitUp-Mac
 */
-- (NSURL*)_projectHostingURLForRemote:(GCRemote*)remote service:(GCHostingService*)service error:(NSError**)error {
+- (NSURL*)_projectHostingURLForRemote:(GCRemote*)remote service:(GCHostingService*)service error:(NSError**)outError {
   NSString* value = GCGitURLFromURL(remote.URL);
   if (value == nil) {
     XLOG_DEBUG_UNREACHABLE();
@@ -452,25 +452,25 @@ NSString* GCNameFromHostingService(GCHostingService service) {
            https://gitlab.com/gitup/GitUp-Mac/merge_requests/new?merge_request%5Bsource_branch%5D=new_graph&merge_request%5Bsource_project_id%5D=251119&merge_request%5Btarget_branch%5D=&merge_request%5Btarget_project_id%5D=251119
            https://gitlab.com/gitup/GitUp-Mac/merge_requests/new?merge_request[source_branch]=new_graph&merge_request[source_project_id]=251119&merge_request[target_branch]=&merge_request[target_project_id]=251119
 */
-- (NSURL*)hostingURLForPullRequestFromRemoteBranch:(GCRemoteBranch*)fromBranch toBranch:(GCRemoteBranch*)toBranch service:(GCHostingService*)service error:(NSError**)error {
+- (NSURL*)hostingURLForPullRequestFromRemoteBranch:(GCRemoteBranch*)fromBranch toBranch:(GCRemoteBranch*)toBranch service:(GCHostingService*)service error:(NSError**)outError {
   NSString* fromName;
-  GCRemote* fromRemote = [self lookupRemoteForRemoteBranch:fromBranch sourceBranchName:&fromName error:error];
+  GCRemote* fromRemote = [self lookupRemoteForRemoteBranch:fromBranch sourceBranchName:&fromName error:outError];
   if (fromRemote == nil) {
     return nil;
   }
   GCHostingService fromService;
-  NSURL* fromURL = [self _projectHostingURLForRemote:fromRemote service:&fromService error:error];
+  NSURL* fromURL = [self _projectHostingURLForRemote:fromRemote service:&fromService error:outError];
   if (fromURL == nil) {
     return nil;
   }
 
   NSString* toName;
-  GCRemote* toRemote = [self lookupRemoteForRemoteBranch:toBranch sourceBranchName:&toName error:error];
+  GCRemote* toRemote = [self lookupRemoteForRemoteBranch:toBranch sourceBranchName:&toName error:outError];
   if (toRemote == nil) {
     return nil;
   }
   GCHostingService toService;
-  NSURL* toURL = [self _projectHostingURLForRemote:toRemote service:&toService error:error];
+  NSURL* toURL = [self _projectHostingURLForRemote:toRemote service:&toService error:outError];
   if (toURL == nil) {
     return nil;
   }

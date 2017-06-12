@@ -832,8 +832,8 @@ cleanup:
   NSString* _configPath;
 }
 
-- (instancetype)initWithDatabase:(NSString*)databasePath error:(NSError**)error {
-  return [self initWithDatabase:databasePath config:nil localRepositoryContents:nil error:error];
+- (instancetype)initWithDatabase:(NSString*)databasePath error:(NSError**)outError {
+  return [self initWithDatabase:databasePath config:nil localRepositoryContents:nil error:outError];
 }
 
 static int _ForeachCallback(const git_oid* oid, void* payload) {
@@ -851,7 +851,7 @@ static int _ForeachCallback(const git_oid* oid, void* payload) {
   return error;
 }
 
-- (BOOL)_copyLocalRepository:(NSString*)path error:(NSError**)error {
+- (BOOL)_copyLocalRepository:(NSString*)path error:(NSError**)outError {
   BOOL success = NO;
   git_repository* repository = NULL;
   git_odb* odb = NULL;
@@ -889,7 +889,7 @@ cleanup:
   return success;
 }
 
-- (instancetype)initWithDatabase:(NSString*)databasePath config:(NSString*)configPath localRepositoryContents:(NSString*)localPath error:(NSError**)error {
+- (instancetype)initWithDatabase:(NSString*)databasePath config:(NSString*)configPath localRepositoryContents:(NSString*)localPath error:(NSError**)outError {
   BOOL success = NO;
   git_repository* repository = NULL;
   git_config* config = NULL;
@@ -921,7 +921,7 @@ cleanup:
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_repository_set_bare, repository);  // Repository is blank at this point and has no index so no need to remove it
 
   if (localPath) {
-    if (![self _copyLocalRepository:localPath error:error]) {
+    if (![self _copyLocalRepository:localPath error:outError]) {
       goto cleanup;
     }
   } else {
@@ -934,7 +934,7 @@ cleanup:
 cleanup:
   git_config_free(config);
   if (success) {
-    return [super initWithRepository:repository error:error];
+    return [super initWithRepository:repository error:outError];
   }
   git_repository_free(repository);
   return nil;

@@ -21,8 +21,8 @@
 
 @implementation GCRepository (Status)
 
-- (NSDictionary*)checkConflicts:(NSError**)error {
-  GCIndex* index = [self readRepositoryIndex:error];
+- (NSDictionary*)checkConflicts:(NSError**)outError {
+  GCIndex* index = [self readRepositoryIndex:outError];
   if (index == nil) {
     return nil;
   }
@@ -42,7 +42,7 @@ static int _DiffNotifyCallback(const git_diff* diff_so_far, const git_diff_delta
   return GIT_EUSER;
 }
 
-- (BOOL)checkClean:(GCCleanCheckOptions)options error:(NSError**)error {
+- (BOOL)checkClean:(GCCleanCheckOptions)options error:(NSError**)outError {
   BOOL clean = NO;
   git_commit* commit = NULL;
   git_tree* tree = NULL;
@@ -56,7 +56,7 @@ static int _DiffNotifyCallback(const git_diff* diff_so_far, const git_diff_delta
   diffOptions.flags = GIT_DIFF_SKIP_BINARY_CHECK;  // This should not be needed since not generating patches anyway
   diffOptions.notify_cb = _DiffNotifyCallback;
   diffOptions.payload = &delta_status;
-  git_index* index = [self reloadRepositoryIndex:error];
+  git_index* index = [self reloadRepositoryIndex:outError];
   if (index == NULL) {
     goto cleanup;
   }
@@ -79,7 +79,7 @@ static int _DiffNotifyCallback(const git_diff* diff_so_far, const git_diff_delta
 
   // Check index changes
   if (!(options & kGCCleanCheckOption_IgnoreIndexChanges)) {
-    if (![self loadHEADCommit:&commit resolvedReference:NULL error:error]) {
+    if (![self loadHEADCommit:&commit resolvedReference:NULL error:outError]) {
       goto cleanup;
     }
     if (commit) {

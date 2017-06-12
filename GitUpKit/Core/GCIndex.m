@@ -232,7 +232,7 @@ static inline BOOL _EqualConflicts(GCIndexConflict* conflict1, GCIndexConflict* 
 
 @implementation GCRepository (GCIndex)
 
-- (GCIndex*)createInMemoryIndex:(NSError**)error {
+- (GCIndex*)createInMemoryIndex:(NSError**)outError {
   git_index* memoryIndex;
   CALL_LIBGIT2_FUNCTION_RETURN(nil, git_index_new, &memoryIndex);
   GCIndex* index = [[GCIndex alloc] initWithRepository:nil index:memoryIndex];
@@ -240,18 +240,18 @@ static inline BOOL _EqualConflicts(GCIndexConflict* conflict1, GCIndexConflict* 
   return index;
 }
 
-- (GCIndex*)readRepositoryIndex:(NSError**)error {
-  git_index* index = [self reloadRepositoryIndex:error];
+- (GCIndex*)readRepositoryIndex:(NSError**)outError {
+  git_index* index = [self reloadRepositoryIndex:outError];
   return index ? [[GCIndex alloc] initWithRepository:self index:index] : nil;
 }
 
-- (BOOL)writeRepositoryIndex:(GCIndex*)index error:(NSError**)error {
+- (BOOL)writeRepositoryIndex:(GCIndex*)index error:(NSError**)outError {
   XLOG_DEBUG_CHECK(!index.inMemory);
   CALL_LIBGIT2_FUNCTION_RETURN(NO, git_index_write, index.private);
   return YES;
 }
 
-- (BOOL)resetIndex:(GCIndex*)index toTreeForCommit:(GCCommit*)commit error:(NSError**)error {
+- (BOOL)resetIndex:(GCIndex*)index toTreeForCommit:(GCCommit*)commit error:(NSError**)outError {
   BOOL success = NO;
   git_tree* tree = NULL;
 
@@ -264,22 +264,22 @@ cleanup:
   return success;
 }
 
-- (BOOL)clearIndex:(GCIndex*)index error:(NSError**)error {
+- (BOOL)clearIndex:(GCIndex*)index error:(NSError**)outError {
   CALL_LIBGIT2_FUNCTION_RETURN(NO, git_index_clear, index.private);
   return YES;
 }
 
-- (NSData*)readContentsForFile:(NSString*)path inIndex:(GCIndex*)index error:(NSError**)error {
+- (NSData*)readContentsForFile:(NSString*)path inIndex:(GCIndex*)index error:(NSError**)outError {
   const git_index_entry* entry = git_index_get_bypath(index.private, GCGitPathFromFileSystemPath(path), 0);
   if ((entry == NULL) || ((entry->mode != GIT_FILEMODE_BLOB) && (entry->mode != GIT_FILEMODE_BLOB_EXECUTABLE))) {
     GC_SET_GENERIC_ERROR(@"File not found");
     return nil;
   }
-  return [self exportBlobWithOID:&entry->id error:error];
+  return [self exportBlobWithOID:&entry->id error:outError];
 }
 
 // Like git_index_add_frombuffer() but works with memory indexes and doesn't clear any conflict at path
-- (BOOL)_addEntry:(const git_index_entry*)entry toIndex:(git_index*)index withData:(NSData*)data error:(NSError**)error {
+- (BOOL)_addEntry:(const git_index_entry*)entry toIndex:(git_index*)index withData:(NSData*)data error:(NSError**)outError {
   git_oid oid;
   CALL_LIBGIT2_FUNCTION_RETURN(NO, git_blob_create_frombuffer, &oid, self.private, data.bytes, data.length);
   git_index_entry copyEntry;
@@ -291,7 +291,7 @@ cleanup:
 }
 
 // Like git_index_add_bypath() but works with memory indexes and doesn't clear any conflict at path
-- (BOOL)_addEntry:(const git_index_entry*)entry toIndex:(git_index*)index error:(NSError**)error {
+- (BOOL)_addEntry:(const git_index_entry*)entry toIndex:(git_index*)index error:(NSError**)outError {
   git_oid oid;
   CALL_LIBGIT2_FUNCTION_RETURN(NO, git_blob_create_fromworkdir, &oid, self.private, entry->path);
   git_index_entry copyEntry;
@@ -301,25 +301,25 @@ cleanup:
   return YES;
 }
 
-- (BOOL)addFile:(NSString*)path withContents:(NSData*)contents toIndex:(GCIndex*)index error:(NSError**)error {
+- (BOOL)addFile:(NSString*)path withContents:(NSData*)contents toIndex:(GCIndex*)index error:(NSError**)outError {
   git_index_entry entry;
   bzero(&entry, sizeof(git_index_entry));
   entry.path = GCGitPathFromFileSystemPath(path);
   entry.mode = GIT_FILEMODE_BLOB;
-  return [self _addEntry:&entry toIndex:index.private withData:contents error:error];
+  return [self _addEntry:&entry toIndex:index.private withData:contents error:outError];
 }
 
-- (BOOL)addFileInWorkingDirectory:(NSString*)path toIndex:(GCIndex*)index error:(NSError**)error {
+- (BOOL)addFileInWorkingDirectory:(NSString*)path toIndex:(GCIndex*)index error:(NSError**)outError {
   struct stat info;
   CALL_POSIX_FUNCTION_RETURN(NO, lstat, [[self absolutePathForFile:path] fileSystemRepresentation], &info);
   git_index_entry entry;
   bzero(&entry, sizeof(git_index_entry));
   entry.path = GCGitPathFromFileSystemPath(path);
   git_index_entry__init_from_stat(&entry, &info, true);
-  return [self _addEntry:&entry toIndex:index.private error:error];
+  return [self _addEntry:&entry toIndex:index.private error:outError];
 }
 
-- (BOOL)addLinesInWorkingDirectoryFile:(NSString*)path toIndex:(GCIndex*)index error:(NSError**)error usingFilter:(GCIndexLineFilter)filter {
+- (BOOL)addLinesInWorkingDirectoryFile:(NSString*)path toIndex:(GCIndex*)index error:(NSError**)outError usingFilter:(GCIndexLineFilter)filter {
   const char* filePath = GCGitPathFromFileSystemPath(path);
 
   // If the file is already in the index, preserve the entry, otherwise create a new entry from the file metadata
@@ -341,7 +341,7 @@ cleanup:
                                              options:(kGCDiffOption_IncludeUntracked | kGCDiffOption_IncludeIgnored)
                                    maxInterHunkLines:NSUIntegerMax
                                      maxContextLines:NSUIntegerMax
-                                               error:error];
+                                               error:outError];
   if (diff == nil) {
     return NO;
   }
@@ -349,7 +349,7 @@ cleanup:
     GC_SET_GENERIC_ERROR(@"Internal inconsistency");
     return NO;
   }
-  GCDiffPatch* patch = [self makePatchForDiffDelta:diff.deltas[0] isBinary:NULL error:error];
+  GCDiffPatch* patch = [self makePatchForDiffDelta:diff.deltas[0] isBinary:NULL error:outError];
   if (patch == nil) {
     return NO;
   }
@@ -387,10 +387,10 @@ cleanup:
                             }
                          endHunkHandler:NULL];
 
-  return [self _addEntry:entryPtr toIndex:index.private withData:data error:error];
+  return [self _addEntry:entryPtr toIndex:index.private withData:data error:outError];
 }
 
-- (BOOL)resetFile:(NSString*)path inIndex:(GCIndex*)index toCommit:(GCCommit*)commit error:(NSError**)error {
+- (BOOL)resetFile:(NSString*)path inIndex:(GCIndex*)index toCommit:(GCCommit*)commit error:(NSError**)outError {
   BOOL success = NO;
   git_tree* tree = NULL;
   git_tree_entry* treeEntry = NULL;
@@ -417,7 +417,7 @@ cleanup:
   return success;
 }
 
-- (BOOL)resetLinesInFile:(NSString*)path index:(GCIndex*)index toCommit:(GCCommit*)commit error:(NSError**)error usingFilter:(GCIndexLineFilter)filter {
+- (BOOL)resetLinesInFile:(NSString*)path index:(GCIndex*)index toCommit:(GCCommit*)commit error:(NSError**)outError usingFilter:(GCIndexLineFilter)filter {
   const char* filePath = GCGitPathFromFileSystemPath(path);
 
   // If the file is already in the index, preserve the entry, otherwise create a new entry from the file blob
@@ -439,7 +439,7 @@ cleanup:
   NSMutableData* data = [[NSMutableData alloc] initWithCapacity:(1024 * 1024)];
 
   // Diff file in index directory with commit and create temporary file in memory excluding the lines we don't want
-  GCDiff* diff = [self diffIndex:index withCommit:commit filePattern:path options:0 maxInterHunkLines:NSUIntegerMax maxContextLines:NSUIntegerMax error:error];
+  GCDiff* diff = [self diffIndex:index withCommit:commit filePattern:path options:0 maxInterHunkLines:NSUIntegerMax maxContextLines:NSUIntegerMax error:outError];
   if (diff == nil) {
     return NO;
   }
@@ -447,7 +447,7 @@ cleanup:
     GC_SET_GENERIC_ERROR(@"Internal inconsistency");
     return NO;
   }
-  GCDiffPatch* patch = [self makePatchForDiffDelta:diff.deltas[0] isBinary:NULL error:error];
+  GCDiffPatch* patch = [self makePatchForDiffDelta:diff.deltas[0] isBinary:NULL error:outError];
   if (patch == nil) {
     return NO;
   }
@@ -485,10 +485,10 @@ cleanup:
                             }
                          endHunkHandler:NULL];
 
-  return [self _addEntry:entryPtr toIndex:index.private withData:data error:error];
+  return [self _addEntry:entryPtr toIndex:index.private withData:data error:outError];
 }
 
-- (BOOL)checkoutFileToWorkingDirectory:(NSString*)path fromIndex:(GCIndex*)index error:(NSError**)error {
+- (BOOL)checkoutFileToWorkingDirectory:(NSString*)path fromIndex:(GCIndex*)index error:(NSError**)outError {
   git_checkout_options options = GIT_CHECKOUT_OPTIONS_INIT;
   options.checkout_strategy = GIT_CHECKOUT_FORCE | GIT_CHECKOUT_DONT_UPDATE_INDEX | GIT_CHECKOUT_DISABLE_PATHSPEC_MATCH;  // There's no reason to update the index
   options.paths.count = 1;
@@ -498,7 +498,7 @@ cleanup:
   return YES;
 }
 
-- (BOOL)checkoutLinesInFileToWorkingDirectory:(NSString*)path fromIndex:(GCIndex*)index error:(NSError**)error usingFilter:(GCIndexLineFilter)filter {
+- (BOOL)checkoutLinesInFileToWorkingDirectory:(NSString*)path fromIndex:(GCIndex*)index error:(NSError**)outError usingFilter:(GCIndexLineFilter)filter {
   BOOL success = NO;
   const char* fullPath = [[self absolutePathForFile:path] fileSystemRepresentation];
   int fd = -1;
@@ -520,7 +520,7 @@ cleanup:
                                      options:(kGCDiffOption_IncludeUntracked | kGCDiffOption_IncludeIgnored)
                            maxInterHunkLines:NSUIntegerMax
                              maxContextLines:NSUIntegerMax
-                                       error:error];
+                                       error:outError];
   if (diff == nil) {
     goto cleanup;
   }
@@ -528,9 +528,10 @@ cleanup:
     GC_SET_GENERIC_ERROR(@"Internal inconsistency");
     goto cleanup;
   }
-  patch = [self makePatchForDiffDelta:diff.deltas[0] isBinary:NULL error:error];
+  patch = [self makePatchForDiffDelta:diff.deltas[0] isBinary:NULL error:outError];
   if (patch) {
     __block BOOL failed = NO;
+    __block NSError* error = nil;
     [patch enumerateUsingBeginHunkHandler:NULL
                               lineHandler:^(GCLineDiffChange change, NSUInteger oldLineNumber, NSUInteger newLineNumber, const char* contentBytes, NSUInteger contentLength) {
 
@@ -559,7 +560,9 @@ cleanup:
                                     break;
                                 }
                                 if (shouldWrite && (write(fd, contentBytes, contentLength) != (ssize_t)contentLength)) {
-                                  GC_SET_GENERIC_ERROR(@"%s", strerror(errno));
+                                  if (error) {
+                                    error = GCNewError(kGCErrorCode_Generic, @(strerror(errno)));
+                                  }
                                   failed = YES;
                                   XLOG_DEBUG_UNREACHABLE();
                                 }
@@ -567,6 +570,9 @@ cleanup:
                               }
                            endHunkHandler:NULL];
     if (failed) {
+      if (outError) {
+        *outError = error;
+      }
       goto cleanup;
     }
   } else {
@@ -596,17 +602,17 @@ cleanup:
 }
 
 // TODO: We should update the resolve undo extension like libgit2 does by default (see https://github.com/git/git/blob/master/Documentation/technical/index-format.txt#L177)
-- (BOOL)clearConflictForFile:(NSString*)path inIndex:(GCIndex*)index error:(NSError**)error {
+- (BOOL)clearConflictForFile:(NSString*)path inIndex:(GCIndex*)index error:(NSError**)outError {
   CALL_LIBGIT2_FUNCTION_RETURN(NO, git_index_conflict_remove, index.private, GCGitPathFromFileSystemPath(path));
   return YES;
 }
 
-- (BOOL)removeFile:(NSString*)path fromIndex:(GCIndex*)index error:(NSError**)error {
+- (BOOL)removeFile:(NSString*)path fromIndex:(GCIndex*)index error:(NSError**)outError {
   CALL_LIBGIT2_FUNCTION_RETURN(NO, git_index_remove, index.private, GCGitPathFromFileSystemPath(path), 0);
   return YES;
 }
 
-- (BOOL)copyFile:(NSString*)path fromOtherIndex:(GCIndex*)otherIndex toIndex:(GCIndex*)index error:(NSError**)error {
+- (BOOL)copyFile:(NSString*)path fromOtherIndex:(GCIndex*)otherIndex toIndex:(GCIndex*)index error:(NSError**)outError {
   const git_index_entry* entry = git_index_get_bypath(otherIndex.private, GCGitPathFromFileSystemPath(path), 0);
   if (entry == NULL) {
     GC_SET_GENERIC_ERROR(@"File not in index");
@@ -616,7 +622,7 @@ cleanup:
   return YES;
 }
 
-- (BOOL)copyLinesInFile:(NSString*)path fromOtherIndex:(GCIndex*)otherIndex toIndex:(GCIndex*)index error:(NSError**)error usingFilter:(GCIndexLineFilter)filter {
+- (BOOL)copyLinesInFile:(NSString*)path fromOtherIndex:(GCIndex*)otherIndex toIndex:(GCIndex*)index error:(NSError**)outError usingFilter:(GCIndexLineFilter)filter {
   const char* filePath = GCGitPathFromFileSystemPath(path);
 
   // Just grab entry from other index
@@ -628,7 +634,7 @@ cleanup:
   NSMutableData* data = [[NSMutableData alloc] initWithCapacity:(1024 * 1024)];
 
   // Diff file in other index with index and create temporary file in memory excluding the lines we don't want
-  GCDiff* diff = [self diffIndex:otherIndex withIndex:index filePattern:path options:0 maxInterHunkLines:NSUIntegerMax maxContextLines:NSUIntegerMax error:error];
+  GCDiff* diff = [self diffIndex:otherIndex withIndex:index filePattern:path options:0 maxInterHunkLines:NSUIntegerMax maxContextLines:NSUIntegerMax error:outError];
   if (diff == nil) {
     return NO;
   }
@@ -636,7 +642,7 @@ cleanup:
     GC_SET_GENERIC_ERROR(@"Internal inconsistency");
     return NO;
   }
-  GCDiffPatch* patch = [self makePatchForDiffDelta:diff.deltas[0] isBinary:NULL error:error];
+  GCDiffPatch* patch = [self makePatchForDiffDelta:diff.deltas[0] isBinary:NULL error:outError];
   if (patch == nil) {
     return NO;
   }
@@ -674,14 +680,14 @@ cleanup:
                             }
                          endHunkHandler:NULL];
 
-  return [self _addEntry:entry toIndex:index.private withData:data error:error];
+  return [self _addEntry:entry toIndex:index.private withData:data error:outError];
 }
 
 @end
 
 @implementation GCRepository (GCIndex_Private)
 
-- (git_index*)reloadRepositoryIndex:(NSError**)error {
+- (git_index*)reloadRepositoryIndex:(NSError**)outError {
   git_index* index = NULL;
 
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_repository_index, &index, self.private);
@@ -697,12 +703,12 @@ cleanup:
 #if DEBUG
 
 // See https://github.com/libgit2/libgit2/issues/2687
-- (BOOL)addAllFilesToIndex:(NSError**)error {
+- (BOOL)addAllFilesToIndex:(NSError**)outError {
   BOOL success = NO;
   git_index* index = NULL;
   git_status_list* list = NULL;
 
-  index = [self reloadRepositoryIndex:error];
+  index = [self reloadRepositoryIndex:outError];
   if (index == NULL) {
     goto cleanup;
   }

@@ -101,7 +101,7 @@ extern int git_reference__is_tag(const char* ref_name);
 
 #pragma mark - Browsing
 
-- (NSArray*)listRemotes:(NSError**)error {
+- (NSArray*)listRemotes:(NSError**)outError {
   NSMutableArray* array = nil;
   git_strarray names = {0};
 
@@ -119,7 +119,7 @@ cleanup:
   return array;
 }
 
-- (GCRemote*)lookupRemoteWithName:(NSString*)name error:(NSError**)error {
+- (GCRemote*)lookupRemoteWithName:(NSString*)name error:(NSError**)outError {
   git_remote* remote;
   CALL_LIBGIT2_FUNCTION_RETURN(nil, git_remote_lookup, &remote, self.private, name.UTF8String);
   return [[GCRemote alloc] initWithRepository:self remote:remote];
@@ -127,13 +127,13 @@ cleanup:
 
 #pragma mark - Operations
 
-- (GCRemote*)addRemoteWithName:(NSString*)name url:(NSURL*)url error:(NSError**)error {
+- (GCRemote*)addRemoteWithName:(NSString*)name url:(NSURL*)url error:(NSError**)outError {
   git_remote* remote;
   CALL_LIBGIT2_FUNCTION_RETURN(nil, git_remote_create, &remote, self.private, name.UTF8String, GCGitURLFromURL(url).UTF8String);
   return [[GCRemote alloc] initWithRepository:self remote:remote];
 }
 
-- (BOOL)setName:(NSString*)name forRemote:(GCRemote*)remote error:(NSError**)error {
+- (BOOL)setName:(NSString*)name forRemote:(GCRemote*)remote error:(NSError**)outError {
   const char* nameUTF8 = name.UTF8String;
   git_strarray problems;
   CALL_LIBGIT2_FUNCTION_RETURN(NO, git_remote_rename, &problems, self.private, git_remote_name(remote.private), nameUTF8);
@@ -145,26 +145,26 @@ cleanup:
   return YES;
 }
 
-- (BOOL)setURL:(NSURL*)url forRemote:(GCRemote*)remote error:(NSError**)error {
+- (BOOL)setURL:(NSURL*)url forRemote:(GCRemote*)remote error:(NSError**)outError {
   CALL_LIBGIT2_FUNCTION_RETURN(NO, git_remote_set_url, self.private, git_remote_name(remote.private), GCGitURLFromURL(url).UTF8String);
   [remote _reload];
   return YES;
 }
 
-- (BOOL)setPushURL:(NSURL*)url forRemote:(GCRemote*)remote error:(NSError**)error {
+- (BOOL)setPushURL:(NSURL*)url forRemote:(GCRemote*)remote error:(NSError**)outError {
   CALL_LIBGIT2_FUNCTION_RETURN(NO, git_remote_set_pushurl, self.private, git_remote_name(remote.private), GCGitURLFromURL(url).UTF8String);
   [remote _reload];
   return YES;
 }
 
-- (BOOL)removeRemote:(GCRemote*)remote error:(NSError**)error {
+- (BOOL)removeRemote:(GCRemote*)remote error:(NSError**)outError {
   CALL_LIBGIT2_FUNCTION_RETURN(NO, git_remote_delete, self.private, git_remote_name(remote.private));
   return YES;
 }
 
 #pragma mark - Transfer
 
-- (NSUInteger)_transfer:(git_direction)direction withRemote:(git_remote*)remote refspecs:(const char**)refspecs count:(size_t)count tagMode:(GCFetchTagMode)tagMode prune:(BOOL)prune error:(NSError**)error {
+- (NSUInteger)_transfer:(git_direction)direction withRemote:(git_remote*)remote refspecs:(const char**)refspecs count:(size_t)count tagMode:(GCFetchTagMode)tagMode prune:(BOOL)prune error:(NSError**)outError {
   XLOG_DEBUG_CHECK(!git_remote_connected(remote));
   NSUInteger updatedTips = NSNotFound;
   const char* remoteURL = git_remote_url(remote);
@@ -176,8 +176,8 @@ cleanup:
   int status = git_remote_connect(remote, direction, &callbacks, NULL, NULL);
   if (status != GIT_OK) {
     LOG_LIBGIT2_ERROR(status);
-    if (error) {
-      *error = GCNewError(status, [NSString stringWithFormat:@"Failed connecting to \"%s\" remote: %@", git_remote_name(remote), GetLastGitErrorMessage()]);  // We can't use CALL_LIBGIT2_FUNCTION_GOTO() as we need to customize the error message
+    if (outError) {
+      *outError = GCNewError(status, [NSString stringWithFormat:@"Failed connecting to \"%s\" remote: %@", git_remote_name(remote), GetLastGitErrorMessage()]);  // We can't use CALL_LIBGIT2_FUNCTION_GOTO() as we need to customize the error message
     }
     goto cleanup;
   }
@@ -240,10 +240,10 @@ cleanup:
 // Inspired from git_remote_prune()
 - (BOOL)checkForChangesInRemote:(GCRemote*)remote
                     withOptions:(GCRemoteCheckOptions)options
-                addedReferences:(NSDictionary**)addedReferences
-             modifiedReferences:(NSDictionary**)modifiedReferences
-              deletedReferences:(NSDictionary**)deletedReferences
-                          error:(NSError**)error {
+                addedReferences:(NSDictionary* __autoreleasing *)addedReferences
+             modifiedReferences:(NSDictionary* __autoreleasing *)modifiedReferences
+              deletedReferences:(NSDictionary* __autoreleasing *)deletedReferences
+                          error:(NSError**)outError {
   BOOL success = NO;
   CFDictionaryKeyCallBacks keyCallbacks = {0, GCCStringCopyCallBack, GCFreeReleaseCallBack, NULL, GCCStringEqualCallBack, GCCStringHashCallBack};
   CFDictionaryValueCallBacks valueCallbacks = {0, GCOIDCopyCallBack, GCFreeReleaseCallBack, NULL, GCOIDEqualCallBack};
@@ -252,8 +252,8 @@ cleanup:
 
   // Build list of remote branches matching this remote's refspecs (excluding symbolic ones)
   if (![self enumerateReferencesWithOptions:0
-                                      error:error
-                                 usingBlock:^BOOL(git_reference* reference) {
+                                      error:outError
+                                 usingBlock:^BOOL(git_reference* reference, NSError** error) {
 
                                    const char* name = git_reference_name(reference);
                                    if (((options & kGCRemoteCheckOption_IncludeBranches) && git_reference__is_remote(name)) ||
@@ -275,7 +275,7 @@ cleanup:
   }
 
   // Build list of branches on remotes filtered by remote refspecs (excluding symbolic ones)
-  if ([self _transfer:GIT_DIRECTION_FETCH withRemote:remote.private refspecs:NULL count:0 tagMode:kGCFetchTagMode_None prune:NO error:error] == NSNotFound) {
+  if ([self _transfer:GIT_DIRECTION_FETCH withRemote:remote.private refspecs:NULL count:0 tagMode:kGCFetchTagMode_None prune:NO error:outError] == NSNotFound) {
     goto cleanup;
   }
   const git_remote_head** headList;
@@ -337,13 +337,13 @@ cleanup:
 
 #pragma mark - Fetch
 
-- (NSUInteger)_fetchFromRemote:(git_remote*)remote refspecs:(const char**)refspecs count:(size_t)count tagMode:(GCFetchTagMode)tagMode prune:(BOOL)prune error:(NSError**)error {
-  return [self _transfer:GIT_DIRECTION_FETCH withRemote:remote refspecs:refspecs count:count tagMode:tagMode prune:prune error:error];
+- (NSUInteger)_fetchFromRemote:(git_remote*)remote refspecs:(const char**)refspecs count:(size_t)count tagMode:(GCFetchTagMode)tagMode prune:(BOOL)prune error:(NSError**)outError {
+  return [self _transfer:GIT_DIRECTION_FETCH withRemote:remote refspecs:refspecs count:count tagMode:tagMode prune:prune error:outError];
 }
 
-- (BOOL)fetchRemoteBranch:(GCRemoteBranch*)branch tagMode:(GCFetchTagMode)mode updatedTips:(NSUInteger*)updatedTips error:(NSError**)error {
+- (BOOL)fetchRemoteBranch:(GCRemoteBranch*)branch tagMode:(GCFetchTagMode)mode updatedTips:(NSUInteger*)updatedTips error:(NSError**)outError {
   NSUInteger result = NSNotFound;
-  git_remote* remote = [self _loadRemoteForRemoteBranch:branch.private error:error];
+  git_remote* remote = [self _loadRemoteForRemoteBranch:branch.private error:outError];
   if (remote == NULL) {
     return NO;
   }
@@ -356,7 +356,7 @@ cleanup:
       CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_refspec_rtransform, &srcBuffer, refspec, dstName);
       char* buffer;
       asprintf(&buffer, "%s:%s", srcBuffer.ptr, dstName);
-      result = [self _fetchFromRemote:remote refspecs:(const char**)&buffer count:1 tagMode:mode prune:NO error:error];
+      result = [self _fetchFromRemote:remote refspecs:(const char**)&buffer count:1 tagMode:mode prune:NO error:outError];
       free(buffer);
       git_buf_free(&srcBuffer);
       goto cleanup;  // TODO: What if there is more than one match?
@@ -375,10 +375,10 @@ cleanup:
   return YES;
 }
 
-- (BOOL)fetchDefaultRemoteBranchesFromRemote:(GCRemote*)remote tagMode:(GCFetchTagMode)mode prune:(BOOL)prune updatedTips:(NSUInteger*)updatedTips error:(NSError**)error {
+- (BOOL)fetchDefaultRemoteBranchesFromRemote:(GCRemote*)remote tagMode:(GCFetchTagMode)mode prune:(BOOL)prune updatedTips:(NSUInteger*)updatedTips error:(NSError**)outError {
   git_strarray refspecs = {0};
   CALL_LIBGIT2_FUNCTION_RETURN(NO, git_remote_get_fetch_refspecs, &refspecs, remote.private);
-  NSUInteger result = [self _fetchFromRemote:remote.private refspecs:(const char**)refspecs.strings count:refspecs.count tagMode:mode prune:prune error:error];
+  NSUInteger result = [self _fetchFromRemote:remote.private refspecs:(const char**)refspecs.strings count:refspecs.count tagMode:mode prune:prune error:outError];
   git_strarray_free(&refspecs);
   if (result == NSNotFound) {
     return NO;
@@ -390,9 +390,9 @@ cleanup:
 }
 
 // We need to pass the special tags refspec which matches the libgit2 behavior of GIT_REMOTE_DOWNLOAD_TAGS_ALL to avoid passing no refspec and having libgit2 fall back to the default ones
-- (NSArray*)fetchTagsFromRemote:(GCRemote*)remote prune:(BOOL)prune updatedTips:(NSUInteger*)updatedTips error:(NSError**)error {
+- (NSArray*)fetchTagsFromRemote:(GCRemote*)remote prune:(BOOL)prune updatedTips:(NSUInteger*)updatedTips error:(NSError**)outError {
   const char* buffer = "refs/tags/*:refs/tags/*";
-  NSUInteger result = [self _fetchFromRemote:remote.private refspecs:&buffer count:1 tagMode:kGCFetchTagMode_All prune:prune error:error];
+  NSUInteger result = [self _fetchFromRemote:remote.private refspecs:&buffer count:1 tagMode:kGCFetchTagMode_All prune:prune error:outError];
   if (result == NSNotFound) {
     return nil;
   }
@@ -425,23 +425,23 @@ cleanup:
 
 #pragma mark - Push
 
-- (BOOL)_pushToRemote:(git_remote*)remote refspecs:(const char**)refspecs count:(size_t)count error:(NSError**)error {
-  return ([self _transfer:GIT_DIRECTION_PUSH withRemote:remote refspecs:refspecs count:count tagMode:kGCFetchTagMode_None prune:NO error:error] != NSNotFound);
+- (BOOL)_pushToRemote:(git_remote*)remote refspecs:(const char**)refspecs count:(size_t)count error:(NSError**)outError {
+  return ([self _transfer:GIT_DIRECTION_PUSH withRemote:remote refspecs:refspecs count:count tagMode:kGCFetchTagMode_None prune:NO error:outError] != NSNotFound);
 }
 
 - (BOOL)_pushSourceReference:(const char*)srcName
                     toRemote:(git_remote*)remote
         destinationReference:(const char*)dstName
                        force:(BOOL)force
-                       error:(NSError**)error {
+                       error:(NSError**)outError {
   char* buffer;
   asprintf(&buffer, "%s%s:%s", force ? "+" : "", srcName, dstName);
-  BOOL success = [self _pushToRemote:remote refspecs:(const char**)&buffer count:1 error:error];
+  BOOL success = [self _pushToRemote:remote refspecs:(const char**)&buffer count:1 error:outError];
   free(buffer);
   return success;
 }
 
-- (BOOL)pushLocalBranchToUpstream:(GCLocalBranch*)branch force:(BOOL)force usedRemote:(GCRemote**)usedRemote error:(NSError**)error {
+- (BOOL)pushLocalBranchToUpstream:(GCLocalBranch*)branch force:(BOOL)force usedRemote:(GCRemote**)usedRemote error:(NSError**)outError {
   BOOL success = NO;
   const char* name = git_reference_name(branch.private);
   git_buf remoteBuffer = {0};
@@ -451,7 +451,7 @@ cleanup:
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_branch_upstream_remote, &remoteBuffer, self.private, name);
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_branch_upstream_merge, &mergeBuffer, self.private, name);
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_remote_lookup, &remote, self.private, remoteBuffer.ptr);
-  if (![self _pushSourceReference:name toRemote:remote destinationReference:mergeBuffer.ptr force:force error:error]) {
+  if (![self _pushSourceReference:name toRemote:remote destinationReference:mergeBuffer.ptr force:force error:outError]) {
     goto cleanup;
   }
   success = YES;
@@ -468,7 +468,7 @@ cleanup:
 }
 
 // TODO: Add low-level API to libgit2
-static BOOL _SetBranchDefaultUpstream(git_repository* repository, git_remote* remote, git_reference* branch, NSError** error) {
+static BOOL _SetBranchDefaultUpstream(git_repository* repository, git_remote* remote, git_reference* branch, NSError** outError) {
   XLOG_DEBUG_CHECK(git_reference_is_branch(branch));
   const char* name = git_reference_name(branch);
   const char* shortName = git_reference_shorthand(branch);
@@ -492,29 +492,29 @@ static BOOL _SetBranchDefaultUpstream(git_repository* repository, git_remote* re
 }
 
 // Use the same "default" behavior as Git i.e push to a branch with the same name on the remote
-- (BOOL)pushLocalBranch:(GCLocalBranch*)branch toRemote:(GCRemote*)remote force:(BOOL)force setUpstream:(BOOL)setUpstream error:(NSError**)error {
+- (BOOL)pushLocalBranch:(GCLocalBranch*)branch toRemote:(GCRemote*)remote force:(BOOL)force setUpstream:(BOOL)setUpstream error:(NSError**)outError {
   const char* name = git_reference_name(branch.private);
-  if (![self _pushSourceReference:name toRemote:remote.private destinationReference:name force:force error:error]) {
+  if (![self _pushSourceReference:name toRemote:remote.private destinationReference:name force:force error:outError]) {
     return NO;
   }
-  if (setUpstream && !_SetBranchDefaultUpstream(self.private, remote.private, branch.private, error)) {
+  if (setUpstream && !_SetBranchDefaultUpstream(self.private, remote.private, branch.private, outError)) {
     return NO;
   }
   return YES;
 }
 
 // Use the same "default" behavior as Git i.e push to a tag with the same name on the remote
-- (BOOL)pushTag:(GCTag*)tag toRemote:(GCRemote*)remote force:(BOOL)force error:(NSError**)error {
+- (BOOL)pushTag:(GCTag*)tag toRemote:(GCRemote*)remote force:(BOOL)force error:(NSError**)outError {
   const char* name = git_reference_name(tag.private);
-  return [self _pushSourceReference:name toRemote:remote.private destinationReference:name force:force error:error];
+  return [self _pushSourceReference:name toRemote:remote.private destinationReference:name force:force error:outError];
 }
 
 // TODO: libgit2 doesn't support pattern based push refspecs like "refs/heads/*:refs/heads/*"
-- (BOOL)_pushAllReferencesToRemote:(git_remote*)remote branches:(BOOL)branches tags:(BOOL)tags force:(BOOL)force error:(NSError**)error {
+- (BOOL)_pushAllReferencesToRemote:(git_remote*)remote branches:(BOOL)branches tags:(BOOL)tags force:(BOOL)force error:(NSError**)outError {
   GC_POINTER_LIST_ALLOCATE(buffers, 128);
   BOOL success = [self enumerateReferencesWithOptions:0
-                                                error:error
-                                           usingBlock:^BOOL(git_reference* reference) {
+                                                error:outError
+                                           usingBlock:^BOOL(git_reference* reference, NSError** error) {
 
                                              if ((branches && git_reference_is_branch(reference)) || (tags && git_reference_is_tag(reference))) {
                                                char* buffer;
@@ -525,7 +525,7 @@ static BOOL _SetBranchDefaultUpstream(git_repository* repository, git_remote* re
 
                                            }];
   if (success) {
-    success = [self _pushToRemote:remote refspecs:(const char**)GC_POINTER_LIST_ROOT(buffers) count:GC_POINTER_LIST_COUNT(buffers) error:error];
+    success = [self _pushToRemote:remote refspecs:(const char**)GC_POINTER_LIST_ROOT(buffers) count:GC_POINTER_LIST_COUNT(buffers) error:outError];
   }
   GC_POINTER_LIST_FOR_LOOP(buffers, char*, buffer) {
     free(buffer);
@@ -535,13 +535,14 @@ static BOOL _SetBranchDefaultUpstream(git_repository* repository, git_remote* re
 }
 
 // Use the same "default" behavior as Git i.e push to branches with the same names on the remote
-- (BOOL)pushAllLocalBranchesToRemote:(GCRemote*)remote force:(BOOL)force setUpstream:(BOOL)setUpstream error:(NSError**)error {
-  if (![self _pushAllReferencesToRemote:remote.private branches:YES tags:NO force:force error:error]) {
+- (BOOL)pushAllLocalBranchesToRemote:(GCRemote*)remote force:(BOOL)force setUpstream:(BOOL)setUpstream error:(NSError**)outError {
+  if (![self _pushAllReferencesToRemote:remote.private branches:YES tags:NO force:force error:outError]) {
     return NO;
   }
+
   if (setUpstream && ![self enumerateReferencesWithOptions:0
-                                                     error:error
-                                                usingBlock:^BOOL(git_reference* reference) {
+                                                     error:outError
+                                                usingBlock:^BOOL(git_reference* reference, NSError** error) {
 
                                                   if (git_reference_is_branch(reference) && !_SetBranchDefaultUpstream(self.private, remote.private, reference, error)) {
                                                     return NO;
@@ -555,15 +556,15 @@ static BOOL _SetBranchDefaultUpstream(git_repository* repository, git_remote* re
 }
 
 // Use the same "default" behavior as Git i.e push to tags with the same names on the remote
-- (BOOL)pushAllTagsToRemote:(GCRemote*)remote force:(BOOL)force error:(NSError**)error {
-  return [self _pushAllReferencesToRemote:remote.private branches:NO tags:YES force:force error:error];
+- (BOOL)pushAllTagsToRemote:(GCRemote*)remote force:(BOOL)force error:(NSError**)outError {
+  return [self _pushAllReferencesToRemote:remote.private branches:NO tags:YES force:force error:outError];
 }
 
-- (BOOL)deleteRemoteBranchFromRemote:(GCRemoteBranch*)branch error:(NSError**)error {
+- (BOOL)deleteRemoteBranchFromRemote:(GCRemoteBranch*)branch error:(NSError**)outError {
   BOOL success = NO;
   git_remote* remote = NULL;
 
-  remote = [self _loadRemoteForRemoteBranch:branch.private error:error];
+  remote = [self _loadRemoteForRemoteBranch:branch.private error:outError];
   if (remote == NULL) {
     goto cleanup;
   }
@@ -575,7 +576,7 @@ static BOOL _SetBranchDefaultUpstream(git_repository* repository, git_remote* re
       CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_refspec_rtransform, &srcBuffer, refspec, dstName);
       char* buffer;
       asprintf(&buffer, ":%s", srcBuffer.ptr);
-      success = [self _pushToRemote:remote refspecs:(const char**)&buffer count:1 error:error];
+      success = [self _pushToRemote:remote refspecs:(const char**)&buffer count:1 error:outError];
       free(buffer);
       git_buf_free(&srcBuffer);
       goto cleanup;  // TODO: What if there is more than one match?
@@ -587,18 +588,18 @@ cleanup:
   return success;
 }
 
-- (BOOL)deleteTag:(GCTag*)tag fromRemote:(GCRemote*)remote error:(NSError**)error {
+- (BOOL)deleteTag:(GCTag*)tag fromRemote:(GCRemote*)remote error:(NSError**)outError {
   const char* name = git_reference_name(tag.private);
   char* buffer;
   asprintf(&buffer, ":%s", name);
-  BOOL success = [self _pushToRemote:remote.private refspecs:(const char**)&buffer count:1 error:error];
+  BOOL success = [self _pushToRemote:remote.private refspecs:(const char**)&buffer count:1 error:outError];
   free(buffer);
   return success;
 }
 
 #pragma mark - Utilities
 
-- (git_remote*)_loadRemoteForRemoteBranch:(git_reference*)branch error:(NSError**)error {
+- (git_remote*)_loadRemoteForRemoteBranch:(git_reference*)branch error:(NSError**)outError {
   git_buf buffer = {0};
   CALL_LIBGIT2_FUNCTION_RETURN(NULL, git_branch_remote_name, &buffer, self.private, git_reference_name(branch));
   git_remote* remote;
@@ -608,8 +609,8 @@ cleanup:
   return remote;
 }
 
-- (GCRemote*)lookupRemoteForRemoteBranch:(GCRemoteBranch*)branch sourceBranchName:(NSString**)name error:(NSError**)error {
-  git_remote* remote = [self _loadRemoteForRemoteBranch:branch.private error:error];
+- (GCRemote*)lookupRemoteForRemoteBranch:(GCRemoteBranch*)branch sourceBranchName:(NSString**)name error:(NSError**)outError {
+  git_remote* remote = [self _loadRemoteForRemoteBranch:branch.private error:outError];
   if (remote == NULL) {
     return nil;
   }
@@ -637,7 +638,7 @@ cleanup:
   return [[GCRemote alloc] initWithRepository:self remote:remote];
 }
 
-- (BOOL)cloneUsingRemote:(GCRemote*)remote recursive:(BOOL)recursive error:(NSError**)error {
+- (BOOL)cloneUsingRemote:(GCRemote*)remote recursive:(BOOL)recursive error:(NSError**)outError {
   [self willStartRemoteTransferWithURL:remote.URL];
 
   git_fetch_options fetchOptions = GIT_FETCH_OPTIONS_INIT;
@@ -649,7 +650,7 @@ cleanup:
   [self didFinishRemoteTransferWithURL:remote.URL success:(status == GIT_OK)];
   CHECK_LIBGIT2_FUNCTION_CALL(return NO, status, == GIT_OK);
 
-  return recursive ? [self initializeAllSubmodules:YES error:error] : YES;
+  return recursive ? [self initializeAllSubmodules:YES error:outError] : YES;
 }
 
 @end
@@ -658,11 +659,11 @@ cleanup:
 
 @implementation GCRepository (Remote_Private)
 
-- (NSUInteger)checkForChangesInRemote:(GCRemote*)remote withOptions:(GCRemoteCheckOptions)options error:(NSError**)error {
+- (NSUInteger)checkForChangesInRemote:(GCRemote*)remote withOptions:(GCRemoteCheckOptions)options error:(NSError**)outError {
   NSDictionary* added;
   NSDictionary* modified;
   NSDictionary* deleted;
-  if (![self checkForChangesInRemote:remote withOptions:options addedReferences:&added modifiedReferences:&modified deletedReferences:&deleted error:error]) {
+  if (![self checkForChangesInRemote:remote withOptions:options addedReferences:&added modifiedReferences:&modified deletedReferences:&deleted error:outError]) {
     return NSNotFound;
   }
   return added.count + modified.count + deleted.count;

@@ -611,17 +611,17 @@ static NSString* _diffTemporaryDirectoryPath = nil;
                               theirCommit:(GCCommit*)theirCommit
                             parentCommits:(NSArray*)parentCommits
                                   message:(NSString*)message
-                                    error:(NSError**)error {
+                                    error:(NSError**)outError {
   XLOG_DEBUG_CHECK(parentCommits.count <= 2);
 
   // Ensure repository is completely clean
-  NSError* localError;
-  if (![self.repository checkClean:0 error:&localError]) {
-    if ([localError.domain isEqualToString:GCErrorDomain] && (localError.code == kGCErrorCode_RepositoryDirty)) {
+  NSError* error;
+  if (![self.repository checkClean:0 error:&error]) {
+    if ([error.domain isEqualToString:GCErrorDomain] && (error.code == kGCErrorCode_RepositoryDirty)) {
       [self.windowController showOverlayWithStyle:kGIOverlayStyle_Warning message:NSLocalizedString(@"Operation results in merge conflicts and repository must be clean to resolve them", nil)];
       GC_SET_USER_CANCELLED_ERROR();
-    } else if (error) {
-      *error = localError;
+    } else if (outError) {
+      *outError = error;
     }
     return nil;
   }
@@ -629,17 +629,17 @@ static NSString* _diffTemporaryDirectoryPath = nil;
   // Save HEAD
   GCCommit* headCommit;
   GCLocalBranch* headBranch;
-  if (![self.repository lookupHEADCurrentCommit:&headCommit branch:&headBranch error:error]) {
+  if (![self.repository lookupHEADCurrentCommit:&headCommit branch:&headBranch error:outError]) {
     return nil;
   }
 
   // Detach HEAD to "ours" commit
-  if (![self.repository checkoutCommit:parentCommits[0] options:0 error:error]) {
+  if (![self.repository checkoutCommit:parentCommits[0] options:0 error:outError]) {
     return nil;
   }
 
   // Check out index with conflicts
-  if (![self.repository checkoutIndex:index withOptions:kGCCheckoutOption_UpdateSubmodulesRecursively error:error]) {
+  if (![self.repository checkoutIndex:index withOptions:kGCCheckoutOption_UpdateSubmodulesRecursively error:outError]) {
     return nil;
   }
 
@@ -649,20 +649,20 @@ static NSString* _diffTemporaryDirectoryPath = nil;
   // Unless user cancelled, create commit with "ours" and "theirs" parent commits (if applicable)
   GCCommit* commit = nil;
   if (resolved) {
-    if (![self.repository syncIndexWithWorkingDirectory:error]) {
+    if (![self.repository syncIndexWithWorkingDirectory:outError]) {
       return nil;
     }
-    commit = [self.repository createCommitFromHEADAndOtherParent:(parentCommits.count > 1 ? parentCommits[1] : nil) withMessage:message error:error];
+    commit = [self.repository createCommitFromHEADAndOtherParent:(parentCommits.count > 1 ? parentCommits[1] : nil) withMessage:message error:outError];
     if (commit == nil) {
       return nil;
     }
   }
 
   // Restore HEAD
-  if ((headBranch && ![self.repository setHEADToReference:headBranch error:error]) || (!headBranch && ![self.repository setDetachedHEADToCommit:headCommit error:error])) {
+  if ((headBranch && ![self.repository setHEADToReference:headBranch error:outError]) || (!headBranch && ![self.repository setDetachedHEADToCommit:headCommit error:outError])) {
     return nil;
   }
-  if (![self.repository forceCheckoutHEAD:YES error:error]) {
+  if (![self.repository forceCheckoutHEAD:YES error:outError]) {
     return nil;
   }
 

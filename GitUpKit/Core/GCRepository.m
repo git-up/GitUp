@@ -134,7 +134,7 @@ static int _GitLFSApply(git_filter* self, void** payload, git_buf* to, const git
 #endif
 }
 
-- (instancetype)initWithRepository:(git_repository*)repository error:(NSError**)error {
+- (instancetype)initWithRepository:(git_repository*)repository error:(NSError**)outError {
   if ((self = [super init])) {
     [self updateRepository:repository];
   }
@@ -159,13 +159,13 @@ static int _GitLFSApply(git_filter* self, void** payload, git_buf* to, const git
 
 #pragma mark - Initialization
 
-- (instancetype)initWithExistingLocalRepository:(NSString*)path error:(NSError**)error {
+- (instancetype)initWithExistingLocalRepository:(NSString*)path error:(NSError**)outError {
   git_repository* repository;
   CALL_LIBGIT2_FUNCTION_RETURN(nil, git_repository_open, &repository, path.fileSystemRepresentation);
-  return [self initWithRepository:repository error:error];
+  return [self initWithRepository:repository error:outError];
 }
 
-- (instancetype)initWithNewLocalRepository:(NSString*)path bare:(BOOL)bare error:(NSError**)error {
+- (instancetype)initWithNewLocalRepository:(NSString*)path bare:(BOOL)bare error:(NSError**)outError {
   git_repository_init_options options = GIT_REPOSITORY_INIT_OPTIONS_INIT;
   options.flags = GIT_REPOSITORY_INIT_NO_REINIT | GIT_REPOSITORY_INIT_MKPATH;
   if (bare) {
@@ -173,7 +173,7 @@ static int _GitLFSApply(git_filter* self, void** payload, git_buf* to, const git
   }
   git_repository* repository;
   CALL_LIBGIT2_FUNCTION_RETURN(nil, git_repository_init_ext, &repository, path.fileSystemRepresentation, &options);
-  return [self initWithRepository:repository error:error];
+  return [self initWithRepository:repository error:outError];
 }
 
 #pragma mark - Accessors
@@ -246,12 +246,12 @@ static int _ReferenceForEachCallback(const char* refname, void* payload) {
 
 #pragma mark - Utilities
 
-- (BOOL)cleanupState:(NSError**)error {
+- (BOOL)cleanupState:(NSError**)outError {
   CALL_LIBGIT2_FUNCTION_RETURN(NO, git_repository_state_cleanup, _private);
   return YES;
 }
 
-- (BOOL)checkPathNotIgnored:(NSString*)path error:(NSError**)error {
+- (BOOL)checkPathNotIgnored:(NSString*)path error:(NSError**)outError {
   int ignored;
   CALL_LIBGIT2_FUNCTION_RETURN(NO, git_ignore_path_is_ignored, &ignored, self.private, GCGitPathFromFileSystemPath(path));
   if (ignored) {
@@ -266,11 +266,11 @@ static int _ReferenceForEachCallback(const char* refname, void* payload) {
   return [_workingDirectoryPath stringByAppendingPathComponent:path];
 }
 
-- (BOOL)safeDeleteFile:(NSString*)path error:(NSError**)error {
+- (BOOL)safeDeleteFile:(NSString*)path error:(NSError**)outError {
 #if TARGET_OS_IPHONE
-  return [[NSFileManager defaultManager] removeItemAtPath:[self absolutePathForFile:path] error:error];
+  return [[NSFileManager defaultManager] removeItemAtPath:[self absolutePathForFile:path] error:outError];
 #else
-  return [[NSFileManager defaultManager] moveItemAtPathToTrash:[self absolutePathForFile:path] error:error];
+  return [[NSFileManager defaultManager] moveItemAtPathToTrash:[self absolutePathForFile:path] error:outError];
 #endif
 }
 
@@ -302,12 +302,12 @@ static int _ReferenceForEachCallback(const char* refname, void* payload) {
   return [self.privateAppDirectoryPath stringByAppendingPathComponent:[[NSProcessInfo processInfo] globallyUniqueString]];  // Ignore errors
 }
 
-- (BOOL)exportBlobWithSHA1:(NSString*)sha1 toPath:(NSString*)path error:(NSError**)error {
+- (BOOL)exportBlobWithSHA1:(NSString*)sha1 toPath:(NSString*)path error:(NSError**)outError {
   git_oid oid;
-  if (!GCGitOIDFromSHA1(sha1, &oid, error)) {
+  if (!GCGitOIDFromSHA1(sha1, &oid, outError)) {
     return NO;
   }
-  return [self exportBlobWithOID:&oid toPath:path error:error];
+  return [self exportBlobWithOID:&oid toPath:path error:outError];
 }
 
 #if !TARGET_OS_IPHONE
@@ -317,14 +317,14 @@ static int _ReferenceForEachCallback(const char* refname, void* payload) {
   return [[NSFileManager defaultManager] isExecutableFileAtPath:path] ? path : nil;
 }
 
-- (BOOL)runHookWithName:(NSString*)name arguments:(NSArray*)arguments standardInput:(NSString*)standardInput error:(NSError**)error {
+- (BOOL)runHookWithName:(NSString*)name arguments:(NSArray*)arguments standardInput:(NSString*)standardInput error:(NSError**)outError {
   NSString* path = [self pathForHookWithName:name];
   if (path) {
     static NSString* cachedPATH = nil;
     if (cachedPATH == nil) {
       GCTask* task = [[GCTask alloc] initWithExecutablePath:@"/bin/bash"];  // TODO: Handle user shell not being bash
       NSData* data;
-      if (![task runWithArguments:@[ @"-l", @"-c", @"echo -n $PATH" ] stdin:NULL stdout:&data stderr:NULL exitStatus:NULL error:error]) {
+      if (![task runWithArguments:@[ @"-l", @"-c", @"echo -n $PATH" ] stdin:NULL stdout:&data stderr:NULL exitStatus:NULL error:outError]) {
         return NO;
       }
       cachedPATH = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
@@ -338,20 +338,20 @@ static int _ReferenceForEachCallback(const char* refname, void* payload) {
     int status;
     NSData* stdoutData;
     NSData* stderrData;
-    if (![task runWithArguments:arguments stdin:[standardInput dataUsingEncoding:NSUTF8StringEncoding] stdout:&stdoutData stderr:&stderrData exitStatus:&status error:error]) {
+    if (![task runWithArguments:arguments stdin:[standardInput dataUsingEncoding:NSUTF8StringEncoding] stdout:&stdoutData stderr:&stderrData exitStatus:&status error:outError]) {
       XLOG_ERROR(@"Failed executing '%@' hook", name);
       return NO;
     }
     XLOG_VERBOSE(@"Executed '%@' hook in %.3f seconds", name, CFAbsoluteTimeGetCurrent() - time);
     if (status != 0) {
-      if (error) {
+      if (outError) {
         NSString* string = [[[NSString alloc] initWithData:(stderrData.length ? stderrData : stdoutData) encoding:NSUTF8StringEncoding] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
         XLOG_DEBUG_CHECK(string);
         NSDictionary* info = @{
           NSLocalizedDescriptionKey : [NSString stringWithFormat:@"Hook '%@' exited with non-zero status (%i)", name, status],
           NSLocalizedRecoverySuggestionErrorKey : (string ? string : @"")
         };
-        *error = [NSError errorWithDomain:GCErrorDomain code:status userInfo:info];
+        *outError = [NSError errorWithDomain:GCErrorDomain code:status userInfo:info];
       }
       return NO;
     }
@@ -363,16 +363,16 @@ static int _ReferenceForEachCallback(const char* refname, void* payload) {
 
 #if DEBUG
 
-- (GCDiff*)checkUnifiedStatus:(NSError**)error {
-  return [self diffWorkingDirectoryWithHEAD:nil options:(kGCDiffOption_IncludeUntracked | kGCDiffOption_FindRenames) maxInterHunkLines:0 maxContextLines:0 error:error];
+- (GCDiff*)checkUnifiedStatus:(NSError**)outError {
+  return [self diffWorkingDirectoryWithHEAD:nil options:(kGCDiffOption_IncludeUntracked | kGCDiffOption_FindRenames) maxInterHunkLines:0 maxContextLines:0 error:outError];
 }
 
-- (GCDiff*)checkIndexStatus:(NSError**)error {
-  return [self diffRepositoryIndexWithHEAD:nil options:kGCDiffOption_FindRenames maxInterHunkLines:0 maxContextLines:0 error:error];
+- (GCDiff*)checkIndexStatus:(NSError**)outError {
+  return [self diffRepositoryIndexWithHEAD:nil options:kGCDiffOption_FindRenames maxInterHunkLines:0 maxContextLines:0 error:outError];
 }
 
-- (GCDiff*)checkWorkingDirectoryStatus:(NSError**)error {
-  return [self diffWorkingDirectoryWithRepositoryIndex:nil options:kGCDiffOption_IncludeUntracked maxInterHunkLines:0 maxContextLines:0 error:error];
+- (GCDiff*)checkWorkingDirectoryStatus:(NSError**)outError {
+  return [self diffWorkingDirectoryWithRepositoryIndex:nil options:kGCDiffOption_IncludeUntracked maxInterHunkLines:0 maxContextLines:0 error:outError];
 }
 
 - (BOOL)checkRepositoryDirty:(BOOL)includeUntracked {
@@ -391,11 +391,11 @@ static int _ReferenceForEachCallback(const char* refname, void* payload) {
   return dirty;
 }
 
-- (instancetype)initWithClonedRepositoryFromURL:(NSURL*)url toPath:(NSString*)path usingDelegate:(id<GCRepositoryDelegate>)delegate recursive:(BOOL)recursive error:(NSError**)error {
-  if ((self = [self initWithNewLocalRepository:path bare:NO error:error])) {
+- (instancetype)initWithClonedRepositoryFromURL:(NSURL*)url toPath:(NSString*)path usingDelegate:(id<GCRepositoryDelegate>)delegate recursive:(BOOL)recursive error:(NSError**)outError {
+  if ((self = [self initWithNewLocalRepository:path bare:NO error:outError])) {
     _delegate = delegate;
-    GCRemote* remote = [self addRemoteWithName:@"origin" url:url error:error];
-    if (!remote || ![self cloneUsingRemote:remote recursive:recursive error:error]) {
+    GCRemote* remote = [self addRemoteWithName:@"origin" url:url error:outError];
+    if (!remote || ![self cloneUsingRemote:remote recursive:recursive error:outError]) {
       return nil;
     }
   }
@@ -670,7 +670,7 @@ static int _PushNegotiationCallback(git_remote* remote, const git_push_update** 
   _lastUpdatedTips = 0;
 }
 
-- (NSData*)exportBlobWithOID:(const git_oid*)oid error:(NSError**)error {
+- (NSData*)exportBlobWithOID:(const git_oid*)oid error:(NSError**)outError {
   git_blob* blob;
   CALL_LIBGIT2_FUNCTION_RETURN(nil, git_blob_lookup, &blob, self.private, oid);
   NSData* data = [[NSData alloc] initWithBytes:git_blob_rawcontent(blob) length:(NSUInteger)git_blob_rawsize(blob)];
@@ -678,7 +678,7 @@ static int _PushNegotiationCallback(git_remote* remote, const git_push_update** 
   return data;
 }
 
-- (BOOL)exportBlobWithOID:(const git_oid*)oid toPath:(NSString*)path error:(NSError**)error {
+- (BOOL)exportBlobWithOID:(const git_oid*)oid toPath:(NSString*)path error:(NSError**)outError {
   BOOL success = NO;
   git_blob* blob = NULL;
   int fd = -1;

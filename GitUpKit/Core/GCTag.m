@@ -92,15 +92,15 @@
 
 #pragma mark - Browsing
 
-- (GCTag*)findTagWithName:(NSString*)name error:(NSError**)error {
-  return [self findReferenceWithFullName:[@kTagsNamespace stringByAppendingString:name] class:[GCTag class] error:error];
+- (GCTag*)findTagWithName:(NSString*)name error:(NSError**)outError {
+  return [self findReferenceWithFullName:[@kTagsNamespace stringByAppendingString:name] class:[GCTag class] error:outError];
 }
 
-- (NSArray*)listTags:(NSError**)error {
+- (NSArray*)listTags:(NSError**)outError {
   NSMutableArray* array = [[NSMutableArray alloc] init];
   BOOL success = [self enumerateReferencesWithOptions:kGCReferenceEnumerationOption_RetainReferences
-                                                error:error
-                                           usingBlock:^BOOL(git_reference* reference) {
+                                                error:outError
+                                           usingBlock:^BOOL(git_reference* reference, NSError** error) {
 
                                              if (git_reference_is_tag(reference)) {
                                                GCTag* tag = [[GCTag alloc] initWithRepository:self reference:reference];
@@ -116,15 +116,15 @@
 
 #pragma mark - Utilities
 
-- (GCCommit*)lookupCommitForTag:(GCTag*)tag annotation:(GCTagAnnotation**)annotation error:(NSError**)error {
+- (GCCommit*)lookupCommitForTag:(GCTag*)tag annotation:(GCTagAnnotation**)annotation error:(NSError**)outError {
   git_object* object = NULL;
   GCCommit* commit = nil;
 
-  if (![self refreshReference:tag error:error]) {
+  if (![self refreshReference:tag error:outError]) {
     goto cleanup;
   }
   git_oid oid;
-  if (![self loadTargetOID:&oid fromReference:tag.private error:error]) {
+  if (![self loadTargetOID:&oid fromReference:tag.private error:outError]) {
     goto cleanup;
   }
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_object_lookup, &object, self.private, &oid, GIT_OBJ_ANY);
@@ -154,7 +154,7 @@ cleanup:
 
 #pragma mark - Editing
 
-- (GCTag*)_createTagReference:(const git_oid*)oid name:(NSString*)name force:(BOOL)force error:(NSError**)error {
+- (GCTag*)_createTagReference:(const git_oid*)oid name:(NSString*)name force:(BOOL)force error:(NSError**)outError {
   const char* refName = [[@kTagsNamespace stringByAppendingString:name] UTF8String];
   git_reference* reference;
   CALL_LIBGIT2_FUNCTION_RETURN(nil, git_reference_create, &reference, self.private, refName, oid, force, NULL);  // Use default reflog message for tag references
@@ -162,16 +162,16 @@ cleanup:
 }
 
 // Re-implementation of git_tag_create_lightweight()
-- (GCTag*)createLightweightTagWithCommit:(GCCommit*)commit name:(NSString*)name force:(BOOL)force error:(NSError**)error {
-  return [self _createTagReference:git_commit_id(commit.private) name:name force:force error:error];
+- (GCTag*)createLightweightTagWithCommit:(GCCommit*)commit name:(NSString*)name force:(BOOL)force error:(NSError**)outError {
+  return [self _createTagReference:git_commit_id(commit.private) name:name force:force error:outError];
 }
 
-- (GCTag*)createAnnotatedTagWithAnnotation:(GCTagAnnotation*)annotation force:(BOOL)force error:(NSError**)error {
-  return [self _createTagReference:git_tag_id(annotation.private) name:annotation.name force:force error:error];
+- (GCTag*)createAnnotatedTagWithAnnotation:(GCTagAnnotation*)annotation force:(BOOL)force error:(NSError**)outError {
+  return [self _createTagReference:git_tag_id(annotation.private) name:annotation.name force:force error:outError];
 }
 
 // Re-implementation of git_tag_create()
-- (GCTag*)createAnnotatedTagWithCommit:(GCCommit*)commit name:(NSString*)name message:(NSString*)message force:(BOOL)force annotation:(GCTagAnnotation**)annotation error:(NSError**)error {
+- (GCTag*)createAnnotatedTagWithCommit:(GCCommit*)commit name:(NSString*)name message:(NSString*)message force:(BOOL)force annotation:(GCTagAnnotation**)annotation error:(NSError**)outError {
   if (message.length == 0) {
     GC_SET_GENERIC_ERROR(@"Message cannot be an empty string");
     return nil;
@@ -185,7 +185,7 @@ cleanup:
   CHECK_LIBGIT2_FUNCTION_CALL(return nil, status, == GIT_OK);
   git_tag* object;
   CALL_LIBGIT2_FUNCTION_RETURN(nil, git_tag_lookup, &object, self.private, &oid);
-  GCTag* tag = [self _createTagReference:&oid name:name force:force error:error];
+  GCTag* tag = [self _createTagReference:&oid name:name force:force error:outError];
   if (annotation) {
     *annotation = [[GCTagAnnotation alloc] initWithRepository:self tag:object];
   } else {
@@ -195,7 +195,7 @@ cleanup:
 }
 
 // Contrary to branches, tags don't carry extra metadata so we can use git_reference_rename()
-- (BOOL)setName:(NSString*)name forTag:(GCTag*)tag force:(BOOL)force error:(NSError**)error {
+- (BOOL)setName:(NSString*)name forTag:(GCTag*)tag force:(BOOL)force error:(NSError**)outError {
   const char* refName = [[@kTagsNamespace stringByAppendingString:name] UTF8String];
   git_reference* reference;
   CALL_LIBGIT2_FUNCTION_RETURN(NO, git_reference_rename, &reference, tag.private, refName, force, NULL);  // Use default reflog message for tag reference renames
@@ -204,8 +204,8 @@ cleanup:
 }
 
 // Re-implementation of git_tag_delete()
-- (BOOL)deleteTag:(GCTag*)tag error:(NSError**)error {
-  if (![self refreshReference:tag error:error]) {  // Works around "old reference value does not match" errors if underlying reference is out of sync
+- (BOOL)deleteTag:(GCTag*)tag error:(NSError**)outError {
+  if (![self refreshReference:tag error:outError]) {  // Works around "old reference value does not match" errors if underlying reference is out of sync
     return NO;
   }
   CALL_LIBGIT2_FUNCTION_RETURN(NO, git_reference_delete, tag.private);
