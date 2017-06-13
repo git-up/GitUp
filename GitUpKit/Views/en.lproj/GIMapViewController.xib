@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7706"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="10117"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="GIMapViewController">
@@ -12,6 +12,13 @@
                 <outlet property="createBranchButton" destination="W3U-R6-9yO" id="Pg7-R6-Pdv"/>
                 <outlet property="createBranchTextField" destination="CUj-FC-ARp" id="5TX-x5-BpX"/>
                 <outlet property="createBranchView" destination="ga8-vG-A68" id="IPI-Zz-gKm"/>
+                <outlet property="createGitFlowActionButton" destination="jJQ-KF-zJP" id="ncl-9a-Thw"/>
+                <outlet property="createGitFlowActionLabel" destination="JcB-rt-Lv6" id="cym-rG-IRU"/>
+                <outlet property="createGitFlowActionTextField" destination="Cse-3q-AeY" id="Qlg-zS-bLs"/>
+                <outlet property="createGitFlowActionView" destination="bzK-ER-MSV" id="IM0-vV-vXO"/>
+                <outlet property="gitFlowTagMessageTextView" destination="4Sd-Ry-DwD" id="ERl-YE-Lcb"/>
+                <outlet property="gitFlowTagNameTextField" destination="mQs-Dn-w1n" id="NvB-Kv-ddr"/>
+                <outlet property="gitFlowTagView" destination="vmT-nM-DHH" id="CKO-Bf-wKr"/>
                 <outlet property="graphScrollView" destination="NEk-yz-xrB" id="hDz-hu-orw"/>
                 <outlet property="graphView" destination="7uX-6u-ejZ" id="BaV-UH-sbs"/>
                 <outlet property="messageButton" destination="ss3-Af-4aU" id="fZH-vS-lhE"/>
@@ -162,6 +169,13 @@ CA
                         <action selector="splitSelectedCommit:" target="-2" id="l3u-zi-MRS"/>
                     </connections>
                 </menuItem>
+                <menuItem isSeparatorItem="YES" id="FZs-dX-Dk4"/>
+                <menuItem title="Finish Action" keyEquivalent="f" id="Bbt-UW-KiK">
+                    <modifierMask key="keyEquivalentModifierMask" option="YES"/>
+                    <connections>
+                        <action selector="gitFlowFinishSelectedAction:" target="-2" id="h7y-HC-7Bl"/>
+                    </connections>
+                </menuItem>
                 <menuItem isSeparatorItem="YES" id="erI-b5-M78"/>
                 <menuItem title="Revert Against Current Branch…" keyEquivalent="r" id="cC0-Dd-nDb">
                     <modifierMask key="keyEquivalentModifierMask"/>
@@ -262,7 +276,7 @@ CA
                                 <rect key="frame" x="0.0" y="75" width="278" height="58"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <size key="minSize" width="278" height="58"/>
+                                <size key="minSize" width="223" height="58"/>
                                 <size key="maxSize" width="463" height="10000000"/>
                                 <attributedString key="textStorage">
                                     <fragment content="&lt;ANNOTATION&gt;">
@@ -273,7 +287,7 @@ CA
                                     </fragment>
                                 </attributedString>
                                 <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                <size key="minSize" width="278" height="58"/>
+                                <size key="minSize" width="223" height="58"/>
                                 <size key="maxSize" width="463" height="10000000"/>
                                 <connections>
                                     <outlet property="delegate" destination="-2" id="xEa-Zb-xrt"/>
@@ -286,7 +300,7 @@ CA
                         <rect key="frame" x="-100" y="-100" width="87" height="18"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
-                    <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="YEO-I1-z9t">
+                    <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="YEO-I1-z9t">
                         <rect key="frame" x="224" y="1" width="15" height="133"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
@@ -329,7 +343,122 @@ Gw
                     </connections>
                 </button>
             </subviews>
-            <point key="canvasLocation" x="463.5" y="1480.5"/>
+            <point key="canvasLocation" x="-58.5" y="1446.5"/>
+        </customView>
+        <customView id="vmT-nM-DHH" userLabel="Tag View">
+            <rect key="frame" x="0.0" y="0.0" width="433" height="207"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <textField verticalHuggingPriority="750" id="mQs-Dn-w1n">
+                    <rect key="frame" x="133" y="165" width="280" height="22"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" placeholderString="Version" drawsBackground="YES" id="ka5-bD-kg9">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <outlet property="delegate" destination="-2" id="eAi-HK-nSg"/>
+                    </connections>
+                </textField>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="Pd1-Fx-8Mk">
+                    <rect key="frame" x="18" y="167" width="109" height="17"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="right" title="New tag name:" id="FI8-Fn-tqq">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="l1x-T4-ffj">
+                    <rect key="frame" x="18" y="140" width="109" height="17"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="right" title="Message:" id="Dij-RE-IHI">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <scrollView autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="Stu-Am-XTQ">
+                    <rect key="frame" x="133" y="97" width="280" height="60"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <clipView key="contentView" id="igq-cf-Euc">
+                        <rect key="frame" x="1" y="1" width="223" height="133"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textView importsGraphics="NO" richText="NO" findStyle="panel" allowsUndo="YES" verticallyResizable="YES" spellingCorrection="YES" smartInsertDelete="YES" id="4Sd-Ry-DwD" customClass="GICommitMessageView">
+                                <rect key="frame" x="0.0" y="75" width="278" height="58"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <size key="minSize" width="278" height="58"/>
+                                <size key="maxSize" width="463" height="10000000"/>
+                                <attributedString key="textStorage">
+                                    <fragment content="&lt;ANNOTATION&gt;">
+                                        <attributes>
+                                            <font key="NSFont" metaFont="smallSystem"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                        </attributes>
+                                    </fragment>
+                                </attributedString>
+                                <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                <size key="minSize" width="278" height="58"/>
+                                <size key="maxSize" width="463" height="10000000"/>
+                                <connections>
+                                    <outlet property="delegate" destination="-2" id="97j-9q-Wlt"/>
+                                </connections>
+                            </textView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </clipView>
+                    <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="P0U-Dk-IWU">
+                        <rect key="frame" x="-100" y="-100" width="87" height="18"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </scroller>
+                    <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="QWc-7J-tCK">
+                        <rect key="frame" x="224" y="1" width="15" height="133"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </scroller>
+                </scrollView>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" setsMaxLayoutWidthAtFirstLayout="YES" id="FGr-81-BUR">
+                    <rect key="frame" x="18" y="49" width="397" height="40"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                    <textFieldCell key="cell" controlSize="small" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="left" id="yCX-sk-tKS">
+                        <font key="font" metaFont="smallSystem"/>
+                        <string key="title">Provide an optional message to create an annotated tag instead of a lightweight tag. You can click to Cancel if you don't want to create tag.</string>
+                        <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <button verticalHuggingPriority="750" id="o2b-Jb-Qdg">
+                    <rect key="frame" x="323" y="17" width="92" height="26"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <buttonCell key="cell" type="bevel" title="Create" bezelStyle="regularSquare" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="BT3-l7-wEb">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                        <string key="keyEquivalent" base64-UTF8="YES">
+DQ
+</string>
+                    </buttonCell>
+                    <connections>
+                        <action selector="finishModalView:" target="-2" id="ugO-h0-kKk"/>
+                    </connections>
+                </button>
+                <button verticalHuggingPriority="750" id="UG1-yD-35O">
+                    <rect key="frame" x="221" y="17" width="92" height="26"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <buttonCell key="cell" type="bevel" title="Cancel" bezelStyle="regularSquare" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="3kl-mh-jbD">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                        <string key="keyEquivalent" base64-UTF8="YES">
+Gw
+</string>
+                    </buttonCell>
+                    <connections>
+                        <action selector="cancelModalView:" target="-2" id="DWR-fE-bV8"/>
+                    </connections>
+                </button>
+            </subviews>
+            <point key="canvasLocation" x="-17.5" y="1147.5"/>
         </customView>
         <customView id="yK7-M9-F1T" userLabel="Rename Branch View">
             <rect key="frame" x="0.0" y="0.0" width="384" height="101"/>
@@ -388,7 +517,7 @@ Gw
             <point key="canvasLocation" x="433" y="1061.5"/>
         </customView>
         <customView id="G2x-MY-zBs" userLabel="Rename Tag View">
-            <rect key="frame" x="-5" y="0.0" width="360" height="101"/>
+            <rect key="frame" x="0.0" y="0.0" width="360" height="101"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <textField verticalHuggingPriority="750" id="0A5-t1-c3Z">
@@ -444,7 +573,7 @@ Gw
             <point key="canvasLocation" x="427" y="899.5"/>
         </customView>
         <customView id="qvM-yB-KWz" userLabel="Message View">
-            <rect key="frame" x="0.0" y="-5" width="590" height="251"/>
+            <rect key="frame" x="0.0" y="0.0" width="590" height="251"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <scrollView autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="MtR-30-oY5">
@@ -529,7 +658,7 @@ Gw
             <point key="canvasLocation" x="472" y="1770.5"/>
         </customView>
         <customView id="ga8-vG-A68" userLabel="Create Branch View">
-            <rect key="frame" x="-5" y="0.0" width="414" height="125"/>
+            <rect key="frame" x="0.0" y="0.0" width="414" height="125"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <textField verticalHuggingPriority="750" id="CUj-FC-ARp">
@@ -591,6 +720,70 @@ Gw
                 </button>
             </subviews>
             <point key="canvasLocation" x="433" y="1240.5"/>
+        </customView>
+        <customView id="bzK-ER-MSV" userLabel="Create Branch View">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="125"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <textField verticalHuggingPriority="750" id="Cse-3q-AeY">
+                    <rect key="frame" x="154" y="83" width="240" height="22"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" placeholderString="Required" drawsBackground="YES" id="JEe-BD-vhD">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <outlet property="delegate" destination="-2" id="N2C-2u-wiY"/>
+                    </connections>
+                </textField>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="JcB-rt-Lv6">
+                    <rect key="frame" x="7" y="85" width="141" height="17"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="right" title="New &lt;ACTION&gt; name:" id="e1d-1q-8hi">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <button id="jJQ-KF-zJP">
+                    <rect key="frame" x="152" y="59" width="185" height="18"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <buttonCell key="cell" type="check" title="Check Out Immediately" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="Ch6-GF-WMc">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                </button>
+                <button verticalHuggingPriority="750" id="iBq-yV-JPe">
+                    <rect key="frame" x="304" y="17" width="92" height="26"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <buttonCell key="cell" type="bevel" title="Create" bezelStyle="regularSquare" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="I4j-Bd-Y7V">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                        <string key="keyEquivalent" base64-UTF8="YES">
+DQ
+</string>
+                    </buttonCell>
+                    <connections>
+                        <action selector="finishModalView:" target="-2" id="ddl-z8-mZS"/>
+                    </connections>
+                </button>
+                <button verticalHuggingPriority="750" id="6mA-ey-67b">
+                    <rect key="frame" x="202" y="17" width="92" height="26"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <buttonCell key="cell" type="bevel" title="Cancel" bezelStyle="regularSquare" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="R9o-ke-FM6">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                        <string key="keyEquivalent" base64-UTF8="YES">
+Gw
+</string>
+                    </buttonCell>
+                    <connections>
+                        <action selector="cancelModalView:" target="-2" id="RLw-Jl-5sv"/>
+                    </connections>
+                </button>
+            </subviews>
+            <point key="canvasLocation" x="433" y="1446.5"/>
         </customView>
     </objects>
 </document>

@@ -35,6 +35,7 @@
 - (void)editCommitMessage:(GCHistoryCommit*)commit;
 
 - (void)createLocalBranchAtCommit:(GCHistoryCommit*)commit withName:(NSString*)name checkOut:(BOOL)checkOut;
+- (BOOL)createLocalBranchAtCommit:(GCHistoryCommit*)commit withName:(NSString*)name checkOut:(BOOL)checkOut error:(NSError **)error;
 - (void)deleteLocalBranch:(GCHistoryLocalBranch*)branch;
 - (void)setName:(NSString*)name forLocalBranch:(GCHistoryLocalBranch*)branch;
 - (void)setTipCommit:(GCHistoryCommit*)commit forLocalBranch:(GCHistoryLocalBranch*)branch;
@@ -45,7 +46,7 @@
 - (void)setName:(NSString*)name forTag:(GCHistoryTag*)tag;
 - (void)deleteTag:(GCHistoryTag*)tag;
 
-- (void)fastForwardLocalBranch:(GCHistoryLocalBranch*)branch toCommitOrBranch:(id)commitOrBranch withUserMessage:(NSString*)userMessage;
+- (BOOL)fastForwardLocalBranch:(GCHistoryLocalBranch*)branch toCommitOrBranch:(id)commitOrBranch withUserMessage:(NSString*)userMessage;
 - (void)mergeCommitOrBranch:(id)commitOrBranch intoLocalBranch:(GCHistoryLocalBranch*)branch withAncestorCommit:(GCHistoryCommit*)ancestorCommit userMessage:(NSString*)userMessage;
 - (void)rebaseLocalBranch:(GCHistoryLocalBranch*)branch fromCommit:(GCHistoryCommit*)fromCommit ontoCommit:(GCHistoryCommit*)commit withUserMessage:(NSString*)userMessage;
 - (void)smartMergeCommitOrBranch:(id)commitOrBranch intoLocalBranch:(GCHistoryLocalBranch*)intoBranch withUserMessage:(NSString*)userMessage;

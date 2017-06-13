@@ -471,6 +471,7 @@ You must close and reopen any opened repositories in GitUp after changing this s
             </toolbar>
             <point key="canvasLocation" x="-8" y="1086"/>
         </window>
+        <customObject id="fTc-yK-w9h" customClass="GitFlow"/>
         <customObject id="Voe-Tx-rLC" customClass="AppDelegate">
             <connections>
                 <outlet property="aboutPanel" destination="sHg-NM-pfN" id="nuH-JO-Zxx"/>
@@ -732,6 +733,49 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                     <action selector="editSettings:" target="-1" id="eKw-Pa-s3l"/>
                                 </connections>
                             </menuItem>
+                            <menuItem isSeparatorItem="YES" id="euH-Hm-yiK"/>
+                            <menuItem title="Git Flow" id="Nco-F9-shO">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" title="Git Flow" id="Jjx-rh-W6S">
+                                    <items>
+                                        <menuItem title="Initialize" id="JM9-X8-aqI">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="gitFlowInitialize:" target="-1" id="plm-2c-bGb"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="vkR-Th-c6n"/>
+                                        <menuItem title="Finish action" keyEquivalent="F" id="ngz-Hp-BwD">
+                                            <modifierMask key="keyEquivalentModifierMask" control="YES"/>
+                                            <connections>
+                                                <action selector="gitFlowFinishCurrentAction:" target="-1" id="saJ-dY-cPG"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="6VI-uA-rx7"/>
+                                        <menuItem title="Start New Feature" keyEquivalent="f" id="NOc-yG-4kp">
+                                            <modifierMask key="keyEquivalentModifierMask" control="YES"/>
+                                            <connections>
+                                                <action selector="gitFlowStartFeature:" target="-1" id="pUN-oU-OS8"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Start New Release" keyEquivalent="r" id="p30-kD-Ywj">
+                                            <modifierMask key="keyEquivalentModifierMask" control="YES"/>
+                                            <connections>
+                                                <action selector="gitFlowStartRelease:" target="-1" id="Sxb-fF-8DO"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Start New Hotfix" keyEquivalent="h" id="WdD-fa-Kqr">
+                                            <modifierMask key="keyEquivalentModifierMask" control="YES"/>
+                                            <connections>
+                                                <action selector="gitFlowStartHotfix:" target="-1" id="Chn-6s-Czc"/>
+                                            </connections>
+                                        </menuItem>
+                                    </items>
+                                </menu>
+                                <connections>
+                                    <action selector="openGitFlowMenu:" target="-1" id="zbA-K7-bfi"/>
+                                </connections>
+                            </menuItem>
                         </items>
                     </menu>
                 </menuItem>
@@ -949,7 +993,7 @@ Gw
             <rect key="contentRect" x="131" y="158" width="428" height="217"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
             <view key="contentView" id="kmS-EA-B5p">
-                <rect key="frame" x="0.0" y="5" width="428" height="217"/>
+                <rect key="frame" x="0.0" y="0.0" width="428" height="217"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="ThD-Fn-TeP">

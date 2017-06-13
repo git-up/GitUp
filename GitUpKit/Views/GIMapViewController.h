@@ -19,6 +19,15 @@
 
 @class GIMapViewController, GIGraph, GINode, GCHistory, GCHistoryCommit, GCCommit;
 
+typedef NSString* GIGitFlowConfigKey;
+
+extern GIGitFlowConfigKey const GIGitFlowBranchDevelop;
+extern GIGitFlowConfigKey const GIGitFlowBranchMaster;
+extern GIGitFlowConfigKey const GIGitFlowPrefixFeature;
+extern GIGitFlowConfigKey const GIGitFlowPrefixRelease;
+extern GIGitFlowConfigKey const GIGitFlowPrefixHotfix;
+extern GIGitFlowConfigKey const GIGitFlowPrefixVersionTag;
+
 @protocol GIMapViewControllerDelegate <GIMergeConflictResolver>
 - (void)mapViewControllerDidReloadGraph:(GIMapViewController*)controller;
 - (void)mapViewControllerDidChangeSelection:(GIMapViewController*)controller;
@@ -54,4 +63,13 @@
 - (IBAction)pushAllTags:(id)sender;
 - (IBAction)pullCurrentBranch:(id)sender;
 - (IBAction)pushCurrentBranch:(id)sender;
+
+// GitFlow
+- (IBAction)gitFlowFinishCurrentAction:(id)sender;
+- (IBAction)gitFlowFinishSelectedAction:(id)sender;
+- (IBAction)gitFlowStartFeature:(id)sender;
+- (IBAction)gitFlowStartRelease:(id)sender;
+- (IBAction)gitFlowStartHotfix:(id)sender;
+
+
 @end
