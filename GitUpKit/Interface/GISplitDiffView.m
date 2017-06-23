@@ -224,7 +224,7 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
           }
           if (string == nil) {
             string = @"<LINE IS NOT VALID UTF-8>\n";
-            XLOG_DEBUG_UNREACHABLE();
+            XLOG_WARNING(@"Line is not valid UTF-8");
           }
 
           switch (change) {
