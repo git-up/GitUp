@@ -27,12 +27,12 @@
 
 #define kPersistentViewStateKeyNamespace @"GIMapViewController_"
 
-#define kPersistentViewStateKey_HideVirtualTips kPersistentViewStateKeyNamespace @"HideVirtualTips"
+#define kPersistentViewStateKey_ShowVirtualTips kPersistentViewStateKeyNamespace @"ShowVirtualTips"
 #define kPersistentViewStateKey_ShowTagTips kPersistentViewStateKeyNamespace @"ShowTagTips"
 #define kPersistentViewStateKey_ShowRemoteBranchTips kPersistentViewStateKeyNamespace @"ShowRemoteBranchTips"
 #define kPersistentViewStateKey_ShowStaleBranchTips kPersistentViewStateKeyNamespace @"ShowStaleBranchTips"
 
-#define kPersistentViewStateKey_HideTagLabels kPersistentViewStateKeyNamespace @"HideTagLabels"
+#define kPersistentViewStateKey_ShowTagLabels kPersistentViewStateKeyNamespace @"ShowTagLabels"
 #define kPersistentViewStateKey_ShowBranchLabels kPersistentViewStateKeyNamespace @"ShowBranchLabels"
 
 @interface GIMapViewController () <GIGraphViewDelegate>
@@ -79,7 +79,7 @@ static NSColor* _patternColor = nil;
 
 - (instancetype)initWithRepository:(GCLiveRepository*)repository {
   if ((self = [super initWithRepository:repository])) {
-    _showsVirtualTips = ![[self.repository userInfoForKey:kPersistentViewStateKey_HideVirtualTips] boolValue];
+    _showsVirtualTips = [[self.repository userInfoForKey:kPersistentViewStateKey_ShowVirtualTips] boolValue];
     _hidesTagTips = ![[self.repository userInfoForKey:kPersistentViewStateKey_ShowTagTips] boolValue];
     _hidesRemoteBranchTips = ![[self.repository userInfoForKey:kPersistentViewStateKey_ShowRemoteBranchTips] boolValue];
     _hidesStaleBranchTips = ![[self.repository userInfoForKey:kPersistentViewStateKey_ShowStaleBranchTips] boolValue];
@@ -101,7 +101,7 @@ static NSColor* _patternColor = nil;
 
   _graphView.delegate = self;
   [self _setGraphViewBackgroundColors:NO];
-  _graphView.showsTagLabels = ![[self.repository userInfoForKey:kPersistentViewStateKey_HideTagLabels] boolValue];
+  _graphView.showsTagLabels = [[self.repository userInfoForKey:kPersistentViewStateKey_ShowTagLabels] boolValue];
   _graphView.showsBranchLabels = [[self.repository userInfoForKey:kPersistentViewStateKey_ShowBranchLabels] boolValue];
 
   _updatePending = YES;
@@ -216,7 +216,7 @@ static NSColor* _patternColor = nil;
 - (void)setShowsVirtualTips:(BOOL)flag {
   if (flag != _showsVirtualTips) {
     _showsVirtualTips = flag;
-    [self.repository setUserInfo:@((BOOL)!_showsVirtualTips) forKey:kPersistentViewStateKey_HideVirtualTips];
+    [self.repository setUserInfo:@(_showsVirtualTips) forKey:kPersistentViewStateKey_ShowVirtualTips];
     [self _reloadMap:YES];
   }
 }
@@ -725,7 +725,7 @@ static NSColor* _patternColor = nil;
 - (IBAction)toggleTagLabels:(id)sender {
   BOOL show = !_graphView.showsTagLabels;
   _graphView.showsTagLabels = show;
-  [self.repository setUserInfo:@((BOOL)!show) forKey:kPersistentViewStateKey_HideTagLabels];
+  [self.repository setUserInfo:@(show) forKey:kPersistentViewStateKey_ShowTagLabels];
 }
 
 - (IBAction)toggleBranchLabels:(id)sender {
