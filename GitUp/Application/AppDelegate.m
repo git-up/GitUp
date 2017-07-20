@@ -106,6 +106,8 @@
 
 + (void)initialize {
   NSDictionary* defaults = @{
+    GIMapViewControllerStateKey_ShowVirtualTips : @(YES),
+    GIMapViewControllerStateKey_ShowTagLabels : @(YES),
     GICommitMessageViewUserDefaultKey_ShowInvisibleCharacters : @(YES),
     GICommitMessageViewUserDefaultKey_ShowMargins : @(YES),
     GICommitMessageViewUserDefaultKey_EnableSpellChecking : @(YES),

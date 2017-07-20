@@ -19,6 +19,15 @@
 
 @class GIMapViewController, GIGraph, GINode, GCHistory, GCHistoryCommit, GCCommit;
 
+// These keys are used for repository’s user info and for NSUserDefaults. All hold Boolean values.
+extern NSString* const GIMapViewControllerStateKey_ShowVirtualTips;
+extern NSString* const GIMapViewControllerStateKey_ShowTagTips;
+extern NSString* const GIMapViewControllerStateKey_ShowRemoteBranchTips;
+extern NSString* const GIMapViewControllerStateKey_ShowStaleBranchTips;
+
+extern NSString* const GIMapViewControllerStateKey_ShowTagLabels;
+extern NSString* const GIMapViewControllerStateKey_ShowBranchLabels;
+
 @protocol GIMapViewControllerDelegate <GIMergeConflictResolver>
 - (void)mapViewControllerDidReloadGraph:(GIMapViewController*)controller;
 - (void)mapViewControllerDidChangeSelection:(GIMapViewController*)controller;
