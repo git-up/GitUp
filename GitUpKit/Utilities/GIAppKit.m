@@ -32,7 +32,17 @@
 
 NSString* const GICommitMessageViewUserDefaultKey_ShowInvisibleCharacters = @"GICommitMessageViewUserDefaultKey_ShowInvisibleCharacters";
 NSString* const GICommitMessageViewUserDefaultKey_ShowMargins = @"GICommitMessageViewUserDefaultKey_ShowMargins";
+
 NSString* const GICommitMessageViewUserDefaultsKey_ContinuousSpellChecking = @"GICommitMessageViewUserDefaultKey_EnableSpellChecking"; // Inconsistent for backwards compatibility.
+NSString* const GICommitMessageViewUserDefaultsKey_GrammarChecking = @"GICommitMessageView_GrammarChecking";
+NSString* const GICommitMessageViewUserDefaultsKey_AutomaticSpellingCorrection = @"GICommitMessageView_AutomaticSpellingCorrection";
+
+NSString* const GICommitMessageViewUserDefaultsKey_SmartInsertDelete = @"GICommitMessageView_SmartInsertDelete";
+NSString* const GICommitMessageViewUserDefaultsKey_QuoteSubstitution = @"GICommitMessageView_QuoteSubstitution";
+NSString* const GICommitMessageViewUserDefaultsKey_DashSubstitution = @"GICommitMessageView_DashSubstitution";
+NSString* const GICommitMessageViewUserDefaultsKey_LinkDetection = @"GICommitMessageView_LinkDetection";
+NSString* const GICommitMessageViewUserDefaultsKey_DataDetection = @"GICommitMessageView_DataDetection";
+NSString* const GICommitMessageViewUserDefaultsKey_TextReplacement = @"GICommitMessageView_TextReplacement";
 
 static const void* _associatedObjectCommitKey = &_associatedObjectCommitKey;
 static NSColor* _separatorColor = nil;
@@ -153,29 +163,47 @@ static NSColor* _separatorColor = nil;
 @implementation GICommitMessageView
 
 - (void)dealloc {
-  [[NSUserDefaults standardUserDefaults] removeObserver:self forKeyPath:GICommitMessageViewUserDefaultsKey_ContinuousSpellChecking context:(__bridge void*)[GICommitMessageView class]];
-  [[NSUserDefaults standardUserDefaults] removeObserver:self forKeyPath:GICommitMessageViewUserDefaultKey_ShowMargins context:(__bridge void*)[GICommitMessageView class]];
-  [[NSUserDefaults standardUserDefaults] removeObserver:self forKeyPath:GICommitMessageViewUserDefaultKey_ShowInvisibleCharacters context:(__bridge void*)[GICommitMessageView class]];
+  NSArray* allObservedKeys = @[
+    GICommitMessageViewUserDefaultKey_ShowInvisibleCharacters,
+    GICommitMessageViewUserDefaultKey_ShowMargins,
+    GICommitMessageViewUserDefaultsKey_ContinuousSpellChecking,
+    GICommitMessageViewUserDefaultsKey_GrammarChecking,
+    GICommitMessageViewUserDefaultsKey_AutomaticSpellingCorrection,
+    GICommitMessageViewUserDefaultsKey_SmartInsertDelete,
+    GICommitMessageViewUserDefaultsKey_QuoteSubstitution,
+    GICommitMessageViewUserDefaultsKey_DashSubstitution,
+    GICommitMessageViewUserDefaultsKey_LinkDetection,
+    GICommitMessageViewUserDefaultsKey_DataDetection,
+    GICommitMessageViewUserDefaultsKey_TextReplacement,
+  ];
+  for (NSString* key in allObservedKeys) {
+    [[NSUserDefaults standardUserDefaults] removeObserver:self forKeyPath:key context:(__bridge void*)[GICommitMessageView class]];
+  }
 }
 
 - (void)awakeFromNib {
   [super awakeFromNib];
 
   self.font = [NSFont userFixedPitchFontOfSize:11];
-  self.continuousSpellCheckingEnabled = [[NSUserDefaults standardUserDefaults] boolForKey:GICommitMessageViewUserDefaultsKey_ContinuousSpellChecking];
-  self.automaticSpellingCorrectionEnabled = NO;  // Don't trust IB
-  self.grammarCheckingEnabled = NO;  // Don't trust IB
-  self.automaticLinkDetectionEnabled = NO;  // Don't trust IB
-  self.automaticQuoteSubstitutionEnabled = NO;  // Don't trust IB
-  self.automaticDashSubstitutionEnabled = NO;  // Don't trust IB
-  self.automaticDataDetectionEnabled = NO;  // Don't trust IB
-  self.automaticTextReplacementEnabled = NO;  // Don't trust IB
-  self.smartInsertDeleteEnabled = YES;  // Don't trust IB
   [self.textContainer replaceLayoutManager:[[GILayoutManager alloc] init]];
 
   [[NSUserDefaults standardUserDefaults] addObserver:self forKeyPath:GICommitMessageViewUserDefaultKey_ShowInvisibleCharacters options:0 context:(__bridge void*)[GICommitMessageView class]];
   [[NSUserDefaults standardUserDefaults] addObserver:self forKeyPath:GICommitMessageViewUserDefaultKey_ShowMargins options:0 context:(__bridge void*)[GICommitMessageView class]];
-  [[NSUserDefaults standardUserDefaults] addObserver:self forKeyPath:GICommitMessageViewUserDefaultsKey_ContinuousSpellChecking options:0 context:(__bridge void*)[GICommitMessageView class]];
+
+  NSArray* keysWantingInitialValue = @[
+    GICommitMessageViewUserDefaultsKey_ContinuousSpellChecking,
+    GICommitMessageViewUserDefaultsKey_GrammarChecking,
+    GICommitMessageViewUserDefaultsKey_AutomaticSpellingCorrection,
+    GICommitMessageViewUserDefaultsKey_SmartInsertDelete,
+    GICommitMessageViewUserDefaultsKey_QuoteSubstitution,
+    GICommitMessageViewUserDefaultsKey_DashSubstitution,
+    GICommitMessageViewUserDefaultsKey_LinkDetection,
+    GICommitMessageViewUserDefaultsKey_DataDetection,
+    GICommitMessageViewUserDefaultsKey_TextReplacement,
+  ];
+  for (NSString* key in keysWantingInitialValue) {
+    [[NSUserDefaults standardUserDefaults] addObserver:self forKeyPath:key options:NSKeyValueObservingOptionInitial context:(__bridge void*)[GICommitMessageView class]];
+  }
 }
 
 - (void)drawRect:(NSRect)dirtyRect {
@@ -209,29 +237,80 @@ static NSColor* _separatorColor = nil;
   }
 }
 
+#define HANDLE_DEFAULTS_KEY_AND_UPDATE_PROPERTY(PROPERTY, DEFAULTS_KEY)                                                 \
+if ([keyPath isEqualToString:GICommitMessageViewUserDefaultsKey_##DEFAULTS_KEY]) {                                      \
+  BOOL newValue = [[NSUserDefaults standardUserDefaults] boolForKey:GICommitMessageViewUserDefaultsKey_##DEFAULTS_KEY]; \
+  if (newValue != [self is##PROPERTY]) {                                                                                \
+    [self set##PROPERTY:newValue];                                                                                      \
+    [self setNeedsDisplay:YES];                                                                                         \
+  }                                                                                                                     \
+  return;                                                                                                               \
+}
+
 // WARNING: This is called *several* times when the default has been changed
 - (void)observeValueForKeyPath:(NSString*)keyPath ofObject:(id)object change:(NSDictionary*)change context:(void*)context {
-  if (context == (__bridge void*)[GICommitMessageView class]) {
-    if ([keyPath isEqualToString:GICommitMessageViewUserDefaultKey_ShowInvisibleCharacters]) {
-      NSRange range = NSMakeRange(0, self.textStorage.length);
-      [self.layoutManager invalidateGlyphsForCharacterRange:range changeInLength:0 actualCharacterRange:NULL];
-      [self.layoutManager invalidateLayoutForCharacterRange:range isSoft:NO actualCharacterRange:NULL];
-      [self setNeedsDisplay:YES];
-    } else if ([keyPath isEqualToString:GICommitMessageViewUserDefaultKey_ShowMargins]) {
-      [self setNeedsDisplay:YES];
-    } else if ([keyPath isEqualToString:GICommitMessageViewUserDefaultsKey_ContinuousSpellChecking]) {
-      BOOL flag = [[NSUserDefaults standardUserDefaults] boolForKey:GICommitMessageViewUserDefaultsKey_ContinuousSpellChecking];
-      if (flag != self.continuousSpellCheckingEnabled) {
-        self.continuousSpellCheckingEnabled = flag;
-        [self setNeedsDisplay:YES];  // TODO: Why is this needed to refresh?
-      }
-    } else {
-      XLOG_DEBUG_UNREACHABLE();
-    }
-  } else {
+  if (context != (__bridge void*)[GICommitMessageView class]) {
     [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    return;
   }
+
+  if ([keyPath isEqualToString:GICommitMessageViewUserDefaultKey_ShowInvisibleCharacters]) {
+    NSRange range = NSMakeRange(0, self.textStorage.length);
+    [self.layoutManager invalidateGlyphsForCharacterRange:range changeInLength:0 actualCharacterRange:NULL];
+    [self.layoutManager invalidateLayoutForCharacterRange:range isSoft:NO actualCharacterRange:NULL];
+    [self setNeedsDisplay:YES];
+    return;
+  }
+
+  if ([keyPath isEqualToString:GICommitMessageViewUserDefaultKey_ShowMargins]) {
+    [self setNeedsDisplay:YES];
+    return;
+  }
+
+  if ([keyPath isEqualToString:GICommitMessageViewUserDefaultsKey_ContinuousSpellChecking]) {
+    BOOL newValue = [[NSUserDefaults standardUserDefaults] boolForKey:GICommitMessageViewUserDefaultsKey_ContinuousSpellChecking];
+    if (newValue != [self isContinuousSpellCheckingEnabled]) {
+      [self setContinuousSpellCheckingEnabled:newValue];
+      [self setNeedsDisplay:YES];  // TODO: Why is this needed to refresh?
+    }
+    return;
+  }
+
+  HANDLE_DEFAULTS_KEY_AND_UPDATE_PROPERTY(ContinuousSpellCheckingEnabled, ContinuousSpellChecking)
+  HANDLE_DEFAULTS_KEY_AND_UPDATE_PROPERTY(GrammarCheckingEnabled, GrammarChecking)
+  HANDLE_DEFAULTS_KEY_AND_UPDATE_PROPERTY(AutomaticSpellingCorrectionEnabled, AutomaticSpellingCorrection)
+  HANDLE_DEFAULTS_KEY_AND_UPDATE_PROPERTY(SmartInsertDeleteEnabled, SmartInsertDelete)
+  HANDLE_DEFAULTS_KEY_AND_UPDATE_PROPERTY(AutomaticQuoteSubstitutionEnabled, QuoteSubstitution)
+  HANDLE_DEFAULTS_KEY_AND_UPDATE_PROPERTY(AutomaticDashSubstitutionEnabled, DashSubstitution)
+  HANDLE_DEFAULTS_KEY_AND_UPDATE_PROPERTY(AutomaticLinkDetectionEnabled, LinkDetection)
+  HANDLE_DEFAULTS_KEY_AND_UPDATE_PROPERTY(AutomaticDataDetectionEnabled, DataDetection)
+  HANDLE_DEFAULTS_KEY_AND_UPDATE_PROPERTY(AutomaticTextReplacementEnabled, TextReplacement)
+
+  XLOG_DEBUG_UNREACHABLE();
 }
+
+/// This property does not have ‘is’ on the getter. Add it here so HANDLE_DEFAULTS_KEY_AND_UPDATE_PROPERTY works.
+- (BOOL)isSmartInsertDeleteEnabled {
+  return [self smartInsertDeleteEnabled];
+}
+
+#define OVERRIDE_SETTER_AND_UPDATE_DEFAULTS(PROPERTY, DEFAULTS_KEY)                                                       \
+- (void)set##PROPERTY:(BOOL)newValue {                                                                                    \
+  [super set##PROPERTY:newValue];                                                                                         \
+  if (newValue != [[NSUserDefaults standardUserDefaults] boolForKey:GICommitMessageViewUserDefaultsKey_##DEFAULTS_KEY]) { \
+    [[NSUserDefaults standardUserDefaults] setBool:newValue forKey:GICommitMessageViewUserDefaultsKey_##DEFAULTS_KEY];    \
+  }                                                                                                                       \
+}
+
+OVERRIDE_SETTER_AND_UPDATE_DEFAULTS(ContinuousSpellCheckingEnabled, ContinuousSpellChecking)
+OVERRIDE_SETTER_AND_UPDATE_DEFAULTS(GrammarCheckingEnabled, GrammarChecking)
+OVERRIDE_SETTER_AND_UPDATE_DEFAULTS(AutomaticSpellingCorrectionEnabled, AutomaticSpellingCorrection)
+OVERRIDE_SETTER_AND_UPDATE_DEFAULTS(SmartInsertDeleteEnabled, SmartInsertDelete)
+OVERRIDE_SETTER_AND_UPDATE_DEFAULTS(AutomaticQuoteSubstitutionEnabled, QuoteSubstitution)
+OVERRIDE_SETTER_AND_UPDATE_DEFAULTS(AutomaticDashSubstitutionEnabled, DashSubstitution)
+OVERRIDE_SETTER_AND_UPDATE_DEFAULTS(AutomaticLinkDetectionEnabled, LinkDetection)
+OVERRIDE_SETTER_AND_UPDATE_DEFAULTS(AutomaticDataDetectionEnabled, DataDetection)
+OVERRIDE_SETTER_AND_UPDATE_DEFAULTS(AutomaticTextReplacementEnabled, TextReplacement)
 
 @end
 

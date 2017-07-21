@@ -22,9 +22,21 @@ typedef NS_ENUM(NSUInteger, GIAlertType) {
   kGIAlertType_Danger
 };
 
+// These keys are used for NSUserDefaults. All hold Boolean values.
+
 extern NSString* const GICommitMessageViewUserDefaultKey_ShowInvisibleCharacters;
 extern NSString* const GICommitMessageViewUserDefaultKey_ShowMargins;
+
 extern NSString* const GICommitMessageViewUserDefaultsKey_ContinuousSpellChecking;
+extern NSString* const GICommitMessageViewUserDefaultsKey_GrammarChecking;
+extern NSString* const GICommitMessageViewUserDefaultsKey_AutomaticSpellingCorrection;
+
+extern NSString* const GICommitMessageViewUserDefaultsKey_SmartInsertDelete;
+extern NSString* const GICommitMessageViewUserDefaultsKey_QuoteSubstitution;
+extern NSString* const GICommitMessageViewUserDefaultsKey_DashSubstitution;
+extern NSString* const GICommitMessageViewUserDefaultsKey_LinkDetection;
+extern NSString* const GICommitMessageViewUserDefaultsKey_DataDetection;
+extern NSString* const GICommitMessageViewUserDefaultsKey_TextReplacement;
 
 @interface NSMutableAttributedString (GIAppKit)
 - (void)appendString:(NSString*)string withAttributes:(NSDictionary*)attributes;

@@ -106,6 +106,7 @@
     GICommitMessageViewUserDefaultKey_ShowInvisibleCharacters : @(YES),
     GICommitMessageViewUserDefaultKey_ShowMargins : @(YES),
     GICommitMessageViewUserDefaultsKey_ContinuousSpellChecking : @(YES),
+    GICommitMessageViewUserDefaultsKey_SmartInsertDelete : @(YES),
     kUserDefaultsKey_ReleaseChannel : kReleaseChannel_Stable,
     kUserDefaultsKey_CheckInterval : @(15 * 60),
     kUserDefaultsKey_FirstLaunch : @(YES),
