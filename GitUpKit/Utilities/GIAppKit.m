@@ -32,7 +32,7 @@
 
 NSString* const GICommitMessageViewUserDefaultKey_ShowInvisibleCharacters = @"GICommitMessageViewUserDefaultKey_ShowInvisibleCharacters";
 NSString* const GICommitMessageViewUserDefaultKey_ShowMargins = @"GICommitMessageViewUserDefaultKey_ShowMargins";
-NSString* const GICommitMessageViewUserDefaultKey_EnableSpellChecking = @"GICommitMessageViewUserDefaultKey_EnableSpellChecking";
+NSString* const GICommitMessageViewUserDefaultsKey_ContinuousSpellChecking = @"GICommitMessageViewUserDefaultKey_EnableSpellChecking"; // Inconsistent for backwards compatibility.
 
 static const void* _associatedObjectCommitKey = &_associatedObjectCommitKey;
 static NSColor* _separatorColor = nil;
@@ -153,7 +153,7 @@ static NSColor* _separatorColor = nil;
 @implementation GICommitMessageView
 
 - (void)dealloc {
-  [[NSUserDefaults standardUserDefaults] removeObserver:self forKeyPath:GICommitMessageViewUserDefaultKey_EnableSpellChecking context:(__bridge void*)[GICommitMessageView class]];
+  [[NSUserDefaults standardUserDefaults] removeObserver:self forKeyPath:GICommitMessageViewUserDefaultsKey_ContinuousSpellChecking context:(__bridge void*)[GICommitMessageView class]];
   [[NSUserDefaults standardUserDefaults] removeObserver:self forKeyPath:GICommitMessageViewUserDefaultKey_ShowMargins context:(__bridge void*)[GICommitMessageView class]];
   [[NSUserDefaults standardUserDefaults] removeObserver:self forKeyPath:GICommitMessageViewUserDefaultKey_ShowInvisibleCharacters context:(__bridge void*)[GICommitMessageView class]];
 }
@@ -162,7 +162,7 @@ static NSColor* _separatorColor = nil;
   [super awakeFromNib];
 
   self.font = [NSFont userFixedPitchFontOfSize:11];
-  self.continuousSpellCheckingEnabled = [[NSUserDefaults standardUserDefaults] boolForKey:GICommitMessageViewUserDefaultKey_EnableSpellChecking];
+  self.continuousSpellCheckingEnabled = [[NSUserDefaults standardUserDefaults] boolForKey:GICommitMessageViewUserDefaultsKey_ContinuousSpellChecking];
   self.automaticSpellingCorrectionEnabled = NO;  // Don't trust IB
   self.grammarCheckingEnabled = NO;  // Don't trust IB
   self.automaticLinkDetectionEnabled = NO;  // Don't trust IB
@@ -175,7 +175,7 @@ static NSColor* _separatorColor = nil;
 
   [[NSUserDefaults standardUserDefaults] addObserver:self forKeyPath:GICommitMessageViewUserDefaultKey_ShowInvisibleCharacters options:0 context:(__bridge void*)[GICommitMessageView class]];
   [[NSUserDefaults standardUserDefaults] addObserver:self forKeyPath:GICommitMessageViewUserDefaultKey_ShowMargins options:0 context:(__bridge void*)[GICommitMessageView class]];
-  [[NSUserDefaults standardUserDefaults] addObserver:self forKeyPath:GICommitMessageViewUserDefaultKey_EnableSpellChecking options:0 context:(__bridge void*)[GICommitMessageView class]];
+  [[NSUserDefaults standardUserDefaults] addObserver:self forKeyPath:GICommitMessageViewUserDefaultsKey_ContinuousSpellChecking options:0 context:(__bridge void*)[GICommitMessageView class]];
 }
 
 - (void)drawRect:(NSRect)dirtyRect {
@@ -219,8 +219,8 @@ static NSColor* _separatorColor = nil;
       [self setNeedsDisplay:YES];
     } else if ([keyPath isEqualToString:GICommitMessageViewUserDefaultKey_ShowMargins]) {
       [self setNeedsDisplay:YES];
-    } else if ([keyPath isEqualToString:GICommitMessageViewUserDefaultKey_EnableSpellChecking]) {
-      BOOL flag = [[NSUserDefaults standardUserDefaults] boolForKey:GICommitMessageViewUserDefaultKey_EnableSpellChecking];
+    } else if ([keyPath isEqualToString:GICommitMessageViewUserDefaultsKey_ContinuousSpellChecking]) {
+      BOOL flag = [[NSUserDefaults standardUserDefaults] boolForKey:GICommitMessageViewUserDefaultsKey_ContinuousSpellChecking];
       if (flag != self.continuousSpellCheckingEnabled) {
         self.continuousSpellCheckingEnabled = flag;
         [self setNeedsDisplay:YES];  // TODO: Why is this needed to refresh?

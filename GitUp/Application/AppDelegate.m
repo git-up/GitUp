@@ -105,7 +105,7 @@
   NSDictionary* defaults = @{
     GICommitMessageViewUserDefaultKey_ShowInvisibleCharacters : @(YES),
     GICommitMessageViewUserDefaultKey_ShowMargins : @(YES),
-    GICommitMessageViewUserDefaultKey_EnableSpellChecking : @(YES),
+    GICommitMessageViewUserDefaultsKey_ContinuousSpellChecking : @(YES),
     kUserDefaultsKey_ReleaseChannel : kReleaseChannel_Stable,
     kUserDefaultsKey_CheckInterval : @(15 * 60),
     kUserDefaultsKey_FirstLaunch : @(YES),

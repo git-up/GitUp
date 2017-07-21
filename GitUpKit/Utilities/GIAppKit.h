@@ -24,7 +24,7 @@ typedef NS_ENUM(NSUInteger, GIAlertType) {
 
 extern NSString* const GICommitMessageViewUserDefaultKey_ShowInvisibleCharacters;
 extern NSString* const GICommitMessageViewUserDefaultKey_ShowMargins;
-extern NSString* const GICommitMessageViewUserDefaultKey_EnableSpellChecking;
+extern NSString* const GICommitMessageViewUserDefaultsKey_ContinuousSpellChecking;
 
 @interface NSMutableAttributedString (GIAppKit)
 - (void)appendString:(NSString*)string withAttributes:(NSDictionary*)attributes;
