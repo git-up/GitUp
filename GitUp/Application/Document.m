@@ -1986,8 +1986,6 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
                    _searchResultsViewController.results = nil;
                  }];
     }
-
-    [_mainWindow makeFirstResponder:_mapViewController.preferredFirstResponder];
   }
 }
 
