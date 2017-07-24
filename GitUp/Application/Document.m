@@ -1739,7 +1739,10 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
     return NO;
   }
 
-  if ((item.action == @selector(focusSearch:)) || (item.action == @selector(performSearch:))) {
+  if (item.action == @selector(performFindPanelAction:) && item.tag != NSFindPanelActionShowFindPanel) {
+    return NO;
+  }
+  if ((item.action == @selector(performFindPanelAction:) && item.tag == NSFindPanelActionShowFindPanel) || item.action == @selector(performSearch:)) {
     return [_windowMode isEqualToString:kWindowModeString_Map] && !_tagsView.superview && !_snapshotsView.superview && !_reflogView.superview && !_ancestorsView.superview && _searchReady;
   }
   if (item.action == @selector(toggleTags:)) {
@@ -1989,7 +1992,10 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
   }
 }
 
-- (IBAction)focusSearch:(id)sender {
+- (IBAction)performFindPanelAction:(id)sender {
+  if ([sender tag] != NSFindPanelActionShowFindPanel) {
+    return;
+  }
   [_mainWindow makeFirstResponder:_searchField];
 }
 
