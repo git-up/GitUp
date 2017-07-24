@@ -804,12 +804,6 @@ You must close and reopen any opened repositories in GitUp after changing this s
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <menu key="submenu" title="Repository" id="01F-zn-dxL">
                         <items>
-                            <menuItem title="Search…" keyEquivalent="f" id="lth-Rr-wEh">
-                                <connections>
-                                    <action selector="focusSearch:" target="-1" id="wfK-7B-jEI"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem isSeparatorItem="YES" id="qQz-Pc-UPf"/>
                             <menuItem title="Browse HEAD Ancestors…" keyEquivalent="d" id="6tA-ab-KI4">
                                 <connections>
                                     <action selector="toggleAncestors:" target="-1" id="4pv-4x-eNG"/>
