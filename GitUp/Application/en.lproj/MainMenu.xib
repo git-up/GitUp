@@ -896,8 +896,8 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                     <action selector="fetchAllRemoteBranches:" target="-1" id="Hb3-9s-czk"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Check All Branches" alternate="YES" keyEquivalent="f" id="BvD-QT-ga7">
-                                <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
+                            <menuItem title="Check All Branches" id="BvD-QT-ga7">
+                                <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="checkForChanges:" target="-1" id="P2O-oC-cy1"/>
                                 </connections>
