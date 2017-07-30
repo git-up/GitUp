@@ -17,9 +17,6 @@
 #error This file requires ARC
 #endif
 
-#import <sys/stat.h>
-#import <sys/attr.h>
-
 #import "GCPrivate.h"
 
 #import "XLFunctions.h"
@@ -495,28 +492,11 @@ static void _StreamCallback(ConstFSEventStreamRef streamRef, void* clientCallBac
 #pragma mark - Snapshots
 
 - (void)_writeSnapshots {
-  BOOL success = NO;
   NSString* path = [self.privateAppDirectoryPath stringByAppendingPathComponent:kSnapshotsFileName];
-  if (path) {
-    NSString* tempPath = [path stringByAppendingString:@"~"];
-    if ([NSKeyedArchiver archiveRootObject:_snapshots toFile:tempPath]) {
-      struct stat info;
-      if (lstat(path.fileSystemRepresentation, &info) == 0) {
-        if (exchangedata(tempPath.fileSystemRepresentation, path.fileSystemRepresentation, FSOPT_NOFOLLOW) == 0) {
-          success = YES;
-        }
-      } else {
-        if (rename(tempPath.fileSystemRepresentation, path.fileSystemRepresentation) == 0) {
-          success = YES;
-        }
-      }
-      if (!success) {
-        XLOG_ERROR(@"Failed archiving snapshots: %s", strerror(errno));
-      }
+  if (!path || ![NSKeyedArchiver archiveRootObject:_snapshots toFile:path]) {
+    if ([self.delegate respondsToSelector:@selector(repository:snapshotsUpdateDidFailWithError:)]) {
+      [self.delegate repository:self snapshotsUpdateDidFailWithError:GCNewError(kGCErrorCode_Generic, @"Failed writing snapshots")];
     }
-  }
-  if (!success && [self.delegate respondsToSelector:@selector(repository:snapshotsUpdateDidFailWithError:)]) {
-    [self.delegate repository:self snapshotsUpdateDidFailWithError:GCNewError(kGCErrorCode_Generic, @"Failed writing snapshots")];
   }
 }
 
