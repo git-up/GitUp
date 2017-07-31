@@ -196,7 +196,11 @@ static NSColor* _separatorColor = nil;
 
   [self updateFont];
   [self.textContainer replaceLayoutManager:[[GILayoutManager alloc] init]];
-
+  
+  // Enable automatic text replacement
+  self.automaticTextReplacementEnabled = YES;
+  
+  // User defaults observing
   [[NSUserDefaults standardUserDefaults] addObserver:self forKeyPath:GICommitMessageViewUserDefaultKey_ShowInvisibleCharacters options:0 context:(__bridge void*)[GICommitMessageView class]];
   [[NSUserDefaults standardUserDefaults] addObserver:self forKeyPath:GICommitMessageViewUserDefaultKey_ShowMargins options:0 context:(__bridge void*)[GICommitMessageView class]];
   [[NSUserDefaults standardUserDefaults] addObserver:self forKeyPath:GIUserDefaultKey_FontSize options:0 context:(__bridge void*)[GICommitMessageView class]];
