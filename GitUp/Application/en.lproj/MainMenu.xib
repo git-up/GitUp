@@ -762,12 +762,12 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="0My-sc-aoR"/>
-                            <menuItem title="Pull Current Branch" keyEquivalent="p" id="SAd-Of-qJk">
+                            <menuItem title="Pull Current Branch" keyEquivalent="l" id="SAd-Of-qJk">
                                 <connections>
                                     <action selector="pullCurrentBranch:" target="-1" id="jwa-zo-piM"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Push Current Branch" keyEquivalent="P" id="Bcb-3R-qZY">
+                            <menuItem title="Push Current Branch" keyEquivalent="p" id="Bcb-3R-qZY">
                                 <connections>
                                     <action selector="pushCurrentBranch:" target="-1" id="eva-SW-zIe"/>
                                 </connections>
