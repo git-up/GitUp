@@ -582,7 +582,9 @@ cleanup:
   CHECK_POSIX_FUNCTION_CALL(goto cleanup, status, == 0);
 
   // Swap temporary copy and original file
-  CALL_POSIX_FUNCTION_GOTO(cleanup, exchangedata, fullPath, tempPath, FSOPT_NOFOLLOW);
+  if (![[NSFileManager defaultManager] swapFileAtPath:@(fullPath) withFileAtPath:@(tempPath)]) {
+    goto cleanup;
+  }
   CALL_POSIX_FUNCTION_GOTO(cleanup, utimes, fullPath, NULL);  // Touch file to make sure any cached information in the index gets invalidated
 
   success = YES;

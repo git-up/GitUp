@@ -17,6 +17,7 @@
 #error This file requires ARC
 #endif
 
+#import <sys/attr.h>
 #import "GCPrivate.h"
 
 @implementation NSFileManager (GCFoundation)
@@ -34,6 +35,22 @@
   }
 
   return pathAttributes != nil;
+}
+
+
+- (BOOL)swapFileAtPath:(NSString*)path1 withFileAtPath:(NSString*)path2
+{
+  NSNumber *swappingSupported = @NO;
+  if (NSURLVolumeSupportsSwapRenamingKey) {
+    [[NSURL fileURLWithPath:path1] getResourceValue:&swappingSupported
+                                             forKey:NSURLVolumeSupportsSwapRenamingKey
+                                              error:NULL];
+  }
+  if (swappingSupported.boolValue) {
+    return renamex_np(path1.fileSystemRepresentation, path2.fileSystemRepresentation, RENAME_SWAP) == 0;
+  } else {
+    return exchangedata(path1.fileSystemRepresentation, path2.fileSystemRepresentation, FSOPT_NOFOLLOW) == 0;
+  }
 }
 
 #if !TARGET_OS_IPHONE
