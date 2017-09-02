@@ -330,6 +330,11 @@ static const void* _associatedObjectDataKey = &_associatedObjectDataKey;
 // We need to retain the underlying commit for later as GINode doesn't retain its commit
 - (void)_setSelectedNode:(GINode*)node display:(BOOL)display scroll:(BOOL)scroll notify:(BOOL)notify {
   XLOG_DEBUG_CHECK(!node.dummy);
+  if (display && _lastSelectedNode) {
+    NSPoint point = [self positionForNode:_lastSelectedNode];
+    [self setNeedsDisplayInRect:SELECTED_NODE_BOUNDS(point.x, point.y)];
+  }
+  _lastSelectedNode = nil;
   if (node != _selectedNode) {
     if (display && _selectedNode) {
       NSPoint point = [self positionForNode:_selectedNode];
@@ -467,7 +472,18 @@ static const void* _associatedObjectDataKey = &_associatedObjectDataKey;
         node = nil;
       }
     }
+
+    GINode* selectedNode = _selectedNode;
+    GINode* lastSelectedNode = _lastSelectedNode;
     [self _setSelectedNode:node display:YES scroll:NO notify:YES];
+    if (event.modifierFlags & NSEventModifierFlagCommand) {
+      if (lastSelectedNode == nil) {
+        _lastSelectedNode = selectedNode;
+      } else {
+        _lastSelectedNode = lastSelectedNode;
+      }
+    }
+
     if (scroll) {
       [self scrollToSelection];
     }
@@ -1690,6 +1706,19 @@ static void _DrawSelectedNode(CGContextRef context, CGFloat x, CGFloat y, GINode
       CGContextFillRect(context, SELECTED_NODE_BOUNDS(x, y));
 #endif
       _DrawSelectedNode(context, x, y, _selectedNode, selectedAttributes1, selectedAttributes2, _dateFormatter, self.window.keyWindow && (self.window.firstResponder == self));
+    }
+  }
+
+  // Draw selected node if any
+  if (_lastSelectedNode) {
+    CGFloat x = CONVERT_X(_lastSelectedNode.x);
+    CGFloat y = CONVERT_Y(offset - _lastSelectedNode.layer.y);
+    if (NSIntersectsRect(SELECTED_NODE_BOUNDS(x, y), dirtyRect)) {
+#if __DEBUG_BOXES__
+      CGContextSetRGBFillColor(context, 1.0, 0.0, 0.0, 0.666);
+      CGContextFillRect(context, SELECTED_NODE_BOUNDS(x, y));
+#endif
+      _DrawSelectedNode(context, x, y, _lastSelectedNode, selectedAttributes1, selectedAttributes2, _dateFormatter, self.window.keyWindow && (self.window.firstResponder == self));
     }
   }
 
