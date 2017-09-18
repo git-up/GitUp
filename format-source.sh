@@ -3,7 +3,7 @@
 # brew install clang-format
 
 CLANG_FORMAT_VERSION=`clang-format -version | awk '{ print $3 }'`
-if [[ "$CLANG_FORMAT_VERSION" != "4.0.0" ]]; then
+if [[ "$CLANG_FORMAT_VERSION" != "5.0.0" ]]; then
   echo "Unsupported clang-format version"
   exit 1
 fi

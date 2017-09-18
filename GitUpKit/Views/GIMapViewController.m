@@ -1003,7 +1003,7 @@ static NSColor* _patternColor = nil;
   if (branch == nil) {
     branch = commit.remoteBranches.firstObject;  // TODO: What if there are multiple remote branches?
   }
-  [self smartMergeCommitOrBranch:(branch ? branch : commit) intoLocalBranch:self.repository.history.HEADBranch withUserMessage:nil];
+  [self smartMergeCommitOrBranch:(branch ? branch : commit)intoLocalBranch:self.repository.history.HEADBranch withUserMessage:nil];
 }
 
 - (IBAction)rebaseOntoSelectedCommit:(id)sender {

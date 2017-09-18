@@ -368,7 +368,7 @@ static NSColor* _separatorColor = nil;
   // Using -setPosition:ofDividerAtIndex: from inside this method confuses Core Animation on 10.8.
   if (kCFCoreFoundationVersionNumber >= kCFCoreFoundationVersionNumber10_9) {
     NSView* view = splitView.subviews.firstObject;
-    [splitView setPosition:(splitView.vertical ? view.frame.size.width : view.frame.size.height) ofDividerAtIndex:0];
+    [splitView setPosition:(splitView.vertical ? view.frame.size.width : view.frame.size.height)ofDividerAtIndex:0];
   } else {
     NSView* view1 = splitView.subviews[0];
     NSView* view2 = splitView.subviews[1];

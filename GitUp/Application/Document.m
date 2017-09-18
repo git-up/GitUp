@@ -2122,7 +2122,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
   [NSApp endSheet:_settingsWindow];
   [_settingsWindow orderOut:nil];
 
-  [_repository setUserInfo:(_indexDiffsButton.state ? @(YES) : @(NO)) forKey:kRepositoryUserInfoKey_IndexDiffs];
+  [_repository setUserInfo:(_indexDiffsButton.state ? @(YES) : @(NO))forKey:kRepositoryUserInfoKey_IndexDiffs];
 }
 
 @end

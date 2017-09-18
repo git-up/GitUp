@@ -104,7 +104,7 @@
   NSData* buffer = [sender.draggingPasteboard dataForType:kPasteboardType];
   const void** pointer = (const void**)buffer.bytes;
   NSMutableArray* array = [[NSMutableArray alloc] init];
-  for (size_t i = 0, count = buffer.length / sizeof(void *); i < count; ++i, ++pointer) {
+  for (size_t i = 0, count = buffer.length / sizeof(void*); i < count; ++i, ++pointer) {
     [array addObject:(__bridge GCDiffDelta*)*pointer];
   }
   return [_controller.delegate diffFilesViewController:_controller didReceiveDeltas:array fromOtherController:sourceController];

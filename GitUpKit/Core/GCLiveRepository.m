@@ -449,7 +449,7 @@ static void _StreamCallback(ConstFSEventStreamRef streamRef, void* clientCallBac
     GCCommitDatabase* database = repository ? [[GCCommitDatabase alloc] initWithRepository:repository
                                                                               databasePath:path
                                                                                    options:(_databaseIndexesDiffs ? kGCCommitDatabaseOptions_IndexDiffs : 0)
-                                                                                     error:&error]
+                                                                                   error:&error]
                                             : nil;
     BOOL success = [database updateWithProgressHandler:handler error:&error];
     database = nil;  // Release and close immediately
@@ -797,7 +797,7 @@ static void _StreamCallback(ConstFSEventStreamRef streamRef, void* clientCallBac
 
   if (!success) {  // In case of error, put a dummy operation on the undo stack since we *must* put something, but pop it at the next runloop iteration
     [[_undoManager prepareWithInvocationTarget:self] _undoOperationWithReason:reason beforeSnapshot:beforeSnapshot afterSnapshot:afterSnapshot checkoutIfNeeded:checkoutIfNeeded ignore:YES];
-    [_undoManager performSelector:(self.undoManager.isRedoing ? @selector(undo) : @selector(redo)) withObject:nil afterDelay:0.0];
+    [_undoManager performSelector:(self.undoManager.isRedoing ? @selector(undo) : @selector(redo))withObject:nil afterDelay:0.0];
     if ([self.delegate respondsToSelector:@selector(repository:undoOperationDidFailWithError:)]) {
       [self.delegate repository:self undoOperationDidFailWithError:error];
     }

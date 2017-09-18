@@ -614,7 +614,7 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
           GCRepository* repository = [[GCRepository alloc] initWithNewLocalRepository:path bare:NO error:&error];
           if (repository) {
             if ([repository addRemoteWithName:@"origin" url:url error:&error]) {
-              [self _openRepositoryWithURL:[NSURL fileURLWithPath:repository.workingDirectoryPath] withCloneMode:(_cloneRecursiveButton.state ? kCloneMode_Recursive : kCloneMode_Default) windowModeID:NSNotFound];
+              [self _openRepositoryWithURL:[NSURL fileURLWithPath:repository.workingDirectoryPath] withCloneMode:(_cloneRecursiveButton.state ? kCloneMode_Recursive : kCloneMode_Default)windowModeID:NSNotFound];
             } else {
               [NSApp presentError:error];
               [[NSFileManager defaultManager] removeItemAtPath:path error:NULL];  // Ignore errors
