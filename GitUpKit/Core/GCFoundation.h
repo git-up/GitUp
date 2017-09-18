@@ -18,6 +18,8 @@
 @interface NSFileManager (GCFoundation)
 - (BOOL)fileExistsAtPath:(NSString*)path followLastSymlink:(BOOL)followLastSymlink;
 
+- (BOOL)swapFileAtPath:(NSString*)path1 withFileAtPath:(NSString*)path2;
+
 #if !TARGET_OS_IPHONE
 
 - (BOOL)moveItemAtPathToTrash:(NSString*)path error:(NSError**)error;

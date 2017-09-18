@@ -502,7 +502,7 @@ static void _StreamCallback(ConstFSEventStreamRef streamRef, void* clientCallBac
     if ([NSKeyedArchiver archiveRootObject:_snapshots toFile:tempPath]) {
       struct stat info;
       if (lstat(path.fileSystemRepresentation, &info) == 0) {
-        if (exchangedata(tempPath.fileSystemRepresentation, path.fileSystemRepresentation, FSOPT_NOFOLLOW) == 0) {
+        if ([[NSFileManager defaultManager] swapFileAtPath:tempPath withFileAtPath:path]) {
           success = YES;
         }
       } else {
