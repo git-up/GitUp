@@ -442,6 +442,9 @@ static inline BOOL _EqualDiffs(git_diff* diff1, git_diff* diff2) {
   GCDiff* gcDiff = nil;
   git_diff* diff = NULL;
 
+  // Make sure filePath lives until the end of scope
+  const char* filePath = GCGitPathFromFileSystemPath(filePattern);
+
   git_diff_options diffOptions = GIT_DIFF_OPTIONS_INIT;
   if (options & kGCDiffOption_IncludeUnmodified) {
     diffOptions.flags |= GIT_DIFF_INCLUDE_UNMODIFIED;
@@ -466,7 +469,6 @@ static inline BOOL _EqualDiffs(git_diff* diff1, git_diff* diff2) {
   }
   if (filePattern) {
     diffOptions.pathspec.count = 1;
-    const char* filePath = GCGitPathFromFileSystemPath(filePattern);
     diffOptions.pathspec.strings = (char**)&filePath;
 
     static NSCharacterSet* set = nil;
