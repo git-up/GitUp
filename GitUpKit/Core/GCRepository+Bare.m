@@ -345,7 +345,7 @@ cleanup:
       parents = [[NSMutableArray alloc] initWithArray:replayParents];
       [parents replaceObjectAtIndex:0 withObject:tipCommit];  // Only replace first parent and preserve others
     }
-    tipCommit = [self replayCommit:replayCommit ontoCommit:tipCommit withAncestorCommit:ancestor updatedMessage:nil updatedParents:(parents ? parents : @[ tipCommit ]) updateCommitter:updateCommitter skipIdentical:skipIdentical conflictHandler:handler error:error];
+    tipCommit = [self replayCommit:replayCommit ontoCommit:tipCommit withAncestorCommit:ancestor updatedMessage:nil updatedParents:(parents ? parents : @[ tipCommit ])updateCommitter:updateCommitter skipIdentical:skipIdentical conflictHandler:handler error:error];
     if (tipCommit == nil) {
       return nil;
     }

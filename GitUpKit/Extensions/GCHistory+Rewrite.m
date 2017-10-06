@@ -241,7 +241,7 @@ typedef NS_ENUM(NSUInteger, ReplayMode) {
                        withInitialMapping:nil
                            usingTransform:transform
                                replayMode:(copyTrees ? kReplayMode_CopyTrees : kReplayMode_ApplyPatches)
-                          conflictHandler:handler
+                               conflictHandler:handler
                                     error:error]) {
     return nil;
   }
@@ -358,7 +358,7 @@ typedef NS_ENUM(NSUInteger, ReplayMode) {
   // Replay descendants from parents onto replayed parent skipping commit
   if (![self _replayDescendantsFromCommit:parentCommit
                                ontoCommit:swappedParentCommit
-                       withInitialMapping:@{ commit : swappedCommit }
+                       withInitialMapping:@{commit : swappedCommit}
                            usingTransform:transform
                                replayMode:kReplayMode_ApplyPatches
                           conflictHandler:handler

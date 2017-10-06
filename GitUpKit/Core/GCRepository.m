@@ -345,7 +345,7 @@ static int _ReferenceForEachCallback(const char* refname, void* payload) {
     XLOG_VERBOSE(@"Executed '%@' hook in %.3f seconds", name, CFAbsoluteTimeGetCurrent() - time);
     if (status != 0) {
       if (error) {
-        NSString* string = [[[NSString alloc] initWithData:(stderrData.length ? stderrData : stdoutData) encoding:NSUTF8StringEncoding] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        NSString* string = [[[NSString alloc] initWithData:(stderrData.length ? stderrData : stdoutData)encoding:NSUTF8StringEncoding] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
         XLOG_DEBUG_CHECK(string);
         NSDictionary* info = @{
           NSLocalizedDescriptionKey : [NSString stringWithFormat:@"Hook '%@' exited with non-zero status (%i)", name, status],
@@ -509,14 +509,14 @@ static int _CredentialsCallback(git_cred** cred, const char* url, const char* us
         success = [repository.delegate repository:repository
             requiresPlainTextAuthenticationForURL:GCURLFromGitURL([NSString stringWithUTF8String:url])
                                              user:(user ? [NSString stringWithUTF8String:user] : nil)
-                                         username:&username
+                                             username:&username
                                          password:&password];
       } else {
         dispatch_sync(dispatch_get_main_queue(), ^{
           success = [repository.delegate repository:repository
               requiresPlainTextAuthenticationForURL:GCURLFromGitURL([NSString stringWithUTF8String:url])
                                                user:(user ? [NSString stringWithUTF8String:user] : nil)
-                                           username:&username
+                                               username:&username
                                            password:&password];
         });
       }
