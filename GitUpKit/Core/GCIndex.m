@@ -17,8 +17,6 @@
 #error This file requires ARC
 #endif
 
-#import <copyfile.h>
-#import <sys/attr.h>
 #import <sys/stat.h>
 
 #import "GCPrivate.h"
@@ -500,13 +498,13 @@ cleanup:
 
 - (BOOL)checkoutLinesInFileToWorkingDirectory:(NSString*)path fromIndex:(GCIndex*)index error:(NSError**)error usingFilter:(GCIndexLineFilter)filter {
   BOOL success = NO;
-  const char* fullPath = [[self absolutePathForFile:path] fileSystemRepresentation];
   int fd = -1;
   GCDiff* diff;
   GCDiffPatch* patch;
 
   // Create temporary path
-  const char* tempPath = self.privateTemporaryFilePath.fileSystemRepresentation;
+  NSString* tempPathString = self.privateTemporaryFilePath;
+  const char* tempPath = tempPathString.fileSystemRepresentation;
   if (!tempPath) {
     GC_SET_GENERIC_ERROR(@"Failed creating temporary path");
     return NO;
@@ -575,18 +573,7 @@ cleanup:
   close(fd);
   fd = -1;
 
-  // Copy file metadata onto the temporary copy
-  copyfile_state_t state = copyfile_state_alloc();
-  int copyStatus = copyfile(fullPath, tempPath, state, COPYFILE_METADATA);
-  copyfile_state_free(state);
-  CHECK_POSIX_FUNCTION_CALL(goto cleanup, copyStatus, == 0);
-
-  // Swap temporary copy and original file
-  int exchangeStatus = GCExchangeFileData(tempPath, fullPath);
-  CHECK_POSIX_FUNCTION_CALL(goto cleanup, exchangeStatus, == 0);
-  CALL_POSIX_FUNCTION_GOTO(cleanup, utimes, fullPath, NULL);  // Touch file to make sure any cached information in the index gets invalidated
-
-  success = YES;
+  success = [NSFileManager.defaultManager replaceItemAtURL:[NSURL fileURLWithPath:[self absolutePathForFile:path]] withItemAtURL:[NSURL fileURLWithPath:tempPathString] backupItemName:nil options:0 resultingItemURL:NULL error:error];
 
 cleanup:
   if (fd >= 0) {
