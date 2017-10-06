@@ -577,13 +577,12 @@ cleanup:
 
   // Copy file metadata onto the temporary copy
   copyfile_state_t state = copyfile_state_alloc();
-  int copyStatus = copyfile(fullPath, tempPath, state, COPYFILE_METADATA);
+  int status = copyfile(fullPath, tempPath, state, COPYFILE_METADATA);
   copyfile_state_free(state);
-  CHECK_POSIX_FUNCTION_CALL(goto cleanup, copyStatus, == 0);
+  CHECK_POSIX_FUNCTION_CALL(goto cleanup, status, == 0);
 
   // Swap temporary copy and original file
-  int exchangeStatus = GCExchangeFileData(tempPath, fullPath);
-  CHECK_POSIX_FUNCTION_CALL(goto cleanup, exchangeStatus, == 0);
+  CALL_POSIX_FUNCTION_GOTO(cleanup, exchangedata, fullPath, tempPath, FSOPT_NOFOLLOW);
   CALL_POSIX_FUNCTION_GOTO(cleanup, utimes, fullPath, NULL);  // Touch file to make sure any cached information in the index gets invalidated
 
   success = YES;
