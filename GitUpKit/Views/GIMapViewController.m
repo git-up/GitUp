@@ -338,6 +338,7 @@ static NSColor* _patternColor = nil;
         item.representedObject = @[ branch, localBranch ];
         [submenu addItem:item];
       }
+      [submenu addItem:[NSMenuItem separatorItem]];
       for (GCHistoryRemoteBranch* remoteBranch in self.repository.history.remoteBranches) {
         item = [[NSMenuItem alloc] initWithTitle:remoteBranch.name action:@selector(_rebaseLocalBranch:) keyEquivalent:@""];
         item.representedObject = @[ branch, remoteBranch ];
