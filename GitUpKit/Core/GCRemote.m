@@ -91,10 +91,6 @@ extern int git_reference__is_tag(const char* ref_name);
   return [self isEqualToRemote:object];
 }
 
-- (NSComparisonResult)nameCompare:(GCRemote*)remote {
-  return [_name localizedStandardCompare:remote->_name];
-}
-
 @end
 
 @implementation GCRepository (GCRemote)
