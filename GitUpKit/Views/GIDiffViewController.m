@@ -53,11 +53,11 @@
   _diffContentsViewController = [[GIDiffContentsViewController alloc] initWithRepository:self.repository];
   _diffContentsViewController.delegate = self;
   _diffContentsViewController.emptyLabel = NSLocalizedString(@"No differences", nil);
-  [_contentsView replaceWithView:_diffContentsViewController.view];
+  [_contentsView gi_replaceWithView:_diffContentsViewController.view];
 
   _diffFilesViewController = [[GIDiffFilesViewController alloc] initWithRepository:self.repository];
   _diffFilesViewController.delegate = self;
-  [_filesView replaceWithView:_diffFilesViewController.view];
+  [_filesView gi_replaceWithView:_diffFilesViewController.view];
 }
 
 - (void)setCommit:(GCCommit*)commit withParentCommit:(GCCommit*)parentCommit {

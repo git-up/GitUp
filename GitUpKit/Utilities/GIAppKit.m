@@ -39,7 +39,7 @@ static NSColor* _separatorColor = nil;
 
 @implementation NSMutableAttributedString (GIAppKit)
 
-- (void)appendString:(NSString*)string withAttributes:(NSDictionary*)attributes {
+- (void)gi_appendString:(NSString*)string withAttributes:(NSDictionary*)attributes {
   if (string.length) {
     NSInteger length = self.length;
     [self replaceCharactersInRange:NSMakeRange(length, 0) withString:string];
@@ -53,7 +53,7 @@ static NSColor* _separatorColor = nil;
 
 @implementation NSAlert (GIAppKit)
 
-+ (void)_alertDidEnd:(NSAlert*)alert returnCode:(NSInteger)returnCode contextInfo:(void*)contextInfo {
++ (void)gi_alertDidEnd:(NSAlert*)alert returnCode:(NSInteger)returnCode contextInfo:(void*)contextInfo {
   void (^handler)(NSInteger) = contextInfo ? CFBridgingRelease(contextInfo) : NULL;
   [alert.window orderOut:nil];  // Dismiss the alert window before the handler might chain another one
   if (handler) {
@@ -61,11 +61,11 @@ static NSColor* _separatorColor = nil;
   }
 }
 
-- (void)beginSheetModalForWindow:(NSWindow*)window withCompletionHandler:(void (^)(NSInteger returnCode))handler {
-  [self beginSheetModalForWindow:window modalDelegate:[NSAlert class] didEndSelector:@selector(_alertDidEnd:returnCode:contextInfo:) contextInfo:(handler ? (void*)CFBridgingRetain(handler) : NULL)];
+- (void)gi_beginSheetModalForWindow:(NSWindow*)window withCompletionHandler:(void (^)(NSInteger returnCode))handler {
+  [self beginSheetModalForWindow:window modalDelegate:[NSAlert class] didEndSelector:@selector(gi_alertDidEnd:returnCode:contextInfo:) contextInfo:(handler ? (void*)CFBridgingRetain(handler) : NULL)];
 }
 
-- (void)setType:(GIAlertType)type {
+- (void)gi_setType:(GIAlertType)type {
   switch (type) {
     case kGIAlertType_Note:
       self.icon = [[NSBundle bundleForClass:[GILayoutManager class]] imageForResource:@"icon_alert_note"];
@@ -84,14 +84,14 @@ static NSColor* _separatorColor = nil;
 
 @implementation NSView (GIAppKit)
 
-- (void)replaceWithView:(NSView*)view {
+- (void)gi_replaceWithView:(NSView*)view {
   XLOG_DEBUG_CHECK(self.superview);
   view.frame = self.frame;
   view.autoresizingMask = self.autoresizingMask;
   [self.superview replaceSubview:self with:view];
 }
 
-- (NSImage*)takeSnapshot {
+- (NSImage*)gi_takeSnapshot {
   NSBitmapImageRep* rep = [self bitmapImageRepForCachingDisplayInRect:self.bounds];
   [self cacheDisplayInRect:self.bounds toBitmapImageRep:rep];
   NSImage* image = [[NSImage alloc] initWithSize:rep.size];
@@ -103,20 +103,20 @@ static NSColor* _separatorColor = nil;
 
 @implementation NSMenu (GIAppKit)
 
-- (NSMenuItem*)addItemWithTitle:(NSString*)title block:(dispatch_block_t)block {
-  return [self addItemWithTitle:title keyEquivalent:0 modifierMask:0 block:block];
+- (NSMenuItem*)gi_addItemWithTitle:(NSString*)title block:(dispatch_block_t)block {
+  return [self gi_addItemWithTitle:title keyEquivalent:0 modifierMask:0 block:block];
 }
 
-- (void)_blockAction:(NSMenuItem*)sender {
+- (void)gi_blockAction:(NSMenuItem*)sender {
   dispatch_block_t block = sender.representedObject;
   block();
 }
 
-- (NSMenuItem*)addItemWithTitle:(NSString*)title keyEquivalent:(unichar)code modifierMask:(NSUInteger)mask block:(dispatch_block_t)block {
+- (NSMenuItem*)gi_addItemWithTitle:(NSString*)title keyEquivalent:(unichar)code modifierMask:(NSUInteger)mask block:(dispatch_block_t)block {
   NSMenuItem* item = [[NSMenuItem alloc] initWithTitle:title action:NULL keyEquivalent:(code ? [NSString stringWithCharacters:&code length:1] : @"")];
   if (block) {
     item.target = self;
-    item.action = @selector(_blockAction:);
+    item.action = @selector(gi_blockAction:);
     item.representedObject = [block copy];
   }
   item.keyEquivalentModifierMask = mask;

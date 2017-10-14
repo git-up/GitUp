@@ -69,18 +69,18 @@
   _filesViewControllerNew.delegate = self;
   _filesViewControllerNew.allowsMultipleSelection = YES;
   _filesViewControllerNew.emptyLabel = NSLocalizedString(@"No changes in commit", nil);
-  [_filesViewNew replaceWithView:_filesViewControllerNew.view];
+  [_filesViewNew gi_replaceWithView:_filesViewControllerNew.view];
 
   _filesViewControllerOld = [[GIDiffFilesViewController alloc] initWithRepository:self.repository];
   _filesViewControllerOld.delegate = self;
   _filesViewControllerOld.allowsMultipleSelection = YES;
   _filesViewControllerOld.emptyLabel = NSLocalizedString(@"No changes in commit", nil);
-  [_filesViewOld replaceWithView:_filesViewControllerOld.view];
+  [_filesViewOld gi_replaceWithView:_filesViewControllerOld.view];
 
   _diffContentsViewController = [[GIDiffContentsViewController alloc] initWithRepository:self.repository];
   _diffContentsViewController.delegate = self;
   _diffContentsViewController.emptyLabel = NSLocalizedString(@"No file selected", nil);
-  [_diffContentsView replaceWithView:_diffContentsViewController.view];
+  [_diffContentsView gi_replaceWithView:_diffContentsViewController.view];
 }
 
 - (void)viewWillShow {

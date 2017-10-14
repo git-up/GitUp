@@ -54,41 +54,41 @@
   NSMutableAttributedString* string = [[NSMutableAttributedString alloc] init];
   [string beginEditing];
   if (_showsBranchInfo) {
-    [string appendString:NSLocalizedString(@"Committing", nil) withAttributes:@{NSFontAttributeName : [NSFont systemFontOfSize:fontSize]}];
+    [string gi_appendString:NSLocalizedString(@"Committing", nil) withAttributes:@{NSFontAttributeName : [NSFont systemFontOfSize:fontSize]}];
     switch (self.repository.state) {
       case kGCRepositoryState_Merge:
-        [string appendString:NSLocalizedString(@" merge", nil) withAttributes:@{NSFontAttributeName : [NSFont boldSystemFontOfSize:fontSize]}];
+        [string gi_appendString:NSLocalizedString(@" merge", nil) withAttributes:@{NSFontAttributeName : [NSFont boldSystemFontOfSize:fontSize]}];
         break;
 
       case kGCRepositoryState_Revert:
-        [string appendString:NSLocalizedString(@" revert", nil) withAttributes:@{NSFontAttributeName : [NSFont boldSystemFontOfSize:fontSize]}];
+        [string gi_appendString:NSLocalizedString(@" revert", nil) withAttributes:@{NSFontAttributeName : [NSFont boldSystemFontOfSize:fontSize]}];
         break;
 
       case kGCRepositoryState_CherryPick:
-        [string appendString:NSLocalizedString(@" cherry-pick", nil) withAttributes:@{NSFontAttributeName : [NSFont boldSystemFontOfSize:fontSize]}];
+        [string gi_appendString:NSLocalizedString(@" cherry-pick", nil) withAttributes:@{NSFontAttributeName : [NSFont boldSystemFontOfSize:fontSize]}];
         break;
 
       case kGCRepositoryState_Rebase:
       case kGCRepositoryState_RebaseInteractive:
       case kGCRepositoryState_RebaseMerge:
-        [string appendString:NSLocalizedString(@" rebase", nil) withAttributes:@{NSFontAttributeName : [NSFont boldSystemFontOfSize:fontSize]}];
+        [string gi_appendString:NSLocalizedString(@" rebase", nil) withAttributes:@{NSFontAttributeName : [NSFont boldSystemFontOfSize:fontSize]}];
         break;
 
       default:
         break;
     }
-    [string appendString:NSLocalizedString(@" as ", nil) withAttributes:@{NSFontAttributeName : [NSFont systemFontOfSize:fontSize]}];
-    [string appendString:user withAttributes:@{NSFontAttributeName : [NSFont boldSystemFontOfSize:fontSize]}];
+    [string gi_appendString:NSLocalizedString(@" as ", nil) withAttributes:@{NSFontAttributeName : [NSFont systemFontOfSize:fontSize]}];
+    [string gi_appendString:user withAttributes:@{NSFontAttributeName : [NSFont boldSystemFontOfSize:fontSize]}];
     if (branch) {
-      [string appendString:NSLocalizedString(@" on branch ", nil) withAttributes:@{NSFontAttributeName : [NSFont systemFontOfSize:fontSize]}];
-      [string appendString:branch.name withAttributes:@{NSFontAttributeName : [NSFont boldSystemFontOfSize:fontSize]}];
+      [string gi_appendString:NSLocalizedString(@" on branch ", nil) withAttributes:@{NSFontAttributeName : [NSFont systemFontOfSize:fontSize]}];
+      [string gi_appendString:branch.name withAttributes:@{NSFontAttributeName : [NSFont boldSystemFontOfSize:fontSize]}];
     } else {
-      [string appendString:NSLocalizedString(@" on ", nil) withAttributes:@{NSFontAttributeName : [NSFont systemFontOfSize:fontSize]}];
-      [string appendString:NSLocalizedString(@"detached HEAD", nil) withAttributes:@{NSFontAttributeName : [NSFont boldSystemFontOfSize:fontSize]}];
+      [string gi_appendString:NSLocalizedString(@" on ", nil) withAttributes:@{NSFontAttributeName : [NSFont systemFontOfSize:fontSize]}];
+      [string gi_appendString:NSLocalizedString(@"detached HEAD", nil) withAttributes:@{NSFontAttributeName : [NSFont boldSystemFontOfSize:fontSize]}];
     }
   } else {
-    [string appendString:NSLocalizedString(@"Committing as ", nil) withAttributes:@{NSFontAttributeName : [NSFont systemFontOfSize:fontSize]}];
-    [string appendString:user withAttributes:@{NSFontAttributeName : [NSFont boldSystemFontOfSize:fontSize]}];
+    [string gi_appendString:NSLocalizedString(@"Committing as ", nil) withAttributes:@{NSFontAttributeName : [NSFont systemFontOfSize:fontSize]}];
+    [string gi_appendString:user withAttributes:@{NSFontAttributeName : [NSFont boldSystemFontOfSize:fontSize]}];
   }
   [string setAlignment:NSCenterTextAlignment range:NSMakeRange(0, string.length)];
   [string endEditing];

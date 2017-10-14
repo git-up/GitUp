@@ -81,11 +81,11 @@
   _diffContentsViewController = [[GIDiffContentsViewController alloc] initWithRepository:self.repository];
   _diffContentsViewController.delegate = self;
   _diffContentsViewController.emptyLabel = NSLocalizedString(@"No differences", nil);
-  [_contentsView replaceWithView:_diffContentsViewController.view];
+  [_contentsView gi_replaceWithView:_diffContentsViewController.view];
 
   _diffFilesViewController = [[GIDiffFilesViewController alloc] initWithRepository:self.repository];
   _diffFilesViewController.delegate = self;
-  [_filesView replaceWithView:_diffFilesViewController.view];
+  [_filesView gi_replaceWithView:_diffFilesViewController.view];
 
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_splitViewDidResizeSubviews:) name:NSSplitViewDidResizeSubviewsNotification object:_mainSplitView];
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_splitViewDidResizeSubviews:) name:NSSplitViewDidResizeSubviewsNotification object:_infoSplitView];
@@ -153,18 +153,18 @@ static NSString* _CleanUpCommitMessage(NSString* message) {
       CGFloat authorFontSize = _authorTextField.font.pointSize;
       NSMutableAttributedString* author = [[NSMutableAttributedString alloc] init];
       [author beginEditing];
-      [author appendString:_commit.authorName withAttributes:@{NSFontAttributeName : [NSFont boldSystemFontOfSize:authorFontSize]}];
-      [author appendString:@" " withAttributes:@{NSFontAttributeName : [NSFont systemFontOfSize:authorFontSize]}];
-      [author appendString:_commit.authorEmail withAttributes:nil];
+      [author gi_appendString:_commit.authorName withAttributes:@{NSFontAttributeName : [NSFont boldSystemFontOfSize:authorFontSize]}];
+      [author gi_appendString:@" " withAttributes:@{NSFontAttributeName : [NSFont systemFontOfSize:authorFontSize]}];
+      [author gi_appendString:_commit.authorEmail withAttributes:nil];
       [author endEditing];
       _authorTextField.attributedStringValue = author;
 
       CGFloat committerFontSize = _committerTextField.font.pointSize;
       NSMutableAttributedString* committer = [[NSMutableAttributedString alloc] init];
       [committer beginEditing];
-      [committer appendString:_commit.committerName withAttributes:@{NSFontAttributeName : [NSFont boldSystemFontOfSize:committerFontSize]}];
-      [committer appendString:@" " withAttributes:@{NSFontAttributeName : [NSFont systemFontOfSize:committerFontSize]}];
-      [committer appendString:_commit.committerEmail withAttributes:nil];
+      [committer gi_appendString:_commit.committerName withAttributes:@{NSFontAttributeName : [NSFont boldSystemFontOfSize:committerFontSize]}];
+      [committer gi_appendString:@" " withAttributes:@{NSFontAttributeName : [NSFont systemFontOfSize:committerFontSize]}];
+      [committer gi_appendString:_commit.committerEmail withAttributes:nil];
       [committer endEditing];
       _committerTextField.attributedStringValue = committer;
 
@@ -211,12 +211,12 @@ static NSString* _CleanUpCommitMessage(NSString* message) {
   [menu addItem:[NSMenuItem separatorItem]];
 
   if (GC_FILE_MODE_IS_FILE(delta.newFile.mode)) {
-    [menu addItemWithTitle:NSLocalizedString(@"Restore File to This Version…", nil)
+    [menu gi_addItemWithTitle:NSLocalizedString(@"Restore File to This Version…", nil)
                      block:^{
                        [self restoreFile:delta.canonicalPath toCommit:_commit];
                      }];
   } else {
-    [menu addItemWithTitle:NSLocalizedString(@"Restore File to This Version…", nil) block:NULL];
+    [menu gi_addItemWithTitle:NSLocalizedString(@"Restore File to This Version…", nil) block:NULL];
   }
 
   return menu;
