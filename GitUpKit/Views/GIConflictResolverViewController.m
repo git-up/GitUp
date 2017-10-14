@@ -48,13 +48,13 @@
   _diffContentsViewController.delegate = self;
   _diffContentsViewController.showsUntrackedAsAdded = YES;
   _diffContentsViewController.emptyLabel = NSLocalizedString(@"No changes in working directory", nil);
-  [_contentsView replaceWithView:_diffContentsViewController.view];
+  [_contentsView gi_replaceWithView:_diffContentsViewController.view];
 
   _diffFilesViewController = [[GIDiffFilesViewController alloc] initWithRepository:self.repository];
   _diffFilesViewController.delegate = self;
   _diffFilesViewController.showsUntrackedAsAdded = YES;
   _diffFilesViewController.emptyLabel = NSLocalizedString(@"No changes in working directory", nil);
-  [_filesView replaceWithView:_diffFilesViewController.view];
+  [_filesView gi_replaceWithView:_diffFilesViewController.view];
 }
 
 - (void)viewWillShow {

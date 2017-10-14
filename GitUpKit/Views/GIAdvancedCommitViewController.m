@@ -54,18 +54,18 @@
   _workdirFilesViewController.delegate = self;
   _workdirFilesViewController.allowsMultipleSelection = YES;
   _workdirFilesViewController.emptyLabel = NSLocalizedString(@"No changes in working directory", nil);
-  [_workdirFilesView replaceWithView:_workdirFilesViewController.view];
+  [_workdirFilesView gi_replaceWithView:_workdirFilesViewController.view];
 
   _indexFilesViewController = [[GIDiffFilesViewController alloc] initWithRepository:self.repository];
   _indexFilesViewController.delegate = self;
   _indexFilesViewController.allowsMultipleSelection = YES;
   _indexFilesViewController.emptyLabel = NSLocalizedString(@"No changes in index", nil);
-  [_indexFilesView replaceWithView:_indexFilesViewController.view];
+  [_indexFilesView gi_replaceWithView:_indexFilesViewController.view];
 
   _diffContentsViewController = [[GIDiffContentsViewController alloc] initWithRepository:self.repository];
   _diffContentsViewController.delegate = self;
   _diffContentsViewController.emptyLabel = NSLocalizedString(@"No file selected", nil);
-  [_diffContentsView replaceWithView:_diffContentsViewController.view];
+  [_diffContentsView gi_replaceWithView:_diffContentsViewController.view];
 
   self.messageTextView.string = @"";
 }
@@ -501,13 +501,13 @@
 
     if (GC_FILE_MODE_IS_FILE(delta.oldFile.mode) || GC_FILE_MODE_IS_FILE(delta.newFile.mode)) {
       if (delta.change == kGCFileDiffChange_Untracked) {
-        [menu addItemWithTitle:NSLocalizedString(@"Delete File…", nil)
+        [menu gi_addItemWithTitle:NSLocalizedString(@"Delete File…", nil)
                          block:^{
                            [self deleteUntrackedFile:delta.canonicalPath];
                          }];
       } else {
         if ([controller getSelectedLinesForDelta:delta oldLines:NULL newLines:NULL]) {
-          [menu addItemWithTitle:NSLocalizedString(@"Discard Line Changes…", nil)
+          [menu gi_addItemWithTitle:NSLocalizedString(@"Discard Line Changes…", nil)
                            block:^{
                              NSIndexSet* oldLines;
                              NSIndexSet* newLines;
@@ -515,14 +515,14 @@
                              [self discardSelectedChangesForFile:delta.canonicalPath oldLines:oldLines newLines:newLines resetIndex:NO];
                            }];
         } else {
-          [menu addItemWithTitle:NSLocalizedString(@"Discard File Changes…", nil)
+          [menu gi_addItemWithTitle:NSLocalizedString(@"Discard File Changes…", nil)
                            block:^{
                              [self discardAllChangesForFile:delta.canonicalPath resetIndex:NO];
                            }];
         }
       }
     } else if (delta.submodule) {
-      [menu addItemWithTitle:NSLocalizedString(@"Discard Submodule Changes…", nil)
+      [menu gi_addItemWithTitle:NSLocalizedString(@"Discard Submodule Changes…", nil)
                        block:^{
                          [self discardSubmoduleAtPath:delta.canonicalPath resetIndex:NO];
                        }];

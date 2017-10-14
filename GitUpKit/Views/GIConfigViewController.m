@@ -239,9 +239,9 @@ static NSMutableDictionary* _patternHelp = nil;
       break;
   }
   NSMutableAttributedString* string = [[NSMutableAttributedString alloc] init];
-  [string appendString:option.variable withAttributes:_optionAttributes];
-  [string appendString:@" = " withAttributes:_separatorAttributes];
-  [string appendString:option.value withAttributes:_valueAttributes];
+  [string gi_appendString:option.variable withAttributes:_optionAttributes];
+  [string gi_appendString:@" = " withAttributes:_separatorAttributes];
+  [string gi_appendString:option.value withAttributes:_valueAttributes];
   view.optionTextField.attributedStringValue = string;
   view.helpTextField.attributedStringValue = [[NSAttributedString alloc] initWithString:[self.class helpForVariable:option.variable] attributes:_helpAttributes];
   return view;

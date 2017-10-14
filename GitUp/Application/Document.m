@@ -305,7 +305,7 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
 
   _mapViewController = [[GIMapViewController alloc] initWithRepository:_repository];
   _mapViewController.delegate = self;
-  [_mapControllerView replaceWithView:_mapViewController.view];
+  [_mapControllerView gi_replaceWithView:_mapViewController.view];
   _mapView.frame = _mapContainerView.bounds;
   [_mapContainerView addSubview:_mapView];
   XLOG_DEBUG_CHECK(_mapContainerView.subviews.firstObject == _mapView);
@@ -314,24 +314,24 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
   _tagsViewController = [[GICommitListViewController alloc] initWithRepository:_repository];
   _tagsViewController.delegate = self;
   _tagsViewController.emptyLabel = NSLocalizedString(@"No Tags", nil);
-  [_tagsControllerView replaceWithView:_tagsViewController.view];
+  [_tagsControllerView gi_replaceWithView:_tagsViewController.view];
 
   _snapshotListViewController = [[GISnapshotListViewController alloc] initWithRepository:_repository];
   _snapshotListViewController.delegate = self;
-  [_snapshotsControllerView replaceWithView:_snapshotListViewController.view];
+  [_snapshotsControllerView gi_replaceWithView:_snapshotListViewController.view];
 
   _unifiedReflogViewController = [[GIUnifiedReflogViewController alloc] initWithRepository:_repository];
   _unifiedReflogViewController.delegate = self;
-  [_reflogControllerView replaceWithView:_unifiedReflogViewController.view];
+  [_reflogControllerView gi_replaceWithView:_unifiedReflogViewController.view];
 
   _ancestorsViewController = [[GICommitListViewController alloc] initWithRepository:_repository];
   _ancestorsViewController.delegate = self;
-  [_ancestorsControllerView replaceWithView:_ancestorsViewController.view];
+  [_ancestorsControllerView gi_replaceWithView:_ancestorsViewController.view];
 
   _searchResultsViewController = [[GICommitListViewController alloc] initWithRepository:_repository];
   _searchResultsViewController.delegate = self;
   _searchResultsViewController.emptyLabel = NSLocalizedString(@"No Results", nil);
-  [_searchControllerView replaceWithView:_searchResultsViewController.view];
+  [_searchControllerView gi_replaceWithView:_searchResultsViewController.view];
 
   _quickViewController = [[GIQuickViewController alloc] initWithRepository:_repository];
   NSTabViewItem* quickItem = [_mainTabView tabViewItemAtIndex:[_mainTabView indexOfTabViewItemWithIdentifier:kWindowModeString_Map_QuickView]];
@@ -343,19 +343,19 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
 
   _commitRewriterViewController = [[GICommitRewriterViewController alloc] initWithRepository:_repository];
   _commitRewriterViewController.delegate = self;
-  [_rewriteControllerView replaceWithView:_commitRewriterViewController.view];
+  [_rewriteControllerView gi_replaceWithView:_commitRewriterViewController.view];
   NSTabViewItem* rewriteItem = [_mainTabView tabViewItemAtIndex:[_mainTabView indexOfTabViewItemWithIdentifier:kWindowModeString_Map_Rewrite]];
   rewriteItem.view = _rewriteView;
 
   _commitSplitterViewController = [[GICommitSplitterViewController alloc] initWithRepository:_repository];
   _commitSplitterViewController.delegate = self;
-  [_splitControllerView replaceWithView:_commitSplitterViewController.view];
+  [_splitControllerView gi_replaceWithView:_commitSplitterViewController.view];
   NSTabViewItem* splitItem = [_mainTabView tabViewItemAtIndex:[_mainTabView indexOfTabViewItemWithIdentifier:kWindowModeString_Map_Split]];
   splitItem.view = _splitView;
 
   _conflictResolverViewController = [[GIConflictResolverViewController alloc] initWithRepository:_repository];
   _conflictResolverViewController.delegate = self;
-  [_resolveControllerView replaceWithView:_conflictResolverViewController.view];
+  [_resolveControllerView gi_replaceWithView:_conflictResolverViewController.view];
   NSTabViewItem* resolveItem = [_mainTabView tabViewItemAtIndex:[_mainTabView indexOfTabViewItemWithIdentifier:kWindowModeString_Map_Resolve]];
   resolveItem.view = _resolveView;
 
@@ -414,8 +414,8 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
                                    alternateButton:nil
                                        otherButton:nil
                          informativeTextWithFormat:NSLocalizedString(@"If using an SSH remote, make sure you have added your key to the ssh-agent, then try again.", nil)];
-    alert.type = kGIAlertType_Stop;
-    [alert beginSheetModalForWindow:_mainWindow withCompletionHandler:NULL];
+    [alert gi_setType:kGIAlertType_Stop];
+    [alert gi_beginSheetModalForWindow:_mainWindow withCompletionHandler:NULL];
     return NO;
   }
 
@@ -558,9 +558,9 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
     if (![_repository checkAllSubmodulesInitialized:YES error:&error]) {
       if ([error.domain isEqualToString:GCErrorDomain] && (error.code == kGCErrorCode_SubmoduleUninitialized)) {
         NSAlert* alert = [NSAlert alertWithMessageText:NSLocalizedString(@"Do you want to initialize submodules?", nil) defaultButton:NSLocalizedString(@"Initialize", nil) alternateButton:NSLocalizedString(@"Cancel", nil) otherButton:nil informativeTextWithFormat:@"One or more submodules in this repository are uninitialized."];
-        alert.type = kGIAlertType_Caution;
+        [alert gi_setType:kGIAlertType_Caution];
         alert.showsSuppressionButton = YES;
-        [alert beginSheetModalForWindow:_mainWindow
+        [alert gi_beginSheetModalForWindow:_mainWindow
                   withCompletionHandler:^(NSInteger returnCode) {
 
                     if (alert.suppressionButton.state) {
@@ -660,10 +660,10 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
         CGFloat fontSize = _infoTextField1.font.pointSize;
         NSMutableAttributedString* string = [[NSMutableAttributedString alloc] init];
         [string beginEditing];
-        [string appendString:NSLocalizedString(@"On branch ", nil) withAttributes:@{NSFontAttributeName : [NSFont systemFontOfSize:fontSize]}];
-        [string appendString:branch.name withAttributes:@{NSFontAttributeName : [NSFont boldSystemFontOfSize:fontSize]}];
-        [string appendString:NSLocalizedString(@" • tracking upstream ", nil) withAttributes:@{NSFontAttributeName : [NSFont systemFontOfSize:fontSize]}];
-        [string appendString:upstream.name withAttributes:@{NSFontAttributeName : [NSFont boldSystemFontOfSize:fontSize]}];
+        [string gi_appendString:NSLocalizedString(@"On branch ", nil) withAttributes:@{NSFontAttributeName : [NSFont systemFontOfSize:fontSize]}];
+        [string gi_appendString:branch.name withAttributes:@{NSFontAttributeName : [NSFont boldSystemFontOfSize:fontSize]}];
+        [string gi_appendString:NSLocalizedString(@" • tracking upstream ", nil) withAttributes:@{NSFontAttributeName : [NSFont systemFontOfSize:fontSize]}];
+        [string gi_appendString:upstream.name withAttributes:@{NSFontAttributeName : [NSFont boldSystemFontOfSize:fontSize]}];
         [string setAlignment:NSCenterTextAlignment range:NSMakeRange(0, string.length)];
         [string endEditing];
         _infoTextField1.attributedStringValue = string;
@@ -707,8 +707,8 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
         CGFloat fontSize = _infoTextField1.font.pointSize;
         NSMutableAttributedString* string = [[NSMutableAttributedString alloc] init];
         [string beginEditing];
-        [string appendString:NSLocalizedString(@"On branch ", nil) withAttributes:@{NSFontAttributeName : [NSFont systemFontOfSize:fontSize]}];
-        [string appendString:branch.name withAttributes:@{NSFontAttributeName : [NSFont boldSystemFontOfSize:fontSize]}];
+        [string gi_appendString:NSLocalizedString(@"On branch ", nil) withAttributes:@{NSFontAttributeName : [NSFont systemFontOfSize:fontSize]}];
+        [string gi_appendString:branch.name withAttributes:@{NSFontAttributeName : [NSFont boldSystemFontOfSize:fontSize]}];
         [string setAlignment:NSCenterTextAlignment range:NSMakeRange(0, string.length)];
         [string endEditing];
         _infoTextField1.attributedStringValue = string;
@@ -885,7 +885,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
                                    alternateButton:NSLocalizedString(@"Cancel", nil)
                                        otherButton:nil
                          informativeTextWithFormat:NSLocalizedString(@"The repository \"%@\" is still being prepared for search. This can take up to a few minutes for large repositories.", nil), self.displayName];
-    alert.type = kGIAlertType_Caution;
+    [alert gi_setType:kGIAlertType_Caution];
     if ([alert runModal] == NSAlertAlternateReturn) {
       return NO;
     }
@@ -1009,13 +1009,13 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
   if (animationInFlight) {
     transitionBlock();
   } else if (appearing) {
-    _fixedSnapshotLayer.contents = [_contentView takeSnapshot];
+    _fixedSnapshotLayer.contents = [_contentView gi_takeSnapshot];
     transitionBlock();
-    _animatingSnapshotLayer.contents = [_contentView takeSnapshot];
+    _animatingSnapshotLayer.contents = [_contentView gi_takeSnapshot];
   } else {
-    _animatingSnapshotLayer.contents = [_contentView takeSnapshot];
+    _animatingSnapshotLayer.contents = [_contentView gi_takeSnapshot];
     transitionBlock();
-    _fixedSnapshotLayer.contents = [_contentView takeSnapshot];
+    _fixedSnapshotLayer.contents = [_contentView gi_takeSnapshot];
   }
 
   [_contentView.layer addSublayer:_fixedSnapshotLayer];
@@ -1792,13 +1792,13 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 - (IBAction)resetHard:(id)sender {
   _untrackedButton.state = NSOffState;
   NSAlert* alert = [[NSAlert alloc] init];
-  alert.type = kGIAlertType_Stop;
+  [alert gi_setType:kGIAlertType_Stop];
   alert.messageText = NSLocalizedString(@"Are you sure you want to reset the index and working directory to the current checkout?", nil);
   alert.informativeText = NSLocalizedString(@"Any operation in progress (merge, rebase, etc...) will be aborted, and any uncommitted change, including in submodules, will be discarded.\n\nThis action cannot be undone.", nil);
   alert.accessoryView = _resetView;
   [alert addButtonWithTitle:NSLocalizedString(@"Reset", nil)];
   [alert addButtonWithTitle:NSLocalizedString(@"Cancel", nil)];
-  [alert beginSheetModalForWindow:_mainWindow
+  [alert gi_beginSheetModalForWindow:_mainWindow
             withCompletionHandler:^(NSInteger returnCode) {
 
               if (returnCode == NSAlertFirstButtonReturn) {

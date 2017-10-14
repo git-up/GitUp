@@ -27,22 +27,22 @@ extern NSString* const GICommitMessageViewUserDefaultKey_ShowMargins;
 extern NSString* const GICommitMessageViewUserDefaultKey_EnableSpellChecking;
 
 @interface NSMutableAttributedString (GIAppKit)
-- (void)appendString:(NSString*)string withAttributes:(NSDictionary*)attributes;
+- (void)gi_appendString:(NSString*)string withAttributes:(NSDictionary*)attributes;
 @end
 
 @interface NSAlert (GIAppKit)
-- (void)beginSheetModalForWindow:(NSWindow*)window withCompletionHandler:(void (^)(NSInteger returnCode))handler;  // AppKit version is 10.9+ only
-- (void)setType:(GIAlertType)type;  // Set the alert icon
+- (void)gi_beginSheetModalForWindow:(NSWindow*)window withCompletionHandler:(void (^)(NSInteger returnCode))handler;  // AppKit version is 10.9+ only
+- (void)gi_setType:(GIAlertType)type;  // Set the alert icon
 @end
 
 @interface NSView (GIAppKit)
-- (void)replaceWithView:(NSView*)view;  // Preserves frame and autoresizing mask
-- (NSImage*)takeSnapshot;
+- (void)gi_replaceWithView:(NSView*)view;  // Preserves frame and autoresizing mask
+- (NSImage*)gi_takeSnapshot;
 @end
 
 @interface NSMenu (GIAppKit)
-- (NSMenuItem*)addItemWithTitle:(NSString*)title block:(dispatch_block_t)block;
-- (NSMenuItem*)addItemWithTitle:(NSString*)title keyEquivalent:(unichar)code modifierMask:(NSUInteger)mask block:(dispatch_block_t)block;  // Pass a NULL block to add a disabled item
+- (NSMenuItem*)gi_addItemWithTitle:(NSString*)title block:(dispatch_block_t)block;
+- (NSMenuItem*)gi_addItemWithTitle:(NSString*)title keyEquivalent:(unichar)code modifierMask:(NSUInteger)mask block:(dispatch_block_t)block;  // Pass a NULL block to add a disabled item
 @end
 
 @interface GIFlippedView : NSView

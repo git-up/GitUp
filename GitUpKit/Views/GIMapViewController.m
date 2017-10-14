@@ -878,7 +878,7 @@ static NSColor* _patternColor = nil;
                                      alternateButton:NSLocalizedString(@"Cancel", nil)
                                          otherButton:NSLocalizedString(@"Checkout Commit", nil)
                            informativeTextWithFormat:NSLocalizedString(@"The selected commit is also the tip of the remote branch \"%@\".", nil), branch.name];
-      alert.type = kGIAlertType_Note;
+      [alert gi_setType:kGIAlertType_Note];
       [self presentAlert:alert
           completionHandler:^(NSInteger returnCode) {
 
@@ -951,7 +951,7 @@ static NSColor* _patternColor = nil;
                                    alternateButton:NSLocalizedString(@"Cancel", nil)
                                        otherButton:NSLocalizedString(@"Delete Commit", nil)
                          informativeTextWithFormat:NSLocalizedString(@"The selected commit is also the tip of the local branch \"%@\".", nil), localBranch.name];
-    alert.type = kGIAlertType_Note;
+    [alert gi_setType:kGIAlertType_Note];
     [self presentAlert:alert
         completionHandler:^(NSInteger returnCode) {
 

@@ -76,7 +76,7 @@
 
   _diffContentsViewController = [[GIDiffContentsViewController alloc] initWithRepository:self.repository];
   _diffContentsViewController.emptyLabel = NSLocalizedString(@"No differences", nil);
-  [_diffView replaceWithView:_diffContentsViewController.view];
+  [_diffView gi_replaceWithView:_diffContentsViewController.view];
 
   _cachedCellView = [_tableView makeViewWithIdentifier:[_tableView.tableColumns[0] identifier] owner:self];
 

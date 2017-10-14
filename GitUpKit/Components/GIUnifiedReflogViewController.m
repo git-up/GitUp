@@ -141,11 +141,11 @@ static NSAttributedString* _AttributedStringFromReflogEntry(GCReflogEntry* entry
       message = [message substringFromIndex:(sizeof(kGCReflogCustomPrefix) - 1)];
     }
     GCReference* reference = entry.references[i];
-    [string appendString:reference.name withAttributes:@{NSFontAttributeName : [NSFont boldSystemFontOfSize:fontSize]}];
-    [string appendString:@" • " withAttributes:@{NSFontAttributeName : [NSFont systemFontOfSize:fontSize]}];
-    [string appendString:message withAttributes:nil];
+    [string gi_appendString:reference.name withAttributes:@{NSFontAttributeName : [NSFont boldSystemFontOfSize:fontSize]}];
+    [string gi_appendString:@" • " withAttributes:@{NSFontAttributeName : [NSFont systemFontOfSize:fontSize]}];
+    [string gi_appendString:message withAttributes:nil];
     if (i < count - 1) {
-      [string appendString:@"\n" withAttributes:nil];
+      [string gi_appendString:@"\n" withAttributes:nil];
     }
   }
   [string addAttribute:NSParagraphStyleAttributeName value:style range:NSMakeRange(0, string.length)];
@@ -271,7 +271,7 @@ static NSString* _StringFromActions(GCReflogActions actions) {
   }
   _nameTextField.stringValue = @"";
   NSAlert* alert = [[NSAlert alloc] init];
-  alert.type = kGIAlertType_Note;
+  [alert gi_setType:kGIAlertType_Note];
   alert.messageText = NSLocalizedString(@"Create New Branch for Reflog Entry", nil);
   alert.informativeText = NSLocalizedString(@"This will create and checkout a new local branch at the commit of the selected reflog entry, making it reachable again.", nil);
   alert.accessoryView = _restoreView;

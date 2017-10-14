@@ -387,7 +387,7 @@
                                      alternateButton:NSLocalizedString(@"Not Now", nil)
                                          otherButton:nil
                            informativeTextWithFormat:NSLocalizedString(@"GitUp can install a companion command line tool at \"%@\" which lets you control GitUp from the terminal.\n\nYou can install it at any time from the GitUp menu.", nil), kToolInstallPath];
-      alert.type = kGIAlertType_Note;
+      [alert gi_setType:kGIAlertType_Note];
       alert.showsSuppressionButton = YES;
       if ([alert runModal] == NSAlertDefaultReturn) {
         [self installTool:nil];
@@ -684,7 +684,7 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
                                          alternateButton:nil
                                              otherButton:nil
                                informativeTextWithFormat:NSLocalizedString(@"The tool has been installed at \"%@\".\nRun \"gitup help\" in Terminal to learn more.", nil), kToolInstallPath];
-          alert.type = kGIAlertType_Note;
+          [alert gi_setType:kGIAlertType_Note];
           [alert runModal];
         } else {
           status = -1;  // Code doesn't matter
@@ -770,7 +770,7 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
                                    alternateButton:nil
                                        otherButton:nil
                          informativeTextWithFormat:NSLocalizedString(@"The update will download automatically in the background and be installed when you quit GitUp.", nil)];
-    alert.type = kGIAlertType_Note;
+    [alert gi_setType:kGIAlertType_Note];
     [alert runModal];
   }
 }
@@ -784,7 +784,7 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
                                    alternateButton:nil
                                        otherButton:nil
                          informativeTextWithFormat:@""];
-    alert.type = kGIAlertType_Note;
+    [alert gi_setType:kGIAlertType_Note];
     [alert runModal];
   }
 }

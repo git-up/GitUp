@@ -186,9 +186,9 @@
     NSMutableAttributedString* author = [[NSMutableAttributedString alloc] init];
     CGFloat fontSize = view.authorTextField.font.pointSize;
     [author beginEditing];
-    [author appendString:commit.authorName withAttributes:@{NSFontAttributeName : [NSFont boldSystemFontOfSize:fontSize]}];
-    [author appendString:@" " withAttributes:@{NSFontAttributeName : [NSFont systemFontOfSize:fontSize]}];
-    [author appendString:commit.authorEmail withAttributes:nil];
+    [author gi_appendString:commit.authorName withAttributes:@{NSFontAttributeName : [NSFont boldSystemFontOfSize:fontSize]}];
+    [author gi_appendString:@" " withAttributes:@{NSFontAttributeName : [NSFont systemFontOfSize:fontSize]}];
+    [author gi_appendString:commit.authorEmail withAttributes:nil];
     [author endEditing];
     view.authorTextField.attributedStringValue = author;
     return view;

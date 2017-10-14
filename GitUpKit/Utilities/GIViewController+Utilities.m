@@ -680,22 +680,22 @@ static NSString* _diffTemporaryDirectoryPath = nil;
   NSMenu* menu = [[NSMenu alloc] initWithTitle:@""];
 
   if (conflict) {
-    [menu addItemWithTitle:NSLocalizedString(@"Resolve in Merge Tool…", nil)
+    [menu gi_addItemWithTitle:NSLocalizedString(@"Resolve in Merge Tool…", nil)
                      block:^{
                        [self resolveConflictInMergeTool:conflict];
                      }];
-    [menu addItemWithTitle:NSLocalizedString(@"Mark as Resolved", nil)
+    [menu gi_addItemWithTitle:NSLocalizedString(@"Mark as Resolved", nil)
                      block:^{
                        [self markConflictAsResolved:conflict];
                      }];
   } else {
     if (GC_FILE_MODE_IS_FILE(delta.oldFile.mode) && GC_FILE_MODE_IS_FILE(delta.newFile.mode)) {
-      [menu addItemWithTitle:NSLocalizedString(@"View in Diff Tool…", nil)
+      [menu gi_addItemWithTitle:NSLocalizedString(@"View in Diff Tool…", nil)
                        block:^{
                          [self viewDeltasInDiffTool:@[ delta ]];
                        }];
     } else {
-      [menu addItemWithTitle:NSLocalizedString(@"View in Diff Tool…", nil) block:NULL];
+      [menu gi_addItemWithTitle:NSLocalizedString(@"View in Diff Tool…", nil) block:NULL];
     }
   }
 
@@ -703,18 +703,18 @@ static NSString* _diffTemporaryDirectoryPath = nil;
     [menu addItem:[NSMenuItem separatorItem]];
 
     if (delta.submodule) {
-      [menu addItemWithTitle:NSLocalizedString(@"Open Submodule…", nil)
+      [menu gi_addItemWithTitle:NSLocalizedString(@"Open Submodule…", nil)
                        block:^{
                          [self openSubmoduleWithApp:delta.canonicalPath];
                        }];
     } else {
-      [menu addItemWithTitle:NSLocalizedString(@"Open File…", nil)
+      [menu gi_addItemWithTitle:NSLocalizedString(@"Open File…", nil)
                        block:^{
                          [self openFileWithDefaultEditor:delta.canonicalPath];
                        }];
     }
 
-    [menu addItemWithTitle:NSLocalizedString(@"Show in Finder…", nil)
+    [menu gi_addItemWithTitle:NSLocalizedString(@"Show in Finder…", nil)
                      block:^{
                        [self showFileInFinder:delta.canonicalPath];
                      }];

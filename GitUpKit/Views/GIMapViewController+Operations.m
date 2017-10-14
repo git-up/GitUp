@@ -777,7 +777,7 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
                                        alternateButton:NSLocalizedString(@"Cancel", nil)
                                            otherButton:NSLocalizedString(@"Merge", nil)
                              informativeTextWithFormat:NSLocalizedString(@"Do you want to still create a merge or just fast-forward?", nil)];
-        alert.type = kGIAlertType_Note;
+        [alert gi_setType:kGIAlertType_Note];
         [self presentAlert:alert
             completionHandler:^(NSInteger returnCode) {
 
@@ -1253,7 +1253,7 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
                                                                               alternateButton:NSLocalizedString(@"Cancel", nil)
                                                                                   otherButton:NSLocalizedString(@"Merge", nil)
                                                                     informativeTextWithFormat:NSLocalizedString(@"The branch \"%@\" has diverged from its upstream and cannot be fast-forwarded.", nil), branch.name];
-                                               alert.type = kGIAlertType_Note;
+                                               [alert gi_setType:kGIAlertType_Note];
                                                [self presentAlert:alert
                                                    completionHandler:^(NSInteger returnCode) {
 

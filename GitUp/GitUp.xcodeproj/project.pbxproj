@@ -338,7 +338,6 @@
 					};
 					E2C338AA19F8562F00063D95 = {
 						CreatedOnToolsVersion = 6.1;
-						DevelopmentTeam = 88W3E55T4B;
 					};
 				};
 			};
@@ -531,6 +530,7 @@
 				BUNDLE_VERSION = 0;
 				BUNDLE_VERSION_STRING = 1.0.9;
 				CODE_SIGN_IDENTITY = "Mac Developer";
+				DEVELOPMENT_TEAM = AXL96AEQK3;
 				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/Third-Party";
 				GCC_DYNAMIC_NO_PIC = YES;
 				INFOPLIST_FILE = Application/Info.plist;
@@ -548,6 +548,7 @@
 				BUNDLE_VERSION = 0;
 				BUNDLE_VERSION_STRING = 1.0.9;
 				CODE_SIGN_IDENTITY = "Mac Developer";
+				DEVELOPMENT_TEAM = AXL96AEQK3;
 				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/Third-Party";
 				GCC_DYNAMIC_NO_PIC = YES;
 				INFOPLIST_FILE = Application/Info.plist;
