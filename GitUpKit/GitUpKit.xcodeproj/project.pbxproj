@@ -558,7 +558,6 @@
 		E27B6D651A84451900D05452 /* GCRepository+Reflog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GCRepository+Reflog.m"; sourceTree = "<group>"; };
 		E27E374F1B86F5D1000A551A /* Base.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Base.xcconfig; sourceTree = "<group>"; };
 		E27E37501B86F5D1000A551A /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
-		E27E37511B86F5D1000A551A /* Distribution.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Distribution.xcconfig; sourceTree = "<group>"; };
 		E27E37521B86F5D1000A551A /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		E27E43011A74A94700D04ED1 /* GIGraph-Tests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GIGraph-Tests.m"; sourceTree = "<group>"; };
 		E27F9B721A549097009C9B3D /* GCRepository+HEAD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GCRepository+HEAD.h"; sourceTree = "<group>"; };
@@ -863,7 +862,6 @@
 			children = (
 				E27E374F1B86F5D1000A551A /* Base.xcconfig */,
 				E27E37501B86F5D1000A551A /* Debug.xcconfig */,
-				E27E37511B86F5D1000A551A /* Distribution.xcconfig */,
 				E27E37521B86F5D1000A551A /* Release.xcconfig */,
 			);
 			name = "Xcode-Configurations";

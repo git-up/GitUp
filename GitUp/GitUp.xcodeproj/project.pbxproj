@@ -118,7 +118,6 @@
 		E2653D241A5B2FBD006A9871 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = "Third-Party/Sparkle.framework"; sourceTree = SOURCE_ROOT; };
 		E27E37561B86F670000A551A /* Base.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Base.xcconfig; sourceTree = "<group>"; };
 		E27E37571B86F670000A551A /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
-		E27E37581B86F670000A551A /* Distribution.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Distribution.xcconfig; sourceTree = "<group>"; };
 		E27E37591B86F670000A551A /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		E28200AC1A7D71EE00DA4096 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = System/Library/Frameworks/CoreServices.framework; sourceTree = SDKROOT; };
 		E28A16DA1B87021600218332 /* GitUpKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GitUpKit.xcodeproj; path = ../GitUpKit/GitUpKit.xcodeproj; sourceTree = "<group>"; };
@@ -208,7 +207,6 @@
 			children = (
 				E27E37561B86F670000A551A /* Base.xcconfig */,
 				E27E37571B86F670000A551A /* Debug.xcconfig */,
-				E27E37581B86F670000A551A /* Distribution.xcconfig */,
 				E27E37591B86F670000A551A /* Release.xcconfig */,
 			);
 			name = "Xcode-Configurations";
