@@ -11,7 +11,6 @@
 		E21753D71B9169DD00BE234A /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E21753D51B9169DD00BE234A /* ViewController.m */; };
 		E21753DC1B9169EE00BE234A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = E21753D81B9169EE00BE234A /* LaunchScreen.xib */; };
 		E21753DD1B9169EE00BE234A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E21753DA1B9169EE00BE234A /* Main.storyboard */; };
-		E21753DF1B9169F900BE234A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E21753DE1B9169F900BE234A /* Images.xcassets */; };
 		E21753F11B916AE000BE234A /* GitUpKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E21753EC1B916ACB00BE234A /* GitUpKit.framework */; };
 		E21753F41B916AFE00BE234A /* GitUpKit.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = E21753EC1B916ACB00BE234A /* GitUpKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E2B987861B916F620097629D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E2B987841B916F620097629D /* main.m */; };
@@ -70,7 +69,6 @@
 		E21753D51B9169DD00BE234A /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = SOURCE_ROOT; };
 		E21753D91B9169EE00BE234A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = SOURCE_ROOT; };
 		E21753DB1B9169EE00BE234A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = SOURCE_ROOT; };
-		E21753DE1B9169F900BE234A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = SOURCE_ROOT; };
 		E21753E21B916ACB00BE234A /* GitUpKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GitUpKit.xcodeproj; path = ../../GitUpKit/GitUpKit.xcodeproj; sourceTree = "<group>"; };
 		E2B987831B916F620097629D /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = SOURCE_ROOT; };
 		E2B987841B916F620097629D /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = SOURCE_ROOT; };
@@ -96,7 +94,6 @@
 				E21753D31B9169DD00BE234A /* AppDelegate.m */,
 				E21753D41B9169DD00BE234A /* ViewController.h */,
 				E21753D51B9169DD00BE234A /* ViewController.m */,
-				E21753DE1B9169F900BE234A /* Images.xcassets */,
 				E21753DA1B9169EE00BE234A /* Main.storyboard */,
 				E21753D81B9169EE00BE234A /* LaunchScreen.xib */,
 				E2B987831B916F620097629D /* Info.plist */,
@@ -212,7 +209,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E21753DF1B9169F900BE234A /* Images.xcassets in Resources */,
 				E21753DD1B9169EE00BE234A /* Main.storyboard in Resources */,
 				E21753DC1B9169EE00BE234A /* LaunchScreen.xib in Resources */,
 			);
