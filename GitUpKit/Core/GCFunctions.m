@@ -145,8 +145,11 @@ int GCExchangeFileData(const char* path1, const char* path2) {
   if (statStatus != 0) {
     return statStatus;
   }
-  struct attrlist attrList = { ATTR_BIT_MAP_COUNT, 0, 0, ATTR_VOL_CAPABILITIES, 0, 0, 0 };
-  struct { u_int32_t length; vol_capabilities_attr_t attr; } attrBuf;
+  struct attrlist attrList = {ATTR_BIT_MAP_COUNT, 0, 0, ATTR_VOL_CAPABILITIES, 0, 0, 0};
+  struct {
+    u_int32_t length;
+    vol_capabilities_attr_t attr;
+  } attrBuf;
   int attrListStatus = getattrlist(stat.f_mntonname, &attrList, &attrBuf, sizeof(attrBuf), 0);
   if (attrListStatus != 0) {
     return attrListStatus;
