@@ -1466,6 +1466,7 @@
 					"-Wno-unused-const-variable",
 					"-Wno-incompatible-pointer-types",
 					"-Wno-shorten-64-to-32",
+					"-Wno-format",
 				);
 			};
 			name = Debug;
@@ -1503,6 +1504,7 @@
 					"-Wno-unused-const-variable",
 					"-Wno-incompatible-pointer-types",
 					"-Wno-shorten-64-to-32",
+					"-Wno-format",
 				);
 			};
 			name = Release;
