@@ -408,6 +408,7 @@
     CFRunLoopSourceRef source = CFMessagePortCreateRunLoopSource(kCFAllocatorDefault, _messagePort, 0);
     if (source) {
       CFRunLoopAddSource(CFRunLoopGetMain(), source, kCFRunLoopDefaultMode);  // Don't use kCFRunLoopCommonModes on purpose
+      CFRelease(source);
     } else {
       XLOG_DEBUG_UNREACHABLE();
     }

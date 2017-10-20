@@ -107,6 +107,7 @@ int main(int argc, const char* argv[]) {
                     fprintf(stderr, "Failed communicating with GitUp application (%i)\n", status);
                   }
                   CFMessagePortInvalidate(messagePort);
+                  CFRelease(messagePort);
                   break;
 
                 } else {
