@@ -531,7 +531,7 @@
 				BUNDLE_VERSION = 0;
 				BUNDLE_VERSION_STRING = 1.0.9;
 				FRAMEWORK_SEARCH_PATHS = (
-					"$(SRCROOT)",
+					"$(SRCROOT)/Third-Party",
 					"$(PROJECT_DIR)",
 				);
 				GCC_DYNAMIC_NO_PIC = YES;
@@ -550,7 +550,7 @@
 				BUNDLE_VERSION = 0;
 				BUNDLE_VERSION_STRING = 1.0.9;
 				FRAMEWORK_SEARCH_PATHS = (
-					"$(SRCROOT)",
+					"$(SRCROOT)/Third-Party",
 					"$(PROJECT_DIR)",
 				);
 				GCC_DYNAMIC_NO_PIC = YES;
