@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 48;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -35,6 +35,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = E267E1A71B84D6C500BAB377;
 			remoteInfo = GitUpKit;
+		};
+		E2DC02E71E12615D00CC091F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E26F7C431B86EBBE00119563 /* GitUpKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = E217531B1B91613300BE234A;
+			remoteInfo = "GitUpKit (iOS)";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -95,6 +102,7 @@
 			isa = PBXGroup;
 			children = (
 				E27E37611B8700F8000A551A /* GitUpKit.framework */,
+				E2DC02E81E12615D00CC091F /* GitUpKit.framework */,
 				E27E37631B8700F8000A551A /* GitUpTests.xctest */,
 			);
 			name = Products;
@@ -140,7 +148,7 @@
 		E267E2771B84EF1700BAB377 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0700;
+				LastUpgradeCheck = 0900;
 				ORGANIZATIONNAME = "";
 				TargetAttributes = {
 					E267E27E1B84EF1700BAB377 = {
@@ -149,7 +157,7 @@
 				};
 			};
 			buildConfigurationList = E267E27A1B84EF1700BAB377 /* Build configuration list for PBXProject "GitDown" */;
-			compatibilityVersion = "Xcode 3.2";
+			compatibilityVersion = "Xcode 8.0";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -185,6 +193,13 @@
 			fileType = wrapper.cfbundle;
 			path = GitUpTests.xctest;
 			remoteRef = E27E37621B8700F8000A551A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		E2DC02E81E12615D00CC091F /* GitUpKit.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = GitUpKit.framework;
+			remoteRef = E2DC02E71E12615D00CC091F /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */

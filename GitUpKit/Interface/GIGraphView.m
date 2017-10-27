@@ -1,4 +1,4 @@
-//  Copyright (C) 2015-2016 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2017 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -411,7 +411,7 @@ static const void* _associatedObjectDataKey = &_associatedObjectDataKey;
 
 - (void)_selectDefaultNode {
   GCHistoryCommit* headCommit = _graph.history.HEADCommit;
-  [self _setSelectedNode:(headCommit ? [_graph nodeForCommit:headCommit] : nil) display:YES scroll:YES notify:YES];
+  [self _setSelectedNode:(headCommit ? [_graph nodeForCommit:headCommit] : nil)display:YES scroll:YES notify:YES];
 }
 
 - (void)_showContextualMenuForNode:(GINode*)node {
@@ -1423,28 +1423,28 @@ static void _DrawSelectedNode(CGContextRef context, CGFloat x, CGFloat y, GINode
   if (tagAttributes == nil) {
     CTFontRef font = CTFontCreateUIFontForLanguage(kCTFontUIFontSystem, 11.0, CFSTR("en-US"));
     tagAttributes = [@{(id)kCTForegroundColorFromContextAttributeName : (id)kCFBooleanTrue,
-                       (id)kCTFontAttributeName : (id)font } retain];
+                       (id)kCTFontAttributeName : (id)font} retain];
     CFRelease(font);
   }
   static NSDictionary* branchAttributes = nil;
   if (branchAttributes == nil) {
     CTFontRef font = CTFontCreateUIFontForLanguage(kCTFontUIFontEmphasizedSystem, 11.0, CFSTR("en-US"));
     branchAttributes = [@{(id)kCTForegroundColorFromContextAttributeName : (id)kCFBooleanTrue,
-                          (id)kCTFontAttributeName : (id)font } retain];
+                          (id)kCTFontAttributeName : (id)font} retain];
     CFRelease(font);
   }
   static NSDictionary* selectedAttributes1 = nil;
   if (selectedAttributes1 == nil) {
     CTFontRef font = CTFontCreateUIFontForLanguage(kCTFontUIFontSystem, 10.0, CFSTR("en-US"));
     selectedAttributes1 = [@{(id)kCTForegroundColorFromContextAttributeName : (id)kCFBooleanTrue,
-                             (id)kCTFontAttributeName : (id)font } retain];
+                             (id)kCTFontAttributeName : (id)font} retain];
     CFRelease(font);
   }
   static NSDictionary* selectedAttributes2 = nil;
   if (selectedAttributes2 == nil) {
     CTFontRef font = CTFontCreateUIFontForLanguage(kCTFontUIFontEmphasizedSystem, 10.0, CFSTR("en-US"));
     selectedAttributes2 = [@{(id)kCTForegroundColorFromContextAttributeName : (id)kCFBooleanTrue,
-                             (id)kCTFontAttributeName : (id)font } retain];
+                             (id)kCTFontAttributeName : (id)font} retain];
     CFRelease(font);
   }
 

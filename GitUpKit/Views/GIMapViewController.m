@@ -1,4 +1,4 @@
-//  Copyright (C) 2015-2016 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2017 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -1003,7 +1003,7 @@ static NSColor* _patternColor = nil;
   if (branch == nil) {
     branch = commit.remoteBranches.firstObject;  // TODO: What if there are multiple remote branches?
   }
-  [self smartMergeCommitOrBranch:(branch ? branch : commit) intoLocalBranch:self.repository.history.HEADBranch withUserMessage:nil];
+  [self smartMergeCommitOrBranch:(branch ? branch : commit)intoLocalBranch:self.repository.history.HEADBranch withUserMessage:nil];
 }
 
 - (IBAction)rebaseOntoSelectedCommit:(id)sender {

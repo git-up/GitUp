@@ -1,4 +1,4 @@
-//  Copyright (C) 2015-2016 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2017 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -135,7 +135,10 @@ static void _WalkViewTree(NSView* view, NSMutableArray* array) {
 }
 
 - (void)sendEvent:(NSEvent*)event {
-  if ((event.type == NSKeyDown) && (event.keyCode == kGIKeyCode_Esc) && self.windowController.overlayVisible) {
+  BOOL escapeKeyDown = (event.type == NSKeyDown) && (event.keyCode == kGIKeyCode_Esc);
+  if (escapeKeyDown && self.windowController.hasModalView) {
+    [self.windowController stopModalView:NO];
+  } else if (escapeKeyDown && self.windowController.overlayVisible) {
     [self.windowController hideOverlay];
   } else {
     [super sendEvent:event];

@@ -1,4 +1,4 @@
-//  Copyright (C) 2015-2016 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2017 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -21,6 +21,10 @@
 #import "AppDelegate.h"
 
 #import <GitUpKit/XLFacilityMacros.h>
+
+#ifndef kCFCoreFoundationVersionNumber10_12
+#define kCFCoreFoundationVersionNumber10_12 1348.1
+#endif
 
 #define kWindowModeString_Map @"map"
 #define kWindowModeString_Map_QuickView @"quickview"
@@ -375,7 +379,7 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
   _hiddenWarningView.layer.backgroundColor = [[NSColor colorWithDeviceRed:0.0 green:0.0 blue:0.0 alpha:0.5] CGColor];
   _hiddenWarningView.layer.cornerRadius = 10.0;
 
-  [(NSTextFieldCell*)_searchField.cell setPlaceholderString:NSLocalizedString(@"Preparing Search… ", nil)];
+  [self _setSearchFieldPlaceholder:NSLocalizedString(@"Preparing Search…", nil)];
   _searchField.enabled = NO;
 
   for (NSMenuItem* item in _showMenu.itemArray) {  // We don't want first responder targets
@@ -494,9 +498,9 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
             if (time > lastTime + 1.0 / kMaxProgressRefreshRate) {
               dispatch_async(dispatch_get_main_queue(), ^{
                 if (progress >= 100) {
-                  [(NSTextFieldCell*)_searchField.cell setPlaceholderString:NSLocalizedString(@"Finishing…        ", nil)];
+                  [self _setSearchFieldPlaceholder:NSLocalizedString(@"Finishing…", nil)];
                 } else {
-                  [(NSTextFieldCell*)_searchField.cell setPlaceholderString:[NSString stringWithFormat:NSLocalizedString(@"Preparing (%.1f%%)…", nil), progress]];
+                  [self _setSearchFieldPlaceholder:[NSString stringWithFormat:NSLocalizedString(@"Preparing (%.1f%%)…", nil), progress]];
                 }
               });
               lastProgress = progress;
@@ -512,10 +516,10 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
         if (!_abortIndexing) {  // If indexing has been aborted, this means the document has already been closed, so don't attempt to do *anything*
           if (success) {
             _searchReady = YES;
-            [(NSTextFieldCell*)_searchField.cell setPlaceholderString:NSLocalizedString(@"Search Repository…", nil)];
+            [self _setSearchFieldPlaceholder:NSLocalizedString(@"Search Repository…", nil)];
             _searchField.enabled = YES;
           } else {
-            [(NSTextFieldCell*)_searchField.cell setPlaceholderString:NSLocalizedString(@"Search Unavailable", nil)];
+            [self _setSearchFieldPlaceholder:NSLocalizedString(@"Search Unavailable", nil)];
             [self presentError:error];
           }
           [[NSProcessInfo processInfo] enableSuddenTermination];
@@ -1951,6 +1955,18 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
   [self _enterConfig];
 }
 
+- (void)_setSearchFieldPlaceholder:(NSString*)placeholder {
+  // 10.11 and earlier: search placeholders have the same length to work around incorrect centering.
+  if (kCFCoreFoundationVersionNumber < kCFCoreFoundationVersionNumber10_12) {
+    placeholder = [placeholder stringByPaddingToLength:18 withString:@" " startingAtIndex:0];
+  }
+  [(NSTextFieldCell*)_searchField.cell setPlaceholderString:placeholder];
+  // 10.12: there are more centering issues, and all are fixed by triggering a layout pass.
+  if (kCFCoreFoundationVersionNumber >= kCFCoreFoundationVersionNumber10_12) {
+    [_searchField setNeedsLayout:YES];
+  }
+}
+
 - (IBAction)performSearch:(id)sender {
   NSString* query = _searchField.stringValue;
   if (query.length) {
@@ -2106,7 +2122,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
   [NSApp endSheet:_settingsWindow];
   [_settingsWindow orderOut:nil];
 
-  [_repository setUserInfo:(_indexDiffsButton.state ? @(YES) : @(NO)) forKey:kRepositoryUserInfoKey_IndexDiffs];
+  [_repository setUserInfo:(_indexDiffsButton.state ? @(YES) : @(NO))forKey:kRepositoryUserInfoKey_IndexDiffs];
 }
 
 @end

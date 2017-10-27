@@ -1,4 +1,4 @@
-//  Copyright (C) 2015-2016 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2017 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -104,7 +104,7 @@
   NSData* buffer = [sender.draggingPasteboard dataForType:kPasteboardType];
   const void** pointer = (const void**)buffer.bytes;
   NSMutableArray* array = [[NSMutableArray alloc] init];
-  for (size_t i = 0, count = buffer.length / sizeof(void *); i < count; ++i, ++pointer) {
+  for (size_t i = 0, count = buffer.length / sizeof(void*); i < count; ++i, ++pointer) {
     [array addObject:(__bridge GCDiffDelta*)*pointer];
   }
   return [_controller.delegate diffFilesViewController:_controller didReceiveDeltas:array fromOtherController:sourceController];

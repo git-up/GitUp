@@ -1,4 +1,4 @@
-//  Copyright (C) 2015-2016 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2017 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -577,12 +577,13 @@ cleanup:
 
   // Copy file metadata onto the temporary copy
   copyfile_state_t state = copyfile_state_alloc();
-  int status = copyfile(fullPath, tempPath, state, COPYFILE_METADATA);
+  int copyStatus = copyfile(fullPath, tempPath, state, COPYFILE_METADATA);
   copyfile_state_free(state);
-  CHECK_POSIX_FUNCTION_CALL(goto cleanup, status, == 0);
+  CHECK_POSIX_FUNCTION_CALL(goto cleanup, copyStatus, == 0);
 
   // Swap temporary copy and original file
-  CALL_POSIX_FUNCTION_GOTO(cleanup, exchangedata, fullPath, tempPath, FSOPT_NOFOLLOW);
+  int exchangeStatus = GCExchangeFileData(tempPath, fullPath);
+  CHECK_POSIX_FUNCTION_CALL(goto cleanup, exchangeStatus, == 0);
   CALL_POSIX_FUNCTION_GOTO(cleanup, utimes, fullPath, NULL);  // Touch file to make sure any cached information in the index gets invalidated
 
   success = YES;

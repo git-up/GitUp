@@ -1,4 +1,4 @@
-//  Copyright (C) 2015-2016 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2017 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -408,6 +408,7 @@
     CFRunLoopSourceRef source = CFMessagePortCreateRunLoopSource(kCFAllocatorDefault, _messagePort, 0);
     if (source) {
       CFRunLoopAddSource(CFRunLoopGetMain(), source, kCFRunLoopDefaultMode);  // Don't use kCFRunLoopCommonModes on purpose
+      CFRelease(source);
     } else {
       XLOG_DEBUG_UNREACHABLE();
     }
@@ -614,7 +615,7 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
           GCRepository* repository = [[GCRepository alloc] initWithNewLocalRepository:path bare:NO error:&error];
           if (repository) {
             if ([repository addRemoteWithName:@"origin" url:url error:&error]) {
-              [self _openRepositoryWithURL:[NSURL fileURLWithPath:repository.workingDirectoryPath] withCloneMode:(_cloneRecursiveButton.state ? kCloneMode_Recursive : kCloneMode_Default) windowModeID:NSNotFound];
+              [self _openRepositoryWithURL:[NSURL fileURLWithPath:repository.workingDirectoryPath] withCloneMode:(_cloneRecursiveButton.state ? kCloneMode_Recursive : kCloneMode_Default)windowModeID:NSNotFound];
             } else {
               [NSApp presentError:error];
               [[NSFileManager defaultManager] removeItemAtPath:path error:NULL];  // Ignore errors

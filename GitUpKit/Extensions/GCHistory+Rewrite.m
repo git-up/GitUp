@@ -1,4 +1,4 @@
-//  Copyright (C) 2015-2016 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2017 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -241,7 +241,7 @@ typedef NS_ENUM(NSUInteger, ReplayMode) {
                        withInitialMapping:nil
                            usingTransform:transform
                                replayMode:(copyTrees ? kReplayMode_CopyTrees : kReplayMode_ApplyPatches)
-                          conflictHandler:handler
+                               conflictHandler:handler
                                     error:error]) {
     return nil;
   }
@@ -358,7 +358,7 @@ typedef NS_ENUM(NSUInteger, ReplayMode) {
   // Replay descendants from parents onto replayed parent skipping commit
   if (![self _replayDescendantsFromCommit:parentCommit
                                ontoCommit:swappedParentCommit
-                       withInitialMapping:@{ commit : swappedCommit }
+                       withInitialMapping:@{commit : swappedCommit}
                            usingTransform:transform
                                replayMode:kReplayMode_ApplyPatches
                           conflictHandler:handler

@@ -1,4 +1,4 @@
-//  Copyright (C) 2015-2016 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2017 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -43,7 +43,7 @@
 
 - (GCCommit*)lookupHEAD:(GCLocalBranch**)currentBranch error:(NSError**)error {
   git_reference* headReference = NULL;
-  git_commit* headCommit = [self loadHEADCommit:(currentBranch ? &headReference : NULL) error:error];
+  git_commit* headCommit = [self loadHEADCommit:(currentBranch ? &headReference : NULL)error:error];
   if (headCommit == NULL) {
     return NULL;
   }
@@ -56,7 +56,7 @@
 - (BOOL)lookupHEADCurrentCommit:(GCCommit**)commit branch:(GCLocalBranch**)branch error:(NSError**)error {
   git_commit* headCommit = NULL;
   git_reference* headReference = NULL;
-  if (![self loadHEADCommit:(commit ? &headCommit : NULL) resolvedReference:(branch ? &headReference : NULL) error:error]) {
+  if (![self loadHEADCommit:(commit ? &headCommit : NULL)resolvedReference:(branch ? &headReference : NULL)error:error]) {
     return NO;
   }
   if (commit) {
@@ -116,7 +116,7 @@
   }
 
   const git_commit* parents[2] = {headCommit, parent.private};
-  commit = [self createCommitFromIndex:index withParents:parents count:(headCommit ? (parent ? 2 : 1) : 0) author:NULL message:message error:error];
+  commit = [self createCommitFromIndex:index withParents:parents count:(headCommit ? (parent ? 2 : 1) : 0)author:NULL message:message error:error];
   if (commit == nil) {
     goto cleanup;
   }
