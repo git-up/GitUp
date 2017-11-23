@@ -67,6 +67,18 @@
   _diffContentsViewController.emptyLabel = NSLocalizedString(@"No file selected", nil);
   [_diffContentsView replaceWithView:_diffContentsViewController.view];
 
+  GCCommit* headCommit = nil;
+  GCLocalBranch* branch = nil;
+  [self.repository lookupHEADCurrentCommit: &headCommit branch: &branch error: nil];
+  if (branch) {
+    NSString *regex = @"([A-Z]+-)(\\d+)";
+    NSRange range = [branch.name rangeOfString: regex options: NSRegularExpressionSearch];
+    if (range.location != NSNotFound) {
+      NSString *text = [branch.name substringWithRange: range];
+      self.messageTextView.string = [NSString stringWithFormat:@"[%@] ", text];
+      return;
+    }
+  }
   self.messageTextView.string = @"";
 }
 
