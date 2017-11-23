@@ -27,13 +27,13 @@
 
 #define kPersistentViewStateKeyNamespace @"GIMapViewController_"
 
-#define kPersistentViewStateKey_HideVirtualTips kPersistentViewStateKeyNamespace @"HideVirtualTips"
-#define kPersistentViewStateKey_ShowTagTips kPersistentViewStateKeyNamespace @"ShowTagTips"
-#define kPersistentViewStateKey_ShowRemoteBranchTips kPersistentViewStateKeyNamespace @"ShowRemoteBranchTips"
-#define kPersistentViewStateKey_ShowStaleBranchTips kPersistentViewStateKeyNamespace @"ShowStaleBranchTips"
+NSString* const GIMapViewControllerStateKey_ShowVirtualTips = kPersistentViewStateKeyNamespace @"ShowVirtualTips";
+NSString* const GIMapViewControllerStateKey_ShowTagTips = kPersistentViewStateKeyNamespace @"ShowTagTips";
+NSString* const GIMapViewControllerStateKey_ShowRemoteBranchTips = kPersistentViewStateKeyNamespace @"ShowRemoteBranchTips";
+NSString* const GIMapViewControllerStateKey_ShowStaleBranchTips = kPersistentViewStateKeyNamespace @"ShowStaleBranchTips";
 
-#define kPersistentViewStateKey_HideTagLabels kPersistentViewStateKeyNamespace @"HideTagLabels"
-#define kPersistentViewStateKey_ShowBranchLabels kPersistentViewStateKeyNamespace @"ShowBranchLabels"
+NSString* const GIMapViewControllerStateKey_ShowTagLabels = kPersistentViewStateKeyNamespace @"ShowTagLabels";
+NSString* const GIMapViewControllerStateKey_ShowBranchLabels = kPersistentViewStateKeyNamespace @"ShowBranchLabels";
 
 @interface GIMapViewController () <GIGraphViewDelegate>
 @property(nonatomic, weak) IBOutlet NSScrollView* graphScrollView;
@@ -67,9 +67,9 @@ static NSColor* _patternColor = nil;
 
 @implementation GIMapViewController {
   BOOL _showsVirtualTips;
-  BOOL _hidesTagTips;
-  BOOL _hidesRemoteBranchTips;
-  BOOL _hidesStaleBranchTips;
+  BOOL _showsTagTips;
+  BOOL _showsRemoteBranchTips;
+  BOOL _showsStaleBranchTips;
   BOOL _updatePending;
 }
 
@@ -79,12 +79,25 @@ static NSColor* _patternColor = nil;
 
 - (instancetype)initWithRepository:(GCLiveRepository*)repository {
   if ((self = [super initWithRepository:repository])) {
-    _showsVirtualTips = ![[self.repository userInfoForKey:kPersistentViewStateKey_HideVirtualTips] boolValue];
-    _hidesTagTips = ![[self.repository userInfoForKey:kPersistentViewStateKey_ShowTagTips] boolValue];
-    _hidesRemoteBranchTips = ![[self.repository userInfoForKey:kPersistentViewStateKey_ShowRemoteBranchTips] boolValue];
-    _hidesStaleBranchTips = ![[self.repository userInfoForKey:kPersistentViewStateKey_ShowStaleBranchTips] boolValue];
+    _showsVirtualTips = [self persistentViewStateForKey:GIMapViewControllerStateKey_ShowVirtualTips];
+    _showsTagTips = [self persistentViewStateForKey:GIMapViewControllerStateKey_ShowTagTips];
+    _showsRemoteBranchTips = [self persistentViewStateForKey:GIMapViewControllerStateKey_ShowRemoteBranchTips];
+    _showsStaleBranchTips = [self persistentViewStateForKey:GIMapViewControllerStateKey_ShowStaleBranchTips];
   }
   return self;
+}
+
+- (BOOL)persistentViewStateForKey:(NSString *)key {
+    id settingInRepository = [self.repository userInfoForKey:key];
+    if (settingInRepository) {
+        return [settingInRepository boolValue];
+    }
+    return [[NSUserDefaults standardUserDefaults] boolForKey:key];
+}
+
+- (void)setPersistentViewState:(BOOL)state forKey:(NSString *)key {
+  [self.repository setUserInfo:@(state) forKey:key];
+  [[NSUserDefaults standardUserDefaults] setBool:state forKey:key];
 }
 
 - (void)_setGraphViewBackgroundColors:(BOOL)previewMode {
@@ -101,8 +114,8 @@ static NSColor* _patternColor = nil;
 
   _graphView.delegate = self;
   [self _setGraphViewBackgroundColors:NO];
-  _graphView.showsTagLabels = ![[self.repository userInfoForKey:kPersistentViewStateKey_HideTagLabels] boolValue];
-  _graphView.showsBranchLabels = [[self.repository userInfoForKey:kPersistentViewStateKey_ShowBranchLabels] boolValue];
+  _graphView.showsTagLabels = [self persistentViewStateForKey:GIMapViewControllerStateKey_ShowTagLabels];
+  _graphView.showsBranchLabels = [self persistentViewStateForKey:GIMapViewControllerStateKey_ShowBranchLabels];
 
   _updatePending = YES;
 }
@@ -135,13 +148,13 @@ static NSColor* _patternColor = nil;
   if (_showsVirtualTips) {
     options |= kGIGraphOption_ShowVirtualTips;
   }
-  if (_hidesStaleBranchTips && !_forceShowAllTips) {
+  if (!(_showsStaleBranchTips || _forceShowAllTips)) {
     options |= kGIGraphOption_SkipStaleBranchTips;
   }
-  if (_hidesTagTips && !_forceShowAllTips) {
+  if (!(_showsTagTips || _forceShowAllTips)) {
     options |= kGIGraphOption_SkipStandaloneTagTips;
   }
-  if (_hidesRemoteBranchTips && !_forceShowAllTips) {
+  if (!(_showsRemoteBranchTips || _forceShowAllTips)) {
     options |= kGIGraphOption_SkipStandaloneRemoteBranchTips;
   }
   CFAbsoluteTime time = CFAbsoluteTimeGetCurrent();
@@ -216,31 +229,31 @@ static NSColor* _patternColor = nil;
 - (void)setShowsVirtualTips:(BOOL)flag {
   if (flag != _showsVirtualTips) {
     _showsVirtualTips = flag;
-    [self.repository setUserInfo:@((BOOL)!_showsVirtualTips) forKey:kPersistentViewStateKey_HideVirtualTips];
+    [self setPersistentViewState:flag forKey:GIMapViewControllerStateKey_ShowVirtualTips];
     [self _reloadMap:YES];
   }
 }
 
-- (void)setHidesTagTips:(BOOL)flag {
-  if (flag != _hidesTagTips) {
-    _hidesTagTips = flag;
-    [self.repository setUserInfo:@((BOOL)!_hidesTagTips) forKey:kPersistentViewStateKey_ShowTagTips];
+- (void)setShowsTagTips:(BOOL)flag {
+  if (flag != _showsTagTips) {
+    _showsTagTips = flag;
+    [self setPersistentViewState:flag forKey:GIMapViewControllerStateKey_ShowTagTips];
     [self _reloadMap:YES];
   }
 }
 
-- (void)setHidesRemoteBranchTips:(BOOL)flag {
-  if (flag != _hidesRemoteBranchTips) {
-    _hidesRemoteBranchTips = flag;
-    [self.repository setUserInfo:@((BOOL)!_hidesRemoteBranchTips) forKey:kPersistentViewStateKey_ShowRemoteBranchTips];
+- (void)setShowsRemoteBranchTips:(BOOL)flag {
+  if (flag != _showsRemoteBranchTips) {
+    _showsRemoteBranchTips = flag;
+    [self setPersistentViewState:flag forKey:GIMapViewControllerStateKey_ShowRemoteBranchTips];
     [self _reloadMap:YES];
   }
 }
 
-- (void)setHidesStaleBranchTips:(BOOL)flag {
-  if (flag != _hidesStaleBranchTips) {
-    _hidesStaleBranchTips = flag;
-    [self.repository setUserInfo:@((BOOL)!_hidesStaleBranchTips) forKey:kPersistentViewStateKey_ShowStaleBranchTips];
+- (void)setShowsStaleBranchTips:(BOOL)flag {
+  if (flag != _showsStaleBranchTips) {
+    _showsStaleBranchTips = flag;
+    [self setPersistentViewState:flag forKey:GIMapViewControllerStateKey_ShowStaleBranchTips];
     [self _reloadMap:YES];
   }
 }
@@ -248,7 +261,7 @@ static NSColor* _patternColor = nil;
 - (void)setForceShowAllTips:(BOOL)flag {
   if (flag != _forceShowAllTips) {
     _forceShowAllTips = flag;
-    if (_hidesTagTips || _hidesRemoteBranchTips || _hidesStaleBranchTips) {
+    if (!(_showsTagTips && _showsRemoteBranchTips && _showsStaleBranchTips)) {
       [self _reloadMap:YES];
     }
   }
@@ -325,6 +338,7 @@ static NSColor* _patternColor = nil;
         item.representedObject = @[ branch, localBranch ];
         [submenu addItem:item];
       }
+      [submenu addItem:[NSMenuItem separatorItem]];
       for (GCHistoryRemoteBranch* remoteBranch in self.repository.history.remoteBranches) {
         item = [[NSMenuItem alloc] initWithTitle:remoteBranch.name action:@selector(_rebaseLocalBranch:) keyEquivalent:@""];
         item.representedObject = @[ branch, remoteBranch ];
@@ -618,15 +632,15 @@ static NSColor* _patternColor = nil;
     return YES;
   }
   if (item.action == @selector(toggleTagTips:)) {
-    [(NSMenuItem*)item setState:(_hidesTagTips && !_forceShowAllTips ? NSOffState : NSOnState)];
+    [(NSMenuItem*)item setState:(_showsTagTips || _forceShowAllTips ? NSOnState : NSOffState)];
     return !_forceShowAllTips;
   }
   if (item.action == @selector(toggleRemoteBranchTips:)) {
-    [(NSMenuItem*)item setState:(_hidesRemoteBranchTips && !_forceShowAllTips ? NSOffState : NSOnState)];
+    [(NSMenuItem*)item setState:(_showsRemoteBranchTips || _forceShowAllTips ? NSOnState : NSOffState)];
     return !_forceShowAllTips;
   }
   if (item.action == @selector(toggleStaleBranchTips:)) {
-    [(NSMenuItem*)item setState:(_hidesStaleBranchTips && !_forceShowAllTips ? NSOffState : NSOnState)];
+    [(NSMenuItem*)item setState:(_showsStaleBranchTips || _forceShowAllTips ? NSOnState : NSOffState)];
     return !_forceShowAllTips;
   }
 
@@ -725,13 +739,13 @@ static NSColor* _patternColor = nil;
 - (IBAction)toggleTagLabels:(id)sender {
   BOOL show = !_graphView.showsTagLabels;
   _graphView.showsTagLabels = show;
-  [self.repository setUserInfo:@((BOOL)!show) forKey:kPersistentViewStateKey_HideTagLabels];
+  [self setPersistentViewState:show forKey:GIMapViewControllerStateKey_ShowTagLabels];
 }
 
 - (IBAction)toggleBranchLabels:(id)sender {
   BOOL show = !_graphView.showsBranchLabels;
   _graphView.showsBranchLabels = show;
-  [self.repository setUserInfo:@(show) forKey:kPersistentViewStateKey_ShowBranchLabels];
+  [self setPersistentViewState:show forKey:GIMapViewControllerStateKey_ShowBranchLabels];
 }
 
 - (IBAction)toggleVirtualTips:(id)sender {
@@ -739,15 +753,15 @@ static NSColor* _patternColor = nil;
 }
 
 - (IBAction)toggleTagTips:(id)sender {
-  self.hidesTagTips = !_hidesTagTips;
+  self.showsTagTips = !_showsTagTips;
 }
 
 - (IBAction)toggleRemoteBranchTips:(id)sender {
-  self.hidesRemoteBranchTips = !_hidesRemoteBranchTips;
+  self.showsRemoteBranchTips = !_showsRemoteBranchTips;
 }
 
 - (IBAction)toggleStaleBranchTips:(id)sender {
-  self.hidesStaleBranchTips = !_hidesStaleBranchTips;
+  self.showsStaleBranchTips = !_showsStaleBranchTips;
 }
 
 - (IBAction)fetchAllRemoteBranches:(id)sender {

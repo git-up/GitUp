@@ -37,8 +37,8 @@ extern NSString* GCNameFromHostingService(GCHostingService service);
 
 - (BOOL)forceCheckoutHEAD:(BOOL)recursive error:(NSError**)error;  // (?) - Equivalent to "git reset --hard" but without the resetting the repository state and updating the reflog
 
-- (NSURL*)hostingURLForProject:(GCHostingService*)service error:(NSError**)error;  // This only looks at the "origin" remote
-- (NSURL*)hostingURLForCommit:(GCCommit*)commit service:(GCHostingService*)service error:(NSError**)error;  // This only looks at the "origin" remote
+- (NSURL*)hostingURLForProject:(GCHostingService*)service error:(NSError**)error;  // Looks for a remote with a compatible hosting provider, preferring a remote named ‘origin’.
+- (NSURL*)hostingURLForCommit:(GCCommit*)commit service:(GCHostingService*)service error:(NSError**)error;
 - (NSURL*)hostingURLForRemoteBranch:(GCRemoteBranch*)branch service:(GCHostingService*)service error:(NSError**)error;
 - (NSURL*)hostingURLForPullRequestFromRemoteBranch:(GCRemoteBranch*)fromBranch toBranch:(GCRemoteBranch*)toBranch service:(GCHostingService*)service error:(NSError**)error;
 

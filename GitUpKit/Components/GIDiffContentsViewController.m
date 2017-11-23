@@ -24,7 +24,8 @@
 #import "GCRepository+Index.h"
 #import "XLFacilityMacros.h"
 
-#define kMinSplitDiffViewWidth 1000
+// Units ems: a multiple of the font point size, so the width threshold is 100 * 10 = 1000 for a 10 point font.
+#define kMinSplitDiffViewWidthEms 100
 
 #define kContextualMenuOffsetX 0
 #define kContextualMenuOffsetY -6
@@ -228,6 +229,7 @@ static NSColor* _DimColor(NSColor* color) {
 - (instancetype)initWithRepository:(GCLiveRepository*)repository {
   if ((self = [super initWithRepository:repository])) {
     [[NSUserDefaults standardUserDefaults] addObserver:self forKeyPath:GIDiffContentsViewControllerUserDefaultKey_DiffViewMode options:0 context:(__bridge void*)[GIDiffContentsViewController class]];
+    [[NSUserDefaults standardUserDefaults] addObserver:self forKeyPath:GIUserDefaultKey_FontSize options:0 context:(__bridge void*)[GIDiffContentsViewController class]];
   }
   return self;
 }
@@ -235,6 +237,7 @@ static NSColor* _DimColor(NSColor* color) {
 - (void)dealloc {
   [[NSNotificationCenter defaultCenter] removeObserver:self name:NSViewBoundsDidChangeNotification object:_tableView.superview];
 
+  [[NSUserDefaults standardUserDefaults] removeObserver:self forKeyPath:GIUserDefaultKey_FontSize context:(__bridge void*)[GIDiffContentsViewController class]];
   [[NSUserDefaults standardUserDefaults] removeObserver:self forKeyPath:GIDiffContentsViewControllerUserDefaultKey_DiffViewMode context:(__bridge void*)[GIDiffContentsViewController class]];
 }
 
@@ -267,13 +270,13 @@ static NSColor* _DimColor(NSColor* color) {
     if ((change == kGCFileDiffChange_Untracked) || (change == kGCFileDiffChange_Added) || (change == kGCFileDiffChange_Deleted)) {
       return [GIUnifiedDiffView class];
     }
-    return self.view.bounds.size.width < kMinSplitDiffViewWidth ? [GIUnifiedDiffView class] : [GISplitDiffView class];
+    return self.view.bounds.size.width < kMinSplitDiffViewWidthEms * GIFontSize() ? [GIUnifiedDiffView class] : [GISplitDiffView class];
   }
   return mode > 0 ? [GISplitDiffView class] : [GIUnifiedDiffView class];
 }
 
-- (void)_updateDiffViews {
-  BOOL reload = NO;
+- (void)_updateDiffViewsForcingReload:(BOOL)forceReload {
+  BOOL reload = forceReload;
   for (GIDiffContentData* data in _data) {
     if (!data.diffView) {
       continue;
@@ -296,7 +299,7 @@ static NSColor* _DimColor(NSColor* color) {
 
 - (void)viewDidResize {
   if (self.viewVisible && !self.liveResizing) {
-    [self _updateDiffViews];
+    [self _updateDiffViewsForcingReload:NO];
     [NSAnimationContext beginGrouping];
     [[NSAnimationContext currentContext] setDuration:0.0];  // Prevent animations in case the view is actually not on screen yet (e.g. in a hidden tab)
     [_tableView noteHeightOfRowsWithIndexesChanged:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [self numberOfRowsInTableView:_tableView])]];
@@ -305,15 +308,16 @@ static NSColor* _DimColor(NSColor* color) {
 }
 
 - (void)viewDidFinishLiveResize {
-  [self _updateDiffViews];
+  [self _updateDiffViewsForcingReload:NO];
   [_tableView noteHeightOfRowsWithIndexesChanged:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [self numberOfRowsInTableView:_tableView])]];
 }
 
 // WARNING: This is called *several* times when the default has been changed
 - (void)observeValueForKeyPath:(NSString*)keyPath ofObject:(id)object change:(NSDictionary*)change context:(void*)context {
   if (context == (__bridge void*)[GIDiffContentsViewController class]) {
-    if (self.viewVisible) {
-      [self _updateDiffViews];  // This is idempotent
+    BOOL isFontSizeChange = [keyPath isEqualToString:GIUserDefaultKey_FontSize];
+    if (self.viewVisible || isFontSizeChange) {
+      [self _updateDiffViewsForcingReload:isFontSizeChange];  // This is idempotent
     }
   } else {
     [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
@@ -606,7 +610,8 @@ static inline NSString* _StringFromFileMode(GCFileMode mode) {
         view.backgroundColor = _renamedBackgroundColor;
         view.imageView.image = _renamedImage;
         label = [NSString stringWithFormat:@"%@ ▶ %@", oldPath, newPath];  // TODO: Handle truncation
-        GIComputeModifiedRanges(oldPath, &oldPathRange, newPath, &newPathRange);
+        // This crashes with certain input. The code is hard to understand and does not do anything particulatly important so disable it.  
+//        GIComputeModifiedRanges(oldPath, &oldPathRange, newPath, &newPathRange);
         newPathRange.location += oldPath.length + 3;
         break;
       }

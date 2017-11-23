@@ -1,4 +1,8 @@
-[![Build Status](https://travis-ci.org/git-up/GitUp.svg?branch=master)](https://travis-ci.org/git-up/GitUp)
+This is my (Douglas Hill’s) fork of GitUp, where I’ll make changes to suit my own use. I use a build from here as my primary interface to Git. If you find this useful too that’s awesome.
+
+- Uses the same bundle identifier as the official GitUp. I’m not sure if this is good or bad.
+- The official GitUp’s analytics are disabled.
+- There is no automatic update system.
 
 GitUp
 =====

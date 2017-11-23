@@ -18,18 +18,10 @@
 #endif
 
 #import "GIPrivate.h"
+#import "GIAppKit.h"
 
-#define kTextFontSize 10
 #define kTextLineHeightPadding 3
 #define kTextLineDescentAdjustment 1
-
-CFDictionaryRef GIDiffViewAttributes = nil;
-
-CTLineRef GIDiffViewAddedLine = NULL;
-CTLineRef GIDiffViewDeletedLine = NULL;
-
-CGFloat GIDiffViewLineHeight = 0.0;
-CGFloat GIDiffViewLineDescent = 0.0;
 
 NSColor* GIDiffViewDeletedBackgroundColor = nil;
 NSColor* GIDiffViewDeletedHighlightColor = nil;
@@ -44,26 +36,15 @@ NSColor* GIDiffViewPlainTextColor = nil;
 
 const char* GIDiffViewMissingNewlinePlaceholder = "🚫\n";
 
+@interface GIDiffView ()
+
+@property(nonatomic, assign) CGFloat lastFontSize;
+
+@end
+
 @implementation GIDiffView
 
 + (void)initialize {
-  GIDiffViewAttributes = CFBridgingRetain(@{(id)kCTFontAttributeName : [NSFont userFixedPitchFontOfSize:kTextFontSize], (id)kCTForegroundColorFromContextAttributeName : (id)kCFBooleanTrue});
-
-  CFAttributedStringRef addedString = CFAttributedStringCreate(kCFAllocatorDefault, CFSTR("+"), GIDiffViewAttributes);
-  GIDiffViewAddedLine = CTLineCreateWithAttributedString(addedString);
-  CFRelease(addedString);
-
-  CFAttributedStringRef deletedString = CFAttributedStringCreate(kCFAllocatorDefault, CFSTR("-"), GIDiffViewAttributes);
-  GIDiffViewDeletedLine = CTLineCreateWithAttributedString(deletedString);
-  CFRelease(deletedString);
-
-  CGFloat ascent;
-  CGFloat descent;
-  CGFloat leading;
-  CTLineGetTypographicBounds(GIDiffViewAddedLine, &ascent, &descent, &leading);
-  GIDiffViewLineHeight = ceilf(ascent + descent + leading) + kTextLineHeightPadding;
-  GIDiffViewLineDescent = ceilf(descent) + kTextLineDescentAdjustment;
-
   GIDiffViewDeletedBackgroundColor = [NSColor colorWithDeviceRed:1.0 green:0.9 blue:0.9 alpha:1.0];
   GIDiffViewDeletedHighlightColor = [NSColor colorWithDeviceRed:1.0 green:0.7 blue:0.7 alpha:1.0];
   GIDiffViewAddedBackgroundColor = [NSColor colorWithDeviceRed:0.85 green:1.0 blue:0.85 alpha:1.0];
@@ -74,6 +55,54 @@ const char* GIDiffViewMissingNewlinePlaceholder = "🚫\n";
   GIDiffViewVerticalLineColor = [NSColor colorWithDeviceRed:0.85 green:0.85 blue:0.85 alpha:0.6];
   GIDiffViewLineNumberColor = [NSColor colorWithDeviceRed:0.75 green:0.75 blue:0.75 alpha:1.0];
   GIDiffViewPlainTextColor = [NSColor blackColor];
+}
+
+- (void)updateMetricsFromCurrentFontSize {
+  CGFloat newSize = GIFontSize();
+// This comparison is safe because the values being compared are both read from user defaults with no additional floating point operations.
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wfloat-equal"
+  if (newSize == _lastFontSize) {
+#pragma clang diagnostic pop
+    return;
+  }
+  _lastFontSize = newSize;
+
+  NSFont* font = [NSFont userFixedPitchFontOfSize:newSize];
+  if (_textAttributes) CFRelease(_textAttributes);
+  _textAttributes = CFBridgingRetain(@{(id)kCTFontAttributeName : font, (id)kCTForegroundColorFromContextAttributeName : (id)kCFBooleanTrue});
+
+  CFAttributedStringRef addedString = CFAttributedStringCreate(kCFAllocatorDefault, CFSTR("+"), _textAttributes);
+  if (_addedLine) CFRelease(_addedLine);
+  _addedLine = CTLineCreateWithAttributedString(addedString);
+  CFRelease(addedString);
+
+  CFAttributedStringRef deletedString = CFAttributedStringCreate(kCFAllocatorDefault, CFSTR("-"), _textAttributes);
+  if (_deletedLine) CFRelease(_deletedLine);
+  _deletedLine = CTLineCreateWithAttributedString(deletedString);
+  CFRelease(deletedString);
+
+  CGFloat ascent;
+  CGFloat descent;
+  CGFloat leading;
+  CTLineGetTypographicBounds(_addedLine, &ascent, &descent, &leading);
+  _lineHeight = ceilf(ascent + descent + leading) + kTextLineHeightPadding;
+  _lineDescent = ceilf(descent) + kTextLineDescentAdjustment;
+
+  [self setNeedsDisplay:YES];
+}
+
+// WARNING: This is called *several* times when the default has been changed
+- (void)observeValueForKeyPath:(NSString*)keyPath ofObject:(id)object change:(NSDictionary*)change context:(void*)context {
+  if (context == (__bridge void*)[GIDiffView class]) {
+    if ([keyPath isEqualToString:GIUserDefaultKey_FontSize]) {
+      [self updateMetricsFromCurrentFontSize];
+    } else {
+      XLOG_UNREACHABLE();
+    }
+  } else {
+    [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+  }
 }
 
 - (void)_windowKeyDidChange:(NSNotification*)notification {
@@ -96,6 +125,7 @@ const char* GIDiffViewMissingNewlinePlaceholder = "🚫\n";
 
 - (void)didFinishInitializing {
   _backgroundColor = [NSColor whiteColor];
+  [[NSUserDefaults standardUserDefaults] addObserver:self forKeyPath:GIUserDefaultKey_FontSize options:NSKeyValueObservingOptionInitial context:(__bridge void*)[GIDiffView class]];
 }
 
 - (instancetype)initWithFrame:(NSRect)frameRect {
@@ -115,6 +145,12 @@ const char* GIDiffViewMissingNewlinePlaceholder = "🚫\n";
 - (void)dealloc {
   [[NSNotificationCenter defaultCenter] removeObserver:self name:NSWindowDidResignKeyNotification object:nil];
   [[NSNotificationCenter defaultCenter] removeObserver:self name:NSWindowDidBecomeKeyNotification object:nil];
+
+  [[NSUserDefaults standardUserDefaults] removeObserver:self forKeyPath:GIUserDefaultKey_FontSize context:(__bridge void*)[GIDiffView class]];
+
+  if (_textAttributes) CFRelease(_textAttributes);
+  if (_addedLine) CFRelease(_addedLine);
+  if (_deletedLine) CFRelease(_deletedLine);
 }
 
 - (BOOL)isOpaque {
