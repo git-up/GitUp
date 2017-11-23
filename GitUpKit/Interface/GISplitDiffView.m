@@ -18,11 +18,25 @@
 #endif
 
 #import "GIPrivate.h"
+#import "GIAppKit.h"
 
-#define kTextLineNumberMargin (5 * 8)
-#define kTextInsetLeft 5
-#define kTextInsetRight 5
 #define kTextBottomPadding 0
+
+static CGFloat textLineNumberMargin(void) {
+  return roundf(4 * GIFontSize());
+}
+
+static CGFloat textInsetLeft(void) {
+  return roundf(1.5f * GIFontSize());
+}
+
+static CGFloat textInsetRight(void) {
+  return roundf(0.5f * GIFontSize());
+}
+
+static CGFloat textLineStartX(void) {
+  return textLineNumberMargin() + textInsetLeft();
+}
 
 typedef NS_ENUM(NSUInteger, DiffLineType) {
   kDiffLineType_Separator = 0,
@@ -127,7 +141,7 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
   if (self.patch && (NSInteger)width != (NSInteger)_size.width) {
     [_lines removeAllObjects];
 
-    CGFloat lineWidth = floor((width - 2 * kTextLineNumberMargin - 2 * kTextInsetLeft - 2 * kTextInsetRight) / 2);
+    CGFloat lineWidth = floor((width - 2 * textLineNumberMargin() - 2 * textInsetLeft() - 2 * textInsetRight()) / 2);
     __block NSUInteger lineIndex = NSNotFound;
     __block NSUInteger startIndex = NSNotFound;
     __block NSUInteger addedCount = 0;
@@ -182,7 +196,7 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
     [self.patch enumerateUsingBeginHunkHandler:^(NSUInteger oldLineNumber, NSUInteger oldLineCount, NSUInteger newLineNumber, NSUInteger newLineCount) {
 
       NSString* string = [[NSString alloc] initWithFormat:@"@@ -%lu,%lu +%lu,%lu @@", oldLineNumber, oldLineCount, newLineNumber, newLineCount];
-      CFAttributedStringRef attributedString = CFAttributedStringCreate(kCFAllocatorDefault, (CFStringRef)string, GIDiffViewAttributes);
+      CFAttributedStringRef attributedString = CFAttributedStringCreate(kCFAllocatorDefault, (CFStringRef)string, self.textAttributes);
       CTLineRef line = CTLineCreateWithAttributedString(attributedString);
       CFRelease(attributedString);
 
@@ -210,7 +224,7 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
           }
           if (string == nil) {
             string = @"<LINE IS NOT VALID UTF-8>\n";
-            XLOG_DEBUG_UNREACHABLE();
+            XLOG_WARNING(@"Line is not valid UTF-8");
           }
 
           switch (change) {
@@ -230,7 +244,7 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
               break;
           }
 
-          CFAttributedStringRef attributedString = CFAttributedStringCreate(kCFAllocatorDefault, (CFStringRef)string, GIDiffViewAttributes);
+          CFAttributedStringRef attributedString = CFAttributedStringCreate(kCFAllocatorDefault, (CFStringRef)string, self.textAttributes);
           CTTypesetterRef typeSetter = CTTypesetterCreateWithAttributedString(attributedString);
           CFIndex length = CFAttributedStringGetLength(attributedString);
           CFIndex offset = 0;
@@ -311,7 +325,7 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
           highlightBlock();
 
         }];
-    _size = NSMakeSize(width, _lines.count * GIDiffViewLineHeight + kTextBottomPadding);
+    _size = NSMakeSize(width, _lines.count * self.lineHeight + kTextBottomPadding);
   }
   return _size.height;
 }
@@ -319,6 +333,8 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
 - (void)drawRect:(NSRect)dirtyRect {
   NSRect bounds = self.bounds;
   CGFloat offset = floor(bounds.size.width / 2);
+  CGFloat lineStartX = textLineStartX();
+
   CGContextRef context = [[NSGraphicsContext currentContext] graphicsPort];
   CGContextSaveGState(context);
 
@@ -331,63 +347,63 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
     NSColor* selectedColor = self.window.keyWindow && (self.window.firstResponder == self) ? [NSColor selectedControlColor] : [NSColor secondarySelectedControlColor];
     CGContextSetTextMatrix(context, CGAffineTransformIdentity);
     NSUInteger count = _lines.count;
-    NSUInteger start = MIN(MAX(count - (dirtyRect.origin.y + dirtyRect.size.height - kTextBottomPadding) / GIDiffViewLineHeight, 0), count);
-    NSUInteger end = MIN(MAX(count - (dirtyRect.origin.y - kTextBottomPadding) / GIDiffViewLineHeight + 1, 0), count);
+    NSUInteger start = MIN(MAX(count - (dirtyRect.origin.y + dirtyRect.size.height - kTextBottomPadding) / self.lineHeight, 0), count);
+    NSUInteger end = MIN(MAX(count - (dirtyRect.origin.y - kTextBottomPadding) / self.lineHeight + 1, 0), count);
     for (NSUInteger i = start; i < end; ++i) {
       __unsafe_unretained GISplitDiffLine* diffLine = _lines[i];
       CTLineRef leftLine = diffLine.leftLine;
       CTLineRef rightLine = diffLine.rightLine;
-      CGFloat linePosition = (count - 1 - i) * GIDiffViewLineHeight + kTextBottomPadding;
-      CGFloat textPosition = linePosition + GIDiffViewLineDescent;
+      CGFloat linePosition = (count - 1 - i) * self.lineHeight + kTextBottomPadding;
+      CGFloat textPosition = linePosition + self.lineDescent;
       if (diffLine.type == kDiffLineType_Separator) {
         [GIDiffViewSeparatorBackgroundColor setFill];
-        CGContextFillRect(context, CGRectMake(0, linePosition + 1, bounds.size.width, GIDiffViewLineHeight - 1));
+        CGContextFillRect(context, CGRectMake(0, linePosition + 1, bounds.size.width, self.lineHeight - 1));
 
         [GIDiffViewSeparatorLineColor setStroke];
         CGContextMoveToPoint(context, 0, linePosition + 0.5);
         CGContextAddLineToPoint(context, bounds.size.width, linePosition + 0.5);
         CGContextStrokePath(context);
-        CGContextMoveToPoint(context, 0, linePosition + GIDiffViewLineHeight - 0.5);
-        CGContextAddLineToPoint(context, bounds.size.width, linePosition + GIDiffViewLineHeight - 0.5);
+        CGContextMoveToPoint(context, 0, linePosition + self.lineHeight - 0.5);
+        CGContextAddLineToPoint(context, bounds.size.width, linePosition + self.lineHeight - 0.5);
         CGContextStrokePath(context);
 
         [GIDiffViewSeparatorTextColor setFill];
-        CGContextSetTextPosition(context, kTextLineNumberMargin + 4, textPosition);
+        CGContextSetTextPosition(context, textLineNumberMargin() + roundf(0.4f * GIFontSize()), textPosition);
         CTLineDraw(leftLine, context);
       } else {
         if (leftLine) {
           if (!_rightSelection && [_selectedLines containsIndex:diffLine.leftNumber]) {
             [selectedColor setFill];
-            CGContextFillRect(context, CGRectMake(0, linePosition, offset, GIDiffViewLineHeight));
+            CGContextFillRect(context, CGRectMake(0, linePosition, offset, self.lineHeight));
           } else if (diffLine.type != kDiffLineType_Context) {
             [GIDiffViewDeletedBackgroundColor setFill];
-            CGContextFillRect(context, CGRectMake(0, linePosition, offset, GIDiffViewLineHeight));
+            CGContextFillRect(context, CGRectMake(0, linePosition, offset, self.lineHeight));
 
             CFRange highlighted = diffLine.leftHighlighted;
             if (highlighted.length) {
               [GIDiffViewDeletedHighlightColor setFill];
               CFRange range = CTLineGetStringRange(leftLine);
-              CGFloat startX = kTextLineNumberMargin + kTextInsetLeft + round(CTLineGetOffsetForStringIndex(leftLine, range.location + highlighted.location, NULL));
-              CGFloat endX = kTextLineNumberMargin + kTextInsetLeft + round(CTLineGetOffsetForStringIndex(leftLine, range.location + highlighted.location + highlighted.length, NULL));
-              CGContextFillRect(context, CGRectMake(startX, linePosition, endX - startX, GIDiffViewLineHeight));
+              CGFloat startX = lineStartX + round(CTLineGetOffsetForStringIndex(leftLine, range.location + highlighted.location, NULL));
+              CGFloat endX = lineStartX + round(CTLineGetOffsetForStringIndex(leftLine, range.location + highlighted.location + highlighted.length, NULL));
+              CGContextFillRect(context, CGRectMake(startX, linePosition, endX - startX, self.lineHeight));
             }
           }
         }
         if (rightLine) {
           if (_rightSelection && [_selectedLines containsIndex:diffLine.rightNumber]) {
             [selectedColor setFill];
-            CGContextFillRect(context, CGRectMake(offset, linePosition, bounds.size.width, GIDiffViewLineHeight));
+            CGContextFillRect(context, CGRectMake(offset, linePosition, bounds.size.width, self.lineHeight));
           } else if (diffLine.type != kDiffLineType_Context) {
             [GIDiffViewAddedBackgroundColor setFill];
-            CGContextFillRect(context, CGRectMake(offset, linePosition, bounds.size.width, GIDiffViewLineHeight));
+            CGContextFillRect(context, CGRectMake(offset, linePosition, bounds.size.width, self.lineHeight));
 
             CFRange highlighted = diffLine.rightHighlighted;
             if (highlighted.length) {
               [GIDiffViewAddedHighlightColor setFill];
               CFRange range = CTLineGetStringRange(rightLine);
-              CGFloat startX = offset + kTextLineNumberMargin + kTextInsetLeft + round(CTLineGetOffsetForStringIndex(rightLine, range.location + highlighted.location, NULL));
-              CGFloat endX = offset + kTextLineNumberMargin + kTextInsetLeft + round(CTLineGetOffsetForStringIndex(rightLine, range.location + highlighted.location + highlighted.length, NULL));
-              CGContextFillRect(context, CGRectMake(startX, linePosition, endX - startX, GIDiffViewLineHeight));
+              CGFloat startX = offset + lineStartX + round(CTLineGetOffsetForStringIndex(rightLine, range.location + highlighted.location, NULL));
+              CGFloat endX = offset + lineStartX + round(CTLineGetOffsetForStringIndex(rightLine, range.location + highlighted.location + highlighted.length, NULL));
+              CGContextFillRect(context, CGRectMake(startX, linePosition, endX - startX, self.lineHeight));
             }
           }
         }
@@ -395,7 +411,7 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
         if (leftLine) {
           if (!diffLine.leftWrapped) {
             [GIDiffViewLineNumberColor setFill];
-            CFAttributedStringRef string = CFAttributedStringCreate(kCFAllocatorDefault, (CFStringRef)(diffLine.leftNumber >= 100000 ? @"9999…" : [NSString stringWithFormat:@"%5lu", diffLine.leftNumber]), GIDiffViewAttributes);
+            CFAttributedStringRef string = CFAttributedStringCreate(kCFAllocatorDefault, (CFStringRef)(diffLine.leftNumber >= 100000 ? @"9999…" : [NSString stringWithFormat:@"%5lu", diffLine.leftNumber]), self.textAttributes);
             CTLineRef prefix = CTLineCreateWithAttributedString(string);
             CGContextSetTextPosition(context, 5, textPosition);
             CTLineDraw(prefix, context);
@@ -405,25 +421,25 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
 
           if (!_rightSelection && _selectedText.length && (i >= _selectedText.location) && (i < _selectedText.location + _selectedText.length)) {
             [selectedColor setFill];
-            CGFloat startX = kTextLineNumberMargin + kTextInsetLeft;
+            CGFloat startX = lineStartX;
             CGFloat endX = offset;
             if (i == _selectedText.location) {
-              startX = kTextLineNumberMargin + kTextInsetLeft + round(CTLineGetOffsetForStringIndex(leftLine, _selectedTextStart, NULL));
+              startX = lineStartX + round(CTLineGetOffsetForStringIndex(leftLine, _selectedTextStart, NULL));
             }
             if (i == _selectedText.location + _selectedText.length - 1) {
-              endX = kTextLineNumberMargin + kTextInsetLeft + round(CTLineGetOffsetForStringIndex(leftLine, _selectedTextEnd, NULL));
+              endX = lineStartX + round(CTLineGetOffsetForStringIndex(leftLine, _selectedTextEnd, NULL));
             }
-            CGContextFillRect(context, CGRectMake(startX, linePosition, endX - startX, GIDiffViewLineHeight));
+            CGContextFillRect(context, CGRectMake(startX, linePosition, endX - startX, self.lineHeight));
           }
 
           [GIDiffViewPlainTextColor set];
-          CGContextSetTextPosition(context, kTextLineNumberMargin + kTextInsetLeft, textPosition);
+          CGContextSetTextPosition(context, lineStartX, textPosition);
           CTLineDraw(leftLine, context);
         }
         if (rightLine) {
           if (!diffLine.rightWrapped) {
             [GIDiffViewLineNumberColor setFill];
-            CFAttributedStringRef string = CFAttributedStringCreate(kCFAllocatorDefault, (CFStringRef)(diffLine.rightNumber >= 100000 ? @"9999…" : [NSString stringWithFormat:@"%5lu", diffLine.rightNumber]), GIDiffViewAttributes);
+            CFAttributedStringRef string = CFAttributedStringCreate(kCFAllocatorDefault, (CFStringRef)(diffLine.rightNumber >= 100000 ? @"9999…" : [NSString stringWithFormat:@"%5lu", diffLine.rightNumber]), self.textAttributes);
             CTLineRef prefix = CTLineCreateWithAttributedString(string);
             CGContextSetTextPosition(context, offset + 5, textPosition);
             CTLineDraw(prefix, context);
@@ -433,19 +449,19 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
 
           if (_rightSelection && _selectedText.length && (i >= _selectedText.location) && (i < _selectedText.location + _selectedText.length)) {
             [selectedColor setFill];
-            CGFloat startX = offset + kTextLineNumberMargin + kTextInsetLeft;
+            CGFloat startX = offset + lineStartX;
             CGFloat endX = bounds.size.width;
             if (i == _selectedText.location) {
-              startX = offset + kTextLineNumberMargin + kTextInsetLeft + round(CTLineGetOffsetForStringIndex(rightLine, _selectedTextStart, NULL));
+              startX = offset + lineStartX + round(CTLineGetOffsetForStringIndex(rightLine, _selectedTextStart, NULL));
             }
             if (i == _selectedText.location + _selectedText.length - 1) {
-              endX = offset + kTextLineNumberMargin + kTextInsetLeft + round(CTLineGetOffsetForStringIndex(rightLine, _selectedTextEnd, NULL));
+              endX = offset + lineStartX + round(CTLineGetOffsetForStringIndex(rightLine, _selectedTextEnd, NULL));
             }
-            CGContextFillRect(context, CGRectMake(startX, linePosition, endX - startX, GIDiffViewLineHeight));
+            CGContextFillRect(context, CGRectMake(startX, linePosition, endX - startX, self.lineHeight));
           }
 
           [GIDiffViewPlainTextColor set];
-          CGContextSetTextPosition(context, offset + kTextLineNumberMargin + kTextInsetLeft, textPosition);
+          CGContextSetTextPosition(context, offset + lineStartX, textPosition);
           CTLineDraw(rightLine, context);
         }
       }
@@ -453,14 +469,14 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
   }
 
   [GIDiffViewVerticalLineColor setStroke];
-  CGContextMoveToPoint(context, kTextLineNumberMargin - 0.5, 0);
-  CGContextAddLineToPoint(context, kTextLineNumberMargin - 0.5, bounds.size.height);
+  CGContextMoveToPoint(context, textLineNumberMargin() - 0.5, 0);
+  CGContextAddLineToPoint(context, textLineNumberMargin() - 0.5, bounds.size.height);
   CGContextStrokePath(context);
   CGContextMoveToPoint(context, offset - 0.5, 0);
   CGContextAddLineToPoint(context, offset - 0.5, bounds.size.height);
   CGContextStrokePath(context);
-  CGContextMoveToPoint(context, offset + kTextLineNumberMargin - 0.5, 0);
-  CGContextAddLineToPoint(context, offset + kTextLineNumberMargin - 0.5, bounds.size.height);
+  CGContextMoveToPoint(context, offset + textLineNumberMargin() - 0.5, 0);
+  CGContextAddLineToPoint(context, offset + textLineNumberMargin() - 0.5, bounds.size.height);
   CGContextStrokePath(context);
 
   CGContextRestoreGState(context);
@@ -469,9 +485,10 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
 - (void)resetCursorRects {
   NSRect bounds = self.bounds;
   CGFloat offset = floor(bounds.size.width / 2);
-  [self addCursorRect:NSMakeRect(kTextLineNumberMargin + kTextInsetLeft, 0, offset - kTextLineNumberMargin - kTextInsetLeft, bounds.size.height)
+  CGFloat lineStartX = textLineStartX();
+  [self addCursorRect:NSMakeRect(lineStartX, 0, offset - lineStartX, bounds.size.height)
                cursor:[NSCursor IBeamCursor]];
-  [self addCursorRect:NSMakeRect(offset + kTextLineNumberMargin + kTextInsetLeft, 0, bounds.size.width - offset - kTextLineNumberMargin - kTextInsetLeft, bounds.size.height)
+  [self addCursorRect:NSMakeRect(offset + lineStartX, 0, bounds.size.width - offset - lineStartX, bounds.size.height)
                cursor:[NSCursor IBeamCursor]];
 }
 
@@ -573,7 +590,7 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
   }
 
   // Check if mouse is in the content area
-  NSInteger y = _lines.count - (location.y - kTextBottomPadding) / GIDiffViewLineHeight;
+  NSInteger y = _lines.count - (location.y - kTextBottomPadding) / self.lineHeight;
   if ((y >= 0) && (y < (NSInteger)_lines.count)) {
     GISplitDiffLine* diffLine = _lines[y];
 
@@ -594,8 +611,10 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
       _selectionMode = kSelectionMode_Replace;
     }
 
+    CGFloat lineStartX = textLineStartX();
+
     // Check if mouse is in the margin area
-    if (((location.x >= 0) && (location.x < kTextLineNumberMargin)) || ((location.x >= offset) && (location.x < offset + kTextLineNumberMargin))) {
+    if (((location.x >= 0) && (location.x < textLineNumberMargin())) || ((location.x >= offset) && (location.x < offset + textLineNumberMargin()))) {
       // Reset selection
       _selectedText.length = 0;
       if (_selectionMode == kSelectionMode_Replace) {
@@ -645,14 +664,14 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
 
     }
     // Otherwise check if mouse is is in the diff area
-    else if (((location.x >= kTextLineNumberMargin + kTextInsetLeft) && (location.x < offset)) || (location.x >= offset + kTextLineNumberMargin + kTextInsetLeft)) {
+    else if (((location.x >= lineStartX) && (location.x < offset)) || (location.x >= offset + lineStartX)) {
       // Reset selection
       _selectedText.length = 0;
       [_selectedLines removeAllIndexes];
 
       // Update selected text
       CTLineRef line = _rightSelection ? diffLine.rightLine : diffLine.leftLine;
-      CFIndex index = CTLineGetStringIndexForPosition(line, CGPointMake(location.x - ((_rightSelection ? offset : 0) + kTextLineNumberMargin + kTextInsetLeft), GIDiffViewLineHeight / 2));
+      CFIndex index = CTLineGetStringIndexForPosition(line, CGPointMake(location.x - ((_rightSelection ? offset : 0) + lineStartX), self.lineHeight / 2));
       if (index != kCFNotFound) {
         _startIndex = y;
         _startOffset = index;
@@ -697,7 +716,7 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
   NSPoint location = [self convertPoint:event.locationInWindow fromView:nil];
 
   // Check if mouse is in the content area
-  NSInteger y = _lines.count - (location.y - kTextBottomPadding) / GIDiffViewLineHeight;
+  NSInteger y = _lines.count - (location.y - kTextBottomPadding) / self.lineHeight;
   if ((y >= 0) && (y < (NSInteger)_lines.count)) {
     GISplitDiffLine* diffLine = _lines[y];
 
@@ -745,7 +764,7 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
     // Otherwise we are in text-selection mode
     else {
       CTLineRef line = _rightSelection ? diffLine.rightLine : diffLine.leftLine;
-      CFIndex index = CTLineGetStringIndexForPosition(line, CGPointMake(location.x - ((_rightSelection ? offset : 0) + kTextLineNumberMargin + kTextInsetLeft), GIDiffViewLineHeight / 2));
+      CFIndex index = CTLineGetStringIndexForPosition(line, CGPointMake(location.x - ((_rightSelection ? offset : 0) + textLineStartX()), self.lineHeight / 2));
       if (index != kCFNotFound) {
         // Update selected text
         if ((NSUInteger)y > _startIndex) {

@@ -19,10 +19,26 @@
 
 #import "GCPrivate.h"
 
+// Would be better if this was configurable.
+static NSString* const defaultBranchName = @"master";
+
 @implementation GCBranch
 @end
 
 @implementation GCLocalBranch
+
+- (NSComparisonResult)nameCompare:(GCReference *)reference {
+  if ([reference isKindOfClass:[GCLocalBranch class]]) {
+    if ([self.name isEqualToString:defaultBranchName]) {
+      return NSOrderedAscending;
+    }
+    if ([reference.name isEqualToString:defaultBranchName]) {
+      return NSOrderedDescending;
+    }
+  }
+
+  return [super nameCompare:reference];
+}
 
 #if DEBUG
 
@@ -36,6 +52,19 @@
 @end
 
 @implementation GCRemoteBranch
+
+- (NSComparisonResult)nameCompare:(GCReference *)reference {
+  if ([reference isKindOfClass:[GCRemoteBranch class]]) {
+    if ([self.branchName isEqualToString:defaultBranchName]) {
+      return NSOrderedAscending;
+    }
+    if ([((GCRemoteBranch*)reference).branchName isEqualToString:defaultBranchName]) {
+      return NSOrderedDescending;
+    }
+  }
+
+  return [super nameCompare:reference];
+}
 
 #if DEBUG
 

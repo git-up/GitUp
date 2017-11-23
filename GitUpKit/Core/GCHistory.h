@@ -62,8 +62,8 @@ typedef NS_ENUM(NSUInteger, GCHistorySorting) {
 @property(nonatomic, readonly) GCHistoryLocalBranch* HEADBranch;  // nil if HEAD is detached
 @property(nonatomic, readonly, getter=isHEADDetached) BOOL HEADDetached;  // Convenience method
 @property(nonatomic, readonly) NSArray* tags;  // Always sorted alphabetically
-@property(nonatomic, readonly) NSArray* localBranches;  // Always sorted alphabetically
-@property(nonatomic, readonly) NSArray* remoteBranches;  // Always sorted alphabetically
+@property(nonatomic, readonly) NSArray* localBranches;  // Always sorted alphabetically, except master is at the top
+@property(nonatomic, readonly) NSArray* remoteBranches;  // Always sorted alphabetically, except master is at the top
 @property(nonatomic, readonly) NSUInteger nextAutoIncrementID;  // See @autoIncrementID on GCHistoryCommit
 - (GCHistoryCommit*)historyCommitWithSHA1:(NSString*)sha1;
 - (GCHistoryCommit*)historyCommitForCommit:(GCCommit*)commit;

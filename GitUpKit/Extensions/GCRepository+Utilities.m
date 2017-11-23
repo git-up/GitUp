@@ -363,13 +363,41 @@ NSString* GCNameFromHostingService(GCHostingService service) {
     }
   }
 
-  GC_SET_GENERIC_ERROR(@"Origin remote on unknown service");
+  GC_SET_GENERIC_ERROR(@"Remote on unknown service");
   return nil;
 }
 
 - (NSURL*)hostingURLForProject:(GCHostingService*)service error:(NSError**)error {
-  GCRemote* remote = [self lookupRemoteWithName:@"origin" error:error];
-  return remote ? [self _projectHostingURLForRemote:remote service:service error:error] : nil;
+  NSArray* remotes = [self listRemotes:error];
+
+  if (!remotes) {
+    return nil;
+  }
+
+  if (remotes.count > 1) {
+    // The order seems to be unspecified. Prefer ‘origin’.
+    NSUInteger originIndex = [remotes indexOfObjectPassingTest:^BOOL(GCRemote* remote, NSUInteger idx, BOOL *stop) {
+      return [remote.name isEqualToString:@"origin"];
+    }];
+
+    if (originIndex != NSNotFound) {
+      NSMutableArray* mutableRemotes = [remotes mutableCopy];
+      GCRemote* originRemote = mutableRemotes[originIndex];
+      [mutableRemotes removeObjectAtIndex:originIndex];
+      [mutableRemotes insertObject:originRemote atIndex:0];
+      remotes = mutableRemotes;
+    }
+  }
+
+  for (GCRemote* remote in remotes) {
+    NSURL* url = [self _projectHostingURLForRemote:remote service:service error:NULL];
+    if (url) {
+      return url;
+    }
+  }
+  
+  GC_SET_GENERIC_ERROR(@"No remotes on compatible services");
+  return nil;
 }
 
 /*

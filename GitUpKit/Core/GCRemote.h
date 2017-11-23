@@ -35,7 +35,6 @@ typedef NS_OPTIONS(NSUInteger, GCRemoteCheckOptions) {
 
 @interface GCRemote (Extensions)
 - (BOOL)isEqualToRemote:(GCRemote*)remote;
-- (NSComparisonResult)nameCompare:(GCRemote*)remote;
 @end
 
 @interface GCRepository (GCRemote)
