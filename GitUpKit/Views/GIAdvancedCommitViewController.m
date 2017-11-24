@@ -67,18 +67,6 @@
   _diffContentsViewController.emptyLabel = NSLocalizedString(@"No file selected", nil);
   [_diffContentsView replaceWithView:_diffContentsViewController.view];
 
-  GCCommit* headCommit = nil;
-  GCLocalBranch* branch = nil;
-  [self.repository lookupHEADCurrentCommit: &headCommit branch: &branch error: nil];
-  if (branch) {
-    NSString *regex = @"([A-Z]+-)(\\d+)";
-    NSRange range = [branch.name rangeOfString: regex options: NSRegularExpressionSearch];
-    if (range.location != NSNotFound) {
-      NSString *text = [branch.name substringWithRange: range];
-      self.messageTextView.string = [NSString stringWithFormat:@"[%@] ", text];
-      return;
-    }
-  }
   self.messageTextView.string = @"";
 }
 
@@ -160,6 +148,22 @@
   _stageButton.enabled = _workdirStatus.modified;
   _discardButton.enabled = _workdirStatus.modified;
   [self _updateCommitButton];
+
+  GCCommit* headCommit = nil;
+  GCLocalBranch* branch = nil;
+  [self.repository lookupHEADCurrentCommit:&headCommit branch:&branch error:nil];
+
+  NSString *emptyRegex = @"^\\[.+\\]\\s*$";
+  BOOL containsDefaultText = [self.messageTextView.string rangeOfString:emptyRegex options:NSRegularExpressionSearch].location != NSNotFound;
+  if (branch && (self.messageTextView.string.length == 0 || containsDefaultText)) {
+    NSString *regex = @"([A-Z]+-)(\\d+)";
+    NSRange range = [branch.name rangeOfString:regex options:NSRegularExpressionSearch];
+    if (range.location != NSNotFound) {
+      NSString *text = [branch.name substringWithRange:range];
+      self.messageTextView.string = [NSString stringWithFormat:@"[%@] ", text];
+      return;
+    }
+  }
 }
 
 // We can't use the default implementation since we need a dynamic first-responder
