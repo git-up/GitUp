@@ -1443,6 +1443,12 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
           [self toggleAncestors:nil];
           handled = YES;
         }
+      } else if (event.keyCode == kGIKeyCode_Return) {
+        if (_searchView.superview) {
+          [_mapViewController checkoutSelectedCommit:nil];
+          [self closeSearch:nil];
+          handled = YES;
+        }
       } else if ([characters isEqualToString:@" "]) {
         if (_searchView.superview) {
           GCHistoryCommit* commit = _searchResultsViewController.selectedCommit;
