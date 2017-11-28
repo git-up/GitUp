@@ -879,13 +879,15 @@ static NSColor* _patternColor = nil;
   }];
 }
 
-- (IBAction)checkoutSelectedCommit:(id)sender {
-  GCHistoryCommit* commit = _graphView.selectedCommit;
-  id target = [self _smartCheckoutTarget:commit];
+- (void)checkoutCommit:(GCHistoryCommit*)commit forResult:(id)result {
+  id target = result ? result : commit;
   if ([target isKindOfClass:[GCLocalBranch class]]) {
     [self checkoutLocalBranch:target];
   } else {
     GCHistoryRemoteBranch* branch = commit.remoteBranches.firstObject;
+    if ([target isKindOfClass:[GCHistoryRemoteBranch class]]) {
+      branch = target;
+    }
     if (branch && ![self.repository.history historyLocalBranchWithName:branch.branchName]) {
       NSAlert* alert = [NSAlert alertWithMessageText:NSLocalizedString(@"Do you want to just checkout the commit or also create a new local branch?", nil)
                                        defaultButton:NSLocalizedString(@"Create Local Branch", nil)
@@ -907,6 +909,11 @@ static NSColor* _patternColor = nil;
       [self checkoutCommit:target];
     }
   }
+}
+
+- (IBAction)checkoutSelectedCommit:(id)sender {
+  id target = [self _smartCheckoutTarget:_graphView.selectedCommit];
+  [self checkoutCommit:_graphView.selectedCommit forResult:target];
 }
 
 - (IBAction)createTagAtSelectedCommit:(id)sender {

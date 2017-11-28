@@ -1445,7 +1445,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
         }
       } else if (event.keyCode == kGIKeyCode_Return) {
         if (_searchView.superview) {
-          [_mapViewController checkoutSelectedCommit:nil];
+          [_mapViewController checkoutCommit:_searchResultsViewController.selectedCommit forResult:_searchResultsViewController.selectedResult];
           [self closeSearch:nil];
           handled = YES;
         }

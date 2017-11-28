@@ -59,7 +59,7 @@ extern NSString* const GIMapViewControllerStateKey_ShowBranchLabels;
 - (IBAction)fetchAllRemoteTags:(id)sender;
 - (IBAction)fetchAndPruneAllRemoteTags:(id)sender;
 
-- (IBAction)checkoutSelectedCommit:(id)sender;
+- (void)checkoutCommit:(GCHistoryCommit*)commit forResult:(id)result;
 
 - (IBAction)pushAllLocalBranches:(id)sender;
 - (IBAction)pushAllTags:(id)sender;
