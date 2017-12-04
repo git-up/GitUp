@@ -103,7 +103,7 @@
 
 + (void)initialize {
   NSDictionary* defaults = @{
-    GICommitMessageViewUserDefaultKey_ShowInvisibleCharacters : @(YES),
+    GICommitMessageViewUserDefaultKey_ShowInvisibleCharacters : @(NO),
     GICommitMessageViewUserDefaultKey_ShowMargins : @(YES),
     GICommitMessageViewUserDefaultKey_EnableSpellChecking : @(YES),
     kUserDefaultsKey_ReleaseChannel : kReleaseChannel_Stable,
