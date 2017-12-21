@@ -43,6 +43,10 @@
   return [super willPresentError:error];
 }
 
+- (void)newWindowForTab:(id)sender {
+  [[AppDelegate sharedDelegate] newRepository:sender];
+}
+
 - (void)addDocument:(NSDocument*)document {
   [super addDocument:document];
 

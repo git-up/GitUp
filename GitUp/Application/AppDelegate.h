@@ -46,6 +46,7 @@
 - (void)repository:(GCRepository*)repository willStartTransferWithURL:(NSURL*)url;
 - (BOOL)repository:(GCRepository*)repository requiresPlainTextAuthenticationForURL:(NSURL*)url user:(NSString*)user username:(NSString**)username password:(NSString**)password;
 - (void)repository:(GCRepository*)repository didFinishTransferWithURL:(NSURL*)url success:(BOOL)success;
+- (IBAction)newRepository:(id)sender;
 
 - (void)handleDocumentCountChanged;
 @end
