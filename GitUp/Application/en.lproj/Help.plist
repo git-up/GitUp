@@ -13,7 +13,7 @@ Select a commit in the Map and then press [Spacebar] to enter Quick View.</strin
 			<string>Branch and commit operations that used to be complex with the command line become intuitive, faster and safer with GitUp.
 Right-click on a commit in the Map to show a list of available actions and their associated keyboard shortcuts.</string>
 			<string>For instance, to edit an incorrect commit message with GitUp, just select the commit in the Map then press [E].
-Right-click on a commit to see all editing operations. You can undo / redo your edits at any time with [Cmd-Z] / [Cmd-Shift-Z].</string>
+Right-click on a commit to see all editing operations. You can undo / redo your edits at any time with [⌘Z] / [⌘⇧Z].</string>
 		</array>
 		<key>link</key>
 		<string>https://github.com/git-up/GitUp/wiki/Using-GitUp-Map-View</string>
@@ -55,7 +55,7 @@ Be sure to only edit options you understand or you may prevent your repository t
 		<key>contents</key>
 		<array>
 			<string>Quick View shows you detailed information about a specific commit in the repository along with its full diff.
-Press [Cmd-Arrow-Up] or [Cmd-Arrow-Down] to select the previous or next commit, or [Spacebar] or [Esc] to exit.</string>
+Press [⌘↑] or [⌘↓] to select the previous or next commit, or [Spacebar] or [Esc] to exit.</string>
 		</array>
 		<key>link</key>
 		<string>https://github.com/git-up/GitUp/wiki/Using-GitUp-Quick-View</string>
@@ -65,7 +65,7 @@ Press [Cmd-Arrow-Up] or [Cmd-Arrow-Down] to select the previous or next commit, 
 		<key>contents</key>
 		<array>
 			<string>The Diff view shows you the diff between the current HEAD of the repository and any other commit.
-Press [i] or [Spacebar] to exit.</string>
+Press [I] or [Spacebar] to exit.</string>
 		</array>
 		<key>link</key>
 		<string>https://github.com/git-up/GitUp/wiki/Viewing-Diffs-in-GitUp</string>
