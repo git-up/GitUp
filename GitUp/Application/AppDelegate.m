@@ -28,6 +28,8 @@
 #import "Common.h"
 #import "ToolProtocol.h"
 #import "GARawTracker.h"
+#import "ServiceProvider.h"
+
 
 #define __ENABLE_SUDDEN_TERMINATION__ 1
 
@@ -99,6 +101,7 @@
   NSString* _authenticationPassword;
 
   CFMessagePortRef _messagePort;
+  ServiceProvider* serviceProvider;
 }
 
 + (void)initialize {
@@ -418,6 +421,12 @@
     XLOG_ERROR(@"Failed creating message port for tool");
     XLOG_DEBUG_UNREACHABLE();
   }
+    
+    // Register services
+    serviceProvider = [[ServiceProvider alloc] init];
+    [NSApp setServicesProvider:serviceProvider];
+    NSUpdateDynamicServices();
+
 
 #if __ENABLE_SUDDEN_TERMINATION__
   // Enable sudden termination
