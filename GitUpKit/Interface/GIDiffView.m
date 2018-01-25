@@ -19,7 +19,7 @@
 
 #import "GIPrivate.h"
 
-#define kTextFontSize 10
+#define kTextDefaultFontSize 11
 #define kTextLineHeightPadding 3
 #define kTextLineDescentAdjustment 1
 
@@ -44,15 +44,31 @@ NSColor* GIDiffViewPlainTextColor = nil;
 
 const char* GIDiffViewMissingNewlinePlaceholder = "🚫\n";
 
+NSString* const GIDiffViewUserDefaultKey_UserFont = @"GIDiffViewUserDefaultKey_UserFont";
+
 @implementation GIDiffView
 
-+ (void)initialize {
-  GIDiffViewAttributes = CFBridgingRetain(@{(id)kCTFontAttributeName : [NSFont userFixedPitchFontOfSize:kTextFontSize], (id)kCTForegroundColorFromContextAttributeName : (id)kCFBooleanTrue});
++ (void)updateSharedFontAttributes {
+  NSData* fontData = [[NSUserDefaults standardUserDefaults] valueForKey:GIDiffViewUserDefaultKey_UserFont];
+  NSFont* font = nil;
+  if (fontData) {
+    font = [NSUnarchiver unarchiveObjectWithData:fontData];
+  }
 
+  if (!font) {
+    font = [NSFont userFixedPitchFontOfSize:kTextDefaultFontSize];
+  }
+
+  if (GIDiffViewAttributes) CFRelease(GIDiffViewAttributes);
+
+  GIDiffViewAttributes = CFBridgingRetain(@{(id)kCTFontAttributeName : font, (id)kCTForegroundColorFromContextAttributeName : (id)kCFBooleanTrue});
+
+  if (GIDiffViewAddedLine) CFRelease(GIDiffViewAddedLine);
   CFAttributedStringRef addedString = CFAttributedStringCreate(kCFAllocatorDefault, CFSTR("+"), GIDiffViewAttributes);
   GIDiffViewAddedLine = CTLineCreateWithAttributedString(addedString);
   CFRelease(addedString);
 
+  if (GIDiffViewDeletedLine) CFRelease(GIDiffViewDeletedLine);
   CFAttributedStringRef deletedString = CFAttributedStringCreate(kCFAllocatorDefault, CFSTR("-"), GIDiffViewAttributes);
   GIDiffViewDeletedLine = CTLineCreateWithAttributedString(deletedString);
   CFRelease(deletedString);
@@ -74,6 +90,10 @@ const char* GIDiffViewMissingNewlinePlaceholder = "🚫\n";
   GIDiffViewVerticalLineColor = [NSColor colorWithDeviceRed:0.85 green:0.85 blue:0.85 alpha:0.6];
   GIDiffViewLineNumberColor = [NSColor colorWithDeviceRed:0.75 green:0.75 blue:0.75 alpha:1.0];
   GIDiffViewPlainTextColor = [NSColor blackColor];
+}
+
++ (void)initialize {
+  [self updateSharedFontAttributes];
 }
 
 - (void)_windowKeyDidChange:(NSNotification*)notification {
