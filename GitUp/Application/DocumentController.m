@@ -55,4 +55,8 @@
   [[AppDelegate sharedDelegate] handleDocumentCountChanged];
 }
 
+- (void)newWindowForTab:(id)sender {
+  [self openDocument:sender];
+}
+
 @end
