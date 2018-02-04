@@ -26,7 +26,6 @@
 #define kUserDefaultsKey_SimpleCommit @"SimpleCommit"  // BOOL
 #define kUserDefaultsKey_DisableSparkle @"DisableSparkle"  // BOOL
 #define kUserDefaultsKey_DiffWhitespaceMode @"DiffWhitespaceMode"  // NSUInteger
-#define kUserDefaultsKey_EnableVisualEffects @"EnableVisualEffects"  // BOOL
 #define kUserDefaultsKey_ShowWelcomeWindow @"ShowWelcomeWindow"  // BOOL
 
 #define kRepositoryUserInfoKey_SkipSubmoduleCheck @"SkipSubmoduleCheck"  // BOOL

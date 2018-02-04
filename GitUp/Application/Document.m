@@ -13,8 +13,6 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#import <QuartzCore/QuartzCore.h>
-
 #import "Document.h"
 #import "WindowController.h"
 #import "Common.h"
@@ -49,10 +47,6 @@
 #define kRestorableStateKey_WindowMode @"windowMode"
 
 #define kSideViewAnimationDuration 0.15  // seconds
-#define kQuickViewAnimationDuration 0.25  // seconds
-
-#define kAnimationKey_ID @"animationID"
-#define kAnimationID_QuickViewSnapshot @"snapshotAnimation"
 
 #define kMaxAncestorCommits 1000
 
@@ -976,126 +970,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 
   _quickViewController.commit = commit;
 
-  [self _animateQuickViewForCommit:commit
-                         appearing:YES
-                        transition:^{
-                          [self _setWindowMode:kWindowModeString_Map_QuickView];
-                        }];
-}
-
-- (void)_animateQuickViewForCommit:(GCHistoryCommit*)commit appearing:(BOOL)appearing transition:(void (^)(void))transitionBlock {
-  if (![[NSUserDefaults standardUserDefaults] boolForKey:kUserDefaultsKey_EnableVisualEffects]) {
-    transitionBlock();
-    return;
-  }
-
-  [CATransaction flush];
-  [CATransaction begin];
-  [CATransaction setDisableActions:YES];
-  [CATransaction setAnimationDuration:kQuickViewAnimationDuration];
-  [CATransaction setAnimationTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionDefault]];
-
-  BOOL animationInFlight = YES;
-  if (!_fixedSnapshotLayer) {
-    animationInFlight = NO;
-    _fixedSnapshotLayer = [CALayer layer];
-    _fixedSnapshotLayer.backgroundColor = _mainWindow.backgroundColor.CGColor;
-    _animatingSnapshotLayer = [CALayer layer];
-    _animatingSnapshotLayer.backgroundColor = _mainWindow.backgroundColor.CGColor;
-    _animatingSnapshotLayer.shadowOpacity = 0.2;
-    _animatingSnapshotLayer.shadowRadius = 30;
-  }
-
-  if (animationInFlight) {
-    transitionBlock();
-  } else if (appearing) {
-    _fixedSnapshotLayer.contents = [_contentView takeSnapshot];
-    transitionBlock();
-    _animatingSnapshotLayer.contents = [_contentView takeSnapshot];
-  } else {
-    _animatingSnapshotLayer.contents = [_contentView takeSnapshot];
-    transitionBlock();
-    _fixedSnapshotLayer.contents = [_contentView takeSnapshot];
-  }
-
-  [_contentView.layer addSublayer:_fixedSnapshotLayer];
-  [_contentView.layer addSublayer:_animatingSnapshotLayer];
-
-  _fixedSnapshotLayer.frame = _contentView.layer.bounds;
-
-  CALayer* fromLayer = nil;
-  if (animationInFlight) {
-    fromLayer = _animatingSnapshotLayer.presentationLayer;
-  }
-
-  if (!fromLayer) {
-    fromLayer = _animatingSnapshotLayer;
-  }
-
-  // Calculating the startProgress to use when reversing an in-flight transition is nontrivial (for a nonlinear timing function).
-  // But we can make Core Animation do it for us by animating a dummy property (zPosition) between 0 and 1 along with the real animations, and using that as the startProgress.
-
-  // Animate the title/toolbar updates alongside the snapshot zoom animation.
-  CATransition* transition = [CATransition animation];
-  transition.type = kCATransitionPush;
-  transition.subtype = appearing ? kCATransitionFromBottom : kCATransitionFromTop;
-  transition.startProgress = fromLayer.zPosition;
-  [_rightView.layer addAnimation:transition forKey:kCATransition];
-  [_titleView.layer addAnimation:transition forKey:kCATransition];
-  [_leftView.layer addAnimation:transition forKey:kCATransition];
-
-  CABasicAnimation* position = [CABasicAnimation animationWithKeyPath:@"position"];
-  CABasicAnimation* transform = [CABasicAnimation animationWithKeyPath:@"transform"];
-  CABasicAnimation* zPosition = [CABasicAnimation animationWithKeyPath:@"zPosition"];
-
-  [self _configureAnimatingSnapshotLayerForCommit:appearing ? commit : nil];
-  position.fromValue = [fromLayer valueForKey:@"position"];
-  transform.fromValue = [fromLayer valueForKey:@"transform"];
-  zPosition.fromValue = @(1 - fromLayer.zPosition);
-
-  [self _configureAnimatingSnapshotLayerForCommit:appearing ? nil : commit];
-  position.toValue = [_animatingSnapshotLayer valueForKey:@"position"];
-  transform.toValue = [_animatingSnapshotLayer valueForKey:@"transform"];
-  zPosition.toValue = @0;
-
-  CAAnimationGroup* group = [CAAnimationGroup animation];
-  group.animations = @[ position, transform, zPosition ];
-  group.delegate = (id)self;  // id<CAAnimationDelegate> is only available on OS X 10.12 SDK
-  [group setValue:kAnimationID_QuickViewSnapshot forKey:kAnimationKey_ID];
-
-  [_animatingSnapshotLayer addAnimation:group forKey:kAnimationID_QuickViewSnapshot];
-
-  [CATransaction commit];
-}
-
-- (void)animationDidStop:(CAAnimation*)anim finished:(BOOL)flag {
-  if ([[anim valueForKey:kAnimationKey_ID] isEqual:kAnimationID_QuickViewSnapshot] && flag) {
-    [_fixedSnapshotLayer removeFromSuperlayer];
-    [_animatingSnapshotLayer removeFromSuperlayer];
-    _fixedSnapshotLayer = nil;
-    _animatingSnapshotLayer = nil;
-  }
-}
-
-- (void)_configureAnimatingSnapshotLayerForCommit:(GCHistoryCommit*)commit {
-  if (commit) {
-    NSPoint commitPoint = [_contentView convertPoint:[_mapViewController positionInViewForCommit:commit] fromView:_mapViewController.view];
-    if (NSPointInRect(commitPoint, _contentView.bounds)) {
-      _animatingSnapshotLayer.bounds = _contentView.layer.bounds;
-      _animatingSnapshotLayer.position = [_contentView convertPointToLayer:commitPoint];
-    } else {
-      _animatingSnapshotLayer.frame = _contentView.layer.bounds;
-    }
-    // Shrink the snapshot so it appears at the location of the commit.
-    // (0 is too small and causes the animation to behave incorrectly.)
-    _animatingSnapshotLayer.transform = CATransform3DMakeScale(0.0001, 0.0001, 1);
-  } else {
-    _animatingSnapshotLayer.transform = CATransform3DIdentity;
-    _animatingSnapshotLayer.frame = _contentView.layer.bounds;
-  }
-  CGPathRef path = CGPathCreateWithRect(_animatingSnapshotLayer.bounds, NULL);
-  _animatingSnapshotLayer.shadowPath = path;
-  CGPathRelease(path);
+  [self _setWindowMode:kWindowModeString_Map_QuickView];
 }
 
 - (BOOL)_hasPreviousQuickView {
@@ -1143,11 +1018,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 
   [_repository resumeHistoryUpdates];
 
-  [self _animateQuickViewForCommit:_quickViewController.commit
-                         appearing:NO
-                        transition:^{
-                          [self _setWindowMode:kWindowModeString_Map];
-                        }];
+  [self _setWindowMode:kWindowModeString_Map];
 }
 
 #pragma mark - Diff
