@@ -82,7 +82,7 @@ static const void* _associatedObjectKey = &_associatedObjectKey;
   return [self _runCLTWithPath:kGitCLTPath
                      arguments:array
               currentDirectory:(repository ? (repository.bare ? repository.repositoryPath : repository.workingDirectoryPath) : [[NSFileManager defaultManager] currentDirectoryPath])
-              environment:(repository ? @{ @"XDG_CONFIG_HOME" : objc_getAssociatedObject(repository, _associatedObjectKey) } : @{})];
+              environment:(repository ? @{@"XDG_CONFIG_HOME" : objc_getAssociatedObject(repository, _associatedObjectKey)} : @{})];
 }
 
 - (NSString*)runGitCLTWithRepository:(GCRepository*)repository command:(NSString*)command, ... {

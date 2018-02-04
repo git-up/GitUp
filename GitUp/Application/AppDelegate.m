@@ -346,8 +346,11 @@
   // Initialize Google Analytics
   [[GARawTracker sharedTracker] startWithTrackingID:@"UA-83409580-1"];
 #endif
-  
-  [[NSAppleEventManager sharedAppleEventManager] setEventHandler:self andSelector:@selector(_getUrl:withReplyEvent:) forEventClass:kInternetEventClass andEventID:kAEGetURL];
+
+  [[NSAppleEventManager sharedAppleEventManager] setEventHandler:self
+                                                     andSelector:@selector(_getUrl:withReplyEvent:)
+                                                   forEventClass:kInternetEventClass
+                                                      andEventID:kAEGetURL];
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification*)notification {
@@ -491,7 +494,7 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
   NSString* command = [input objectForKey:kToolDictionaryKey_Command];
   NSString* repository = [[input objectForKey:kToolDictionaryKey_Repository] stringByStandardizingPath];
   if (!command.length || !repository.length) {
-    return @{ kToolDictionaryKey_Error : @"Invalid command" };
+    return @{kToolDictionaryKey_Error : @"Invalid command"};
   }
   if ([command isEqualToString:@kToolCommand_Open]) {
     [self _openRepositoryWithURL:[NSURL fileURLWithPath:repository] withCloneMode:kCloneMode_None windowModeID:NSNotFound];
@@ -502,7 +505,7 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
   } else if ([command isEqualToString:@kToolCommand_Stash]) {
     [self _openRepositoryWithURL:[NSURL fileURLWithPath:repository] withCloneMode:kCloneMode_None windowModeID:kWindowModeID_Stashes];
   } else {
-    return @{ kToolDictionaryKey_Error : [NSString stringWithFormat:@"Unknown command '%@'", command] };
+    return @{kToolDictionaryKey_Error : [NSString stringWithFormat:@"Unknown command '%@'", command]};
   }
   return @{};
 }

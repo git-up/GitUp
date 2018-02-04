@@ -48,7 +48,7 @@
   if (_repository) {
     if (_repository.bare) {
       if (outError) {
-        *outError = [NSError errorWithDomain:NSCocoaErrorDomain code:-1 userInfo:@{ NSLocalizedDescriptionKey : @"Bare repositories are not supported!" }];
+        *outError = [NSError errorWithDomain:NSCocoaErrorDomain code:-1 userInfo:@{NSLocalizedDescriptionKey : @"Bare repositories are not supported!"}];
       }
     } else {
       _repository.delegate = self;

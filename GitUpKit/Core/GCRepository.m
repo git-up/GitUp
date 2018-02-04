@@ -334,7 +334,7 @@ static int _ReferenceForEachCallback(const char* refname, void* payload) {
     CFAbsoluteTime time = CFAbsoluteTimeGetCurrent();
     GCTask* task = [[GCTask alloc] initWithExecutablePath:path];
     task.currentDirectoryPath = self.workingDirectoryPath;  // TODO: Is this the right working directory?
-    task.additionalEnvironment = @{ @"PATH" : cachedPATH };
+    task.additionalEnvironment = @{@"PATH" : cachedPATH};
     int status;
     NSData* stdoutData;
     NSData* stderrData;
