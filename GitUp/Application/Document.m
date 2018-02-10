@@ -1700,6 +1700,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
   view.frame = NSOffsetRect(newViewFrame, viewFrame.size.width, 0);
   [_mapContainerView addSubview:view positioned:NSWindowAbove relativeTo:_mapView];
 
+#if 0  // TODO: On 10.13, the first time the view is shown after animating, it is completely empty
   [NSAnimationContext beginGrouping];
   [[NSAnimationContext currentContext] setDuration:kSideViewAnimationDuration];
   if (completion) {
@@ -1710,6 +1711,13 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
   [_mapView.animator setFrame:newMapFrame];
   [view.animator setFrame:newViewFrame];
   [NSAnimationContext endGrouping];
+#else
+  [_mapView setFrame:newMapFrame];
+  [view setFrame:newViewFrame];
+  if (completion) {
+    completion();
+  }
+#endif
   [self _updateToolBar];
 
   [self _showHelpWithIdentifier:identifier];
