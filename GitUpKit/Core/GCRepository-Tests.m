@@ -62,7 +62,7 @@
 // -initWithNewLocalRepository:bare:error: is called in -setUp
 - (void)testInitialization {
   // Check initialization result
-  [self assertGitCLTOutputContainsString:@"On branch master\n\nNo commits yet\n" withRepository:self.repository command:@"status", nil];
+  [self assertGitCLTOutputContainsString:@"On branch master\n\nInitial commit\n" withRepository:self.repository command:@"status", nil];
 
   // Check properties
   XCTAssertEqualObjects([self.repository.repositoryPath stringByStandardizingPath], [self.temporaryPath stringByAppendingPathComponent:@".git"]);
