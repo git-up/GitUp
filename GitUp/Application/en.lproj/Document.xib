@@ -501,7 +501,7 @@ Adjust settings in Show menu</string>
             </subviews>
             <point key="canvasLocation" x="-512.5" y="1242"/>
         </customView>
-        <customView id="ghu-yR-ohT" userLabel="Title View">
+        <customView id="ghu-yR-ohT" userLabel="Title View" customClass="ToolbarItemWrapperView">
             <rect key="frame" x="0.0" y="0.0" width="320" height="32"/>
             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
             <subviews>
@@ -526,7 +526,7 @@ Adjust settings in Show menu</string>
             </subviews>
             <point key="canvasLocation" x="200" y="408"/>
         </customView>
-        <customView id="d4D-Mc-I9O" userLabel="Left View">
+        <customView id="d4D-Mc-I9O" userLabel="Left View" customClass="ToolbarItemWrapperView">
             <rect key="frame" x="0.0" y="0.0" width="220" height="32"/>
             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
             <subviews>
@@ -580,7 +580,7 @@ Adjust settings in Show menu</string>
             </subviews>
             <point key="canvasLocation" x="469" y="496"/>
         </customView>
-        <customView id="kfr-yg-mn6" userLabel="Right View">
+        <customView id="kfr-yg-mn6" userLabel="Right View" customClass="ToolbarItemWrapperView">
             <rect key="frame" x="0.0" y="0.0" width="220" height="32"/>
             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
             <subviews>
