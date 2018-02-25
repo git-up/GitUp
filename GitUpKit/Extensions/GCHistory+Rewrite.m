@@ -170,7 +170,6 @@ typedef NS_ENUM(NSUInteger, ReplayMode) {
   __block BOOL success = YES;
   [self walkDescendantsOfCommits:@[ fromCommit ]
                       usingBlock:^(GCHistoryCommit* commit, BOOL* stop) {
-
                         if ([self isCommitOnAnyLocalBranch:commit]) {
                           if (CFDictionaryContainsKey(mapping, (__bridge const void*)commit)) {
                             return;
@@ -222,7 +221,6 @@ typedef NS_ENUM(NSUInteger, ReplayMode) {
                         } else {
                           XLOG_DEBUG(@"Skipping replay of commit \"%@\" (%@) not on local branch", commit.summary, commit.shortSHA1);
                         }
-
                       }];
   CFRelease(mapping);
   return success;

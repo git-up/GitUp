@@ -272,14 +272,12 @@
     [alert addButtonWithTitle:NSLocalizedString(@"Cancel", nil)];
     [self presentAlert:alert
         completionHandler:^(NSInteger returnCode) {
-
           if (returnCode == NSAlertFirstButtonReturn) {
             block();
           }
           if (alert.suppressionButton.state) {
             [[NSUserDefaults standardUserDefaults] setBool:YES forKey:key];
           }
-
         }];
   }
 }

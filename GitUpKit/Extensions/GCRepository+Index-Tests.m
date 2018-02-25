@@ -207,9 +207,7 @@
                                          toIndex:index2
                                            error:NULL
                                      usingFilter:^BOOL(GCLineDiffChange change, NSUInteger oldLineNumber, NSUInteger newLineNumber) {
-
                                        return (newLineNumber % 2);
-
                                      }]);
   XCTAssertFalse(index2.empty);
   NSData* data2 = [self.repository exportBlobWithOID:[index2 OIDForFile:@"lines.txt"] error:NULL];
@@ -225,9 +223,7 @@
                                          toIndex:index2
                                            error:NULL
                                      usingFilter:^BOOL(GCLineDiffChange change, NSUInteger oldLineNumber, NSUInteger newLineNumber) {
-
                                        return YES;
-
                                      }]);
   NSData* data3 = [self.repository exportBlobWithOID:[index2 OIDForFile:@"lines.txt"] error:NULL];
   XCTAssertNotNil(data3);

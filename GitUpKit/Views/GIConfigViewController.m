@@ -311,7 +311,6 @@ static NSMutableDictionary* _patternHelp = nil;
   [self.windowController runModalView:_editView
             withInitialFirstResponder:(option ? _valueTextField : _nameTextField)
             completionHandler:^(BOOL success) {
-
               if (success) {
                 NSString* name = option ? option.variable : [_nameTextField.stringValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
                 NSString* value = [_valueTextField.stringValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
@@ -333,7 +332,6 @@ static NSMutableDictionary* _patternHelp = nil;
                   NSBeep();
                 }
               }
-
             }];
 }
 

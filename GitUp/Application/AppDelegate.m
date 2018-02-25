@@ -210,7 +210,6 @@
   [[NSDocumentController sharedDocumentController] openDocumentWithContentsOfURL:url
                                                                          display:YES
                                                                completionHandler:^(NSDocument* document, BOOL documentWasAlreadyOpen, NSError* openError) {
-
                                                                  if (document) {
                                                                    if (documentWasAlreadyOpen) {
                                                                      if ((NSUInteger)windowModeID != NSNotFound) {
@@ -226,7 +225,6 @@
                                                                  } else {
                                                                    [[NSDocumentController sharedDocumentController] presentError:openError];
                                                                  }
-
                                                                }];
 }
 

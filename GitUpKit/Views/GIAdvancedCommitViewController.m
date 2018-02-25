@@ -255,7 +255,6 @@
                                     button:NSLocalizedString(@"Discard", nil)
                  suppressionUserDefaultKey:nil
                                      block:^{
-
                                        for (GCDiffDelta* delta in deltas) {
                                          NSError* error;
                                          BOOL submodule = delta.submodule;
@@ -269,7 +268,6 @@
                                          _indexActive = YES;
                                          [self.view.window makeFirstResponder:_indexFilesViewController.preferredFirstResponder];
                                        }
-
                                      }];
     } else {
       NSBeep();
@@ -402,7 +400,6 @@
                                     button:NSLocalizedString(@"Discard", nil)
                  suppressionUserDefaultKey:nil
                                      block:^{
-
                                        for (GCDiffDelta* delta in _diffContentsViewController.deltas) {
                                          NSIndexSet* oldLines;
                                          NSIndexSet* newLines;
@@ -419,7 +416,6 @@
                                          _indexActive = !_indexActive;
                                        }
                                        [self.view.window makeFirstResponder:(_indexActive ? _indexFilesViewController.preferredFirstResponder : _workdirFilesViewController.preferredFirstResponder)];
-
                                      }];
     } else {
       NSBeep();

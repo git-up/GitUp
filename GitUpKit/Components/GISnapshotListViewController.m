@@ -150,7 +150,6 @@
                                        skipCheckoutOnUndo:NO
                                                     error:&error
                                                usingBlock:^BOOL(GCLiveRepository* repository, NSError** outError) {
-
                                                  BOOL didUpdateReferences;
                                                  if (![repository restoreSnapshot:snapshot
                                                                       withOptions:(kGCSnapshotOption_IncludeHEAD | kGCSnapshotOption_IncludeLocalBranches | kGCSnapshotOption_IncludeTags)
@@ -166,7 +165,6 @@
                                                    didUpdate = YES;
                                                  }
                                                  return YES;
-
                                                }];
   }
   if (success) {

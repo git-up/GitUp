@@ -443,7 +443,6 @@ static void _StreamCallback(ConstFSEventStreamRef streamRef, void* clientCallBac
   NSString* path = [self.privateAppDirectoryPath stringByAppendingPathComponent:kCommitDatabaseFileName];
   _updatingDatabase = YES;
   dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
-
     NSError* error;
     GCRepository* repository = [[GCRepository alloc] initWithExistingLocalRepository:self.repositoryPath error:&error];  // We cannot use self because we access the repo on a background thread
     GCCommitDatabase* database = repository ? [[GCCommitDatabase alloc] initWithRepository:repository
@@ -454,13 +453,10 @@ static void _StreamCallback(ConstFSEventStreamRef streamRef, void* clientCallBac
     BOOL success = [database updateWithProgressHandler:handler error:&error];
     database = nil;  // Release and close immediately
     dispatch_async(dispatch_get_main_queue(), ^{
-
       XLOG_DEBUG_CHECK(_updatingDatabase);
       _updatingDatabase = NO;
       completion(success, error);
-
     });
-
   });
 }
 
@@ -471,7 +467,6 @@ static void _StreamCallback(ConstFSEventStreamRef streamRef, void* clientCallBac
   } else {
     [self _updateDatabaseInBackgroundWithProgressHandler:NULL
                                               completion:^(BOOL success, NSError* error) {
-
                                                 if (success) {
                                                   if ([self.delegate respondsToSelector:@selector(repositoryDidUpdateSearch:)]) {
                                                     [self.delegate repositoryDidUpdateSearch:self];
@@ -487,7 +482,6 @@ static void _StreamCallback(ConstFSEventStreamRef streamRef, void* clientCallBac
                                                     [self.delegate repository:self searchUpdateDidFailWithError:error];
                                                   }
                                                 }
-
                                               }];
   }
 }
@@ -859,12 +853,10 @@ static void _StreamCallback(ConstFSEventStreamRef streamRef, void* clientCallBac
       [self.delegate repositoryBackgroundOperationInProgressDidChange:self];
     }
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-
       GCRepository* repository = [[GCRepository alloc] initWithExistingLocalRepository:self.repositoryPath error:&error];
       repository.delegate = self.delegate;
       __block BOOL success = repository && operationBlock(repository, &error);
       dispatch_async(dispatch_get_main_queue(), ^{
-
         if (success) {
           GCSnapshot* afterSnapshot = reason ? [self takeSnapshot:&error] : nil;
           if (!reason || afterSnapshot) {
@@ -881,15 +873,11 @@ static void _StreamCallback(ConstFSEventStreamRef streamRef, void* clientCallBac
         }
         [[NSProcessInfo processInfo] enableSuddenTermination];
         completionBlock(success, error);
-
       });
-
     });
   } else {
     dispatch_async(dispatch_get_main_queue(), ^{
-
       completionBlock(NO, error);
-
     });
   }
 }
@@ -907,7 +895,6 @@ static void _StreamCallback(ConstFSEventStreamRef streamRef, void* clientCallBac
                        skipCheckoutOnUndo:NO
                                     error:error
                                usingBlock:^BOOL(GCLiveRepository* repository, NSError** outError) {
-
                                  GCReferenceTransform* transform = block(repository, outError);
                                  if (!transform) {
                                    return NO;
@@ -927,7 +914,6 @@ static void _StreamCallback(ConstFSEventStreamRef streamRef, void* clientCallBac
                                    return [self checkoutTreeForCommit:nil withBaseline:oldHeadCommit options:kGCCheckoutOption_UpdateSubmodulesRecursively error:outError];
                                  }
                                  return YES;
-
                                }];
 }
 
@@ -938,10 +924,8 @@ static void _StreamCallback(ConstFSEventStreamRef streamRef, void* clientCallBac
                      skipCheckoutOnUndo:YES
                                   error:error
                              usingBlock:^BOOL(GCLiveRepository* repository, NSError** outError) {
-
                                newCommit = [repository createCommitFromHEADAndOtherParent:parent withMessage:message error:outError];
                                return newCommit ? YES : NO;
-
                              }]) {
     return nil;
   }
@@ -955,10 +939,8 @@ static void _StreamCallback(ConstFSEventStreamRef streamRef, void* clientCallBac
                      skipCheckoutOnUndo:YES
                                   error:error
                              usingBlock:^BOOL(GCLiveRepository* repository, NSError** outError) {
-
                                newCommit = [repository createCommitByAmendingHEADWithMessage:message error:error];
                                return newCommit ? YES : NO;
-
                              }]) {
     return nil;
   }
@@ -976,7 +958,6 @@ static void _StreamCallback(ConstFSEventStreamRef streamRef, void* clientCallBac
     _databaseIndexesDiffs = indexDiffs;
     [self _updateDatabaseInBackgroundWithProgressHandler:handler
                                               completion:^(BOOL success, NSError* error) {
-
                                                 if (success) {
                                                   NSString* path = [self.privateAppDirectoryPath stringByAppendingPathComponent:kCommitDatabaseFileName];
                                                   _database = [[GCCommitDatabase alloc] initWithRepository:self
@@ -993,7 +974,6 @@ static void _StreamCallback(ConstFSEventStreamRef streamRef, void* clientCallBac
                                                   }
                                                 }
                                                 completion(success, error);
-
                                               }];
   } else {
     XLOG_DEBUG_UNREACHABLE();

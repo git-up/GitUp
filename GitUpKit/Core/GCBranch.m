@@ -99,7 +99,6 @@
   BOOL success = [self enumerateReferencesWithOptions:kGCReferenceEnumerationOption_RetainReferences
                                                 error:error
                                            usingBlock:^BOOL(git_reference* reference) {
-
                                              if ((flags & GIT_BRANCH_LOCAL) && git_reference_is_branch(reference)) {
                                                GCLocalBranch* branch = [[GCLocalBranch alloc] initWithRepository:self reference:reference];
                                                [array addObject:branch];
@@ -110,7 +109,6 @@
                                                git_reference_free(reference);
                                              }
                                              return YES;
-
                                            }];
   return success ? array : nil;
 }

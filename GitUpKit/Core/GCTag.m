@@ -101,7 +101,6 @@
   BOOL success = [self enumerateReferencesWithOptions:kGCReferenceEnumerationOption_RetainReferences
                                                 error:error
                                            usingBlock:^BOOL(git_reference* reference) {
-
                                              if (git_reference_is_tag(reference)) {
                                                GCTag* tag = [[GCTag alloc] initWithRepository:self reference:reference];
                                                [array addObject:tag];
@@ -109,7 +108,6 @@
                                                git_reference_free(reference);
                                              }
                                              return YES;
-
                                            }];
   return success ? array : nil;
 }

@@ -80,7 +80,6 @@ NSString* GCNameFromHostingService(GCHostingService service) {
                     recursive:recursive
                         error:error
                         block:^BOOL(GCRepository* repository, NSArray* remotes, NSError** blockError) {
-
                           for (GCRemote* remote in remotes) {
                             NSUInteger count;
                             if (![repository fetchDefaultRemoteBranchesFromRemote:remote tagMode:mode prune:prune updatedTips:&count error:blockError]) {
@@ -89,7 +88,6 @@ NSString* GCNameFromHostingService(GCHostingService service) {
                             total += count;
                           }
                           return YES;
-
                         }]) {
     return NO;
   }
@@ -105,7 +103,6 @@ NSString* GCNameFromHostingService(GCHostingService service) {
                     recursive:recursive
                         error:error
                         block:^BOOL(GCRepository* repository, NSArray* remotes, NSError** blockError) {
-
                           NSMutableArray* remoteTags = prune ? [[NSMutableArray alloc] init] : nil;
                           for (GCRemote* remote in remotes) {
                             NSUInteger count;
@@ -131,7 +128,6 @@ NSString* GCNameFromHostingService(GCHostingService service) {
                             }
                           }
                           return YES;
-
                         }]) {
     return NO;
   }

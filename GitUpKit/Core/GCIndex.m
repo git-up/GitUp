@@ -355,7 +355,6 @@ cleanup:
   }
   [patch enumerateUsingBeginHunkHandler:NULL
                             lineHandler:^(GCLineDiffChange change, NSUInteger oldLineNumber, NSUInteger newLineNumber, const char* contentBytes, NSUInteger contentLength) {
-
                               /* Comparing workdir to index:
      
      Change      | Filter     | Write?
@@ -383,7 +382,6 @@ cleanup:
                               if (shouldWrite) {
                                 [data appendBytes:contentBytes length:contentLength];
                               }
-
                             }
                          endHunkHandler:NULL];
 
@@ -453,7 +451,6 @@ cleanup:
   }
   [patch enumerateUsingBeginHunkHandler:NULL
                             lineHandler:^(GCLineDiffChange change, NSUInteger oldLineNumber, NSUInteger newLineNumber, const char* contentBytes, NSUInteger contentLength) {
-
                               /* Comparing index to commit:
      
      Change      | Filter     | Write?
@@ -481,7 +478,6 @@ cleanup:
                               if (shouldWrite) {
                                 [data appendBytes:contentBytes length:contentLength];
                               }
-
                             }
                          endHunkHandler:NULL];
 
@@ -533,7 +529,6 @@ cleanup:
     __block BOOL failed = NO;
     [patch enumerateUsingBeginHunkHandler:NULL
                               lineHandler:^(GCLineDiffChange change, NSUInteger oldLineNumber, NSUInteger newLineNumber, const char* contentBytes, NSUInteger contentLength) {
-
                                 /* Comparing workdir to index:
        
        Change      | Filter     | Write?
@@ -563,7 +558,6 @@ cleanup:
                                   failed = YES;
                                   XLOG_DEBUG_UNREACHABLE();
                                 }
-
                               }
                            endHunkHandler:NULL];
     if (failed) {
@@ -643,7 +637,6 @@ cleanup:
   }
   [patch enumerateUsingBeginHunkHandler:NULL
                             lineHandler:^(GCLineDiffChange change, NSUInteger oldLineNumber, NSUInteger newLineNumber, const char* contentBytes, NSUInteger contentLength) {
-
                               /* Comparing other index to index:
      
      Change      | Filter     | Write?
@@ -671,7 +664,6 @@ cleanup:
                               if (shouldWrite) {
                                 [data appendBytes:contentBytes length:contentLength];
                               }
-
                             }
                          endHunkHandler:NULL];
 
