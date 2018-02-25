@@ -1012,9 +1012,9 @@ static BOOL _MatchReference(NSString* match, NSString* name) {
   match = [match stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
   bool searchFileHistoryOnly = [match hasPrefix:@"/"];
   // Search file history directly
-  if(match.length >= kMinSearchLength && searchFileHistoryOnly) {
+  if(match.length >= (kMinSearchLength + 1) && searchFileHistoryOnly) {
     NSArray* fileCommits = [_history.repository lookupCommitsForFile:[match substringFromIndex:1] followRenames:YES error:NULL];
-    if([fileCommits count] > 0) {
+    if(fileCommits.count > 0) {
       [results addObjectsFromArray:fileCommits];
     }
   }
@@ -1035,7 +1035,7 @@ static BOOL _MatchReference(NSString* match, NSString* name) {
         }
       }
     }
-    
+
     // Search references
     for (GCHistoryLocalBranch* branch in _history.localBranches) {
       if (_MatchReference(match, branch.name)) {
