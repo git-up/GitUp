@@ -988,17 +988,17 @@ static BOOL _MatchReference(NSString* match, NSString* name) {
 - (NSArray*)findCommitsMatching:(NSString*)match {
   XLOG_DEBUG_CHECK(_database);
   NSMutableArray* results = [[NSMutableArray alloc] init];
-  
+
   match = [match stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
   bool searchFileHistoryOnly = [match hasPrefix:@"/"];
   // Search file history directly
-  if(match.length >= (kMinSearchLength + 1) && searchFileHistoryOnly) {
+  if (match.length >= (kMinSearchLength + 1) && searchFileHistoryOnly) {
     NSArray* fileCommits = [_history.repository lookupCommitsForFile:[match substringFromIndex:1] followRenames:YES error:NULL];
-    if(fileCommits.count > 0) {
+    if (fileCommits.count > 0) {
       [results addObjectsFromArray:fileCommits];
     }
   }
-  
+
   if (match.length >= kMinSearchLength && !searchFileHistoryOnly) {
     // Search SHA1s directly
     NSArray* words = [match componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
