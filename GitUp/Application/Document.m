@@ -1173,7 +1173,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 
 - (NSArray*)toolbarDefaultItemIdentifiers:(NSToolbar*)toolbar {
   if (_unifiedToolbar) {
-    return @[ kToolbarItem_Left, kToolbarItem_Title, NSToolbarSpaceItemIdentifier, kToolbarItem_Right ];
+    return @[ kToolbarItem_Left, kToolbarItem_Title, kToolbarItem_Right ];
   }
   return @[ kToolbarItem_Left, NSToolbarFlexibleSpaceItemIdentifier, kToolbarItem_Right ];
 }
