@@ -1816,13 +1816,13 @@
 			buildSettings = {
 				HEADER_SEARCH_PATHS = (
 					"Third-Party/libgit2/include",
-					"Third-Party/Libraries/libssh2/$(PLATFORM_NAME)/include",
-					"Third-Party/Libraries/libsqlite3/$(PLATFORM_NAME)/include",
+					"Third-Party/libsqlite3/$(PLATFORM_NAME)/include",
+					"Third-Party/libssh2/$(PLATFORM_NAME)/include",
 				);
 				OTHER_LDFLAGS = (
-					"Third-Party/Libraries/libssl/$(PLATFORM_NAME)/lib/libcrypto.a",
-					"Third-Party/Libraries/libssh2/$(PLATFORM_NAME)/lib/libssh2.a",
-					"Third-Party/Libraries/libsqlite3/$(PLATFORM_NAME)/lib/libsqlite3.a",
+					"Third-Party/libsqlite3/$(PLATFORM_NAME)/lib/libsqlite3.a",
+					"Third-Party/libssl/$(PLATFORM_NAME)/lib/libcrypto.a",
+					"Third-Party/libssh2/$(PLATFORM_NAME)/lib/libssh2.a",
 				);
 			};
 			name = Debug;
@@ -1833,13 +1833,13 @@
 			buildSettings = {
 				HEADER_SEARCH_PATHS = (
 					"Third-Party/libgit2/include",
-					"Third-Party/Libraries/libssh2/$(PLATFORM_NAME)/include",
-					"Third-Party/Libraries/libsqlite3/$(PLATFORM_NAME)/include",
+					"Third-Party/libsqlite3/$(PLATFORM_NAME)/include",
+					"Third-Party/libssh2/$(PLATFORM_NAME)/include",
 				);
 				OTHER_LDFLAGS = (
-					"Third-Party/Libraries/libssl/$(PLATFORM_NAME)/lib/libcrypto.a",
-					"Third-Party/Libraries/libssh2/$(PLATFORM_NAME)/lib/libssh2.a",
-					"Third-Party/Libraries/libsqlite3/$(PLATFORM_NAME)/lib/libsqlite3.a",
+					"Third-Party/libsqlite3/$(PLATFORM_NAME)/lib/libsqlite3.a",
+					"Third-Party/libssl/$(PLATFORM_NAME)/lib/libcrypto.a",
+					"Third-Party/libssh2/$(PLATFORM_NAME)/lib/libssh2.a",
 				);
 			};
 			name = Release;

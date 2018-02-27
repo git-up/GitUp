@@ -1481,7 +1481,7 @@
 					GIT_ARCH_64,
 				);
 				HEADER_SEARCH_PATHS = (
-					"Libraries/libssh2/$(PLATFORM_NAME)/include",
+					"libssh2/$(PLATFORM_NAME)/include",
 					libgit2/src,
 					libgit2/include,
 					"libgit2/deps/http-parser",
@@ -1524,7 +1524,7 @@
 					GIT_ARCH_64,
 				);
 				HEADER_SEARCH_PATHS = (
-					"Libraries/libssh2/$(PLATFORM_NAME)/include",
+					"libssh2/$(PLATFORM_NAME)/include",
 					libgit2/src,
 					libgit2/include,
 					"libgit2/deps/http-parser",
