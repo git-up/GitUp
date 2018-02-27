@@ -1755,10 +1755,6 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"Third-Party/Libraries/libssl/$(PLATFORM_NAME)/lib/libcrypto.a",
-				);
 				PRODUCT_BUNDLE_IDENTIFIER = co.gitup.kit;
 				PRODUCT_NAME = GitUpKit;
 				SDKROOT = iphoneos;
@@ -1775,10 +1771,6 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"Third-Party/Libraries/libssl/$(PLATFORM_NAME)/lib/libcrypto.a",
-				);
 				PRODUCT_BUNDLE_IDENTIFIER = co.gitup.kit;
 				PRODUCT_NAME = GitUpKit;
 				SDKROOT = iphoneos;
@@ -1795,10 +1787,6 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"Third-Party/Libraries/libssl/$(PLATFORM_NAME)/lib/libcrypto.a",
-				);
 				PRODUCT_BUNDLE_IDENTIFIER = co.gitup.kit;
 				PRODUCT_NAME = GitUpKit;
 				SDKROOT = macosx;
@@ -1815,10 +1803,6 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"Third-Party/Libraries/libssl/$(PLATFORM_NAME)/lib/libcrypto.a",
-				);
 				PRODUCT_BUNDLE_IDENTIFIER = co.gitup.kit;
 				PRODUCT_NAME = GitUpKit;
 				SDKROOT = macosx;
@@ -1836,6 +1820,7 @@
 					"Third-Party/Libraries/libsqlite3/$(PLATFORM_NAME)/include",
 				);
 				OTHER_LDFLAGS = (
+					"Third-Party/Libraries/libssl/$(PLATFORM_NAME)/lib/libcrypto.a",
 					"Third-Party/Libraries/libssh2/$(PLATFORM_NAME)/lib/libssh2.a",
 					"Third-Party/Libraries/libsqlite3/$(PLATFORM_NAME)/lib/libsqlite3.a",
 				);
@@ -1852,6 +1837,7 @@
 					"Third-Party/Libraries/libsqlite3/$(PLATFORM_NAME)/include",
 				);
 				OTHER_LDFLAGS = (
+					"Third-Party/Libraries/libssl/$(PLATFORM_NAME)/lib/libcrypto.a",
 					"Third-Party/Libraries/libssh2/$(PLATFORM_NAME)/lib/libssh2.a",
 					"Third-Party/Libraries/libsqlite3/$(PLATFORM_NAME)/lib/libsqlite3.a",
 				);
@@ -1868,10 +1854,6 @@
 				GCC_PREPROCESSOR_DEFINITIONS_NOT_USED_IN_PRECOMPS = (
 					"$(inherited)",
 					"__GI_HAS_APPKIT__=0",
-				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"Third-Party/Libraries/libssl/$(PLATFORM_NAME)/lib/libcrypto.a",
 				);
 				PRODUCT_NAME = GitUpTests;
 				SDKROOT = macosx;
@@ -1892,10 +1874,6 @@
 				GCC_PREPROCESSOR_DEFINITIONS_NOT_USED_IN_PRECOMPS = (
 					"$(inherited)",
 					"__GI_HAS_APPKIT__=0",
-				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"Third-Party/Libraries/libssl/$(PLATFORM_NAME)/lib/libcrypto.a",
 				);
 				PRODUCT_NAME = GitUpTests;
 				SDKROOT = macosx;
