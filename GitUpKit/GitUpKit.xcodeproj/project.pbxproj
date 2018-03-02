@@ -1821,7 +1821,7 @@
 				);
 				OTHER_LDFLAGS = (
 					"Third-Party/libsqlite3/$(PLATFORM_NAME)/lib/libsqlite3.a",
-					"Third-Party/libssl/$(PLATFORM_NAME)/lib/libcrypto.a",
+					"Third-Party/libmbedtls/$(PLATFORM_NAME)/lib/libmbedcrypto.a",
 					"Third-Party/libssh2/$(PLATFORM_NAME)/lib/libssh2.a",
 				);
 			};
@@ -1838,7 +1838,7 @@
 				);
 				OTHER_LDFLAGS = (
 					"Third-Party/libsqlite3/$(PLATFORM_NAME)/lib/libsqlite3.a",
-					"Third-Party/libssl/$(PLATFORM_NAME)/lib/libcrypto.a",
+					"Third-Party/libmbedtls/$(PLATFORM_NAME)/lib/libmbedcrypto.a",
 					"Third-Party/libssh2/$(PLATFORM_NAME)/lib/libssh2.a",
 				);
 			};
