@@ -489,7 +489,7 @@
 				HEADER_SEARCH_PATHS = "../GitUpKit/Third-Party/libgit2/include";
 				OTHER_LDFLAGS = (
 					"$(BUILD_DIR)/$(CONFIGURATION)/libgit2.a",
-					"../GitUpKit/Third-Party/libmbedtls/$(PLATFORM_NAME)/lib/libmbedcrypto.a",
+					"../GitUpKit/Third-Party/libssl/$(PLATFORM_NAME)/lib/libcrypto.a",
 					"../GitUpKit/Third-Party/libssh2/$(PLATFORM_NAME)/lib/libssh2.a",
 				);
 				PRODUCT_NAME = gitup;
@@ -504,7 +504,7 @@
 				HEADER_SEARCH_PATHS = "../GitUpKit/Third-Party/libgit2/include";
 				OTHER_LDFLAGS = (
 					"$(BUILD_DIR)/$(CONFIGURATION)/libgit2.a",
-					"../GitUpKit/Third-Party/libmbedtls/$(PLATFORM_NAME)/lib/libmbedcrypto.a",
+					"../GitUpKit/Third-Party/libssl/$(PLATFORM_NAME)/lib/libcrypto.a",
 					"../GitUpKit/Third-Party/libssh2/$(PLATFORM_NAME)/lib/libssh2.a",
 				);
 				PRODUCT_NAME = gitup;

@@ -56,7 +56,7 @@ function build_arch_library() {
     exit 1
   fi
   
-  ./configure --prefix="$PREFIX" --host="$HOST" --disable-shared --disable-debug --disable-examples-build --with-libz --with-mbedtls="`pwd`/../../libmbedtls/$PLATFORM"
+  ./configure --prefix="$PREFIX" --host="$HOST" --disable-shared --disable-debug --disable-examples-build --with-libz --with-openssl --with-libssl-prefix="`pwd`/../../libssl/$PLATFORM"
   make install
   make clean
 }
