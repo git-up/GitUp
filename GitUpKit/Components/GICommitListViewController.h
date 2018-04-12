@@ -15,6 +15,8 @@
 
 #import "GIViewController.h"
 
+#import "GIAppKit.h"
+
 @class GICommitListViewController, GCHistoryCommit;
 
 @protocol GICommitListViewControllerDelegate <NSObject>
@@ -22,7 +24,7 @@
 - (void)commitListViewControllerDidChangeSelection:(GICommitListViewController*)controller;
 @end
 
-@interface GICommitListViewController : GIViewController
+@interface GICommitListViewController : GIViewController <GIContentInsetsDelegate>
 @property(nonatomic, assign) id<GICommitListViewControllerDelegate> delegate;
 @property(nonatomic, copy) NSArray* results;  // Can contain GCHistoryCommit, GCHistoryLocalBranch, GCHistoryRemoteBranch or GCHistoryTag
 @property(nonatomic, readonly) NSArray* commits;  // Converted results to GCHistoryCommits

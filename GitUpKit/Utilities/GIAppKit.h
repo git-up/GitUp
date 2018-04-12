@@ -66,3 +66,14 @@ extern NSString* const GICommitMessageViewUserDefaultKey_EnableSpellChecking;
 @property(nonatomic) IBInspectable CGFloat minSize1;
 @property(nonatomic) IBInspectable CGFloat minSize2;
 @end
+
+@protocol GIContentInsetsDelegate
+- (void)updateLayoutWithContentInsets:(NSEdgeInsets)insets;
+@end
+
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= __MAC_10_10
+@interface GIPolyfillVisualEffectView : NSVisualEffectView
+#else
+@interface GIPolyfillVisualEffectView : NSView
+#endif
+@end

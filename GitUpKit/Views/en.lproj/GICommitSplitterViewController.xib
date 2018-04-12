@@ -1,16 +1,20 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14109" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7706"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14109"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="GICommitSplitterViewController">
             <connections>
-                <outlet property="continueButton" destination="kyp-MO-xu5" id="LRR-6V-vFc"/>
+                <outlet property="bottomView" destination="lsf-hZ-dPf" id="UIO-ec-eYa"/>
+                <outlet property="continueButton" destination="9Uk-Ng-w73" id="yGW-rC-IR1"/>
                 <outlet property="diffContentsView" destination="weo-in-1Ld" id="WAI-ja-NrZ"/>
+                <outlet property="filesOldColorView" destination="7j5-Pz-Pse" id="xaS-ou-FkQ"/>
                 <outlet property="filesViewNew" destination="IfV-FZ-t0W" id="s6S-bX-wFN"/>
                 <outlet property="filesViewOld" destination="Scn-lW-rL0" id="Ixn-qz-kmQ"/>
+                <outlet property="headerColorView" destination="eJw-Ro-RO2" id="jaE-8I-GJk"/>
                 <outlet property="infoTextField" destination="J4i-ca-hW8" id="SsC-49-2T9"/>
                 <outlet property="messageTextView" destination="C9q-53-7wr" id="Yf2-ha-bpr"/>
                 <outlet property="messageView" destination="mcb-9I-AWZ" id="5WM-be-w0L"/>
@@ -23,6 +27,155 @@
             <rect key="frame" x="0.0" y="0.0" width="1000" height="500"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
+                <splitView misplaced="YES" dividerStyle="thin" vertical="YES" id="GbO-qM-CQw" customClass="GIDualSplitView">
+                    <rect key="frame" x="0.0" y="0.0" width="1000" height="500"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                    <subviews>
+                        <customView id="hef-Ad-4nX">
+                            <rect key="frame" x="0.0" y="0.0" width="300" height="500"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                            <subviews>
+                                <box verticalHuggingPriority="750" boxType="separator" id="GiE-tn-bRu">
+                                    <rect key="frame" x="0.0" y="39" width="300" height="5"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                </box>
+                                <splitView misplaced="YES" dividerStyle="thin" id="e6i-iT-slV" customClass="GIDualSplitView">
+                                    <rect key="frame" x="0.0" y="0.0" width="300" height="500"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <customView id="VtZ-UX-sFq">
+                                            <rect key="frame" x="0.0" y="0.0" width="300" height="249"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <subviews>
+                                                <customView misplaced="YES" id="Scn-lW-rL0">
+                                                    <rect key="frame" x="0.0" y="0.0" width="300" height="249"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                </customView>
+                                                <customView id="7j5-Pz-Pse" customClass="GIColorView">
+                                                    <rect key="frame" x="0.0" y="215" width="300" height="34"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                                    <subviews>
+                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="JBE-2n-Fmz">
+                                                            <rect key="frame" x="8" y="9" width="154" height="17"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                            <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingTail" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="left" title="Old Commit" id="CSN-Cf-azv">
+                                                                <font key="font" metaFont="systemBold"/>
+                                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="deviceWhite"/>
+                                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                            </textFieldCell>
+                                                        </textField>
+                                                    </subviews>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="color" keyPath="backgroundColor">
+                                                            <color key="value" white="0.5" alpha="1" colorSpace="custom" customColorSpace="deviceWhite"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
+                                                </customView>
+                                            </subviews>
+                                        </customView>
+                                        <customView id="ots-w9-o6k">
+                                            <rect key="frame" x="0.0" y="250" width="300" height="250"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <subviews>
+                                                <customView id="i0X-9n-k1u" customClass="GIColorView">
+                                                    <rect key="frame" x="0.0" y="216" width="300" height="34"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                                    <subviews>
+                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="Zg3-mt-YHc">
+                                                            <rect key="frame" x="8" y="9" width="154" height="17"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                            <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingTail" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="left" title="New Commit" id="C06-wj-5uc">
+                                                                <font key="font" metaFont="systemBold"/>
+                                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="deviceWhite"/>
+                                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                            </textFieldCell>
+                                                        </textField>
+                                                    </subviews>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="color" keyPath="backgroundColor">
+                                                            <color key="value" white="0.5" alpha="1" colorSpace="custom" customColorSpace="deviceWhite"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
+                                                </customView>
+                                                <customView misplaced="YES" id="IfV-FZ-t0W">
+                                                    <rect key="frame" x="0.0" y="0.0" width="300" height="216"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                </customView>
+                                                <customView misplaced="YES" id="lsf-hZ-dPf" customClass="GIPolyfillVisualEffectView">
+                                                    <rect key="frame" x="0.0" y="0.0" width="300" height="42"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                                </customView>
+                                                <button verticalHuggingPriority="750" id="nxt-Ko-BXq">
+                                                    <rect key="frame" x="8" y="8" width="84" height="26"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                                    <buttonCell key="cell" type="bevel" title="Cancel" bezelStyle="regularSquare" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="foE-IS-DPn">
+                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                        <font key="font" metaFont="system"/>
+                                                        <string key="keyEquivalent" base64-UTF8="YES">
+Gw
+</string>
+                                                    </buttonCell>
+                                                    <connections>
+                                                        <action selector="cancel:" target="-2" id="4a4-ol-h5n"/>
+                                                    </connections>
+                                                </button>
+                                                <button verticalHuggingPriority="750" id="9Uk-Ng-w73">
+                                                    <rect key="frame" x="188" y="8" width="104" height="26"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                                    <buttonCell key="cell" type="bevel" title="Continue…" bezelStyle="regularSquare" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="IzC-Z8-TyG">
+                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                        <font key="font" metaFont="system"/>
+                                                        <string key="keyEquivalent" base64-UTF8="YES">
+DQ
+</string>
+                                                        <modifierMask key="keyEquivalentModifierMask" option="YES"/>
+                                                    </buttonCell>
+                                                    <connections>
+                                                        <action selector="continue:" target="-2" id="jKZ-gG-2GW"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                        </customView>
+                                    </subviews>
+                                    <holdingPriorities>
+                                        <real value="250"/>
+                                        <real value="250"/>
+                                    </holdingPriorities>
+                                    <userDefinedRuntimeAttributes>
+                                        <userDefinedRuntimeAttribute type="number" keyPath="minSize1">
+                                            <real key="value" value="150"/>
+                                        </userDefinedRuntimeAttribute>
+                                        <userDefinedRuntimeAttribute type="number" keyPath="minSize2">
+                                            <real key="value" value="150"/>
+                                        </userDefinedRuntimeAttribute>
+                                    </userDefinedRuntimeAttributes>
+                                </splitView>
+                            </subviews>
+                        </customView>
+                        <customView id="XQf-N4-jx3">
+                            <rect key="frame" x="301" y="0.0" width="699" height="500"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                            <subviews>
+                                <customView id="weo-in-1Ld">
+                                    <rect key="frame" x="0.0" y="0.0" width="699" height="500"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                </customView>
+                            </subviews>
+                        </customView>
+                    </subviews>
+                    <holdingPriorities>
+                        <real value="250"/>
+                        <real value="250"/>
+                    </holdingPriorities>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="minSize1">
+                            <real key="value" value="300"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="number" keyPath="minSize2">
+                            <real key="value" value="500"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                </splitView>
                 <customView id="eJw-Ro-RO2" customClass="GIColorView">
                     <rect key="frame" x="0.0" y="470" width="1000" height="30"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
@@ -52,154 +205,6 @@
                         </userDefinedRuntimeAttribute>
                     </userDefinedRuntimeAttributes>
                 </customView>
-                <splitView dividerStyle="thin" vertical="YES" id="GbO-qM-CQw" customClass="GIDualSplitView">
-                    <rect key="frame" x="0.0" y="0.0" width="1000" height="470"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                    <subviews>
-                        <customView id="hef-Ad-4nX">
-                            <rect key="frame" x="0.0" y="0.0" width="300" height="470"/>
-                            <autoresizingMask key="autoresizingMask"/>
-                            <subviews>
-                                <box verticalHuggingPriority="750" title="Box" boxType="separator" titlePosition="noTitle" id="GiE-tn-bRu">
-                                    <rect key="frame" x="0.0" y="39" width="300" height="5"/>
-                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                    <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
-                                    <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                    <font key="titleFont" metaFont="system"/>
-                                </box>
-                                <splitView dividerStyle="thin" id="e6i-iT-slV" customClass="GIDualSplitView">
-                                    <rect key="frame" x="0.0" y="42" width="300" height="428"/>
-                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                    <subviews>
-                                        <customView id="VtZ-UX-sFq">
-                                            <rect key="frame" x="0.0" y="0.0" width="300" height="214"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                            <subviews>
-                                                <customView id="7j5-Pz-Pse" customClass="GIColorView">
-                                                    <rect key="frame" x="0.0" y="180" width="300" height="34"/>
-                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                                    <subviews>
-                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="JBE-2n-Fmz">
-                                                            <rect key="frame" x="8" y="9" width="154" height="17"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                            <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingTail" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="left" title="Old Commit" id="CSN-Cf-azv">
-                                                                <font key="font" metaFont="systemBold"/>
-                                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="deviceWhite"/>
-                                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                            </textFieldCell>
-                                                        </textField>
-                                                    </subviews>
-                                                    <userDefinedRuntimeAttributes>
-                                                        <userDefinedRuntimeAttribute type="color" keyPath="backgroundColor">
-                                                            <color key="value" white="0.5" alpha="1" colorSpace="custom" customColorSpace="deviceWhite"/>
-                                                        </userDefinedRuntimeAttribute>
-                                                    </userDefinedRuntimeAttributes>
-                                                </customView>
-                                                <customView id="Scn-lW-rL0">
-                                                    <rect key="frame" x="0.0" y="0.0" width="300" height="180"/>
-                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                </customView>
-                                            </subviews>
-                                        </customView>
-                                        <customView id="ots-w9-o6k">
-                                            <rect key="frame" x="0.0" y="215" width="300" height="213"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                            <subviews>
-                                                <customView id="i0X-9n-k1u" customClass="GIColorView">
-                                                    <rect key="frame" x="0.0" y="179" width="300" height="34"/>
-                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                                    <subviews>
-                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="Zg3-mt-YHc">
-                                                            <rect key="frame" x="8" y="9" width="154" height="17"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                            <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingTail" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="left" title="New Commit" id="C06-wj-5uc">
-                                                                <font key="font" metaFont="systemBold"/>
-                                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="deviceWhite"/>
-                                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                            </textFieldCell>
-                                                        </textField>
-                                                    </subviews>
-                                                    <userDefinedRuntimeAttributes>
-                                                        <userDefinedRuntimeAttribute type="color" keyPath="backgroundColor">
-                                                            <color key="value" white="0.5" alpha="1" colorSpace="custom" customColorSpace="deviceWhite"/>
-                                                        </userDefinedRuntimeAttribute>
-                                                    </userDefinedRuntimeAttributes>
-                                                </customView>
-                                                <customView id="IfV-FZ-t0W">
-                                                    <rect key="frame" x="0.0" y="0.0" width="300" height="179"/>
-                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                </customView>
-                                            </subviews>
-                                        </customView>
-                                    </subviews>
-                                    <holdingPriorities>
-                                        <real value="250"/>
-                                        <real value="250"/>
-                                    </holdingPriorities>
-                                    <userDefinedRuntimeAttributes>
-                                        <userDefinedRuntimeAttribute type="number" keyPath="minSize1">
-                                            <real key="value" value="150"/>
-                                        </userDefinedRuntimeAttribute>
-                                        <userDefinedRuntimeAttribute type="number" keyPath="minSize2">
-                                            <real key="value" value="150"/>
-                                        </userDefinedRuntimeAttribute>
-                                    </userDefinedRuntimeAttributes>
-                                </splitView>
-                                <button verticalHuggingPriority="750" id="GmQ-B6-tjv">
-                                    <rect key="frame" x="8" y="7" width="84" height="26"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <buttonCell key="cell" type="bevel" title="Cancel" bezelStyle="regularSquare" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="rco-aZ-vl2">
-                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                        <font key="font" metaFont="system"/>
-                                        <string key="keyEquivalent" base64-UTF8="YES">
-Gw
-</string>
-                                    </buttonCell>
-                                    <connections>
-                                        <action selector="cancel:" target="-2" id="nii-dL-QPl"/>
-                                    </connections>
-                                </button>
-                                <button verticalHuggingPriority="750" id="kyp-MO-xu5">
-                                    <rect key="frame" x="188" y="7" width="104" height="26"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                    <buttonCell key="cell" type="bevel" title="Continue…" bezelStyle="regularSquare" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="khk-i1-Bqu">
-                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                        <font key="font" metaFont="system"/>
-                                        <string key="keyEquivalent" base64-UTF8="YES">
-DQ
-</string>
-                                        <modifierMask key="keyEquivalentModifierMask" option="YES"/>
-                                    </buttonCell>
-                                    <connections>
-                                        <action selector="continue:" target="-2" id="b6D-BI-9Ig"/>
-                                    </connections>
-                                </button>
-                            </subviews>
-                        </customView>
-                        <customView id="XQf-N4-jx3">
-                            <rect key="frame" x="301" y="0.0" width="699" height="470"/>
-                            <autoresizingMask key="autoresizingMask"/>
-                            <subviews>
-                                <customView id="weo-in-1Ld">
-                                    <rect key="frame" x="0.0" y="0.0" width="699" height="470"/>
-                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                </customView>
-                            </subviews>
-                        </customView>
-                    </subviews>
-                    <holdingPriorities>
-                        <real value="250"/>
-                        <real value="250"/>
-                    </holdingPriorities>
-                    <userDefinedRuntimeAttributes>
-                        <userDefinedRuntimeAttribute type="number" keyPath="minSize1">
-                            <real key="value" value="300"/>
-                        </userDefinedRuntimeAttribute>
-                        <userDefinedRuntimeAttribute type="number" keyPath="minSize2">
-                            <real key="value" value="500"/>
-                        </userDefinedRuntimeAttribute>
-                    </userDefinedRuntimeAttributes>
-                </splitView>
             </subviews>
             <point key="canvasLocation" x="552" y="309"/>
         </view>
@@ -223,9 +228,9 @@ DQ
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <clipView key="contentView" id="sKA-Dg-4u7">
                         <rect key="frame" x="1" y="1" width="548" height="98"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <textView importsGraphics="NO" richText="NO" findStyle="panel" allowsUndo="YES" verticallyResizable="YES" smartInsertDelete="YES" id="C9q-53-7wr" customClass="GICommitMessageView">
+                            <textView importsGraphics="NO" richText="NO" verticallyResizable="YES" findStyle="panel" allowsUndo="YES" smartInsertDelete="YES" id="C9q-53-7wr" customClass="GICommitMessageView">
                                 <rect key="frame" x="0.0" y="0.0" width="548" height="98"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -240,8 +245,6 @@ DQ
                                     </fragment>
                                 </attributedString>
                                 <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                <size key="minSize" width="548" height="98"/>
-                                <size key="maxSize" width="608" height="10000000"/>
                                 <connections>
                                     <outlet property="delegate" destination="-2" id="kk3-aI-fXa"/>
                                 </connections>
@@ -272,9 +275,9 @@ DQ
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <clipView key="contentView" id="iv1-rd-iqv">
                         <rect key="frame" x="1" y="1" width="548" height="98"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <textView importsGraphics="NO" richText="NO" findStyle="panel" allowsUndo="YES" verticallyResizable="YES" smartInsertDelete="YES" id="Bd9-d7-YLd" customClass="GICommitMessageView">
+                            <textView importsGraphics="NO" richText="NO" verticallyResizable="YES" findStyle="panel" allowsUndo="YES" smartInsertDelete="YES" id="Bd9-d7-YLd" customClass="GICommitMessageView">
                                 <rect key="frame" x="0.0" y="0.0" width="548" height="98"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -289,8 +292,6 @@ DQ
                                     </fragment>
                                 </attributedString>
                                 <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                <size key="minSize" width="548" height="98"/>
-                                <size key="maxSize" width="562" height="10000000"/>
                                 <connections>
                                     <outlet property="delegate" destination="-2" id="r9O-yb-7mj"/>
                                 </connections>

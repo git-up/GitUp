@@ -1,8 +1,9 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6751" systemVersion="14C1510" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14109" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6751"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14109"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="GIUnifiedReflogViewController">
@@ -23,15 +24,16 @@
                     <rect key="frame" x="0.0" y="0.0" width="310" height="500"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <clipView key="contentView" id="hSz-33-pAu">
-                        <rect key="frame" x="1" y="0.0" width="238" height="134"/>
+                        <rect key="frame" x="0.0" y="0.0" width="310" height="500"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" columnResizing="NO" multipleSelection="NO" emptySelection="NO" autosaveColumns="NO" typeSelect="NO" rowHeight="64" rowSizeStyle="automatic" viewBased="YES" floatsGroupRows="NO" id="eCC-8p-v0T" customClass="GITableView">
+                                <rect key="frame" x="0.0" y="0.0" width="310" height="500"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                 <tableColumns>
-                                    <tableColumn editable="NO" width="310" minWidth="40" maxWidth="1000" id="Utu-ea-oof">
+                                    <tableColumn identifier="" editable="NO" width="310" minWidth="40" maxWidth="1000" id="Utu-ea-oof">
                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
                                             <font key="font" metaFont="smallSystem"/>
                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -103,7 +105,6 @@
                                 </connections>
                             </tableView>
                         </subviews>
-                        <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </clipView>
                     <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="Vyp-Pl-FhK">
                         <rect key="frame" x="1" y="31.568840026855469" width="48" height="16"/>
@@ -118,7 +119,7 @@
             <point key="canvasLocation" x="232" y="388"/>
         </view>
         <customView translatesAutoresizingMaskIntoConstraints="NO" id="hZQ-gb-8kq" userLabel="Restore View">
-            <rect key="frame" x="0.0" y="-2" width="358" height="22"/>
+            <rect key="frame" x="0.0" y="0.0" width="358" height="22"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <textField verticalHuggingPriority="750" id="1Ft-qn-oYj">

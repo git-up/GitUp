@@ -15,8 +15,10 @@
 
 #import "GIViewController.h"
 
+#import "GIAppKit.h"
+
 @class GCHistoryCommit;
 
-@interface GIQuickViewController : GIViewController
+@interface GIQuickViewController : GIViewController <GIContentInsetsDelegate>
 @property(nonatomic, strong) GCHistoryCommit* commit;
 @end

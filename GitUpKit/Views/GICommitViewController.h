@@ -24,7 +24,7 @@
 @end
 
 // Abstract base class
-@interface GICommitViewController : GIViewController
+@interface GICommitViewController : GIViewController <GIContentInsetsDelegate>
 @property(nonatomic, assign) id<GICommitViewControllerDelegate> delegate;
 @property(nonatomic, weak) IBOutlet NSTextField* infoTextField;
 @property(nonatomic, strong) IBOutlet GICommitMessageView* messageTextView;  // Does not support weak references

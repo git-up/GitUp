@@ -16,6 +16,8 @@
 #import "GICommitViewController.h"
 #import "GIViewController+Utilities.h"
 
+#import "GIAppKit.h"
+
 @class GICommitRewriterViewController, GCHistoryCommit;
 
 @protocol GICommitRewriterViewControllerDelegate <GICommitViewControllerDelegate, GIMergeConflictResolver>
@@ -23,7 +25,7 @@
 - (void)commitRewriterViewControllerShouldCancel:(GICommitRewriterViewController*)controller;
 @end
 
-@interface GICommitRewriterViewController : GICommitViewController
+@interface GICommitRewriterViewController : GICommitViewController <GIContentInsetsDelegate>
 @property(nonatomic, assign) id<GICommitRewriterViewControllerDelegate> delegate;
 - (BOOL)startRewritingCommit:(GCHistoryCommit*)commit error:(NSError**)error;
 - (BOOL)finishRewritingCommitWithMessage:(NSString*)message error:(NSError**)error;

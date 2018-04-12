@@ -1,15 +1,17 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14109" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7706"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14109"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="GIStashListViewController">
             <connections>
-                <outlet property="applyButton" destination="BQO-hB-uyJ" id="7oF-MK-rBo"/>
+                <outlet property="applyButton" destination="rEy-7J-Xix" id="JkM-PT-azY"/>
+                <outlet property="bottomView" destination="g0K-Bo-GsR" id="pJG-94-2YV"/>
                 <outlet property="diffView" destination="z83-ov-Iwr" id="Dur-Eu-b8w"/>
-                <outlet property="dropButton" destination="Nb7-TT-Jjt" id="RXa-Wc-2aU"/>
+                <outlet property="dropButton" destination="zbC-uu-WHh" id="bxW-f5-C3c"/>
                 <outlet property="emptyLabel" destination="2vp-ts-xnS" id="bMk-n9-68o"/>
                 <outlet property="indexButton" destination="gS5-gJ-uvH" id="5SK-sV-BAo"/>
                 <outlet property="messageTextField" destination="1Ft-qn-oYj" id="dHc-cx-EuN"/>
@@ -33,27 +35,24 @@
                             <rect key="frame" x="0.0" y="0.0" width="300" height="500"/>
                             <autoresizingMask key="autoresizingMask"/>
                             <subviews>
-                                <box verticalHuggingPriority="750" title="Box" boxType="separator" titlePosition="noTitle" id="R5I-cO-ijQ">
+                                <box verticalHuggingPriority="750" boxType="separator" id="R5I-cO-ijQ">
                                     <rect key="frame" x="0.0" y="39" width="300" height="5"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                    <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
-                                    <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                    <font key="titleFont" metaFont="system"/>
                                 </box>
-                                <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="50" horizontalPageScroll="10" verticalLineScroll="50" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" horizontalScrollElasticity="none" id="9JY-At-FkM">
-                                    <rect key="frame" x="0.0" y="42" width="300" height="458"/>
+                                <scrollView misplaced="YES" borderType="none" autohidesScrollers="YES" horizontalLineScroll="50" horizontalPageScroll="10" verticalLineScroll="50" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" horizontalScrollElasticity="none" id="9JY-At-FkM">
+                                    <rect key="frame" x="0.0" y="0.0" width="300" height="500"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <clipView key="contentView" id="30S-bg-Q3C">
-                                        <rect key="frame" x="0.0" y="0.0" width="300" height="874"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="300" height="500"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <subviews>
                                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" columnResizing="NO" multipleSelection="NO" emptySelection="NO" autosaveColumns="NO" typeSelect="NO" rowHeight="50" rowSizeStyle="automatic" viewBased="YES" floatsGroupRows="NO" id="PuJ-qB-scf" customClass="GITableView">
-                                                <rect key="frame" x="0.0" y="0.0" width="300" height="0.0"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="300" height="500"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                                 <tableColumns>
-                                                    <tableColumn editable="NO" width="300" minWidth="40" maxWidth="1000" id="sMJ-Ww-cFI">
+                                                    <tableColumn identifier="" editable="NO" width="300" minWidth="40" maxWidth="1000" id="sMJ-Ww-cFI">
                                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
                                                             <font key="font" metaFont="smallSystem"/>
                                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -113,7 +112,6 @@
                                                 </connections>
                                             </tableView>
                                         </subviews>
-                                        <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     </clipView>
                                     <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="pap-ze-etC">
                                         <rect key="frame" x="1" y="31.568840026855469" width="48" height="16"/>
@@ -133,46 +131,52 @@
                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                 </textField>
-                                <button verticalHuggingPriority="750" id="BQO-hB-uyJ">
-                                    <rect key="frame" x="208" y="7" width="84" height="26"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                    <buttonCell key="cell" type="bevel" title="Apply" bezelStyle="regularSquare" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="tfe-JD-fS9">
-                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                        <font key="font" metaFont="system"/>
-                                        <string key="keyEquivalent" base64-UTF8="YES">
+                                <customView misplaced="YES" id="g0K-Bo-GsR" customClass="GIPolyfillVisualEffectView">
+                                    <rect key="frame" x="0.0" y="0.0" width="300" height="42"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                    <subviews>
+                                        <button verticalHuggingPriority="750" misplaced="YES" id="rEy-7J-Xix">
+                                            <rect key="frame" x="208" y="7" width="84" height="26"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                            <buttonCell key="cell" type="bevel" title="Apply" bezelStyle="regularSquare" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Lad-rB-N0q">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                                <string key="keyEquivalent" base64-UTF8="YES">
 DQ
 </string>
-                                    </buttonCell>
-                                    <connections>
-                                        <action selector="applyStash:" target="-2" id="307-iv-B8n"/>
-                                    </connections>
-                                </button>
-                                <button toolTip="Save new stash" verticalHuggingPriority="750" id="OrZ-IL-bI8">
-                                    <rect key="frame" x="8" y="7" width="26" height="26"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="NSAddTemplate" imagePosition="only" alignment="center" borderStyle="border" inset="2" id="hGa-5V-ckv">
-                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                        <font key="font" metaFont="system"/>
-                                        <string key="keyEquivalent">s</string>
-                                    </buttonCell>
-                                    <connections>
-                                        <action selector="saveStash:" target="-2" id="cFs-bg-Klk"/>
-                                    </connections>
-                                </button>
-                                <button toolTip="Delete selected stash" verticalHuggingPriority="750" id="Nb7-TT-Jjt">
-                                    <rect key="frame" x="34" y="7" width="26" height="26"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="NSRemoveTemplate" imagePosition="only" alignment="center" borderStyle="border" inset="2" id="REa-ay-zbm">
-                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                        <font key="font" metaFont="system"/>
-                                        <string key="keyEquivalent" base64-UTF8="YES">
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="applyStash:" target="-2" id="tqN-A6-4Xt"/>
+                                            </connections>
+                                        </button>
+                                        <button toolTip="Delete selected stash" verticalHuggingPriority="750" misplaced="YES" id="zbC-uu-WHh">
+                                            <rect key="frame" x="34" y="7" width="26" height="26"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="NSRemoveTemplate" imagePosition="only" alignment="center" borderStyle="border" inset="2" id="q04-XF-PPT">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                                <string key="keyEquivalent" base64-UTF8="YES">
 CA
 </string>
-                                    </buttonCell>
-                                    <connections>
-                                        <action selector="dropStash:" target="-2" id="FN7-Nh-Qob"/>
-                                    </connections>
-                                </button>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="dropStash:" target="-2" id="FTu-Xw-UGF"/>
+                                            </connections>
+                                        </button>
+                                        <button toolTip="Save new stash" verticalHuggingPriority="750" misplaced="YES" id="s5M-uI-Qyr">
+                                            <rect key="frame" x="8" y="7" width="26" height="26"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="NSAddTemplate" imagePosition="only" alignment="center" borderStyle="border" inset="2" id="TZv-DA-sVD">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                                <string key="keyEquivalent">s</string>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="saveStash:" target="-2" id="77S-Ls-WgQ"/>
+                                            </connections>
+                                        </button>
+                                    </subviews>
+                                </customView>
                             </subviews>
                         </customView>
                         <customView id="h9c-cK-1on">

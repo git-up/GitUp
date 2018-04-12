@@ -17,6 +17,7 @@
 #error This file requires ARC
 #endif
 
+#import "GIColorView.h"
 #import "GIConflictResolverViewController.h"
 #import "GIDiffContentsViewController.h"
 #import "GIDiffFilesViewController.h"
@@ -28,7 +29,9 @@
 @interface GIConflictResolverViewController () <GIDiffContentsViewControllerDelegate, GIDiffFilesViewControllerDelegate>
 @property(nonatomic, weak) IBOutlet NSTextField* oursTextField;
 @property(nonatomic, weak) IBOutlet NSTextField* theirsTextField;
+@property (weak) IBOutlet GIColorView *headerColorView;
 @property(nonatomic, weak) IBOutlet NSView* contentsView;
+@property (weak) IBOutlet GIPolyfillVisualEffectView *bottomView;
 @property(nonatomic, weak) IBOutlet NSView* filesView;
 @property(nonatomic, weak) IBOutlet NSButton* continueButton;
 @end
@@ -157,6 +160,20 @@
     return [self.view.window.firstResponder.nextResponder tryToPerform:@selector(keyDown:) with:[NSApp currentEvent]];
   }
   return [super textView:textView doCommandBySelector:selector];
+}
+
+#pragma mark - GIContentInsetsDelegate
+
+-(void)updateLayoutWithContentInsets:(NSEdgeInsets)insets {
+	CGRect frame = _headerColorView.frame;
+	frame.origin.y = _headerColorView.superview.frame.size.height - frame.size.height - insets.top;
+	_headerColorView.frame = frame;
+	
+	insets.top += _headerColorView.frame.size.height;
+	[_diffContentsViewController updateLayoutWithContentInsets:insets];
+	
+	insets.bottom = _bottomView.frame.size.height;
+	[_diffFilesViewController updateLayoutWithContentInsets:insets];
 }
 
 #pragma mark - Actions

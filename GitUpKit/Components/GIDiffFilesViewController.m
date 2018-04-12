@@ -242,6 +242,11 @@ static NSImage* _untrackedImage = nil;
   [_tableView scrollRowToVisible:indexes.firstIndex];
 }
 
+#pragma mark - GIContentInsetsDelegate
+- (void)updateLayoutWithContentInsets:(NSEdgeInsets)insets {
+  _tableView.enclosingScrollView.contentInsets = insets;
+}
+
 #pragma mark - Actions
 
 - (BOOL)validateUserInterfaceItem:(id<NSValidatedUserInterfaceItem>)item {

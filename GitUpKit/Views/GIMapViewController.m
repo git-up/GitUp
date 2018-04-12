@@ -538,6 +538,12 @@ static NSColor* _patternColor = nil;
   return _contextualMenu;
 }
 
+#pragma mark - GIContentInsetsDelegate
+
+- (void)updateLayoutWithContentInsets:(NSEdgeInsets)insets {
+  _graphScrollView.contentInsets = insets;
+}
+
 #pragma mark - Interface
 
 - (void)keyDown:(NSEvent*)event {

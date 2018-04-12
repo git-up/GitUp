@@ -15,5 +15,7 @@
 
 #import "GIViewController.h"
 
-@interface GIStashListViewController : GIViewController
+#import "GIAppKit.h"
+
+@interface GIStashListViewController : GIViewController <GIContentInsetsDelegate>
 @end

@@ -264,6 +264,12 @@ static NSMutableDictionary* _patternHelp = nil;
   _deleteButton.enabled = (row >= 0);
 }
 
+#pragma mark - GIContentInsetsDelegate
+
+- (void)updateLayoutWithContentInsets:(NSEdgeInsets)insets {
+  _tableView.enclosingScrollView.contentInsets = insets;
+}
+
 #pragma mark - Actions
 
 - (BOOL)validateUserInterfaceItem:(id<NSValidatedUserInterfaceItem>)item {

@@ -507,7 +507,7 @@ static int _refdb_exists(int* exists, git_refdb_backend* _backend, const char* r
   return error;
 }
 
-static git_reference* _refdb_create_reference(git_reference** reference_out, sqlite3_stmt* statement) {
+static int _refdb_create_reference(git_reference** reference_out, sqlite3_stmt* statement) {
   int error = GIT_ERROR;
   const char* name = (const char*)sqlite3_column_text(statement, 0);
   const void* oid = sqlite3_column_blob(statement, 1);

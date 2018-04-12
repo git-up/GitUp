@@ -18,6 +18,7 @@
 #endif
 
 #import "GIAdvancedCommitViewController.h"
+#import "GIColorView.h"
 #import "GIDiffFilesViewController.h"
 #import "GIDiffContentsViewController.h"
 #import "GIViewController+Utilities.h"
@@ -26,11 +27,15 @@
 #import "GIWindowController.h"
 #import "XLFacilityMacros.h"
 
+#import "GIAppKit.h"
+
 @interface GIAdvancedCommitViewController () <GIDiffFilesViewControllerDelegate, GIDiffContentsViewControllerDelegate>
+@property(nonatomic, weak) IBOutlet GIColorView* workdirColorView;
 @property(nonatomic, weak) IBOutlet NSView* workdirFilesView;
 @property(nonatomic, weak) IBOutlet NSView* indexFilesView;
 @property(nonatomic, weak) IBOutlet NSView* diffContentsView;
 @property(nonatomic, weak) IBOutlet NSButton* unstageButton;
+@property(nonatomic, weak) IBOutlet GIPolyfillVisualEffectView* bottomView;
 @property(nonatomic, weak) IBOutlet NSButton* commitButton;
 @property(nonatomic, weak) IBOutlet NSButton* stageButton;
 @property(nonatomic, weak) IBOutlet NSButton* discardButton;
@@ -536,6 +541,20 @@
     return [self.view.window.firstResponder.nextResponder tryToPerform:@selector(keyDown:) with:[NSApp currentEvent]];
   }
   return [super textView:textView doCommandBySelector:selector];
+}
+
+#pragma mark - GIContentInsetsDelegate
+
+- (void)updateLayoutWithContentInsets:(NSEdgeInsets)insets {
+  [_diffContentsViewController updateLayoutWithContentInsets:insets];
+
+  CGRect frame = _workdirColorView.frame;
+  frame.origin.y = _workdirColorView.superview.frame.size.height - frame.size.height - insets.top;
+  _workdirColorView.frame = frame;
+
+  insets.top += _workdirColorView.frame.size.height;
+  insets.bottom = _bottomView.frame.size.height;
+  [_workdirFilesViewController updateLayoutWithContentInsets:insets];
 }
 
 #pragma mark - Actions

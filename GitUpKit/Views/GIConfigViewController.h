@@ -15,5 +15,7 @@
 
 #import "GIViewController.h"
 
-@interface GIConfigViewController : GIViewController
+#import "GIAppKit.h"
+
+@interface GIConfigViewController : GIViewController <GIContentInsetsDelegate>
 @end

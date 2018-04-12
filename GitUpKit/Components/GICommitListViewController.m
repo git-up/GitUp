@@ -244,4 +244,10 @@
   }
 }
 
+#pragma mark - GIInsetChangeDelegate
+
+- (void)updateLayoutWithContentInsets:(NSEdgeInsets)insets {
+  _tableView.enclosingScrollView.contentInsets = insets;
+}
+
 @end

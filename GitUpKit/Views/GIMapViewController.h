@@ -17,6 +17,8 @@
 
 #import "GCRepository.h"
 
+#import "GIAppKit.h"
+
 @class GIMapViewController, GIGraph, GINode, GCHistory, GCHistoryCommit, GCCommit;
 
 @protocol GIMapViewControllerDelegate <GIMergeConflictResolver>
@@ -29,7 +31,7 @@
 - (void)mapViewController:(GIMapViewController*)controller splitCommit:(GCHistoryCommit*)commit;
 @end
 
-@interface GIMapViewController : GIViewController <NSUserInterfaceValidations>
+@interface GIMapViewController : GIViewController <NSUserInterfaceValidations, GIContentInsetsDelegate>
 @property(nonatomic, assign) id<GIMapViewControllerDelegate> delegate;
 @property(nonatomic, readonly) GIGraph* graph;
 @property(nonatomic, readonly) GCHistoryCommit* selectedCommit;  // Nil if no commit is selected

@@ -15,6 +15,9 @@
 
 #import "GIViewController.h"
 
+#import "GIAppKit.h"
+
+
 @class GCCommit, GIConflictResolverViewController;
 
 @protocol GIConflictResolverViewControllerDelegate <NSObject>
@@ -22,7 +25,7 @@
 - (void)conflictResolverViewControllerDidFinish:(GIConflictResolverViewController*)controller;
 @end
 
-@interface GIConflictResolverViewController : GIViewController
+@interface GIConflictResolverViewController : GIViewController <GIContentInsetsDelegate>
 @property(nonatomic, assign) id<GIConflictResolverViewControllerDelegate> delegate;
 @property(nonatomic, strong) GCCommit* ourCommit;
 @property(nonatomic, strong) GCCommit* theirCommit;

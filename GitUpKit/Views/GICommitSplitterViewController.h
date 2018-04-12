@@ -16,6 +16,8 @@
 #import "GISimpleCommitViewController.h"
 #import "GIViewController+Utilities.h"
 
+#import "GIAppKit.h"
+
 @class GICommitSplitterViewController, GCHistoryCommit;
 
 @protocol GICommitSplitterViewControllerDelegate <GICommitViewControllerDelegate, GIMergeConflictResolver>
@@ -23,7 +25,7 @@
 - (void)commitSplitterViewControllerShouldCancel:(GICommitSplitterViewController*)controller;
 @end
 
-@interface GICommitSplitterViewController : GICommitViewController
+@interface GICommitSplitterViewController : GICommitViewController <GIContentInsetsDelegate>
 @property(nonatomic, assign) id<GICommitSplitterViewControllerDelegate> delegate;
 - (BOOL)startSplittingCommit:(GCHistoryCommit*)commit error:(NSError**)error;
 - (BOOL)finishSplittingCommitWithOldMessage:(NSString*)oldMessage newMessage:(NSString*)newMessage error:(NSError**)error;

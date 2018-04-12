@@ -58,6 +58,7 @@ typedef NS_ENUM(NSUInteger, WindowModeID) {
 
 @property(nonatomic, strong) IBOutlet NSView* mapView;
 @property(nonatomic, weak) IBOutlet NSView* mapControllerView;  // Temporary placeholder replaced by actual controller view at load time
+@property(nonatomic, weak) IBOutlet NSView* bottomView;
 @property(nonatomic, weak) IBOutlet NSMenu* showMenu;
 @property(nonatomic, weak) IBOutlet NSTextField* infoTextField1;
 @property(nonatomic, weak) IBOutlet NSTextField* infoTextField2;
@@ -69,18 +70,22 @@ typedef NS_ENUM(NSUInteger, WindowModeID) {
 
 @property(nonatomic, strong) IBOutlet NSView* tagsView;
 @property(nonatomic, weak) IBOutlet NSView* tagsControllerView;  // Temporary placeholder replaced by actual controller view at load time
+@property(weak) IBOutlet NSView* tagsBottomView;
 
 @property(nonatomic, strong) IBOutlet NSView* snapshotsView;
 @property(nonatomic, weak) IBOutlet NSView* snapshotsControllerView;  // Temporary placeholder replaced by actual controller view at load time
+@property(weak) IBOutlet NSView* snapshotsBottomView;
 
 @property(nonatomic, strong) IBOutlet NSView* reflogView;
 @property(nonatomic, weak) IBOutlet NSView* reflogControllerView;  // Temporary placeholder replaced by actual controller view at load time
+@property(weak) IBOutlet NSView* reflogBottomView;
 
 @property(nonatomic, strong) IBOutlet NSView* searchView;
 @property(nonatomic, weak) IBOutlet NSView* searchControllerView;  // Temporary placeholder replaced by actual controller view at load time
 
 @property(nonatomic, strong) IBOutlet NSView* ancestorsView;
 @property(nonatomic, weak) IBOutlet NSView* ancestorsControllerView;  // Temporary placeholder replaced by actual controller view at load time
+@property(nonatomic, weak) IBOutlet NSView* ancestorsBottomView;
 
 @property(nonatomic, strong) IBOutlet NSView* rewriteView;
 @property(nonatomic, weak) IBOutlet NSView* rewriteControllerView;  // Temporary placeholder replaced by actual controller view at load time
