@@ -35,8 +35,6 @@
 
 #define kPreferencePaneIdentifier_General @"general"
 
-#define kWelcomeWindowCornerRadius 10
-
 #define kInstallerName @"install.sh"
 #define kToolName @"gitup"
 #define kToolInstallPath @"/usr/local/bin/" kToolName
@@ -45,32 +43,20 @@
 - (void)setShowsTagField:(BOOL)flag;
 @end
 
-@interface WelcomeView : NSView
-@end
-
 @interface AppDelegate () <NSUserNotificationCenterDelegate, SUUpdaterDelegate>
 - (IBAction)closeWelcomeWindow:(id)sender;
-@end
-
-@implementation WelcomeView
-
-- (void)drawRect:(NSRect)dirtyRect {
-  NSRect bounds = self.bounds;
-  CGContextRef context = [[NSGraphicsContext currentContext] graphicsPort];
-
-  CGContextClearRect(context, dirtyRect);
-
-  CGContextSetRGBFillColor(context, 0.9, 0.9, 0.9, 1.0);
-  GICGContextAddRoundedRect(context, bounds, kWelcomeWindowCornerRadius);
-  CGContextFillPath(context);
-}
-
 @end
 
 @interface WelcomeWindow : NSWindow
 @end
 
 @implementation WelcomeWindow
+
+- (void)awakeFromNib {
+  self.opaque = NO;
+  self.backgroundColor = [NSColor clearColor];
+  self.movableByWindowBackground = YES;
+}
 
 - (BOOL)validateMenuItem:(NSMenuItem*)menuItem {
   return menuItem.action == @selector(performClose:) ? YES : [super validateMenuItem:menuItem];
@@ -266,10 +252,6 @@
   _welcomeMaxHeight = _welcomeWindow.frame.size.height;
 
   _allowWelcome = -1;
-
-  _welcomeWindow.alphaValue = 1.0;
-  _welcomeWindow.opaque = NO;
-  _welcomeWindow.movableByWindowBackground = YES;
 
   _twitterButton.textAlignment = NSLeftTextAlignment;
   _twitterButton.textFont = [NSFont boldSystemFontOfSize:11];
