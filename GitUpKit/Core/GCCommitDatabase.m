@@ -553,7 +553,7 @@ static BOOL _ProcessDiff(git_repository* repo, git_commit* commit, git_commit* p
   return success;
 }
 
-- (BOOL)_addCommitsForTip:(const git_oid*)tipOID handler:(BOOL (^)())handler error:(NSError**)error {
+- (BOOL)_addCommitsForTip:(const git_oid*)tipOID handler:(BOOL (^)(void))handler error:(NSError**)error {
   BOOL success = NO;
   GC_LIST_ALLOCATE(row, 16, Item);
   GC_LIST_ALLOCATE(newRow, 16, Item);
@@ -919,7 +919,7 @@ cleanup:
   return success;
 }
 
-- (BOOL)_removeCommitsForTip:(const git_oid*)tipOID handler:(BOOL (^)())handler error:(NSError**)error {
+- (BOOL)_removeCommitsForTip:(const git_oid*)tipOID handler:(BOOL (^)(void))handler error:(NSError**)error {
   BOOL success = NO;
   GC_LIST_ALLOCATE(row, 16, sqlite3_int64);
   GC_LIST_ALLOCATE(newRow, 16, sqlite3_int64);

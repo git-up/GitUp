@@ -386,3 +386,13 @@ static NSColor* _separatorColor = nil;
 }
 
 @end
+
+@implementation GIPolyfillVisualEffectView
+
+- (void)awakeFromNib {
+  if (@available(macOS 10.10, *)) {
+    self.blendingMode = NSVisualEffectBlendingModeWithinWindow;
+  }
+}
+
+@end

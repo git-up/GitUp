@@ -15,9 +15,11 @@
 
 #import "GIViewController.h"
 
+#import "GIAppKit.h"
+
 @class GCCommit;
 
-@interface GIDiffViewController : GIViewController
+@interface GIDiffViewController : GIViewController <GIContentInsetsDelegate>
 @property(nonatomic, readonly) GCCommit* commit;
 @property(nonatomic, readonly) GCCommit* parentCommit;
 - (void)setCommit:(GCCommit*)commit withParentCommit:(GCCommit*)parentCommit;

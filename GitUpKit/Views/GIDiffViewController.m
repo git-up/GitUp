@@ -17,6 +17,7 @@
 #error This file requires ARC
 #endif
 
+#import "GIColorView.h"
 #import "GIDiffViewController.h"
 #import "GIDiffContentsViewController.h"
 #import "GIDiffFilesViewController.h"
@@ -25,6 +26,7 @@
 #import "XLFacilityMacros.h"
 
 @interface GIDiffViewController () <GIDiffContentsViewControllerDelegate, GIDiffFilesViewControllerDelegate>
+@property(nonatomic, weak) IBOutlet GIColorView* headerColorView;
 @property(nonatomic, weak) IBOutlet NSView* contentsView;
 @property(nonatomic, weak) IBOutlet NSView* filesView;
 @property(nonatomic, weak) IBOutlet NSTextField* fromTextField;
@@ -105,6 +107,18 @@
   _disableFeedbackLoop = YES;
   [_diffContentsViewController setTopVisibleDelta:delta offset:0];
   _disableFeedbackLoop = NO;
+}
+
+#pragma mark - GIDiffViewController
+
+- (void)updateLayoutWithContentInsets:(NSEdgeInsets)insets {
+  CGRect frame = _headerColorView.frame;
+  frame.origin.y = _headerColorView.superview.frame.size.height - frame.size.height - insets.top;
+  _headerColorView.frame = frame;
+
+  insets.top += _headerColorView.frame.size.height;
+  [_diffFilesViewController updateLayoutWithContentInsets:insets];
+  [_diffContentsViewController updateLayoutWithContentInsets:insets];
 }
 
 @end

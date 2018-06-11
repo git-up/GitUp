@@ -234,4 +234,11 @@ static NSString* _CleanUpCommitMessage(NSString* message) {
   return [self handleKeyDownEvent:event forSelectedDeltas:_diffFilesViewController.selectedDeltas withConflicts:nil allowOpen:NO];
 }
 
+#pragma mark - GIContentInsetsDelegate
+
+- (void)updateLayoutWithContentInsets:(NSEdgeInsets)insets {
+  _infoScrollView.contentInsets = insets;
+  [_diffContentsViewController updateLayoutWithContentInsets:insets];
+}
+
 @end

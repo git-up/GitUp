@@ -229,7 +229,7 @@ static void _TimerCallBack(CFRunLoopTimerRef timer, void* info) {
   }
 
   if (_overlayView.superview == nil) {
-    NSRect bounds = [self.window.contentView bounds];
+    NSRect bounds = self.window.contentLayoutRect;
     NSRect frame = _overlayView.frame;
     _overlayView.frame = NSMakeRect(0, bounds.size.height - frame.size.height, bounds.size.width, frame.size.height);
     [self.window.contentView addSubview:_overlayView];  // Must be above everything else

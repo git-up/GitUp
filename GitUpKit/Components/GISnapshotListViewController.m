@@ -132,6 +132,12 @@
   }
 }
 
+#pragma mark - GIContentInsetsDelegate
+
+- (void)updateLayoutWithContentInsets:(NSEdgeInsets)insets {
+  _tableView.enclosingScrollView.contentInsets = insets;
+}
+
 #pragma mark - Actions
 
 - (IBAction)restoreSnapshot:(id)sender {

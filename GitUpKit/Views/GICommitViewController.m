@@ -156,6 +156,10 @@
   }
 }
 
+- (void)updateLayoutWithContentInsets:(NSEdgeInsets)insets {
+  XLOG_DEBUG_UNREACHABLE();
+}
+
 @end
 
 @implementation GICommitViewController (Extensions)

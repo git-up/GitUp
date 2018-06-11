@@ -23,7 +23,7 @@
 - (void)unifiedReflogViewController:(GIUnifiedReflogViewController*)controller didRestoreReflogEntry:(GCReflogEntry*)entry;
 @end
 
-@interface GIUnifiedReflogViewController : GIViewController
+@interface GIUnifiedReflogViewController : GIViewController <GIContentInsetsDelegate>
 @property(nonatomic, assign) id<GIUnifiedReflogViewControllerDelegate> delegate;
 @property(nonatomic, readonly) GCReflogEntry* selectedReflogEntry;
 @end

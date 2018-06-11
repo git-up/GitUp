@@ -17,6 +17,8 @@
 
 #import "GCDiff.h"
 
+#import "GIAppKit.h"
+
 extern NSString* const GIDiffContentsViewControllerUserDefaultKey_DiffViewMode;  // Integer (-1, 0 or 1)
 
 @class GIDiffContentsViewController, GCIndexConflict;
@@ -32,7 +34,7 @@ extern NSString* const GIDiffContentsViewControllerUserDefaultKey_DiffViewMode; 
 - (void)diffContentsViewController:(GIDiffContentsViewController*)controller didClickActionButtonForDelta:(GCDiffDelta*)delta conflict:(GCIndexConflict*)conflict;
 @end
 
-@interface GIDiffContentsViewController : GIViewController
+@interface GIDiffContentsViewController : GIViewController <GIContentInsetsDelegate>
 @property(nonatomic, assign) id<GIDiffContentsViewControllerDelegate> delegate;
 @property(nonatomic) BOOL showsUntrackedAsAdded;  // Default is NO
 @property(nonatomic, copy) NSString* emptyLabel;

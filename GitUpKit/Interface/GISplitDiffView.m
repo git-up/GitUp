@@ -132,7 +132,7 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
     __block NSUInteger startIndex = NSNotFound;
     __block NSUInteger addedCount = 0;
     __block NSUInteger deletedCount = 0;
-    void (^highlightBlock)() = ^() {
+    void (^highlightBlock)(void) = ^() {
       if ((addedCount == deletedCount) && (startIndex != NSNotFound)) {
         NSUInteger deletedIndex = startIndex;
         NSUInteger addedIndex = startIndex;

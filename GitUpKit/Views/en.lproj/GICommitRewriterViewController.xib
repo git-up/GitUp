@@ -1,15 +1,18 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14109" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7706"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14109"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="GICommitRewriterViewController">
             <connections>
+                <outlet property="bottomView" destination="jgB-A3-67A" id="nNi-tn-FkM"/>
                 <outlet property="contentsView" destination="hwM-6S-E69" id="aJi-zv-CuV"/>
-                <outlet property="continueButton" destination="3PR-J1-aKE" id="S3e-F9-2ES"/>
+                <outlet property="continueButton" destination="UIR-I8-aej" id="ksO-lh-Kz4"/>
                 <outlet property="filesView" destination="OjA-hK-WAP" id="jGe-bb-qi8"/>
+                <outlet property="headerColorView" destination="GrA-cS-Ts1" id="jux-Ah-GbV"/>
                 <outlet property="infoTextField" destination="uTH-et-agS" id="UEP-Tg-SWb"/>
                 <outlet property="messageTextView" destination="vJg-vt-cWY" id="LHF-gK-x6M"/>
                 <outlet property="messageView" destination="RtD-0g-Q5a" id="tVN-A5-e9C"/>
@@ -23,6 +26,80 @@
             <rect key="frame" x="0.0" y="0.0" width="1000" height="500"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
+                <splitView misplaced="YES" dividerStyle="thin" vertical="YES" id="ggX-gG-WJV" customClass="GIDualSplitView">
+                    <rect key="frame" x="0.0" y="0.0" width="1000" height="500"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                    <subviews>
+                        <customView id="ac4-Pc-4Ig">
+                            <rect key="frame" x="0.0" y="0.0" width="300" height="500"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                            <subviews>
+                                <box verticalHuggingPriority="750" boxType="separator" id="ZBF-ni-AKe">
+                                    <rect key="frame" x="0.0" y="39" width="300" height="5"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                </box>
+                                <customView misplaced="YES" id="OjA-hK-WAP">
+                                    <rect key="frame" x="0.0" y="0.0" width="300" height="500"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                </customView>
+                                <customView misplaced="YES" id="jgB-A3-67A" customClass="GIPolyfillVisualEffectView">
+                                    <rect key="frame" x="0.0" y="0.0" width="300" height="42"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                </customView>
+                                <button verticalHuggingPriority="750" id="dJh-7U-yTS">
+                                    <rect key="frame" x="8" y="8" width="84" height="26"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <buttonCell key="cell" type="bevel" title="Cancel" bezelStyle="regularSquare" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="N9d-a0-Zn1">
+                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                        <font key="font" metaFont="system"/>
+                                        <string key="keyEquivalent" base64-UTF8="YES">
+Gw
+</string>
+                                    </buttonCell>
+                                    <connections>
+                                        <action selector="cancel:" target="-2" id="Fym-fB-HXc"/>
+                                    </connections>
+                                </button>
+                                <button verticalHuggingPriority="750" id="UIR-I8-aej">
+                                    <rect key="frame" x="188" y="8" width="104" height="26"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                    <buttonCell key="cell" type="bevel" title="Continue…" bezelStyle="regularSquare" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="g8O-CU-5en">
+                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                        <font key="font" metaFont="system"/>
+                                        <string key="keyEquivalent" base64-UTF8="YES">
+DQ
+</string>
+                                    </buttonCell>
+                                    <connections>
+                                        <action selector="continue:" target="-2" id="zdv-VV-1Gy"/>
+                                    </connections>
+                                </button>
+                            </subviews>
+                        </customView>
+                        <customView id="uU2-RL-XAi">
+                            <rect key="frame" x="301" y="0.0" width="699" height="500"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                            <subviews>
+                                <customView id="hwM-6S-E69">
+                                    <rect key="frame" x="0.0" y="0.0" width="699" height="500"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                </customView>
+                            </subviews>
+                        </customView>
+                    </subviews>
+                    <holdingPriorities>
+                        <real value="250"/>
+                        <real value="250"/>
+                    </holdingPriorities>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="minSize1">
+                            <real key="value" value="300"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="number" keyPath="minSize2">
+                            <real key="value" value="500"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                </splitView>
                 <customView id="GrA-cS-Ts1" customClass="GIColorView">
                     <rect key="frame" x="0.0" y="470" width="1000" height="30"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
@@ -52,79 +129,6 @@
                         </userDefinedRuntimeAttribute>
                     </userDefinedRuntimeAttributes>
                 </customView>
-                <splitView dividerStyle="thin" vertical="YES" id="ggX-gG-WJV" customClass="GIDualSplitView">
-                    <rect key="frame" x="0.0" y="0.0" width="1000" height="470"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                    <subviews>
-                        <customView id="ac4-Pc-4Ig">
-                            <rect key="frame" x="0.0" y="0.0" width="300" height="470"/>
-                            <autoresizingMask key="autoresizingMask"/>
-                            <subviews>
-                                <box verticalHuggingPriority="750" title="Box" boxType="separator" titlePosition="noTitle" id="ZBF-ni-AKe">
-                                    <rect key="frame" x="0.0" y="39" width="300" height="5"/>
-                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                    <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
-                                    <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                    <font key="titleFont" metaFont="system"/>
-                                </box>
-                                <customView id="OjA-hK-WAP">
-                                    <rect key="frame" x="0.0" y="42" width="300" height="428"/>
-                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                </customView>
-                                <button verticalHuggingPriority="750" id="MQE-ts-iIn">
-                                    <rect key="frame" x="8" y="7" width="84" height="26"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <buttonCell key="cell" type="bevel" title="Cancel" bezelStyle="regularSquare" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="mX3-eO-IXN">
-                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                        <font key="font" metaFont="system"/>
-                                        <string key="keyEquivalent" base64-UTF8="YES">
-Gw
-</string>
-                                    </buttonCell>
-                                    <connections>
-                                        <action selector="cancel:" target="-2" id="bab-Tm-5kX"/>
-                                    </connections>
-                                </button>
-                                <button verticalHuggingPriority="750" id="3PR-J1-aKE">
-                                    <rect key="frame" x="188" y="7" width="104" height="26"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                    <buttonCell key="cell" type="bevel" title="Continue…" bezelStyle="regularSquare" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Ibk-mz-3rz">
-                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                        <font key="font" metaFont="system"/>
-                                        <string key="keyEquivalent" base64-UTF8="YES">
-DQ
-</string>
-                                    </buttonCell>
-                                    <connections>
-                                        <action selector="continue:" target="-2" id="EEj-wF-AT4"/>
-                                    </connections>
-                                </button>
-                            </subviews>
-                        </customView>
-                        <customView id="uU2-RL-XAi">
-                            <rect key="frame" x="301" y="0.0" width="699" height="470"/>
-                            <autoresizingMask key="autoresizingMask"/>
-                            <subviews>
-                                <customView id="hwM-6S-E69">
-                                    <rect key="frame" x="0.0" y="0.0" width="699" height="470"/>
-                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                </customView>
-                            </subviews>
-                        </customView>
-                    </subviews>
-                    <holdingPriorities>
-                        <real value="250"/>
-                        <real value="250"/>
-                    </holdingPriorities>
-                    <userDefinedRuntimeAttributes>
-                        <userDefinedRuntimeAttribute type="number" keyPath="minSize1">
-                            <real key="value" value="300"/>
-                        </userDefinedRuntimeAttribute>
-                        <userDefinedRuntimeAttribute type="number" keyPath="minSize2">
-                            <real key="value" value="500"/>
-                        </userDefinedRuntimeAttribute>
-                    </userDefinedRuntimeAttributes>
-                </splitView>
             </subviews>
         </view>
         <customView id="RtD-0g-Q5a" userLabel="Message View">
@@ -144,10 +148,10 @@ DQ
                     <rect key="frame" x="20" y="83" width="550" height="150"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <clipView key="contentView" id="PV2-zJ-Th2">
-                        <rect key="frame" x="1" y="1" width="223" height="133"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <rect key="frame" x="1" y="1" width="548" height="148"/>
+                        <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <textView importsGraphics="NO" richText="NO" findStyle="panel" allowsUndo="YES" verticallyResizable="YES" smartInsertDelete="YES" id="vJg-vt-cWY" customClass="GICommitMessageView">
+                            <textView importsGraphics="NO" richText="NO" verticallyResizable="YES" findStyle="panel" allowsUndo="YES" smartInsertDelete="YES" id="vJg-vt-cWY" customClass="GICommitMessageView">
                                 <rect key="frame" x="0.0" y="0.0" width="548" height="148"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -162,8 +166,6 @@ DQ
                                     </fragment>
                                 </attributedString>
                                 <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                <size key="minSize" width="548" height="148"/>
-                                <size key="maxSize" width="550" height="10000000"/>
                                 <connections>
                                     <outlet property="delegate" destination="-2" id="PVe-GN-63R"/>
                                 </connections>

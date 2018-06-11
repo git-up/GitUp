@@ -36,6 +36,7 @@
 @interface GIStashListViewController () <NSTableViewDataSource>
 @property(nonatomic, weak) IBOutlet GITableView* tableView;
 @property(nonatomic, weak) IBOutlet NSView* diffView;
+@property(nonatomic, weak) IBOutlet GIPolyfillVisualEffectView* bottomView;
 @property(nonatomic, weak) IBOutlet NSButton* dropButton;
 @property(nonatomic, weak) IBOutlet NSButton* applyButton;
 @property(nonatomic, weak) IBOutlet NSTextField* emptyLabel;
@@ -174,6 +175,14 @@
     _dropButton.enabled = NO;
     _applyButton.enabled = NO;
   }
+}
+
+#pragma mark - GIInsetChangedDelegete
+- (void)updateLayoutWithContentInsets:(NSEdgeInsets)insets {
+  [_diffContentsViewController updateLayoutWithContentInsets:insets];
+
+  insets.bottom = _bottomView.frame.size.height;
+  _tableView.enclosingScrollView.contentInsets = insets;
 }
 
 #pragma mark - Actions

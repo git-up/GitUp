@@ -30,7 +30,7 @@
 - (BOOL)diffFilesViewController:(GIDiffFilesViewController*)controller didReceiveDeltas:(NSArray*)deltas fromOtherController:(GIDiffFilesViewController*)otherController;
 @end
 
-@interface GIDiffFilesViewController : GIViewController
+@interface GIDiffFilesViewController : GIViewController <GIContentInsetsDelegate>
 @property(nonatomic, assign) id<GIDiffFilesViewControllerDelegate> delegate;
 @property(nonatomic) BOOL showsUntrackedAsAdded;  // Default is NO
 @property(nonatomic, copy) NSString* emptyLabel;

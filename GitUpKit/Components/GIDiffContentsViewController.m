@@ -706,6 +706,12 @@ static inline NSString* _StringFromFileMode(GCFileMode mode) {
   }
 }
 
+#pragma mark - GIContentInsetsDelegate
+
+- (void)updateLayoutWithContentInsets:(NSEdgeInsets)insets {
+  _tableView.enclosingScrollView.contentInsets = insets;
+}
+
 #pragma mark - Actions
 
 - (IBAction)showActionMenu:(id)sender {

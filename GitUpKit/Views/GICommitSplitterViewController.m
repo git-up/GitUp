@@ -17,6 +17,7 @@
 #error This file requires ARC
 #endif
 
+#import "GIColorView.h"
 #import "GICommitSplitterViewController.h"
 #import "GIDiffFilesViewController.h"
 #import "GIDiffContentsViewController.h"
@@ -30,10 +31,13 @@
 #define kGCDefaultMaxDiffContextLines 3
 
 @interface GICommitSplitterViewController () <GIDiffFilesViewControllerDelegate, GIDiffContentsViewControllerDelegate>
+@property(nonatomic, weak) IBOutlet GIColorView *headerColorView;
 @property(nonatomic, weak) IBOutlet NSTextField* titleTextField;
+@property(nonatomic, weak) IBOutlet GIColorView *filesOldColorView;
 @property(nonatomic, weak) IBOutlet NSView* filesViewNew;
 @property(nonatomic, weak) IBOutlet NSView* filesViewOld;
 @property(nonatomic, weak) IBOutlet NSView* diffContentsView;
+@property(nonatomic, weak) IBOutlet GIPolyfillVisualEffectView *bottomView;
 @property(nonatomic, weak) IBOutlet NSButton* continueButton;
 
 @property(nonatomic, strong) IBOutlet NSView* messageView;
@@ -506,6 +510,28 @@ cleanup:
     return [self.view.window.firstResponder.nextResponder tryToPerform:@selector(keyDown:) with:[NSApp currentEvent]];
   }
   return [super textView:textView doCommandBySelector:selector];
+}
+
+#pragma mark - GIContentInsetsDelegate
+
+-(void)updateLayoutWithContentInsets:(NSEdgeInsets)insets {
+	CGRect frame = _headerColorView.frame;
+	frame.origin.y = _headerColorView.superview.frame.size.height - frame.size.height - insets.top;
+	_headerColorView.frame = frame;
+	
+	insets.top += _headerColorView.frame.size.height;
+	[_diffContentsViewController updateLayoutWithContentInsets:insets];
+	
+	frame = _filesOldColorView.frame;
+	frame.origin.y = _filesOldColorView.superview.frame.size.height - frame.size.height - insets.top;
+	_filesOldColorView.frame = frame;
+	
+	insets.top += _filesOldColorView.frame.size.height;
+	[_filesViewControllerOld updateLayoutWithContentInsets:insets];
+	
+	insets.top = 0;
+	insets.bottom = _bottomView.frame.size.height;
+	[_filesViewControllerNew updateLayoutWithContentInsets:insets];
 }
 
 #pragma mark - Actions

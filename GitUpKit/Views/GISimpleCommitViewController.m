@@ -165,6 +165,13 @@
   return [super textView:textView doCommandBySelector:selector];
 }
 
+#pragma mark - GIContentInsetsDelegate
+
+- (void)updateLayoutWithContentInsets:(NSEdgeInsets)insets {
+  [_diffFilesViewController updateLayoutWithContentInsets:insets];
+  [_diffContentsViewController updateLayoutWithContentInsets:insets];
+}
+
 #pragma mark - Actions
 
 - (IBAction)commit:(id)sender {

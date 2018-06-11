@@ -15,6 +15,8 @@
 
 #import "GIViewController.h"
 
+#import "GIAppKit.h"
+
 @class GISnapshotListViewController, GCSnapshot;
 
 @protocol GISnapshotListViewControllerDelegate <NSObject>
@@ -23,7 +25,7 @@
 - (void)snapshotListViewController:(GISnapshotListViewController*)controller didRestoreSnapshot:(GCSnapshot*)snapshot;
 @end
 
-@interface GISnapshotListViewController : GIViewController
+@interface GISnapshotListViewController : GIViewController <GIContentInsetsDelegate>
 @property(nonatomic, assign) id<GISnapshotListViewControllerDelegate> delegate;
 @property(nonatomic, readonly) GCSnapshot* selectedSnapshot;
 @end

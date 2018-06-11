@@ -26,6 +26,8 @@
   [super windowDidLoad];
 
   self.window.delegate = self;
+
+  self.window.styleMask |= NSFullSizeContentViewWindowMask;
 }
 
 - (void)synchronizeWindowTitleWithDocumentName {

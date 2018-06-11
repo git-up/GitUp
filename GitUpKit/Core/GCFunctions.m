@@ -95,7 +95,7 @@ NSData* GCCleanedUpCommitMessage(NSString* message) {
 }
 
 NSString* GCUserFromSignature(const git_signature* signature) {
-  return [NSString stringWithFormat:@"%@ <%s>", [NSString stringWithUTF8String:signature->name], signature->email];
+  return [NSString stringWithFormat:@"%@ <%s>", [NSString stringWithUTF8String:signature->name], signature -> email];
 }
 
 // We can't use -[NSString fileSystemRepresentation] as it returns decomposed UTF8 while everything in Git is composed UTF8

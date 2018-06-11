@@ -1,8 +1,9 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14109" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7706"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14109"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="GIDiffContentsViewController">
@@ -23,16 +24,16 @@
                     <rect key="frame" x="0.0" y="0.0" width="700" height="500"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <clipView key="contentView" id="KvI-YZ-5JJ">
-                        <rect key="frame" x="1" y="0.0" width="238" height="134"/>
+                        <rect key="frame" x="0.0" y="0.0" width="700" height="500"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" typeSelect="NO" rowHeight="100" rowSizeStyle="automatic" viewBased="YES" id="vcn-19-sDY" customClass="GIContentsTableView">
-                                <rect key="frame" x="0.0" y="0.0" width="700" height="0.0"/>
+                                <rect key="frame" x="0.0" y="0.0" width="700" height="500"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                 <tableColumns>
-                                    <tableColumn editable="NO" width="700" minWidth="40" maxWidth="10000" id="M5W-6M-rLe">
+                                    <tableColumn identifier="" editable="NO" width="700" minWidth="40" maxWidth="10000" id="M5W-6M-rLe">
                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
                                             <font key="font" metaFont="smallSystem"/>
                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -52,7 +53,7 @@
                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="Y1E-lo-5Dv">
                                                         <rect key="frame" x="31" y="10" width="540" height="16"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                                        <textFieldCell key="cell" lineBreakMode="truncatingHead" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="left" title="Label" id="nPK-ee-7Lf">
+                                                        <textFieldCell key="cell" lineBreakMode="truncatingHead" selectable="YES" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="left" title="Label" id="nPK-ee-7Lf">
                                                             <font key="font" metaFont="systemBold" size="12"/>
                                                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -94,11 +95,11 @@
                                                 </connections>
                                             </tableCellView>
                                             <tableCellView identifier="text" id="6zJ-8v-jV4" customClass="GITextDiffCellView">
-                                                <rect key="frame" x="0.0" y="40" width="700" height="100"/>
+                                                <rect key="frame" x="0.0" y="34" width="700" height="100"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             </tableCellView>
                                             <tableCellView identifier="empty" id="JmW-sf-koG" customClass="GIEmptyDiffCellView">
-                                                <rect key="frame" x="0.0" y="240" width="700" height="50"/>
+                                                <rect key="frame" x="0.0" y="134" width="700" height="50"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="vEH-U7-166">
@@ -112,22 +113,8 @@
                                                     </textField>
                                                 </subviews>
                                             </tableCellView>
-                                            <tableCellView identifier="binary" id="OJg-Sv-XTo" customClass="GIBinaryDiffCellView">
-                                                <rect key="frame" x="0.0" y="140" width="700" height="100"/>
-                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                <subviews>
-                                                    <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" id="jMk-52-KEf">
-                                                        <rect key="frame" x="318" y="18" width="64" height="64"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="NSApplicationIcon" id="LNY-Ju-mOz"/>
-                                                    </imageView>
-                                                </subviews>
-                                                <connections>
-                                                    <outlet property="imageView" destination="jMk-52-KEf" id="eB8-Zt-lNU"/>
-                                                </connections>
-                                            </tableCellView>
                                             <tableCellView identifier="conflict" id="hYN-9E-rxQ" customClass="GIConflictDiffCellView">
-                                                <rect key="frame" x="0.0" y="284" width="700" height="60"/>
+                                                <rect key="frame" x="0.0" y="184" width="700" height="60"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <customView id="IHV-Ry-isd">
@@ -186,8 +173,22 @@
                                                     <outlet property="statusTextField" destination="IRV-hg-pLs" id="gRO-Kl-ff5"/>
                                                 </connections>
                                             </tableCellView>
+                                            <tableCellView identifier="binary" id="OJg-Sv-XTo" customClass="GIBinaryDiffCellView">
+                                                <rect key="frame" x="0.0" y="244" width="700" height="100"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                <subviews>
+                                                    <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" id="jMk-52-KEf">
+                                                        <rect key="frame" x="318" y="18" width="64" height="64"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="NSApplicationIcon" id="LNY-Ju-mOz"/>
+                                                    </imageView>
+                                                </subviews>
+                                                <connections>
+                                                    <outlet property="imageView" destination="jMk-52-KEf" id="eB8-Zt-lNU"/>
+                                                </connections>
+                                            </tableCellView>
                                             <tableCellView identifier="submodule" id="cNk-N6-wN7" customClass="GISubmoduleDiffCellView">
-                                                <rect key="frame" x="0.0" y="240" width="700" height="50"/>
+                                                <rect key="frame" x="0.0" y="344" width="700" height="50"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <customView id="eWx-eZ-o0j">
@@ -258,7 +259,6 @@
                                 </connections>
                             </tableView>
                         </subviews>
-                        <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </clipView>
                     <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="Zog-jE-wv1">
                         <rect key="frame" x="1" y="31.568840026855469" width="48" height="16"/>

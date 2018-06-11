@@ -256,6 +256,12 @@ static NSString* _StringFromActions(GCReflogActions actions) {
   }
 }
 
+#pragma mark - GIContentInsetsDelegate
+
+- (void)updateLayoutWithContentInsets:(NSEdgeInsets)insets {
+  _tableView.enclosingScrollView.contentInsets = insets;
+}
+
 #pragma mark - Actions
 
 - (IBAction)restoreEntry:(id)sender {
