@@ -17,7 +17,7 @@
 #import "AppDelegate.h"
 
 @interface DragAndDropImageView()
-@property (nonatomic, assign) BOOL isHiglighted;
+@property (nonatomic, assign) BOOL isHighlighted;
 @end
 
 @implementation DragAndDropImageView
@@ -35,7 +35,7 @@
   BOOL isDragOperationGeneric = (NSDragOperationGeneric & [sender draggingSourceOperationMask]) == NSDragOperationGeneric;
   NSPasteboard *pasteboard = [sender draggingPasteboard];
   if (isDragOperationGeneric && [self directoryURLFromPasteboard:pasteboard]) {
-    self.isHiglighted = YES;
+    self.isHighlighted = YES;
     return NSDragOperationGeneric;
   } else {
     return NSDragOperationNone;
@@ -43,7 +43,7 @@
 }
 
 - (void)draggingExited:(id<NSDraggingInfo>)sender {
-  self.isHiglighted = NO;
+  self.isHighlighted = NO;
 }
 
 - (BOOL)performDragOperation:(id <NSDraggingInfo>)sender {
@@ -59,13 +59,13 @@
 }
 
 - (void)concludeDragOperation:(id<NSDraggingInfo>)sender {
-  self.isHiglighted = NO;
+  self.isHighlighted = NO;
 }
 
 - (void)drawRect:(NSRect)dirtyRect {
   [super drawRect:dirtyRect];
 
-  if (self.isHiglighted) {
+  if (self.isHighlighted) {
     NSBezierPath *path = [NSBezierPath bezierPathWithRoundedRect:dirtyRect xRadius:10 yRadius:10];
     // systemBlueColor from https://developer.apple.com/design/human-interface-guidelines/macos/visual-design/color/
     NSColor *higlightColor = [NSColor colorWithRed:27.0/255.0
@@ -96,9 +96,9 @@
   }
 }
 
-- (void)setIsHiglighted:(BOOL)isHiglighted {
-  if (_isHiglighted != isHiglighted) {
-    _isHiglighted = isHiglighted;
+- (void)setIsHighlighted:(BOOL)isHighlighted {
+  if (_isHighlighted != isHighlighted) {
+    _isHighlighted = isHighlighted;
 
     [self setNeedsDisplay:YES];
   }
