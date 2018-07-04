@@ -188,6 +188,10 @@
   }
 }
 
+- (void)openRepositoryWithURL:(NSURL*)url {
+  [self _openRepositoryWithURL:url withCloneMode:kCloneMode_None windowModeID:NSNotFound];
+}
+
 - (void)_setDocumentWindowModeID:(NSArray*)arguments {
   [(Document*)arguments[0] setWindowModeID:[arguments[1] unsignedIntegerValue]];
 }
