@@ -1,4 +1,4 @@
-//  Copyright (C) 2015-2017 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2018 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -67,14 +67,12 @@ static NSString* _diffTemporaryDirectoryPath = nil;
                                 button:NSLocalizedString(@"Discard All", nil)
              suppressionUserDefaultKey:nil
                                  block:^{
-
                                    NSError* error;
                                    if ([self.repository syncWorkingDirectoryWithIndex:&error]) {
                                      [self.repository notifyWorkingDirectoryChanged];
                                    } else {
                                      [self presentError:error];
                                    }
-
                                  }];
 }
 
@@ -127,13 +125,11 @@ static NSString* _diffTemporaryDirectoryPath = nil;
                                 button:NSLocalizedString(@"Discard", nil)
              suppressionUserDefaultKey:nil
                                  block:^{
-
                                    NSError* error;
                                    if (![self discardSubmoduleAtPath:path resetIndex:resetIndex error:&error]) {
                                      [self presentError:error];
                                    }
                                    [self.repository notifyWorkingDirectoryChanged];
-
                                  }];
 }
 
@@ -152,7 +148,6 @@ static NSString* _diffTemporaryDirectoryPath = nil;
   if ([self.repository addLinesFromFileToIndex:path
                                          error:&error
                                    usingFilter:^BOOL(GCLineDiffChange change, NSUInteger oldLineNumber, NSUInteger newLineNumber) {
-
                                      if (change == kGCLineDiffChange_Added) {
                                        return [newLines containsIndex:newLineNumber];
                                      }
@@ -160,7 +155,6 @@ static NSString* _diffTemporaryDirectoryPath = nil;
                                        return [oldLines containsIndex:oldLineNumber];
                                      }
                                      return YES;
-
                                    }]) {
     [self.repository notifyRepositoryChanged];
   } else {
@@ -182,7 +176,6 @@ static NSString* _diffTemporaryDirectoryPath = nil;
   if ([self.repository resetLinesFromFileInIndexToHEAD:path
                                                  error:&error
                                            usingFilter:^BOOL(GCLineDiffChange change, NSUInteger oldLineNumber, NSUInteger newLineNumber) {
-
                                              if (change == kGCLineDiffChange_Added) {
                                                return [newLines containsIndex:newLineNumber];
                                              }
@@ -190,7 +183,6 @@ static NSString* _diffTemporaryDirectoryPath = nil;
                                                return [oldLines containsIndex:oldLineNumber];
                                              }
                                              return NO;
-
                                            }]) {
     [self.repository notifyWorkingDirectoryChanged];
   } else {
@@ -222,13 +214,11 @@ static NSString* _diffTemporaryDirectoryPath = nil;
                                 button:NSLocalizedString(@"Discard", nil)
              suppressionUserDefaultKey:nil
                                  block:^{
-
                                    NSError* error;
                                    if (![self discardAllChangesForFile:path resetIndex:resetIndex error:&error]) {
                                      [self presentError:error];
                                    }
                                    [self.repository notifyWorkingDirectoryChanged];
-
                                  }];
 }
 
@@ -239,7 +229,6 @@ static NSString* _diffTemporaryDirectoryPath = nil;
   return [self.repository checkoutLinesFromFileFromIndex:path
                                                    error:error
                                              usingFilter:^BOOL(GCLineDiffChange change, NSUInteger oldLineNumber, NSUInteger newLineNumber) {
-
                                                if (change == kGCLineDiffChange_Added) {
                                                  return [newLines containsIndex:newLineNumber];
                                                }
@@ -247,7 +236,6 @@ static NSString* _diffTemporaryDirectoryPath = nil;
                                                  return [oldLines containsIndex:oldLineNumber];
                                                }
                                                return NO;
-
                                              }];
 }
 
@@ -258,13 +246,11 @@ static NSString* _diffTemporaryDirectoryPath = nil;
                                 button:NSLocalizedString(@"Discard", nil)
              suppressionUserDefaultKey:nil
                                  block:^{
-
                                    NSError* error;
                                    if (![self discardSelectedChangesForFile:path oldLines:oldLines newLines:newLines resetIndex:resetIndex error:&error]) {
                                      [self presentError:error];
                                    }
                                    [self.repository notifyWorkingDirectoryChanged];
-
                                  }];
 }
 
@@ -275,14 +261,12 @@ static NSString* _diffTemporaryDirectoryPath = nil;
                                 button:NSLocalizedString(@"Delete", nil)
              suppressionUserDefaultKey:nil
                                  block:^{
-
                                    NSError* error;
                                    if ([self.repository safeDeleteFile:path error:&error]) {
                                      [self.repository notifyWorkingDirectoryChanged];
                                    } else {
                                      [self presentError:error];
                                    }
-
                                  }];
 }
 
@@ -293,13 +277,11 @@ static NSString* _diffTemporaryDirectoryPath = nil;
                                 button:NSLocalizedString(@"Restore", nil)
              suppressionUserDefaultKey:nil
                                  block:^{
-
                                    NSError* error;
                                    if (![self.repository safeDeleteFileIfExists:path error:&error] || ![self.repository checkoutFileToWorkingDirectory:path fromCommit:commit skipIndex:YES error:&error]) {
                                      [self presentError:error];
                                    }
                                    [self.repository notifyWorkingDirectoryChanged];
-
                                  }];
 }
 
@@ -320,11 +302,9 @@ static NSString* _diffTemporaryDirectoryPath = nil;
       [[NSDocumentController sharedDocumentController] openDocumentWithContentsOfURL:[NSURL fileURLWithPath:subrepo.workingDirectoryPath]
                                                                              display:YES
                                                                    completionHandler:^(NSDocument* document, BOOL documentWasAlreadyOpen, NSError* openError) {
-
                                                                      if (!document) {
                                                                        [[NSDocumentController sharedDocumentController] presentError:openError];
                                                                      }
-
                                                                    }];
     } else if ([error.domain isEqualToString:GCErrorDomain] && (error.code == kGCErrorCode_NotFound)) {
       [self.windowController showOverlayWithStyle:kGIOverlayStyle_Warning format:NSLocalizedString(@"Submodule \"%@\" is not initialized", nil), submodule.name];

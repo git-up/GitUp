@@ -1,4 +1,4 @@
-//  Copyright (C) 2015-2017 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2018 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -12,8 +12,6 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-#import <QuartzCore/QuartzCore.h>
 
 #import "Document.h"
 #import "WindowController.h"
@@ -49,10 +47,6 @@
 #define kRestorableStateKey_WindowMode @"windowMode"
 
 #define kSideViewAnimationDuration 0.15  // seconds
-#define kQuickViewAnimationDuration 0.25  // seconds
-
-#define kAnimationKey_ID @"animationID"
-#define kAnimationID_QuickViewSnapshot @"snapshotAnimation"
 
 #define kMaxAncestorCommits 1000
 
@@ -447,19 +441,15 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
   [_repository performOperationInBackgroundWithReason:@"clone"
       argument:nil
       usingOperationBlock:^BOOL(GCRepository* repository, NSError** outError) {
-
         return [repository cloneUsingRemote:remote recursive:recursive error:outError];
-
       }
       completionBlock:^(BOOL success, NSError* error) {
-
         [_repository resumeHistoryUpdates];
         if (!success) {
           [self presentError:error];
         }
         [self _prepareSearch];
         [self _resetCheckTimer];
-
       }];
 }
 
@@ -467,17 +457,13 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
   [_repository performOperationInBackgroundWithReason:nil
       argument:nil
       usingOperationBlock:^BOOL(GCRepository* repository, NSError** outError) {
-
         return [repository initializeAllSubmodules:YES error:outError];
-
       }
       completionBlock:^(BOOL success, NSError* error) {
-
         if (!success) {
           [self presentError:error];
         }
         [self _resetCheckTimer];
-
       }];
 }
 
@@ -490,7 +476,6 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
   __block CFTimeInterval lastTime = 0.0;
   [_repository prepareSearchInBackground:[[_repository userInfoForKey:kRepositoryUserInfoKey_IndexDiffs] boolValue]
       withProgressHandler:^BOOL(BOOL firstUpdate, NSUInteger addedCommits, NSUInteger removedCommits) {
-
         if (firstUpdate) {
           float progress = MIN(roundf(1000 * (float)addedCommits / (float)totalCount) / 10, 100.0);
           if (progress > lastProgress) {
@@ -509,10 +494,8 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
           }
         }
         return !_abortIndexing;
-
       }
       completion:^(BOOL success, NSError* error) {
-
         if (!_abortIndexing) {  // If indexing has been aborted, this means the document has already been closed, so don't attempt to do *anything*
           if (success) {
             _searchReady = YES;
@@ -525,7 +508,6 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
           [[NSProcessInfo processInfo] enableSuddenTermination];
           _indexing = NO;
         }
-
       }];
 }
 
@@ -562,14 +544,12 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
         alert.showsSuppressionButton = YES;
         [alert beginSheetModalForWindow:_mainWindow
                   withCompletionHandler:^(NSInteger returnCode) {
-
                     if (alert.suppressionButton.state) {
                       [_repository setUserInfo:@(YES) forKey:kRepositoryUserInfoKey_SkipSubmoduleCheck];
                     }
                     if (returnCode == NSAlertDefaultReturn) {
                       [self _initializeSubmodules];
                     }
-
                   }];
         return;  // Don't do anything else
       } else {
@@ -976,126 +956,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 
   _quickViewController.commit = commit;
 
-  [self _animateQuickViewForCommit:commit
-                         appearing:YES
-                        transition:^{
-                          [self _setWindowMode:kWindowModeString_Map_QuickView];
-                        }];
-}
-
-- (void)_animateQuickViewForCommit:(GCHistoryCommit*)commit appearing:(BOOL)appearing transition:(void (^)(void))transitionBlock {
-  if (![[NSUserDefaults standardUserDefaults] boolForKey:kUserDefaultsKey_EnableVisualEffects]) {
-    transitionBlock();
-    return;
-  }
-
-  [CATransaction flush];
-  [CATransaction begin];
-  [CATransaction setDisableActions:YES];
-  [CATransaction setAnimationDuration:kQuickViewAnimationDuration];
-  [CATransaction setAnimationTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionDefault]];
-
-  BOOL animationInFlight = YES;
-  if (!_fixedSnapshotLayer) {
-    animationInFlight = NO;
-    _fixedSnapshotLayer = [CALayer layer];
-    _fixedSnapshotLayer.backgroundColor = _mainWindow.backgroundColor.CGColor;
-    _animatingSnapshotLayer = [CALayer layer];
-    _animatingSnapshotLayer.backgroundColor = _mainWindow.backgroundColor.CGColor;
-    _animatingSnapshotLayer.shadowOpacity = 0.2;
-    _animatingSnapshotLayer.shadowRadius = 30;
-  }
-
-  if (animationInFlight) {
-    transitionBlock();
-  } else if (appearing) {
-    _fixedSnapshotLayer.contents = [_contentView takeSnapshot];
-    transitionBlock();
-    _animatingSnapshotLayer.contents = [_contentView takeSnapshot];
-  } else {
-    _animatingSnapshotLayer.contents = [_contentView takeSnapshot];
-    transitionBlock();
-    _fixedSnapshotLayer.contents = [_contentView takeSnapshot];
-  }
-
-  [_contentView.layer addSublayer:_fixedSnapshotLayer];
-  [_contentView.layer addSublayer:_animatingSnapshotLayer];
-
-  _fixedSnapshotLayer.frame = _contentView.layer.bounds;
-
-  CALayer* fromLayer = nil;
-  if (animationInFlight) {
-    fromLayer = _animatingSnapshotLayer.presentationLayer;
-  }
-
-  if (!fromLayer) {
-    fromLayer = _animatingSnapshotLayer;
-  }
-
-  // Calculating the startProgress to use when reversing an in-flight transition is nontrivial (for a nonlinear timing function).
-  // But we can make Core Animation do it for us by animating a dummy property (zPosition) between 0 and 1 along with the real animations, and using that as the startProgress.
-
-  // Animate the title/toolbar updates alongside the snapshot zoom animation.
-  CATransition* transition = [CATransition animation];
-  transition.type = kCATransitionPush;
-  transition.subtype = appearing ? kCATransitionFromBottom : kCATransitionFromTop;
-  transition.startProgress = fromLayer.zPosition;
-  [_rightView.layer addAnimation:transition forKey:kCATransition];
-  [_titleView.layer addAnimation:transition forKey:kCATransition];
-  [_leftView.layer addAnimation:transition forKey:kCATransition];
-
-  CABasicAnimation* position = [CABasicAnimation animationWithKeyPath:@"position"];
-  CABasicAnimation* transform = [CABasicAnimation animationWithKeyPath:@"transform"];
-  CABasicAnimation* zPosition = [CABasicAnimation animationWithKeyPath:@"zPosition"];
-
-  [self _configureAnimatingSnapshotLayerForCommit:appearing ? commit : nil];
-  position.fromValue = [fromLayer valueForKey:@"position"];
-  transform.fromValue = [fromLayer valueForKey:@"transform"];
-  zPosition.fromValue = @(1 - fromLayer.zPosition);
-
-  [self _configureAnimatingSnapshotLayerForCommit:appearing ? nil : commit];
-  position.toValue = [_animatingSnapshotLayer valueForKey:@"position"];
-  transform.toValue = [_animatingSnapshotLayer valueForKey:@"transform"];
-  zPosition.toValue = @0;
-
-  CAAnimationGroup* group = [CAAnimationGroup animation];
-  group.animations = @[ position, transform, zPosition ];
-  group.delegate = (id)self;  // id<CAAnimationDelegate> is only available on OS X 10.12 SDK
-  [group setValue:kAnimationID_QuickViewSnapshot forKey:kAnimationKey_ID];
-
-  [_animatingSnapshotLayer addAnimation:group forKey:kAnimationID_QuickViewSnapshot];
-
-  [CATransaction commit];
-}
-
-- (void)animationDidStop:(CAAnimation*)anim finished:(BOOL)flag {
-  if ([[anim valueForKey:kAnimationKey_ID] isEqual:kAnimationID_QuickViewSnapshot] && flag) {
-    [_fixedSnapshotLayer removeFromSuperlayer];
-    [_animatingSnapshotLayer removeFromSuperlayer];
-    _fixedSnapshotLayer = nil;
-    _animatingSnapshotLayer = nil;
-  }
-}
-
-- (void)_configureAnimatingSnapshotLayerForCommit:(GCHistoryCommit*)commit {
-  if (commit) {
-    NSPoint commitPoint = [_contentView convertPoint:[_mapViewController positionInViewForCommit:commit] fromView:_mapViewController.view];
-    if (NSPointInRect(commitPoint, _contentView.bounds)) {
-      _animatingSnapshotLayer.bounds = _contentView.layer.bounds;
-      _animatingSnapshotLayer.position = [_contentView convertPointToLayer:commitPoint];
-    } else {
-      _animatingSnapshotLayer.frame = _contentView.layer.bounds;
-    }
-    // Shrink the snapshot so it appears at the location of the commit.
-    // (0 is too small and causes the animation to behave incorrectly.)
-    _animatingSnapshotLayer.transform = CATransform3DMakeScale(0.0001, 0.0001, 1);
-  } else {
-    _animatingSnapshotLayer.transform = CATransform3DIdentity;
-    _animatingSnapshotLayer.frame = _contentView.layer.bounds;
-  }
-  CGPathRef path = CGPathCreateWithRect(_animatingSnapshotLayer.bounds, NULL);
-  _animatingSnapshotLayer.shadowPath = path;
-  CGPathRelease(path);
+  [self _setWindowMode:kWindowModeString_Map_QuickView];
 }
 
 - (BOOL)_hasPreviousQuickView {
@@ -1143,11 +1004,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 
   [_repository resumeHistoryUpdates];
 
-  [self _animateQuickViewForCommit:_quickViewController.commit
-                         appearing:NO
-                        transition:^{
-                          [self _setWindowMode:kWindowModeString_Map];
-                        }];
+  [self _setWindowMode:kWindowModeString_Map];
 }
 
 #pragma mark - Diff
@@ -1302,7 +1159,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 
 - (NSArray*)toolbarDefaultItemIdentifiers:(NSToolbar*)toolbar {
   if (_unifiedToolbar) {
-    return @[ kToolbarItem_Left, kToolbarItem_Title, NSToolbarSpaceItemIdentifier, kToolbarItem_Right ];
+    return @[ kToolbarItem_Left, kToolbarItem_Title, kToolbarItem_Right ];
   }
   return @[ kToolbarItem_Left, NSToolbarFlexibleSpaceItemIdentifier, kToolbarItem_Right ];
 }
@@ -1800,7 +1657,6 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
   [alert addButtonWithTitle:NSLocalizedString(@"Cancel", nil)];
   [alert beginSheetModalForWindow:_mainWindow
             withCompletionHandler:^(NSInteger returnCode) {
-
               if (returnCode == NSAlertFirstButtonReturn) {
                 NSError* error;
                 if (![_repository resetToHEAD:kGCResetMode_Hard error:&error] || (_untrackedButton.state && ![_repository cleanWorkingDirectory:&error]) || ![_repository updateAllSubmodulesResursively:YES error:&error]) {
@@ -1808,7 +1664,6 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
                 }
                 [_repository notifyRepositoryChanged];
               }
-
             }];
 }
 
@@ -1829,6 +1684,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
   view.frame = NSOffsetRect(newViewFrame, viewFrame.size.width, 0);
   [_mapContainerView addSubview:view positioned:NSWindowAbove relativeTo:_mapView];
 
+#if 0  // TODO: On 10.13, the first time the view is shown after animating, it is completely empty
   [NSAnimationContext beginGrouping];
   [[NSAnimationContext currentContext] setDuration:kSideViewAnimationDuration];
   if (completion) {
@@ -1839,6 +1695,13 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
   [_mapView.animator setFrame:newMapFrame];
   [view.animator setFrame:newViewFrame];
   [NSAnimationContext endGrouping];
+#else
+  [_mapView setFrame:newMapFrame];
+  [view setFrame:newViewFrame];
+  if (completion) {
+    completion();
+  }
+#endif
   [self _updateToolBar];
 
   [self _showHelpWithIdentifier:identifier];
@@ -2030,7 +1893,6 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
     _checkingForChanges = YES;
     NSString* path = _repository.repositoryPath;  // Avoid race-condition in case _repository is set to nil before block is executed
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-
       NSMutableDictionary* updatedReferences = [[NSMutableDictionary alloc] init];
       GCRepository* repository = [[GCRepository alloc] initWithExistingLocalRepository:path error:NULL];
       repository.delegate = (id<GCRepositoryDelegate>)self.class;  // Don't use self as we don't want to show progress UI nor authentication prompts
@@ -2048,7 +1910,6 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
         }
       }
       dispatch_async(dispatch_get_main_queue(), ^{
-
         if (_repository) {
           _updatedReferences = updatedReferences;
           if (_updatedReferences.count) {
@@ -2067,9 +1928,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
         } else {
           XLOG_WARNING(@"Remote check completed after document was closed");
         }
-
       });
-
     });
   } else {
     XLOG_DEBUG_UNREACHABLE();  // Not sure how this can happen but it has in the field

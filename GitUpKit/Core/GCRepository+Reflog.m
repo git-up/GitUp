@@ -1,4 +1,4 @@
-//  Copyright (C) 2015-2017 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2018 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -254,7 +254,6 @@ static CFHashCode _EntryHashCallBack(const void* value) {
   BOOL success = [self enumerateReferencesWithOptions:(kGCReferenceEnumerationOption_IncludeHEAD | kGCReferenceEnumerationOption_RetainReferences)
                                                 error:error
                                            usingBlock:^BOOL(git_reference* rawReference) {
-
                                              if (git_reference_has_log(self.private, git_reference_name(rawReference))) {
                                                git_reflog* reflog;
                                                CALL_LIBGIT2_FUNCTION_RETURN(NO, git_reflog_read, &reflog, self.private, git_reference_name(rawReference));
@@ -294,7 +293,6 @@ static CFHashCode _EntryHashCallBack(const void* value) {
                                                git_reference_free(rawReference);
                                              }
                                              return YES;
-
                                            }];
   CFRelease(cache);
   if (!success) {

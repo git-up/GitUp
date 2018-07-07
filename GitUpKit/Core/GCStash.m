@@ -1,4 +1,4 @@
-//  Copyright (C) 2015-2017 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2018 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -136,7 +136,6 @@ cleanup:
 - (NSArray*)listStashes:(NSError**)error {
   NSMutableArray* array = [[NSMutableArray alloc] init];
   CALL_LIBGIT2_FUNCTION_RETURN(nil, git_stash_foreach_block, self.private, ^int(size_t index, const char* message, const git_oid* stash_id) {
-
     XLOG_DEBUG_CHECK(array.count == index);
     GCStash* stash = [self _newStashFromOID:stash_id error:error];
     if (stash == nil) {
@@ -144,7 +143,6 @@ cleanup:
     }
     [array addObject:stash];
     return GIT_OK;
-
   });
   return array;
 }
@@ -153,13 +151,11 @@ cleanup:
   const git_oid* oid = git_commit_id(stash.private);
   __block NSUInteger stashIndex = NSNotFound;
   CALL_LIBGIT2_FUNCTION_RETURN(NSNotFound, git_stash_foreach_block, self.private, ^int(size_t index, const char* message, const git_oid* stash_id) {
-
     if (git_oid_equal(stash_id, oid)) {
       XLOG_DEBUG_CHECK(stashIndex == NSNotFound);
       stashIndex = index;
     }
     return GIT_OK;
-
   });
   if (stashIndex == NSNotFound) {
     GC_SET_GENERIC_ERROR(@"Stash does not exist");

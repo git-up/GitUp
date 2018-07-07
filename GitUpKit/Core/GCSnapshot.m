@@ -1,4 +1,4 @@
-//  Copyright (C) 2015-2017 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2018 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -280,7 +280,6 @@ cleanup:
     BOOL success = [repository enumerateReferencesWithOptions:kGCReferenceEnumerationOption_IncludeHEAD
                                                         error:error
                                                    usingBlock:^BOOL(git_reference* reference) {
-
                                                      git_object* object = NULL;
                                                      git_oid oid;
                                                      if ([repository loadTargetOID:&oid fromReference:reference error:NULL]) {  // Ignore errors since repositories can have invalid references
@@ -298,7 +297,6 @@ cleanup:
 
                                                      git_object_free(object);
                                                      return YES;
-
                                                    }];
     if (!success) {
       return nil;
@@ -644,12 +642,10 @@ cleanup:
   BOOL result = [self enumerateReferencesWithOptions:kGCReferenceEnumerationOption_IncludeHEAD
                                                error:error
                                           usingBlock:^BOOL(git_reference* reference) {
-
                                             GCSerializedReference* serializedReference = [[GCSerializedReference alloc] initWithReference:reference resolvedObject:NULL];
                                             [references addObject:serializedReference];
                                             [serializedReference release];
                                             return YES;
-
                                           }];
   if (result) {
     result = [self _restoreFromReferences:references andConfig:config toSnapshot:snapshot withOptions:options reflogMessage:message didUpdateReferences:didUpdateReferences error:error];

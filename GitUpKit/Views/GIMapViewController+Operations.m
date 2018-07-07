@@ -1,4 +1,4 @@
-//  Copyright (C) 2015-2017 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2018 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -116,9 +116,7 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
                                 skipCheckoutOnUndo:NO
                                              error:&error
                                         usingBlock:^BOOL(GCLiveRepository* repository, NSError** outError) {
-
                                           return [repository checkoutCommit:commit options:kGCCheckoutOption_UpdateSubmodulesRecursively error:outError];
-
                                         }]) {
     [self presentError:error];
   }
@@ -133,9 +131,7 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
                                 skipCheckoutOnUndo:NO
                                              error:&error
                                         usingBlock:^BOOL(GCLiveRepository* repository, NSError** outError) {
-
                                           return [repository checkoutLocalBranch:branch options:kGCCheckoutOption_UpdateSubmodulesRecursively error:outError];
-
                                         }]) {
     [self presentError:error];
   }
@@ -150,7 +146,6 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
                                 skipCheckoutOnUndo:NO
                                              error:&error
                                         usingBlock:^BOOL(GCLiveRepository* repository, NSError** outError) {
-
                                           GCLocalBranch* localBranch = [repository createLocalBranchFromCommit:remoteBranch.tipCommit withName:remoteBranch.branchName force:NO error:outError];
                                           if (localBranch == nil) {
                                             return NO;
@@ -163,7 +158,6 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
                                             return NO;
                                           }
                                           return YES;
-
                                         }]) {
     [self presentError:error];
   }
@@ -181,17 +175,13 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
                                                                argument:commit.SHA1
                                                                   error:&error
                                                              usingBlock:^GCReferenceTransform*(GCLiveRepository* repository, NSError** outError1) {
-
                                                                return [repository.history swapCommitWithItsParent:commit
                                                                                                   conflictHandler:^GCCommit*(GCIndex* index, GCCommit* ourCommit, GCCommit* theirCommit, NSArray* parentCommits, NSString* message, NSError** outError2) {
-
                                                                                                     return [self resolveConflictsWithResolver:self.delegate index:index ourCommit:ourCommit theirCommit:theirCommit parentCommits:parentCommits message:message error:outError2];
-
                                                                                                   }
                                                                                                    newChildCommit:NULL
                                                                                                   newParentCommit:&newCommit
                                                                                                             error:outError1];
-
                                                              }];
     [self.repository resumeHistoryUpdates];
     if (success) {
@@ -213,17 +203,13 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
                                                                argument:child.SHA1
                                                                   error:&error
                                                              usingBlock:^GCReferenceTransform*(GCLiveRepository* repository, NSError** outError1) {
-
                                                                return [repository.history swapCommitWithItsParent:child
                                                                                                   conflictHandler:^GCCommit*(GCIndex* index, GCCommit* ourCommit, GCCommit* theirCommit, NSArray* parentCommits, NSString* message, NSError** outError2) {
-
                                                                                                     return [self resolveConflictsWithResolver:self.delegate index:index ourCommit:ourCommit theirCommit:theirCommit parentCommits:parentCommits message:message error:outError2];
-
                                                                                                   }
                                                                                                    newChildCommit:&newCommit
                                                                                                   newParentCommit:NULL
                                                                                                             error:outError1];
-
                                                              }];
     [self.repository resumeHistoryUpdates];
     if (success) {
@@ -242,7 +228,6 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
                         withTitle:NSLocalizedString(@"Squashed commit message:", nil)
                            button:NSLocalizedString(@"Squash", nil)
                             block:^(NSString* message) {
-
                               NSError* error;
                               __block GCCommit* newCommit = nil;
                               [self.repository setUndoActionName:NSLocalizedString(@"Squash Commit", nil)];
@@ -250,15 +235,12 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
                                                                               argument:commit.SHA1
                                                                                  error:&error
                                                                             usingBlock:^GCReferenceTransform*(GCLiveRepository* repository, NSError** outError) {
-
                                                                               return [repository.history squashCommit:commit withMessage:message newCommit:&newCommit error:outError];
-
                                                                             }]) {
                                 [self selectCommit:newCommit];
                               } else {
                                 [self presentError:error];
                               }
-
                             }];
   }
 }
@@ -272,9 +254,7 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
                                                     argument:commit.SHA1
                                                        error:&error
                                                   usingBlock:^GCReferenceTransform*(GCLiveRepository* repository, NSError** outError) {
-
                                                     return [repository.history fixupCommit:commit newCommit:&newCommit error:outError];
-
                                                   }]) {
       [self selectCommit:newCommit];
     } else {
@@ -292,15 +272,11 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
                                                      argument:commit.SHA1
                                                         error:&error
                                                    usingBlock:^GCReferenceTransform*(GCLiveRepository* repository, NSError** outError1) {
-
                                                      return [repository.history deleteCommit:commit
                                                                          withConflictHandler:^GCCommit*(GCIndex* index, GCCommit* ourCommit, GCCommit* theirCommit, NSArray* parentCommits, NSString* message, NSError** outError2) {
-
                                                                            return [self resolveConflictsWithResolver:self.delegate index:index ourCommit:ourCommit theirCommit:theirCommit parentCommits:parentCommits message:message error:outError2];
-
                                                                          }
                                                                                        error:outError1];
-
                                                    }]) {
       [self presentError:error];
     }
@@ -315,7 +291,6 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
                         withTitle:NSLocalizedString(@"Cherry-picked commit message:", nil)
                            button:NSLocalizedString(@"Cherry-Pick", nil)
                             block:^(NSString* message) {
-
                               NSError* error;
                               __block GCCommit* newCommit = nil;
                               [self.repository setUndoActionName:NSLocalizedString(@"Cherry-Pick Commit", nil)];
@@ -323,24 +298,19 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
                                                                               argument:commit.SHA1
                                                                                  error:&error
                                                                             usingBlock:^GCReferenceTransform*(GCLiveRepository* repository, NSError** outError1) {
-
                                                                               return [repository.history cherryPickCommit:commit
                                                                                                             againstBranch:branch
                                                                                                               withMessage:message
                                                                                                           conflictHandler:^GCCommit*(GCIndex* index, GCCommit* ourCommit, GCCommit* theirCommit, NSArray* parentCommits, NSString* message2, NSError** outError2) {
-
                                                                                                             return [self resolveConflictsWithResolver:self.delegate index:index ourCommit:ourCommit theirCommit:theirCommit parentCommits:parentCommits message:message2 error:outError2];
-
                                                                                                           }
                                                                                                                 newCommit:&newCommit
                                                                                                                     error:outError1];
-
                                                                             }]) {
                                 [self selectCommit:newCommit];
                               } else {
                                 [self presentError:error];
                               }
-
                             }];
   }
 }
@@ -367,7 +337,6 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
                             withTitle:NSLocalizedString(@"Reverted commit message:", nil)
                                button:NSLocalizedString(@"Revert", nil)
                                 block:^(NSString* message) {
-
                                   NSError* error;
                                   __block GCCommit* newCommit = nil;
                                   [self.repository setUndoActionName:NSLocalizedString(@"Revert Commit", nil)];
@@ -375,24 +344,19 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
                                                                                   argument:commit.SHA1
                                                                                      error:&error
                                                                                 usingBlock:^GCReferenceTransform*(GCLiveRepository* repository, NSError** outError1) {
-
                                                                                   return [repository.history revertCommit:commit
                                                                                                             againstBranch:branch
                                                                                                               withMessage:message
                                                                                                           conflictHandler:^GCCommit*(GCIndex* index, GCCommit* ourCommit, GCCommit* theirCommit, NSArray* parentCommits, NSString* message2, NSError** outError2) {
-
                                                                                                             return [self resolveConflictsWithResolver:self.delegate index:index ourCommit:ourCommit theirCommit:theirCommit parentCommits:parentCommits message:message2 error:outError2];
-
                                                                                                           }
                                                                                                                 newCommit:&newCommit
                                                                                                                     error:outError1];
-
                                                                                 }]) {
                                     [self selectCommit:newCommit];
                                   } else {
                                     [self presentError:error];
                                   }
-
                                 }];
       }
       break;
@@ -407,7 +371,6 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
                       withTitle:NSLocalizedString(@"New commit message:", nil)
                          button:NSLocalizedString(@"Save", nil)
                           block:^(NSString* message) {
-
                             if (![message isEqualToString:originalMessage]) {
                               NSError* error;
                               __block GCCommit* newCommit = nil;
@@ -416,13 +379,11 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
                                                                               argument:commit.SHA1
                                                                                  error:&error
                                                                             usingBlock:^GCReferenceTransform*(GCLiveRepository* repository, NSError** outError) {
-
                                                                               newCommit = [repository copyCommit:commit withUpdatedMessage:message updatedParents:nil updatedTreeFromIndex:nil updateCommitter:YES error:outError];
                                                                               if (newCommit == nil) {
                                                                                 return nil;
                                                                               }
                                                                               return [repository.history rewriteCommit:commit withUpdatedCommit:newCommit copyTrees:YES conflictHandler:NULL error:outError];  // No need for a conflict handler as editing a message should not result in conflicts
-
                                                                             }]) {
                                 [self selectCommit:newCommit];
                               } else {
@@ -431,7 +392,6 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
                             } else {
                               NSBeep();
                             }
-
                           }];
 }
 
@@ -446,7 +406,6 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
                                 skipCheckoutOnUndo:NO
                                              error:&error
                                         usingBlock:^BOOL(GCLiveRepository* repository, NSError** outError) {
-
                                           GCLocalBranch* branch = [repository createLocalBranchFromCommit:commit withName:name force:NO error:outError];
                                           if (branch == nil) {
                                             return NO;
@@ -456,7 +415,6 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
                                             return NO;
                                           }
                                           return YES;
-
                                         }]) {
     [self presentError:error];
   }
@@ -472,9 +430,7 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
                                skipCheckoutOnUndo:YES
                                             error:&error
                                        usingBlock:^BOOL(GCLiveRepository* repository, NSError** outError) {
-
                                          return [repository deleteLocalBranch:branch error:outError];
-
                                        }]) {
     if ([upstream isKindOfClass:[GCHistoryRemoteBranch class]]) {
       [self confirmUserActionWithAlertType:_AlertTypeForDangerousRemoteOperations()
@@ -483,9 +439,7 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
                                     button:NSLocalizedString(@"Delete Remote Branch", nil)
                  suppressionUserDefaultKey:nil
                                      block:^{
-
                                        [self _deleteRemoteBranchFromRemote:upstream];
-
                                      }];
     }
   } else {
@@ -502,9 +456,7 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
                                 skipCheckoutOnUndo:YES
                                              error:&error
                                         usingBlock:^BOOL(GCLiveRepository* repository, NSError** outError) {
-
                                           return [repository setName:name forLocalBranch:branch force:NO error:outError];
-
                                         }]) {
     [self presentError:error];
   }
@@ -518,11 +470,9 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
                                                      argument:branch.name
                                                         error:&error
                                                    usingBlock:^GCReferenceTransform*(GCLiveRepository* repository, NSError** outError) {
-
                                                      GCReferenceTransform* transform = [[GCReferenceTransform alloc] initWithRepository:repository reflogMessage:kGCReflogMessageFormat_GitUp_SetTip];
                                                      [transform setDirectTarget:commit forReference:branch];
                                                      return transform;
-
                                                    }]) {
       [self presentError:error];
     }
@@ -538,11 +488,9 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
                                 skipCheckoutOnUndo:YES
                                              error:&error
                                         usingBlock:^BOOL(GCLiveRepository* repository, NSError** outError) {
-
                                           GCReferenceTransform* transform = [[GCReferenceTransform alloc] initWithRepository:repository reflogMessage:kGCReflogMessageFormat_GitUp_MoveTip];
                                           [transform setDirectTarget:commit forReference:branch];
                                           return [repository applyReferenceTransform:transform error:outError];
-
                                         }]) {
     [self presentError:error];
   }
@@ -558,9 +506,7 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
                                   skipCheckoutOnUndo:YES
                                                error:&error
                                           usingBlock:^BOOL(GCLiveRepository* repository, NSError** outError) {
-
                                             return [repository setUpstream:upstream forLocalBranch:branch error:outError];
-
                                           }]) {
       [self presentError:error];
     }
@@ -571,9 +517,7 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
                                   skipCheckoutOnUndo:YES
                                                error:&error
                                           usingBlock:^BOOL(GCLiveRepository* repository, NSError** outError) {
-
                                             return [self.repository unsetUpstreamForLocalBranch:branch error:outError];
-
                                           }]) {
       [self presentError:error];
     }
@@ -592,14 +536,12 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
                                 skipCheckoutOnUndo:YES
                                              error:&error
                                         usingBlock:^BOOL(GCLiveRepository* repository, NSError** outError) {
-
                                           if (message.length) {
                                             tag = [repository createAnnotatedTagWithCommit:commit name:name message:message force:NO annotation:NULL error:outError];
                                           } else {
                                             tag = [repository createLightweightTagWithCommit:commit name:name force:NO error:outError];
                                           }
                                           return tag ? YES : NO;
-
                                         }]) {
     [self presentError:error];
   }
@@ -614,9 +556,7 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
                                 skipCheckoutOnUndo:YES
                                              error:&error
                                         usingBlock:^BOOL(GCLiveRepository* repository, NSError** outError) {
-
                                           return [repository setName:name forTag:tag force:NO error:outError];
-
                                         }]) {
     [self presentError:error];
   }
@@ -631,9 +571,7 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
                                 skipCheckoutOnUndo:YES
                                              error:&error
                                         usingBlock:^BOOL(GCLiveRepository* repository, NSError** outError) {
-
                                           return [repository deleteTag:tag error:outError];
-
                                         }]) {
     [self presentError:error];
   }
@@ -655,9 +593,7 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
                          argument:(isBranch ? [commitOrBranch name] : [commitOrBranch SHA1])
                          error:&error
                                                   usingBlock:^GCReferenceTransform*(GCLiveRepository* repository, NSError** outError) {
-
                                                     return [repository.history fastForwardBranch:branch toCommit:commit error:outError];
-
                                                   }]) {
       [self selectCommit:commit];
       if (userMessage) {
@@ -678,7 +614,6 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
                         withTitle:NSLocalizedString(@"Merged commit message:", nil)
                            button:NSLocalizedString(@"Merge", nil)
                             block:^(NSString* message) {
-
                               NSError* error;
                               __block GCCommit* newCommit = nil;
                               if (isBranch) {
@@ -690,19 +625,15 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
                                                    argument:(isBranch ? [commitOrBranch name] : [commitOrBranch SHA1])
                                                    error:&error
                                                                             usingBlock:^GCReferenceTransform*(GCLiveRepository* repository, NSError** outError1) {
-
                                                                               return [repository.history mergeCommit:commit
                                                                                                           intoBranch:branch
                                                                                                   withAncestorCommit:ancestorCommit
                                                                                                              message:message
                                                                                                      conflictHandler:^GCCommit*(GCIndex* index, GCCommit* ourCommit, GCCommit* theirCommit, NSArray* parentCommits, NSString* message2, NSError** outError2) {
-
                                                                                                        return [self resolveConflictsWithResolver:self.delegate index:index ourCommit:ourCommit theirCommit:theirCommit parentCommits:parentCommits message:message2 error:outError2];
-
                                                                                                      }
                                                                                                            newCommit:&newCommit
                                                                                                                error:outError1];
-
                                                                             }]) {
                                 [self selectCommit:newCommit];
                                 if (userMessage) {
@@ -711,7 +642,6 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
                               } else {
                                 [self presentError:error];
                               }
-
                             }];
   }
 }
@@ -726,18 +656,14 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
                                                                argument:branch.name
                                                                   error:&error
                                                              usingBlock:^GCReferenceTransform*(GCLiveRepository* repository, NSError** outError1) {
-
                                                                return [repository.history rebaseBranch:branch
                                                                                             fromCommit:fromCommit
                                                                                             ontoCommit:commit
                                                                                        conflictHandler:^GCCommit*(GCIndex* index, GCCommit* ourCommit, GCCommit* theirCommit, NSArray* parentCommits, NSString* message, NSError** outError2) {
-
                                                                                          return [self resolveConflictsWithResolver:self.delegate index:index ourCommit:ourCommit theirCommit:theirCommit parentCommits:parentCommits message:message error:outError2];
-
                                                                                        }
                                                                                           newTipCommit:&newCommit
                                                                                                  error:outError1];
-
                                                              }];
     [self.repository resumeHistoryUpdates];
     if (success) {
@@ -780,13 +706,11 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
         alert.type = kGIAlertType_Note;
         [self presentAlert:alert
             completionHandler:^(NSInteger returnCode) {
-
               if (returnCode == NSAlertDefaultReturn) {
                 [self fastForwardLocalBranch:intoBranch toCommitOrBranch:commitOrBranch withUserMessage:userMessage];
               } else if (returnCode == NSAlertOtherReturn) {
                 [self mergeCommitOrBranch:commitOrBranch intoLocalBranch:intoBranch withAncestorCommit:ancestorCommit userMessage:userMessage];
               }
-
             }];
       }
       break;
@@ -836,16 +760,12 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
                                 button:NSLocalizedString(@"Fetch Branch", nil)
              suppressionUserDefaultKey:kUserDefaultsKey_SkipFetchRemoteBranchWarning
                                  block:^{
-
                                    [self.repository performOperationInBackgroundWithReason:nil
                                        argument:nil
                                        usingOperationBlock:^BOOL(GCRepository* repository, NSError** error) {
-
                                          return [repository fetchRemoteBranch:branch tagMode:kGCFetchTagMode_None updatedTips:&updatedTips error:error];  // Don't fetch any tags to not mess up with undo
-
                                        }
                                        completionBlock:^(BOOL success, NSError* error) {
-
                                          if (success) {
                                            if (updatedTips) {
                                              [self.windowController showOverlayWithStyle:kGIOverlayStyle_Informational message:NSLocalizedString(@"Remote branch was updated", nil)];
@@ -855,9 +775,7 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
                                          } else {
                                            [self presentError:error];
                                          }
-
                                        }];
-
                                  }];
 }
 
@@ -868,17 +786,13 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
                                 button:NSLocalizedString(@"Fetch Remote Branches", nil)
              suppressionUserDefaultKey:kUserDefaultsKey_SkipFetchRemoteBranchesWarning
                                  block:^{
-
                                    __block NSUInteger updatedTips;
                                    [self.repository performOperationInBackgroundWithReason:nil
                                        argument:nil
                                        usingOperationBlock:^BOOL(GCRepository* repository, NSError** error) {
-
                                          return [repository fetchDefaultRemoteBranchesFromAllRemotes:kGCFetchTagMode_None recursive:YES prune:YES updatedTips:&updatedTips error:error];  // Don't fetch any tags to avoid messing with undo (pruning is OK as it only affects remote branches)
-
                                        }
                                        completionBlock:^(BOOL success, NSError* error) {
-
                                          if (success) {
                                            if (updatedTips > 1) {
                                              [self.windowController showOverlayWithStyle:kGIOverlayStyle_Informational format:NSLocalizedString(@"%lu remote branches have been updated", nil), updatedTips];
@@ -890,9 +804,7 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
                                          } else {
                                            [self presentError:error];
                                          }
-
                                        }];
-
                                  }];
 }
 
@@ -902,12 +814,9 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
   [self.repository performOperationInBackgroundWithReason:@"fetch_remote_tags"
       argument:nil
       usingOperationBlock:^BOOL(GCRepository* repository, NSError** error) {
-
         return [repository fetchAllTagsFromAllRemotes:NO prune:prune updatedTips:&updatedTips error:error];  // Don't fetch recursively as we can't undo changes in submodules
-
       }
       completionBlock:^(BOOL success, NSError* error) {
-
         if (success) {
           if (updatedTips > 1) {
             [self.windowController showOverlayWithStyle:kGIOverlayStyle_Informational format:NSLocalizedString(@"%lu tags have been updated", nil), updatedTips];
@@ -919,7 +828,6 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
         } else {
           [self presentError:error];
         }
-
       }];
 }
 
@@ -930,16 +838,13 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
   [self.repository performOperationInBackgroundWithReason:nil
       argument:nil
       usingOperationBlock:^BOOL(GCRepository* repository, NSError** outError) {
-
         if (remote) {
           return [repository pushLocalBranch:branch toRemote:remote force:force setUpstream:NO error:outError];
         } else {
           return [repository pushLocalBranchToUpstream:branch force:force usedRemote:&upstreamRemote error:outError];
         }
-
       }
       completionBlock:^(BOOL success, NSError* error) {
-
         if (success) {
           if (remote) {
             NSError* localError;
@@ -953,9 +858,7 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
                                               button:NSLocalizedString(@"Set Upstream", nil)
                            suppressionUserDefaultKey:nil
                                                block:^{
-
                                                  [self setUpstream:remoteBranch forLocalBranch:branch];
-
                                                }];
               }
             } else {
@@ -972,14 +875,11 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
                                         button:NSLocalizedString(@"Force Push", nil)
                      suppressionUserDefaultKey:nil
                                          block:^{
-
                                            [self _pushLocalBranch:branch toRemote:remote force:YES];
-
                                          }];
         } else {
           [self presentError:error];
         }
-
       }];
 }
 
@@ -990,9 +890,7 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
                                 button:NSLocalizedString(@"Push Branch", nil)
              suppressionUserDefaultKey:kUserDefaultsKey_SkipPushLocalBranchToRemoteWarning
                                  block:^{
-
                                    [self _pushLocalBranch:branch toRemote:remote force:NO];
-
                                  }];
 }
 
@@ -1004,9 +902,7 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
                                 button:NSLocalizedString(@"Push Branch", nil)
              suppressionUserDefaultKey:kUserDefaultsKey_SkipPushBranchWarning
                                  block:^{
-
                                    [self _pushLocalBranch:branch toRemote:nil force:NO];
-
                                  }];
 }
 
@@ -1014,12 +910,9 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
   [self.repository performOperationInBackgroundWithReason:nil
       argument:nil
       usingOperationBlock:^BOOL(GCRepository* repository, NSError** error) {
-
         return [self.repository pushAllLocalBranchesToRemote:remote force:force setUpstream:NO error:error];
-
       }
       completionBlock:^(BOOL success, NSError* error) {
-
         if (success) {
           [self.windowController showOverlayWithStyle:kGIOverlayStyle_Informational format:NSLocalizedString(@"All branches were pushed to the remote \"%@\" successfully!", nil), remote.name];
         } else if ([error.domain isEqualToString:GCErrorDomain] && (error.code == kGCErrorCode_NonFastForward)) {
@@ -1029,14 +922,11 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
                                         button:NSLocalizedString(@"Force Push", nil)
                      suppressionUserDefaultKey:nil
                                          block:^{
-
                                            [self _pushAllLocalBranchesToRemote:remote force:YES];
-
                                          }];
         } else {
           [self presentError:error];
         }
-
       }];
 }
 
@@ -1051,9 +941,7 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
                                   button:NSLocalizedString(@"Push All Branches", nil)
                suppressionUserDefaultKey:nil
                                    block:^{
-
                                      [self _pushAllLocalBranchesToRemote:remote force:NO];
-
                                    }];
   } else if (remotes == nil) {
     [self presentError:localError];
@@ -1069,18 +957,14 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
   [self.repository performOperationInBackgroundWithReason:nil
       argument:nil
       usingOperationBlock:^BOOL(GCRepository* repository, NSError** error) {
-
         return [repository pushTag:tag toRemote:remote force:YES error:error];
-
       }
       completionBlock:^(BOOL success, NSError* error) {
-
         if (success) {
           [self.windowController showOverlayWithStyle:kGIOverlayStyle_Informational format:NSLocalizedString(@"The tag \"%@\" was pushed to the remote \"%@\" successfully!", nil), tag.name, remote.name];
         } else {
           [self presentError:error];
         }
-
       }];
 }
 
@@ -1092,9 +976,7 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
                                 button:NSLocalizedString(@"Push Tag", nil)
              suppressionUserDefaultKey:kUserDefaultsKey_SkipPushTagWarning
                                  block:^{
-
                                    [self _pushTag:tag toRemote:remote];
-
                                  }];
 }
 
@@ -1110,24 +992,18 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
                                   button:NSLocalizedString(@"Push All Tags", nil)
                suppressionUserDefaultKey:nil
                                    block:^{
-
                                      [self.repository performOperationInBackgroundWithReason:nil
                                          argument:nil
                                          usingOperationBlock:^BOOL(GCRepository* repository, NSError** error) {
-
                                            return [self.repository pushAllTagsToRemote:remote force:YES error:error];
-
                                          }
                                          completionBlock:^(BOOL success, NSError* error) {
-
                                            if (success) {
                                              [self.windowController showOverlayWithStyle:kGIOverlayStyle_Informational format:NSLocalizedString(@"All tags were pushed to the remote \"%@\" successfully!", nil), remote.name];
                                            } else {
                                              [self presentError:error];
                                            }
-
                                          }];
-
                                    }];
   } else if (remotes == nil) {
     [self presentError:localError];
@@ -1142,16 +1018,12 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
   [self.repository performOperationInBackgroundWithReason:nil
       argument:nil
       usingOperationBlock:^BOOL(GCRepository* repository, NSError** error) {
-
         return [repository deleteRemoteBranchFromRemote:branch error:error];
-
       }
       completionBlock:^(BOOL success, NSError* error) {
-
         if (!success) {
           [self presentError:error];
         }
-
       }];
 }
 
@@ -1163,9 +1035,7 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
                                 button:NSLocalizedString(@"Delete Branch", nil)
              suppressionUserDefaultKey:nil
                                  block:^{
-
                                    [self _deleteRemoteBranchFromRemote:branch];
-
                                  }];
 }
 
@@ -1176,7 +1046,6 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
                                 button:NSLocalizedString(@"Delete Tag", nil)
              suppressionUserDefaultKey:nil
                                  block:^{
-
                                    NSError* localError;
                                    NSArray* remotes = [self.repository listRemotes:&localError];
                                    if (remotes == nil) {
@@ -1187,24 +1056,19 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
                                      [self.repository performOperationInBackgroundWithReason:nil
                                          argument:nil
                                          usingOperationBlock:^BOOL(GCRepository* repository, NSError** error) {
-
                                            for (GCRemote* remote in remotes) {
                                              if (![repository deleteTag:tag fromRemote:remote error:error]) {
                                                return NO;
                                              }
                                            }
                                            return YES;
-
                                          }
                                          completionBlock:^(BOOL success, NSError* error) {
-
                                            if (!success) {
                                              [self presentError:error];
                                            }
-
                                          }];
                                    }
-
                                  }];
 }
 
@@ -1218,16 +1082,12 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
                                 button:NSLocalizedString(@"Pull Branch", nil)
              suppressionUserDefaultKey:kUserDefaultsKey_SkipPullBranchWarning
                                  block:^{
-
                                    [self.repository performOperationInBackgroundWithReason:nil
                                        argument:nil
                                        usingOperationBlock:^BOOL(GCRepository* repository, NSError** error) {
-
                                          return [repository fetchRemoteBranch:upstream tagMode:kGCFetchTagMode_None updatedTips:NULL error:error];  // Don't fetch any tags to not mess up with undo
-
                                        }
                                        completionBlock:^(BOOL success, NSError* error) {
-
                                          if (success) {
                                            GCHistoryCommit* branchCommit = branch.tipCommit;
                                            upstream = [self.repository.history historyRemoteBranchForRemoteBranch:upstream];  // We must refetch the branch from history as it has changed
@@ -1256,13 +1116,11 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
                                                alert.type = kGIAlertType_Note;
                                                [self presentAlert:alert
                                                    completionHandler:^(NSInteger returnCode) {
-
                                                      if (returnCode == NSAlertDefaultReturn) {
                                                        [self rebaseLocalBranch:branch fromCommit:ancestorCommit ontoCommit:upstream.tipCommit withUserMessage:nil];
                                                      } else if (returnCode == NSAlertOtherReturn) {
                                                        [self mergeCommitOrBranch:upstream intoLocalBranch:branch withAncestorCommit:ancestorCommit userMessage:nil];
                                                      }
-
                                                    }];
                                                break;
                                              }
@@ -1270,9 +1128,7 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
                                          } else {
                                            [self presentError:error];
                                          }
-
                                        }];
-
                                  }];
 }
 

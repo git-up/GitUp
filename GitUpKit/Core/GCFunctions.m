@@ -1,4 +1,4 @@
-//  Copyright (C) 2015-2017 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2018 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -145,8 +145,11 @@ int GCExchangeFileData(const char* path1, const char* path2) {
   if (statStatus != 0) {
     return statStatus;
   }
-  struct attrlist attrList = { ATTR_BIT_MAP_COUNT, 0, 0, ATTR_VOL_CAPABILITIES, 0, 0, 0 };
-  struct { u_int32_t length; vol_capabilities_attr_t attr; } attrBuf;
+  struct attrlist attrList = {ATTR_BIT_MAP_COUNT, 0, 0, ATTR_VOL_CAPABILITIES, 0, 0, 0};
+  struct {
+    u_int32_t length;
+    vol_capabilities_attr_t attr;
+  } attrBuf;
   int attrListStatus = getattrlist(stat.f_mntonname, &attrList, &attrBuf, sizeof(attrBuf), 0);
   if (attrListStatus != 0) {
     return attrListStatus;
