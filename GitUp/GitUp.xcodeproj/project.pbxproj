@@ -167,7 +167,6 @@
 			files = (
 				E2E3C9A21D771E9D00AA9A62 /* SystemConfiguration.framework in Frameworks */,
 				165C32B61B95739700D2F894 /* QuartzCore.framework in Frameworks */,
-				279289C61CEF9D4400ACF279 /* (null) in Frameworks */,
 				E2C338D719F85C2E00063D95 /* Cocoa.framework in Frameworks */,
 				E267E26B1B84E07E00BAB377 /* Security.framework in Frameworks */,
 				E28A16E51B87023200218332 /* GitUpKit.framework in Frameworks */,
@@ -342,7 +341,6 @@
 					};
 					E2C338AA19F8562F00063D95 = {
 						CreatedOnToolsVersion = 6.1;
-						DevelopmentTeam = 88W3E55T4B;
 					};
 				};
 			};
@@ -536,12 +534,13 @@
 				BUNDLE_VERSION = 0;
 				BUNDLE_VERSION_STRING = 1.0.11;
 				CODE_SIGN_IDENTITY = "Mac Developer";
+				DEVELOPMENT_TEAM = PVJYV742FV;
 				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/Third-Party";
 				GCC_DYNAMIC_NO_PIC = YES;
 				INFOPLIST_FILE = Application/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				OTHER_LDFLAGS = "-Wl,-rpath,@loader_path/../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "co.gitup.mac-debug";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.arsenkin.mac-debug";
 				PRODUCT_NAME = GitUp;
 			};
 			name = Debug;
@@ -553,12 +552,13 @@
 				BUNDLE_VERSION = 0;
 				BUNDLE_VERSION_STRING = 1.0.11;
 				CODE_SIGN_IDENTITY = "Mac Developer";
+				DEVELOPMENT_TEAM = PVJYV742FV;
 				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/Third-Party";
 				GCC_DYNAMIC_NO_PIC = YES;
 				INFOPLIST_FILE = Application/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				OTHER_LDFLAGS = "-Wl,-rpath,@loader_path/../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = co.gitup.mac;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.arsenkin.mac-debug";
 				PRODUCT_NAME = GitUp;
 			};
 			name = Release;
