@@ -1,4 +1,4 @@
-//  Copyright (C) 2015-2017 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2018 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -207,9 +207,7 @@
                                          toIndex:index2
                                            error:NULL
                                      usingFilter:^BOOL(GCLineDiffChange change, NSUInteger oldLineNumber, NSUInteger newLineNumber) {
-
                                        return (newLineNumber % 2);
-
                                      }]);
   XCTAssertFalse(index2.empty);
   NSData* data2 = [self.repository exportBlobWithOID:[index2 OIDForFile:@"lines.txt"] error:NULL];
@@ -225,9 +223,7 @@
                                          toIndex:index2
                                            error:NULL
                                      usingFilter:^BOOL(GCLineDiffChange change, NSUInteger oldLineNumber, NSUInteger newLineNumber) {
-
                                        return YES;
-
                                      }]);
   NSData* data3 = [self.repository exportBlobWithOID:[index2 OIDForFile:@"lines.txt"] error:NULL];
   XCTAssertNotNil(data3);

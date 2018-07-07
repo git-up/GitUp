@@ -1,4 +1,4 @@
-//  Copyright (C) 2015-2017 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2018 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -234,7 +234,6 @@
   [self.windowController runModalView:_saveView
             withInitialFirstResponder:_messageTextField
                     completionHandler:^(BOOL success) {
-
                       if (success) {
                         NSString* message = [_messageTextField.stringValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
                         NSError* error;
@@ -251,7 +250,6 @@
                           [self presentError:error];
                         }
                       }
-
                     }];
 }
 
@@ -265,7 +263,6 @@
                                   button:NSLocalizedString(@"Apply Stash", nil)
                suppressionUserDefaultKey:kUserDefaultsKey_SkipApplyWarning
                                    block:^{
-
                                      NSError* error;
                                      if ([self.repository applyStash:stash restoreIndex:NO error:&error]) {
                                        [self.repository notifyRepositoryChanged];
@@ -273,7 +270,6 @@
                                      } else {
                                        [self presentError:error];
                                      }
-
                                    }];
   } else {
     NSBeep();

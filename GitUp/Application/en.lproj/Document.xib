@@ -1,8 +1,9 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" customObjectInstantitationMethod="direct">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13771" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7706"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13771"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="Document">
@@ -62,7 +63,7 @@
             </connections>
         </customObject>
         <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="xOd-HO-29H" userLabel="Main Window" customClass="GIWindow">
-            <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" unifiedTitleAndToolbar="YES"/>
+            <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowCollectionBehavior key="collectionBehavior" fullScreenPrimary="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="253" y="204" width="1000" height="500"/>
@@ -223,12 +224,9 @@ Adjust settings in Show menu</string>
                         </textField>
                     </subviews>
                 </customView>
-                <box verticalHuggingPriority="750" title="Box" boxType="separator" titlePosition="noTitle" id="mWX-Pk-UvH">
+                <box verticalHuggingPriority="750" boxType="separator" id="mWX-Pk-UvH">
                     <rect key="frame" x="0.0" y="43" width="1000" height="5"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                    <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
-                    <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                    <font key="titleFont" metaFont="system"/>
                 </box>
                 <popUpButton id="Fov-GV-gD7">
                     <rect key="frame" x="10" y="10" width="80" height="27"/>
@@ -385,19 +383,13 @@ Adjust settings in Show menu</string>
                         <action selector="toggleTags:" target="-2" id="eYy-3x-jbj"/>
                     </connections>
                 </button>
-                <box horizontalHuggingPriority="750" title="Box" boxType="separator" titlePosition="noTitle" id="gbn-Tx-Mt6">
+                <box horizontalHuggingPriority="750" boxType="separator" id="gbn-Tx-Mt6">
                     <rect key="frame" x="-2" y="0.0" width="5" height="500"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
-                    <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
-                    <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                    <font key="titleFont" metaFont="system"/>
                 </box>
-                <box verticalHuggingPriority="750" title="Box" boxType="separator" titlePosition="noTitle" id="IFu-ad-WoU">
+                <box verticalHuggingPriority="750" boxType="separator" id="IFu-ad-WoU">
                     <rect key="frame" x="1" y="43" width="260" height="5"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
-                    <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                    <font key="titleFont" metaFont="system"/>
                 </box>
             </subviews>
             <point key="canvasLocation" x="-192.5" y="650"/>
@@ -421,19 +413,13 @@ Adjust settings in Show menu</string>
                         <action selector="toggleAncestors:" target="-2" id="cRN-q3-d3h"/>
                     </connections>
                 </button>
-                <box horizontalHuggingPriority="750" title="Box" boxType="separator" titlePosition="noTitle" id="i5t-9R-reS">
+                <box horizontalHuggingPriority="750" boxType="separator" id="i5t-9R-reS">
                     <rect key="frame" x="-2" y="0.0" width="5" height="500"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
-                    <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
-                    <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                    <font key="titleFont" metaFont="system"/>
                 </box>
-                <box verticalHuggingPriority="750" title="Box" boxType="separator" titlePosition="noTitle" id="lo1-B5-5pc">
+                <box verticalHuggingPriority="750" boxType="separator" id="lo1-B5-5pc">
                     <rect key="frame" x="1" y="43" width="260" height="5"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
-                    <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                    <font key="titleFont" metaFont="system"/>
                 </box>
             </subviews>
             <point key="canvasLocation" x="124.5" y="650"/>
@@ -459,19 +445,13 @@ Adjust settings in Show menu</string>
                         <action selector="toggleSnapshots:" target="-2" id="xEj-EP-Pu2"/>
                     </connections>
                 </button>
-                <box horizontalHuggingPriority="750" title="Box" boxType="separator" titlePosition="noTitle" id="BaD-c2-XFv">
+                <box horizontalHuggingPriority="750" boxType="separator" id="BaD-c2-XFv">
                     <rect key="frame" x="-2" y="0.0" width="5" height="500"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
-                    <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
-                    <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                    <font key="titleFont" metaFont="system"/>
                 </box>
-                <box verticalHuggingPriority="750" title="Box" boxType="separator" titlePosition="noTitle" id="Usm-DE-GWR">
+                <box verticalHuggingPriority="750" boxType="separator" id="Usm-DE-GWR">
                     <rect key="frame" x="1" y="43" width="260" height="5"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
-                    <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                    <font key="titleFont" metaFont="system"/>
                 </box>
             </subviews>
             <point key="canvasLocation" x="-526" y="650"/>
@@ -495,19 +475,13 @@ Adjust settings in Show menu</string>
                         <action selector="toggleReflog:" target="-2" id="iy2-Rc-GIe"/>
                     </connections>
                 </button>
-                <box horizontalHuggingPriority="750" title="Box" boxType="separator" titlePosition="noTitle" id="2s4-Rc-CUd">
+                <box horizontalHuggingPriority="750" boxType="separator" id="2s4-Rc-CUd">
                     <rect key="frame" x="-2" y="0.0" width="5" height="500"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
-                    <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
-                    <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                    <font key="titleFont" metaFont="system"/>
                 </box>
-                <box verticalHuggingPriority="750" title="Box" boxType="separator" titlePosition="noTitle" id="eoI-52-5pL">
+                <box verticalHuggingPriority="750" boxType="separator" id="eoI-52-5pL">
                     <rect key="frame" x="1" y="43" width="260" height="5"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
-                    <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                    <font key="titleFont" metaFont="system"/>
                 </box>
             </subviews>
             <point key="canvasLocation" x="-399.5" y="730"/>
@@ -520,17 +494,14 @@ Adjust settings in Show menu</string>
                     <rect key="frame" x="1" y="0.0" width="260" height="500"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
                 </customView>
-                <box horizontalHuggingPriority="750" title="Box" boxType="separator" titlePosition="noTitle" id="kME-Ra-FDy">
+                <box horizontalHuggingPriority="750" boxType="separator" id="kME-Ra-FDy">
                     <rect key="frame" x="-2" y="0.0" width="5" height="500"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
-                    <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
-                    <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                    <font key="titleFont" metaFont="system"/>
                 </box>
             </subviews>
             <point key="canvasLocation" x="-512.5" y="1242"/>
         </customView>
-        <customView id="ghu-yR-ohT" userLabel="Title View">
+        <customView id="ghu-yR-ohT" userLabel="Title View" customClass="ToolbarItemWrapperView">
             <rect key="frame" x="0.0" y="0.0" width="320" height="32"/>
             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
             <subviews>
@@ -555,7 +526,7 @@ Adjust settings in Show menu</string>
             </subviews>
             <point key="canvasLocation" x="200" y="408"/>
         </customView>
-        <customView id="d4D-Mc-I9O" userLabel="Left View">
+        <customView id="d4D-Mc-I9O" userLabel="Left View" customClass="ToolbarItemWrapperView">
             <rect key="frame" x="0.0" y="0.0" width="220" height="32"/>
             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
             <subviews>
@@ -585,8 +556,8 @@ Adjust settings in Show menu</string>
                         <action selector="selectPreviousCommit:" target="-2" id="cHX-Hx-4Op"/>
                     </connections>
                 </button>
-                <segmentedControl toolTip="Select view" verticalHuggingPriority="750" id="RvM-Rz-Je8">
-                    <rect key="frame" x="3" y="3" width="106" height="25"/>
+                <segmentedControl toolTip="Select view" verticalHuggingPriority="750" misplaced="YES" id="RvM-Rz-Je8">
+                    <rect key="frame" x="3" y="3" width="110" height="25"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <segmentedCell key="cell" borderStyle="border" alignment="left" style="texturedSquare" trackingMode="selectOne" id="vbd-3d-MTF">
                         <font key="font" metaFont="system"/>
@@ -609,13 +580,13 @@ Adjust settings in Show menu</string>
             </subviews>
             <point key="canvasLocation" x="469" y="496"/>
         </customView>
-        <customView id="kfr-yg-mn6" userLabel="Right View">
-            <rect key="frame" x="0.0" y="0.0" width="220" height="32"/>
+        <customView misplaced="YES" id="kfr-yg-mn6" userLabel="Right View" customClass="ToolbarItemWrapperView">
+            <rect key="frame" x="0.0" y="0.0" width="260" height="32"/>
             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
             <subviews>
                 <searchField toolTip="Search repository" wantsLayer="YES" verticalHuggingPriority="750" id="mcD-hz-JrS">
-                    <rect key="frame" x="37" y="5" width="180" height="22"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <rect key="frame" x="77" y="5" width="180" height="22"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                     <searchFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" allowsUndo="NO" borderStyle="bezel" placeholderString="" usesSingleLineMode="YES" bezelStyle="round" id="3QH-Xd-ctD">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -627,8 +598,8 @@ Adjust settings in Show menu</string>
                     </connections>
                 </searchField>
                 <button toolTip="Show or hide Snapshots" verticalHuggingPriority="750" id="yWu-L8-6Ms">
-                    <rect key="frame" x="3" y="3" width="25" height="25"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <rect key="frame" x="43" y="3" width="25" height="25"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="icon_nav_snapshot" imagePosition="only" alignment="center" alternateImage="icon_nav_snapshot_pressed" borderStyle="border" inset="2" id="rrq-JQ-Zyn">
                         <behavior key="behavior" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
@@ -638,7 +609,7 @@ Adjust settings in Show menu</string>
                     </connections>
                 </button>
                 <button id="FEG-0e-0JW">
-                    <rect key="frame" x="206" y="9" width="12" height="15"/>
+                    <rect key="frame" x="246" y="9" width="12" height="15"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="icon_nav_min" imagePosition="overlaps" alignment="center" alternateImage="icon_nav_min_pressed" inset="2" id="x0U-ct-UgO">
                         <behavior key="behavior" lightByContents="YES"/>
@@ -649,7 +620,7 @@ Adjust settings in Show menu</string>
                     </connections>
                 </button>
             </subviews>
-            <point key="canvasLocation" x="197.5" y="496"/>
+            <point key="canvasLocation" x="150" y="496"/>
         </customView>
         <customView id="ifo-84-dTf" userLabel="Reset View">
             <rect key="frame" x="0.0" y="0.0" width="300" height="19"/>

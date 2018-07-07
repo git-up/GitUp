@@ -1,4 +1,4 @@
-//  Copyright (C) 2015-2017 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2018 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -205,17 +205,13 @@
                                                    argument:_targetCommit.SHA1
                                                       error:error
                                                  usingBlock:^GCReferenceTransform*(GCLiveRepository* repository, NSError** outError1) {
-
                                                    return [repository.history rewriteCommit:_targetCommit
                                                                           withUpdatedCommit:newCommit
                                                                                   copyTrees:NO
                                                                             conflictHandler:^GCCommit*(GCIndex* index2, GCCommit* ourCommit, GCCommit* theirCommit, NSArray* parentCommits, NSString* message2, NSError** outError2) {
-
                                                                               return [self resolveConflictsWithResolver:self.delegate index:index2 ourCommit:ourCommit theirCommit:theirCommit parentCommits:parentCommits message:message2 error:outError2];
-
                                                                             }
                                                                                       error:outError1];
-
                                                  }]) {
     [self.repository resumeHistoryUpdates];
     goto cleanup;
@@ -312,7 +308,6 @@ cleanup:
   [self.windowController runModalView:self.messageView
             withInitialFirstResponder:self.messageTextView
                     completionHandler:^(BOOL success) {
-
                       if (success) {
                         NSString* message = [self.messageTextView.string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
                         if (message.length) {
@@ -321,7 +316,6 @@ cleanup:
                           [self presentAlertWithType:kGIAlertType_Stop title:NSLocalizedString(@"You must provide a non-empty commit message", nil) message:nil];
                         }
                       }
-
                     }];
 }
 

@@ -1,4 +1,4 @@
-//  Copyright (C) 2015-2017 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2018 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -279,7 +279,6 @@ static NSString* _StringFromActions(GCReflogActions actions) {
   [alert addButtonWithTitle:NSLocalizedString(@"Cancel", nil)];
   [self presentAlert:alert
       completionHandler:^(NSInteger returnCode) {
-
         if (returnCode == NSAlertFirstButtonReturn) {
           NSString* name = [_nameTextField.stringValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
           if (name.length) {
@@ -292,7 +291,6 @@ static NSString* _StringFromActions(GCReflogActions actions) {
                                                  skipCheckoutOnUndo:NO
                                                               error:&error
                                                          usingBlock:^BOOL(GCLiveRepository* repository, NSError** outError) {
-
                                                            GCLocalBranch* branch = [repository createLocalBranchFromCommit:entry.toCommit withName:name force:NO error:outError];
                                                            if (branch == nil) {
                                                              return NO;
@@ -302,7 +300,6 @@ static NSString* _StringFromActions(GCReflogActions actions) {
                                                              return NO;
                                                            }
                                                            return YES;
-
                                                          }];
             }
             if (success) {
@@ -316,7 +313,6 @@ static NSString* _StringFromActions(GCReflogActions actions) {
             NSBeep();
           }
         }
-
       }];
 }
 

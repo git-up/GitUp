@@ -33,13 +33,24 @@
 	<string>${BUNDLE_VERSION}</string>
 	<key>CFBundleShortVersionString</key>
 	<string>${BUNDLE_VERSION_STRING}</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>github-mac</string>
+			</array>
+		</dict>
+	</array>
 	<key>LSMinimumSystemVersion</key>
 	<string>$(MACOSX_DEPLOYMENT_TARGET)</string>
 	<key>NSHumanReadableCopyright</key>
-	<string>Copyright © 2015-2017 Pierre-Olivier Latour. All rights reserved.</string>
+	<string>Copyright © 2015-2018 Pierre-Olivier Latour. All rights reserved.</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
+	<key>NSRequiresAquaSystemAppearance</key>
+	<true/>
 </dict>
 </plist>
