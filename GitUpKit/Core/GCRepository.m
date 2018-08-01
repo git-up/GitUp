@@ -354,6 +354,9 @@ static int _ReferenceForEachCallback(const char* refname, void* payload) {
       }
       return NO;
     }
+    if (standardOutput) {
+      *standardOutput = [[NSString alloc] initWithData:stdoutData encoding:NSUTF8StringEncoding];
+    }
   }
   return YES;
 }
