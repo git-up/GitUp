@@ -103,6 +103,7 @@
     kUserDefaultsKey_CheckInterval : @(15 * 60),
     kUserDefaultsKey_FirstLaunch : @(YES),
     kUserDefaultsKey_DiffWhitespaceMode : @(kGCLiveRepositoryDiffWhitespaceMode_Normal),
+    kUserDefaultsKey_EnableVisualEffects : @(NO),
     kUserDefaultsKey_ShowWelcomeWindow : @(YES),
   };
   [[NSUserDefaults standardUserDefaults] registerDefaults:defaults];
