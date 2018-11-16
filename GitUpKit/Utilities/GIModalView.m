@@ -1,4 +1,4 @@
-//  Copyright (C) 2015-2017 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2018 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -112,11 +112,9 @@
     [[NSAnimationContext currentContext] setDuration:kAnimationDuration];
     [[NSAnimationContext currentContext] setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn]];
     [[NSAnimationContext currentContext] setCompletionHandler:^{
-
       if (handler) {
         handler();
       }
-
     }];
     [self.animator addSubview:view];
     [NSAnimationContext endGrouping];
@@ -142,12 +140,10 @@
     [[NSAnimationContext currentContext] setDuration:kAnimationDuration];
     [[NSAnimationContext currentContext] setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut]];
     [[NSAnimationContext currentContext] setCompletionHandler:^{
-
       view.wantsLayer = NO;
       if (handler) {
         handler();
       }
-
     }];
     [view.animator removeFromSuperviewWithoutNeedingDisplay];
     [NSAnimationContext endGrouping];

@@ -1,4 +1,4 @@
-//  Copyright (C) 2015-2017 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2018 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -53,6 +53,10 @@
   [super removeDocument:document];
 
   [[AppDelegate sharedDelegate] handleDocumentCountChanged];
+}
+
+- (void)newWindowForTab:(id)sender {
+  [self openDocument:sender];
 }
 
 @end

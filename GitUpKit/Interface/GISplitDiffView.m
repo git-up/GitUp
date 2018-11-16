@@ -1,4 +1,4 @@
-//  Copyright (C) 2015-2017 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2018 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -194,7 +194,6 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
       }
     };
     [self.patch enumerateUsingBeginHunkHandler:^(NSUInteger oldLineNumber, NSUInteger oldLineCount, NSUInteger newLineNumber, NSUInteger newLineCount) {
-
       NSString* string = [[NSString alloc] initWithFormat:@"@@ -%lu,%lu +%lu,%lu @@", oldLineNumber, oldLineCount, newLineNumber, newLineCount];
       CFAttributedStringRef attributedString = CFAttributedStringCreate(kCFAllocatorDefault, (CFStringRef)string, self.textAttributes);
       CTLineRef line = CTLineCreateWithAttributedString(attributedString);
@@ -208,10 +207,8 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
       addedCount = 0;
       deletedCount = 0;
       startIndex = NSNotFound;
-
     }
         lineHandler:^(GCLineDiffChange change, NSUInteger oldLineNumber, NSUInteger newLineNumber, const char* contentBytes, NSUInteger contentLength) {
-
           NSString* string;
           if (contentBytes[contentLength - 1] != '\n') {
             size_t length = strlen(GIDiffViewMissingNewlinePlaceholder);
@@ -318,12 +315,9 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
           } while (offset < length);
           CFRelease(typeSetter);
           CFRelease(attributedString);
-
         }
         endHunkHandler:^{
-
           highlightBlock();
-
         }];
     _size = NSMakeSize(width, _lines.count * self.lineHeight + kTextBottomPadding);
   }

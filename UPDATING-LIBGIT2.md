@@ -2,7 +2,8 @@
 
 - Checkout https://github.com/git-up/libgit2
 - Switch to `gitup` branch
-- Pull from upstream at https://github.com/libgit2/libgit2
+- Add upstream remote at https://github.com/libgit2/libgit2 with `git remote add upstream git@github.com:libgit2/libgit2.git`
+- Fetch from upstream with `git fetch --all`
 - Make sure `gitup` branch current tip is tagged with the corresponding date e.g. `2015-12-02` and push tag
 - Rebased `gitup` branch on top of upstream
 

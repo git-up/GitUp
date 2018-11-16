@@ -1,4 +1,4 @@
-//  Copyright (C) 2015-2017 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2018 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -250,7 +250,6 @@ cleanup:
   if (![self enumerateReferencesWithOptions:0
                                       error:error
                                  usingBlock:^BOOL(git_reference* reference) {
-
                                    const char* name = git_reference_name(reference);
                                    if (((options & kGCRemoteCheckOption_IncludeBranches) && git_reference__is_remote(name)) ||
                                        ((options & kGCRemoteCheckOption_IncludeTags) && git_reference__is_tag(name))) {
@@ -265,7 +264,6 @@ cleanup:
                                      }
                                    }
                                    return YES;
-
                                  }]) {
     goto cleanup;
   }
@@ -511,14 +509,12 @@ static BOOL _SetBranchDefaultUpstream(git_repository* repository, git_remote* re
   BOOL success = [self enumerateReferencesWithOptions:0
                                                 error:error
                                            usingBlock:^BOOL(git_reference* reference) {
-
                                              if ((branches && git_reference_is_branch(reference)) || (tags && git_reference_is_tag(reference))) {
                                                char* buffer;
                                                asprintf(&buffer, "%s%s:%s", force ? "+" : "", git_reference_name(reference), git_reference_name(reference));
                                                GC_POINTER_LIST_APPEND(buffers, buffer);
                                              }
                                              return YES;
-
                                            }];
   if (success) {
     success = [self _pushToRemote:remote refspecs:(const char**)GC_POINTER_LIST_ROOT(buffers) count:GC_POINTER_LIST_COUNT(buffers) error:error];
@@ -538,12 +534,10 @@ static BOOL _SetBranchDefaultUpstream(git_repository* repository, git_remote* re
   if (setUpstream && ![self enumerateReferencesWithOptions:0
                                                      error:error
                                                 usingBlock:^BOOL(git_reference* reference) {
-
                                                   if (git_reference_is_branch(reference) && !_SetBranchDefaultUpstream(self.private, remote.private, reference, error)) {
                                                     return NO;
                                                   }
                                                   return YES;
-
                                                 }]) {
     return NO;
   }

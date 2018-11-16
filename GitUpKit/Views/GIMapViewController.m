@@ -1,4 +1,4 @@
-//  Copyright (C) 2015-2017 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2018 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -605,7 +605,6 @@ static NSColor* _patternColor = nil;
   [self.windowController runModalView:_messageView
             withInitialFirstResponder:_messageTextView
                     completionHandler:^(BOOL success) {
-
                       if (success) {
                         NSString* editedMessage = [_messageTextView.string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
                         if (editedMessage.length) {
@@ -616,7 +615,6 @@ static NSColor* _patternColor = nil;
                       }
                       _messageTextView.string = @"";
                       [_messageTextView.undoManager removeAllActions];
-
                     }];
 }
 
@@ -897,13 +895,11 @@ static NSColor* _patternColor = nil;
       alert.type = kGIAlertType_Note;
       [self presentAlert:alert
           completionHandler:^(NSInteger returnCode) {
-
             if (returnCode == NSAlertDefaultReturn) {
               [self checkoutRemoteBranch:branch];
             } else if (returnCode == NSAlertOtherReturn) {
               [self checkoutCommit:target];
             }
-
           }];
     } else {
       [self checkoutCommit:target];
@@ -923,7 +919,6 @@ static NSColor* _patternColor = nil;
   [self.windowController runModalView:_tagView
             withInitialFirstResponder:_tagNameTextField
                     completionHandler:^(BOOL success) {
-
                       if (success) {
                         NSString* name = _tagNameTextField.stringValue;
                         NSString* message = [_tagMessageTextView.string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
@@ -935,7 +930,6 @@ static NSColor* _patternColor = nil;
                       }
                       _tagMessageTextView.string = @"";
                       [_tagMessageTextView.undoManager removeAllActions];
-
                     }];
 }
 
@@ -975,13 +969,11 @@ static NSColor* _patternColor = nil;
     alert.type = kGIAlertType_Note;
     [self presentAlert:alert
         completionHandler:^(NSInteger returnCode) {
-
           if (returnCode == NSAlertDefaultReturn) {
             [self deleteLocalBranch:localBranch];
           } else if (returnCode == NSAlertOtherReturn) {
             [self deleteCommit:commit];
           }
-
         }];
   } else {
     GCHistoryRemoteBranch* remoteBranch = commit.remoteBranches.firstObject;
@@ -1049,7 +1041,6 @@ static NSColor* _patternColor = nil;
   [self.windowController runModalView:_createBranchView
             withInitialFirstResponder:_createBranchTextField
                     completionHandler:^(BOOL success) {
-
                       if (success) {
                         NSString* name = _createBranchTextField.stringValue;
                         if (name.length) {
@@ -1058,7 +1049,6 @@ static NSColor* _patternColor = nil;
                           NSBeep();
                         }
                       }
-
                     }];
 }
 
@@ -1070,7 +1060,6 @@ static NSColor* _patternColor = nil;
   [self.windowController runModalView:_renameTagView
             withInitialFirstResponder:_renameTagTextField
                     completionHandler:^(BOOL success) {
-
                       if (success) {
                         NSString* name = _renameTagTextField.stringValue;
                         if (name.length && ![name isEqualToString:tag.name]) {
@@ -1079,7 +1068,6 @@ static NSColor* _patternColor = nil;
                           NSBeep();
                         }
                       }
-
                     }];
 }
 
@@ -1146,7 +1134,6 @@ static NSColor* _patternColor = nil;
   [self.windowController runModalView:_renameBranchView
             withInitialFirstResponder:_renameBranchTextField
                     completionHandler:^(BOOL success) {
-
                       if (success) {
                         NSString* name = _renameBranchTextField.stringValue;
                         if (name.length && ![name isEqualToString:branch.name]) {
@@ -1155,7 +1142,6 @@ static NSColor* _patternColor = nil;
                           NSBeep();
                         }
                       }
-
                     }];
 }
 

@@ -1,4 +1,4 @@
-//  Copyright (C) 2015-2017 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2018 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -1048,7 +1048,6 @@ cleanup:
   if (![_repository enumerateReferencesWithOptions:kGCReferenceEnumerationOption_IncludeHEAD
                                              error:error
                                         usingBlock:^BOOL(git_reference* reference) {
-
                                           if (git_reference_type(reference) == GIT_REF_OID) {  // We don't care about symbolic references as they eventually point to a direct one anyway
                                             const git_oid* oid = git_reference_target(reference);
                                             git_object* object = NULL;
@@ -1078,7 +1077,6 @@ cleanup:
                                             git_object_free(object);
                                           }
                                           return YES;
-
                                         }]) {
     goto cleanup;
   }

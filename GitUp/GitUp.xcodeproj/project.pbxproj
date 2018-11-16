@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		165C32B61B95739700D2F894 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 165C32B51B95739700D2F894 /* QuartzCore.framework */; };
+		31CD50E3203E2E2800360B3A /* ToolbarItemWrapperView.m in Sources */ = {isa = PBXBuildFile; fileRef = 31CD50E2203E2E2800360B3A /* ToolbarItemWrapperView.m */; };
 		A53C6D0C1E61A9CF0070387E /* FontSizeTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = A53C6D0B1E61A9CF0070387E /* FontSizeTransformer.m */; };
 		E212A6DE1B92100E00F62B18 /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E212A6DD1B92100E00F62B18 /* libiconv.dylib */; };
 		E21739F71A5080DD00EC6777 /* DocumentController.m in Sources */ = {isa = PBXBuildFile; fileRef = E21739F61A5080DD00EC6777 /* DocumentController.m */; };
@@ -107,6 +108,8 @@
 
 /* Begin PBXFileReference section */
 		165C32B51B95739700D2F894 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		31CD50E1203E2E2800360B3A /* ToolbarItemWrapperView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ToolbarItemWrapperView.h; sourceTree = "<group>"; };
+		31CD50E2203E2E2800360B3A /* ToolbarItemWrapperView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ToolbarItemWrapperView.m; sourceTree = "<group>"; };
 		A53C6D0A1E61A9CF0070387E /* FontSizeTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FontSizeTransformer.h; sourceTree = "<group>"; };
 		A53C6D0B1E61A9CF0070387E /* FontSizeTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FontSizeTransformer.m; sourceTree = "<group>"; };
 		E212A6DD1B92100E00F62B18 /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = usr/lib/libiconv.dylib; sourceTree = SDKROOT; };
@@ -273,6 +276,8 @@
 				A53C6D0B1E61A9CF0070387E /* FontSizeTransformer.m */,
 				E2C5672B1A6D98BC00ECFE07 /* WindowController.h */,
 				E2C5672C1A6D98BC00ECFE07 /* WindowController.m */,
+				31CD50E1203E2E2800360B3A /* ToolbarItemWrapperView.h */,
+				31CD50E2203E2E2800360B3A /* ToolbarItemWrapperView.m */,
 			);
 			path = Application;
 			sourceTree = "<group>";
@@ -333,7 +338,7 @@
 		E2C338A319F8562F00063D95 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0900;
+				LastUpgradeCheck = 1000;
 				ORGANIZATIONNAME = "";
 				TargetAttributes = {
 					E21DCAE71B253847006424E8 = {
@@ -427,6 +432,7 @@
 				A53C6D0C1E61A9CF0070387E /* FontSizeTransformer.m in Sources */,
 				E2C338B219F8562F00063D95 /* AppDelegate.m in Sources */,
 				E2C338B719F8562F00063D95 /* Document.m in Sources */,
+				31CD50E3203E2E2800360B3A /* ToolbarItemWrapperView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -488,8 +494,8 @@
 				HEADER_SEARCH_PATHS = "../GitUpKit/Third-Party/libgit2/include";
 				OTHER_LDFLAGS = (
 					"$(BUILD_DIR)/$(CONFIGURATION)/libgit2.a",
-					"../GitUpKit/Third-Party/Libraries/libssl/$(PLATFORM_NAME)/lib/libcrypto.a",
-					"../GitUpKit/Third-Party/Libraries/libssh2/$(PLATFORM_NAME)/lib/libssh2.a",
+					"../GitUpKit/Third-Party/libssl/$(PLATFORM_NAME)/lib/libcrypto.a",
+					"../GitUpKit/Third-Party/libssh2/$(PLATFORM_NAME)/lib/libssh2.a",
 				);
 				PRODUCT_NAME = gitup;
 				SKIP_INSTALL = YES;
@@ -503,8 +509,8 @@
 				HEADER_SEARCH_PATHS = "../GitUpKit/Third-Party/libgit2/include";
 				OTHER_LDFLAGS = (
 					"$(BUILD_DIR)/$(CONFIGURATION)/libgit2.a",
-					"../GitUpKit/Third-Party/Libraries/libssl/$(PLATFORM_NAME)/lib/libcrypto.a",
-					"../GitUpKit/Third-Party/Libraries/libssh2/$(PLATFORM_NAME)/lib/libssh2.a",
+					"../GitUpKit/Third-Party/libssl/$(PLATFORM_NAME)/lib/libcrypto.a",
+					"../GitUpKit/Third-Party/libssh2/$(PLATFORM_NAME)/lib/libssh2.a",
 				);
 				PRODUCT_NAME = gitup;
 				SKIP_INSTALL = YES;
@@ -534,7 +540,7 @@
 				BUNDLE_VERSION = 0;
 				BUNDLE_VERSION_STRING = 1.0.13;
 				CODE_SIGN_IDENTITY = "Mac Developer";
-				DEVELOPMENT_TEAM = 6CP9R36E2P;
+				DEVELOPMENT_TEAM = 3DZ38T823P;
 				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/Third-Party";
 				GCC_DYNAMIC_NO_PIC = YES;
 				INFOPLIST_FILE = Application/Info.plist;
@@ -552,7 +558,7 @@
 				BUNDLE_VERSION = 0;
 				BUNDLE_VERSION_STRING = 1.0.13;
 				CODE_SIGN_IDENTITY = "Mac Developer";
-				DEVELOPMENT_TEAM = 6CP9R36E2P;
+				DEVELOPMENT_TEAM = 3DZ38T823P;
 				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/Third-Party";
 				GCC_DYNAMIC_NO_PIC = YES;
 				INFOPLIST_FILE = Application/Info.plist;

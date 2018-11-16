@@ -1,4 +1,4 @@
-//  Copyright (C) 2015-2017 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2018 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -247,14 +247,12 @@ static void _TimerCallBack(CFRunLoopTimerRef timer, void* info) {
     [[NSAnimationContext currentContext] setDuration:kOverlayAnimationInDuration];
     [[NSAnimationContext currentContext] setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn]];
     [[NSAnimationContext currentContext] setCompletionHandler:^{
-
       _overlayTextField.stringValue = message;
       [NSAnimationContext beginGrouping];
       [[NSAnimationContext currentContext] setDuration:kOverlayAnimationInDuration];
       [[NSAnimationContext currentContext] setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut]];
       [_overlayTextField.animator setAlphaValue:1.0];
       [NSAnimationContext endGrouping];
-
     }];
     [_overlayTextField.animator setAlphaValue:0.0];
     [NSAnimationContext endGrouping];
@@ -346,14 +344,12 @@ static void _TimerCallBack(CFRunLoopTimerRef timer, void* info) {
   _previousResponder = nil;
 
   [_modalView dismissContentViewWithCompletionHandler:^{
-
     [_modalView removeFromSuperview];
     [_delegate windowControllerDidChangeHasModalView:self];
 
     [self.window enableCursorRects];  // TODO: This hides the cursor until it moves again?!
 
     [[NSProcessInfo processInfo] enableSuddenTermination];
-
   }];
 
   if (_handler) {

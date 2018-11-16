@@ -1,4 +1,4 @@
-//  Copyright (C) 2015-2017 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2018 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -162,17 +162,14 @@ typedef struct {
       }
     };
     [self.patch enumerateUsingBeginHunkHandler:^(NSUInteger oldLineNumber, NSUInteger oldLineCount, NSUInteger newLineNumber, NSUInteger newLineCount) {
-
       CFStringRef string = CFStringCreateWithFormat(kCFAllocatorDefault, NULL, CFSTR("@@ -%lu,%lu +%lu,%lu @@\n"), oldLineNumber, oldLineCount, newLineNumber, newLineCount);
       [self _addLineWithString:string change:NSNotFound oldLineNumber:oldLineNumber newLineNumber:newLineNumber contentBytes:NULL contentLength:0];
       CFRelease(string);
 
       deletedIndex = NSNotFound;
       addedIndex = NSNotFound;
-
     }
         lineHandler:^(GCLineDiffChange change, NSUInteger oldLineNumber, NSUInteger newLineNumber, const char* contentBytes, NSUInteger contentLength) {
-
           CFStringRef string;
           if (contentBytes[contentLength - 1] != '\n') {
             size_t length = strlen(GIDiffViewMissingNewlinePlaceholder);
@@ -203,12 +200,9 @@ typedef struct {
             deletedIndex = NSNotFound;
             addedIndex = NSNotFound;
           }
-
         }
         endHunkHandler:^{
-
           highlightBlock(_lineInfoCount);
-
         }];
   }
 }

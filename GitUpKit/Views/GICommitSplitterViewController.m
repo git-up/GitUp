@@ -1,4 +1,4 @@
-//  Copyright (C) 2015-2017 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2018 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -195,12 +195,10 @@
                                        toCommit:_commit
                                           error:&error
                                     usingFilter:^BOOL(GCLineDiffChange change, NSUInteger oldLineNumber, NSUInteger newLineNumber) {
-
                                       if (change == kGCLineDiffChange_Added) {
                                         return [oldLines containsIndex:newLineNumber];
                                       }
                                       return NO;
-
                                     }];
   } else {
     success = [self.repository copyLinesInFile:delta.canonicalPath
@@ -208,7 +206,6 @@
                                        toIndex:_indexOld
                                          error:&error
                                    usingFilter:^BOOL(GCLineDiffChange change, NSUInteger oldLineNumber, NSUInteger newLineNumber) {
-
                                      if (change == kGCLineDiffChange_Added) {
                                        return [newLines containsIndex:newLineNumber];
                                      }
@@ -216,7 +213,6 @@
                                        return [oldLines containsIndex:oldLineNumber];
                                      }
                                      return NO;
-
                                    }];
   }
   if (success) {
@@ -266,7 +262,6 @@
                                toCommit:_parentCommit
                                   error:&error
                             usingFilter:^BOOL(GCLineDiffChange change, NSUInteger oldLineNumber, NSUInteger newLineNumber) {
-
                               if (change == kGCLineDiffChange_Added) {
                                 return [newLines containsIndex:newLineNumber];
                               }
@@ -274,7 +269,6 @@
                                 return [oldLines containsIndex:oldLineNumber];
                               }
                               return NO;
-
                             }]) {
     [self _reload];
     _disableFeedback = YES;
@@ -336,18 +330,14 @@
                                                   argument:_commit.SHA1
                                                      error:error
                                                 usingBlock:^GCReferenceTransform*(GCLiveRepository* repository, NSError** outError1) {
-
                                                   return [repository.history rewriteCommit:_commit
                                                                          withUpdatedCommit:newCommit
                                                                                  copyTrees:YES
                                                                            conflictHandler:^GCCommit*(GCIndex* index, GCCommit* ourCommit, GCCommit* theirCommit, NSArray* parentCommits, NSString* message3, NSError** outError2) {
-
                                                                              XLOG_DEBUG_UNREACHABLE();  // Splitting a commit should not generate index conflicts when replaying descendants
                                                                              return [self resolveConflictsWithResolver:self.delegate index:index ourCommit:ourCommit theirCommit:theirCommit parentCommits:parentCommits message:message3 error:outError2];
-
                                                                            }
                                                                                      error:outError1];
-
                                                 }]) {
     success = YES;
   }
@@ -528,7 +518,6 @@ cleanup:
   [self.windowController runModalView:_messageView
             withInitialFirstResponder:self.messageTextView
                     completionHandler:^(BOOL success) {
-
                       if (success) {
                         NSString* message = [self.messageTextView.string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
                         NSString* otherMessage = [self.otherMessageTextView.string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
@@ -538,7 +527,6 @@ cleanup:
                           [self presentAlertWithType:kGIAlertType_Stop title:NSLocalizedString(@"You must provide non-empty commit messages", nil) message:nil];
                         }
                       }
-
                     }];
 }
 

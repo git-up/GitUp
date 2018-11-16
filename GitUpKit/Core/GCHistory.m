@@ -1,4 +1,4 @@
-//  Copyright (C) 2015-2017 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2018 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -337,7 +337,6 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
     while (1) {
       NSUInteger oldCounter = counter;
       if (![walker iterateWithCommitBlock:^(GCHistoryCommit* commit, BOOL* stop) {
-
             if (!COMMIT_STATE(commit)) {
               BOOL skip = NO;
               CFArrayRef children = commit->_children;
@@ -354,7 +353,6 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
                 ++counter;
               }
             }
-
           }] ||
           (counter == oldCounter)) {
         break;
@@ -781,7 +779,6 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
   // Find all other tips
   BOOL (^enumerateBlock)
   (git_reference*) = ^(git_reference* reference) {
-
     GCReference* referenceObject = nil;
     if (git_reference_type(reference) != GIT_REF_SYMBOLIC) {  // Skip symbolic refs like "remote/origin/HEAD"
       git_commit* commit = NULL;
@@ -867,7 +864,6 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
       git_reference_free(reference);
     }
     return YES;
-
   };
   if (snapshot) {
     for (GCSerializedReference* serializedReference in snapshot.serializedReferences) {
@@ -990,13 +986,11 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
       XLOG_DEBUG_CHECK(tipCommit);
       [self _walkAncestorsFromCommit:tipCommit
                           usingBlock:^BOOL(GCHistoryCommit* commit, GCHistoryCommit* previousCommit) {
-
                             if (commit->generation == generation) {
                               return NO;
                             }
                             commit->generation = generation;
                             return YES;
-
                           }];
     }
 
@@ -1009,7 +1003,6 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
       }
       [self _walkAncestorsFromCommit:tipCommit
                           usingBlock:^BOOL(GCHistoryCommit* commit, GCHistoryCommit* childCommit) {
-
                             if (commit->generation == generation) {
                               if (childCommit) {
                                 [childCommit removeParent:commit];
@@ -1029,7 +1022,6 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
                               }
                             }
                             return YES;
-
                           }];
     }
   }

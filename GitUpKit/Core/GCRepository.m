@@ -1,4 +1,4 @@
-//  Copyright (C) 2015-2017 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2018 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -120,7 +120,6 @@ static int _GitLFSApply(git_filter* self, void** payload, git_buf* to, const git
   assert(git_libgit2_features() & GIT_FEATURE_SSH);
   assert(git_libgit2_init() >= 1);
   assert(libssh2_init(0) == 0);  // We can't have libgit2 using libssh2_session_init() and in turn calling this function on an arbitrary thread later on
-  assert(git_openssl_set_locking() == -1);
 
 #if !TARGET_OS_IPHONE
   struct stat info;
@@ -334,7 +333,7 @@ static int _ReferenceForEachCallback(const char* refname, void* payload) {
     CFAbsoluteTime time = CFAbsoluteTimeGetCurrent();
     GCTask* task = [[GCTask alloc] initWithExecutablePath:path];
     task.currentDirectoryPath = self.workingDirectoryPath;  // TODO: Is this the right working directory?
-    task.additionalEnvironment = @{ @"PATH" : cachedPATH };
+    task.additionalEnvironment = @{@"PATH" : cachedPATH};
     int status;
     NSData* stdoutData;
     NSData* stderrData;

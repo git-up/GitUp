@@ -1,4 +1,4 @@
-//  Copyright (C) 2015-2017 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2018 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -38,8 +38,6 @@
 
 #define kPreferencePaneIdentifier_General @"general"
 
-#define kWelcomeWindowCornerRadius 10
-
 #define kInstallerName @"install.sh"
 #define kToolName @"gitup"
 #define kToolInstallPath @"/usr/local/bin/" kToolName
@@ -48,32 +46,20 @@
 - (void)setShowsTagField:(BOOL)flag;
 @end
 
-@interface WelcomeView : NSView
-@end
-
 @interface AppDelegate () <NSUserNotificationCenterDelegate, SUUpdaterDelegate>
 - (IBAction)closeWelcomeWindow:(id)sender;
-@end
-
-@implementation WelcomeView
-
-- (void)drawRect:(NSRect)dirtyRect {
-  NSRect bounds = self.bounds;
-  CGContextRef context = [[NSGraphicsContext currentContext] graphicsPort];
-
-  CGContextClearRect(context, dirtyRect);
-
-  CGContextSetRGBFillColor(context, 0.9, 0.9, 0.9, 1.0);
-  GICGContextAddRoundedRect(context, bounds, kWelcomeWindowCornerRadius);
-  CGContextFillPath(context);
-}
-
 @end
 
 @interface WelcomeWindow : NSWindow
 @end
 
 @implementation WelcomeWindow
+
+- (void)awakeFromNib {
+  self.opaque = NO;
+  self.backgroundColor = [NSColor clearColor];
+  self.movableByWindowBackground = YES;
+}
 
 - (BOOL)validateMenuItem:(NSMenuItem*)menuItem {
   return menuItem.action == @selector(performClose:) ? YES : [super validateMenuItem:menuItem];
@@ -117,7 +103,6 @@
     kUserDefaultsKey_CheckInterval : @(15 * 60),
     kUserDefaultsKey_FirstLaunch : @(YES),
     kUserDefaultsKey_DiffWhitespaceMode : @(kGCLiveRepositoryDiffWhitespaceMode_Normal),
-    kUserDefaultsKey_EnableVisualEffects : @(NO),
     kUserDefaultsKey_ShowWelcomeWindow : @(YES),
   };
   [[NSUserDefaults standardUserDefaults] registerDefaults:defaults];
@@ -218,7 +203,6 @@
   [[NSDocumentController sharedDocumentController] openDocumentWithContentsOfURL:url
                                                                          display:YES
                                                                completionHandler:^(NSDocument* document, BOOL documentWasAlreadyOpen, NSError* openError) {
-
                                                                  if (document) {
                                                                    if (documentWasAlreadyOpen) {
                                                                      if ((NSUInteger)windowModeID != NSNotFound) {
@@ -234,7 +218,6 @@
                                                                  } else {
                                                                    [[NSDocumentController sharedDocumentController] presentError:openError];
                                                                  }
-
                                                                }];
 }
 
@@ -276,10 +259,6 @@
   _welcomeMaxHeight = _welcomeWindow.frame.size.height;
 
   _allowWelcome = -1;
-
-  _welcomeWindow.alphaValue = 1.0;
-  _welcomeWindow.opaque = NO;
-  _welcomeWindow.movableByWindowBackground = YES;
 
   _twitterButton.textAlignment = NSLeftTextAlignment;
   _twitterButton.textFont = [NSFont boldSystemFontOfSize:11];
@@ -353,6 +332,11 @@
   // Initialize Google Analytics
   [[GARawTracker sharedTracker] startWithTrackingID:@"UA-83409580-1"];
 #endif
+
+  [[NSAppleEventManager sharedAppleEventManager] setEventHandler:self
+                                                     andSelector:@selector(_getUrl:withReplyEvent:)
+                                                   forEventClass:kInternetEventClass
+                                                      andEventID:kAEGetURL];
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification*)notification {
@@ -430,6 +414,16 @@
 #endif
 }
 
+- (void)_getUrl:(NSAppleEventDescriptor*)event withReplyEvent:(NSAppleEventDescriptor*)replyEvent {
+  NSURL* url = [NSURL URLWithString:[event paramDescriptorForKeyword:keyDirectObject].stringValue];
+  BOOL isGitHubMacScheme = [url.scheme rangeOfString:@"github-mac" options:NSCaseInsensitiveSearch].location != NSNotFound;
+  BOOL isOpenRepoHost = [url.host rangeOfString:@"openRepo" options:NSCaseInsensitiveSearch].location != NSNotFound;
+  NSString* path = url.path.length ? [url.path substringFromIndex:1] : nil;
+  if (isGitHubMacScheme && isOpenRepoHost && path) {
+    [self _cloneRepositoryFromURLString:path];
+  }
+}
+
 - (BOOL)applicationShouldOpenUntitledFile:(NSApplication*)sender {
   return NO;
 }
@@ -486,7 +480,7 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
   NSString* command = [input objectForKey:kToolDictionaryKey_Command];
   NSString* repository = [[input objectForKey:kToolDictionaryKey_Repository] stringByStandardizingPath];
   if (!command.length || !repository.length) {
-    return @{ kToolDictionaryKey_Error : @"Invalid command" };
+    return @{kToolDictionaryKey_Error : @"Invalid command"};
   }
   if ([command isEqualToString:@kToolCommand_Open]) {
     [self _openRepositoryWithURL:[NSURL fileURLWithPath:repository] withCloneMode:kCloneMode_None windowModeID:NSNotFound];
@@ -497,7 +491,7 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
   } else if ([command isEqualToString:@kToolCommand_Stash]) {
     [self _openRepositoryWithURL:[NSURL fileURLWithPath:repository] withCloneMode:kCloneMode_None windowModeID:kWindowModeID_Stashes];
   } else {
-    return @{ kToolDictionaryKey_Error : [NSString stringWithFormat:@"Unknown command '%@'", command] };
+    return @{kToolDictionaryKey_Error : [NSString stringWithFormat:@"Unknown command '%@'", command]};
   }
   return @{};
 }
@@ -600,8 +594,8 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
   }
 }
 
-- (IBAction)cloneRepository:(id)sender {
-  _cloneURLTextField.stringValue = @"";
+- (void)_cloneRepositoryFromURLString:(NSString*)urlString {
+  _cloneURLTextField.stringValue = urlString;
   _cloneRecursiveButton.state = NSOnState;
   if ([NSApp runModalForWindow:_cloneWindow] && _cloneURLTextField.stringValue.length) {
     NSURL* url = GCURLFromGitURL(_cloneURLTextField.stringValue);
@@ -638,6 +632,10 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
       [NSApp presentError:MAKE_ERROR(@"Invalid Git repository URL")];
     }
   }
+}
+
+- (IBAction)cloneRepository:(id)sender {
+  [self _cloneRepositoryFromURLString:@""];
 }
 
 - (IBAction)dimissModal:(id)sender {
