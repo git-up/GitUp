@@ -1,4 +1,4 @@
-//  Copyright (C) 2015-2016 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2018 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -345,7 +345,7 @@ cleanup:
       parents = [[NSMutableArray alloc] initWithArray:replayParents];
       [parents replaceObjectAtIndex:0 withObject:tipCommit];  // Only replace first parent and preserve others
     }
-    tipCommit = [self replayCommit:replayCommit ontoCommit:tipCommit withAncestorCommit:ancestor updatedMessage:nil updatedParents:(parents ? parents : @[ tipCommit ]) updateCommitter:updateCommitter skipIdentical:skipIdentical conflictHandler:handler error:error];
+    tipCommit = [self replayCommit:replayCommit ontoCommit:tipCommit withAncestorCommit:ancestor updatedMessage:nil updatedParents:(parents ? parents : @[ tipCommit ])updateCommitter:updateCommitter skipIdentical:skipIdentical conflictHandler:handler error:error];
     if (tipCommit == nil) {
       return nil;
     }

@@ -1,4 +1,4 @@
-//  Copyright (C) 2015-2016 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2018 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -17,10 +17,19 @@
 #error This file requires ARC
 #endif
 
+#import <TargetConditionals.h>
 #import <libssh2.h>
 #import <pthread.h>
+#if !TARGET_OS_IPHONE
+#import <git2/sys/filter.h>
+#import <sys/stat.h>
+#endif
 
 #import "GCPrivate.h"
+
+#if !TARGET_OS_IPHONE
+static const char* _GitLFSPath = "/usr/local/bin/git-lfs";
+#endif
 
 static inline BOOL _IsDirectoryWritable(const char* path) {
   int status = access(path, W_OK);
@@ -30,6 +39,64 @@ static inline BOOL _IsDirectoryWritable(const char* path) {
   XLOG_DEBUG_CHECK(errno == EACCES);
   return NO;
 }
+
+static inline NSString* _MakeDirectoryPath(const char* path) {
+  if (!path) {
+    return nil;
+  }
+  size_t length = strlen(path);
+  if (length && (path[length - 1] == '/')) {
+    --length;
+  }
+  if (!length) {
+    XLOG_DEBUG_UNREACHABLE();
+    return nil;
+  }
+  return [[NSFileManager defaultManager] stringWithFileSystemRepresentation:path length:length];
+}
+
+#if !TARGET_OS_IPHONE
+
+static int _GitLFSApply(git_filter* self, void** payload, git_buf* to, const git_buf* from, const git_filter_source* src) {
+  if (from->size > 0) {
+    @autoreleasepool {
+      CFAbsoluteTime time = CFAbsoluteTimeGetCurrent();
+      NSMutableArray* arguments = [[NSMutableArray alloc] init];
+      if (git_filter_source_mode(src) == GIT_FILTER_SMUDGE) {  // ODB -> Worktree
+        [arguments addObject:@"smudge"];
+      } else if (git_filter_source_mode(src) == GIT_FILTER_CLEAN) {  // Worktree -> ODB
+        [arguments addObject:@"clean"];
+      } else {
+        XLOG_DEBUG_UNREACHABLE();
+        return -1;
+      }
+      [arguments addObject:@"--"];
+      [arguments addObject:GCFileSystemPathFromGitPath(git_filter_source_path(src))];
+      GCTask* task = [[GCTask alloc] initWithExecutablePath:[NSString stringWithUTF8String:_GitLFSPath]];
+      task.currentDirectoryPath = _MakeDirectoryPath(git_repository_workdir(git_filter_source_repo(src)));
+      int status;
+      NSData* stdinData = [[NSData alloc] initWithBytesNoCopy:from->ptr length:from->size freeWhenDone:NO];
+      NSData* stdoutData;
+      if (![task runWithArguments:arguments stdin:stdinData stdout:&stdoutData stderr:NULL exitStatus:&status error:NULL]) {
+        XLOG_ERROR(@"git-lfs tool failed executing");
+        giterr_set_str(GITERR_FILTER, "git-lfs tool failed executing");
+        return -1;
+      }
+      XLOG_VERBOSE(@"Executed git-lfs tool in %.3f seconds", CFAbsoluteTimeGetCurrent() - time);
+      if (status != 0) {
+        XLOG_ERROR(@"git-lfs tool exited with non-zero status (%i)", status);
+        giterr_set_str(GITERR_FILTER, "git-lfs tool exited with non-zero status");
+        return -1;
+      }
+      if (git_buf_set(to, stdoutData.bytes, stdoutData.length) < 0) {  // TODO: Avoid copying data
+        return -1;
+      }
+    }
+  }
+  return 0;
+}
+
+#endif
 
 @implementation GCRepository {
 #if !TARGET_OS_IPHONE
@@ -53,7 +120,17 @@ static inline BOOL _IsDirectoryWritable(const char* path) {
   assert(git_libgit2_features() & GIT_FEATURE_SSH);
   assert(git_libgit2_init() >= 1);
   assert(libssh2_init(0) == 0);  // We can't have libgit2 using libssh2_session_init() and in turn calling this function on an arbitrary thread later on
-  assert(git_openssl_set_locking() == -1);
+
+#if !TARGET_OS_IPHONE
+  struct stat info;
+  if (lstat(_GitLFSPath, &info) == 0) {
+    git_filter* filter = calloc(1, sizeof(git_filter));
+    filter->version = GIT_FILTER_VERSION;
+    filter->attributes = "filter=lfs";
+    filter->apply = _GitLFSApply;
+    assert(git_filter_register("lfs", filter, -1) == 0);  // Priority must be lower than CRLF and IDENT built-in filters
+  }
+#endif
 }
 
 - (instancetype)initWithRepository:(git_repository*)repository error:(NSError**)error {
@@ -65,21 +142,6 @@ static inline BOOL _IsDirectoryWritable(const char* path) {
 
 - (void)dealloc {
   git_repository_free(_private);
-}
-
-static inline NSString* _MakeDirectoryPath(const char* path) {
-  if (!path) {
-    return nil;
-  }
-  size_t length = strlen(path);
-  if (length && (path[length - 1] == '/')) {
-    --length;
-  }
-  if (!length) {
-    XLOG_DEBUG_UNREACHABLE();
-    return nil;
-  }
-  return [[NSFileManager defaultManager] stringWithFileSystemRepresentation:path length:length];
 }
 
 // TODO: Should we really have this method? There might still be a bunch of libgit2 objects around that refer to the old git_repository*
@@ -271,7 +333,7 @@ static int _ReferenceForEachCallback(const char* refname, void* payload) {
     CFAbsoluteTime time = CFAbsoluteTimeGetCurrent();
     GCTask* task = [[GCTask alloc] initWithExecutablePath:path];
     task.currentDirectoryPath = self.workingDirectoryPath;  // TODO: Is this the right working directory?
-    task.additionalEnvironment = @{ @"PATH" : cachedPATH };
+    task.additionalEnvironment = @{@"PATH" : cachedPATH};
     int status;
     NSData* stdoutData;
     NSData* stderrData;
@@ -282,7 +344,7 @@ static int _ReferenceForEachCallback(const char* refname, void* payload) {
     XLOG_VERBOSE(@"Executed '%@' hook in %.3f seconds", name, CFAbsoluteTimeGetCurrent() - time);
     if (status != 0) {
       if (error) {
-        NSString* string = [[[NSString alloc] initWithData:(stderrData.length ? stderrData : stdoutData) encoding:NSUTF8StringEncoding] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        NSString* string = [[[NSString alloc] initWithData:(stderrData.length ? stderrData : stdoutData)encoding:NSUTF8StringEncoding] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
         XLOG_DEBUG_CHECK(string);
         NSDictionary* info = @{
           NSLocalizedDescriptionKey : [NSString stringWithFormat:@"Hook '%@' exited with non-zero status (%i)", name, status],
@@ -446,14 +508,14 @@ static int _CredentialsCallback(git_cred** cred, const char* url, const char* us
         success = [repository.delegate repository:repository
             requiresPlainTextAuthenticationForURL:GCURLFromGitURL([NSString stringWithUTF8String:url])
                                              user:(user ? [NSString stringWithUTF8String:user] : nil)
-                                         username:&username
+                                             username:&username
                                          password:&password];
       } else {
         dispatch_sync(dispatch_get_main_queue(), ^{
           success = [repository.delegate repository:repository
               requiresPlainTextAuthenticationForURL:GCURLFromGitURL([NSString stringWithUTF8String:url])
                                                user:(user ? [NSString stringWithUTF8String:user] : nil)
-                                           username:&username
+                                               username:&username
                                            password:&password];
         });
       }

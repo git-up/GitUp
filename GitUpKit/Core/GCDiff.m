@@ -1,4 +1,4 @@
-//  Copyright (C) 2015-2016 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2018 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -442,6 +442,9 @@ static inline BOOL _EqualDiffs(git_diff* diff1, git_diff* diff2) {
   GCDiff* gcDiff = nil;
   git_diff* diff = NULL;
 
+  // Make sure filePath lives until the end of scope
+  const char* filePath = GCGitPathFromFileSystemPath(filePattern);
+
   git_diff_options diffOptions = GIT_DIFF_OPTIONS_INIT;
   if (options & kGCDiffOption_IncludeUnmodified) {
     diffOptions.flags |= GIT_DIFF_INCLUDE_UNMODIFIED;
@@ -466,7 +469,6 @@ static inline BOOL _EqualDiffs(git_diff* diff1, git_diff* diff2) {
   }
   if (filePattern) {
     diffOptions.pathspec.count = 1;
-    const char* filePath = GCGitPathFromFileSystemPath(filePattern);
     diffOptions.pathspec.strings = (char**)&filePath;
 
     static NSCharacterSet* set = nil;
@@ -532,7 +534,6 @@ cleanup:
                      maxContextLines:maxContextLines
                                error:error
                                block:^int(git_diff** outDiff, git_diff_options* diffOptions) {
-
                                  int status = git_diff_tree_to_index(outDiff, self.private, tree, index.private, diffOptions);
                                  if (status == GIT_OK) {
                                    git_diff* diff2;
@@ -552,7 +553,6 @@ cleanup:
                                    }
                                  }
                                  return status;
-
                                }];
   git_tree_free(tree);
   return diff;
@@ -577,14 +577,12 @@ cleanup:
              maxContextLines:maxContextLines
                        error:error
                        block:^int(git_diff** outDiff, git_diff_options* diffOptions) {
-
                          diffOptions->flags |= GIT_DIFF_UPDATE_INDEX;
                          int status = git_diff_index_to_workdir(outDiff, self.private, index.private, diffOptions);
                          if (status == GIT_ELOCKED) {
                            status = GIT_OK;  // Passing GIT_DIFF_UPDATE_INDEX means git_diff_index_to_workdir() will attempt to write the index even if there are no changes and this could fail if it is currently locked by another process
                          }
                          return status;
-
                        }];
 }
 
@@ -612,9 +610,7 @@ cleanup:
                      maxContextLines:maxContextLines
                                error:error
                                block:^int(git_diff** outDiff, git_diff_options* diffOptions) {
-
                                  return git_diff_tree_to_index(outDiff, self.private, tree, index.private, diffOptions);
-
                                }];
   git_tree_free(tree);
   return diff;
@@ -644,9 +640,7 @@ cleanup:
                      maxContextLines:maxContextLines
                                error:error
                                block:^int(git_diff** outDiff, git_diff_options* diffOptions) {
-
                                  return git_diff_tree_to_tree(outDiff, self.private, oldTree, newTree, diffOptions);
-
                                }];
   git_tree_free(newTree);
   git_tree_free(oldTree);
@@ -667,9 +661,7 @@ cleanup:
              maxContextLines:maxContextLines
                        error:error
                        block:^int(git_diff** outDiff, git_diff_options* diffOptions) {
-
                          return git_diff_index_to_index(outDiff, self.private, oldIndex.private, newIndex.private, diffOptions);
-
                        }];
 }
 

@@ -1,4 +1,4 @@
-//  Copyright (C) 2015-2016 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2018 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -18,6 +18,14 @@
 #endif
 
 #import "GCPrivate.h"
+
+#import <sys/stat.h>
+#import <sys/attr.h>
+#import <sys/mount.h>
+
+#ifndef kCFCoreFoundationVersionNumber10_12
+#define kCFCoreFoundationVersionNumber10_12 1348.1
+#endif
 
 NSString* const GCErrorDomain = @"GCErrorDomain";
 
@@ -130,6 +138,30 @@ NSString* GCGitURLFromURL(NSURL* url) {
   }
   return url.absoluteString;
 }
+
+int GCExchangeFileData(const char* path1, const char* path2) {
+  struct statfs stat;
+  int statStatus = statfs(path2, &stat);
+  if (statStatus != 0) {
+    return statStatus;
+  }
+  struct attrlist attrList = {ATTR_BIT_MAP_COUNT, 0, 0, ATTR_VOL_CAPABILITIES, 0, 0, 0};
+  struct {
+    u_int32_t length;
+    vol_capabilities_attr_t attr;
+  } attrBuf;
+  int attrListStatus = getattrlist(stat.f_mntonname, &attrList, &attrBuf, sizeof(attrBuf), 0);
+  if (attrListStatus != 0) {
+    return attrListStatus;
+  }
+  if ((attrBuf.attr.capabilities[VOL_CAPABILITIES_INTERFACES] & VOL_CAP_INT_EXCHANGEDATA) == VOL_CAP_INT_EXCHANGEDATA) {
+    return exchangedata(path1, path2, FSOPT_NOFOLLOW);
+  } else if (kCFCoreFoundationVersionNumber >= kCFCoreFoundationVersionNumber10_12 && (attrBuf.attr.capabilities[VOL_CAPABILITIES_INTERFACES] & VOL_CAP_INT_RENAME_SWAP) == VOL_CAP_INT_RENAME_SWAP) {
+    return renamex_np(path1, path2, RENAME_SWAP);
+  } else {
+    return -1;
+  }
+};
 
 GCFileMode GCFileModeFromMode(git_filemode_t mode) {
   switch (mode) {

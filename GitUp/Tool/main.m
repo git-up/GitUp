@@ -1,4 +1,4 @@
-//  Copyright (C) 2015-2016 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2018 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -107,6 +107,7 @@ int main(int argc, const char* argv[]) {
                     fprintf(stderr, "Failed communicating with GitUp application (%i)\n", status);
                   }
                   CFMessagePortInvalidate(messagePort);
+                  CFRelease(messagePort);
                   break;
 
                 } else {

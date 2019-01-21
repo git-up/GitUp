@@ -1,4 +1,4 @@
-//  Copyright (C) 2015-2016 Pierre-Olivier Latour <info@pol-online.net>
+//  Copyright (C) 2015-2018 Pierre-Olivier Latour <info@pol-online.net>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -63,7 +63,7 @@ static const void* _associatedObjectKey = &_associatedObjectKey;
 }
 
 - (void)destroyLocalRepository:(GCRepository*)repository {
-  XCTAssert([[NSFileManager defaultManager] removeItemAtPath:(repository.bare ? repository.repositoryPath : repository.workingDirectoryPath) error:NULL]);
+  XCTAssert([[NSFileManager defaultManager] removeItemAtPath:(repository.bare ? repository.repositoryPath : repository.workingDirectoryPath)error:NULL]);
 }
 
 - (NSString*)_runCLTWithPath:(NSString*)path arguments:(NSArray*)arguments currentDirectory:(NSString*)currentDirectory environment:(NSDictionary*)environment {
@@ -82,7 +82,7 @@ static const void* _associatedObjectKey = &_associatedObjectKey;
   return [self _runCLTWithPath:kGitCLTPath
                      arguments:array
               currentDirectory:(repository ? (repository.bare ? repository.repositoryPath : repository.workingDirectoryPath) : [[NSFileManager defaultManager] currentDirectoryPath])
-                   environment:(repository ? @{ @"XDG_CONFIG_HOME" : objc_getAssociatedObject(repository, _associatedObjectKey) } : @{})];
+              environment:(repository ? @{@"XDG_CONFIG_HOME" : objc_getAssociatedObject(repository, _associatedObjectKey)} : @{})];
 }
 
 - (NSString*)runGitCLTWithRepository:(GCRepository*)repository command:(NSString*)command, ... {
