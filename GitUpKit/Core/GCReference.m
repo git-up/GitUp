@@ -83,14 +83,14 @@
 
 @implementation GCRepository (GCReference_Private)
 
-- (id)findReferenceWithFullName:(NSString*)fullname class:(Class) class error:(NSError**)error {
+- (id)findReferenceWithFullName:(NSString*)fullname class:(Class)class error:(NSError**)error {
   XLOG_DEBUG_CHECK([class isSubclassOfClass:[GCReference class]]);
   git_reference* reference;
   CALL_LIBGIT2_FUNCTION_RETURN(nil, git_reference_lookup, &reference, self.private, fullname.UTF8String);
   return [[class alloc] initWithRepository:self reference:reference];
 }
 
-    - (BOOL)refreshReference : (GCReference*)reference error : (NSError**)error {
+- (BOOL)refreshReference:(GCReference*)reference error:(NSError**)error {
   git_reference* newReference;
   CALL_LIBGIT2_FUNCTION_RETURN(NO, git_reference_lookup, &newReference, self.private, git_reference_name(reference.private));
   [reference updateReference:newReference];

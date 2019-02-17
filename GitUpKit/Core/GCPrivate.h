@@ -316,7 +316,7 @@ extern int git_submodule_foreach_block(git_repository* repo, int (^block)(git_su
 @end
 
 @interface GCRepository (GCReference_Private)
-- (id)findReferenceWithFullName:(NSString*)fullname class:(Class) class error:(NSError**)error;
+- (id)findReferenceWithFullName:(NSString*)fullname class:(Class)class error:(NSError**)error;
 - (BOOL)refreshReference:(GCReference*)reference error:(NSError**)error;
 - (BOOL)enumerateReferencesWithOptions:(GCReferenceEnumerationOptions)options error:(NSError**)error usingBlock:(BOOL (^)(git_reference* reference))block;
 - (BOOL)loadTargetOID:(git_oid*)oid fromReference:(git_reference*)reference error:(NSError**)error;

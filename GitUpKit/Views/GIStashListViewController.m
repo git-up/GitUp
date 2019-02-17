@@ -222,7 +222,7 @@
   }
   if (!success) {  // In case of error, put a dummy operation on the undo stack since we *must* put something, but pop it at the next runloop iteration
     [[self.undoManager prepareWithInvocationTarget:self] _undoSaveStash:stash withMessage:message keepIndex:keepIndex includeUntracked:includeUntracked ignore:YES];
-    [self.undoManager performSelector:(self.undoManager.isRedoing ? @selector(undo) : @selector(redo))withObject:nil afterDelay:0.0];
+    [self.undoManager performSelector:(self.undoManager.isRedoing ? @selector(undo) : @selector(redo)) withObject:nil afterDelay:0.0];
     [self presentError:error];
   }
 }
@@ -237,7 +237,7 @@
                       if (success) {
                         NSString* message = [_messageTextField.stringValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
                         NSError* error;
-                        GCStash* stash = [self.repository saveStashWithMessage:(message.length ? message : nil)keepIndex:_indexButton.state includeUntracked:_untrackedButton.state error:&error];
+                        GCStash* stash = [self.repository saveStashWithMessage:(message.length ? message : nil) keepIndex:_indexButton.state includeUntracked:_untrackedButton.state error:&error];
                         if (stash) {
                           [self.undoManager setActionName:NSLocalizedString(@"Save Stash", nil)];
                           [[self.undoManager prepareWithInvocationTarget:self] _undoSaveStash:stash withMessage:(message.length ? message : nil)keepIndex:_indexButton.state includeUntracked:_untrackedButton.state ignore:NO];  // TODO: We should really use the built-in undo mechanism from GCLiveRepository
@@ -289,7 +289,7 @@
     [self.repository notifyRepositoryChanged];
   } else {  // In case of error, put a dummy operation on the undo stack since we *must* put something, but pop it at the next runloop iteration
     [[self.undoManager prepareWithInvocationTarget:self] _undoDropStashWithPreviousState:state ignore:YES];
-    [self.undoManager performSelector:(self.undoManager.isRedoing ? @selector(undo) : @selector(redo))withObject:nil afterDelay:0.0];
+    [self.undoManager performSelector:(self.undoManager.isRedoing ? @selector(undo) : @selector(redo)) withObject:nil afterDelay:0.0];
     [self presentError:error];
   }
 }

@@ -631,7 +631,7 @@ static inline NSString* _StringFromFileMode(GCFileMode mode) {
     label = [label stringByAppendingFormat:@" (%@ ▶ %@)", _StringFromFileMode(delta.oldFile.mode), _StringFromFileMode(delta.newFile.mode)];
   }
   if (oldPathRange.length || newPathRange.length) {
-    NSDictionary* attributes = @{ NSUnderlineStyleAttributeName : @(NSUnderlineStyleSingle) };
+    NSDictionary* attributes = @{NSUnderlineStyleAttributeName : @(NSUnderlineStyleSingle)};
     NSMutableAttributedString* string = [[NSMutableAttributedString alloc] initWithString:label attributes:nil];
     [string beginEditing];
     [string setAttributes:attributes range:oldPathRange];

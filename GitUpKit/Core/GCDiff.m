@@ -217,11 +217,11 @@ static inline GCFileDiffChange _FileDiffChangeFromStatus(git_delta_t status) {
 
 - (NSString*)description {
   static char modes[] = {' ', 'T', 'B', 'X', 'L', 'C'};  // WARNING: Must match GCFileModeFromMode
-  static char status[] = {// WARNING: Must match GCFileDiffChange
-                          ' ', 'I', '?', 'X',
-                          'A', 'D', 'M',
-                          'R', 'C', 'T',
-                          '!'};
+  static char status[] = {  // WARNING: Must match GCFileDiffChange
+      ' ', 'I', '?', 'X',
+      'A', 'D', 'M',
+      'R', 'C', 'T',
+      '!'};
   return [NSString stringWithFormat:@"%c \"%s\" (%c) -> \"%s\" (%c)", status[_FileDiffChangeFromStatus(_private->status)],
                                     _private->old_file.path, modes[GCFileModeFromMode(_private->old_file.mode)],
                                     _private->new_file.path, modes[GCFileModeFromMode(_private->new_file.mode)]];

@@ -44,12 +44,12 @@
   repo1 = nil;
 
   // Test read-only
-  XCTAssertTrue([[NSFileManager defaultManager] setAttributes:@{ NSFilePosixPermissions : @(0500) } ofItemAtPath:[path stringByAppendingPathComponent:@".git"] error:NULL]);
+  XCTAssertTrue([[NSFileManager defaultManager] setAttributes:@{NSFilePosixPermissions : @(0500)} ofItemAtPath:[path stringByAppendingPathComponent:@".git"] error:NULL]);
   GCRepository* repo2 = [[GCRepository alloc] initWithExistingLocalRepository:path error:NULL];
   XCTAssertNotNil(repo2);
   XCTAssertTrue(repo2.readOnly);
   repo2 = nil;
-  XCTAssertTrue([[NSFileManager defaultManager] setAttributes:@{ NSFilePosixPermissions : @(0700) } ofItemAtPath:[path stringByAppendingPathComponent:@".git"] error:NULL]);
+  XCTAssertTrue([[NSFileManager defaultManager] setAttributes:@{NSFilePosixPermissions : @(0700)} ofItemAtPath:[path stringByAppendingPathComponent:@".git"] error:NULL]);
 
   // Destroy repository
   XCTAssertTrue([[NSFileManager defaultManager] removeItemAtPath:path error:NULL]);

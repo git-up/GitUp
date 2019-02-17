@@ -300,7 +300,7 @@ cleanup:
   [self.delegate commitRewriterViewControllerShouldCancel:self];
 }
 
-- (IBAction) continue:(id)sender {
+- (IBAction)continue:(id)sender {
   if (self.repository.indexConflicts.count) {
     [self presentAlertWithType:kGIAlertType_Stop title:NSLocalizedString(@"You must resolve conflicts before continuing!", nil) message:nil];
     return;

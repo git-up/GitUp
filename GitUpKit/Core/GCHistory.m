@@ -459,7 +459,7 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
   // Keep generating commit rows following parents (respectively children)
   if (GC_POINTER_LIST_COUNT(previousRow)) {
     __block BOOL success = NO;
-    BOOL (^commitBlock)
+    BOOL(^commitBlock)
     (GCHistoryCommit*) = ^(GCHistoryCommit* commit) {
       XLOG_DEBUG_CHECK(!COMMIT_IS_PROCESSED(commit));
       BOOL ready = YES;
@@ -777,7 +777,7 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
   }
 
   // Find all other tips
-  BOOL (^enumerateBlock)
+  BOOL(^enumerateBlock)
   (git_reference*) = ^(git_reference* reference) {
     GCReference* referenceObject = nil;
     if (git_reference_type(reference) != GIT_REF_SYMBOLIC) {  // Skip symbolic refs like "remote/origin/HEAD"

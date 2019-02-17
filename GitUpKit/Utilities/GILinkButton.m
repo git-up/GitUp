@@ -79,7 +79,7 @@
   NSMutableDictionary* attributes = [[NSMutableDictionary alloc] init];
   [attributes setObject:style forKey:NSParagraphStyleAttributeName];
   [attributes setValue:_textFont forKey:NSFontAttributeName];
-  [attributes setValue:(_highlighted ? _alternateLinkColor : _linkColor)forKey:NSForegroundColorAttributeName];
+  [attributes setValue:(_highlighted ? _alternateLinkColor : _linkColor) forKey:NSForegroundColorAttributeName];
   [_link drawInRect:self.bounds withAttributes:attributes];
 }
 

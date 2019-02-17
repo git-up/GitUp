@@ -590,8 +590,8 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
       [self.repository setUndoActionName:[NSString stringWithFormat:NSLocalizedString(@"Fast-Forward \"%@\" Branch to Commit", nil), branch.name]];
     }
     if ([self.repository performReferenceTransformWithReason:(isBranch ? @"fast_forward_merge_branch" : @"fast_forward_merge_commit")
-                         argument:(isBranch ? [commitOrBranch name] : [commitOrBranch SHA1])
-                         error:&error
+                                                    argument:(isBranch ? [commitOrBranch name] : [commitOrBranch SHA1])
+                                                    error:&error
                                                   usingBlock:^GCReferenceTransform*(GCLiveRepository* repository, NSError** outError) {
                                                     return [repository.history fastForwardBranch:branch toCommit:commit error:outError];
                                                   }]) {
@@ -621,9 +621,12 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
                               } else {
                                 [self.repository setUndoActionName:[NSString stringWithFormat:NSLocalizedString(@"Merge Commit Into \"%@\" Branch", nil), branch.name]];
                               }
-                              if ([self.repository performReferenceTransformWithReason:(isBranch ? @"merge_branch" : @"merge_commit")
-                                                   argument:(isBranch ? [commitOrBranch name] : [commitOrBranch SHA1])
-                                                   error:&error
+
+                              NSString* reason = isBranch ? @"merge_branch" : @"merge_commit";
+                              NSString* argument = isBranch ? [commitOrBranch name] : [commitOrBranch SHA1];
+                              if ([self.repository performReferenceTransformWithReason:reason
+                                                                              argument:argument
+                                                                                 error:&error
                                                                             usingBlock:^GCReferenceTransform*(GCLiveRepository* repository, NSError** outError1) {
                                                                               return [repository.history mergeCommit:commit
                                                                                                           intoBranch:branch
@@ -681,7 +684,7 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
   BOOL isBranch = [commitOrBranch isKindOfClass:[GCBranch class]];
   NSError* analyzeError;
   GCHistoryCommit* ancestorCommit;
-  GCMergeAnalysisResult result = [self _analyzeMergingCommit:(isBranch ? [commitOrBranch tipCommit] : commitOrBranch)intoCommit:intoBranch.tipCommit ancestorCommit:&ancestorCommit error:&analyzeError];
+  GCMergeAnalysisResult result = [self _analyzeMergingCommit:(isBranch ? [commitOrBranch tipCommit] : commitOrBranch) intoCommit:intoBranch.tipCommit ancestorCommit:&ancestorCommit error:&analyzeError];
   switch (result) {
     case kGCMergeAnalysisResult_Unknown:
       [self presentError:analyzeError];

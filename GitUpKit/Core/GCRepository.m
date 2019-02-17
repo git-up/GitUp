@@ -344,7 +344,7 @@ static int _ReferenceForEachCallback(const char* refname, void* payload) {
     XLOG_VERBOSE(@"Executed '%@' hook in %.3f seconds", name, CFAbsoluteTimeGetCurrent() - time);
     if (status != 0) {
       if (error) {
-        NSString* string = [[[NSString alloc] initWithData:(stderrData.length ? stderrData : stdoutData)encoding:NSUTF8StringEncoding] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        NSString* string = [[[NSString alloc] initWithData:(stderrData.length ? stderrData : stdoutData) encoding:NSUTF8StringEncoding] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
         XLOG_DEBUG_CHECK(string);
         NSDictionary* info = @{
           NSLocalizedDescriptionKey : [NSString stringWithFormat:@"Hook '%@' exited with non-zero status (%i)", name, status],

@@ -179,21 +179,22 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
         }
       }
     };
-    [self.patch enumerateUsingBeginHunkHandler:^(NSUInteger oldLineNumber, NSUInteger oldLineCount, NSUInteger newLineNumber, NSUInteger newLineCount) {
-      NSString* string = [[NSString alloc] initWithFormat:@"@@ -%lu,%lu +%lu,%lu @@", oldLineNumber, oldLineCount, newLineNumber, newLineCount];
-      CFAttributedStringRef attributedString = CFAttributedStringCreate(kCFAllocatorDefault, (CFStringRef)string, GIDiffViewAttributes);
-      CTLineRef line = CTLineCreateWithAttributedString(attributedString);
-      CFRelease(attributedString);
+    [self.patch
+        enumerateUsingBeginHunkHandler:^(NSUInteger oldLineNumber, NSUInteger oldLineCount, NSUInteger newLineNumber, NSUInteger newLineCount) {
+          NSString* string = [[NSString alloc] initWithFormat:@"@@ -%lu,%lu +%lu,%lu @@", oldLineNumber, oldLineCount, newLineNumber, newLineCount];
+          CFAttributedStringRef attributedString = CFAttributedStringCreate(kCFAllocatorDefault, (CFStringRef)string, GIDiffViewAttributes);
+          CTLineRef line = CTLineCreateWithAttributedString(attributedString);
+          CFRelease(attributedString);
 
-      GISplitDiffLine* diffLine = [[GISplitDiffLine alloc] initWithType:kDiffLineType_Separator];
-      diffLine.leftString = string;
-      diffLine.leftLine = line;  // Transfer ownership to GISplitDiffLine
-      [_lines addObject:diffLine];
+          GISplitDiffLine* diffLine = [[GISplitDiffLine alloc] initWithType:kDiffLineType_Separator];
+          diffLine.leftString = string;
+          diffLine.leftLine = line;  // Transfer ownership to GISplitDiffLine
+          [_lines addObject:diffLine];
 
-      addedCount = 0;
-      deletedCount = 0;
-      startIndex = NSNotFound;
-    }
+          addedCount = 0;
+          deletedCount = 0;
+          startIndex = NSNotFound;
+        }
         lineHandler:^(GCLineDiffChange change, NSUInteger oldLineNumber, NSUInteger newLineNumber, const char* contentBytes, NSUInteger contentLength) {
           NSString* string;
           if (contentBytes[contentLength - 1] != '\n') {

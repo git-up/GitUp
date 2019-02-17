@@ -9,6 +9,7 @@ AlwaysBreakBeforeMultilineStrings: false
 AccessModifierOffset: -2
 ObjCSpaceBeforeProtocolList: true
 SortIncludes: false
+ObjCBinPackProtocolList: Auto
 ---
 Language: Cpp
 ---

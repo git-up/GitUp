@@ -411,7 +411,7 @@ static const void* _associatedObjectDataKey = &_associatedObjectDataKey;
 
 - (void)_selectDefaultNode {
   GCHistoryCommit* headCommit = _graph.history.HEADCommit;
-  [self _setSelectedNode:(headCommit ? [_graph nodeForCommit:headCommit] : nil)display:YES scroll:YES notify:YES];
+  [self _setSelectedNode:(headCommit ? [_graph nodeForCommit:headCommit] : nil) display:YES scroll:YES notify:YES];
 }
 
 - (void)_showContextualMenuForNode:(GINode*)node {

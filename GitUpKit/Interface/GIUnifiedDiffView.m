@@ -147,14 +147,15 @@ typedef struct {
         }
       }
     };
-    [self.patch enumerateUsingBeginHunkHandler:^(NSUInteger oldLineNumber, NSUInteger oldLineCount, NSUInteger newLineNumber, NSUInteger newLineCount) {
-      CFStringRef string = CFStringCreateWithFormat(kCFAllocatorDefault, NULL, CFSTR("@@ -%lu,%lu +%lu,%lu @@\n"), oldLineNumber, oldLineCount, newLineNumber, newLineCount);
-      [self _addLineWithString:string change:NSNotFound oldLineNumber:oldLineNumber newLineNumber:newLineNumber contentBytes:NULL contentLength:0];
-      CFRelease(string);
+    [self.patch
+        enumerateUsingBeginHunkHandler:^(NSUInteger oldLineNumber, NSUInteger oldLineCount, NSUInteger newLineNumber, NSUInteger newLineCount) {
+          CFStringRef string = CFStringCreateWithFormat(kCFAllocatorDefault, NULL, CFSTR("@@ -%lu,%lu +%lu,%lu @@\n"), oldLineNumber, oldLineCount, newLineNumber, newLineCount);
+          [self _addLineWithString:string change:NSNotFound oldLineNumber:oldLineNumber newLineNumber:newLineNumber contentBytes:NULL contentLength:0];
+          CFRelease(string);
 
-      deletedIndex = NSNotFound;
-      addedIndex = NSNotFound;
-    }
+          deletedIndex = NSNotFound;
+          addedIndex = NSNotFound;
+        }
         lineHandler:^(GCLineDiffChange change, NSUInteger oldLineNumber, NSUInteger newLineNumber, const char* contentBytes, NSUInteger contentLength) {
           CFStringRef string;
           if (contentBytes[contentLength - 1] != '\n') {

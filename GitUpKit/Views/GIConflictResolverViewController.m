@@ -165,7 +165,7 @@
   [_delegate conflictResolverViewControllerShouldCancel:self];
 }
 
-- (IBAction) continue:(id)sender {
+- (IBAction)continue:(id)sender {
   [_delegate conflictResolverViewControllerDidFinish:self];
 }
 
