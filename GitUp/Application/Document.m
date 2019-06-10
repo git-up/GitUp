@@ -243,16 +243,20 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
   return success;
 }
 
-- (void)close {
-  [super close];
-
+- (void)closeAndSaveCurrentWindowFrame:(BOOL)shouldSaveCurrentWindowFrame {
   CFRunLoopTimerSetNextFireDate(_checkTimer, HUGE_VALF);
 
-  XLOG_DEBUG_CHECK(_mainWindow);
-  [_repository setUserInfo:_mainWindow.stringWithSavedFrame forKey:kRepositoryUserInfoKey_MainWindowFrame];
-
   _repository.delegate = nil;  // Make sure that if the GCLiveRepository is still around afterwards, it won't call back to the dealloc'ed document
-  _repository = nil;
+
+  if (shouldSaveCurrentWindowFrame && _mainWindow.isVisible) {
+    [_repository setUserInfo:_mainWindow.stringWithSavedFrame forKey:kRepositoryUserInfoKey_MainWindowFrame];
+  }
+
+  [super close];
+}
+
+- (void)close {
+  [self closeAndSaveCurrentWindowFrame:YES];
 }
 
 - (void)makeWindowControllers {
@@ -424,6 +428,23 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
   } else {
     [super canCloseDocumentWithDelegate:delegate shouldCloseSelector:shouldCloseSelector contextInfo:contextInfo];
   }
+}
+
+- (void)presentedItemDidMoveToURL:(NSURL*)newURL {
+  dispatch_async(dispatch_get_main_queue(), ^{
+    [self closeAndSaveCurrentWindowFrame:NO];
+
+    NSDocumentController* controller = NSDocumentController.sharedDocumentController;
+    [controller openDocumentWithContentsOfURL:newURL
+                                      display:YES
+                            completionHandler:^(NSDocument* document, BOOL documentWasAlreadyOpen, NSError* error) {
+                              if (document) {
+                                XLOG_DEBUG(@"Reopened document for rename to \"%@\"", newURL.path);
+                              } else {
+                                [controller presentError:error];
+                              }
+                            }];
+  });
 }
 
 #pragma mark - Utilities

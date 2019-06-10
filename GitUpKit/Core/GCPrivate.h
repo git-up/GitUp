@@ -247,7 +247,6 @@ extern int git_submodule_foreach_block(git_repository* repo, int (^block)(git_su
 @property(nonatomic, readonly) git_repository* private NS_RETURNS_INNER_POINTER;
 @property(nonatomic, readonly) NSUInteger lastUpdatedTips;  // Reset before fetching and updated during fetching
 - (instancetype)initWithRepository:(git_repository*)repository error:(NSError**)error;
-- (void)updateRepository:(git_repository*)repository;
 - (NSString*)privateTemporaryFilePath;
 #if DEBUG
 - (GCDiff*)checkUnifiedStatus:(NSError**)error;
