@@ -358,3 +358,15 @@ static NSColor* _separatorColor = nil;
 }
 
 @end
+
+@implementation NSAppearance (GIAppearance)
+
+- (BOOL)matchesDarkAppearance {
+  if (@available(macOS 10.14, *)) {
+    return [[self bestMatchFromAppearancesWithNames:@[ NSAppearanceNameAqua, NSAppearanceNameDarkAqua ]] isEqual:NSAppearanceNameDarkAqua];
+  } else {
+    return NO;
+  }
+}
+
+@end
