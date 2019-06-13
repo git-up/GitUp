@@ -275,10 +275,14 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
   _titleView.wantsLayer = YES;
   _rightView.wantsLayer = YES;
 
-  // Text fields must be drawn on an opaque background to avoid subpixel antialiasing issues during animation.
-  for (NSTextField* field in @[ _infoTextField1, _infoTextField2, _progressTextField ]) {
-    field.drawsBackground = YES;
-    field.backgroundColor = _mainWindow.backgroundColor;
+  // Text fields must be drawn on an opaque background pre-Mojave to avoid
+  // subpixel antialiasing issues during animation.
+  if (@available(macOS 10.14, *)) {
+  } else {
+    for (NSTextField* field in @[ _infoTextField1, _infoTextField2, _progressTextField ]) {
+      field.drawsBackground = YES;
+      field.backgroundColor = _mainWindow.backgroundColor;
+    }
   }
 
   _mapViewController = [[GIMapViewController alloc] initWithRepository:_repository];
