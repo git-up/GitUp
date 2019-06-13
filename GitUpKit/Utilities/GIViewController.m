@@ -183,7 +183,7 @@
 }
 
 - (void)presentAlert:(NSAlert*)alert completionHandler:(void (^)(NSInteger returnCode))handler {
-  [alert beginSheetModalForWindow:self.view.window withCompletionHandler:handler];
+  [alert beginSheetModalForWindow:self.view.window completionHandler:handler];
 }
 
 #pragma mark - NSTextFieldDelegate
@@ -248,7 +248,7 @@
   NSAlert* alert = [NSAlert alertWithMessageText:title defaultButton:NSLocalizedString(@"OK", nil) alternateButton:nil otherButton:nil informativeTextWithFormat:(message ? message : @"")];
 #pragma clang diagnostic pop
   alert.type = type;
-  [self presentAlert:alert completionHandler:NULL];
+  [alert beginSheetModalForWindow:self.view.window completionHandler:NULL];
 }
 
 - (void)confirmUserActionWithAlertType:(GIAlertType)type

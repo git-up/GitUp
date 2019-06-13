@@ -410,7 +410,7 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
                                        otherButton:nil
                          informativeTextWithFormat:NSLocalizedString(@"If using an SSH remote, make sure you have added your key to the ssh-agent, then try again.", nil)];
     alert.type = kGIAlertType_Stop;
-    [alert beginSheetModalForWindow:_mainWindow withCompletionHandler:NULL];
+    [alert beginSheetModalForWindow:_mainWindow completionHandler:NULL];
     return NO;
   }
 
@@ -561,14 +561,14 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
         alert.type = kGIAlertType_Caution;
         alert.showsSuppressionButton = YES;
         [alert beginSheetModalForWindow:_mainWindow
-                  withCompletionHandler:^(NSInteger returnCode) {
-                    if (alert.suppressionButton.state) {
-                      [_repository setUserInfo:@(YES) forKey:kRepositoryUserInfoKey_SkipSubmoduleCheck];
-                    }
-                    if (returnCode == NSAlertDefaultReturn) {
-                      [self _initializeSubmodules];
-                    }
-                  }];
+                      completionHandler:^(NSInteger returnCode) {
+                        if (alert.suppressionButton.state) {
+                          [_repository setUserInfo:@(YES) forKey:kRepositoryUserInfoKey_SkipSubmoduleCheck];
+                        }
+                        if (returnCode == NSAlertDefaultReturn) {
+                          [self _initializeSubmodules];
+                        }
+                      }];
         return;  // Don't do anything else
       } else {
         [self presentError:error];
@@ -1674,15 +1674,15 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
   [alert addButtonWithTitle:NSLocalizedString(@"Reset", nil)];
   [alert addButtonWithTitle:NSLocalizedString(@"Cancel", nil)];
   [alert beginSheetModalForWindow:_mainWindow
-            withCompletionHandler:^(NSInteger returnCode) {
-              if (returnCode == NSAlertFirstButtonReturn) {
-                NSError* error;
-                if (![_repository resetToHEAD:kGCResetMode_Hard error:&error] || (_untrackedButton.state && ![_repository cleanWorkingDirectory:&error]) || ![_repository updateAllSubmodulesResursively:YES error:&error]) {
-                  [self presentError:error];
-                }
-                [_repository notifyRepositoryChanged];
-              }
-            }];
+                completionHandler:^(NSInteger returnCode) {
+                  if (returnCode == NSAlertFirstButtonReturn) {
+                    NSError* error;
+                    if (![_repository resetToHEAD:kGCResetMode_Hard error:&error] || (_untrackedButton.state && ![_repository cleanWorkingDirectory:&error]) || ![_repository updateAllSubmodulesResursively:YES error:&error]) {
+                      [self presentError:error];
+                    }
+                    [_repository notifyRepositoryChanged];
+                  }
+                }];
 }
 
 - (IBAction)switchMode:(id)sender {

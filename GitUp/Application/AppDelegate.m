@@ -568,9 +568,7 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
   savePanel.title = NSLocalizedString(@"Create New Repository", nil);
   savePanel.prompt = NSLocalizedString(@"Create", nil);
   savePanel.nameFieldLabel = NSLocalizedString(@"Name:", nil);
-  if ([savePanel respondsToSelector:@selector(setShowsTagField:)]) {
-    [savePanel setShowsTagField:NO];
-  }
+  savePanel.showsTagField = NO;
   if ([savePanel runModal] == NSFileHandlingPanelOKButton) {
     NSString* path = savePanel.URL.path;
     NSError* error;
@@ -599,9 +597,7 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
       savePanel.prompt = NSLocalizedString(@"Clone", nil);
       savePanel.nameFieldLabel = NSLocalizedString(@"Name:", nil);
       savePanel.nameFieldStringValue = name ? name : @"";
-      if ([savePanel respondsToSelector:@selector(setShowsTagField:)]) {
-        [savePanel setShowsTagField:NO];
-      }
+      savePanel.showsTagField = NO;
       if ([savePanel runModal] == NSFileHandlingPanelOKButton) {
         NSString* path = savePanel.URL.path;
         NSError* error;
