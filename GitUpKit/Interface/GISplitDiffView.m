@@ -322,7 +322,24 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
   [self.backgroundColor setFill];
   CGContextFillRect(context, dirtyRect);
 
+  void (^drawHorizontalSeparator)(CGFloat) = ^(CGFloat y) {
+    CGContextSaveGState(context);
+    CGContextSetStrokeColorWithColor(context, NSColor.gridColor.CGColor);
+
+    CGFloat pattern[] = {kTextLineNumberMargin - 1, 1, offset - kTextLineNumberMargin - 1, 1, kTextLineNumberMargin - 1, 1, CGFLOAT_MAX};
+    size_t count = sizeof(pattern) / sizeof(*pattern);
+    CGContextSetLineDash(context, 0, pattern, count);
+
+    CGContextMoveToPoint(context, 0, y);
+    CGContextAddLineToPoint(context, bounds.size.width, y);
+    CGContextStrokePath(context);
+
+    CGContextRestoreGState(context);
+  };
+
   if (_lines.count) {
+    drawHorizontalSeparator(0.5);
+
     NSColor* selectedColor = self.window.keyWindow && (self.window.firstResponder == self) ? [NSColor selectedControlColor] : [NSColor secondarySelectedControlColor];
     CGContextSetTextMatrix(context, CGAffineTransformIdentity);
     NSUInteger count = _lines.count;
@@ -336,15 +353,10 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
       CGFloat textPosition = linePosition + GIDiffViewLineDescent;
       if (diffLine.type == kDiffLineType_Separator) {
         [NSColor.gitUpDiffSeparatorBackgroundColor setFill];
-        CGContextFillRect(context, CGRectMake(0, linePosition + 1, bounds.size.width, GIDiffViewLineHeight - 1));
+        CGContextFillRect(context, CGRectMake(0, linePosition + 1, bounds.size.width, GIDiffViewLineHeight - 2));
 
-        [NSColor.gridColor setStroke];
-        CGContextMoveToPoint(context, 0, linePosition + 0.5);
-        CGContextAddLineToPoint(context, bounds.size.width, linePosition + 0.5);
-        CGContextStrokePath(context);
-        CGContextMoveToPoint(context, 0, linePosition + GIDiffViewLineHeight - 0.5);
-        CGContextAddLineToPoint(context, bounds.size.width, linePosition + GIDiffViewLineHeight - 0.5);
-        CGContextStrokePath(context);
+        drawHorizontalSeparator(linePosition + 0.5);
+        drawHorizontalSeparator(linePosition + GIDiffViewLineHeight - 0.5);
 
         [NSColor.tertiaryLabelColor setFill];
         CGContextSetTextPosition(context, kTextLineNumberMargin + 4, textPosition);
