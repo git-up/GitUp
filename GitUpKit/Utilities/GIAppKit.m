@@ -228,6 +228,11 @@ static const void* _associatedObjectCommitKey = &_associatedObjectCommitKey;
 @implementation GITableCellView
 
 - (void)saveTextFieldColors {
+  if (@available(macOS 10.14, *)) {
+    // Handled fully automatically.
+    return;
+  }
+
   for (NSView* view in self.subviews) {
     if ([view isKindOfClass:[NSTextField class]]) {
       objc_setAssociatedObject(view, _associatedObjectCommitKey, [(NSTextField*)view textColor], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
@@ -244,10 +249,15 @@ static const void* _associatedObjectCommitKey = &_associatedObjectCommitKey;
 - (void)setBackgroundStyle:(NSBackgroundStyle)backgroundStyle {
   [super setBackgroundStyle:backgroundStyle];
 
+  if (@available(macOS 10.14, *)) {
+    // Handled fully automatically.
+    return;
+  }
+
   for (NSView* view in self.subviews) {
     if ([view isKindOfClass:[NSTextField class]]) {
-      if (backgroundStyle == NSBackgroundStyleDark) {
-        [(NSTextField*)view setTextColor:[NSColor whiteColor]];
+      if (backgroundStyle == NSBackgroundStyleEmphasized) {
+        [(NSTextField*)view setTextColor:NSColor.alternateSelectedControlTextColor];
       } else {
         [(NSTextField*)view setTextColor:objc_getAssociatedObject(view, _associatedObjectCommitKey)];
       }
