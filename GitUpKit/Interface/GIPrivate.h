@@ -16,6 +16,7 @@
 #import "GIInterface.h"
 
 #import "XLFacilityMacros.h"
+#import "NSBundle+GitUpKit.h"
 
 #if __GI_HAS_APPKIT__
 
