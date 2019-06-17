@@ -97,7 +97,6 @@ static const void* _associatedObjectDataKey = &_associatedObjectDataKey;
   _dateFormatter = [[NSDateFormatter alloc] init];
   _dateFormatter.dateStyle = NSDateFormatterShortStyle;
   _dateFormatter.timeStyle = NSDateFormatterShortStyle;
-  _backgroundColor = [[NSColor whiteColor] retain];
 
   self.graph = nil;
 }
@@ -123,7 +122,6 @@ static const void* _associatedObjectDataKey = &_associatedObjectDataKey;
   [[NSNotificationCenter defaultCenter] removeObserver:self name:NSWindowDidBecomeKeyNotification object:nil];
 
   [_graph release];
-  [_backgroundColor release];
   [_dateFormatter release];
 
   [super dealloc];
@@ -222,13 +220,6 @@ static const void* _associatedObjectDataKey = &_associatedObjectDataKey;
 
 - (void)setShowsBranchLabels:(BOOL)flag {
   _showsBranchLabels = flag;
-
-  [self setNeedsDisplay:YES];
-}
-
-- (void)setBackgroundColor:(NSColor*)color {
-  [_backgroundColor autorelease];
-  _backgroundColor = [color retain];
 
   [self setNeedsDisplay:YES];
 }
@@ -530,10 +521,6 @@ static const void* _associatedObjectDataKey = &_associatedObjectDataKey;
 }
 
 #pragma mark - Drawing
-
-- (BOOL)isOpaque {
-  return YES;
-}
 
 static void _DrawNode(GINode* node, CGContextRef context, CGFloat x, CGFloat y) {
   BOOL onBranchMainLine = node.primaryLine.branchMainLine;
@@ -1454,15 +1441,11 @@ static void _DrawSelectedNode(CGContextRef context, CGFloat x, CGFloat y, GINode
   CGContextSetTextDrawingMode(context, kCGTextFill);
   CGContextSetTextMatrix(context, CGAffineTransformIdentity);
 
-// Draw background
 #if __DEBUG_DRAWING__
+  // Draw background
   CGContextSetFillColorWithColor(context, [[NSColor colorWithDeviceHue:(CGFloat)(random() % 1000) / 1000.0 saturation:0.25 brightness:0.75 alpha:1.0] CGColor]);
-#else
-  CGContextSetFillColorWithColor(context, _backgroundColor.CGColor);
-#endif
   CGContextFillRect(context, dirtyRect);
 
-#if __DEBUG_DRAWING__
   // Draw grid
   CGContextSetLineWidth(context, 1);
   CGContextSetRGBStrokeColor(context, 1.0, 1.0, 1.0, 0.25);

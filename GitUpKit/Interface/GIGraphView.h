@@ -28,7 +28,6 @@
 @property(nonatomic, strong) GIGraph* graph;
 @property(nonatomic) BOOL showsTagLabels;
 @property(nonatomic) BOOL showsBranchLabels;
-@property(nonatomic, strong) NSColor* backgroundColor;
 
 @property(nonatomic, assign) GINode* selectedNode;  // Setting this property directly does not call the delegate
 @property(nonatomic, assign) GCHistoryCommit* selectedCommit;  // Convenience method that wraps @selectedNode
