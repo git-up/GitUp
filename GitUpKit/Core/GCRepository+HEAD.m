@@ -43,7 +43,7 @@
 
 - (GCCommit*)lookupHEAD:(GCLocalBranch**)currentBranch error:(NSError**)error {
   git_reference* headReference = NULL;
-  git_commit* headCommit = [self loadHEADCommit:(currentBranch ? &headReference : NULL)error:error];
+  git_commit* headCommit = [self loadHEADCommit:(currentBranch ? &headReference : NULL) error:error];
   if (headCommit == NULL) {
     return NULL;
   }
@@ -56,7 +56,7 @@
 - (BOOL)lookupHEADCurrentCommit:(GCCommit**)commit branch:(GCLocalBranch**)branch error:(NSError**)error {
   git_commit* headCommit = NULL;
   git_reference* headReference = NULL;
-  if (![self loadHEADCommit:(commit ? &headCommit : NULL)resolvedReference:(branch ? &headReference : NULL)error:error]) {
+  if (![self loadHEADCommit:(commit ? &headCommit : NULL) resolvedReference:(branch ? &headReference : NULL)error:error]) {
     return NO;
   }
   if (commit) {

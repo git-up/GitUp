@@ -514,7 +514,7 @@ cleanup:
   [self.delegate commitSplitterViewControllerShouldCancel:self];
 }
 
-- (IBAction) continue:(id)sender {
+- (IBAction)continue:(id)sender {
   [self.windowController runModalView:_messageView
             withInitialFirstResponder:self.messageTextView
                     completionHandler:^(BOOL success) {

@@ -298,7 +298,7 @@ static NSMutableDictionary* _patternHelp = nil;
     [self.repository notifyRepositoryChanged];
   } else {  // In case of error, put a dummy operation on the undo stack since we *must* put something, but pop it at the next runloop iteration
     [[self.undoManager prepareWithInvocationTarget:self] _undoWriteOptionWithLevel:level variable:variable value:value ignore:YES];
-    [self.undoManager performSelector:(self.undoManager.isRedoing ? @selector(undo) : @selector(redo))withObject:nil afterDelay:0.0];
+    [self.undoManager performSelector:(self.undoManager.isRedoing ? @selector(undo) : @selector(redo)) withObject:nil afterDelay:0.0];
     [self presentError:error];
   }
 }
@@ -317,9 +317,9 @@ static NSMutableDictionary* _patternHelp = nil;
                 if (name.length && value.length) {
                   NSError* error;
                   GCConfigOption* currentOption = option ? option : [self.repository readConfigOptionForLevel:kGCConfigLevel_Local variable:name error:&error];
-                  if ((currentOption || ([error.domain isEqualToString:GCErrorDomain] && (error.code == kGCErrorCode_NotFound))) && [self.repository writeConfigOptionForLevel:(option ? option.level : kGCConfigLevel_Local)variable:name withValue:value error:&error]) {
+                  if ((currentOption || ([error.domain isEqualToString:GCErrorDomain] && (error.code == kGCErrorCode_NotFound))) && [self.repository writeConfigOptionForLevel:(option ? option.level : kGCConfigLevel_Local) variable:name withValue:value error:&error]) {
                     [self.undoManager setActionName:NSLocalizedString(@"Edit Configuration", nil)];
-                    [[self.undoManager prepareWithInvocationTarget:self] _undoWriteOptionWithLevel:(option ? option.level : kGCConfigLevel_Local)variable:name value:currentOption.value ignore:NO];  // TODO: We should really use the built-in undo mechanism from GCLiveRepository
+                    [[self.undoManager prepareWithInvocationTarget:self] _undoWriteOptionWithLevel:(option ? option.level : kGCConfigLevel_Local) variable:name value:currentOption.value ignore:NO];  // TODO: We should really use the built-in undo mechanism from GCLiveRepository
                     [self.repository notifyRepositoryChanged];
 
                     if (!option) {

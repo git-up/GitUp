@@ -128,9 +128,10 @@
   for (GCDiffDelta* delta in diff.deltas) {
     GCDiffPatch* patch = [self.repository makePatchForDiffDelta:delta isBinary:NULL error:NULL];
     XCTAssertNotNil(patch);
-    [patch enumerateUsingBeginHunkHandler:^(NSUInteger oldLineNumber, NSUInteger oldLineCount, NSUInteger newLineNumber, NSUInteger newLineCount) {
-      ++count;  // 2 x 1 hunks
-    }
+    [patch
+        enumerateUsingBeginHunkHandler:^(NSUInteger oldLineNumber, NSUInteger oldLineCount, NSUInteger newLineNumber, NSUInteger newLineCount) {
+          ++count;  // 2 x 1 hunks
+        }
         lineHandler:^(GCLineDiffChange change, NSUInteger oldLineNumber, NSUInteger newLineNumber, const char* contentBytes, NSUInteger contentLength) {
           ++count;  // 2 + 1 lines
         }
