@@ -122,25 +122,7 @@ static void _TimerCallBack(CFRunLoopTimerRef timer, void* info) {
 - (void)_stream:(ConstFSEventStreamRef)stream didReceiveEvents:(size_t)numEvents withPaths:(void*)eventPaths flags:(const FSEventStreamEventFlags*)eventFlags {
   for (size_t i = 0; i < numEvents; ++i) {
     const char* path = ((const char**)eventPaths)[i];
-    if (eventFlags[i] & kFSEventStreamEventFlagRootChanged) {
-      XLOG_DEBUG_CHECK(stream == _gitDirectoryStream);
-      char buffer[PATH_MAX];
-      if (fcntl(_gitDirectory, F_GETPATH, buffer) >= 0) {
-        XLOG_VERBOSE(@"Repository \"%s\" has moved to \"%s\"", git_repository_path(self.private), buffer);
-        git_repository* repository;
-        int status = git_repository_open(&repository, buffer);
-        if (status == GIT_OK) {
-          [self updateRepository:repository];  // TODO: Is this really safe?
-          [self _reloadWorkingDirectoryStream];
-        } else {
-          LOG_LIBGIT2_ERROR(status);
-        }
-      } else {
-        XLOG_DEBUG_UNREACHABLE();
-        XLOG_ERROR(@"Failed retrieving directory path (%s)", strerror(errno));
-      }
-
-    } else if (eventFlags[i] & kFSEventStreamEventFlagMustScanSubDirs) {
+    if (eventFlags[i] & kFSEventStreamEventFlagMustScanSubDirs) {
       XLOG_WARNING(@"Ignoring event stream request to rescan \"%s\"", path);  // Note that this directory path can be missing the trailing slash
 
     } else {  // Documentation says "eventFlags" should be 0x0 for regular events but that's not the case on OS X 10.10 at least
@@ -238,7 +220,7 @@ static void _StreamCallback(ConstFSEventStreamRef streamRef, void* clientCallBac
     FSEventStreamContext streamContext = {0, (__bridge void*)self, NULL, NULL, NULL};
     _gitDirectoryStream = FSEventStreamCreate(kCFAllocatorDefault, _StreamCallback, &streamContext,
                                               (__bridge CFArrayRef) @[ path ], kFSEventStreamEventIdSinceNow,
-                                              kFSLatency, kFSEventStreamCreateFlagWatchRoot | kFSEventStreamCreateFlagIgnoreSelf);  // This opens the path
+                                              kFSLatency, kFSEventStreamCreateFlagIgnoreSelf);  // This opens the path
     if (_gitDirectoryStream == NULL) {
       XLOG_ERROR(@"Failed creating event stream at \"%@\"", path);
       return nil;

@@ -135,21 +135,15 @@ static int _GitLFSApply(git_filter* self, void** payload, git_buf* to, const git
 
 - (instancetype)initWithRepository:(git_repository*)repository error:(NSError**)error {
   if ((self = [super init])) {
-    [self updateRepository:repository];
+    _private = repository;
+    _repositoryPath = _MakeDirectoryPath(git_repository_path(_private));
+    _workingDirectoryPath = _MakeDirectoryPath(git_repository_workdir(_private));
   }
   return self;
 }
 
 - (void)dealloc {
   git_repository_free(_private);
-}
-
-// TODO: Should we really have this method? There might still be a bunch of libgit2 objects around that refer to the old git_repository*
-- (void)updateRepository:(git_repository*)repository {
-  git_repository_free(_private);
-  _private = repository;
-  _repositoryPath = _MakeDirectoryPath(git_repository_path(_private));
-  _workingDirectoryPath = _MakeDirectoryPath(git_repository_workdir(_private));
 }
 
 - (NSString*)description {
