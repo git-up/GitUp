@@ -39,9 +39,6 @@
 @property(nonatomic, getter=isEmpty) BOOL empty;
 @end
 
-@interface GIDiffRowView : NSTableRowView
-@end
-
 @interface GIHeaderDiffCellView : NSTableCellView
 @property(nonatomic, weak) IBOutlet NSButton* menuButton;
 @property(nonatomic, weak) IBOutlet NSButton* actionButton;
@@ -94,20 +91,6 @@ NSString* const GIDiffContentsViewControllerUserDefaultKey_DiffViewMode = @"GIDi
 @end
 
 @implementation GIDiffContentData
-@end
-
-@implementation GIDiffRowView
-
-- (BOOL)isOpaque {
-  return YES;
-}
-
-// Override all native drawing
-- (void)drawRect:(NSRect)dirtyRect {
-  [NSColor.textBackgroundColor setFill];
-  NSRectFill(dirtyRect);
-}
-
 @end
 
 @implementation GIHeaderDiffCellView
@@ -443,10 +426,6 @@ static NSImage* _untrackedImage = nil;
     row -= 1;
   }
   return row % 2 == 0;
-}
-
-- (NSTableRowView*)tableView:(NSTableView*)tableView rowViewForRow:(NSInteger)row {
-  return [[GIDiffRowView alloc] init];
 }
 
 - (void)tableView:(NSTableView*)tableView didRemoveRowView:(NSTableRowView*)rowView forRow:(NSInteger)row {
