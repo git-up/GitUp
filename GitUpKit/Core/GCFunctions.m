@@ -23,10 +23,6 @@
 #import <sys/attr.h>
 #import <sys/mount.h>
 
-#ifndef kCFCoreFoundationVersionNumber10_12
-#define kCFCoreFoundationVersionNumber10_12 1348.1
-#endif
-
 NSString* const GCErrorDomain = @"GCErrorDomain";
 
 NSError* GCNewError(NSInteger code, NSString* message) {
@@ -154,13 +150,18 @@ int GCExchangeFileData(const char* path1, const char* path2) {
   if (attrListStatus != 0) {
     return attrListStatus;
   }
+
+  if (@available(macOS 10.12, iOS 10.0, tvOS 10.0, watchOS 3.0, *)) {
+    if ((attrBuf.attr.capabilities[VOL_CAPABILITIES_INTERFACES] & VOL_CAP_INT_RENAME_SWAP) == VOL_CAP_INT_RENAME_SWAP) {
+      return renamex_np(path1, path2, RENAME_SWAP);
+    }
+  }
+
   if ((attrBuf.attr.capabilities[VOL_CAPABILITIES_INTERFACES] & VOL_CAP_INT_EXCHANGEDATA) == VOL_CAP_INT_EXCHANGEDATA) {
     return exchangedata(path1, path2, FSOPT_NOFOLLOW);
-  } else if (kCFCoreFoundationVersionNumber >= kCFCoreFoundationVersionNumber10_12 && (attrBuf.attr.capabilities[VOL_CAPABILITIES_INTERFACES] & VOL_CAP_INT_RENAME_SWAP) == VOL_CAP_INT_RENAME_SWAP) {
-    return renamex_np(path1, path2, RENAME_SWAP);
-  } else {
-    return -1;
   }
+
+  return -1;
 };
 
 GCFileMode GCFileModeFromMode(git_filemode_t mode) {

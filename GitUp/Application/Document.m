@@ -20,10 +20,6 @@
 
 #import <GitUpKit/XLFacilityMacros.h>
 
-#ifndef kCFCoreFoundationVersionNumber10_12
-#define kCFCoreFoundationVersionNumber10_12 1348.1
-#endif
-
 #define kWindowModeString_Map @"map"
 #define kWindowModeString_Map_QuickView @"quickview"
 #define kWindowModeString_Map_Diff @"diff"
@@ -1829,14 +1825,14 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 }
 
 - (void)_setSearchFieldPlaceholder:(NSString*)placeholder {
-  // 10.11 and earlier: search placeholders have the same length to work around incorrect centering.
-  if (kCFCoreFoundationVersionNumber < kCFCoreFoundationVersionNumber10_12) {
+  if (@available(macOS 10.12, *)) {
+    // 10.12: there are centering issues, and all are fixed by triggering a layout pass.
+    _searchField.placeholderString = placeholder;
+    _searchField.needsLayout = YES;
+  } else {
+    // 10.11 and earlier: search placeholders have the same length to work around incorrect centering.
     placeholder = [placeholder stringByPaddingToLength:18 withString:@" " startingAtIndex:0];
-  }
-  [(NSTextFieldCell*)_searchField.cell setPlaceholderString:placeholder];
-  // 10.12: there are more centering issues, and all are fixed by triggering a layout pass.
-  if (kCFCoreFoundationVersionNumber >= kCFCoreFoundationVersionNumber10_12) {
-    [_searchField setNeedsLayout:YES];
+    _searchField.placeholderString = placeholder;
   }
 }
 

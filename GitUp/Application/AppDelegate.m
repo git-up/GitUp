@@ -462,7 +462,13 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
   XLOG_DEBUG_CHECK(input);
   NSDictionary* output = [(__bridge AppDelegate*)info _processToolCommand:input];
   XLOG_DEBUG_CHECK(output);
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunguarded-availability"
+  // The deprecation for this method in the macOS 10.14 SDK marks the incorrect
+  // version for its introduction. However, it is useful to keep availability
+  // guards on in general. FB6233110
   return CFBridgingRetain([NSKeyedArchiver archivedDataWithRootObject:output]);
+#pragma clang diagnostic pop
 }
 
 - (NSDictionary*)_processToolCommand:(NSDictionary*)input {
