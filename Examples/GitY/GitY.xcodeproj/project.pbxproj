@@ -65,6 +65,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		DB72902322C8360B007AB8F7 /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
+		DB72902422C8360B007AB8F7 /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
+		DB72902522C8360B007AB8F7 /* Base.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Base.xcconfig; sourceTree = "<group>"; };
 		E22942AD1B87C18B00DD27BF /* CommitViewTemplate.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CommitViewTemplate.png; sourceTree = "<group>"; };
 		E22942AE1B87C18B00DD27BF /* HistoryViewTemplate.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = HistoryViewTemplate.png; sourceTree = "<group>"; };
 		E2DBF9431B879511006B292E /* GitY.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GitY.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -93,6 +96,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		DB72902222C8360B007AB8F7 /* Xcode-Configurations */ = {
+			isa = PBXGroup;
+			children = (
+				DB72902322C8360B007AB8F7 /* Debug.xcconfig */,
+				DB72902422C8360B007AB8F7 /* Release.xcconfig */,
+				DB72902522C8360B007AB8F7 /* Base.xcconfig */,
+			);
+			name = "Xcode-Configurations";
+			path = "../../Xcode-Configurations";
+			sourceTree = "<group>";
+		};
 		E2DBF93A1B879511006B292E = {
 			isa = PBXGroup;
 			children = (
@@ -110,6 +124,7 @@
 				E22942AD1B87C18B00DD27BF /* CommitViewTemplate.png */,
 				E22942AE1B87C18B00DD27BF /* HistoryViewTemplate.png */,
 				E2DBF9441B879511006B292E /* Products */,
+				DB72902222C8360B007AB8F7 /* Xcode-Configurations */,
 			);
 			sourceTree = "<group>";
 		};
@@ -159,7 +174,7 @@
 		E2DBF93B1B879511006B292E /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0920;
+				LastUpgradeCheck = 1020;
 				TargetAttributes = {
 					E2DBF9421B879511006B292E = {
 						CreatedOnToolsVersion = 7.0;
@@ -272,69 +287,16 @@
 /* Begin XCBuildConfiguration section */
 		E2DBF9581B879511006B292E /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = DB72902322C8360B007AB8F7 /* Debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.8;
-				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
 		E2DBF9591B879511006B292E /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = DB72902422C8360B007AB8F7 /* Release.xcconfig */;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				ENABLE_NS_ASSERTIONS = NO;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				SDKROOT = macosx;
 			};
 			name = Release;

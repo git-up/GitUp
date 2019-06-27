@@ -290,6 +290,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		DB72906522C83EB1007AB8F7 /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
+		DB72906622C83EB1007AB8F7 /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
+		DB72906722C83EB1007AB8F7 /* Base.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Base.xcconfig; sourceTree = "<group>"; };
 		E2174BD51B91240400BE234A /* libgit2.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libgit2.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		E2174C5E1B9125C500BE234A /* libgit2.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libgit2.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		E2174F2B1B912B6B00BE234A /* annotated_commit.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = annotated_commit.c; sourceTree = "<group>"; };
@@ -653,12 +656,24 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		DB72906422C83EB1007AB8F7 /* Xcode-Configurations */ = {
+			isa = PBXGroup;
+			children = (
+				DB72906522C83EB1007AB8F7 /* Debug.xcconfig */,
+				DB72906622C83EB1007AB8F7 /* Release.xcconfig */,
+				DB72906722C83EB1007AB8F7 /* Base.xcconfig */,
+			);
+			name = "Xcode-Configurations";
+			path = "../../Xcode-Configurations";
+			sourceTree = "<group>";
+		};
 		E217485C1B911B5200BE234A = {
 			isa = PBXGroup;
 			children = (
 				E217529F1B914B9600BE234A /* Headers */,
 				E2174F2A1B912B6B00BE234A /* Source */,
 				E217515E1B912B8E00BE234A /* Dependencies */,
+				DB72906422C83EB1007AB8F7 /* Xcode-Configurations */,
 				E21748661B911B5200BE234A /* Products */,
 			);
 			sourceTree = "<group>";
@@ -1463,7 +1478,11 @@
 /* Begin XCBuildConfiguration section */
 		E217486A1B911B5200BE234A /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = DB72906522C83EB1007AB8F7 /* Debug.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = NO;
+				CLANG_WARN_COMMA = NO;
+				CLANG_WARN_UNREACHABLE_CODE = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				EXECUTABLE_PREFIX = lib;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -1480,6 +1499,7 @@
 					GIT_USE_NSEC,
 					GIT_ARCH_64,
 				);
+				GCC_WARN_UNINITIALIZED_AUTOS = NO;
 				HEADER_SEARCH_PATHS = (
 					"libssh2/$(PLATFORM_NAME)/include",
 					libgit2/src,
@@ -1507,7 +1527,11 @@
 		};
 		E217486B1B911B5200BE234A /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = DB72906622C83EB1007AB8F7 /* Release.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = NO;
+				CLANG_WARN_COMMA = NO;
+				CLANG_WARN_UNREACHABLE_CODE = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				EXECUTABLE_PREFIX = lib;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -1523,6 +1547,7 @@
 					GIT_USE_NSEC,
 					GIT_ARCH_64,
 				);
+				GCC_WARN_UNINITIALIZED_AUTOS = NO;
 				HEADER_SEARCH_PATHS = (
 					"libssh2/$(PLATFORM_NAME)/include",
 					libgit2/src,
@@ -1554,7 +1579,6 @@
 					"$(inherited)",
 					GIT_ARCH_64,
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				SDKROOT = macosx;
 			};
 			name = Debug;
@@ -1566,7 +1590,6 @@
 					"$(inherited)",
 					GIT_ARCH_64,
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				SDKROOT = macosx;
 			};
 			name = Release;
@@ -1574,7 +1597,6 @@
 		E2174C701B9125C600BE234A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -1582,7 +1604,6 @@
 		E2174C711B9125C600BE234A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				SDKROOT = iphoneos;
 			};
 			name = Release;
