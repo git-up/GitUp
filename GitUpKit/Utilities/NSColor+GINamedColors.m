@@ -18,6 +18,70 @@
 
 @implementation NSColor (GINamedColors)
 
++ (NSArray*)gitUpGraphAlternatingBranchColors {
+  static dispatch_once_t once;
+  static NSArray* colors;
+  dispatch_once(&once, ^{
+    if (@available(macOS 10.13, *)) {
+      NSBundle* bundle = NSBundle.gitUpKitBundle;
+      colors = @[
+        [NSColor colorNamed:@"branch/1"
+                     bundle:bundle],
+        [NSColor colorNamed:@"branch/2"
+                     bundle:bundle],
+        [NSColor colorNamed:@"branch/3"
+                     bundle:bundle],
+        [NSColor colorNamed:@"branch/4"
+                     bundle:bundle],
+        [NSColor colorNamed:@"branch/5"
+                     bundle:bundle],
+        [NSColor colorNamed:@"branch/6"
+                     bundle:bundle],
+        [NSColor colorNamed:@"branch/7"
+                     bundle:bundle],
+        [NSColor colorNamed:@"branch/8"
+                     bundle:bundle]
+      ];
+    } else {
+      colors = @[
+        [NSColor colorWithDeviceRed:0.9
+                              green:0.5355
+                               blue:0.5355
+                              alpha:1],
+        [NSColor colorWithDeviceRed:0.9
+                              green:0.7137
+                               blue:0.495
+                              alpha:1],
+        [NSColor colorWithDeviceRed:0.9
+                              green:0.801
+                               blue:0.45
+                              alpha:1],
+        [NSColor colorWithDeviceRed:0.508194
+                              green:0.81
+                               blue:0.48195
+                              alpha:1],
+        [NSColor colorWithDeviceRed:0.495
+                              green:0.9
+                               blue:0.8514
+                              alpha:1],
+        [NSColor colorWithDeviceRed:0.495
+                              green:0.6813
+                               blue:0.9
+                              alpha:1],
+        [NSColor colorWithDeviceRed:0.75208
+                              green:0.544
+                               blue:0.85
+                              alpha:1],
+        [NSColor colorWithDeviceRed:0.9
+                              green:0.55575
+                               blue:0.741645
+                              alpha:1]
+      ];
+    }
+  });
+  return colors;
+}
+
 #define IMPLEMENT_NAMED_COLOR(__NAME__, __ASSET__, __RED__, __GREEN__, __BLUE__, __ALPHA__) \
   +(NSColor*)gitUp##__NAME__##Color {                                                       \
     if (@available(macOS 10.13, *)) {                                                       \

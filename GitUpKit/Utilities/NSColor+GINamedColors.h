@@ -17,4 +17,6 @@
 
 @interface NSColor (GINamedColors)
 
+@property(class, strong, readonly) NSArray<NSColor*>* gitUpGraphAlternatingBranchColors;
+
 @end
