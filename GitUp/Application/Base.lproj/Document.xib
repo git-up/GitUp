@@ -229,11 +229,11 @@ Adjust settings in Show menu</string>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                 </box>
                 <popUpButton id="Fov-GV-gD7">
-                    <rect key="frame" x="10" y="10" width="80" height="27"/>
+                    <rect key="frame" x="12" y="12" width="80" height="23"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <popUpButtonCell key="cell" type="bevel" title="Show" bezelStyle="regularSquare" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" preferredEdge="maxY" selectedItem="9kl-kD-1vf" id="6Tc-ix-fh5">
+                    <popUpButtonCell key="cell" type="roundTextured" title="Show" bezelStyle="texturedRounded" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" preferredEdge="maxY" selectedItem="9kl-kD-1vf" id="6Tc-ix-fh5">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="cellTitle"/>
+                        <font key="font" metaFont="system"/>
                         <menu key="menu" id="FSB-Wc-ZmT">
                             <items>
                                 <menuItem title="Show" state="on" hidden="YES" id="hR8-Mf-qwD"/>
@@ -278,27 +278,27 @@ Adjust settings in Show menu</string>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="cbp-6y-jbG">
                     <rect key="frame" x="100" y="24" width="800" height="14"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="center" title="&lt;INFO LINE 1&gt;" id="1X5-xy-mOw">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" white="0.25" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="center" title="&lt;INFO LINE 1&gt;" id="1X5-xy-mOw">
+                        <font key="font" metaFont="toolTip"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="eEA-mo-3Uq">
                     <rect key="frame" x="100" y="8" width="800" height="14"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="center" title="&lt;INFO LINE 2&gt;" id="ecG-9J-PlG">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="center" title="&lt;INFO LINE 2&gt;" id="ecG-9J-PlG">
+                        <font key="font" metaFont="toolTip"/>
+                        <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
                 <textField hidden="YES" horizontalHuggingPriority="251" verticalHuggingPriority="750" id="dry-dR-hSD">
                     <rect key="frame" x="363" y="23" width="274" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="center" title="Remote operation in progress - Please wait…" id="vXh-uB-Jji">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" white="0.25" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="center" title="Remote operation in progress - Please wait…" id="vXh-uB-Jji">
+                        <font key="font" metaFont="toolTip"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
@@ -307,9 +307,9 @@ Adjust settings in Show menu</string>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </progressIndicator>
                 <button toolTip="Pull current branch from upstream" verticalHuggingPriority="750" id="bVm-VR-ap5">
-                    <rect key="frame" x="936" y="10" width="27" height="27"/>
+                    <rect key="frame" x="930" y="12" width="27" height="23"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                    <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="icon_action_fetch" imagePosition="only" alignment="center" borderStyle="border" inset="2" id="SFq-Wx-Us0">
+                    <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="icon_action_fetch" imagePosition="only" alignment="center" borderStyle="border" inset="2" id="SFq-Wx-Us0">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
@@ -318,9 +318,9 @@ Adjust settings in Show menu</string>
                     </connections>
                 </button>
                 <button toolTip="Push current branch to upstream" verticalHuggingPriority="750" id="NjF-Aj-I7c">
-                    <rect key="frame" x="963" y="10" width="27" height="27"/>
+                    <rect key="frame" x="961" y="12" width="27" height="23"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                    <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="icon_action_push" imagePosition="only" alignment="center" borderStyle="border" inset="2" id="dhk-Ry-6pb">
+                    <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="icon_action_push" imagePosition="only" alignment="center" borderStyle="border" inset="2" id="dhk-Ry-6pb">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
@@ -439,7 +439,7 @@ Adjust settings in Show menu</string>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <buttonCell key="cell" type="bevel" title="Done" bezelStyle="regularSquare" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="mu6-y9-mEl">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="cellTitle"/>
+                        <font key="font" metaFont="controlContent"/>
                     </buttonCell>
                     <connections>
                         <action selector="toggleSnapshots:" target="-2" id="xEj-EP-Pu2"/>
@@ -469,7 +469,7 @@ Adjust settings in Show menu</string>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <buttonCell key="cell" type="bevel" title="Done" bezelStyle="regularSquare" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Vb7-E2-czh">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="cellTitle"/>
+                        <font key="font" metaFont="controlContent"/>
                     </buttonCell>
                     <connections>
                         <action selector="toggleReflog:" target="-2" id="iy2-Rc-GIe"/>

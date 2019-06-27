@@ -124,10 +124,6 @@ static inline WindowModeID _WindowModeIDFromString(NSString* mode) {
 }
 
 + (void)initialize {
-  [[NSImage imageNamed:@"icon_nav_map"] setTemplate:YES];
-  [[NSImage imageNamed:@"icon_nav_commit"] setTemplate:YES];
-  [[NSImage imageNamed:@"icon_nav_stash"] setTemplate:YES];
-
   NSString* path = [[NSBundle mainBundle] pathForResource:@"Help" ofType:@"plist"];
   if (path) {
     NSData* data = [NSData dataWithContentsOfFile:path];
@@ -272,7 +268,6 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
   if (frameString) {
     [_mainWindow setFrameFromString:frameString];
   }
-  _mainWindow.backgroundColor = [NSColor whiteColor];
   [_mainWindow setToolbar:_toolbar];
   _mainWindow.titleVisibility = NSWindowTitleHidden;
   _contentView.wantsLayer = YES;
