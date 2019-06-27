@@ -113,6 +113,9 @@ IMPLEMENT_NAMED_COLOR(DiffModifiedBackground, "diff/modified_background", 0.609,
 IMPLEMENT_NAMED_COLOR(DiffDeletedBackground, "diff/deleted_background", 1, 0.627, 0.63, 1)
 IMPLEMENT_NAMED_COLOR(DiffRenamedBackground, "diff/renamed_background", 0.656, 0.547, 0.759, 1)
 IMPLEMENT_NAMED_COLOR(DiffUntrackedBackground, "diff/untracked_background", 0.75, 0.75, 0.75, 1)
+IMPLEMENT_NAMED_COLOR(ConfigConflictBackground, "config/conflict_background", 1, 0.95, 0.95, 1)
+IMPLEMENT_NAMED_COLOR(ConfigGlobalBackground, "config/global_background", 0.95, 1, 0.95, 1)
+IMPLEMENT_NAMED_COLOR(ConfigHighlightBackground, "config/highlight_background", 1, 1, 0, 0.5)
 
 #undef IMPLEMENT_NAMED_COLOR
 

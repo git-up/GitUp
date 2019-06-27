@@ -34,4 +34,8 @@
 @property(class, strong, readonly) NSColor* gitUpDiffRenamedBackgroundColor;
 @property(class, strong, readonly) NSColor* gitUpDiffUntrackedBackgroundColor;
 
+@property(class, strong, readonly) NSColor* gitUpConfigConflictBackgroundColor;
+@property(class, strong, readonly) NSColor* gitUpConfigGlobalBackgroundColor;
+@property(class, strong, readonly) NSColor* gitUpConfigHighlightBackgroundColor;
+
 @end

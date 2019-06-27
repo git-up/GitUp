@@ -116,7 +116,7 @@ static NSMutableDictionary* _patternHelp = nil;
   CGFloat fontSize = _cachedCellView.optionTextField.font.pointSize;
   _optionAttributes = @{NSFontAttributeName : [NSFont boldSystemFontOfSize:fontSize]};
   _separatorAttributes = @{NSFontAttributeName : [NSFont systemFontOfSize:fontSize]};
-  _valueAttributes = @{NSFontAttributeName : [NSFont systemFontOfSize:fontSize], NSBackgroundColorAttributeName : [NSColor colorWithDeviceRed:1.0 green:1.0 blue:0.0 alpha:0.5]};
+  _valueAttributes = @{NSFontAttributeName : [NSFont systemFontOfSize:fontSize], NSBackgroundColorAttributeName : NSColor.gitUpConfigHighlightBackgroundColor};
 }
 
 - (void)viewWillAppear {
@@ -213,11 +213,11 @@ static NSMutableDictionary* _patternHelp = nil;
 - (void)tableView:(NSTableView*)tableView didAddRowView:(NSTableRowView*)rowView forRow:(NSInteger)row {
   GCConfigOption* option = _config[row];
   if ([_set countForObject:option.variable] > 1) {
-    rowView.backgroundColor = [NSColor colorWithDeviceRed:1.0 green:0.95 blue:0.95 alpha:1.0];
+    rowView.backgroundColor = NSColor.gitUpConfigConflictBackgroundColor;
   } else if (option.level != kGCConfigLevel_Local) {
-    rowView.backgroundColor = [NSColor colorWithDeviceRed:0.95 green:1.0 blue:0.95 alpha:1.0];
+    rowView.backgroundColor = NSColor.gitUpConfigGlobalBackgroundColor;
   } else {
-    rowView.backgroundColor = [NSColor whiteColor];
+    rowView.backgroundColor = NSColor.textBackgroundColor;
   }
 }
 
@@ -310,8 +310,7 @@ static NSMutableDictionary* _patternHelp = nil;
 - (void)_promptOption:(GCConfigOption*)option {
   _nameTextField.stringValue = option ? option.variable : @"";
   _valueTextField.stringValue = option ? option.value : @"";
-  _nameTextField.editable = (option == nil);
-  _nameTextField.textColor = option ? [NSColor grayColor] : _valueTextField.textColor;
+  _nameTextField.enabled = (option == nil);
   [self.windowController runModalView:_editView
             withInitialFirstResponder:(option ? _valueTextField : _nameTextField)
             completionHandler:^(BOOL success) {
