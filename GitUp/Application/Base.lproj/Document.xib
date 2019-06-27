@@ -510,7 +510,7 @@ Adjust settings in Show menu</string>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                     <textFieldCell key="cell" lineBreakMode="truncatingMiddle" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="center" title="&lt;REPOSITORY&gt;" usesSingleLineMode="YES" id="IrL-wK-jB6">
                         <font key="font" metaFont="system"/>
-                        <color key="textColor" white="0.0" alpha="0.66000000000000003" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
@@ -519,7 +519,7 @@ Adjust settings in Show menu</string>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                     <textFieldCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="center" title="&lt;INFO&gt;" usesSingleLineMode="YES" id="ueS-Kv-b9C">
                         <font key="font" metaFont="miniSystem"/>
-                        <color key="textColor" white="0.0" alpha="0.5" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
@@ -600,8 +600,8 @@ Adjust settings in Show menu</string>
                 <button toolTip="Show or hide Snapshots" verticalHuggingPriority="750" id="yWu-L8-6Ms">
                     <rect key="frame" x="43" y="3" width="25" height="25"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                    <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="icon_nav_snapshot" imagePosition="only" alignment="center" alternateImage="icon_nav_snapshot_pressed" borderStyle="border" inset="2" id="rrq-JQ-Zyn">
-                        <behavior key="behavior" lightByContents="YES"/>
+                    <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="icon_nav_snapshot" imagePosition="only" alignment="center" borderStyle="border" inset="2" id="rrq-JQ-Zyn">
+                        <behavior key="behavior" pushIn="YES" changeContents="YES" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
                     <connections>
@@ -609,9 +609,9 @@ Adjust settings in Show menu</string>
                     </connections>
                 </button>
                 <button id="FEG-0e-0JW">
-                    <rect key="frame" x="246" y="9" width="12" height="15"/>
+                    <rect key="frame" x="241" y="3" width="16" height="25"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                    <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="icon_nav_min" imagePosition="overlaps" alignment="center" alternateImage="icon_nav_min_pressed" inset="2" id="x0U-ct-UgO">
+                    <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="icon_nav_min" imagePosition="only" alignment="center" inset="2" id="x0U-ct-UgO">
                         <behavior key="behavior" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
@@ -658,7 +658,7 @@ Adjust settings in Show menu</string>
                         <rect key="frame" x="36" y="61" width="396" height="70"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" id="nO1-ig-ikF">
-                            <font key="font" metaFont="smallSystem"/>
+                            <font key="font" metaFont="toolTip"/>
                             <string key="title">GitUp searches only commit messages by default, but it can also search their diffs (text files only). This requires indexing the diffs of all commits in the repository which can take a long time.
 Changing this setting requires re-indexing the repository, which will automatically happen the next time you open it in GitUp.</string>
                             <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
@@ -691,9 +691,7 @@ DQ
         <image name="icon_nav_down" width="16" height="16"/>
         <image name="icon_nav_map" width="15" height="15"/>
         <image name="icon_nav_min" width="12" height="12"/>
-        <image name="icon_nav_min_pressed" width="12" height="12"/>
         <image name="icon_nav_snapshot" width="15" height="15"/>
-        <image name="icon_nav_snapshot_pressed" width="15" height="15"/>
         <image name="icon_nav_stash" width="15" height="15"/>
         <image name="icon_nav_up" width="16" height="16"/>
     </resources>

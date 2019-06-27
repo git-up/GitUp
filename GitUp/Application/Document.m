@@ -750,19 +750,8 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 
     if ([_windowMode isEqualToString:kWindowModeString_Map]) {
       _snapshotsButton.hidden = NO;
-      if (![self validateUserInterfaceItem:(id)_snapshotsButton]) {
-        _snapshotsButton.image = [NSImage imageNamed:@"icon_nav_snapshot_disable"];
-        _snapshotsButton.alternateImage = [NSImage imageNamed:@"icon_nav_snapshot_disable"];
-        _snapshotsButton.enabled = NO;
-      } else if (_snapshotsView.superview) {
-        _snapshotsButton.image = [NSImage imageNamed:@"icon_nav_snapshot_active"];
-        _snapshotsButton.alternateImage = [NSImage imageNamed:@"icon_nav_snapshot_active_pressed"];
-        _snapshotsButton.enabled = YES;
-      } else {
-        _snapshotsButton.image = [NSImage imageNamed:@"icon_nav_snapshot"];
-        _snapshotsButton.alternateImage = [NSImage imageNamed:@"icon_nav_snapshot_pressed"];
-        _snapshotsButton.enabled = YES;
-      }
+      _snapshotsButton.enabled = [self validateUserInterfaceItem:(id)_snapshotsButton];
+      _snapshotsButton.state = _snapshotsView.superview ? NSControlStateValueOn : NSControlStateValueOff;
       _searchField.hidden = NO;
       _searchField.enabled = [self validateUserInterfaceItem:(id)_searchField];
     } else {
