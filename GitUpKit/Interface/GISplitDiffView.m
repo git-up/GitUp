@@ -335,10 +335,10 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
       CGFloat linePosition = (count - 1 - i) * GIDiffViewLineHeight + kTextBottomPadding;
       CGFloat textPosition = linePosition + GIDiffViewLineDescent;
       if (diffLine.type == kDiffLineType_Separator) {
-        [GIDiffViewSeparatorBackgroundColor setFill];
+        [NSColor.gitUpDiffSeparatorBackgroundColor setFill];
         CGContextFillRect(context, CGRectMake(0, linePosition + 1, bounds.size.width, GIDiffViewLineHeight - 1));
 
-        [GIDiffViewSeparatorLineColor setStroke];
+        [NSColor.gridColor setStroke];
         CGContextMoveToPoint(context, 0, linePosition + 0.5);
         CGContextAddLineToPoint(context, bounds.size.width, linePosition + 0.5);
         CGContextStrokePath(context);
@@ -346,7 +346,7 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
         CGContextAddLineToPoint(context, bounds.size.width, linePosition + GIDiffViewLineHeight - 0.5);
         CGContextStrokePath(context);
 
-        [GIDiffViewSeparatorTextColor setFill];
+        [NSColor.tertiaryLabelColor setFill];
         CGContextSetTextPosition(context, kTextLineNumberMargin + 4, textPosition);
         CTLineDraw(leftLine, context);
       } else {
@@ -355,12 +355,12 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
             [selectedColor setFill];
             CGContextFillRect(context, CGRectMake(0, linePosition, offset, GIDiffViewLineHeight));
           } else if (diffLine.type != kDiffLineType_Context) {
-            [GIDiffViewDeletedBackgroundColor setFill];
+            [NSColor.gitUpDiffDeletedTextBackgroundColor setFill];
             CGContextFillRect(context, CGRectMake(0, linePosition, offset, GIDiffViewLineHeight));
 
             CFRange highlighted = diffLine.leftHighlighted;
             if (highlighted.length) {
-              [GIDiffViewDeletedHighlightColor setFill];
+              [NSColor.gitUpDiffDeletedTextHighlightColor setFill];
               CFRange range = CTLineGetStringRange(leftLine);
               CGFloat startX = kTextLineNumberMargin + kTextInsetLeft + round(CTLineGetOffsetForStringIndex(leftLine, range.location + highlighted.location, NULL));
               CGFloat endX = kTextLineNumberMargin + kTextInsetLeft + round(CTLineGetOffsetForStringIndex(leftLine, range.location + highlighted.location + highlighted.length, NULL));
@@ -373,12 +373,12 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
             [selectedColor setFill];
             CGContextFillRect(context, CGRectMake(offset, linePosition, bounds.size.width, GIDiffViewLineHeight));
           } else if (diffLine.type != kDiffLineType_Context) {
-            [GIDiffViewAddedBackgroundColor setFill];
+            [NSColor.gitUpDiffAddedTextBackgroundColor setFill];
             CGContextFillRect(context, CGRectMake(offset, linePosition, bounds.size.width, GIDiffViewLineHeight));
 
             CFRange highlighted = diffLine.rightHighlighted;
             if (highlighted.length) {
-              [GIDiffViewAddedHighlightColor setFill];
+              [NSColor.gitUpDiffAddedTextHighlightColor setFill];
               CFRange range = CTLineGetStringRange(rightLine);
               CGFloat startX = offset + kTextLineNumberMargin + kTextInsetLeft + round(CTLineGetOffsetForStringIndex(rightLine, range.location + highlighted.location, NULL));
               CGFloat endX = offset + kTextLineNumberMargin + kTextInsetLeft + round(CTLineGetOffsetForStringIndex(rightLine, range.location + highlighted.location + highlighted.length, NULL));
@@ -389,7 +389,7 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
 
         if (leftLine) {
           if (!diffLine.leftWrapped) {
-            [GIDiffViewLineNumberColor setFill];
+            [NSColor.tertiaryLabelColor setFill];
             CFAttributedStringRef string = CFAttributedStringCreate(kCFAllocatorDefault, (CFStringRef)(diffLine.leftNumber >= 100000 ? @"9999…" : [NSString stringWithFormat:@"%5lu", diffLine.leftNumber]), GIDiffViewAttributes);
             CTLineRef prefix = CTLineCreateWithAttributedString(string);
             CGContextSetTextPosition(context, 5, textPosition);
@@ -411,13 +411,13 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
             CGContextFillRect(context, CGRectMake(startX, linePosition, endX - startX, GIDiffViewLineHeight));
           }
 
-          [GIDiffViewPlainTextColor set];
+          [NSColor.labelColor set];
           CGContextSetTextPosition(context, kTextLineNumberMargin + kTextInsetLeft, textPosition);
           CTLineDraw(leftLine, context);
         }
         if (rightLine) {
           if (!diffLine.rightWrapped) {
-            [GIDiffViewLineNumberColor setFill];
+            [NSColor.tertiaryLabelColor setFill];
             CFAttributedStringRef string = CFAttributedStringCreate(kCFAllocatorDefault, (CFStringRef)(diffLine.rightNumber >= 100000 ? @"9999…" : [NSString stringWithFormat:@"%5lu", diffLine.rightNumber]), GIDiffViewAttributes);
             CTLineRef prefix = CTLineCreateWithAttributedString(string);
             CGContextSetTextPosition(context, offset + 5, textPosition);
@@ -439,7 +439,7 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
             CGContextFillRect(context, CGRectMake(startX, linePosition, endX - startX, GIDiffViewLineHeight));
           }
 
-          [GIDiffViewPlainTextColor set];
+          [NSColor.labelColor set];
           CGContextSetTextPosition(context, offset + kTextLineNumberMargin + kTextInsetLeft, textPosition);
           CTLineDraw(rightLine, context);
         }
@@ -447,7 +447,7 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
     }
   }
 
-  [GIDiffViewVerticalLineColor setStroke];
+  [NSColor.gridColor setStroke];
   CGContextMoveToPoint(context, kTextLineNumberMargin - 0.5, 0);
   CGContextAddLineToPoint(context, kTextLineNumberMargin - 0.5, bounds.size.height);
   CGContextStrokePath(context);

@@ -19,4 +19,19 @@
 
 @property(class, strong, readonly) NSArray<NSColor*>* gitUpGraphAlternatingBranchColors;
 
+@property(class, strong, readonly) NSColor* gitUpSeparatorColor;
+
+@property(class, strong, readonly) NSColor* gitUpDiffDeletedTextBackgroundColor;
+@property(class, strong, readonly) NSColor* gitUpDiffDeletedTextHighlightColor;
+@property(class, strong, readonly) NSColor* gitUpDiffAddedTextBackgroundColor;
+@property(class, strong, readonly) NSColor* gitUpDiffAddedTextHighlightColor;
+@property(class, strong, readonly) NSColor* gitUpDiffSeparatorBackgroundColor;
+
+@property(class, strong, readonly) NSColor* gitUpDiffConflictBackgroundColor;
+@property(class, strong, readonly) NSColor* gitUpDiffAddedBackgroundColor;
+@property(class, strong, readonly) NSColor* gitUpDiffModifiedBackgroundColor;
+@property(class, strong, readonly) NSColor* gitUpDiffDeletedBackgroundColor;
+@property(class, strong, readonly) NSColor* gitUpDiffRenamedBackgroundColor;
+@property(class, strong, readonly) NSColor* gitUpDiffUntrackedBackgroundColor;
+
 @end

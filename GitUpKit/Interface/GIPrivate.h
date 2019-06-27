@@ -28,17 +28,6 @@ extern CTLineRef GIDiffViewDeletedLine;
 extern CGFloat GIDiffViewLineHeight;
 extern CGFloat GIDiffViewLineDescent;
 
-extern NSColor* GIDiffViewDeletedBackgroundColor;
-extern NSColor* GIDiffViewDeletedHighlightColor;
-extern NSColor* GIDiffViewAddedBackgroundColor;
-extern NSColor* GIDiffViewAddedHighlightColor;
-extern NSColor* GIDiffViewSeparatorBackgroundColor;
-extern NSColor* GIDiffViewSeparatorLineColor;
-extern NSColor* GIDiffViewSeparatorTextColor;
-extern NSColor* GIDiffViewVerticalLineColor;
-extern NSColor* GIDiffViewLineNumberColor;
-extern NSColor* GIDiffViewPlainTextColor;
-
 extern const char* GIDiffViewMissingNewlinePlaceholder;
 
 #endif

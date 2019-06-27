@@ -101,6 +101,19 @@
     }                                                                                       \
   }
 
+IMPLEMENT_NAMED_COLOR(Separator, "separator", 0, 0, 0, 0.2)
+IMPLEMENT_NAMED_COLOR(DiffDeletedTextBackground, "diff/deleted_text_background", 1, 0.9, 0.9, 1)
+IMPLEMENT_NAMED_COLOR(DiffDeletedTextHighlight, "diff/deleted_text_highlight", 1, 0.7, 0.7, 1)
+IMPLEMENT_NAMED_COLOR(DiffAddedTextBackground, "diff/added_text_background", 0.85, 1, 0.85, 1)
+IMPLEMENT_NAMED_COLOR(DiffAddedTextHighlight, "diff/added_text_highlight", 0.7, 1, 0.7, 1)
+IMPLEMENT_NAMED_COLOR(DiffSeparatorBackground, "diff/separator_background", 0.97, 0.97, 0.97, 1)
+IMPLEMENT_NAMED_COLOR(DiffConflictBackground, "diff/conflict_background", 1, 0.59, 0.15, 1)
+IMPLEMENT_NAMED_COLOR(DiffAddedBackground, "diff/added_background", 0.475, 0.687, 1, 1)
+IMPLEMENT_NAMED_COLOR(DiffModifiedBackground, "diff/modified_background", 0.609, 0.798, 0.501, 1)
+IMPLEMENT_NAMED_COLOR(DiffDeletedBackground, "diff/deleted_background", 1, 0.627, 0.63, 1)
+IMPLEMENT_NAMED_COLOR(DiffRenamedBackground, "diff/renamed_background", 0.656, 0.547, 0.759, 1)
+IMPLEMENT_NAMED_COLOR(DiffUntrackedBackground, "diff/untracked_background", 0.75, 0.75, 0.75, 1)
+
 #undef IMPLEMENT_NAMED_COLOR
 
 @end
