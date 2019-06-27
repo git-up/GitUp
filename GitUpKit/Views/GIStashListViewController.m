@@ -83,14 +83,18 @@
   _dropButton.enabled = NO;
 }
 
-- (void)viewWillShow {
+- (void)viewWillAppear {
+  [super viewWillAppear];
+
   XLOG_DEBUG_CHECK(self.repository.stashesEnabled == NO);
   self.repository.stashesEnabled = YES;
 
   [self _reloadStashes];
 }
 
-- (void)viewDidHide {
+- (void)viewDidDisappear {
+  [super viewDidDisappear];
+
   _stashes = nil;
   [_tableView reloadData];
 

@@ -35,26 +35,6 @@
   __unsafe_unretained GIViewController* _viewController;  // This is required since redeclaring a read-only property as "assign" still makes it strong!
 }
 
-- (void)viewWillMoveToWindow:(NSWindow*)newWindow {
-  [super viewWillMoveToWindow:newWindow];
-
-  if (newWindow) {
-    [_viewController viewWillShow];
-  } else {
-    [_viewController viewWillHide];
-  }
-}
-
-- (void)viewDidMoveToWindow {
-  [super viewDidMoveToWindow];
-
-  if (self.window) {
-    [_viewController viewDidShow];
-  } else {
-    [_viewController viewDidHide];
-  }
-}
-
 - (void)resizeSubviewsWithOldSize:(NSSize)oldSize {
   [super resizeSubviewsWithOldSize:oldSize];
 
@@ -300,22 +280,6 @@ static NSView* _PreferredFirstResponder(NSView* containerView) {
   NSView* view = _PreferredFirstResponder(self.view);
   XLOG_DEBUG_CHECK(view);
   return view;
-}
-
-- (void)viewWillShow {
-  ;
-}
-
-- (void)viewDidShow {
-  ;
-}
-
-- (void)viewWillHide {
-  ;
-}
-
-- (void)viewDidHide {
-  ;
 }
 
 - (void)viewDidResize {

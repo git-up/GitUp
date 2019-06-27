@@ -70,8 +70,8 @@
   self.messageTextView.string = @"";
 }
 
-- (void)viewWillShow {
-  [super viewWillShow];
+- (void)viewWillAppear {
+  [super viewWillAppear];
 
   XLOG_DEBUG_CHECK(self.repository.statusMode == kGCLiveRepositoryStatusMode_Disabled);
   self.repository.statusMode = kGCLiveRepositoryStatusMode_Normal;
@@ -82,8 +82,8 @@
   _indexFilesViewController.selectedDelta = _indexStatus.deltas.firstObject;
 }
 
-- (void)viewDidHide {
-  [super viewDidHide];
+- (void)viewDidDisappear {
+  [super viewDidDisappear];
 
   _workdirStatus = nil;
   _indexStatus = nil;

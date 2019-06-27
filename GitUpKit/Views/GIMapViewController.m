@@ -107,7 +107,9 @@ static NSColor* _patternColor = nil;
   _updatePending = YES;
 }
 
-- (void)viewWillShow {
+- (void)viewWillAppear {
+  [super viewWillAppear];
+
   if (_updatePending) {
     [self _reloadMap:NO];
     _updatePending = NO;

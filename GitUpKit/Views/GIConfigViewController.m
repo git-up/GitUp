@@ -119,7 +119,9 @@ static NSMutableDictionary* _patternHelp = nil;
   _valueAttributes = @{NSFontAttributeName : [NSFont systemFontOfSize:fontSize], NSBackgroundColorAttributeName : [NSColor colorWithDeviceRed:1.0 green:1.0 blue:0.0 alpha:0.5]};
 }
 
-- (void)viewWillShow {
+- (void)viewWillAppear {
+  [super viewWillAppear];
+
   [self _reloadConfig];
 }
 
@@ -138,7 +140,9 @@ static NSMutableDictionary* _patternHelp = nil;
   }
 }
 
-- (void)viewDidHide {
+- (void)viewDidDisappear {
+  [super viewDidDisappear];
+
   _config = nil;
   _set = nil;
   [_tableView reloadData];

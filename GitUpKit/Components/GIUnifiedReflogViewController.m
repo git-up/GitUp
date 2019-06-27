@@ -74,7 +74,9 @@ static NSColor* _reachableColor = nil;
   _cachedCellView = [_tableView makeViewWithIdentifier:[_tableView.tableColumns[0] identifier] owner:self];
 }
 
-- (void)viewWillShow {
+- (void)viewWillAppear {
+  [super viewWillAppear];
+
   [self _reloadUnifiedReflog];
 }
 
@@ -109,7 +111,9 @@ static NSColor* _reachableColor = nil;
   }
 }
 
-- (void)viewDidHide {
+- (void)viewDidDisappear {
+  [super viewDidDisappear];
+
   _entries = nil;
   [_tableView reloadData];
 }

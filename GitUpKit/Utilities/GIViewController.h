@@ -44,11 +44,6 @@
 @interface GIViewController (Subclassing)
 @property(nonatomic, readonly) NSView* preferredFirstResponder;  // Default implementation returns first subview that accepts first responder status
 
-- (void)viewWillShow;  // Default implementation does nothing
-- (void)viewDidShow;  // Default implementation does nothing
-- (void)viewWillHide;  // Default implementation does nothing
-- (void)viewDidHide;  // Default implementation does nothing
-
 - (void)viewDidResize;  // Default implementation does nothing
 - (void)viewWillBeginLiveResize;  // Default implementation does nothing
 - (void)viewDidFinishLiveResize;  // Default implementation does nothing
