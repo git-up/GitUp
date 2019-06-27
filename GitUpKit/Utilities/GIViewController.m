@@ -55,15 +55,6 @@
   }
 }
 
-- (void)setViewController:(GIViewController*)viewController {
-  _viewController = viewController;
-  [super setNextResponder:_viewController];
-}
-
-- (void)setNextResponder:(NSResponder*)nextResponder {
-  [_viewController setNextResponder:nextResponder];
-}
-
 - (void)resizeSubviewsWithOldSize:(NSSize)oldSize {
   [super resizeSubviewsWithOldSize:oldSize];
 
