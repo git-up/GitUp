@@ -262,7 +262,7 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
   CGFloat fontSize = _infoTextField2.font.pointSize;
   NSMutableParagraphStyle* style = [[NSMutableParagraphStyle alloc] init];
   style.alignment = NSCenterTextAlignment;
-  _stateAttributes = @{NSParagraphStyleAttributeName : style, NSForegroundColorAttributeName : [NSColor redColor], NSFontAttributeName : [NSFont boldSystemFontOfSize:fontSize]};
+  _stateAttributes = @{NSParagraphStyleAttributeName : style, NSForegroundColorAttributeName : NSColor.systemRedColor, NSFontAttributeName : [NSFont boldSystemFontOfSize:fontSize]};
 
   NSString* frameString = [_repository userInfoForKey:kRepositoryUserInfoKey_MainWindowFrame];
   if (frameString) {
@@ -354,6 +354,7 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
   NSTabViewItem* configItem = [_mainTabView tabViewItemAtIndex:[_mainTabView indexOfTabViewItemWithIdentifier:kWindowModeString_Map_Config]];
   configItem.view = _configViewController.view;
 
+  // This always uses a dark appearance.
   _hiddenWarningView.layer.backgroundColor = [[NSColor colorWithDeviceRed:0.0 green:0.0 blue:0.0 alpha:0.5] CGColor];
   _hiddenWarningView.layer.cornerRadius = 10.0;
 

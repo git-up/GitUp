@@ -73,7 +73,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="1000" height="500"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <customView hidden="YES" id="Zjf-1c-7Wk" customClass="GIColorView">
+                    <customView hidden="YES" appearanceType="aqua" id="Zjf-1c-7Wk" customClass="GIColorView">
                         <rect key="frame" x="0.0" y="450" width="1000" height="50"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <subviews>
@@ -81,7 +81,7 @@
                                 <rect key="frame" x="8" y="8" width="718" height="31"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" controlSize="small" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="left" title="&lt;HELP&gt;" id="de5-iD-6RU">
-                                    <font key="font" metaFont="smallSystem"/>
+                                    <font key="font" metaFont="toolTip"/>
                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
@@ -91,7 +91,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="roundRect" title="Continue" bezelStyle="roundedRect" alignment="center" controlSize="small" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="3Bn-bb-IAI">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="smallSystem"/>
+                                    <font key="font" metaFont="toolTip"/>
                                 </buttonCell>
                                 <connections>
                                     <action selector="dismissHelp:" target="-2" id="6SE-nM-Khn"/>
@@ -102,7 +102,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="roundRect" title="Got It!" bezelStyle="roundedRect" alignment="center" controlSize="small" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="U4W-Zh-R2B">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="smallSystem"/>
+                                    <font key="font" metaFont="toolTip"/>
                                 </buttonCell>
                                 <connections>
                                     <action selector="dismissHelp:" target="-2" id="ZhX-zZ-Pix"/>
@@ -113,7 +113,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="roundRect" title="Learn More…" bezelStyle="roundedRect" alignment="center" controlSize="small" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ux0-pi-0du">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="smallSystem"/>
+                                    <font key="font" metaFont="toolTip"/>
                                 </buttonCell>
                                 <connections>
                                     <action selector="openHelp:" target="-2" id="9JT-bA-cXq"/>
@@ -218,7 +218,7 @@
                                 <font key="font" metaFont="systemBold"/>
                                 <string key="title">Search result hidden from map
 Adjust settings in Show menu</string>
-                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                             </textFieldCell>
                         </textField>
