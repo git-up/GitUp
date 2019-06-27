@@ -24,6 +24,7 @@
 #import "GCRepository+Utilities.h"
 #import "GCHistory+Rewrite.h"
 #import "XLFacilityMacros.h"
+#import "NSBundle+GitUpKit.h"
 
 #define kPersistentViewStateKeyNamespace @"GIMapViewController_"
 
@@ -63,18 +64,12 @@
 @property(nonatomic, weak) IBOutlet NSButton* messageButton;
 @end
 
-static NSColor* _patternColor = nil;
-
 @implementation GIMapViewController {
   BOOL _showsVirtualTips;
   BOOL _hidesTagTips;
   BOOL _hidesRemoteBranchTips;
   BOOL _hidesStaleBranchTips;
   BOOL _updatePending;
-}
-
-+ (void)initialize {
-  _patternColor = [NSColor colorWithPatternImage:[[NSBundle bundleForClass:[GIMapViewController class]] imageForResource:@"background_pattern"]];
 }
 
 - (instancetype)initWithRepository:(GCLiveRepository*)repository {
@@ -89,11 +84,12 @@ static NSColor* _patternColor = nil;
 
 - (void)_setGraphViewBackgroundColors:(BOOL)previewMode {
   if (previewMode) {
-    _graphView.backgroundColor = _patternColor;
+    NSBundle* bundle = NSBundle.gitUpKitBundle;
+    NSImage* patternImage = [bundle imageForResource:@"background_pattern"];
+    _graphScrollView.backgroundColor = [NSColor colorWithPatternImage:patternImage];
   } else {
-    _graphView.backgroundColor = [NSColor whiteColor];
+    _graphScrollView.backgroundColor = NSColor.controlBackgroundColor;
   }
-  _graphScrollView.backgroundColor = _graphView.backgroundColor;  // Required for exposed areas through elasticity
 }
 
 - (void)loadView {
