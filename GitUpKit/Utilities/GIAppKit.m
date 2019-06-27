@@ -159,6 +159,8 @@ static NSColor* _separatorColor = nil;
   self.automaticDataDetectionEnabled = NO;  // Don't trust IB
   self.automaticTextReplacementEnabled = NO;  // Don't trust IB
   self.smartInsertDeleteEnabled = YES;  // Don't trust IB
+  self.textColor = NSColor.textColor;  // Don't trust IB
+  self.backgroundColor = NSColor.textBackgroundColor;  // Don't trust IB
   [self.textContainer replaceLayoutManager:[[GILayoutManager alloc] init]];
 
   [[NSUserDefaults standardUserDefaults] addObserver:self forKeyPath:GICommitMessageViewUserDefaultKey_ShowInvisibleCharacters options:0 context:(__bridge void*)[GICommitMessageView class]];
