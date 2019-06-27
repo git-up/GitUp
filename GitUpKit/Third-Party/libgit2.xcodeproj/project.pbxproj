@@ -1134,7 +1134,7 @@
 		E217485D1B911B5200BE234A /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1000;
+				LastUpgradeCheck = 1020;
 				ORGANIZATIONNAME = "";
 				TargetAttributes = {
 					E2174BD41B91240400BE234A = {
@@ -1550,7 +1550,6 @@
 		E2174BD71B91240400BE234A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
 					GIT_ARCH_64,
@@ -1563,7 +1562,6 @@
 		E2174BD81B91240400BE234A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
 					GIT_ARCH_64,
@@ -1576,7 +1574,6 @@
 		E2174C701B9125C600BE234A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				SDKROOT = iphoneos;
 			};
@@ -1585,7 +1582,6 @@
 		E2174C711B9125C600BE234A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				SDKROOT = iphoneos;
 			};

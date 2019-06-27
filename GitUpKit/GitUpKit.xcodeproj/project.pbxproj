@@ -1249,7 +1249,7 @@
 		E2C338A319F8562F00063D95 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1000;
+				LastUpgradeCheck = 1020;
 				ORGANIZATIONNAME = "";
 				TargetAttributes = {
 					E217531A1B91613300BE234A = {
@@ -1857,10 +1857,6 @@
 				);
 				PRODUCT_NAME = GitUpTests;
 				SDKROOT = macosx;
-				WARNING_CFLAGS = (
-					"$(inherited)",
-					"-Wno-partial-availability",
-				);
 			};
 			name = Debug;
 		};
@@ -1877,10 +1873,6 @@
 				);
 				PRODUCT_NAME = GitUpTests;
 				SDKROOT = macosx;
-				WARNING_CFLAGS = (
-					"$(inherited)",
-					"-Wno-partial-availability",
-				);
 			};
 			name = Release;
 		};

@@ -333,7 +333,7 @@
 		E2C338A319F8562F00063D95 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1000;
+				LastUpgradeCheck = 1020;
 				ORGANIZATIONNAME = "";
 				TargetAttributes = {
 					E21DCAE71B253847006424E8 = {
@@ -485,7 +485,7 @@
 		E21DCAEC1B253847006424E8 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				GCC_DYNAMIC_NO_PIC = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				HEADER_SEARCH_PATHS = "../GitUpKit/Third-Party/libgit2/include";
 				OTHER_LDFLAGS = (
 					"$(BUILD_DIR)/$(CONFIGURATION)/libgit2.a",
@@ -500,7 +500,7 @@
 		E21DCAED1B253847006424E8 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				GCC_DYNAMIC_NO_PIC = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				HEADER_SEARCH_PATHS = "../GitUpKit/Third-Party/libgit2/include";
 				OTHER_LDFLAGS = (
 					"$(BUILD_DIR)/$(CONFIGURATION)/libgit2.a",
@@ -536,10 +536,8 @@
 				BUNDLE_VERSION_STRING = 1.0.11;
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/Third-Party";
-				GCC_DYNAMIC_NO_PIC = YES;
 				INFOPLIST_FILE = Application/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				OTHER_LDFLAGS = "-Wl,-rpath,@loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "co.gitup.mac-debug";
 				PRODUCT_NAME = GitUp;
 			};
@@ -553,10 +551,8 @@
 				BUNDLE_VERSION_STRING = 1.0.11;
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/Third-Party";
-				GCC_DYNAMIC_NO_PIC = YES;
 				INFOPLIST_FILE = Application/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				OTHER_LDFLAGS = "-Wl,-rpath,@loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = co.gitup.mac;
 				PRODUCT_NAME = GitUp;
 			};
