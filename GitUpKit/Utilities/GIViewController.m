@@ -237,16 +237,14 @@
   if (format) {
     va_list arguments;
     va_start(arguments, format);
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wformat-nonliteral"
     message = [[NSString alloc] initWithFormat:format arguments:arguments];
-#pragma clang diagnostic pop
     va_end(arguments);
   }
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wformat-security"
-  NSAlert* alert = [NSAlert alertWithMessageText:title defaultButton:NSLocalizedString(@"OK", nil) alternateButton:nil otherButton:nil informativeTextWithFormat:(message ? message : @"")];
-#pragma clang diagnostic pop
+
+  NSAlert* alert = [[NSAlert alloc] init];
+  alert.messageText = title;
+  alert.informativeText = (message ? message : @"");
+  [alert addButtonWithTitle:NSLocalizedString(@"OK", nil)];
   alert.type = type;
   [alert beginSheetModalForWindow:self.view.window completionHandler:NULL];
 }

@@ -110,7 +110,7 @@ static const void* _associatedObjectKey = &_associatedObjectKey;
   va_start(arguments, command);
   NSString* result = [self _runGitCLTWithRepository:repository command:command arguments:arguments];
   va_end(arguments);
-  XCTAssertTrue([result rangeOfString:string].location != NSNotFound);  // -containsString: doesn't exist pre-10.10
+  XCTAssertTrue([result containsString:string]);
 }
 
 - (void)assertGitCLTOutputEndsWithString:(NSString*)string withRepository:(GCRepository*)repository command:(NSString*)command, ... {

@@ -871,17 +871,18 @@ static NSColor* _patternColor = nil;
   } else {
     GCHistoryRemoteBranch* branch = commit.remoteBranches.firstObject;
     if (branch && ![self.repository.history historyLocalBranchWithName:branch.branchName]) {
-      NSAlert* alert = [NSAlert alertWithMessageText:NSLocalizedString(@"Do you want to just checkout the commit or also create a new local branch?", nil)
-                                       defaultButton:NSLocalizedString(@"Create Local Branch", nil)
-                                     alternateButton:NSLocalizedString(@"Cancel", nil)
-                                         otherButton:NSLocalizedString(@"Checkout Commit", nil)
-                           informativeTextWithFormat:NSLocalizedString(@"The selected commit is also the tip of the remote branch \"%@\".", nil), branch.name];
+      NSAlert* alert = [[NSAlert alloc] init];
+      alert.messageText = NSLocalizedString(@"Do you want to just checkout the commit or also create a new local branch?", nil);
+      alert.informativeText = [NSString stringWithFormat:NSLocalizedString(@"The selected commit is also the tip of the remote branch \"%@\".", nil), branch.name];
+      [alert addButtonWithTitle:NSLocalizedString(@"Create Local Branch", nil)];
+      [alert addButtonWithTitle:NSLocalizedString(@"Checkout Commit", nil)];
+      [alert addButtonWithTitle:NSLocalizedString(@"Cancel", nil)];
       alert.type = kGIAlertType_Note;
       [self presentAlert:alert
           completionHandler:^(NSInteger returnCode) {
-            if (returnCode == NSAlertDefaultReturn) {
+            if (returnCode == NSAlertFirstButtonReturn) {
               [self checkoutRemoteBranch:branch];
-            } else if (returnCode == NSAlertOtherReturn) {
+            } else if (returnCode == NSAlertSecondButtonReturn) {
               [self checkoutCommit:target];
             }
           }];
@@ -940,17 +941,18 @@ static NSColor* _patternColor = nil;
   GCHistoryCommit* commit = _graphView.selectedCommit;
   GCHistoryLocalBranch* localBranch = commit.localBranches.firstObject;
   if (localBranch) {
-    NSAlert* alert = [NSAlert alertWithMessageText:NSLocalizedString(@"Do you want to delete the commit or the local branch?", nil)
-                                     defaultButton:NSLocalizedString(@"Delete Local Branch", nil)
-                                   alternateButton:NSLocalizedString(@"Cancel", nil)
-                                       otherButton:NSLocalizedString(@"Delete Commit", nil)
-                         informativeTextWithFormat:NSLocalizedString(@"The selected commit is also the tip of the local branch \"%@\".", nil), localBranch.name];
+    NSAlert* alert = [[NSAlert alloc] init];
+    alert.messageText = NSLocalizedString(@"Do you want to delete the commit or the local branch?", nil);
+    alert.informativeText = [NSString stringWithFormat:NSLocalizedString(@"The selected commit is also the tip of the local branch \"%@\".", nil), localBranch.name];
+    [alert addButtonWithTitle:NSLocalizedString(@"Delete Local Branch", nil)];
+    [alert addButtonWithTitle:NSLocalizedString(@"Delete Commit", nil)];
+    [alert addButtonWithTitle:NSLocalizedString(@"Cancel", nil)];
     alert.type = kGIAlertType_Note;
     [self presentAlert:alert
         completionHandler:^(NSInteger returnCode) {
-          if (returnCode == NSAlertDefaultReturn) {
+          if (returnCode == NSAlertFirstButtonReturn) {
             [self deleteLocalBranch:localBranch];
-          } else if (returnCode == NSAlertOtherReturn) {
+          } else if (returnCode == NSAlertSecondButtonReturn) {
             [self deleteCommit:commit];
           }
         }];

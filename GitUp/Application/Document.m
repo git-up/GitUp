@@ -52,10 +52,6 @@
 
 #define kMaxProgressRefreshRate 10.0  // Hz
 
-@interface NSWindow (OSX_10_10)
-- (void)setTitleVisibility:(NSWindowTitleVisibility)visibility;
-@end
-
 @interface Document () <NSToolbarDelegate, NSTextFieldDelegate, GCLiveRepositoryDelegate, GIWindowControllerDelegate, GIMapViewControllerDelegate, GISnapshotListViewControllerDelegate, GIUnifiedReflogViewControllerDelegate, GICommitListViewControllerDelegate, GICommitRewriterViewControllerDelegate, GICommitSplitterViewControllerDelegate, GIConflictResolverViewControllerDelegate>
 @end
 
@@ -105,7 +101,6 @@ static inline WindowModeID _WindowModeIDFromString(NSString* mode) {
   GIStashListViewController* _stashListViewController;
   GIConfigViewController* _configViewController;
   GCLiveRepository* _repository;
-  BOOL _unifiedToolbar;
   NSNumberFormatter* _numberFormatter;
   NSDateFormatter* _dateFormatter;
   CALayer* _fixedSnapshotLayer;
@@ -155,7 +150,6 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
 
 - (instancetype)init {
   if ((self = [super init])) {
-    _unifiedToolbar = [NSWindow instancesRespondToSelector:@selector(setTitleVisibility:)];  // OS X 10.10 and later
     _numberFormatter = [[NSNumberFormatter alloc] init];
     _numberFormatter.locale = [NSLocale localeWithLocaleIdentifier:@"en_US"];
     _numberFormatter.numberStyle = NSNumberFormatterDecimalStyle;
@@ -284,9 +278,7 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
   }
   _mainWindow.backgroundColor = [NSColor whiteColor];
   [_mainWindow setToolbar:_toolbar];
-  if (_unifiedToolbar) {
-    [_mainWindow setTitleVisibility:NSWindowTitleHidden];
-  }
+  _mainWindow.titleVisibility = NSWindowTitleHidden;
   _contentView.wantsLayer = YES;
   _leftView.wantsLayer = YES;
   _titleView.wantsLayer = YES;
@@ -404,11 +396,10 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
   }
 
   if ([error.domain isEqualToString:GCErrorDomain] && (error.code == -1) && [error.localizedDescription isEqualToString:@"authentication required but no callback set"]) {  // TODO: Avoid hardcoding libgit2 error
-    NSAlert* alert = [NSAlert alertWithMessageText:NSLocalizedString(@"Unable to authenticate with remote!", nil)
-                                     defaultButton:NSLocalizedString(@"OK", nil)
-                                   alternateButton:nil
-                                       otherButton:nil
-                         informativeTextWithFormat:NSLocalizedString(@"If using an SSH remote, make sure you have added your key to the ssh-agent, then try again.", nil)];
+    NSAlert* alert = [[NSAlert alloc] init];
+    alert.messageText = NSLocalizedString(@"Unable to authenticate with remote!", nil);
+    alert.informativeText = NSLocalizedString(@"If using an SSH remote, make sure you have added your key to the ssh-agent, then try again.", nil);
+    [alert addButtonWithTitle:NSLocalizedString(@"OK", nil)];
     alert.type = kGIAlertType_Stop;
     [alert beginSheetModalForWindow:_mainWindow completionHandler:NULL];
     return NO;
@@ -557,15 +548,19 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
     NSError* error;
     if (![_repository checkAllSubmodulesInitialized:YES error:&error]) {
       if ([error.domain isEqualToString:GCErrorDomain] && (error.code == kGCErrorCode_SubmoduleUninitialized)) {
-        NSAlert* alert = [NSAlert alertWithMessageText:NSLocalizedString(@"Do you want to initialize submodules?", nil) defaultButton:NSLocalizedString(@"Initialize", nil) alternateButton:NSLocalizedString(@"Cancel", nil) otherButton:nil informativeTextWithFormat:@"One or more submodules in this repository are uninitialized."];
+        NSAlert* alert = [[NSAlert alloc] init];
+        alert.messageText = NSLocalizedString(@"Do you want to initialize submodules?", nil);
+        alert.informativeText = NSLocalizedString(@"One or more submodules in this repository are uninitialized.", nil);
+        [alert addButtonWithTitle:NSLocalizedString(@"Initialize", nil)];
+        [alert addButtonWithTitle:NSLocalizedString(@"Cancel", nil)];
         alert.type = kGIAlertType_Caution;
         alert.showsSuppressionButton = YES;
         [alert beginSheetModalForWindow:_mainWindow
-                      completionHandler:^(NSInteger returnCode) {
+                      completionHandler:^(NSModalResponse returnCode) {
                         if (alert.suppressionButton.state) {
                           [_repository setUserInfo:@(YES) forKey:kRepositoryUserInfoKey_SkipSubmoduleCheck];
                         }
-                        if (returnCode == NSAlertDefaultReturn) {
+                        if (returnCode == NSAlertFirstButtonReturn) {
                           [self _initializeSubmodules];
                         }
                       }];
@@ -878,13 +873,13 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
     return NO;
   }
   if (_indexing) {
-    NSAlert* alert = [NSAlert alertWithMessageText:NSLocalizedString(@"Are you sure you want to close the repository?", nil)
-                                     defaultButton:NSLocalizedString(@"Close", nil)
-                                   alternateButton:NSLocalizedString(@"Cancel", nil)
-                                       otherButton:nil
-                         informativeTextWithFormat:NSLocalizedString(@"The repository \"%@\" is still being prepared for search. This can take up to a few minutes for large repositories.", nil), self.displayName];
+    NSAlert* alert = [[NSAlert alloc] init];
+    alert.messageText = NSLocalizedString(@"Are you sure you want to close the repository?", nil);
+    alert.informativeText = [NSString stringWithFormat:NSLocalizedString(@"The repository \"%@\" is still being prepared for search. This can take up to a few minutes for large repositories.", nil), self.displayName];
+    [alert addButtonWithTitle:NSLocalizedString(@"Close", nil)];
+    [alert addButtonWithTitle:NSLocalizedString(@"Cancel", nil)];
     alert.type = kGIAlertType_Caution;
-    if ([alert runModal] == NSAlertAlternateReturn) {
+    if ([alert runModal] == NSAlertFirstButtonReturn) {
       return NO;
     }
     _abortIndexing = YES;
@@ -1176,10 +1171,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 }
 
 - (NSArray*)toolbarDefaultItemIdentifiers:(NSToolbar*)toolbar {
-  if (_unifiedToolbar) {
-    return @[ kToolbarItem_Left, kToolbarItem_Title, kToolbarItem_Right ];
-  }
-  return @[ kToolbarItem_Left, NSToolbarFlexibleSpaceItemIdentifier, kToolbarItem_Right ];
+  return @[ kToolbarItem_Left, kToolbarItem_Title, kToolbarItem_Right ];
 }
 
 - (NSArray*)toolbarAllowedItemIdentifiers:(NSToolbar*)toolbar {
@@ -1992,7 +1984,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 - (IBAction)editSettings:(id)sender {
   _indexDiffsButton.state = [[_repository userInfoForKey:kRepositoryUserInfoKey_IndexDiffs] boolValue];
 
-  [NSApp beginSheet:_settingsWindow modalForWindow:_mainWindow modalDelegate:nil didEndSelector:NULL contextInfo:NULL];
+  [_mainWindow beginSheet:_settingsWindow completionHandler:NULL];
 }
 
 - (IBAction)saveSettings:(id)sender {
