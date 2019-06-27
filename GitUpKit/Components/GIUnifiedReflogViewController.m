@@ -40,20 +40,10 @@
 @implementation GIReflogCellView
 @end
 
-static NSColor* _missingColor = nil;
-static NSColor* _unreachableColor = nil;
-static NSColor* _reachableColor = nil;
-
 @implementation GIUnifiedReflogViewController {
   NSArray* _entries;
   NSDateFormatter* _dateFormatter;
   GIReflogCellView* _cachedCellView;
-}
-
-+ (void)initialize {
-  _missingColor = [NSColor colorWithDeviceRed:1.0 green:0.0 blue:0.0 alpha:1.0];
-  _unreachableColor = [NSColor colorWithDeviceRed:0.0 green:0.0 blue:0.0 alpha:1.0];
-  _reachableColor = [NSColor colorWithDeviceRed:0.7 green:0.7 blue:0.7 alpha:1.0];
 }
 
 - (instancetype)initWithRepository:(GCLiveRepository*)repository {
@@ -209,14 +199,14 @@ static NSString* _StringFromActions(GCReflogActions actions) {
   if (commit) {
     if ([self.repository.history historyCommitForCommit:entry.toCommit]) {
       view.mode = 1;
-      color = _reachableColor;
+      color = NSColor.secondaryLabelColor;
     } else {
       view.mode = 0;
-      color = _unreachableColor;
+      color = NSColor.labelColor;
     }
   } else {
     view.mode = -1;
-    color = _missingColor;
+    color = NSColor.systemRedColor;
   }
   view.dateTextField.stringValue = [_dateFormatter stringFromDate:entry.date];
   view.dateTextField.textColor = color;

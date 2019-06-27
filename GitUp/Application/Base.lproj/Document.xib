@@ -373,11 +373,11 @@ Adjust settings in Show menu</string>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
                 </customView>
                 <button verticalHuggingPriority="750" id="bvP-z4-n9x">
-                    <rect key="frame" x="91" y="10" width="80" height="27"/>
+                    <rect key="frame" x="90" y="12" width="80" height="23"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <buttonCell key="cell" type="bevel" title="Done" bezelStyle="regularSquare" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="QV1-K4-raG">
+                    <buttonCell key="cell" type="roundTextured" title="Done" bezelStyle="texturedRounded" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="QV1-K4-raG">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="titleBar" size="12"/>
+                        <font key="font" metaFont="system"/>
                     </buttonCell>
                     <connections>
                         <action selector="toggleTags:" target="-2" id="eYy-3x-jbj"/>
@@ -403,11 +403,11 @@ Adjust settings in Show menu</string>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
                 </customView>
                 <button verticalHuggingPriority="750" id="6Ni-2N-Ux7">
-                    <rect key="frame" x="91" y="10" width="80" height="27"/>
+                    <rect key="frame" x="90" y="12" width="80" height="23"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <buttonCell key="cell" type="bevel" title="Done" bezelStyle="regularSquare" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="G4D-l9-GAh">
+                    <buttonCell key="cell" type="roundTextured" title="Done" bezelStyle="texturedRounded" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="G4D-l9-GAh">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="titleBar" size="12"/>
+                        <font key="font" metaFont="system"/>
                     </buttonCell>
                     <connections>
                         <action selector="toggleAncestors:" target="-2" id="cRN-q3-d3h"/>
@@ -435,11 +435,11 @@ Adjust settings in Show menu</string>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
                 </customView>
                 <button verticalHuggingPriority="750" id="rOD-bh-eJs">
-                    <rect key="frame" x="91" y="10" width="80" height="27"/>
+                    <rect key="frame" x="90" y="12" width="80" height="23"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <buttonCell key="cell" type="bevel" title="Done" bezelStyle="regularSquare" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="mu6-y9-mEl">
+                    <buttonCell key="cell" type="roundTextured" title="Done" bezelStyle="texturedRounded" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="mu6-y9-mEl">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="controlContent"/>
+                        <font key="font" metaFont="system"/>
                     </buttonCell>
                     <connections>
                         <action selector="toggleSnapshots:" target="-2" id="xEj-EP-Pu2"/>
@@ -465,11 +465,11 @@ Adjust settings in Show menu</string>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
                 </customView>
                 <button verticalHuggingPriority="750" id="l3F-kQ-tsG">
-                    <rect key="frame" x="91" y="10" width="80" height="27"/>
+                    <rect key="frame" x="90" y="12" width="80" height="23"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <buttonCell key="cell" type="bevel" title="Done" bezelStyle="regularSquare" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Vb7-E2-czh">
+                    <buttonCell key="cell" type="roundTextured" title="Done" bezelStyle="texturedRounded" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Vb7-E2-czh">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="controlContent"/>
+                        <font key="font" metaFont="system"/>
                     </buttonCell>
                     <connections>
                         <action selector="toggleReflog:" target="-2" id="iy2-Rc-GIe"/>

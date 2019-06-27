@@ -21,6 +21,7 @@
 
 #import "GIAppKit.h"
 #import "GIConstants.h"
+#import "NSColor+GINamedColors.h"
 
 #import "XLFacilityMacros.h"
 
@@ -35,7 +36,6 @@ NSString* const GICommitMessageViewUserDefaultKey_ShowMargins = @"GICommitMessag
 NSString* const GICommitMessageViewUserDefaultKey_EnableSpellChecking = @"GICommitMessageViewUserDefaultKey_EnableSpellChecking";
 
 static const void* _associatedObjectCommitKey = &_associatedObjectCommitKey;
-static NSColor* _separatorColor = nil;
 
 @implementation NSMutableAttributedString (GIAppKit)
 
@@ -182,7 +182,7 @@ static NSColor* _separatorColor = nil;
     CGFloat x1 = floor(offset + kSummaryMaxWidth * charWidth) + 0.5;
     const CGFloat pattern1[] = {2, 4};
     CGContextSetLineDash(context, 0, pattern1, 2);
-    CGContextSetRGBStrokeColor(context, 0.33, 0.33, 0.33, 0.2);
+    CGContextSetStrokeColorWithColor(context, NSColor.tertiaryLabelColor.CGColor);
     CGContextMoveToPoint(context, x1, 0);
     CGContextAddLineToPoint(context, x1, bounds.size.height);
     CGContextStrokePath(context);
@@ -190,7 +190,7 @@ static NSColor* _separatorColor = nil;
     CGFloat x2 = floor(offset + kBodyMaxWidth * charWidth) + 0.5;
     const CGFloat pattern2[] = {4, 2};
     CGContextSetLineDash(context, 0, pattern2, 2);
-    CGContextSetRGBStrokeColor(context, 0.33, 0.33, 0.33, 0.2);
+    CGContextSetStrokeColorWithColor(context, NSColor.tertiaryLabelColor.CGColor);
     CGContextMoveToPoint(context, x2, 0);
     CGContextAddLineToPoint(context, x2, bounds.size.height);
     CGContextStrokePath(context);
@@ -227,10 +227,6 @@ static NSColor* _separatorColor = nil;
 
 @implementation GITableCellView
 
-+ (void)initialize {
-  _separatorColor = [NSColor colorWithDeviceRed:0.9 green:0.9 blue:0.9 alpha:1.0];
-}
-
 - (void)saveTextFieldColors {
   for (NSView* view in self.subviews) {
     if ([view isKindOfClass:[NSTextField class]]) {
@@ -263,7 +259,7 @@ static NSColor* _separatorColor = nil;
   NSRect bounds = self.bounds;
   CGContextRef context = [[NSGraphicsContext currentContext] graphicsPort];
 
-  [_separatorColor setStroke];
+  [NSColor.gitUpSeparatorColor setStroke];
   CGContextMoveToPoint(context, 0, 0.5);
   CGContextAddLineToPoint(context, bounds.size.width, 0.5);
   CGContextStrokePath(context);
