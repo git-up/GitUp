@@ -173,7 +173,7 @@
 			};
 			buildConfigurationList = E267E27A1B84EF1700BAB377 /* Build configuration list for PBXProject "GitDown" */;
 			compatibilityVersion = "Xcode 8.0";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,

@@ -1162,9 +1162,10 @@
 			};
 			buildConfigurationList = E21748601B911B5200BE234A /* Build configuration list for PBXProject "libgit2" */;
 			compatibilityVersion = "Xcode 8.0";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				Base,
 				en,
 			);
 			mainGroup = E217485C1B911B5200BE234A;

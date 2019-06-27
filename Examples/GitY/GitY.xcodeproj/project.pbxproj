@@ -183,7 +183,7 @@
 			};
 			buildConfigurationList = E2DBF93E1B879511006B292E /* Build configuration list for PBXProject "GitY" */;
 			compatibilityVersion = "Xcode 8.0";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
