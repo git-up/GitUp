@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13771" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13771"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -62,7 +62,7 @@
                 <outlet property="window" destination="xOd-HO-29H" id="JIz-fz-R2o"/>
             </connections>
         </customObject>
-        <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="xOd-HO-29H" userLabel="Main Window" customClass="GIWindow">
+        <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="xOd-HO-29H" userLabel="Main Window" customClass="GIWindow">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowCollectionBehavior key="collectionBehavior" fullScreenPrimary="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
@@ -556,19 +556,19 @@ Adjust settings in Show menu</string>
                         <action selector="selectPreviousCommit:" target="-2" id="cHX-Hx-4Op"/>
                     </connections>
                 </button>
-                <segmentedControl toolTip="Select view" verticalHuggingPriority="750" misplaced="YES" id="RvM-Rz-Je8">
+                <segmentedControl verticalHuggingPriority="750" id="RvM-Rz-Je8">
                     <rect key="frame" x="3" y="3" width="110" height="25"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <segmentedCell key="cell" borderStyle="border" alignment="left" style="texturedSquare" trackingMode="selectOne" id="vbd-3d-MTF">
                         <font key="font" metaFont="system"/>
                         <segments>
-                            <segment image="icon_nav_map" imageScaling="none" width="34">
+                            <segment toolTip="Map View" image="icon_nav_map" imageScaling="none" width="34">
                                 <nil key="label"/>
                             </segment>
-                            <segment image="icon_nav_commit" imageScaling="none" width="34" tag="1">
+                            <segment toolTip="Commit View" image="icon_nav_commit" imageScaling="none" width="34" tag="1">
                                 <nil key="label"/>
                             </segment>
-                            <segment image="icon_nav_stash" imageScaling="none" width="34" tag="2">
+                            <segment toolTip="Stashes View" image="icon_nav_stash" imageScaling="none" width="34" tag="2">
                                 <nil key="label"/>
                             </segment>
                         </segments>
@@ -580,7 +580,7 @@ Adjust settings in Show menu</string>
             </subviews>
             <point key="canvasLocation" x="469" y="496"/>
         </customView>
-        <customView misplaced="YES" id="kfr-yg-mn6" userLabel="Right View" customClass="ToolbarItemWrapperView">
+        <customView id="kfr-yg-mn6" userLabel="Right View" customClass="ToolbarItemWrapperView">
             <rect key="frame" x="0.0" y="0.0" width="260" height="32"/>
             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
             <subviews>
@@ -637,7 +637,7 @@ Adjust settings in Show menu</string>
             </subviews>
             <point key="canvasLocation" x="960" y="1327.5"/>
         </customView>
-        <window allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="F4T-LV-HgR" userLabel="Settings Window">
+        <window allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="F4T-LV-HgR" userLabel="Settings Window">
             <windowStyleMask key="styleMask" titled="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="131" y="158" width="450" height="173"/>
