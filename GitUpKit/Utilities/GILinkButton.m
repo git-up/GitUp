@@ -19,16 +19,9 @@
 
 #import "GILinkButton.h"
 
-@interface GILinkButton ()
-@property(nonatomic, assign) id target;
-@property(nonatomic) SEL action;
-@end
-
 @implementation GILinkButton {
   BOOL _highlighted;
 }
-
-@synthesize target, action;  // Required for pre-10.10
 
 - (void)_initialize {
   _textAlignment = NSCenterTextAlignment;

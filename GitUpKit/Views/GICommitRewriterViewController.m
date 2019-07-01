@@ -75,9 +75,9 @@
   [_filesView replaceWithView:_diffFilesViewController.view];
 }
 
-- (void)viewWillShow {
+- (void)viewWillAppear {
   XLOG_DEBUG_CHECK(_targetCommit != nil);
-  [super viewWillShow];
+  [super viewWillAppear];
 
   XLOG_DEBUG_CHECK(self.repository.statusMode == kGCLiveRepositoryStatusMode_Disabled);
   self.repository.statusMode = kGCLiveRepositoryStatusMode_Unified;
@@ -87,8 +87,8 @@
   [self _reloadContents];
 }
 
-- (void)viewDidHide {
-  [super viewDidHide];
+- (void)viewDidDisappear {
+  [super viewDidDisappear];
 
   _unifiedStatus = nil;
 

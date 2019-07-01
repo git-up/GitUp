@@ -95,7 +95,7 @@
 		E21753831B91635800BE234A /* GCRepository+Index.m in Sources */ = {isa = PBXBuildFile; fileRef = E2790D461ACF12E200965A98 /* GCRepository+Index.m */; };
 		E21753841B91635800BE234A /* GCRepository+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = E218A58D1A56706600DFF1DF /* GCRepository+Utilities.m */; };
 		E21753851B91636D00BE234A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2C338D819F85C3400063D95 /* Foundation.framework */; };
-		E217538E1B9167C500BE234A /* libgit2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E21752F61B914EC000BE234A /* libgit2.a */; };
+		E217538E1B9167C500BE234A /* libgit2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E21752F81B914EC000BE234A /* libgit2.a */; };
 		E217538F1B9167F500BE234A /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E2C3394419F85D4B00063D95 /* libz.dylib */; };
 		E21753901B9167F500BE234A /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E2C3393E19F85D2A00063D95 /* libiconv.dylib */; };
 		E21753911B91684300BE234A /* XLASLLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = E267E2AE1B84F27800BAB377 /* XLASLLogger.m */; };
@@ -444,10 +444,10 @@
 		E21A88F21A9471B300255AC3 /* GIPrivate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GIPrivate.m; sourceTree = "<group>"; };
 		E21A88F51A97172D00255AC3 /* GIUnifiedReflogViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GIUnifiedReflogViewController.h; sourceTree = "<group>"; };
 		E21A88F61A97172D00255AC3 /* GIUnifiedReflogViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GIUnifiedReflogViewController.m; sourceTree = "<group>"; };
-		E21A88F91A97173300255AC3 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/GIUnifiedReflogViewController.xib; sourceTree = "<group>"; };
+		E21A88F91A97173300255AC3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/GIUnifiedReflogViewController.xib; sourceTree = "<group>"; };
 		E21A88FB1A97A67900255AC3 /* GISnapshotListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GISnapshotListViewController.h; sourceTree = "<group>"; };
 		E21A88FC1A97A67900255AC3 /* GISnapshotListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GISnapshotListViewController.m; sourceTree = "<group>"; };
-		E21A88FF1A97A67E00255AC3 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/GISnapshotListViewController.xib; sourceTree = "<group>"; };
+		E21A88FF1A97A67E00255AC3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/GISnapshotListViewController.xib; sourceTree = "<group>"; };
 		E22941D31AC11E31000A83AF /* GIAppKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GIAppKit.h; sourceTree = "<group>"; };
 		E22941D41AC11E31000A83AF /* GIAppKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GIAppKit.m; sourceTree = "<group>"; };
 		E22941D51AC11E31000A83AF /* GIModalView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GIModalView.h; sourceTree = "<group>"; };
@@ -460,14 +460,14 @@
 		E22941E11AC11E79000A83AF /* Utilities.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Utilities.xcassets; sourceTree = "<group>"; };
 		E22941E31AC11EBB000A83AF /* GILinkButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GILinkButton.h; sourceTree = "<group>"; };
 		E22941E41AC11EBB000A83AF /* GILinkButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GILinkButton.m; sourceTree = "<group>"; };
-		E22941E81AC11F56000A83AF /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/GIAdvancedCommitViewController.xib; sourceTree = "<group>"; };
+		E22941E81AC11F56000A83AF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/GIAdvancedCommitViewController.xib; sourceTree = "<group>"; };
 		E22941EA1AC11F56000A83AF /* en */ = {isa = PBXFileReference; lastKnownFileType = text; name = en; path = "en.lproj/GIConfigViewController-Help.txt"; sourceTree = "<group>"; };
-		E22941EC1AC11F56000A83AF /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/GIConfigViewController.xib; sourceTree = "<group>"; };
-		E22941EE1AC11F56000A83AF /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/GIDiffViewController.xib; sourceTree = "<group>"; };
-		E22941F01AC11F56000A83AF /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/GIMapViewController.xib; sourceTree = "<group>"; };
-		E22941F21AC11F56000A83AF /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/GIQuickViewController.xib; sourceTree = "<group>"; };
-		E22941F41AC11F56000A83AF /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/GISimpleCommitViewController.xib; sourceTree = "<group>"; };
-		E22941F61AC11F56000A83AF /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/GIStashListViewController.xib; sourceTree = "<group>"; };
+		E22941EC1AC11F56000A83AF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/GIConfigViewController.xib; sourceTree = "<group>"; };
+		E22941EE1AC11F56000A83AF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/GIDiffViewController.xib; sourceTree = "<group>"; };
+		E22941F01AC11F56000A83AF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/GIMapViewController.xib; sourceTree = "<group>"; };
+		E22941F21AC11F56000A83AF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/GIQuickViewController.xib; sourceTree = "<group>"; };
+		E22941F41AC11F56000A83AF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/GISimpleCommitViewController.xib; sourceTree = "<group>"; };
+		E22941F61AC11F56000A83AF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/GIStashListViewController.xib; sourceTree = "<group>"; };
 		E22941F71AC11F56000A83AF /* GIAdvancedCommitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GIAdvancedCommitViewController.h; sourceTree = "<group>"; };
 		E22941F81AC11F56000A83AF /* GIAdvancedCommitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GIAdvancedCommitViewController.m; sourceTree = "<group>"; };
 		E22941F91AC11F56000A83AF /* GICommitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GICommitViewController.h; sourceTree = "<group>"; };
@@ -487,8 +487,8 @@
 		E22942071AC11F56000A83AF /* GIStashListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GIStashListViewController.h; sourceTree = "<group>"; };
 		E22942081AC11F56000A83AF /* GIStashListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GIStashListViewController.m; sourceTree = "<group>"; };
 		E229421A1AC11FF6000A83AF /* Views.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Views.xcassets; sourceTree = "<group>"; };
-		E229421D1AC120A8000A83AF /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/GICommitRewriterViewController.xib; sourceTree = "<group>"; };
-		E229421F1AC120A8000A83AF /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/GICommitSplitterViewController.xib; sourceTree = "<group>"; };
+		E229421D1AC120A8000A83AF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/GICommitRewriterViewController.xib; sourceTree = "<group>"; };
+		E229421F1AC120A8000A83AF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/GICommitSplitterViewController.xib; sourceTree = "<group>"; };
 		E22942221AC12145000A83AF /* GICommitRewriterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GICommitRewriterViewController.h; sourceTree = "<group>"; };
 		E22942231AC12145000A83AF /* GICommitRewriterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GICommitRewriterViewController.m; sourceTree = "<group>"; };
 		E22942251AC12E5C000A83AF /* GIColorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GIColorView.h; sourceTree = "<group>"; };
@@ -496,7 +496,7 @@
 		E22942291AC2160E000A83AF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Reasons.strings; sourceTree = "<group>"; };
 		E229D8F61ACF313E00D5F0AC /* GICommitSplitterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GICommitSplitterViewController.h; sourceTree = "<group>"; };
 		E229D8F71ACF313E00D5F0AC /* GICommitSplitterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GICommitSplitterViewController.m; sourceTree = "<group>"; };
-		E230DEE91AA11CE9006EE09F /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/GICommitListViewController.xib; sourceTree = "<group>"; };
+		E230DEE91AA11CE9006EE09F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/GICommitListViewController.xib; sourceTree = "<group>"; };
 		E230DEEB1AA11CF7006EE09F /* GICommitListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GICommitListViewController.h; sourceTree = "<group>"; };
 		E230DEEC1AA11CF7006EE09F /* GICommitListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GICommitListViewController.m; sourceTree = "<group>"; };
 		E23186031B139CB900A93CCF /* GIConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GIConstants.h; sourceTree = "<group>"; };
@@ -586,7 +586,7 @@
 		E2BDA06B1AD5AF2F00E69729 /* GIViewController+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GIViewController+Utilities.m"; sourceTree = "<group>"; };
 		E2BDA0701AD5B97B00E69729 /* GIConflictResolverViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GIConflictResolverViewController.h; sourceTree = "<group>"; };
 		E2BDA0711AD5B97B00E69729 /* GIConflictResolverViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GIConflictResolverViewController.m; sourceTree = "<group>"; };
-		E2BDA0741AD5B98A00E69729 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/GIConflictResolverViewController.xib; sourceTree = "<group>"; };
+		E2BDA0741AD5B98A00E69729 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/GIConflictResolverViewController.xib; sourceTree = "<group>"; };
 		E2C338C419F8562F00063D95 /* GitUpTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GitUpTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E2C338D619F85C2E00063D95 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		E2C338D819F85C3400063D95 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -629,13 +629,13 @@
 		E2D4DEB01A4D599200B6AF66 /* GILayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GILayer.h; sourceTree = "<group>"; };
 		E2D4DEB11A4D599200B6AF66 /* GILayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GILayer.m; sourceTree = "<group>"; };
 		E2D4DEB31A4D5AC600B6AF66 /* GIInterface.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GIInterface.h; sourceTree = "<group>"; };
-		E2D5AB301AA502D400BE9FFC /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/GIDiffContentsViewController.xib; sourceTree = "<group>"; };
+		E2D5AB301AA502D400BE9FFC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/GIDiffContentsViewController.xib; sourceTree = "<group>"; };
 		E2D5AB321AA502E000BE9FFC /* GIDiffContentsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GIDiffContentsViewController.h; sourceTree = "<group>"; };
 		E2D5AB331AA502E000BE9FFC /* GIDiffContentsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GIDiffContentsViewController.m; sourceTree = "<group>"; };
 		E2D899991AA411430081FE66 /* Components.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Components.xcassets; sourceTree = "<group>"; };
 		E2E4CA191AB0F3F000D225D3 /* GIDiffFilesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GIDiffFilesViewController.h; sourceTree = "<group>"; };
 		E2E4CA1A1AB0F3F000D225D3 /* GIDiffFilesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GIDiffFilesViewController.m; sourceTree = "<group>"; };
-		E2E4CA1D1AB0F3F500D225D3 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/GIDiffFilesViewController.xib; sourceTree = "<group>"; };
+		E2E4CA1D1AB0F3F500D225D3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/GIDiffFilesViewController.xib; sourceTree = "<group>"; };
 		E2F5C27C1A8171C900C30739 /* GCSnapshot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCSnapshot.h; sourceTree = "<group>"; };
 		E2F5C27D1A8171C900C30739 /* GCSnapshot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCSnapshot.m; sourceTree = "<group>"; };
 		E2F5C2801A8186C200C30739 /* GCSnapshot-Tests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GCSnapshot-Tests.m"; sourceTree = "<group>"; };
@@ -1249,7 +1249,7 @@
 		E2C338A319F8562F00063D95 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1000;
+				LastUpgradeCheck = 1020;
 				ORGANIZATIONNAME = "";
 				TargetAttributes = {
 					E217531A1B91613300BE234A = {
@@ -1268,10 +1268,11 @@
 			};
 			buildConfigurationList = E2C338A619F8562F00063D95 /* Build configuration list for PBXProject "GitUpKit" */;
 			compatibilityVersion = "Xcode 8.0";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = E2C338A219F8562F00063D95;
 			productRefGroup = E2C338AC19F8562F00063D95 /* Products */;
@@ -1610,7 +1611,7 @@
 		E21A88F81A97173300255AC3 /* GIUnifiedReflogViewController.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				E21A88F91A97173300255AC3 /* en */,
+				E21A88F91A97173300255AC3 /* Base */,
 			);
 			name = GIUnifiedReflogViewController.xib;
 			sourceTree = "<group>";
@@ -1618,7 +1619,7 @@
 		E21A88FE1A97A67E00255AC3 /* GISnapshotListViewController.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				E21A88FF1A97A67E00255AC3 /* en */,
+				E21A88FF1A97A67E00255AC3 /* Base */,
 			);
 			name = GISnapshotListViewController.xib;
 			sourceTree = "<group>";
@@ -1626,7 +1627,7 @@
 		E22941E71AC11F56000A83AF /* GIAdvancedCommitViewController.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				E22941E81AC11F56000A83AF /* en */,
+				E22941E81AC11F56000A83AF /* Base */,
 			);
 			name = GIAdvancedCommitViewController.xib;
 			sourceTree = "<group>";
@@ -1642,7 +1643,7 @@
 		E22941EB1AC11F56000A83AF /* GIConfigViewController.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				E22941EC1AC11F56000A83AF /* en */,
+				E22941EC1AC11F56000A83AF /* Base */,
 			);
 			name = GIConfigViewController.xib;
 			sourceTree = "<group>";
@@ -1650,7 +1651,7 @@
 		E22941ED1AC11F56000A83AF /* GIDiffViewController.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				E22941EE1AC11F56000A83AF /* en */,
+				E22941EE1AC11F56000A83AF /* Base */,
 			);
 			name = GIDiffViewController.xib;
 			sourceTree = "<group>";
@@ -1658,7 +1659,7 @@
 		E22941EF1AC11F56000A83AF /* GIMapViewController.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				E22941F01AC11F56000A83AF /* en */,
+				E22941F01AC11F56000A83AF /* Base */,
 			);
 			name = GIMapViewController.xib;
 			sourceTree = "<group>";
@@ -1666,7 +1667,7 @@
 		E22941F11AC11F56000A83AF /* GIQuickViewController.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				E22941F21AC11F56000A83AF /* en */,
+				E22941F21AC11F56000A83AF /* Base */,
 			);
 			name = GIQuickViewController.xib;
 			sourceTree = "<group>";
@@ -1674,7 +1675,7 @@
 		E22941F31AC11F56000A83AF /* GISimpleCommitViewController.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				E22941F41AC11F56000A83AF /* en */,
+				E22941F41AC11F56000A83AF /* Base */,
 			);
 			name = GISimpleCommitViewController.xib;
 			sourceTree = "<group>";
@@ -1682,7 +1683,7 @@
 		E22941F51AC11F56000A83AF /* GIStashListViewController.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				E22941F61AC11F56000A83AF /* en */,
+				E22941F61AC11F56000A83AF /* Base */,
 			);
 			name = GIStashListViewController.xib;
 			sourceTree = "<group>";
@@ -1690,7 +1691,7 @@
 		E229421C1AC120A8000A83AF /* GICommitRewriterViewController.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				E229421D1AC120A8000A83AF /* en */,
+				E229421D1AC120A8000A83AF /* Base */,
 			);
 			name = GICommitRewriterViewController.xib;
 			sourceTree = "<group>";
@@ -1698,7 +1699,7 @@
 		E229421E1AC120A8000A83AF /* GICommitSplitterViewController.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				E229421F1AC120A8000A83AF /* en */,
+				E229421F1AC120A8000A83AF /* Base */,
 			);
 			name = GICommitSplitterViewController.xib;
 			sourceTree = "<group>";
@@ -1714,7 +1715,7 @@
 		E230DEE81AA11CE9006EE09F /* GICommitListViewController.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				E230DEE91AA11CE9006EE09F /* en */,
+				E230DEE91AA11CE9006EE09F /* Base */,
 			);
 			name = GICommitListViewController.xib;
 			sourceTree = "<group>";
@@ -1722,7 +1723,7 @@
 		E2BDA0731AD5B98A00E69729 /* GIConflictResolverViewController.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				E2BDA0741AD5B98A00E69729 /* en */,
+				E2BDA0741AD5B98A00E69729 /* Base */,
 			);
 			name = GIConflictResolverViewController.xib;
 			sourceTree = "<group>";
@@ -1730,7 +1731,7 @@
 		E2D5AB2F1AA502D400BE9FFC /* GIDiffContentsViewController.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				E2D5AB301AA502D400BE9FFC /* en */,
+				E2D5AB301AA502D400BE9FFC /* Base */,
 			);
 			name = GIDiffContentsViewController.xib;
 			sourceTree = "<group>";
@@ -1738,7 +1739,7 @@
 		E2E4CA1C1AB0F3F500D225D3 /* GIDiffFilesViewController.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				E2E4CA1D1AB0F3F500D225D3 /* en */,
+				E2E4CA1D1AB0F3F500D225D3 /* Base */,
 			);
 			name = GIDiffFilesViewController.xib;
 			sourceTree = "<group>";
@@ -1857,10 +1858,6 @@
 				);
 				PRODUCT_NAME = GitUpTests;
 				SDKROOT = macosx;
-				WARNING_CFLAGS = (
-					"$(inherited)",
-					"-Wno-partial-availability",
-				);
 			};
 			name = Debug;
 		};
@@ -1877,10 +1874,6 @@
 				);
 				PRODUCT_NAME = GitUpTests;
 				SDKROOT = macosx;
-				WARNING_CFLAGS = (
-					"$(inherited)",
-					"-Wno-partial-availability",
-				);
 			};
 			name = Release;
 		};

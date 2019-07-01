@@ -83,9 +83,9 @@
   [_diffContentsView replaceWithView:_diffContentsViewController.view];
 }
 
-- (void)viewWillShow {
+- (void)viewWillAppear {
   XLOG_DEBUG_CHECK(_commit);
-  [super viewWillShow];
+  [super viewWillAppear];
 
   _titleTextField.stringValue = [NSString stringWithFormat:@"\"%@\" <%@>", _commit.summary, _commit.shortSHA1];
 
@@ -97,8 +97,8 @@
   _filesViewControllerOld.selectedDelta = _diffOld.deltas.firstObject;
 }
 
-- (void)viewDidHide {
-  [super viewDidHide];
+- (void)viewDidDisappear {
+  [super viewDidDisappear];
 
   _diffNew = nil;
   _diffOld = nil;

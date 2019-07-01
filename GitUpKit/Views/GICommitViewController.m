@@ -104,7 +104,9 @@
 }
 
 // TODO: Live update these fields
-- (void)viewWillShow {
+- (void)viewWillAppear {
+  [super viewWillAppear];
+
   if (_messageTextView.string.length == 0) {
     NSString* message = @"";
 
@@ -126,7 +128,9 @@
   [self _updateInterface];
 }
 
-- (void)viewDidHide {
+- (void)viewDidDisappear {
+  [super viewDidDisappear];
+
   _headCommitMessage = nil;
 }
 

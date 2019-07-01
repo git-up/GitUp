@@ -92,7 +92,14 @@ int main(int argc, const char* argv[]) {
                   NSMutableDictionary* message = [[NSMutableDictionary alloc] init];
                   [message setObject:[NSString stringWithUTF8String:command] forKey:kToolDictionaryKey_Command];
                   [message setObject:repositoryPath forKey:kToolDictionaryKey_Repository];
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunguarded-availability"
+                  // The deprecation for this method in the macOS 10.14 SDK
+                  // marks the incorrect version for its introduction. However,
+                  // it is useful to keep availability guards on in general.
+                  // FB6233110
                   NSData* sendData = [NSKeyedArchiver archivedDataWithRootObject:message];
+#pragma clang diagnostic pop
                   CFDataRef returnData = NULL;
                   status = CFMessagePortSendRequest(messagePort, 0, (CFDataRef)sendData, kCommunicationTimeOut, kCommunicationTimeOut, kCFRunLoopDefaultMode, &returnData);
                   if (status == kCFMessagePortSuccess) {

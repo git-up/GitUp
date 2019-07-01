@@ -62,7 +62,9 @@
   return self;
 }
 
-- (void)viewWillShow {
+- (void)viewWillAppear {
+  [super viewWillAppear];
+
   [self _reloadSnapshots];
 }
 
@@ -77,7 +79,9 @@
   [_tableView reloadData];
 }
 
-- (void)viewDidHide {
+- (void)viewDidDisappear {
+  [super viewDidDisappear];
+
   _snapshots = nil;
   [_tableView reloadData];
 }

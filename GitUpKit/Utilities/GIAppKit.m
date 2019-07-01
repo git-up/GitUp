@@ -53,18 +53,6 @@ static NSColor* _separatorColor = nil;
 
 @implementation NSAlert (GIAppKit)
 
-+ (void)_alertDidEnd:(NSAlert*)alert returnCode:(NSInteger)returnCode contextInfo:(void*)contextInfo {
-  void (^handler)(NSInteger) = contextInfo ? CFBridgingRelease(contextInfo) : NULL;
-  [alert.window orderOut:nil];  // Dismiss the alert window before the handler might chain another one
-  if (handler) {
-    handler(returnCode);
-  }
-}
-
-- (void)beginSheetModalForWindow:(NSWindow*)window withCompletionHandler:(void (^)(NSInteger returnCode))handler {
-  [self beginSheetModalForWindow:window modalDelegate:[NSAlert class] didEndSelector:@selector(_alertDidEnd:returnCode:contextInfo:) contextInfo:(handler ? (void*)CFBridgingRetain(handler) : NULL)];
-}
-
 - (void)setType:(GIAlertType)type {
   switch (type) {
     case kGIAlertType_Note:
@@ -365,24 +353,8 @@ static NSColor* _separatorColor = nil;
 - (void)splitView:(NSSplitView*)splitView resizeSubviewsWithOldSize:(NSSize)oldSize {
   [splitView adjustSubviews];
   // Take the min size constraints into account.
-  // Using -setPosition:ofDividerAtIndex: from inside this method confuses Core Animation on 10.8.
-  if (kCFCoreFoundationVersionNumber >= kCFCoreFoundationVersionNumber10_9) {
-    NSView* view = splitView.subviews.firstObject;
-    [splitView setPosition:(splitView.vertical ? view.frame.size.width : view.frame.size.height) ofDividerAtIndex:0];
-  } else {
-    NSView* view1 = splitView.subviews[0];
-    NSView* view2 = splitView.subviews[1];
-    NSSize splitViewSize = splitView.bounds.size;
-    if (splitView.vertical) {
-      CGFloat splitPosition = MAX(view1.bounds.size.width, _minSize1);
-      view1.frame = NSMakeRect(0, 0, splitPosition, splitViewSize.height);
-      view2.frame = NSMakeRect(splitPosition + splitView.dividerThickness, 0, splitViewSize.width - splitPosition - splitView.dividerThickness, splitViewSize.height);
-    } else {
-      CGFloat splitPosition = MAX(view1.bounds.size.height, _minSize1);
-      view1.frame = NSMakeRect(0, 0, splitViewSize.width, splitPosition);
-      view2.frame = NSMakeRect(0, splitPosition + splitView.dividerThickness, splitViewSize.width, splitViewSize.height - splitPosition - splitView.dividerThickness);
-    }
-  }
+  NSView* view = splitView.subviews.firstObject;
+  [splitView setPosition:(splitView.vertical ? view.frame.size.width : view.frame.size.height) ofDividerAtIndex:0];
 }
 
 @end

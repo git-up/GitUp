@@ -701,17 +701,18 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
 
     case kGCMergeAnalysisResult_FastForward: {
       if (result == kGCMergeAnalysisResult_FastForward) {
-        NSAlert* alert = [NSAlert alertWithMessageText:NSLocalizedString(@"This merge can be fast-forwarded!", nil)
-                                         defaultButton:NSLocalizedString(@"Fast Forward", nil)
-                                       alternateButton:NSLocalizedString(@"Cancel", nil)
-                                           otherButton:NSLocalizedString(@"Merge", nil)
-                             informativeTextWithFormat:NSLocalizedString(@"Do you want to still create a merge or just fast-forward?", nil)];
+        NSAlert* alert = [[NSAlert alloc] init];
+        alert.messageText = NSLocalizedString(@"This merge can be fast-forwarded!", nil);
+        alert.informativeText = NSLocalizedString(@"Do you want to still create a merge or just fast-forward?", nil);
+        [alert addButtonWithTitle:NSLocalizedString(@"Fast Forward", nil)];
+        [alert addButtonWithTitle:NSLocalizedString(@"Merge", nil)];
+        [alert addButtonWithTitle:NSLocalizedString(@"Cancel", nil)];
         alert.type = kGIAlertType_Note;
         [self presentAlert:alert
             completionHandler:^(NSInteger returnCode) {
-              if (returnCode == NSAlertDefaultReturn) {
+              if (returnCode == NSAlertFirstButtonReturn) {
                 [self fastForwardLocalBranch:intoBranch toCommitOrBranch:commitOrBranch withUserMessage:userMessage];
-              } else if (returnCode == NSAlertOtherReturn) {
+              } else if (returnCode == NSAlertSecondButtonReturn) {
                 [self mergeCommitOrBranch:commitOrBranch intoLocalBranch:intoBranch withAncestorCommit:ancestorCommit userMessage:userMessage];
               }
             }];
@@ -1111,17 +1112,18 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
                                                break;
 
                                              case kGCMergeAnalysisResult_Normal: {
-                                               NSAlert* alert = [NSAlert alertWithMessageText:[NSString stringWithFormat:NSLocalizedString(@"Do you want to merge or rebase the branch \"%@\"?", nil), branch.name]
-                                                                                defaultButton:NSLocalizedString(@"Rebase", nil)
-                                                                              alternateButton:NSLocalizedString(@"Cancel", nil)
-                                                                                  otherButton:NSLocalizedString(@"Merge", nil)
-                                                                    informativeTextWithFormat:NSLocalizedString(@"The branch \"%@\" has diverged from its upstream and cannot be fast-forwarded.", nil), branch.name];
+                                               NSAlert* alert = [[NSAlert alloc] init];
+                                               alert.messageText = [NSString stringWithFormat:NSLocalizedString(@"Do you want to merge or rebase the branch \"%@\"?", nil), branch.name];
+                                               alert.informativeText = [NSString stringWithFormat:NSLocalizedString(@"The branch \"%@\" has diverged from its upstream and cannot be fast-forwarded.", nil), branch.name];
+                                               [alert addButtonWithTitle:NSLocalizedString(@"Rebase", nil)];
+                                               [alert addButtonWithTitle:NSLocalizedString(@"Merge", nil)];
+                                               [alert addButtonWithTitle:NSLocalizedString(@"Cancel", nil)];
                                                alert.type = kGIAlertType_Note;
                                                [self presentAlert:alert
                                                    completionHandler:^(NSInteger returnCode) {
-                                                     if (returnCode == NSAlertDefaultReturn) {
+                                                     if (returnCode == NSAlertFirstButtonReturn) {
                                                        [self rebaseLocalBranch:branch fromCommit:ancestorCommit ontoCommit:upstream.tipCommit withUserMessage:nil];
-                                                     } else if (returnCode == NSAlertOtherReturn) {
+                                                     } else if (returnCode == NSAlertSecondButtonReturn) {
                                                        [self mergeCommitOrBranch:upstream intoLocalBranch:branch withAncestorCommit:ancestorCommit userMessage:nil];
                                                      }
                                                    }];

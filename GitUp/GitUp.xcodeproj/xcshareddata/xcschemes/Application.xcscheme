@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1000"
+   LastUpgradeVersion = "1020"
    version = "2.0">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -29,19 +29,12 @@
       shouldUseLaunchSchemeArgsEnv = "NO">
       <Testables>
       </Testables>
-      <EnvironmentVariables>
-         <EnvironmentVariable
-            key = "DYLD_INSERT_LIBRARIES"
-            value = "/usr/lib/libgmalloc.dylib"
-            isEnabled = "YES">
-         </EnvironmentVariable>
-         <EnvironmentVariable
+      <AdditionalOptions>
+         <AdditionalOption
             key = "NSZombieEnabled"
             value = "YES"
             isEnabled = "YES">
-         </EnvironmentVariable>
-      </EnvironmentVariables>
-      <AdditionalOptions>
+         </AdditionalOption>
       </AdditionalOptions>
    </TestAction>
    <LaunchAction

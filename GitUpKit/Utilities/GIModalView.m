@@ -27,12 +27,6 @@
 #define __ENABLE_BLUR__ 0
 
 #if __ENABLE_BLUR__
-#ifndef kCFCoreFoundationVersionNumber10_10
-#define kCFCoreFoundationVersionNumber10_10 1152
-#endif
-#endif
-
-#if __ENABLE_BLUR__
 #define kBlurRadius 20.0
 #define kAnimationDuration 0.2
 #define kBlurName @"blur"
@@ -48,17 +42,15 @@
   self.wantsLayer = YES;
 
 #if __ENABLE_BLUR__
-  if (kCFCoreFoundationVersionNumber >= kCFCoreFoundationVersionNumber10_10) {  // Background filters don't seem to work on 10.8 and 10.9
-    size_t size;
-    if (sysctlbyname("hw.model", NULL, &size, NULL, 0) == 0) {
-      char* machine = malloc(size);
-      if (sysctlbyname("hw.model", machine, &size, NULL, 0) == 0) {
-        if (strncmp(machine, "MacBookAir", 10)) {  // MBA 2013 hangs for 1-2 seconds the first time the blur effect is used in the app
-          _useBackgroundFilters = YES;
-        }
+  size_t size;
+  if (sysctlbyname("hw.model", NULL, &size, NULL, 0) == 0) {
+    char* machine = malloc(size);
+    if (sysctlbyname("hw.model", machine, &size, NULL, 0) == 0) {
+      if (strncmp(machine, "MacBookAir", 10)) {  // MBA 2013 hangs for 1-2 seconds the first time the blur effect is used in the app
+        _useBackgroundFilters = YES;
       }
-      free(machine);
     }
+    free(machine);
   }
 
   if (_useBackgroundFilters) {
