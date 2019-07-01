@@ -24,11 +24,6 @@
 
 #define kPasteboardType @"GIDiffDelta"  // Raw unretained pointer which is OK since pasteboard is use within process only
 
-@interface GIDiffFileData : NSObject
-@property(nonatomic, strong) GCDiffDelta* delta;
-@property(nonatomic, strong) GCIndexConflict* conflict;
-@end
-
 @interface GIFileCellView : NSTableCellView
 @end
 
@@ -39,9 +34,7 @@
 @interface GIDiffFilesViewController ()
 @property(nonatomic, weak) IBOutlet GIFilesTableView* tableView;
 @property(nonatomic, weak) IBOutlet NSTextField* emptyTextField;
-@end
-
-@implementation GIDiffFileData
+@property(nonatomic, readonly) NSArray* items;
 @end
 
 @implementation GIFileCellView
@@ -131,9 +124,7 @@ static NSImage* _deletedImage = nil;
 static NSImage* _renamedImage = nil;
 static NSImage* _untrackedImage = nil;
 
-@implementation GIDiffFilesViewController {
-  NSMutableArray* _data;
-}
+@implementation GIDiffFilesViewController
 
 + (void)initialize {
   _conflictImage = [[NSBundle bundleForClass:[GIDiffFilesViewController class]] imageForResource:@"icon_file_conflict"];
@@ -156,29 +147,22 @@ static NSImage* _untrackedImage = nil;
   self.allowsMultipleSelection = NO;
 }
 
+- (NSArray*)items {
+  return self.deltas;
+}
+
 - (void)setDeltas:(NSArray*)deltas usingConflicts:(NSDictionary*)conflicts {
   if ((deltas != _deltas) || (conflicts != _conflicts)) {
-    _deltas = deltas;
-    _conflicts = conflicts;
+    _deltas = [deltas copy];
+    _conflicts = [conflicts copy];
     [self _reloadDeltas];
   }
 }
 
 - (void)_reloadDeltas {
-  if (_deltas.count) {
-    _data = [[NSMutableArray alloc] init];
-    for (GCDiffDelta* delta in _deltas) {
-      GIDiffFileData* data = [[GIDiffFileData alloc] init];
-      data.delta = delta;
-      data.conflict = [_conflicts objectForKey:delta.canonicalPath];
-      [_data addObject:data];
-    }
-  } else {
-    _data = nil;
-  }
   [_tableView reloadData];
 
-  _emptyTextField.hidden = _data.count ? YES : NO;
+  _emptyTextField.hidden = self.deltas.count ? YES : NO;
 }
 
 - (void)setAllowsMultipleSelection:(BOOL)flag {
@@ -200,44 +184,29 @@ static NSImage* _untrackedImage = nil;
 
 - (GCDiffDelta*)selectedDelta {
   NSInteger row = _tableView.selectedRow;
-  if (row >= 0) {
-    return [(GIDiffFileData*)_data[row] delta];
-  }
-  return nil;
+  GCDiffDelta* delta = row >= 0 ? self.items[row] : nil;
+  return delta;
 }
 
 - (void)setSelectedDelta:(GCDiffDelta*)delta {
-  NSInteger row = 0;
-  for (GIDiffFileData* data in _data) {
-    if ((data.delta == delta) || [data.delta.canonicalPath isEqualToString:delta.canonicalPath]) {  // Don't use -isEqualToDelta:
-      [_tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:row] byExtendingSelection:NO];
-      [_tableView scrollRowToVisible:row];
-      break;
-    }
-    ++row;
-  }
+  self.selectedDeltas = delta ? @[ delta ] : @[];
 }
 
 - (NSArray*)selectedDeltas {
-  NSMutableArray* array = [[NSMutableArray alloc] init];
-  [_tableView.selectedRowIndexes enumerateIndexesUsingBlock:^(NSUInteger index, BOOL* stop) {
-    [array addObject:[(GIDiffFileData*)_data[index] delta]];
-  }];
-  return array;
+  return [self.items objectsAtIndexes:self.tableView.selectedRowIndexes];
 }
 
 - (void)setSelectedDeltas:(NSArray*)deltas {
-  NSMutableIndexSet* indexes = [[NSMutableIndexSet alloc] init];
-  NSUInteger row = 0;
-  for (GIDiffFileData* data in _data) {
-    for (GCDiffDelta* delta in deltas) {
-      if ((data.delta == delta) || [data.delta.canonicalPath isEqualToString:delta.canonicalPath]) {  // Don't use -isEqualToDelta:
-        [indexes addIndex:row];
-        break;
+  NSIndexSet* indexes = [self.items indexesOfObjectsPassingTest:^(GCDiffDelta* delta, NSUInteger row, BOOL* stop) {
+    for (GCDiffDelta* deltaToSelect in deltas) {
+      if ((delta == deltaToSelect) || [delta.canonicalPath isEqualToString:deltaToSelect.canonicalPath]) {  // Don't use -isEqualToDelta:
+        return YES;
       }
     }
-    ++row;
-  }
+
+    return NO;
+  }];
+
   [_tableView selectRowIndexes:indexes byExtendingSelection:NO];
   [_tableView scrollRowToVisible:indexes.firstIndex];
 }
@@ -255,7 +224,7 @@ static NSImage* _untrackedImage = nil;
 - (IBAction)copy:(id)sender {
   NSMutableString* string = [[NSMutableString alloc] init];
   [_tableView.selectedRowIndexes enumerateIndexesUsingBlock:^(NSUInteger index, BOOL* stop) {
-    GCDiffDelta* delta = [(GIDiffFileData*)_data[index] delta];
+    GCDiffDelta* delta = self.items[index];
     if (string.length) {
       [string appendString:@"\n"];
     }
@@ -274,7 +243,7 @@ static NSImage* _untrackedImage = nil;
 #pragma mark - NSTableViewDataSource
 
 - (NSInteger)numberOfRowsInTableView:(NSTableView*)tableView {
-  return _data.count;
+  return self.items.count;
 }
 
 - (BOOL)tableView:(NSTableView*)tableView writeRowsWithIndexes:(NSIndexSet*)rowIndexes toPasteboard:(NSPasteboard*)pboard {
@@ -283,8 +252,8 @@ static NSImage* _untrackedImage = nil;
   }
   NSMutableData* buffer = [[NSMutableData alloc] init];
   [rowIndexes enumerateIndexesUsingBlock:^(NSUInteger index, BOOL* stop) {
-    GIDiffFileData* data = _data[index];
-    const void* pointer = (__bridge const void*)data.delta;
+    GCDiffDelta* delta = self.items[index];
+    const void* pointer = (__bridge const void*)delta;
     [buffer appendBytes:&pointer length:sizeof(void*)];
   }];
   [pboard declareTypes:[NSArray arrayWithObject:kPasteboardType] owner:self];
@@ -295,13 +264,14 @@ static NSImage* _untrackedImage = nil;
 #pragma mark - NSTableViewDelegate
 
 - (NSView*)tableView:(NSTableView*)tableView viewForTableColumn:(NSTableColumn*)tableColumn row:(NSInteger)row {
-  GIDiffFileData* data = _data[row];
+  GCDiffDelta* delta = self.items[row];
+  GCIndexConflict* conflict = self.conflicts[delta.canonicalPath];
   GIFileCellView* view = [_tableView makeViewWithIdentifier:tableColumn.identifier owner:self];
-  view.textField.stringValue = data.delta.canonicalPath;
-  if (data.conflict) {
+  view.textField.stringValue = delta.canonicalPath;
+  if (conflict) {
     view.imageView.image = _conflictImage;
   } else {
-    switch (data.delta.change) {
+    switch (delta.change) {
       case kGCFileDiffChange_Added:
         view.imageView.image = _addedImage;
         break;
@@ -336,8 +306,9 @@ static NSImage* _untrackedImage = nil;
 }
 
 - (BOOL)tableView:(NSTableView*)tableView shouldSelectRow:(NSInteger)row {
+  GCDiffDelta* delta = row >= 0 ? self.items[row] : nil;
   if ([_delegate respondsToSelector:@selector(diffFilesViewController:willSelectDelta:)]) {
-    [_delegate diffFilesViewController:self willSelectDelta:(row >= 0 ? [(GIDiffFileData*)_data[row] delta] : nil)];
+    [_delegate diffFilesViewController:self willSelectDelta:delta];
   }
   return YES;
 }
