@@ -167,16 +167,16 @@ static NSImage* _untrackedImage = nil;
 }
 
 - (IBAction)copy:(id)sender {
-  NSMutableString* string = [[NSMutableString alloc] init];
+  NSMutableArray* objects = [NSMutableArray array];
   [_tableView.selectedRowIndexes enumerateIndexesUsingBlock:^(NSUInteger index, BOOL* stop) {
-    GCDiffDelta* delta = self.items[index];
-    if (string.length) {
-      [string appendString:@"\n"];
+    id<NSPasteboardWriting> pasteboardWriter = [self tableView:_tableView pasteboardWriterForRow:index];
+    if (!pasteboardWriter) {
+      return;
     }
-    [string appendString:delta.canonicalPath];
+    [objects addObject:pasteboardWriter];
   }];
-  [[NSPasteboard generalPasteboard] declareTypes:@[ NSPasteboardTypeString ] owner:nil];
-  [[NSPasteboard generalPasteboard] setString:string forType:NSPasteboardTypeString];
+  [[NSPasteboard generalPasteboard] clearContents];
+  [[NSPasteboard generalPasteboard] writeObjects:objects];
 }
 
 - (IBAction)doubleClick:(id)sender {
