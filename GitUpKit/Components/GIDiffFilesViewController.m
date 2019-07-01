@@ -22,7 +22,7 @@
 #import "GIInterface.h"
 #import "XLFacilityMacros.h"
 
-#define kPasteboardType @"GIDiffDelta"  // Raw unretained pointer which is OK since pasteboard is use within process only
+static const NSPasteboardType GIPasteboardTypeFileRowIndex = @"co.gitup.mac.file-row-index";
 
 @interface GIFileCellView : NSTableCellView
 @end
@@ -40,10 +40,7 @@
 @implementation GIFileCellView
 @end
 
-// Override all dragging methods to ensure original behavior of NSTableView is gone
-@implementation GIFilesTableView {
-  NSDragOperation _dragOperation;
-}
+@implementation GIFilesTableView
 
 - (BOOL)becomeFirstResponder {
   if (![super becomeFirstResponder]) {
@@ -59,60 +56,6 @@
   if (![_controller.delegate respondsToSelector:@selector(diffFilesViewController:handleKeyDownEvent:)] || ![_controller.delegate diffFilesViewController:_controller handleKeyDownEvent:event]) {
     [super keyDown:event];
   }
-}
-
-- (void)awakeFromNib {
-  [self registerForDraggedTypes:[NSArray arrayWithObject:kPasteboardType]];
-}
-
-- (NSDragOperation)draggingEntered:(id<NSDraggingInfo>)sender {
-  _dragOperation = NSDragOperationNone;
-  if ((sender.draggingSource != self) && [_controller.delegate respondsToSelector:@selector(diffFilesViewControllerShouldAcceptDeltas:fromOtherController:)]) {
-    GIDiffFilesViewController* sourceController = [(GIFilesTableView*)sender.draggingSource controller];
-    if ([_controller.delegate diffFilesViewControllerShouldAcceptDeltas:_controller fromOtherController:sourceController]) {
-      _dragOperation = NSDragOperationCopy;
-    }
-  }
-  return _dragOperation;
-}
-
-- (NSDragOperation)draggingUpdated:(id<NSDraggingInfo>)sender {
-  return _dragOperation;
-}
-
-- (void)draggingExited:(id<NSDraggingInfo>)sender {
-  ;
-}
-
-- (void)draggingEnded:(id<NSDraggingInfo>)sender {
-  ;
-}
-
-- (BOOL)prepareForDragOperation:(id<NSDraggingInfo>)sender {
-  return YES;
-}
-
-- (BOOL)performDragOperation:(id<NSDraggingInfo>)sender {
-  GIDiffFilesViewController* sourceController = [(GIFilesTableView*)sender.draggingSource controller];
-  NSData* buffer = [sender.draggingPasteboard dataForType:kPasteboardType];
-  const void** pointer = (const void**)buffer.bytes;
-  NSMutableArray* array = [[NSMutableArray alloc] init];
-  for (size_t i = 0, count = buffer.length / sizeof(void*); i < count; ++i, ++pointer) {
-    [array addObject:(__bridge GCDiffDelta*)*pointer];
-  }
-  return [_controller.delegate diffFilesViewController:_controller didReceiveDeltas:array fromOtherController:sourceController];
-}
-
-- (void)concludeDragOperation:(id<NSDraggingInfo>)sender {
-  ;
-}
-
-- (BOOL)wantsPeriodicDraggingUpdates {
-  return NO;
-}
-
-- (void)updateDraggingItemsForDrag:(id<NSDraggingInfo>)sender {
-  ;
 }
 
 @end
@@ -141,6 +84,8 @@ static NSImage* _untrackedImage = nil;
   _tableView.controller = self;
   _tableView.target = self;
   _tableView.doubleAction = @selector(doubleClick:);
+  [_tableView registerForDraggedTypes:@[ GIPasteboardTypeFileRowIndex ]];
+  [_tableView setDraggingSourceOperationMask:NSDragOperationMove forLocal:YES];
 
   _emptyTextField.stringValue = @"";
 
@@ -246,19 +191,46 @@ static NSImage* _untrackedImage = nil;
   return self.items.count;
 }
 
-- (BOOL)tableView:(NSTableView*)tableView writeRowsWithIndexes:(NSIndexSet*)rowIndexes toPasteboard:(NSPasteboard*)pboard {
-  if (![_delegate respondsToSelector:@selector(diffFilesViewControllerShouldAcceptDeltas:fromOtherController:)]) {
-    return NO;
+- (id<NSPasteboardWriting>)tableView:(NSTableView*)tableView pasteboardWriterForRow:(NSInteger)row {
+  NSPasteboardItem* pasteboardItem = [[NSPasteboardItem alloc] init];
+  [pasteboardItem setPropertyList:@(row) forType:GIPasteboardTypeFileRowIndex];
+  return pasteboardItem;
+}
+
+- (NSDragOperation)tableView:(NSTableView*)tableView validateDrop:(id<NSDraggingInfo>)info proposedRow:(NSInteger)row proposedDropOperation:(NSTableViewDropOperation)dropOperation {
+  // Don't allow dropping directly on to rows.
+  if (dropOperation != NSTableViewDropAbove) {
+    return NSDragOperationNone;
   }
-  NSMutableData* buffer = [[NSMutableData alloc] init];
-  [rowIndexes enumerateIndexesUsingBlock:^(NSUInteger index, BOOL* stop) {
-    GCDiffDelta* delta = self.items[index];
-    const void* pointer = (__bridge const void*)delta;
-    [buffer appendBytes:&pointer length:sizeof(void*)];
-  }];
-  [pboard declareTypes:[NSArray arrayWithObject:kPasteboardType] owner:self];
-  [pboard setData:buffer forType:kPasteboardType];
-  return YES;
+
+  // The drag must include the private pasteboard type.
+  NSPasteboard* pasteboard = info.draggingPasteboard;
+  if (![pasteboard canReadItemWithDataConformingToTypes:@[ GIPasteboardTypeFileRowIndex ]]) {
+    return NSDragOperationNone;
+  }
+
+  // Source must be another compatible files list.
+  GIFilesTableView* source = info.draggingSource;
+  if (source == tableView || ![self.delegate respondsToSelector:@selector(diffFilesViewControllerShouldAcceptDeltas:fromOtherController:)] || ![self.delegate respondsToSelector:@selector(diffFilesViewController:didReceiveDeltas:fromOtherController:)] || ![self.delegate diffFilesViewControllerShouldAcceptDeltas:self fromOtherController:source.controller]) {
+    return NSDragOperationNone;
+  }
+
+  // Having passed all those checks, approve the drop.
+  [tableView setDropRow:-1 dropOperation:NSTableViewDropAbove];
+  return NSDragOperationMove;
+}
+
+- (BOOL)tableView:(NSTableView*)tableView acceptDrop:(id<NSDraggingInfo>)info row:(NSInteger)row dropOperation:(NSTableViewDropOperation)dropOperation {
+  NSArray* pasteboardItems = [info.draggingPasteboard readObjectsForClasses:@[ NSPasteboardItem.self ] options:nil];
+  NSMutableIndexSet* indexes = [[NSMutableIndexSet alloc] init];
+  for (NSPasteboardItem* pasteboardItem in pasteboardItems) {
+    NSNumber* sourceRowNumber = [pasteboardItem propertyListForType:GIPasteboardTypeFileRowIndex];
+    if (!sourceRowNumber) continue;
+    [indexes addIndex:sourceRowNumber.unsignedIntegerValue];
+  }
+  GIFilesTableView* source = info.draggingSource;
+  NSArray* deltas = [source.controller.items objectsAtIndexes:indexes];
+  return [self.delegate diffFilesViewController:self didReceiveDeltas:deltas fromOtherController:source.controller];
 }
 
 #pragma mark - NSTableViewDelegate
