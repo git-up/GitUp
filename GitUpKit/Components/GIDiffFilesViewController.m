@@ -23,6 +23,7 @@
 #import "XLFacilityMacros.h"
 
 static const NSPasteboardType GIPasteboardTypeFileRowIndex = @"co.gitup.mac.file-row-index";
+static const NSPasteboardType GIPasteboardTypeFileURL = @"public.file-url";
 
 @interface GIFileCellView : NSTableCellView
 @end
@@ -86,6 +87,7 @@ static NSImage* _untrackedImage = nil;
   _tableView.doubleAction = @selector(doubleClick:);
   [_tableView registerForDraggedTypes:@[ GIPasteboardTypeFileRowIndex ]];
   [_tableView setDraggingSourceOperationMask:NSDragOperationMove forLocal:YES];
+  [_tableView setDraggingSourceOperationMask:NSDragOperationGeneric forLocal:NO];
 
   _emptyTextField.stringValue = @"";
 
@@ -197,6 +199,10 @@ static NSImage* _untrackedImage = nil;
   NSPasteboardItem* pasteboardItem = [[NSPasteboardItem alloc] init];
   [pasteboardItem setPropertyList:@(row) forType:GIPasteboardTypeFileRowIndex];
   [pasteboardItem setString:delta.canonicalPath forType:NSPasteboardTypeString];
+
+  NSString* path = [delta.diff.repository absolutePathForFile:delta.canonicalPath];
+  NSURL* url = [NSURL fileURLWithPath:path isDirectory:NO];
+  [pasteboardItem setString:url.absoluteString forType:GIPasteboardTypeFileURL];
 
   return pasteboardItem;
 }
