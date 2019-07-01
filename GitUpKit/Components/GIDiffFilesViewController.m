@@ -192,8 +192,12 @@ static NSImage* _untrackedImage = nil;
 }
 
 - (id<NSPasteboardWriting>)tableView:(NSTableView*)tableView pasteboardWriterForRow:(NSInteger)row {
+  GCDiffDelta* delta = self.items[row];
+
   NSPasteboardItem* pasteboardItem = [[NSPasteboardItem alloc] init];
   [pasteboardItem setPropertyList:@(row) forType:GIPasteboardTypeFileRowIndex];
+  [pasteboardItem setString:delta.canonicalPath forType:NSPasteboardTypeString];
+
   return pasteboardItem;
 }
 
