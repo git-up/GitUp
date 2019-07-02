@@ -280,6 +280,16 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
   _titleView.wantsLayer = YES;
   _rightView.wantsLayer = YES;
 
+  if (@available(macOS 10.11, *)) {
+    // Fields have different alignment rects from their bounds starting in 10.11
+    // and will appear slightly small when laid out just by autoresizing.
+    // Manually make it its preferred height to align with the snapshots button.
+    CGRect searchFieldFrame = _searchField.frame;
+    searchFieldFrame.size.height = [_searchField sizeThatFits:searchFieldFrame.size].height;
+    searchFieldFrame.origin.y = floor(NSMidY(_snapshotsButton.frame) - (searchFieldFrame.size.height / 2));
+    _searchField.frame = searchFieldFrame;
+  }
+
   // Text fields must be drawn on an opaque background to avoid subpixel antialiasing issues during animation.
   for (NSTextField* field in @[ _infoTextField1, _infoTextField2, _progressTextField ]) {
     field.drawsBackground = YES;
