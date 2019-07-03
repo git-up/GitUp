@@ -240,7 +240,24 @@ typedef struct {
   [self.backgroundColor setFill];
   CGContextFillRect(context, dirtyRect);
 
+  void (^drawHorizontalSeparator)(CGFloat) = ^(CGFloat y) {
+    CGContextSaveGState(context);
+    CGContextSetStrokeColorWithColor(context, NSColor.gridColor.CGColor);
+
+    CGFloat pattern[] = {kTextLineNumberMargin - 1, 1, kTextLineNumberMargin - 1, 1, CGFLOAT_MAX};
+    size_t count = sizeof(pattern) / sizeof(*pattern);
+    CGContextSetLineDash(context, 0, pattern, count);
+
+    CGContextMoveToPoint(context, 0, y);
+    CGContextAddLineToPoint(context, bounds.size.width, y);
+    CGContextStrokePath(context);
+
+    CGContextRestoreGState(context);
+  };
+
   if (_frame) {
+    drawHorizontalSeparator(0.5);
+
     NSColor* selectedColor = self.window.keyWindow && (self.window.firstResponder == self) ? [NSColor selectedControlColor] : [NSColor secondarySelectedControlColor];
     CGContextSetTextMatrix(context, CGAffineTransformIdentity);
     CFArrayRef lines = CTFrameGetLines(_frame);
@@ -272,17 +289,17 @@ typedef struct {
           CGContextFillRect(context, CGRectMake(0, linePosition, bounds.size.width, GIDiffViewLineHeight));
         } else if (info->change != kGCLineDiffChange_Unmodified) {
           if (info->change == kGCLineDiffChange_Deleted) {
-            [GIDiffViewDeletedBackgroundColor setFill];
+            [NSColor.gitUpDiffDeletedTextBackgroundColor setFill];
           } else {
-            [GIDiffViewAddedBackgroundColor setFill];
+            [NSColor.gitUpDiffAddedTextBackgroundColor setFill];
           }
           CGContextFillRect(context, CGRectMake(0, linePosition, bounds.size.width, GIDiffViewLineHeight));
 
           if (info->highlighted.length) {
             if (info->change == kGCLineDiffChange_Deleted) {
-              [GIDiffViewDeletedHighlightColor setFill];
+              [NSColor.gitUpDiffDeletedTextHighlightColor setFill];
             } else {
-              [GIDiffViewAddedHighlightColor setFill];
+              [NSColor.gitUpDiffAddedTextHighlightColor setFill];
             }
             CGFloat startX = CTLineGetOffsetForStringIndex(line, info->range.location + info->highlighted.location, NULL);
             CGFloat endX = CTLineGetOffsetForStringIndex(line, info->range.location + info->highlighted.location + info->highlighted.length, NULL);
@@ -294,7 +311,7 @@ typedef struct {
           }
         }
 
-        [GIDiffViewLineNumberColor setFill];
+        [NSColor.tertiaryLabelColor setFill];
         if ((lineRange.location == info->range.location) && (info->oldLineNumber != NSNotFound)) {
           CFAttributedStringRef string = CFAttributedStringCreate(kCFAllocatorDefault, (CFStringRef)(info->oldLineNumber >= 100000 ? @"9999…" : [NSString stringWithFormat:@"%5lu", info->oldLineNumber]), GIDiffViewAttributes);
           CTLineRef prefix = CTLineCreateWithAttributedString(string);
@@ -335,29 +352,24 @@ typedef struct {
           CGContextFillRect(context, CGRectMake(startX, linePosition, endX - startX, GIDiffViewLineHeight));
         }
 
-        [GIDiffViewPlainTextColor set];
+        [NSColor.labelColor set];
         CGContextSetTextPosition(context, 2 * kTextLineNumberMargin + kTextInsetLeft, textPosition);
         CTLineDraw(line, context);
       } else {
-        [GIDiffViewSeparatorBackgroundColor setFill];
-        CGContextFillRect(context, CGRectMake(0, linePosition + 1, bounds.size.width, GIDiffViewLineHeight - 1));
+        [NSColor.gitUpDiffSeparatorBackgroundColor setFill];
+        CGContextFillRect(context, CGRectMake(0, linePosition + 1, bounds.size.width, GIDiffViewLineHeight - 2));
 
-        [GIDiffViewSeparatorLineColor setStroke];
-        CGContextMoveToPoint(context, 0, linePosition + 0.5);
-        CGContextAddLineToPoint(context, bounds.size.width, linePosition + 0.5);
-        CGContextStrokePath(context);
-        CGContextMoveToPoint(context, 0, linePosition + GIDiffViewLineHeight - 0.5);
-        CGContextAddLineToPoint(context, bounds.size.width, linePosition + GIDiffViewLineHeight - 0.5);
-        CGContextStrokePath(context);
+        drawHorizontalSeparator(linePosition + 0.5);
+        drawHorizontalSeparator(linePosition + GIDiffViewLineHeight - 0.5);
 
-        [GIDiffViewSeparatorTextColor setFill];
+        [NSColor.tertiaryLabelColor setFill];
         CGContextSetTextPosition(context, 2 * kTextLineNumberMargin + 4, textPosition);
         CTLineDraw(line, context);
       }
     }
   }
 
-  [GIDiffViewVerticalLineColor setStroke];
+  [NSColor.gridColor setStroke];
   CGContextMoveToPoint(context, kTextLineNumberMargin - 0.5, 0);
   CGContextAddLineToPoint(context, kTextLineNumberMargin - 0.5, bounds.size.height);
   CGContextStrokePath(context);

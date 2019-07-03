@@ -31,17 +31,6 @@ CTLineRef GIDiffViewDeletedLine = NULL;
 CGFloat GIDiffViewLineHeight = 0.0;
 CGFloat GIDiffViewLineDescent = 0.0;
 
-NSColor* GIDiffViewDeletedBackgroundColor = nil;
-NSColor* GIDiffViewDeletedHighlightColor = nil;
-NSColor* GIDiffViewAddedBackgroundColor = nil;
-NSColor* GIDiffViewAddedHighlightColor = nil;
-NSColor* GIDiffViewSeparatorBackgroundColor = nil;
-NSColor* GIDiffViewSeparatorLineColor = nil;
-NSColor* GIDiffViewSeparatorTextColor = nil;
-NSColor* GIDiffViewVerticalLineColor = nil;
-NSColor* GIDiffViewLineNumberColor = nil;
-NSColor* GIDiffViewPlainTextColor = nil;
-
 const char* GIDiffViewMissingNewlinePlaceholder = "🚫\n";
 
 @implementation GIDiffView
@@ -63,17 +52,6 @@ const char* GIDiffViewMissingNewlinePlaceholder = "🚫\n";
   CTLineGetTypographicBounds(GIDiffViewAddedLine, &ascent, &descent, &leading);
   GIDiffViewLineHeight = ceilf(ascent + descent + leading) + kTextLineHeightPadding;
   GIDiffViewLineDescent = ceilf(descent) + kTextLineDescentAdjustment;
-
-  GIDiffViewDeletedBackgroundColor = [NSColor colorWithDeviceRed:1.0 green:0.9 blue:0.9 alpha:1.0];
-  GIDiffViewDeletedHighlightColor = [NSColor colorWithDeviceRed:1.0 green:0.7 blue:0.7 alpha:1.0];
-  GIDiffViewAddedBackgroundColor = [NSColor colorWithDeviceRed:0.85 green:1.0 blue:0.85 alpha:1.0];
-  GIDiffViewAddedHighlightColor = [NSColor colorWithDeviceRed:0.7 green:1.0 blue:0.7 alpha:1.0];
-  GIDiffViewSeparatorBackgroundColor = [NSColor colorWithDeviceRed:0.97 green:0.97 blue:0.97 alpha:1.0];
-  GIDiffViewSeparatorLineColor = [NSColor colorWithDeviceRed:0.9 green:0.9 blue:0.9 alpha:1.0];
-  GIDiffViewSeparatorTextColor = [NSColor colorWithDeviceRed:0.65 green:0.65 blue:0.65 alpha:1.0];
-  GIDiffViewVerticalLineColor = [NSColor colorWithDeviceRed:0.85 green:0.85 blue:0.85 alpha:0.6];
-  GIDiffViewLineNumberColor = [NSColor colorWithDeviceRed:0.75 green:0.75 blue:0.75 alpha:1.0];
-  GIDiffViewPlainTextColor = [NSColor blackColor];
 }
 
 - (void)_windowKeyDidChange:(NSNotification*)notification {
@@ -95,7 +73,7 @@ const char* GIDiffViewMissingNewlinePlaceholder = "🚫\n";
 }
 
 - (void)didFinishInitializing {
-  _backgroundColor = [NSColor whiteColor];
+  _backgroundColor = NSColor.textBackgroundColor;
 }
 
 - (instancetype)initWithFrame:(NSRect)frameRect {

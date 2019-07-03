@@ -65,3 +65,7 @@ extern NSString* const GICommitMessageViewUserDefaultKey_EnableSpellChecking;
 @property(nonatomic) IBInspectable CGFloat minSize1;
 @property(nonatomic) IBInspectable CGFloat minSize2;
 @end
+
+@interface NSAppearance (GIAppearance)
+@property(nonatomic, readonly) BOOL matchesDarkAppearance;
+@end

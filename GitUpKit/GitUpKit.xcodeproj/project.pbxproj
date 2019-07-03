@@ -12,6 +12,13 @@
 		749786941B85AAB10065BD55 /* GCOrderedSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 74EDB5D11B84D4C400F00E79 /* GCOrderedSet.m */; };
 		74EDB5D61B84E06500F00E79 /* GCOrderedSet-Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 74EDB5D51B84E06500F00E79 /* GCOrderedSet-Tests.m */; };
 		74EDB5D71B8517F500F00E79 /* GCOrderedSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 74EDB5D11B84D4C400F00E79 /* GCOrderedSet.m */; };
+		DBCF675722CAE12500969D4A /* NSColor+GINamedColors.h in Headers */ = {isa = PBXBuildFile; fileRef = DBDFBC1A22B61290003EEC6C /* NSColor+GINamedColors.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DBDFBC0C22B610F1003EEC6C /* Interface.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DBDFBC0B22B610F1003EEC6C /* Interface.xcassets */; };
+		DBDFBC0F22B61135003EEC6C /* NSBundle+GitUpKit.h in Headers */ = {isa = PBXBuildFile; fileRef = DBDFBC0D22B61135003EEC6C /* NSBundle+GitUpKit.h */; };
+		DBDFBC1022B61135003EEC6C /* NSBundle+GitUpKit.h in Headers */ = {isa = PBXBuildFile; fileRef = DBDFBC0D22B61135003EEC6C /* NSBundle+GitUpKit.h */; };
+		DBDFBC1122B61135003EEC6C /* NSBundle+GitUpKit.m in Sources */ = {isa = PBXBuildFile; fileRef = DBDFBC0E22B61135003EEC6C /* NSBundle+GitUpKit.m */; };
+		DBDFBC1222B61135003EEC6C /* NSBundle+GitUpKit.m in Sources */ = {isa = PBXBuildFile; fileRef = DBDFBC0E22B61135003EEC6C /* NSBundle+GitUpKit.m */; };
+		DBDFBC1D22B61290003EEC6C /* NSColor+GINamedColors.m in Sources */ = {isa = PBXBuildFile; fileRef = DBDFBC1B22B61290003EEC6C /* NSColor+GINamedColors.m */; };
 		E200A3BA1B02DDA100C4E39D /* GCPrivate.m in Sources */ = {isa = PBXBuildFile; fileRef = E200A3B81B02DDA100C4E39D /* GCPrivate.m */; };
 		E20EB08C19FC75CA0031A075 /* GCRepository+Reset.m in Sources */ = {isa = PBXBuildFile; fileRef = E20EB08A19FC75CA0031A075 /* GCRepository+Reset.m */; };
 		E20EB09019FC76160031A075 /* GCRepository+Status.m in Sources */ = {isa = PBXBuildFile; fileRef = E20EB08E19FC76160031A075 /* GCRepository+Status.m */; };
@@ -419,6 +426,11 @@
 		74EDB5D01B84D4C400F00E79 /* GCOrderedSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCOrderedSet.h; sourceTree = "<group>"; };
 		74EDB5D11B84D4C400F00E79 /* GCOrderedSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCOrderedSet.m; sourceTree = "<group>"; };
 		74EDB5D51B84E06500F00E79 /* GCOrderedSet-Tests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GCOrderedSet-Tests.m"; sourceTree = "<group>"; };
+		DBDFBC0B22B610F1003EEC6C /* Interface.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Interface.xcassets; sourceTree = "<group>"; };
+		DBDFBC0D22B61135003EEC6C /* NSBundle+GitUpKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSBundle+GitUpKit.h"; sourceTree = "<group>"; };
+		DBDFBC0E22B61135003EEC6C /* NSBundle+GitUpKit.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSBundle+GitUpKit.m"; sourceTree = "<group>"; };
+		DBDFBC1A22B61290003EEC6C /* NSColor+GINamedColors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSColor+GINamedColors.h"; sourceTree = "<group>"; };
+		DBDFBC1B22B61290003EEC6C /* NSColor+GINamedColors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSColor+GINamedColors.m"; sourceTree = "<group>"; };
 		E200A3B81B02DDA100C4E39D /* GCPrivate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCPrivate.m; sourceTree = "<group>"; };
 		E20EB08919FC75CA0031A075 /* GCRepository+Reset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GCRepository+Reset.h"; sourceTree = "<group>"; };
 		E20EB08A19FC75CA0031A075 /* GCRepository+Reset.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GCRepository+Reset.m"; sourceTree = "<group>"; };
@@ -759,6 +771,10 @@
 				E22941DC1AC11E4E000A83AF /* GIWindowController.h */,
 				E22941DD1AC11E4E000A83AF /* GIWindowController.m */,
 				E22941DE1AC11E4E000A83AF /* GIWindowController.xib */,
+				DBDFBC0D22B61135003EEC6C /* NSBundle+GitUpKit.h */,
+				DBDFBC0E22B61135003EEC6C /* NSBundle+GitUpKit.m */,
+				DBDFBC1A22B61290003EEC6C /* NSColor+GINamedColors.h */,
+				DBDFBC1B22B61290003EEC6C /* NSColor+GINamedColors.m */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -1002,6 +1018,7 @@
 		E2D4DE9F1A4D562300B6AF66 /* Interface */ = {
 			isa = PBXGroup;
 			children = (
+				DBDFBC0B22B610F1003EEC6C /* Interface.xcassets */,
 				E2D4DEAD1A4D592000B6AF66 /* GIBranch.h */,
 				E2D4DEAE1A4D592000B6AF66 /* GIBranch.m */,
 				E23186031B139CB900A93CCF /* GIConstants.h */,
@@ -1043,6 +1060,7 @@
 				E21753421B91626B00BE234A /* GCBranch.h in Headers */,
 				E21753431B91626B00BE234A /* GCCommit.h in Headers */,
 				E21753441B91626B00BE234A /* GCCommitDatabase.h in Headers */,
+				DBDFBC1022B61135003EEC6C /* NSBundle+GitUpKit.h in Headers */,
 				E21753451B91626B00BE234A /* GCCore.h in Headers */,
 				E21753461B91626B00BE234A /* GCDiff.h in Headers */,
 				E21753471B91626B00BE234A /* GCError.h in Headers */,
@@ -1118,6 +1136,7 @@
 				E267E1C31B84D80500BAB377 /* GCLiveRepository.h in Headers */,
 				E267E2A71B84F03600BAB377 /* GCMacros.h in Headers */,
 				E267E1C41B84D80500BAB377 /* GCObject.h in Headers */,
+				DBCF675722CAE12500969D4A /* NSColor+GINamedColors.h in Headers */,
 				E267E1C51B84D80500BAB377 /* GCReference.h in Headers */,
 				E267E1C61B84D80500BAB377 /* GCReferenceTransform.h in Headers */,
 				E267E1C71B84D80500BAB377 /* GCReflogMessages.h in Headers */,
@@ -1162,6 +1181,7 @@
 				E267E24E1B84DC7D00BAB377 /* GICommitRewriterViewController.h in Headers */,
 				E267E24F1B84DC7D00BAB377 /* GICommitSplitterViewController.h in Headers */,
 				E267E2501B84DC7D00BAB377 /* GICommitViewController.h in Headers */,
+				DBDFBC0F22B61135003EEC6C /* NSBundle+GitUpKit.h in Headers */,
 				E267E2511B84DC7D00BAB377 /* GIConfigViewController.h in Headers */,
 				E267E2521B84DC7D00BAB377 /* GIConflictResolverViewController.h in Headers */,
 				E267E2531B84DC7D00BAB377 /* GIDiffViewController.h in Headers */,
@@ -1315,6 +1335,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E267E2201B84DBD600BAB377 /* Utilities.xcassets in Resources */,
+				DBDFBC0C22B610F1003EEC6C /* Interface.xcassets in Resources */,
 				E267E2211B84DBD900BAB377 /* GIWindowController.xib in Resources */,
 				E267E23B1B84DC4B00BAB377 /* Components.xcassets in Resources */,
 				E267E23C1B84DC4B00BAB377 /* Reasons.strings in Resources */,
@@ -1422,6 +1443,7 @@
 				E21753951B91684300BE234A /* XLFunctions.m in Sources */,
 				E21753961B91684300BE234A /* XLLogger.m in Sources */,
 				E21753971B91684300BE234A /* XLLogRecord.m in Sources */,
+				DBDFBC1222B61135003EEC6C /* NSBundle+GitUpKit.m in Sources */,
 				E21753981B91684300BE234A /* XLStandardLogger.m in Sources */,
 				E21753991B91684300BE234A /* XLDatabaseLogger.m in Sources */,
 			);
@@ -1440,6 +1462,7 @@
 				E267E1D71B84D83100BAB377 /* GCHistory.m in Sources */,
 				E267E1D81B84D83100BAB377 /* GCIndex.m in Sources */,
 				E267E1D91B84D83100BAB377 /* GCLiveRepository.m in Sources */,
+				DBDFBC1D22B61290003EEC6C /* NSColor+GINamedColors.m in Sources */,
 				E267E1DA1B84D83100BAB377 /* GCObject.m in Sources */,
 				749786941B85AAB10065BD55 /* GCOrderedSet.m in Sources */,
 				E267E1DB1B84D83100BAB377 /* GCPrivate.m in Sources */,
@@ -1476,6 +1499,7 @@
 				E267E2291B84DBF800BAB377 /* GIAppKit.m in Sources */,
 				E267E22A1B84DBF800BAB377 /* GIColorView.m in Sources */,
 				E267E22B1B84DBF800BAB377 /* GILinkButton.m in Sources */,
+				DBDFBC1122B61135003EEC6C /* NSBundle+GitUpKit.m in Sources */,
 				E267E22C1B84DBF800BAB377 /* GIModalView.m in Sources */,
 				E267E22D1B84DBF800BAB377 /* GIViewController.m in Sources */,
 				E267E22E1B84DBF800BAB377 /* GIViewController+Utilities.m in Sources */,

@@ -33,6 +33,7 @@
 @interface GIWindowController ()
 @property(nonatomic, strong) IBOutlet GIColorView* overlayView;
 @property(nonatomic, weak) IBOutlet NSTextField* overlayTextField;
+@property(nonatomic, weak) IBOutlet NSButton* overlayCloseButton;
 - (GIModalView*)modalViewIfVisible;
 @end
 
@@ -178,6 +179,13 @@ static void _TimerCallBack(CFRunLoopTimerRef timer, void* info) {
   if ((self = [super initWithWindow:window])) {
     [[NSBundle bundleForClass:[GIWindowController class]] loadNibNamed:@"GIWindowController" owner:self topLevelObjects:NULL];
     XLOG_DEBUG_CHECK(_overlayView);
+
+    // Force a dark appearance of the overlay. Set in the nib for 10.14.
+    if (@available(macOS 10.14, *)) {
+    } else {
+      _overlayTextField.textColor = NSColor.whiteColor;
+      _overlayCloseButton.cell.backgroundStyle = NSBackgroundStyleEmphasized;
+    }
 
     _area = [[NSTrackingArea alloc] initWithRect:NSZeroRect options:(NSTrackingInVisibleRect | NSTrackingActiveAlways | NSTrackingMouseEnteredAndExited) owner:self userInfo:nil];
     [_overlayView addTrackingArea:_area];

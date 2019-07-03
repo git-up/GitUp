@@ -529,25 +529,7 @@ cleanup:
 #if __GI_HAS_APPKIT__
 
 - (void)_computeNodeAndLineColors {
-  NSMutableArray* colors = [[NSMutableArray alloc] init];
-#if 1  // Pol set
-  [colors addObject:[NSColor colorWithDeviceHue:(0.0 / 8.0) saturation:0.45 brightness:0.90 alpha:1.0]];
-  [colors addObject:[NSColor colorWithDeviceHue:(1.0 / 8.0) saturation:0.45 brightness:0.90 alpha:1.0]];
-  [colors addObject:[NSColor colorWithDeviceHue:(2.0 / 8.0) saturation:0.45 brightness:0.90 alpha:1.0]];
-  [colors addObject:[NSColor colorWithDeviceHue:(3.0 / 8.0) saturation:0.45 brightness:0.90 alpha:1.0]];
-  [colors addObject:[NSColor colorWithDeviceHue:(4.0 / 8.0) saturation:0.45 brightness:0.90 alpha:1.0]];
-  [colors addObject:[NSColor colorWithDeviceHue:(5.0 / 8.0) saturation:0.45 brightness:0.90 alpha:1.0]];
-  [colors addObject:[NSColor colorWithDeviceHue:(6.0 / 8.0) saturation:0.45 brightness:0.90 alpha:1.0]];
-  [colors addObject:[NSColor colorWithDeviceHue:(7.0 / 8.0) saturation:0.45 brightness:0.90 alpha:1.0]];
-#else  // Wayne set
-  [colors addObject:[NSColor colorWithDeviceRed:(75.0 / 255.0) green:(138.0 / 255.0) blue:(231.0 / 255.0) alpha:1.0]];
-  [colors addObject:[NSColor colorWithDeviceRed:(179.0 / 255.0) green:(143.0 / 255.0) blue:(177.0 / 255.0) alpha:1.0]];
-  [colors addObject:[NSColor colorWithDeviceRed:(240.0 / 255.0) green:(115.0 / 255.0) blue:(116.0 / 255.0) alpha:1.0]];
-  [colors addObject:[NSColor colorWithDeviceRed:(140.0 / 255.0) green:(194.0 / 255.0) blue:(200.0 / 255.0) alpha:1.0]];
-  [colors addObject:[NSColor colorWithDeviceRed:(100.0 / 255.0) green:(170.0 / 255.0) blue:(130.0 / 255.0) alpha:1.0]];
-  [colors addObject:[NSColor colorWithDeviceRed:(250.0 / 255.0) green:(173.0 / 255.0) blue:(72.0 / 255.0) alpha:1.0]];
-  [colors addObject:[NSColor colorWithDeviceRed:(134.0 / 255.0) green:(126 / 255.0) blue:(124.0 / 255.0) alpha:1.0]];
-#endif
+  NSArray* colors = [NSColor.gitUpGraphAlternatingBranchColors retain];
   NSUInteger numColors = colors.count;
 
 #if __COLORIZE_BRANCHES__

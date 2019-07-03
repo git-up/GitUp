@@ -124,10 +124,6 @@ static inline WindowModeID _WindowModeIDFromString(NSString* mode) {
 }
 
 + (void)initialize {
-  [[NSImage imageNamed:@"icon_nav_map"] setTemplate:YES];
-  [[NSImage imageNamed:@"icon_nav_commit"] setTemplate:YES];
-  [[NSImage imageNamed:@"icon_nav_stash"] setTemplate:YES];
-
   NSString* path = [[NSBundle mainBundle] pathForResource:@"Help" ofType:@"plist"];
   if (path) {
     NSData* data = [NSData dataWithContentsOfFile:path];
@@ -266,13 +262,12 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
   CGFloat fontSize = _infoTextField2.font.pointSize;
   NSMutableParagraphStyle* style = [[NSMutableParagraphStyle alloc] init];
   style.alignment = NSCenterTextAlignment;
-  _stateAttributes = @{NSParagraphStyleAttributeName : style, NSForegroundColorAttributeName : [NSColor redColor], NSFontAttributeName : [NSFont boldSystemFontOfSize:fontSize]};
+  _stateAttributes = @{NSParagraphStyleAttributeName : style, NSForegroundColorAttributeName : NSColor.systemRedColor, NSFontAttributeName : [NSFont boldSystemFontOfSize:fontSize]};
 
   NSString* frameString = [_repository userInfoForKey:kRepositoryUserInfoKey_MainWindowFrame];
   if (frameString) {
     [_mainWindow setFrameFromString:frameString];
   }
-  _mainWindow.backgroundColor = [NSColor whiteColor];
   [_mainWindow setToolbar:_toolbar];
   _mainWindow.titleVisibility = NSWindowTitleHidden;
   _contentView.wantsLayer = YES;
@@ -280,6 +275,16 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
   _titleView.wantsLayer = YES;
   _rightView.wantsLayer = YES;
 
+  // Text fields must be drawn on an opaque background pre-Mojave to avoid
+  // subpixel antialiasing issues during animation.
+  if (@available(macOS 10.14, *)) {
+  } else {
+    for (NSTextField* field in @[ _infoTextField1, _infoTextField2, _progressTextField ]) {
+      field.drawsBackground = YES;
+      field.backgroundColor = _mainWindow.backgroundColor;
+    }
+  }
+  
   if (@available(macOS 10.11, *)) {
     // Fields have different alignment rects from their bounds starting in 10.11
     // and will appear slightly small when laid out just by autoresizing.
@@ -288,12 +293,6 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
     searchFieldFrame.size.height = [_searchField sizeThatFits:searchFieldFrame.size].height;
     searchFieldFrame.origin.y = floor(NSMidY(_snapshotsButton.frame) - (searchFieldFrame.size.height / 2));
     _searchField.frame = searchFieldFrame;
-  }
-
-  // Text fields must be drawn on an opaque background to avoid subpixel antialiasing issues during animation.
-  for (NSTextField* field in @[ _infoTextField1, _infoTextField2, _progressTextField ]) {
-    field.drawsBackground = YES;
-    field.backgroundColor = _mainWindow.backgroundColor;
   }
 
   _mapViewController = [[GIMapViewController alloc] initWithRepository:_repository];
@@ -369,6 +368,7 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
   NSTabViewItem* configItem = [_mainTabView tabViewItemAtIndex:[_mainTabView indexOfTabViewItemWithIdentifier:kWindowModeString_Map_Config]];
   configItem.view = _configViewController.view;
 
+  // This always uses a dark appearance.
   _hiddenWarningView.layer.backgroundColor = [[NSColor colorWithDeviceRed:0.0 green:0.0 blue:0.0 alpha:0.5] CGColor];
   _hiddenWarningView.layer.cornerRadius = 10.0;
 
@@ -760,19 +760,8 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 
     if ([_windowMode isEqualToString:kWindowModeString_Map]) {
       _snapshotsButton.hidden = NO;
-      if (![self validateUserInterfaceItem:(id)_snapshotsButton]) {
-        _snapshotsButton.image = [NSImage imageNamed:@"icon_nav_snapshot_disable"];
-        _snapshotsButton.alternateImage = [NSImage imageNamed:@"icon_nav_snapshot_disable"];
-        _snapshotsButton.enabled = NO;
-      } else if (_snapshotsView.superview) {
-        _snapshotsButton.image = [NSImage imageNamed:@"icon_nav_snapshot_active"];
-        _snapshotsButton.alternateImage = [NSImage imageNamed:@"icon_nav_snapshot_active_pressed"];
-        _snapshotsButton.enabled = YES;
-      } else {
-        _snapshotsButton.image = [NSImage imageNamed:@"icon_nav_snapshot"];
-        _snapshotsButton.alternateImage = [NSImage imageNamed:@"icon_nav_snapshot_pressed"];
-        _snapshotsButton.enabled = YES;
-      }
+      _snapshotsButton.enabled = [self validateUserInterfaceItem:(id)_snapshotsButton];
+      _snapshotsButton.state = _snapshotsView.superview ? NSControlStateValueOn : NSControlStateValueOff;
       _searchField.hidden = NO;
       _searchField.enabled = [self validateUserInterfaceItem:(id)_searchField];
     } else {

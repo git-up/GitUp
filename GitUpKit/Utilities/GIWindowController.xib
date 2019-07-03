@@ -1,19 +1,21 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6751" systemVersion="14C1514" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" customObjectInstantitationMethod="direct">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6751"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="GIWindowController">
             <connections>
+                <outlet property="overlayCloseButton" destination="RqW-TO-VRM" id="82l-vu-eZz"/>
                 <outlet property="overlayTextField" destination="7MR-W6-yhX" id="HJD-ux-NuK"/>
                 <outlet property="overlayView" destination="XhT-61-Yxc" id="9dU-ow-ojE"/>
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
-        <customView id="XhT-61-Yxc" customClass="GIColorView">
+        <customView appearanceType="darkAqua" id="XhT-61-Yxc" customClass="GIColorView">
             <rect key="frame" x="0.0" y="0.0" width="1000" height="50"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
             <subviews>
@@ -22,16 +24,16 @@
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="center" title="&lt;TEXT&gt;" id="OaN-6N-rRC">
                         <font key="font" metaFont="systemBold"/>
-                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
                 <button id="RqW-TO-VRM">
                     <rect key="frame" x="973" y="11" width="20" height="28"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                    <buttonCell key="cell" type="bevel" bezelStyle="rounded" image="icon_nav_closetip" imagePosition="only" alignment="center" alternateImage="icon_nav_closetip_pressed" controlSize="small" inset="2" id="Rxu-uK-fp6">
+                    <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSStopProgressFreestandingTemplate" imagePosition="only" alignment="center" inset="2" id="Rxu-uK-fp6">
                         <behavior key="behavior" lightByContents="YES"/>
-                        <font key="font" metaFont="smallSystem"/>
+                        <font key="font" metaFont="system"/>
                     </buttonCell>
                     <connections>
                         <action selector="dismissOverlay:" target="-2" id="M2B-7c-Jmk"/>
@@ -42,7 +44,6 @@
         </customView>
     </objects>
     <resources>
-        <image name="icon_nav_closetip" width="13" height="13"/>
-        <image name="icon_nav_closetip_pressed" width="13" height="13"/>
+        <image name="NSStopProgressFreestandingTemplate" width="14" height="14"/>
     </resources>
 </document>

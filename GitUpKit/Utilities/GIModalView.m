@@ -23,6 +23,7 @@
 #import "GIModalView.h"
 
 #import "XLFacilityMacros.h"
+#import "NSColor+GINamedColors.h"
 
 #define __ENABLE_BLUR__ 0
 
@@ -86,7 +87,6 @@
   view.autoresizingMask = NSViewMinXMargin | NSViewMaxXMargin | NSViewMinYMargin | NSViewMaxYMargin;
   view.wantsLayer = YES;
   view.layer.borderWidth = 1.0;
-  view.layer.borderColor = [[NSColor colorWithDeviceRed:0.0 green:0.0 blue:0.0 alpha:0.2] CGColor];
   view.layer.cornerRadius = 5.0;
 
 #if __ENABLE_BLUR__
@@ -113,8 +113,6 @@
   } else
 #endif
   {
-    view.layer.backgroundColor = [[NSColor colorWithDeviceRed:0.95 green:0.95 blue:0.95 alpha:1.0] CGColor];
-    self.layer.backgroundColor = [[NSColor colorWithDeviceRed:0.0 green:0.0 blue:0.0 alpha:0.4] CGColor];
     [self addSubview:view];
     if (handler) {
       dispatch_async(dispatch_get_main_queue(), handler);
@@ -157,6 +155,24 @@
     if (handler) {
       dispatch_async(dispatch_get_main_queue(), handler);
     }
+  }
+}
+
+- (void)updateLayer {
+  NSView* view = self.subviews.firstObject;
+  if (!view) {
+    return;
+  }
+
+  view.layer.borderColor = NSColor.gitUpSeparatorColor.CGColor;
+
+#if __ENABLE_BLUR__
+  if (!_useBackgroundFilters)
+#endif
+  {
+    view.layer.backgroundColor = NSColor.windowBackgroundColor.CGColor;
+    // This is for dimming so deliberately does not adapt for dark mode.
+    self.layer.backgroundColor = [[NSColor colorWithDeviceRed:0.0 green:0.0 blue:0.0 alpha:0.4] CGColor];
   }
 }
 

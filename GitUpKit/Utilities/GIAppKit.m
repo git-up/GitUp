@@ -21,6 +21,7 @@
 
 #import "GIAppKit.h"
 #import "GIConstants.h"
+#import "NSColor+GINamedColors.h"
 
 #import "XLFacilityMacros.h"
 
@@ -35,7 +36,6 @@ NSString* const GICommitMessageViewUserDefaultKey_ShowMargins = @"GICommitMessag
 NSString* const GICommitMessageViewUserDefaultKey_EnableSpellChecking = @"GICommitMessageViewUserDefaultKey_EnableSpellChecking";
 
 static const void* _associatedObjectCommitKey = &_associatedObjectCommitKey;
-static NSColor* _separatorColor = nil;
 
 @implementation NSMutableAttributedString (GIAppKit)
 
@@ -159,6 +159,8 @@ static NSColor* _separatorColor = nil;
   self.automaticDataDetectionEnabled = NO;  // Don't trust IB
   self.automaticTextReplacementEnabled = NO;  // Don't trust IB
   self.smartInsertDeleteEnabled = YES;  // Don't trust IB
+  self.textColor = NSColor.textColor;  // Don't trust IB
+  self.backgroundColor = NSColor.textBackgroundColor;  // Don't trust IB
   [self.textContainer replaceLayoutManager:[[GILayoutManager alloc] init]];
 
   [[NSUserDefaults standardUserDefaults] addObserver:self forKeyPath:GICommitMessageViewUserDefaultKey_ShowInvisibleCharacters options:0 context:(__bridge void*)[GICommitMessageView class]];
@@ -180,7 +182,7 @@ static NSColor* _separatorColor = nil;
     CGFloat x1 = floor(offset + kSummaryMaxWidth * charWidth) + 0.5;
     const CGFloat pattern1[] = {2, 4};
     CGContextSetLineDash(context, 0, pattern1, 2);
-    CGContextSetRGBStrokeColor(context, 0.33, 0.33, 0.33, 0.2);
+    CGContextSetStrokeColorWithColor(context, NSColor.tertiaryLabelColor.CGColor);
     CGContextMoveToPoint(context, x1, 0);
     CGContextAddLineToPoint(context, x1, bounds.size.height);
     CGContextStrokePath(context);
@@ -188,7 +190,7 @@ static NSColor* _separatorColor = nil;
     CGFloat x2 = floor(offset + kBodyMaxWidth * charWidth) + 0.5;
     const CGFloat pattern2[] = {4, 2};
     CGContextSetLineDash(context, 0, pattern2, 2);
-    CGContextSetRGBStrokeColor(context, 0.33, 0.33, 0.33, 0.2);
+    CGContextSetStrokeColorWithColor(context, NSColor.tertiaryLabelColor.CGColor);
     CGContextMoveToPoint(context, x2, 0);
     CGContextAddLineToPoint(context, x2, bounds.size.height);
     CGContextStrokePath(context);
@@ -225,11 +227,12 @@ static NSColor* _separatorColor = nil;
 
 @implementation GITableCellView
 
-+ (void)initialize {
-  _separatorColor = [NSColor colorWithDeviceRed:0.9 green:0.9 blue:0.9 alpha:1.0];
-}
-
 - (void)saveTextFieldColors {
+  if (@available(macOS 10.14, *)) {
+    // Handled fully automatically.
+    return;
+  }
+
   for (NSView* view in self.subviews) {
     if ([view isKindOfClass:[NSTextField class]]) {
       objc_setAssociatedObject(view, _associatedObjectCommitKey, [(NSTextField*)view textColor], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
@@ -246,10 +249,15 @@ static NSColor* _separatorColor = nil;
 - (void)setBackgroundStyle:(NSBackgroundStyle)backgroundStyle {
   [super setBackgroundStyle:backgroundStyle];
 
+  if (@available(macOS 10.14, *)) {
+    // Handled fully automatically.
+    return;
+  }
+
   for (NSView* view in self.subviews) {
     if ([view isKindOfClass:[NSTextField class]]) {
-      if (backgroundStyle == NSBackgroundStyleDark) {
-        [(NSTextField*)view setTextColor:[NSColor whiteColor]];
+      if (backgroundStyle == NSBackgroundStyleEmphasized) {
+        [(NSTextField*)view setTextColor:NSColor.alternateSelectedControlTextColor];
       } else {
         [(NSTextField*)view setTextColor:objc_getAssociatedObject(view, _associatedObjectCommitKey)];
       }
@@ -261,7 +269,7 @@ static NSColor* _separatorColor = nil;
   NSRect bounds = self.bounds;
   CGContextRef context = [[NSGraphicsContext currentContext] graphicsPort];
 
-  [_separatorColor setStroke];
+  [NSColor.gitUpSeparatorColor setStroke];
   CGContextMoveToPoint(context, 0, 0.5);
   CGContextAddLineToPoint(context, bounds.size.width, 0.5);
   CGContextStrokePath(context);
@@ -355,6 +363,18 @@ static NSColor* _separatorColor = nil;
   // Take the min size constraints into account.
   NSView* view = splitView.subviews.firstObject;
   [splitView setPosition:(splitView.vertical ? view.frame.size.width : view.frame.size.height) ofDividerAtIndex:0];
+}
+
+@end
+
+@implementation NSAppearance (GIAppearance)
+
+- (BOOL)matchesDarkAppearance {
+  if (@available(macOS 10.14, *)) {
+    return [[self bestMatchFromAppearancesWithNames:@[ NSAppearanceNameAqua, NSAppearanceNameDarkAqua ]] isEqual:NSAppearanceNameDarkAqua];
+  } else {
+    return NO;
+  }
 }
 
 @end

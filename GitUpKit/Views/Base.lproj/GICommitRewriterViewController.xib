@@ -1,8 +1,9 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7706"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="GICommitRewriterViewController">
@@ -32,7 +33,7 @@
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                             <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingTail" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="right" title="Rewriting Commit:" id="e11-6O-HXn">
                                 <font key="font" metaFont="systemBold" size="12"/>
-                                <color key="textColor" white="0.25" alpha="1" colorSpace="custom" customColorSpace="deviceWhite"/>
+                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                             </textFieldCell>
                         </textField>
@@ -40,15 +41,15 @@
                             <rect key="frame" x="135" y="8" width="847" height="16"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                             <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingTail" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="left" title="&lt;TITLE&gt;" id="rrE-b8-3j3">
-                                <font key="font" metaFont="cellTitle"/>
-                                <color key="textColor" white="0.25" alpha="1" colorSpace="custom" customColorSpace="deviceWhite"/>
+                                <font key="font" metaFont="controlContent"/>
+                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                             </textFieldCell>
                         </textField>
                     </subviews>
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="color" keyPath="backgroundColor">
-                            <color key="value" white="0.94999999999999996" alpha="1" colorSpace="deviceWhite"/>
+                            <color key="value" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </userDefinedRuntimeAttribute>
                     </userDefinedRuntimeAttributes>
                 </customView>
@@ -60,21 +61,18 @@
                             <rect key="frame" x="0.0" y="0.0" width="300" height="470"/>
                             <autoresizingMask key="autoresizingMask"/>
                             <subviews>
-                                <box verticalHuggingPriority="750" title="Box" boxType="separator" titlePosition="noTitle" id="ZBF-ni-AKe">
-                                    <rect key="frame" x="0.0" y="39" width="300" height="5"/>
+                                <box verticalHuggingPriority="750" boxType="separator" id="ZBF-ni-AKe">
+                                    <rect key="frame" x="0.0" y="43" width="300" height="5"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                    <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
-                                    <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                    <font key="titleFont" metaFont="system"/>
                                 </box>
                                 <customView id="OjA-hK-WAP">
-                                    <rect key="frame" x="0.0" y="42" width="300" height="428"/>
+                                    <rect key="frame" x="0.0" y="46" width="300" height="424"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </customView>
                                 <button verticalHuggingPriority="750" id="MQE-ts-iIn">
-                                    <rect key="frame" x="8" y="7" width="84" height="26"/>
+                                    <rect key="frame" x="12" y="12" width="84" height="23"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <buttonCell key="cell" type="bevel" title="Cancel" bezelStyle="regularSquare" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="mX3-eO-IXN">
+                                    <buttonCell key="cell" type="roundTextured" title="Cancel" bezelStyle="texturedRounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="mX3-eO-IXN">
                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                         <font key="font" metaFont="system"/>
                                         <string key="keyEquivalent" base64-UTF8="YES">
@@ -86,9 +84,9 @@ Gw
                                     </connections>
                                 </button>
                                 <button verticalHuggingPriority="750" id="3PR-J1-aKE">
-                                    <rect key="frame" x="188" y="7" width="104" height="26"/>
+                                    <rect key="frame" x="184" y="12" width="104" height="23"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                    <buttonCell key="cell" type="bevel" title="Continue…" bezelStyle="regularSquare" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Ibk-mz-3rz">
+                                    <buttonCell key="cell" type="roundTextured" title="Continue…" bezelStyle="texturedRounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Ibk-mz-3rz">
                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                         <font key="font" metaFont="system"/>
                                         <string key="keyEquivalent" base64-UTF8="YES">
@@ -128,7 +126,7 @@ DQ
             </subviews>
         </view>
         <customView id="RtD-0g-Q5a" userLabel="Message View">
-            <rect key="frame" x="0.0" y="-5" width="590" height="273"/>
+            <rect key="frame" x="0.0" y="0.0" width="590" height="273"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="pPL-IW-FD6">
@@ -143,39 +141,38 @@ DQ
                 <scrollView autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="DIo-C0-hvl">
                     <rect key="frame" x="20" y="83" width="550" height="150"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <clipView key="contentView" id="PV2-zJ-Th2">
-                        <rect key="frame" x="1" y="1" width="223" height="133"/>
+                    <clipView key="contentView" drawsBackground="NO" id="PV2-zJ-Th2">
+                        <rect key="frame" x="1" y="1" width="548" height="148"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textView importsGraphics="NO" richText="NO" findStyle="panel" allowsUndo="YES" verticallyResizable="YES" smartInsertDelete="YES" id="vJg-vt-cWY" customClass="GICommitMessageView">
+                            <textView importsGraphics="NO" richText="NO" verticallyResizable="YES" findStyle="panel" allowsUndo="YES" smartInsertDelete="YES" id="vJg-vt-cWY" customClass="GICommitMessageView">
                                 <rect key="frame" x="0.0" y="0.0" width="548" height="148"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 <size key="minSize" width="548" height="148"/>
                                 <size key="maxSize" width="550" height="10000000"/>
                                 <attributedString key="textStorage">
                                     <fragment content="&lt;MESSAGE&gt;">
                                         <attributes>
-                                            <font key="NSFont" metaFont="smallSystem"/>
+                                            <color key="NSColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                            <font key="NSFont" metaFont="toolTip"/>
                                             <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
                                         </attributes>
                                     </fragment>
                                 </attributedString>
-                                <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                <size key="minSize" width="548" height="148"/>
-                                <size key="maxSize" width="550" height="10000000"/>
+                                <color key="insertionPointColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                 <connections>
                                     <outlet property="delegate" destination="-2" id="PVe-GN-63R"/>
                                 </connections>
                             </textView>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </clipView>
-                    <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="byn-9R-q9d">
+                    <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="byn-9R-q9d">
                         <rect key="frame" x="-100" y="-100" width="87" height="18"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
-                    <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="v4Y-hR-5VU">
+                    <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="v4Y-hR-5VU">
                         <rect key="frame" x="224" y="1" width="15" height="133"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
@@ -184,15 +181,15 @@ DQ
                     <rect key="frame" x="18" y="61" width="554" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingTail" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="left" title="&lt;INFO&gt;" id="RGN-xW-ZIT">
-                        <font key="font" metaFont="smallSystem"/>
+                        <font key="font" metaFont="toolTip"/>
                         <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
                 <button verticalHuggingPriority="750" id="jiN-49-CJi">
-                    <rect key="frame" x="438" y="17" width="134" height="26"/>
+                    <rect key="frame" x="442" y="13" width="134" height="32"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <buttonCell key="cell" type="bevel" title="Rewrite Commit" bezelStyle="regularSquare" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="JGJ-zD-wfi">
+                    <buttonCell key="cell" type="push" title="Rewrite Commit" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="JGJ-zD-wfi">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
                         <string key="keyEquivalent" base64-UTF8="YES">
@@ -205,9 +202,9 @@ DQ
                     </connections>
                 </button>
                 <button verticalHuggingPriority="750" id="2mu-cU-csS">
-                    <rect key="frame" x="338" y="17" width="92" height="26"/>
+                    <rect key="frame" x="348" y="13" width="92" height="32"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <buttonCell key="cell" type="bevel" title="Cancel" bezelStyle="regularSquare" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="GL2-s4-e19">
+                    <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="GL2-s4-e19">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
                         <string key="keyEquivalent" base64-UTF8="YES">

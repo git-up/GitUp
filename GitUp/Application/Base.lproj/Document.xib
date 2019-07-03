@@ -73,7 +73,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="1000" height="500"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <customView hidden="YES" id="Zjf-1c-7Wk" customClass="GIColorView">
+                    <customView hidden="YES" appearanceType="aqua" id="Zjf-1c-7Wk" customClass="GIColorView">
                         <rect key="frame" x="0.0" y="450" width="1000" height="50"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <subviews>
@@ -81,7 +81,7 @@
                                 <rect key="frame" x="8" y="8" width="718" height="31"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" controlSize="small" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="left" title="&lt;HELP&gt;" id="de5-iD-6RU">
-                                    <font key="font" metaFont="smallSystem"/>
+                                    <font key="font" metaFont="toolTip"/>
                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
@@ -91,7 +91,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="roundRect" title="Continue" bezelStyle="roundedRect" alignment="center" controlSize="small" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="3Bn-bb-IAI">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="smallSystem"/>
+                                    <font key="font" metaFont="toolTip"/>
                                 </buttonCell>
                                 <connections>
                                     <action selector="dismissHelp:" target="-2" id="6SE-nM-Khn"/>
@@ -102,7 +102,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="roundRect" title="Got It!" bezelStyle="roundedRect" alignment="center" controlSize="small" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="U4W-Zh-R2B">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="smallSystem"/>
+                                    <font key="font" metaFont="toolTip"/>
                                 </buttonCell>
                                 <connections>
                                     <action selector="dismissHelp:" target="-2" id="ZhX-zZ-Pix"/>
@@ -113,7 +113,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="roundRect" title="Learn More…" bezelStyle="roundedRect" alignment="center" controlSize="small" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ux0-pi-0du">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="smallSystem"/>
+                                    <font key="font" metaFont="toolTip"/>
                                 </buttonCell>
                                 <connections>
                                     <action selector="openHelp:" target="-2" id="9JT-bA-cXq"/>
@@ -218,7 +218,7 @@
                                 <font key="font" metaFont="systemBold"/>
                                 <string key="title">Search result hidden from map
 Adjust settings in Show menu</string>
-                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                             </textFieldCell>
                         </textField>
@@ -229,11 +229,11 @@ Adjust settings in Show menu</string>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                 </box>
                 <popUpButton id="Fov-GV-gD7">
-                    <rect key="frame" x="10" y="10" width="80" height="27"/>
+                    <rect key="frame" x="12" y="12" width="80" height="23"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <popUpButtonCell key="cell" type="bevel" title="Show" bezelStyle="regularSquare" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" preferredEdge="maxY" selectedItem="9kl-kD-1vf" id="6Tc-ix-fh5">
+                    <popUpButtonCell key="cell" type="roundTextured" title="Show" bezelStyle="texturedRounded" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" preferredEdge="maxY" selectedItem="9kl-kD-1vf" id="6Tc-ix-fh5">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="cellTitle"/>
+                        <font key="font" metaFont="system"/>
                         <menu key="menu" id="FSB-Wc-ZmT">
                             <items>
                                 <menuItem title="Show" state="on" hidden="YES" id="hR8-Mf-qwD"/>
@@ -278,27 +278,27 @@ Adjust settings in Show menu</string>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="cbp-6y-jbG">
                     <rect key="frame" x="100" y="24" width="800" height="14"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="center" title="&lt;INFO LINE 1&gt;" id="1X5-xy-mOw">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" white="0.25" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="center" title="&lt;INFO LINE 1&gt;" id="1X5-xy-mOw">
+                        <font key="font" metaFont="toolTip"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="eEA-mo-3Uq">
                     <rect key="frame" x="100" y="8" width="800" height="14"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="center" title="&lt;INFO LINE 2&gt;" id="ecG-9J-PlG">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="center" title="&lt;INFO LINE 2&gt;" id="ecG-9J-PlG">
+                        <font key="font" metaFont="toolTip"/>
+                        <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
                 <textField hidden="YES" horizontalHuggingPriority="251" verticalHuggingPriority="750" id="dry-dR-hSD">
                     <rect key="frame" x="363" y="23" width="274" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="center" title="Remote operation in progress - Please wait…" id="vXh-uB-Jji">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" white="0.25" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="center" title="Remote operation in progress - Please wait…" id="vXh-uB-Jji">
+                        <font key="font" metaFont="toolTip"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
@@ -307,9 +307,9 @@ Adjust settings in Show menu</string>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </progressIndicator>
                 <button toolTip="Pull current branch from upstream" verticalHuggingPriority="750" id="bVm-VR-ap5">
-                    <rect key="frame" x="936" y="10" width="27" height="27"/>
+                    <rect key="frame" x="930" y="12" width="27" height="23"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                    <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="icon_action_fetch" imagePosition="only" alignment="center" borderStyle="border" inset="2" id="SFq-Wx-Us0">
+                    <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="icon_action_fetch" imagePosition="only" alignment="center" borderStyle="border" inset="2" id="SFq-Wx-Us0">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
@@ -318,9 +318,9 @@ Adjust settings in Show menu</string>
                     </connections>
                 </button>
                 <button toolTip="Push current branch to upstream" verticalHuggingPriority="750" id="NjF-Aj-I7c">
-                    <rect key="frame" x="963" y="10" width="27" height="27"/>
+                    <rect key="frame" x="961" y="12" width="27" height="23"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                    <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="icon_action_push" imagePosition="only" alignment="center" borderStyle="border" inset="2" id="dhk-Ry-6pb">
+                    <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="icon_action_push" imagePosition="only" alignment="center" borderStyle="border" inset="2" id="dhk-Ry-6pb">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
@@ -373,11 +373,11 @@ Adjust settings in Show menu</string>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
                 </customView>
                 <button verticalHuggingPriority="750" id="bvP-z4-n9x">
-                    <rect key="frame" x="91" y="10" width="80" height="27"/>
+                    <rect key="frame" x="90" y="12" width="80" height="23"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <buttonCell key="cell" type="bevel" title="Done" bezelStyle="regularSquare" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="QV1-K4-raG">
+                    <buttonCell key="cell" type="roundTextured" title="Done" bezelStyle="texturedRounded" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="QV1-K4-raG">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="titleBar" size="12"/>
+                        <font key="font" metaFont="system"/>
                     </buttonCell>
                     <connections>
                         <action selector="toggleTags:" target="-2" id="eYy-3x-jbj"/>
@@ -403,11 +403,11 @@ Adjust settings in Show menu</string>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
                 </customView>
                 <button verticalHuggingPriority="750" id="6Ni-2N-Ux7">
-                    <rect key="frame" x="91" y="10" width="80" height="27"/>
+                    <rect key="frame" x="90" y="12" width="80" height="23"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <buttonCell key="cell" type="bevel" title="Done" bezelStyle="regularSquare" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="G4D-l9-GAh">
+                    <buttonCell key="cell" type="roundTextured" title="Done" bezelStyle="texturedRounded" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="G4D-l9-GAh">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="titleBar" size="12"/>
+                        <font key="font" metaFont="system"/>
                     </buttonCell>
                     <connections>
                         <action selector="toggleAncestors:" target="-2" id="cRN-q3-d3h"/>
@@ -435,11 +435,11 @@ Adjust settings in Show menu</string>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
                 </customView>
                 <button verticalHuggingPriority="750" id="rOD-bh-eJs">
-                    <rect key="frame" x="91" y="10" width="80" height="27"/>
+                    <rect key="frame" x="90" y="12" width="80" height="23"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <buttonCell key="cell" type="bevel" title="Done" bezelStyle="regularSquare" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="mu6-y9-mEl">
+                    <buttonCell key="cell" type="roundTextured" title="Done" bezelStyle="texturedRounded" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="mu6-y9-mEl">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="cellTitle"/>
+                        <font key="font" metaFont="system"/>
                     </buttonCell>
                     <connections>
                         <action selector="toggleSnapshots:" target="-2" id="xEj-EP-Pu2"/>
@@ -465,11 +465,11 @@ Adjust settings in Show menu</string>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
                 </customView>
                 <button verticalHuggingPriority="750" id="l3F-kQ-tsG">
-                    <rect key="frame" x="91" y="10" width="80" height="27"/>
+                    <rect key="frame" x="90" y="12" width="80" height="23"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <buttonCell key="cell" type="bevel" title="Done" bezelStyle="regularSquare" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Vb7-E2-czh">
+                    <buttonCell key="cell" type="roundTextured" title="Done" bezelStyle="texturedRounded" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Vb7-E2-czh">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="cellTitle"/>
+                        <font key="font" metaFont="system"/>
                     </buttonCell>
                     <connections>
                         <action selector="toggleReflog:" target="-2" id="iy2-Rc-GIe"/>
@@ -510,7 +510,7 @@ Adjust settings in Show menu</string>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                     <textFieldCell key="cell" lineBreakMode="truncatingMiddle" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="center" title="&lt;REPOSITORY&gt;" usesSingleLineMode="YES" id="IrL-wK-jB6">
                         <font key="font" metaFont="system"/>
-                        <color key="textColor" white="0.0" alpha="0.66000000000000003" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
@@ -519,7 +519,7 @@ Adjust settings in Show menu</string>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                     <textFieldCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="center" title="&lt;INFO&gt;" usesSingleLineMode="YES" id="ueS-Kv-b9C">
                         <font key="font" metaFont="miniSystem"/>
-                        <color key="textColor" white="0.0" alpha="0.5" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
@@ -600,8 +600,8 @@ Adjust settings in Show menu</string>
                 <button toolTip="Show or hide Snapshots" verticalHuggingPriority="750" id="yWu-L8-6Ms">
                     <rect key="frame" x="43" y="3" width="25" height="25"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                    <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="icon_nav_snapshot" imagePosition="only" alignment="center" alternateImage="icon_nav_snapshot_pressed" borderStyle="border" inset="2" id="rrq-JQ-Zyn">
-                        <behavior key="behavior" lightByContents="YES"/>
+                    <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="icon_nav_snapshot" imagePosition="only" alignment="center" borderStyle="border" inset="2" id="rrq-JQ-Zyn">
+                        <behavior key="behavior" pushIn="YES" changeContents="YES" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
                     <connections>
@@ -609,9 +609,9 @@ Adjust settings in Show menu</string>
                     </connections>
                 </button>
                 <button id="FEG-0e-0JW">
-                    <rect key="frame" x="246" y="9" width="12" height="15"/>
+                    <rect key="frame" x="241" y="3" width="16" height="25"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                    <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="icon_nav_min" imagePosition="overlaps" alignment="center" alternateImage="icon_nav_min_pressed" inset="2" id="x0U-ct-UgO">
+                    <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="icon_nav_min" imagePosition="only" alignment="center" inset="2" id="x0U-ct-UgO">
                         <behavior key="behavior" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
@@ -658,7 +658,7 @@ Adjust settings in Show menu</string>
                         <rect key="frame" x="36" y="61" width="396" height="70"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" id="nO1-ig-ikF">
-                            <font key="font" metaFont="smallSystem"/>
+                            <font key="font" metaFont="toolTip"/>
                             <string key="title">GitUp searches only commit messages by default, but it can also search their diffs (text files only). This requires indexing the diffs of all commits in the repository which can take a long time.
 Changing this setting requires re-indexing the repository, which will automatically happen the next time you open it in GitUp.</string>
                             <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
@@ -691,9 +691,7 @@ DQ
         <image name="icon_nav_down" width="16" height="16"/>
         <image name="icon_nav_map" width="15" height="15"/>
         <image name="icon_nav_min" width="12" height="12"/>
-        <image name="icon_nav_min_pressed" width="12" height="12"/>
         <image name="icon_nav_snapshot" width="15" height="15"/>
-        <image name="icon_nav_snapshot_pressed" width="15" height="15"/>
         <image name="icon_nav_stash" width="15" height="15"/>
         <image name="icon_nav_up" width="16" height="16"/>
     </resources>

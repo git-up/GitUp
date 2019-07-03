@@ -39,9 +39,6 @@
 @property(nonatomic, getter=isEmpty) BOOL empty;
 @end
 
-@interface GIDiffRowView : NSTableRowView
-@end
-
 @interface GIHeaderDiffCellView : NSTableCellView
 @property(nonatomic, weak) IBOutlet NSButton* menuButton;
 @property(nonatomic, weak) IBOutlet NSButton* actionButton;
@@ -96,20 +93,6 @@ NSString* const GIDiffContentsViewControllerUserDefaultKey_DiffViewMode = @"GIDi
 @implementation GIDiffContentData
 @end
 
-@implementation GIDiffRowView
-
-- (BOOL)isOpaque {
-  return YES;
-}
-
-// Override all native drawing
-- (void)drawRect:(NSRect)dirtyRect {
-  [[NSColor whiteColor] setFill];
-  NSRectFill(dirtyRect);
-}
-
-@end
-
 @implementation GIHeaderDiffCellView
 
 - (BOOL)isOpaque {
@@ -125,7 +108,7 @@ NSString* const GIDiffContentsViewControllerUserDefaultKey_DiffViewMode = @"GIDi
 
   CGContextFillRect(context, dirtyRect);
 
-  CGContextSetBlendMode(context, kCGBlendModeMultiply);
+  CGContextSetStrokeColorWithColor(context, NSColor.gitUpSeparatorColor.CGColor);
   CGContextMoveToPoint(context, bounds.origin.x, bounds.origin.y + 0.5);
   CGContextAddLineToPoint(context, bounds.origin.x + bounds.size.width, bounds.origin.y + 0.5);
   CGContextStrokePath(context);
@@ -178,13 +161,6 @@ NSString* const GIDiffContentsViewControllerUserDefaultKey_DiffViewMode = @"GIDi
 
 @end
 
-static NSColor* _conflictBackgroundColor = nil;
-static NSColor* _addedBackgroundColor = nil;
-static NSColor* _modifiedBackgroundColor = nil;
-static NSColor* _deletedBackgroundColor = nil;
-static NSColor* _renamedBackgroundColor = nil;
-static NSColor* _untrackedBackgroundColor = nil;
-
 static NSImage* _conflictImage = nil;
 static NSImage* _addedImage = nil;
 static NSImage* _modifiedImage = nil;
@@ -201,22 +177,7 @@ static NSImage* _untrackedImage = nil;
   CGFloat _binaryViewHeight;
 }
 
-static NSColor* _DimColor(NSColor* color) {
-  CGFloat hue;
-  CGFloat saturation;
-  CGFloat brightness;
-  [color getHue:&hue saturation:&saturation brightness:&brightness alpha:NULL];
-  return [NSColor colorWithDeviceHue:hue saturation:(saturation - 0.15) brightness:(brightness + 0.1) alpha:1.0];
-}
-
 + (void)initialize {
-  _conflictBackgroundColor = _DimColor([NSColor colorWithDeviceRed:(255.0 / 255.0) green:(132.0 / 255.0) blue:(0.0 / 255.0) alpha:1.0]);
-  _addedBackgroundColor = _DimColor([NSColor colorWithDeviceRed:(75.0 / 255.0) green:(138.0 / 255.0) blue:(231.0 / 255.0) alpha:1.0]);
-  _modifiedBackgroundColor = _DimColor([NSColor colorWithDeviceRed:(119.0 / 255.0) green:(178.0 / 255.0) blue:(85.0 / 255.0) alpha:1.0]);
-  _deletedBackgroundColor = _DimColor([NSColor colorWithDeviceRed:(241.0 / 255.0) green:(115.0 / 255.0) blue:(116.0 / 255.0) alpha:1.0]);
-  _renamedBackgroundColor = _DimColor([NSColor colorWithDeviceRed:(133.0 / 255.0) green:(96.0 / 255.0) blue:(168.0 / 255.0) alpha:1.0]);
-  _untrackedBackgroundColor = [NSColor colorWithDeviceRed:0.75 green:0.75 blue:0.75 alpha:1.0];
-
   _conflictImage = [[NSBundle bundleForClass:[GIDiffContentsViewController class]] imageForResource:@"icon_file_conflict"];
   _addedImage = [[NSBundle bundleForClass:[GIDiffContentsViewController class]] imageForResource:@"icon_file_a"];
   _modifiedImage = [[NSBundle bundleForClass:[GIDiffContentsViewController class]] imageForResource:@"icon_file_m"];
@@ -248,7 +209,6 @@ static NSColor* _DimColor(NSColor* color) {
   [super loadView];
 
   _tableView.controller = self;
-  _tableView.backgroundColor = [NSColor colorWithDeviceRed:0.98 green:0.98 blue:0.98 alpha:1.0];
 
   _emptyTextField.stringValue = @"";
 
@@ -468,10 +428,6 @@ static NSColor* _DimColor(NSColor* color) {
   return row % 2 == 0;
 }
 
-- (NSTableRowView*)tableView:(NSTableView*)tableView rowViewForRow:(NSInteger)row {
-  return [[GIDiffRowView alloc] init];
-}
-
 - (void)tableView:(NSTableView*)tableView didRemoveRowView:(NSTableRowView*)rowView forRow:(NSInteger)row {
   if (_headerView) {
     row -= 1;
@@ -581,29 +537,29 @@ static inline NSString* _StringFromFileMode(GCFileMode mode) {
   NSRange newPathRange = {0, 0};
   NSString* label = data.delta.canonicalPath;
   if (data.conflict) {
-    view.backgroundColor = _conflictBackgroundColor;
+    view.backgroundColor = NSColor.gitUpDiffConflictBackgroundColor;
     view.imageView.image = _conflictImage;
   } else {
     switch (delta.change) {
       case kGCFileDiffChange_Added:
-        view.backgroundColor = _addedBackgroundColor;
+        view.backgroundColor = NSColor.gitUpDiffAddedBackgroundColor;
         view.imageView.image = _addedImage;
         break;
 
       case kGCFileDiffChange_Deleted:
-        view.backgroundColor = _deletedBackgroundColor;
+        view.backgroundColor = NSColor.gitUpDiffDeletedBackgroundColor;
         view.imageView.image = _deletedImage;
         break;
 
       case kGCFileDiffChange_Modified:
-        view.backgroundColor = _modifiedBackgroundColor;
+        view.backgroundColor = NSColor.gitUpDiffModifiedBackgroundColor;
         view.imageView.image = _modifiedImage;
         break;
 
       case kGCFileDiffChange_Renamed: {
         NSString* oldPath = delta.oldFile.path;
         NSString* newPath = delta.newFile.path;
-        view.backgroundColor = _renamedBackgroundColor;
+        view.backgroundColor = NSColor.gitUpDiffRenamedBackgroundColor;
         view.imageView.image = _renamedImage;
         label = [NSString stringWithFormat:@"%@ ▶ %@", oldPath, newPath];  // TODO: Handle truncation
         GIComputeModifiedRanges(oldPath, &oldPathRange, newPath, &newPathRange);
@@ -613,10 +569,10 @@ static inline NSString* _StringFromFileMode(GCFileMode mode) {
 
       case kGCFileDiffChange_Untracked:
         if (_showsUntrackedAsAdded) {
-          view.backgroundColor = _addedBackgroundColor;
+          view.backgroundColor = NSColor.gitUpDiffAddedBackgroundColor;
           view.imageView.image = _addedImage;
         } else {
-          view.backgroundColor = _untrackedBackgroundColor;
+          view.backgroundColor = NSColor.gitUpDiffUntrackedBackgroundColor;
           view.imageView.image = _untrackedImage;
         }
         break;
