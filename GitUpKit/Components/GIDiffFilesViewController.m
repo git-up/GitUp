@@ -32,10 +32,16 @@ static const NSPasteboardType GIPasteboardTypeFileURL = @"public.file-url";
 @property(nonatomic, assign) GIDiffFilesViewController* controller;
 @end
 
-@interface GIDiffFilesViewController ()
+@interface GIDiffFilesViewController () <NSFilePromiseProviderDelegate>
 @property(nonatomic, weak) IBOutlet GIFilesTableView* tableView;
 @property(nonatomic, weak) IBOutlet NSTextField* emptyTextField;
 @property(nonatomic, readonly) NSArray* items;
+@end
+
+/// Allows augmenting a file promise with custom intra-app data.
+API_AVAILABLE(macos(10.12))
+@interface GIDiffFileProvider : NSFilePromiseProvider
+@property(strong) id<NSPasteboardWriting> overridePasteboardWriter;
 @end
 
 @implementation GIFileCellView
@@ -204,6 +210,20 @@ static NSImage* _untrackedImage = nil;
   NSURL* url = [NSURL fileURLWithPath:path isDirectory:NO];
   [pasteboardItem setString:url.absoluteString forType:GIPasteboardTypeFileURL];
 
+  if (@available(macOS 10.12, *)) {
+    if (GC_FILE_MODE_IS_FILE(delta.oldFile.mode) || GC_FILE_MODE_IS_FILE(delta.newFile.mode)) {
+      NSString* pathExtension = delta.canonicalPath.pathExtension;
+      NSString* utType = (__bridge_transfer NSString*)UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (__bridge CFStringRef)pathExtension, kUTTypeData);
+
+      if (utType) {
+        GIDiffFileProvider* provider = [[GIDiffFileProvider alloc] initWithFileType:utType delegate:self];
+        provider.userInfo = delta;
+        provider.overridePasteboardWriter = pasteboardItem;
+        return provider;
+      }
+    }
+  }
+
   return pasteboardItem;
 }
 
@@ -299,6 +319,59 @@ static NSImage* _untrackedImage = nil;
   if ([_delegate respondsToSelector:@selector(diffFilesViewControllerDidChangeSelection:)]) {
     [_delegate diffFilesViewControllerDidChangeSelection:self];
   }
+}
+
+#pragma mark - NSFilePromiseProviderDelegate
+
+- (NSString*)_SHA1ForDelta:(GCDiffDelta*)delta {
+  switch (delta.change) {
+    case kGCFileDiffChange_Deleted:
+    case kGCFileDiffChange_Unmodified:
+    case kGCFileDiffChange_Ignored:
+    case kGCFileDiffChange_Untracked:
+    case kGCFileDiffChange_Unreadable:
+      return delta.oldFile.SHA1;
+    case kGCFileDiffChange_Added:
+    case kGCFileDiffChange_Modified:
+    case kGCFileDiffChange_Renamed:
+    case kGCFileDiffChange_Copied:
+    case kGCFileDiffChange_TypeChanged:
+    case kGCFileDiffChange_Conflicted:
+      return delta.newFile.SHA1;
+  }
+}
+
+- (NSString*)filePromiseProvider:(NSFilePromiseProvider*)filePromiseProvider fileNameForType:(NSString*)fileType API_AVAILABLE(macos(10.12)) {
+  GCDiffDelta* delta = filePromiseProvider.userInfo;
+  NSString* SHA1 = [[self _SHA1ForDelta:delta] substringToIndex:7];
+  NSString* basename = delta.canonicalPath.stringByDeletingPathExtension.lastPathComponent;
+  NSString* pathExtension = delta.canonicalPath.pathExtension;
+  NSString* filename = [[NSString stringWithFormat:@"%@ (%@)", basename, SHA1] stringByAppendingPathExtension:pathExtension];
+  return filename;
+}
+
+- (void)filePromiseProvider:(NSFilePromiseProvider*)filePromiseProvider writePromiseToURL:(NSURL*)url completionHandler:(void (^)(NSError* errorOrNil))completionHandler API_AVAILABLE(macos(10.12)) {
+  GCDiffDelta* delta = filePromiseProvider.userInfo;
+  NSString* SHA1 = [self _SHA1ForDelta:delta];
+  NSError* error;
+  BOOL success = [delta.diff.repository exportBlobWithSHA1:SHA1 toPath:url.path error:&error];
+  completionHandler(success ? nil : error);
+}
+
+@end
+
+@implementation GIDiffFileProvider
+
+- (NSArray<NSPasteboardType>*)writableTypesForPasteboard:(NSPasteboard*)pasteboard {
+  return [[self.overridePasteboardWriter writableTypesForPasteboard:pasteboard] arrayByAddingObjectsFromArray:[super writableTypesForPasteboard:pasteboard]];
+}
+
+- (NSPasteboardWritingOptions)writingOptionsForType:(NSPasteboardType)type pasteboard:(NSPasteboard*)pasteboard {
+  return [self.overridePasteboardWriter writingOptionsForType:type pasteboard:pasteboard] ?: [super writingOptionsForType:type pasteboard:pasteboard];
+}
+
+- (id)pasteboardPropertyListForType:(NSPasteboardType)type {
+  return [self.overridePasteboardWriter pasteboardPropertyListForType:type] ?: [super pasteboardPropertyListForType:type];
 }
 
 @end
