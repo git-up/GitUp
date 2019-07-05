@@ -22,12 +22,8 @@
 #import "GIInterface.h"
 #import "XLFacilityMacros.h"
 
-#define kPasteboardType @"GIDiffDelta"  // Raw unretained pointer which is OK since pasteboard is use within process only
-
-@interface GIDiffFileData : NSObject
-@property(nonatomic, strong) GCDiffDelta* delta;
-@property(nonatomic, strong) GCIndexConflict* conflict;
-@end
+static const NSPasteboardType GIPasteboardTypeFileRowIndex = @"co.gitup.mac.file-row-index";
+static const NSPasteboardType GIPasteboardTypeFileURL = @"public.file-url";
 
 @interface GIFileCellView : NSTableCellView
 @end
@@ -36,21 +32,22 @@
 @property(nonatomic, assign) GIDiffFilesViewController* controller;
 @end
 
-@interface GIDiffFilesViewController ()
+@interface GIDiffFilesViewController () <NSFilePromiseProviderDelegate>
 @property(nonatomic, weak) IBOutlet GIFilesTableView* tableView;
 @property(nonatomic, weak) IBOutlet NSTextField* emptyTextField;
+@property(nonatomic, readonly) NSArray* items;
 @end
 
-@implementation GIDiffFileData
+/// Allows augmenting a file promise with custom intra-app data.
+API_AVAILABLE(macos(10.12))
+@interface GIDiffFileProvider : NSFilePromiseProvider
+@property(strong) id<NSPasteboardWriting> overridePasteboardWriter;
 @end
 
 @implementation GIFileCellView
 @end
 
-// Override all dragging methods to ensure original behavior of NSTableView is gone
-@implementation GIFilesTableView {
-  NSDragOperation _dragOperation;
-}
+@implementation GIFilesTableView
 
 - (BOOL)becomeFirstResponder {
   if (![super becomeFirstResponder]) {
@@ -68,60 +65,6 @@
   }
 }
 
-- (void)awakeFromNib {
-  [self registerForDraggedTypes:[NSArray arrayWithObject:kPasteboardType]];
-}
-
-- (NSDragOperation)draggingEntered:(id<NSDraggingInfo>)sender {
-  _dragOperation = NSDragOperationNone;
-  if ((sender.draggingSource != self) && [_controller.delegate respondsToSelector:@selector(diffFilesViewControllerShouldAcceptDeltas:fromOtherController:)]) {
-    GIDiffFilesViewController* sourceController = [(GIFilesTableView*)sender.draggingSource controller];
-    if ([_controller.delegate diffFilesViewControllerShouldAcceptDeltas:_controller fromOtherController:sourceController]) {
-      _dragOperation = NSDragOperationCopy;
-    }
-  }
-  return _dragOperation;
-}
-
-- (NSDragOperation)draggingUpdated:(id<NSDraggingInfo>)sender {
-  return _dragOperation;
-}
-
-- (void)draggingExited:(id<NSDraggingInfo>)sender {
-  ;
-}
-
-- (void)draggingEnded:(id<NSDraggingInfo>)sender {
-  ;
-}
-
-- (BOOL)prepareForDragOperation:(id<NSDraggingInfo>)sender {
-  return YES;
-}
-
-- (BOOL)performDragOperation:(id<NSDraggingInfo>)sender {
-  GIDiffFilesViewController* sourceController = [(GIFilesTableView*)sender.draggingSource controller];
-  NSData* buffer = [sender.draggingPasteboard dataForType:kPasteboardType];
-  const void** pointer = (const void**)buffer.bytes;
-  NSMutableArray* array = [[NSMutableArray alloc] init];
-  for (size_t i = 0, count = buffer.length / sizeof(void*); i < count; ++i, ++pointer) {
-    [array addObject:(__bridge GCDiffDelta*)*pointer];
-  }
-  return [_controller.delegate diffFilesViewController:_controller didReceiveDeltas:array fromOtherController:sourceController];
-}
-
-- (void)concludeDragOperation:(id<NSDraggingInfo>)sender {
-  ;
-}
-
-- (BOOL)wantsPeriodicDraggingUpdates {
-  return NO;
-}
-
-- (void)updateDraggingItemsForDrag:(id<NSDraggingInfo>)sender {
-  ;
-}
-
 @end
 
 static NSImage* _conflictImage = nil;
@@ -131,9 +74,7 @@ static NSImage* _deletedImage = nil;
 static NSImage* _renamedImage = nil;
 static NSImage* _untrackedImage = nil;
 
-@implementation GIDiffFilesViewController {
-  NSMutableArray* _data;
-}
+@implementation GIDiffFilesViewController
 
 + (void)initialize {
   _conflictImage = [[NSBundle bundleForClass:[GIDiffFilesViewController class]] imageForResource:@"icon_file_conflict"];
@@ -150,35 +91,31 @@ static NSImage* _untrackedImage = nil;
   _tableView.controller = self;
   _tableView.target = self;
   _tableView.doubleAction = @selector(doubleClick:);
+  [_tableView registerForDraggedTypes:@[ GIPasteboardTypeFileRowIndex ]];
+  [_tableView setDraggingSourceOperationMask:NSDragOperationMove forLocal:YES];
+  [_tableView setDraggingSourceOperationMask:NSDragOperationGeneric forLocal:NO];
 
   _emptyTextField.stringValue = @"";
 
   self.allowsMultipleSelection = NO;
 }
 
+- (NSArray*)items {
+  return self.deltas;
+}
+
 - (void)setDeltas:(NSArray*)deltas usingConflicts:(NSDictionary*)conflicts {
   if ((deltas != _deltas) || (conflicts != _conflicts)) {
-    _deltas = deltas;
-    _conflicts = conflicts;
+    _deltas = [deltas copy];
+    _conflicts = [conflicts copy];
     [self _reloadDeltas];
   }
 }
 
 - (void)_reloadDeltas {
-  if (_deltas.count) {
-    _data = [[NSMutableArray alloc] init];
-    for (GCDiffDelta* delta in _deltas) {
-      GIDiffFileData* data = [[GIDiffFileData alloc] init];
-      data.delta = delta;
-      data.conflict = [_conflicts objectForKey:delta.canonicalPath];
-      [_data addObject:data];
-    }
-  } else {
-    _data = nil;
-  }
   [_tableView reloadData];
 
-  _emptyTextField.hidden = _data.count ? YES : NO;
+  _emptyTextField.hidden = self.deltas.count ? YES : NO;
 }
 
 - (void)setAllowsMultipleSelection:(BOOL)flag {
@@ -200,44 +137,29 @@ static NSImage* _untrackedImage = nil;
 
 - (GCDiffDelta*)selectedDelta {
   NSInteger row = _tableView.selectedRow;
-  if (row >= 0) {
-    return [(GIDiffFileData*)_data[row] delta];
-  }
-  return nil;
+  GCDiffDelta* delta = row >= 0 ? self.items[row] : nil;
+  return delta;
 }
 
 - (void)setSelectedDelta:(GCDiffDelta*)delta {
-  NSInteger row = 0;
-  for (GIDiffFileData* data in _data) {
-    if ((data.delta == delta) || [data.delta.canonicalPath isEqualToString:delta.canonicalPath]) {  // Don't use -isEqualToDelta:
-      [_tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:row] byExtendingSelection:NO];
-      [_tableView scrollRowToVisible:row];
-      break;
-    }
-    ++row;
-  }
+  self.selectedDeltas = delta ? @[ delta ] : @[];
 }
 
 - (NSArray*)selectedDeltas {
-  NSMutableArray* array = [[NSMutableArray alloc] init];
-  [_tableView.selectedRowIndexes enumerateIndexesUsingBlock:^(NSUInteger index, BOOL* stop) {
-    [array addObject:[(GIDiffFileData*)_data[index] delta]];
-  }];
-  return array;
+  return [self.items objectsAtIndexes:self.tableView.selectedRowIndexes];
 }
 
 - (void)setSelectedDeltas:(NSArray*)deltas {
-  NSMutableIndexSet* indexes = [[NSMutableIndexSet alloc] init];
-  NSUInteger row = 0;
-  for (GIDiffFileData* data in _data) {
-    for (GCDiffDelta* delta in deltas) {
-      if ((data.delta == delta) || [data.delta.canonicalPath isEqualToString:delta.canonicalPath]) {  // Don't use -isEqualToDelta:
-        [indexes addIndex:row];
-        break;
+  NSIndexSet* indexes = [self.items indexesOfObjectsPassingTest:^(GCDiffDelta* delta, NSUInteger row, BOOL* stop) {
+    for (GCDiffDelta* deltaToSelect in deltas) {
+      if ((delta == deltaToSelect) || [delta.canonicalPath isEqualToString:deltaToSelect.canonicalPath]) {  // Don't use -isEqualToDelta:
+        return YES;
       }
     }
-    ++row;
-  }
+
+    return NO;
+  }];
+
   [_tableView selectRowIndexes:indexes byExtendingSelection:NO];
   [_tableView scrollRowToVisible:indexes.firstIndex];
 }
@@ -253,16 +175,16 @@ static NSImage* _untrackedImage = nil;
 }
 
 - (IBAction)copy:(id)sender {
-  NSMutableString* string = [[NSMutableString alloc] init];
+  NSMutableArray* objects = [NSMutableArray array];
   [_tableView.selectedRowIndexes enumerateIndexesUsingBlock:^(NSUInteger index, BOOL* stop) {
-    GCDiffDelta* delta = [(GIDiffFileData*)_data[index] delta];
-    if (string.length) {
-      [string appendString:@"\n"];
+    id<NSPasteboardWriting> pasteboardWriter = [self tableView:_tableView pasteboardWriterForRow:index];
+    if (!pasteboardWriter) {
+      return;
     }
-    [string appendString:delta.canonicalPath];
+    [objects addObject:pasteboardWriter];
   }];
-  [[NSPasteboard generalPasteboard] declareTypes:@[ NSPasteboardTypeString ] owner:nil];
-  [[NSPasteboard generalPasteboard] setString:string forType:NSPasteboardTypeString];
+  [[NSPasteboard generalPasteboard] clearContents];
+  [[NSPasteboard generalPasteboard] writeObjects:objects];
 }
 
 - (IBAction)doubleClick:(id)sender {
@@ -274,34 +196,84 @@ static NSImage* _untrackedImage = nil;
 #pragma mark - NSTableViewDataSource
 
 - (NSInteger)numberOfRowsInTableView:(NSTableView*)tableView {
-  return _data.count;
+  return self.items.count;
 }
 
-- (BOOL)tableView:(NSTableView*)tableView writeRowsWithIndexes:(NSIndexSet*)rowIndexes toPasteboard:(NSPasteboard*)pboard {
-  if (![_delegate respondsToSelector:@selector(diffFilesViewControllerShouldAcceptDeltas:fromOtherController:)]) {
-    return NO;
+- (id<NSPasteboardWriting>)tableView:(NSTableView*)tableView pasteboardWriterForRow:(NSInteger)row {
+  GCDiffDelta* delta = self.items[row];
+
+  NSPasteboardItem* pasteboardItem = [[NSPasteboardItem alloc] init];
+  [pasteboardItem setPropertyList:@(row) forType:GIPasteboardTypeFileRowIndex];
+  [pasteboardItem setString:delta.canonicalPath forType:NSPasteboardTypeString];
+
+  NSString* path = [delta.diff.repository absolutePathForFile:delta.canonicalPath];
+  NSURL* url = [NSURL fileURLWithPath:path isDirectory:NO];
+  [pasteboardItem setString:url.absoluteString forType:GIPasteboardTypeFileURL];
+
+  if (@available(macOS 10.12, *)) {
+    if (GC_FILE_MODE_IS_FILE(delta.oldFile.mode) || GC_FILE_MODE_IS_FILE(delta.newFile.mode)) {
+      NSString* pathExtension = delta.canonicalPath.pathExtension;
+      NSString* utType = (__bridge_transfer NSString*)UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (__bridge CFStringRef)pathExtension, kUTTypeData);
+
+      if (utType) {
+        GIDiffFileProvider* provider = [[GIDiffFileProvider alloc] initWithFileType:utType delegate:self];
+        provider.userInfo = delta;
+        provider.overridePasteboardWriter = pasteboardItem;
+        return provider;
+      }
+    }
   }
-  NSMutableData* buffer = [[NSMutableData alloc] init];
-  [rowIndexes enumerateIndexesUsingBlock:^(NSUInteger index, BOOL* stop) {
-    GIDiffFileData* data = _data[index];
-    const void* pointer = (__bridge const void*)data.delta;
-    [buffer appendBytes:&pointer length:sizeof(void*)];
-  }];
-  [pboard declareTypes:[NSArray arrayWithObject:kPasteboardType] owner:self];
-  [pboard setData:buffer forType:kPasteboardType];
-  return YES;
+
+  return pasteboardItem;
+}
+
+- (NSDragOperation)tableView:(NSTableView*)tableView validateDrop:(id<NSDraggingInfo>)info proposedRow:(NSInteger)row proposedDropOperation:(NSTableViewDropOperation)dropOperation {
+  // Don't allow dropping directly on to rows.
+  if (dropOperation != NSTableViewDropAbove) {
+    return NSDragOperationNone;
+  }
+
+  // The drag must include the private pasteboard type.
+  NSPasteboard* pasteboard = info.draggingPasteboard;
+  if (![pasteboard canReadItemWithDataConformingToTypes:@[ GIPasteboardTypeFileRowIndex ]]) {
+    return NSDragOperationNone;
+  }
+
+  // Source must be another compatible files list.
+  GIFilesTableView* source = info.draggingSource;
+  if (source == tableView || ![self.delegate respondsToSelector:@selector(diffFilesViewControllerShouldAcceptDeltas:fromOtherController:)] || ![self.delegate respondsToSelector:@selector(diffFilesViewController:didReceiveDeltas:fromOtherController:)] || ![self.delegate diffFilesViewControllerShouldAcceptDeltas:self fromOtherController:source.controller]) {
+    return NSDragOperationNone;
+  }
+
+  // Having passed all those checks, approve the drop.
+  [tableView setDropRow:-1 dropOperation:NSTableViewDropAbove];
+  return NSDragOperationMove;
+}
+
+- (BOOL)tableView:(NSTableView*)tableView acceptDrop:(id<NSDraggingInfo>)info row:(NSInteger)row dropOperation:(NSTableViewDropOperation)dropOperation {
+  NSArray* pasteboardItems = [info.draggingPasteboard readObjectsForClasses:@[ NSPasteboardItem.self ] options:nil];
+  NSMutableIndexSet* indexes = [[NSMutableIndexSet alloc] init];
+  for (NSPasteboardItem* pasteboardItem in pasteboardItems) {
+    NSNumber* sourceRowNumber = [pasteboardItem propertyListForType:GIPasteboardTypeFileRowIndex];
+    if (!sourceRowNumber) continue;
+    [indexes addIndex:sourceRowNumber.unsignedIntegerValue];
+  }
+  GIFilesTableView* source = info.draggingSource;
+  NSArray* deltas = [source.controller.items objectsAtIndexes:indexes];
+  return [self.delegate diffFilesViewController:self didReceiveDeltas:deltas fromOtherController:source.controller];
 }
 
 #pragma mark - NSTableViewDelegate
 
 - (NSView*)tableView:(NSTableView*)tableView viewForTableColumn:(NSTableColumn*)tableColumn row:(NSInteger)row {
-  GIDiffFileData* data = _data[row];
+  GCDiffDelta* delta = self.items[row];
+  GCIndexConflict* conflict = self.conflicts[delta.canonicalPath];
   GIFileCellView* view = [_tableView makeViewWithIdentifier:tableColumn.identifier owner:self];
-  view.textField.stringValue = data.delta.canonicalPath;
-  if (data.conflict) {
+  view.textField.stringValue = delta.canonicalPath;
+  if (conflict) {
     view.imageView.image = _conflictImage;
   } else {
-    switch (data.delta.change) {
+    switch (delta.change) {
       case kGCFileDiffChange_Added:
         view.imageView.image = _addedImage;
         break;
@@ -336,8 +308,9 @@ static NSImage* _untrackedImage = nil;
 }
 
 - (BOOL)tableView:(NSTableView*)tableView shouldSelectRow:(NSInteger)row {
+  GCDiffDelta* delta = row >= 0 ? self.items[row] : nil;
   if ([_delegate respondsToSelector:@selector(diffFilesViewController:willSelectDelta:)]) {
-    [_delegate diffFilesViewController:self willSelectDelta:(row >= 0 ? [(GIDiffFileData*)_data[row] delta] : nil)];
+    [_delegate diffFilesViewController:self willSelectDelta:delta];
   }
   return YES;
 }
@@ -346,6 +319,59 @@ static NSImage* _untrackedImage = nil;
   if ([_delegate respondsToSelector:@selector(diffFilesViewControllerDidChangeSelection:)]) {
     [_delegate diffFilesViewControllerDidChangeSelection:self];
   }
+}
+
+#pragma mark - NSFilePromiseProviderDelegate
+
+- (NSString*)_SHA1ForDelta:(GCDiffDelta*)delta {
+  switch (delta.change) {
+    case kGCFileDiffChange_Deleted:
+    case kGCFileDiffChange_Unmodified:
+    case kGCFileDiffChange_Ignored:
+    case kGCFileDiffChange_Untracked:
+    case kGCFileDiffChange_Unreadable:
+      return delta.oldFile.SHA1;
+    case kGCFileDiffChange_Added:
+    case kGCFileDiffChange_Modified:
+    case kGCFileDiffChange_Renamed:
+    case kGCFileDiffChange_Copied:
+    case kGCFileDiffChange_TypeChanged:
+    case kGCFileDiffChange_Conflicted:
+      return delta.newFile.SHA1;
+  }
+}
+
+- (NSString*)filePromiseProvider:(NSFilePromiseProvider*)filePromiseProvider fileNameForType:(NSString*)fileType API_AVAILABLE(macos(10.12)) {
+  GCDiffDelta* delta = filePromiseProvider.userInfo;
+  NSString* SHA1 = [[self _SHA1ForDelta:delta] substringToIndex:7];
+  NSString* basename = delta.canonicalPath.stringByDeletingPathExtension.lastPathComponent;
+  NSString* pathExtension = delta.canonicalPath.pathExtension;
+  NSString* filename = [[NSString stringWithFormat:@"%@ (%@)", basename, SHA1] stringByAppendingPathExtension:pathExtension];
+  return filename;
+}
+
+- (void)filePromiseProvider:(NSFilePromiseProvider*)filePromiseProvider writePromiseToURL:(NSURL*)url completionHandler:(void (^)(NSError* errorOrNil))completionHandler API_AVAILABLE(macos(10.12)) {
+  GCDiffDelta* delta = filePromiseProvider.userInfo;
+  NSString* SHA1 = [self _SHA1ForDelta:delta];
+  NSError* error;
+  BOOL success = [delta.diff.repository exportBlobWithSHA1:SHA1 toPath:url.path error:&error];
+  completionHandler(success ? nil : error);
+}
+
+@end
+
+@implementation GIDiffFileProvider
+
+- (NSArray<NSPasteboardType>*)writableTypesForPasteboard:(NSPasteboard*)pasteboard {
+  return [[self.overridePasteboardWriter writableTypesForPasteboard:pasteboard] arrayByAddingObjectsFromArray:[super writableTypesForPasteboard:pasteboard]];
+}
+
+- (NSPasteboardWritingOptions)writingOptionsForType:(NSPasteboardType)type pasteboard:(NSPasteboard*)pasteboard {
+  return [self.overridePasteboardWriter writingOptionsForType:type pasteboard:pasteboard] ?: [super writingOptionsForType:type pasteboard:pasteboard];
+}
+
+- (id)pasteboardPropertyListForType:(NSPasteboardType)type {
+  return [self.overridePasteboardWriter pasteboardPropertyListForType:type] ?: [super pasteboardPropertyListForType:type];
 }
 
 @end

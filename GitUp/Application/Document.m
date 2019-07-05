@@ -284,7 +284,7 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
       field.backgroundColor = _mainWindow.backgroundColor;
     }
   }
-  
+
   if (@available(macOS 10.11, *)) {
     // Fields have different alignment rects from their bounds starting in 10.11
     // and will appear slightly small when laid out just by autoresizing.
