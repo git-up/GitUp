@@ -22,10 +22,14 @@
             <rect key="frame" x="0.0" y="0.0" width="1000" height="500"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <customView id="xtX-wF-ETB" customClass="GIColorView">
+                <customView id="xtX-wF-ETB">
                     <rect key="frame" x="0.0" y="450" width="1000" height="50"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                     <subviews>
+                        <box verticalHuggingPriority="750" boxType="separator" id="JPb-MQ-Lkt">
+                            <rect key="frame" x="0.0" y="-2" width="1000" height="5"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                        </box>
                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="ZFh-UY-NQJ">
                             <rect key="frame" x="3" y="29" width="117" height="16"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -63,11 +67,6 @@
                             </textFieldCell>
                         </textField>
                     </subviews>
-                    <userDefinedRuntimeAttributes>
-                        <userDefinedRuntimeAttribute type="color" keyPath="backgroundColor">
-                            <color key="value" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
-                        </userDefinedRuntimeAttribute>
-                    </userDefinedRuntimeAttributes>
                 </customView>
                 <splitView dividerStyle="thin" vertical="YES" id="GFw-7l-pVF" customClass="GIDualSplitView">
                     <rect key="frame" x="0.0" y="0.0" width="1000" height="450"/>
