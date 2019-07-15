@@ -30,12 +30,14 @@
 #define kKSDiffPath @"/usr/local/bin/ksdiff"
 #define kBComparePath @"/usr/local/bin/bcompare"
 #define kP4MergePath @"/Applications/p4merge.app/Contents/Resources/launchp4merge"
+#define kDiffMergePath @"/Applications/DiffMerge.app/Contents/Resources/diffmerge.sh"
 
 NSString* const GIViewControllerTool_FileMerge = @"FileMerge";
 NSString* const GIViewControllerTool_Kaleidoscope = @"Kaleidoscope";
 NSString* const GIViewControllerTool_BeyondCompare = @"Beyond Compare";
 NSString* const GIViewControllerTool_P4Merge = @"P4Merge";
 NSString* const GIViewControllerTool_GitTool = @"Git Tool";
+NSString* const GIViewControllerTool_DiffMerge = @"DiffMerge";
 
 NSString* const GIViewController_DiffTool = @"GIViewController_DiffTool";
 NSString* const GIViewController_MergeTool = @"GIViewController_MergeTool";
@@ -395,6 +397,14 @@ static NSString* _diffTemporaryDirectoryPath = nil;
   }
 }
 
+- (void)_runDiffMergeToolWithArguments:(NSArray*)arguments {
+  if (([[NSFileManager defaultManager] isExecutableFileAtPath:kDiffMergePath])) {
+    [self _runTaskWithPath:kDiffMergePath arguments:arguments variables:nil waitUntilExit:NO reportErrors:NO];  // launch diff merge
+  } else {
+    [self presentAlertWithType:kGIAlertType_Stop title:NSLocalizedString(@"DiffMerge is not available!", nil) message:NSLocalizedString(@"P4Merge app doesn't appear to be installed.", nil)];
+  }
+}
+
 // http://git-scm.com/docs/git-mergetool
 - (void)_runMergeGitToolForFile:(NSString*)file withOldPath:(NSString*)oldPath newPath:(NSString*)newPath basePath:(NSString*)basePath {
   NSString* tool = [[self.repository readConfigOptionForVariable:@"merge.tool" error:NULL] value];
@@ -455,6 +465,8 @@ static NSString* _diffTemporaryDirectoryPath = nil;
       [self _runP4MergeWithArguments:@[ @"-nl", oldTitle, @"-nr", newTitle, oldPath, newPath ]];
     } else if ([identifier isEqualToString:GIViewControllerTool_GitTool]) {
       [self _runDiffGitToolForFile:delta.canonicalPath withOldPath:oldPath newPath:newPath];
+    } else if ([identifier isEqualToString:GIViewControllerTool_DiffMerge]) {
+      [self _runDiffMergeToolWithArguments:@[ [NSString stringWithFormat:@"-t1=%@", oldTitle], [NSString stringWithFormat:@"-t2=%@", newTitle], oldPath, newPath ]];
     } else {
       XLOG_DEBUG_UNREACHABLE();
     }
@@ -571,6 +583,15 @@ static NSString* _diffTemporaryDirectoryPath = nil;
     [self _runP4MergeWithArguments:arguments];
   } else if ([identifier isEqualToString:GIViewControllerTool_GitTool]) {
     [self _runMergeGitToolForFile:mergePath withOldPath:ourPath newPath:theirPath basePath:ancestorPath];
+  } else if ([identifier isEqualToString:GIViewControllerTool_DiffMerge]) {
+    [arguments addObject:[NSString stringWithFormat:@"-r=%@", mergePath]];
+    [arguments addObject:[NSString stringWithFormat:@"-t1=%@", ourTitle]];
+    [arguments addObject:[NSString stringWithFormat:@"-t2=%@", ancestorTitle]];
+    [arguments addObject:[NSString stringWithFormat:@"-t3=%@", theirTitle]];
+    [arguments addObject:ourPath];
+    [arguments addObject:ancestorPath];
+    [arguments addObject:theirPath];
+    [self _runDiffMergeToolWithArguments:arguments];
   } else {
     XLOG_DEBUG_UNREACHABLE();
   }
@@ -840,6 +861,8 @@ static NSString* _diffTemporaryDirectoryPath = nil;
     [self _runBeyondCompareWithArguments:@[ [NSString stringWithFormat:@"-title1=%@", oldTitle], [NSString stringWithFormat:@"-title2=%@", newTitle], oldPath, newPath ]];
   } else if ([identifier isEqualToString:GIViewControllerTool_P4Merge] || [identifier isEqualToString:GIViewControllerTool_GitTool]) {
     ;  // Handled above
+  } else if ([identifier isEqualToString:GIViewControllerTool_DiffMerge]) {
+    [self _runDiffMergeToolWithArguments:@[ [NSString stringWithFormat:@"-t1=%@", oldTitle], [NSString stringWithFormat:@"-t2=%@", newTitle], oldPath, newPath ]];
   } else {
     XLOG_DEBUG_UNREACHABLE();
   }

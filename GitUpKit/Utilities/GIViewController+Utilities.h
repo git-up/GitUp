@@ -22,6 +22,7 @@ extern NSString* const GIViewControllerTool_Kaleidoscope;
 extern NSString* const GIViewControllerTool_BeyondCompare;
 extern NSString* const GIViewControllerTool_P4Merge;
 extern NSString* const GIViewControllerTool_GitTool;
+extern NSString* const GIViewControllerTool_DiffMerge;
 
 extern NSString* const GIViewController_DiffTool;
 extern NSString* const GIViewController_MergeTool;

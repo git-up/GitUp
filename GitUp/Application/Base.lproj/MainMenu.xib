@@ -356,6 +356,7 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                                         <menuItem title="Kaleidoscope" id="EDr-i6-aAh"/>
                                                         <menuItem title="Beyond Compare" id="cip-D6-GZD"/>
                                                         <menuItem title="P4Merge" id="RNS-uQ-WHF"/>
+                                                        <menuItem title="DiffMerge" id="yH0-Kd-hsv"/>
                                                         <menuItem isSeparatorItem="YES" id="XvM-0Z-bmM"/>
                                                         <menuItem title="Git Tool" id="iEl-zc-obP"/>
                                                     </items>
@@ -392,6 +393,7 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                                         <menuItem title="Kaleidoscope" id="pqO-7b-B5J"/>
                                                         <menuItem title="Beyond Compare" id="AaP-5A-YVD"/>
                                                         <menuItem title="P4Merge" id="Uq1-pA-HzR"/>
+                                                        <menuItem title="DiffMerge" id="AXz-pD-fZY"/>
                                                         <menuItem isSeparatorItem="YES" id="opM-b3-5YC"/>
                                                         <menuItem title="Git Tool" id="yyO-2T-uYr"/>
                                                     </items>
