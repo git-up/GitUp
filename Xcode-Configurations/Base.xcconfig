@@ -48,5 +48,5 @@ GCC_WARN_UNUSED_FUNCTION = YES
 GCC_WARN_UNUSED_VARIABLE = YES
 
 GITUP_PLATFORM[sdk=macosx*] = MacOSX
-GITUP_PLATFORM[sdk=iphonesimulator*] = iPhoneOS
-GITUP_PLATFORM[sdk=iphoneos*] = iPhoneSimulator
+GITUP_PLATFORM[sdk=iphonesimulator*] = iPhoneSimulator
+GITUP_PLATFORM[sdk=iphoneos*] = iPhoneOS
