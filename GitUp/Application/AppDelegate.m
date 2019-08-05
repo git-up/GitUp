@@ -93,6 +93,7 @@
     kUserDefaultsKey_FirstLaunch : @(YES),
     kUserDefaultsKey_DiffWhitespaceMode : @(kGCLiveRepositoryDiffWhitespaceMode_Normal),
     kUserDefaultsKey_ShowWelcomeWindow : @(YES),
+    kUserDefaultsKey_Theme : kTheme_Dark,
   };
   [[NSUserDefaults standardUserDefaults] registerDefaults:defaults];
 }
@@ -265,6 +266,9 @@
   }
 
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_willShowRecentPopUpMenu:) name:NSPopUpButtonWillPopUpNotification object:_recentPopUpButton];
+
+  NSString* theme = [[NSUserDefaults standardUserDefaults] stringForKey:kUserDefaultsKey_Theme];
+  [self _applyTheme:theme];
 }
 
 - (void)_updatePreferencePanel {
@@ -272,6 +276,16 @@
   for (NSMenuItem* item in _channelPopUpButton.menu.itemArray) {
     if ([item.representedObject isEqualToString:channel]) {
       [_channelPopUpButton selectItem:item];
+      break;
+    }
+  }
+}
+
+- (void)_updateThemePopUpButton {
+  NSString* theme = [[NSUserDefaults standardUserDefaults] stringForKey:kUserDefaultsKey_Theme];
+  for (NSMenuItem* item in _themePopUpButton.menu.itemArray) {
+    if ([item.title isEqualToString:theme]) {
+      [_themePopUpButton selectItem:item];
       break;
     }
   }
@@ -515,6 +529,23 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
   }
 }
 
+- (void)_applyTheme:(NSString*)theme {
+  BOOL enableDarkMode = [theme isEqualToString:kTheme_Dark];
+  if (@available(macOS 10.14, *)) {
+    if (enableDarkMode) {
+      NSApp.appearance = [NSAppearance appearanceNamed:NSAppearanceNameDarkAqua];
+    } else {
+      NSApp.appearance = [NSAppearance appearanceNamed:NSAppearanceNameAqua];
+    }
+  }
+  [[NSUserDefaults standardUserDefaults] setObject:theme forKey:kUserDefaultsKey_Theme];
+}
+
+- (IBAction)changeTheme:(id)sender {
+  NSString* theme = _themePopUpButton.titleOfSelectedItem;
+  [self _applyTheme:theme];
+}
+
 - (IBAction)viewWiki:(id)sender {
   [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:kURL_Wiki]];
 }
@@ -543,6 +574,7 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
 
 - (IBAction)showPreferences:(id)sender {
   [self _updatePreferencePanel];
+  [self _updateThemePopUpButton];
   [_preferencesWindow makeKeyAndOrderFront:nil];
 }
 

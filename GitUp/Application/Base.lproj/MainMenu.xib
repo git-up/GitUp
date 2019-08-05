@@ -15,10 +15,10 @@
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <window title="GitUp Preferences" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="preferences" animationBehavior="default" id="3qV-q4-a6k">
             <windowStyleMask key="styleMask" titled="YES" closable="YES"/>
-            <rect key="contentRect" x="940" y="240" width="500" height="400"/>
+            <rect key="contentRect" x="940" y="240" width="500" height="410"/>
             <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1417"/>
             <view key="contentView" id="uEJ-lO-PMl">
-                <rect key="frame" x="0.0" y="0.0" width="500" height="400"/>
+                <rect key="frame" x="0.0" y="0.0" width="500" height="410"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <userGuides>
                     <userLayoutGuide location="138" affinity="minX"/>
@@ -26,17 +26,17 @@
                 </userGuides>
                 <subviews>
                     <tabView type="noTabsNoBorder" id="anN-jw-l7x">
-                        <rect key="frame" x="0.0" y="0.0" width="500" height="400"/>
+                        <rect key="frame" x="0.0" y="0.0" width="500" height="410"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <font key="font" metaFont="system"/>
                         <tabViewItems>
-                            <tabViewItem label="{500, 368}" identifier="general" id="M8N-WY-xpP">
+                            <tabViewItem label="{500, 410}" identifier="general" id="M8N-WY-xpP">
                                 <view key="view" id="ZJf-t1-iGB">
-                                    <rect key="frame" x="0.0" y="0.0" width="500" height="400"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="500" height="410"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="EBQ-WH-0CZ">
-                                            <rect key="frame" x="12" y="363" width="120" height="17"/>
+                                            <rect key="frame" x="12" y="373" width="120" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Appearance:" id="KoF-W9-skh">
                                                 <font key="font" metaFont="system"/>
@@ -45,7 +45,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <button id="2WQ-hK-j2t">
-                                            <rect key="frame" x="137" y="362" width="162" height="18"/>
+                                            <rect key="frame" x="137" y="372" width="162" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="check" title="Show welcome window" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="x90-KD-anh">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -62,7 +62,7 @@
                                             </connections>
                                         </button>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="lyZ-cf-MT6">
-                                            <rect key="frame" x="12" y="193" width="120" height="17"/>
+                                            <rect key="frame" x="12" y="203" width="120" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="right" title="Commits:" id="6J8-35-XZI">
                                                 <font key="font" metaFont="system"/>
@@ -71,7 +71,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <button id="CQY-oC-oQ8">
-                                            <rect key="frame" x="137" y="192" width="146" height="18"/>
+                                            <rect key="frame" x="137" y="202" width="146" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="check" title="Use Simple mode" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="rMb-zc-NF1">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -88,7 +88,7 @@
                                             </connections>
                                         </button>
                                         <button id="T1B-3i-hRB">
-                                            <rect key="frame" x="137" y="102" width="191" height="18"/>
+                                            <rect key="frame" x="137" y="112" width="191" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="check" title="Show invisible characters" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="omy-Qf-vg9">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -105,7 +105,7 @@
                                             </connections>
                                         </button>
                                         <button id="SyF-mN-F3q">
-                                            <rect key="frame" x="137" y="82" width="270" height="18"/>
+                                            <rect key="frame" x="137" y="92" width="270" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="check" title="Show margins at 50 and 72 characters" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="AMR-Ne-0QY">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -122,7 +122,7 @@
                                             </connections>
                                         </button>
                                         <button id="ag6-rb-zPH">
-                                            <rect key="frame" x="137" y="62" width="176" height="18"/>
+                                            <rect key="frame" x="137" y="72" width="176" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="check" title="Enable spell checking" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="G82-Jf-2sb">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -139,7 +139,7 @@
                                             </connections>
                                         </button>
                                         <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="jee-vl-BUt">
-                                            <rect key="frame" x="137" y="130" width="345" height="56"/>
+                                            <rect key="frame" x="137" y="140" width="345" height="56"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" id="v99-tx-ohB">
                                                 <font key="font" metaFont="toolTip"/>
@@ -150,7 +150,7 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="YZU-dx-gjr">
-                                            <rect key="frame" x="12" y="264" width="120" height="17"/>
+                                            <rect key="frame" x="12" y="274" width="120" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Diffs Layout:" id="B0V-bN-usw">
                                                 <font key="font" metaFont="system"/>
@@ -159,7 +159,7 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                             </textFieldCell>
                                         </textField>
                                         <matrix verticalHuggingPriority="750" allowsEmptySelection="NO" autorecalculatesCellSize="YES" id="pP3-w2-KOs">
-                                            <rect key="frame" x="139" y="224" width="341" height="58"/>
+                                            <rect key="frame" x="139" y="234" width="341" height="58"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                             <size key="cellSize" width="276" height="18"/>
@@ -195,7 +195,7 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                             </connections>
                                         </matrix>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="mC1-sE-MTH">
-                                            <rect key="frame" x="12" y="103" width="120" height="17"/>
+                                            <rect key="frame" x="12" y="113" width="120" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="right" title="Message Editor:" id="5Hr-DF-QKw">
                                                 <font key="font" metaFont="system"/>
@@ -204,7 +204,7 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="IO8-Wx-DRo">
-                                            <rect key="frame" x="12" y="338" width="120" height="17"/>
+                                            <rect key="frame" x="12" y="348" width="120" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Diff Generation:" id="cxW-C3-fIQ">
                                                 <font key="font" metaFont="system"/>
@@ -213,7 +213,7 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                             </textFieldCell>
                                         </textField>
                                         <matrix verticalHuggingPriority="750" allowsEmptySelection="NO" autorecalculatesCellSize="YES" id="zwg-99-t9E">
-                                            <rect key="frame" x="139" y="298" width="341" height="58"/>
+                                            <rect key="frame" x="139" y="308" width="341" height="58"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                             <size key="cellSize" width="268" height="18"/>
@@ -248,20 +248,50 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                                 </binding>
                                             </connections>
                                         </matrix>
+                                        <popUpButton verticalHuggingPriority="750" id="aYx-qQ-zM6" userLabel="Theme">
+                                            <rect key="frame" x="137" y="34" width="77" height="25"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <popUpButtonCell key="cell" type="push" title="Light" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="JvD-d0-gDC" id="VKw-op-BDT" userLabel="Theme">
+                                                <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="menu"/>
+                                                <menu key="menu" id="MTa-wS-FO9">
+                                                    <items>
+                                                        <menuItem title="Light" state="on" id="JvD-d0-gDC" userLabel="Light">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="Dark" id="Sc6-iK-E7E" userLabel="Dark">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                    </items>
+                                                </menu>
+                                            </popUpButtonCell>
+                                            <connections>
+                                                <action selector="changeTheme:" target="Voe-Tx-rLC" id="1mb-By-SXO"/>
+                                            </connections>
+                                        </popUpButton>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="1hO-bG-lcd">
+                                            <rect key="frame" x="82" y="41" width="50" height="17"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Theme:" id="JLz-xa-wP4">
+                                                <font key="font" usesAppearanceFont="YES"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
                                     </subviews>
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="{500, 262}" identifier="advanced" id="Qdl-lQ-O4q">
                                 <view key="view" id="8CG-H0-Xhk">
-                                    <rect key="frame" x="0.0" y="0.0" width="500" height="400"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="500" height="442"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <popUpButton verticalHuggingPriority="750" id="7N4-S9-iWL">
-                                            <rect key="frame" x="136" y="192" width="200" height="26"/>
+                                            <rect key="frame" x="136" y="234" width="200" height="26"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <popUpButtonCell key="cell" type="push" title="&lt;RELEASE CHANNEL&gt;" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" autoenablesItems="NO" selectedItem="xdx-IX-FK6" id="Sdr-Ep-kPW">
                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="system"/>
+                                                <font key="font" metaFont="menu"/>
                                                 <menu key="menu" autoenablesItems="NO" id="0Z3-9j-kDN">
                                                     <items>
                                                         <menuItem title="&lt;RELEASE CHANNEL&gt;" state="on" id="xdx-IX-FK6">
@@ -275,7 +305,7 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                             </connections>
                                         </popUpButton>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="mi3-Eg-51i">
-                                            <rect key="frame" x="12" y="198" width="120" height="17"/>
+                                            <rect key="frame" x="12" y="240" width="120" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="right" title="Release Channel:" id="M0A-b6-dhN">
                                                 <font key="font" metaFont="system"/>
@@ -284,7 +314,7 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="b9G-MU-MDn">
-                                            <rect key="frame" x="12" y="295" width="120" height="17"/>
+                                            <rect key="frame" x="12" y="337" width="120" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="right" title="Remotes:" id="LAp-ea-WLX">
                                                 <font key="font" metaFont="system"/>
@@ -293,7 +323,7 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                             </textFieldCell>
                                         </textField>
                                         <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="PtA-hG-Qmn">
-                                            <rect key="frame" x="137" y="154" width="345" height="34"/>
+                                            <rect key="frame" x="137" y="196" width="345" height="34"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="The &quot;Continuous&quot; release channel installs builds directly from GitUp Continuous Integration. Use at your own risk!" id="qB2-E4-Yuu">
                                                 <font key="font" metaFont="toolTip"/>
@@ -302,7 +332,7 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="w2N-io-xkS">
-                                            <rect key="frame" x="137" y="295" width="130" height="17"/>
+                                            <rect key="frame" x="137" y="337" width="130" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="left" title="Automatically check" id="X1v-BK-dAQ">
                                                 <font key="font" metaFont="system"/>
@@ -311,11 +341,11 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                             </textFieldCell>
                                         </textField>
                                         <popUpButton verticalHuggingPriority="750" id="ZYX-Yt-1fl">
-                                            <rect key="frame" x="271" y="289" width="145" height="26"/>
+                                            <rect key="frame" x="271" y="331" width="145" height="26"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <popUpButtonCell key="cell" type="push" title="Never" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" autoenablesItems="NO" altersStateOfSelectedItem="NO" selectedItem="KgR-3b-gT5" id="Pdg-S3-YXJ">
                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="system"/>
+                                                <font key="font" metaFont="menu"/>
                                                 <menu key="menu" autoenablesItems="NO" id="HS2-nT-ca7">
                                                     <items>
                                                         <menuItem title="Never" id="KgR-3b-gT5"/>
@@ -336,7 +366,7 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                             </connections>
                                         </popUpButton>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="vpU-gW-P72">
-                                            <rect key="frame" x="12" y="369" width="120" height="17"/>
+                                            <rect key="frame" x="12" y="411" width="120" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="right" title="External Diff:" id="WZ7-h0-Fpb">
                                                 <font key="font" metaFont="system"/>
@@ -345,11 +375,11 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                             </textFieldCell>
                                         </textField>
                                         <popUpButton verticalHuggingPriority="750" id="mZX-yf-dtK">
-                                            <rect key="frame" x="136" y="363" width="165" height="26"/>
+                                            <rect key="frame" x="136" y="405" width="165" height="26"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <popUpButtonCell key="cell" type="push" title="FileMerge" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" autoenablesItems="NO" altersStateOfSelectedItem="NO" selectedItem="szc-39-qmN" id="yfJ-9J-pbb">
                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="system"/>
+                                                <font key="font" metaFont="menu"/>
                                                 <menu key="menu" autoenablesItems="NO" id="bCl-N0-YZa">
                                                     <items>
                                                         <menuItem title="FileMerge" id="szc-39-qmN"/>
@@ -373,7 +403,7 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                             </connections>
                                         </popUpButton>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="2WJ-iR-f3R">
-                                            <rect key="frame" x="12" y="336" width="120" height="17"/>
+                                            <rect key="frame" x="12" y="378" width="120" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="right" title="External Merge:" id="2DT-l7-dgY">
                                                 <font key="font" metaFont="system"/>
@@ -382,11 +412,11 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                             </textFieldCell>
                                         </textField>
                                         <popUpButton verticalHuggingPriority="750" id="Ud9-w0-9vK">
-                                            <rect key="frame" x="136" y="330" width="165" height="26"/>
+                                            <rect key="frame" x="136" y="372" width="165" height="26"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <popUpButtonCell key="cell" type="push" title="FileMerge" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" autoenablesItems="NO" altersStateOfSelectedItem="NO" selectedItem="Zln-Lm-NeH" id="NHJ-tA-W14">
                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="system"/>
+                                                <font key="font" metaFont="menu"/>
                                                 <menu key="menu" autoenablesItems="NO" id="79m-3R-eaz">
                                                     <items>
                                                         <menuItem title="FileMerge" id="Zln-Lm-NeH"/>
@@ -410,7 +440,7 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                             </connections>
                                         </popUpButton>
                                         <button id="Xxa-CO-ELY">
-                                            <rect key="frame" x="136" y="269" width="346" height="18"/>
+                                            <rect key="frame" x="136" y="311" width="346" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="check" title="Allow quick confirmation of dangerous operations" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="uJq-iS-sPr">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -421,7 +451,7 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                             </connections>
                                         </button>
                                         <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="Ad9-ef-Jqv">
-                                            <rect key="frame" x="137" y="237" width="345" height="28"/>
+                                            <rect key="frame" x="137" y="279" width="345" height="28"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="This allows dangerous operations on remotes, like force push, to be confirmed by pressing the Return key in dialogs." id="LQY-Xb-bQ5">
                                                 <font key="font" metaFont="toolTip"/>
@@ -454,7 +484,7 @@ You must close and reopen any opened repositories in GitUp after changing this s
                     <toolbarItem reference="doU-9n-plE"/>
                 </defaultToolbarItems>
             </toolbar>
-            <point key="canvasLocation" x="-8" y="1086"/>
+            <point key="canvasLocation" x="-8" y="1138"/>
         </window>
         <customObject id="Voe-Tx-rLC" customClass="AppDelegate">
             <connections>
@@ -473,6 +503,7 @@ You must close and reopen any opened repositories in GitUp after changing this s
                 <outlet property="preferencesToolbar" destination="YkS-ea-UXD" id="eZX-nc-ex8"/>
                 <outlet property="preferencesWindow" destination="3qV-q4-a6k" id="yO6-yX-KBA"/>
                 <outlet property="recentPopUpButton" destination="rck-lm-gsz" id="mPQ-v1-bTW"/>
+                <outlet property="themePopUpButton" destination="aYx-qQ-zM6" id="NeK-Gb-prC"/>
                 <outlet property="twitterButton" destination="5ht-7L-7AO" id="BT6-TN-i3z"/>
                 <outlet property="versionTextField" destination="HZC-36-Grr" id="qyt-nZ-xv3"/>
                 <outlet property="welcomeWindow" destination="mjY-As-hbN" id="qhN-UE-SS0"/>
@@ -1189,7 +1220,7 @@ UI design by Wayne Fan</string>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                 <popUpButtonCell key="cell" type="bevel" title="Recently Opened…" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" pullsDown="YES" autoenablesItems="NO" altersStateOfSelectedItem="NO" selectedItem="BnD-OX-t50" id="TkZ-yA-jfp">
                                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                                    <font key="font" metaFont="system"/>
+                                                    <font key="font" metaFont="menu"/>
                                                     <string key="keyEquivalent"></string>
                                                     <menu key="menu" autoenablesItems="NO" id="SuZ-b2-YNW">
                                                         <items>

@@ -20,6 +20,7 @@
 @property(nonatomic, weak) IBOutlet NSToolbar* preferencesToolbar;
 @property(nonatomic, weak) IBOutlet NSTabView* preferencesTabView;
 @property(nonatomic, weak) IBOutlet NSPopUpButton* channelPopUpButton;
+@property(nonatomic, weak) IBOutlet NSPopUpButton* themePopUpButton;
 
 @property(nonatomic, strong) IBOutlet NSWindow* cloneWindow;
 @property(nonatomic, weak) IBOutlet NSTextField* cloneURLTextField;
