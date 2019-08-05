@@ -48,7 +48,7 @@ GCC_WARN_UNUSED_FUNCTION = YES
 GCC_WARN_UNUSED_VARIABLE = YES
 
 // GITUP_PLATFORM determines where to find header files and precompiled libs
-// required for build, for ex. headers of libssh2 located in
+// required for build on case-sensitive systems, for ex. headers of libssh2 located in
 // "GitUpKit/Third-Party/libssh2/MacOSX/include" folder.
 GITUP_PLATFORM[sdk=macosx*] = MacOSX
 GITUP_PLATFORM[sdk=iphonesimulator*] = iPhoneSimulator
