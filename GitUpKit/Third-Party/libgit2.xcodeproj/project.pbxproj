@@ -1502,7 +1502,7 @@
 				);
 				GCC_WARN_UNINITIALIZED_AUTOS = NO;
 				HEADER_SEARCH_PATHS = (
-					"libssh2/$(PLATFORM_NAME)/include",
+					"libssh2/$(GITUP_PLATFORM)/include",
 					libgit2/src,
 					libgit2/include,
 					"libgit2/deps/http-parser",
@@ -1550,7 +1550,7 @@
 				);
 				GCC_WARN_UNINITIALIZED_AUTOS = NO;
 				HEADER_SEARCH_PATHS = (
-					"libssh2/$(PLATFORM_NAME)/include",
+					"libssh2/$(GITUP_PLATFORM)/include",
 					libgit2/src,
 					libgit2/include,
 					"libgit2/deps/http-parser",
