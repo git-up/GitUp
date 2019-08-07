@@ -540,7 +540,7 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
 }
 
 - (NSArray*)_themePreferences {
-  return @[kTheme_SystemPreference, kTheme_Dark, kTheme_Light];
+  return @[ kTheme_SystemPreference, kTheme_Dark, kTheme_Light ];
 }
 
 - (void)_applyTheme:(NSString*)theme {
