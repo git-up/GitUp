@@ -16,6 +16,10 @@
 "stable" = "Stable";
 "continuous" = "Continuous";
 
+"systemTheme" = "According to System Preference";
+"darkTheme" = "Always use Dark theme";
+"lightTheme" = "Always use Light theme";
+
 "map" = "Map";
 "quickview" = "Quick View";
 "diff" = "Diff";

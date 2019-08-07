@@ -17,8 +17,9 @@
 
 #define kReleaseChannel_Stable @"stable"
 #define kReleaseChannel_Continuous @"continuous"
-#define kTheme_Dark @"Dark"
-#define kTheme_Light @"Light"
+#define kTheme_SystemPreference @"systemTheme"
+#define kTheme_Dark @"darkTheme"
+#define kTheme_Light @"lightTheme"
 
 #define kUserDefaultsKey_FirstLaunch @"FirstLaunch"  // BOOL
 #define kUserDefaultsKey_SkipInstallCLT @"SkipInstallCLT"  // BOOL
