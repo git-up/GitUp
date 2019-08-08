@@ -93,6 +93,7 @@
     kUserDefaultsKey_FirstLaunch : @(YES),
     kUserDefaultsKey_DiffWhitespaceMode : @(kGCLiveRepositoryDiffWhitespaceMode_Normal),
     kUserDefaultsKey_ShowWelcomeWindow : @(YES),
+    kUserDefaultsKey_Theme : kTheme_SystemPreference,
   };
   [[NSUserDefaults standardUserDefaults] registerDefaults:defaults];
 }
@@ -265,6 +266,15 @@
   }
 
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_willShowRecentPopUpMenu:) name:NSPopUpButtonWillPopUpNotification object:_recentPopUpButton];
+
+  NSString* theme = [[NSUserDefaults standardUserDefaults] stringForKey:kUserDefaultsKey_Theme];
+  [self _applyTheme:theme];
+  [_themePopUpButton.menu removeAllItems];
+  for (NSString* string in [self _themePreferences]) {
+    NSMenuItem* item = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(string, nil) action:NULL keyEquivalent:@""];
+    item.representedObject = string;
+    [_themePopUpButton.menu addItem:item];
+  }
 }
 
 - (void)_updatePreferencePanel {
@@ -272,6 +282,16 @@
   for (NSMenuItem* item in _channelPopUpButton.menu.itemArray) {
     if ([item.representedObject isEqualToString:channel]) {
       [_channelPopUpButton selectItem:item];
+      break;
+    }
+  }
+}
+
+- (void)_updateThemePopUpButton {
+  NSString* theme = [[NSUserDefaults standardUserDefaults] stringForKey:kUserDefaultsKey_Theme];
+  for (NSMenuItem* item in _themePopUpButton.menu.itemArray) {
+    if ([item.representedObject isEqualToString:theme]) {
+      [_themePopUpButton selectItem:item];
       break;
     }
   }
@@ -397,6 +417,10 @@
     XLOG_DEBUG_UNREACHABLE();
   }
 
+  // Load theme preference
+  NSString* theme = [[NSUserDefaults standardUserDefaults] stringForKey:kUserDefaultsKey_Theme];
+  [self _applyTheme:theme];
+
 #if __ENABLE_SUDDEN_TERMINATION__
   // Enable sudden termination
   [[NSProcessInfo processInfo] enableSuddenTermination];
@@ -515,6 +539,33 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
   }
 }
 
+- (NSArray*)_themePreferences {
+  return @[ kTheme_SystemPreference, kTheme_Dark, kTheme_Light ];
+}
+
+- (void)_applyTheme:(NSString*)theme {
+  if (@available(macOS 10.14, *)) {
+    NSInteger index = [[self _themePreferences] indexOfObject:theme];
+    switch (index) {
+      case 0:
+        NSApp.appearance = nil;
+        break;
+      case 1:
+        NSApp.appearance = [NSAppearance appearanceNamed:NSAppearanceNameDarkAqua];
+        break;
+      case 2:
+        NSApp.appearance = [NSAppearance appearanceNamed:NSAppearanceNameAqua];
+        break;
+    }
+  }
+  [[NSUserDefaults standardUserDefaults] setObject:theme forKey:kUserDefaultsKey_Theme];
+}
+
+- (IBAction)changeTheme:(id)sender {
+  NSString* theme = _themePopUpButton.selectedItem.representedObject;
+  [self _applyTheme:theme];
+}
+
 - (IBAction)viewWiki:(id)sender {
   [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:kURL_Wiki]];
 }
@@ -543,6 +594,7 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
 
 - (IBAction)showPreferences:(id)sender {
   [self _updatePreferencePanel];
+  [self _updateThemePopUpButton];
   [_preferencesWindow makeKeyAndOrderFront:nil];
 }
 

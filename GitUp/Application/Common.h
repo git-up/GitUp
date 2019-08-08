@@ -17,6 +17,9 @@
 
 #define kReleaseChannel_Stable @"stable"
 #define kReleaseChannel_Continuous @"continuous"
+#define kTheme_SystemPreference @"systemTheme"
+#define kTheme_Dark @"darkTheme"
+#define kTheme_Light @"lightTheme"
 
 #define kUserDefaultsKey_FirstLaunch @"FirstLaunch"  // BOOL
 #define kUserDefaultsKey_SkipInstallCLT @"SkipInstallCLT"  // BOOL
@@ -27,6 +30,7 @@
 #define kUserDefaultsKey_DisableSparkle @"DisableSparkle"  // BOOL
 #define kUserDefaultsKey_DiffWhitespaceMode @"DiffWhitespaceMode"  // NSUInteger
 #define kUserDefaultsKey_ShowWelcomeWindow @"ShowWelcomeWindow"  // BOOL
+#define kUserDefaultsKey_Theme @"Theme"  // NSString
 
 #define kRepositoryUserInfoKey_SkipSubmoduleCheck @"SkipSubmoduleCheck"  // BOOL
 #define kRepositoryUserInfoKey_MainWindowFrame @"MainWindowFrame"  // NSString
