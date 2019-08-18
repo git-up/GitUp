@@ -599,7 +599,11 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
 }
 
 - (IBAction)selectPreferencePane:(id)sender {
-  [_preferencesTabView selectTabViewItemWithIdentifier:_preferencesToolbar.selectedItemIdentifier];
+  [NSAnimationContext runAnimationGroup:^(NSAnimationContext * _Nonnull context) {
+    context.allowsImplicitAnimation = YES;
+    context.duration = (sender ? 0.2 : 0);
+    [_preferencesTabView selectTabViewItemWithIdentifier:_preferencesToolbar.selectedItemIdentifier];
+  } completionHandler:nil];
   NSSize size = NSSizeFromString(_preferencesTabView.selectedTabViewItem.label);
   NSRect rect = [_preferencesWindow contentRectForFrameRect:_preferencesWindow.frame];
   if (sender) {
