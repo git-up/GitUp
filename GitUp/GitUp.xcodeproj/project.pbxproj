@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0AE7F5F12312C1B000B06050 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0AE7F5ED2312C1B000B06050 /* InfoPlist.strings */; };
 		165C32B61B95739700D2F894 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 165C32B51B95739700D2F894 /* QuartzCore.framework */; };
 		31CD50E3203E2E2800360B3A /* ToolbarItemWrapperView.m in Sources */ = {isa = PBXBuildFile; fileRef = 31CD50E2203E2E2800360B3A /* ToolbarItemWrapperView.m */; };
 		E212A6DE1B92100E00F62B18 /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E212A6DD1B92100E00F62B18 /* libiconv.dylib */; };
@@ -106,6 +107,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0AE7F5EE2312C1B000B06050 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		165C32B51B95739700D2F894 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		31CD50E1203E2E2800360B3A /* ToolbarItemWrapperView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ToolbarItemWrapperView.h; sourceTree = "<group>"; };
 		31CD50E2203E2E2800360B3A /* ToolbarItemWrapperView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ToolbarItemWrapperView.m; sourceTree = "<group>"; };
@@ -267,6 +269,7 @@
 				E2BDA0671AD47A2F00E69729 /* Help.plist */,
 				E2C338AF19F8562F00063D95 /* Info.plist */,
 				E2A5BE6E1A814970008DD47F /* Localizable.strings */,
+				0AE7F5ED2312C1B000B06050 /* InfoPlist.strings */,
 				E2C338B319F8562F00063D95 /* main.m */,
 				E2C338BD19F8562F00063D95 /* MainMenu.xib */,
 				E2C5672B1A6D98BC00ECFE07 /* WindowController.h */,
@@ -400,6 +403,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E25EBCEB1AA3F8B700D3AF44 /* Application.xcassets in Resources */,
+				0AE7F5F12312C1B000B06050 /* InfoPlist.strings in Resources */,
 				E2A5BE701A814970008DD47F /* Localizable.strings in Resources */,
 				E2C338BA19F8562F00063D95 /* Document.xib in Resources */,
 				E2C338BF19F8562F00063D95 /* MainMenu.xib in Resources */,
@@ -448,6 +452,14 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		0AE7F5ED2312C1B000B06050 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0AE7F5EE2312C1B000B06050 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
 		E2A5BE6E1A814970008DD47F /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
