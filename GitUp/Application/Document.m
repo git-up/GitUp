@@ -874,7 +874,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
     [alert addButtonWithTitle:NSLocalizedString(@"Close", nil)];
     [alert addButtonWithTitle:NSLocalizedString(@"Cancel", nil)];
     alert.type = kGIAlertType_Caution;
-    if ([alert runModal] == NSAlertFirstButtonReturn) {
+    if ([alert runModal] == NSAlertSecondButtonReturn) {
       return NO;
     }
     _abortIndexing = YES;
