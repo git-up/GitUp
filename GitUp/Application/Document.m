@@ -1968,7 +1968,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 - (IBAction)openInTerminal:(id)sender {
   NSString* script = [NSString stringWithFormat:@"tell application \"Terminal\" to do script \"cd \\\"%@\\\"\"", _repository.workingDirectoryPath];
   NSDictionary *dictionary = nil;
-  NSAppleEventDescriptor *result = [[[NSAppleScript alloc] initWithSource:script] executeAndReturnError:&dictionary];
+  [[[NSAppleScript alloc] initWithSource:script] executeAndReturnError:&dictionary];
   if (dictionary != nil) {
     NSString *message = (NSString *)dictionary[NSAppleScriptErrorMessage] ?: @"Unknown error!";
     // show error?
