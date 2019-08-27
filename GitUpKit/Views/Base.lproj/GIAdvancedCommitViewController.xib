@@ -81,9 +81,9 @@
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                 </customView>
                                                                 <button verticalHuggingPriority="750" id="4zE-Zk-8sX">
-                                                                    <rect key="frame" x="12" y="9" width="114" height="23"/>
+                                                                    <rect key="frame" x="8" y="4" width="120" height="32"/>
                                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                                    <buttonCell key="cell" type="roundTextured" title="Discard All…" bezelStyle="texturedRounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ld8-vc-cxM">
+                                                                    <buttonCell key="cell" type="push" title="Discard All…" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ld8-vc-cxM">
                                                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                                         <font key="font" metaFont="system"/>
                                                                         <string key="keyEquivalent">d</string>
@@ -94,9 +94,9 @@
                                                                     </connections>
                                                                 </button>
                                                                 <button verticalHuggingPriority="750" id="nf2-5l-LHg">
-                                                                    <rect key="frame" x="174" y="9" width="114" height="23"/>
+                                                                    <rect key="frame" x="172" y="4" width="120" height="32"/>
                                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                                                    <buttonCell key="cell" type="roundTextured" title="Stage All" bezelStyle="texturedRounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ia5-7P-vyF">
+                                                                    <buttonCell key="cell" type="push" title="Stage All" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ia5-7P-vyF">
                                                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                                         <font key="font" metaFont="system"/>
                                                                         <string key="keyEquivalent">s</string>
@@ -235,9 +235,9 @@
                                     </connections>
                                 </button>
                                 <button verticalHuggingPriority="750" id="mNK-0g-48P">
-                                    <rect key="frame" x="876" y="12" width="112" height="23"/>
+                                    <rect key="frame" x="872" y="5" width="120" height="32"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                    <buttonCell key="cell" type="roundTextured" title="Commit" bezelStyle="texturedRounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="GtK-Iv-qM4">
+                                    <buttonCell key="cell" type="push" title="Commit" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="GtK-Iv-qM4">
                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                         <font key="font" metaFont="system"/>
                                         <string key="keyEquivalent" base64-UTF8="YES">
@@ -259,9 +259,9 @@ DQ
                                     </textFieldCell>
                                 </textField>
                                 <button verticalHuggingPriority="750" id="0n6-Tx-H9g">
-                                    <rect key="frame" x="12" y="12" width="114" height="23"/>
+                                    <rect key="frame" x="8" y="5" width="122" height="32"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <buttonCell key="cell" type="roundTextured" title="Unstage All" bezelStyle="texturedRounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="oqv-6o-u68">
+                                    <buttonCell key="cell" type="push" title="Unstage All" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="oqv-6o-u68">
                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                         <font key="font" metaFont="system"/>
                                         <string key="keyEquivalent">u</string>

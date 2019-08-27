@@ -99,9 +99,9 @@
                                                     </scroller>
                                                 </scrollView>
                                                 <button verticalHuggingPriority="750" id="3PR-J1-aKE">
-                                                    <rect key="frame" x="114" y="12" width="174" height="23"/>
+                                                    <rect key="frame" x="110" y="5" width="182" height="32"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                                    <buttonCell key="cell" type="roundTextured" title="Commit All Changes" bezelStyle="texturedRounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Ibk-mz-3rz">
+                                                    <buttonCell key="cell" type="push" title="Commit All Changes" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Ibk-mz-3rz">
                                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                         <font key="font" metaFont="system"/>
                                                         <string key="keyEquivalent" base64-UTF8="YES">
