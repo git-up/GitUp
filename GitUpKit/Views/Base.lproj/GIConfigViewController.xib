@@ -111,9 +111,9 @@
                     </scroller>
                 </scrollView>
                 <button toolTip="Add new option" verticalHuggingPriority="750" id="czt-SE-8sZ">
-                    <rect key="frame" x="12" y="12" width="26" height="23"/>
+                    <rect key="frame" x="8" y="5" width="37" height="32"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="NSAddTemplate" imagePosition="only" alignment="center" borderStyle="border" inset="2" id="nyb-dg-sa2">
+                    <buttonCell key="cell" type="push" bezelStyle="rounded" image="NSAddTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="nyb-dg-sa2">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
                         <string key="keyEquivalent">n</string>
@@ -123,9 +123,9 @@
                     </connections>
                 </button>
                 <button toolTip="Delete selected option" verticalHuggingPriority="750" id="agS-he-C87">
-                    <rect key="frame" x="42" y="12" width="26" height="23"/>
+                    <rect key="frame" x="38" y="5" width="37" height="32"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="NSRemoveTemplate" imagePosition="only" alignment="center" borderStyle="border" inset="2" id="fe4-5j-J96">
+                    <buttonCell key="cell" type="push" bezelStyle="rounded" image="NSRemoveTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="fe4-5j-J96">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
                         <string key="keyEquivalent" base64-UTF8="YES">
@@ -137,9 +137,9 @@ CA
                     </connections>
                 </button>
                 <button verticalHuggingPriority="750" id="DmR-oW-YvH">
-                    <rect key="frame" x="896" y="12" width="92" height="23"/>
+                    <rect key="frame" x="900" y="5" width="92" height="32"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                    <buttonCell key="cell" type="roundTextured" title="Edit…" bezelStyle="texturedRounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Zpv-vW-DFj">
+                    <buttonCell key="cell" type="push" title="Edit…" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Zpv-vW-DFj">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
                         <string key="keyEquivalent" base64-UTF8="YES">

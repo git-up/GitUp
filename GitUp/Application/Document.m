@@ -376,7 +376,7 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
   _searchField.enabled = NO;
 
   for (NSMenuItem* item in _showMenu.itemArray) {  // We don't want first responder targets
-    if (![item isSeparatorItem]) {
+    if (item.target == nil && item.action != NULL) {
       item.target = _mapViewController;
     }
   }
@@ -725,10 +725,10 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
     NSRect frame = _pullButton.frame;
     if (isBehind) {
       _pullButton.image = [NSImage imageNamed:@"icon_action_fetch_new"];
-      _pullButton.frame = NSMakeRect(frame.origin.x + frame.size.width - 44, frame.origin.y, 44, frame.size.height);
+      _pullButton.frame = NSMakeRect(frame.origin.x + frame.size.width - 53, frame.origin.y, 53, frame.size.height);
     } else {
       _pullButton.image = [NSImage imageNamed:@"icon_action_fetch"];
-      _pullButton.frame = NSMakeRect(frame.origin.x + frame.size.width - 27, frame.origin.y, 27, frame.size.height);
+      _pullButton.frame = NSMakeRect(frame.origin.x + frame.size.width - 37, frame.origin.y, 37, frame.size.height);
     }
     _pushButton.hidden = NO;
     _pushButton.enabled = [_mapViewController validateUserInterfaceItem:(id)_pushButton];

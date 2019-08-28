@@ -131,9 +131,9 @@
                                     </textFieldCell>
                                 </textField>
                                 <button verticalHuggingPriority="750" id="BQO-hB-uyJ">
-                                    <rect key="frame" x="204" y="12" width="84" height="23"/>
+                                    <rect key="frame" x="200" y="5" width="92" height="32"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                    <buttonCell key="cell" type="roundTextured" title="Apply" bezelStyle="texturedRounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="tfe-JD-fS9">
+                                    <buttonCell key="cell" type="push" title="Apply" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="tfe-JD-fS9">
                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                         <font key="font" metaFont="system"/>
                                         <string key="keyEquivalent" base64-UTF8="YES">
@@ -145,9 +145,9 @@ DQ
                                     </connections>
                                 </button>
                                 <button toolTip="Save new stash" verticalHuggingPriority="750" id="OrZ-IL-bI8">
-                                    <rect key="frame" x="12" y="12" width="26" height="23"/>
+                                    <rect key="frame" x="8" y="5" width="37" height="32"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="NSAddTemplate" imagePosition="only" alignment="center" borderStyle="border" inset="2" id="hGa-5V-ckv">
+                                    <buttonCell key="cell" type="push" bezelStyle="rounded" image="NSAddTemplate" imagePosition="only" alignment="center" borderStyle="border" inset="2" id="hGa-5V-ckv">
                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                         <font key="font" metaFont="system"/>
                                         <string key="keyEquivalent">s</string>
@@ -157,9 +157,9 @@ DQ
                                     </connections>
                                 </button>
                                 <button toolTip="Delete selected stash" verticalHuggingPriority="750" id="Nb7-TT-Jjt">
-                                    <rect key="frame" x="42" y="12" width="26" height="23"/>
+                                    <rect key="frame" x="38" y="5" width="37" height="32"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="NSRemoveTemplate" imagePosition="only" alignment="center" borderStyle="border" inset="2" id="REa-ay-zbm">
+                                    <buttonCell key="cell" type="push" bezelStyle="rounded" image="NSRemoveTemplate" imagePosition="only" alignment="center" borderStyle="border" inset="2" id="REa-ay-zbm">
                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                         <font key="font" metaFont="system"/>
                                         <string key="keyEquivalent" base64-UTF8="YES">
@@ -250,7 +250,7 @@ CA
                     </buttonCell>
                 </button>
                 <button verticalHuggingPriority="750" id="vJY-XB-liH">
-                    <rect key="frame" x="285" y="13" width="114" height="32"/>
+                    <rect key="frame" x="277" y="13" width="122" height="32"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="push" title="Save Stash" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="C2U-GN-V9l">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -264,7 +264,7 @@ DQ
                     </connections>
                 </button>
                 <button verticalHuggingPriority="750" id="7wW-wx-tLU">
-                    <rect key="frame" x="193" y="13" width="92" height="32"/>
+                    <rect key="frame" x="177" y="13" width="100" height="32"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="fFT-El-nrs">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>

@@ -144,9 +144,9 @@
                                     </userDefinedRuntimeAttributes>
                                 </splitView>
                                 <button verticalHuggingPriority="750" id="GmQ-B6-tjv">
-                                    <rect key="frame" x="12" y="12" width="84" height="23"/>
+                                    <rect key="frame" x="8" y="5" width="100" height="32"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <buttonCell key="cell" type="roundTextured" title="Cancel" bezelStyle="texturedRounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="rco-aZ-vl2">
+                                    <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="rco-aZ-vl2">
                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                         <font key="font" metaFont="system"/>
                                         <string key="keyEquivalent" base64-UTF8="YES">
@@ -158,9 +158,9 @@ Gw
                                     </connections>
                                 </button>
                                 <button verticalHuggingPriority="750" id="kyp-MO-xu5">
-                                    <rect key="frame" x="184" y="12" width="104" height="23"/>
+                                    <rect key="frame" x="180" y="5" width="112" height="32"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                    <buttonCell key="cell" type="roundTextured" title="Continue…" bezelStyle="texturedRounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="khk-i1-Bqu">
+                                    <buttonCell key="cell" type="push" title="Continue…" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="khk-i1-Bqu">
                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                         <font key="font" metaFont="system"/>
                                         <string key="keyEquivalent" base64-UTF8="YES">
@@ -313,7 +313,7 @@ DQ
                     </textFieldCell>
                 </textField>
                 <button verticalHuggingPriority="750" id="Nxe-6I-8Yc">
-                    <rect key="frame" x="454" y="13" width="122" height="32"/>
+                    <rect key="frame" x="446" y="13" width="130" height="32"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="push" title="Split Commit" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="I9A-6a-Tsc">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -328,7 +328,7 @@ DQ
                     </connections>
                 </button>
                 <button verticalHuggingPriority="750" id="BjK-xU-1uM">
-                    <rect key="frame" x="360" y="13" width="92" height="32"/>
+                    <rect key="frame" x="346" y="13" width="100" height="32"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ad8-SM-Ixv">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>

@@ -69,9 +69,9 @@
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </customView>
                                 <button verticalHuggingPriority="750" id="MQE-ts-iIn">
-                                    <rect key="frame" x="12" y="12" width="84" height="23"/>
+                                    <rect key="frame" x="8" y="5" width="100" height="32"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <buttonCell key="cell" type="roundTextured" title="Cancel" bezelStyle="texturedRounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="mX3-eO-IXN">
+                                    <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="mX3-eO-IXN">
                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                         <font key="font" metaFont="system"/>
                                         <string key="keyEquivalent" base64-UTF8="YES">
@@ -83,9 +83,9 @@ Gw
                                     </connections>
                                 </button>
                                 <button verticalHuggingPriority="750" id="3PR-J1-aKE">
-                                    <rect key="frame" x="184" y="12" width="104" height="23"/>
+                                    <rect key="frame" x="180" y="5" width="112" height="32"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                    <buttonCell key="cell" type="roundTextured" title="Continue…" bezelStyle="texturedRounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Ibk-mz-3rz">
+                                    <buttonCell key="cell" type="push" title="Continue…" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Ibk-mz-3rz">
                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                         <font key="font" metaFont="system"/>
                                         <string key="keyEquivalent" base64-UTF8="YES">
@@ -186,7 +186,7 @@ DQ
                     </textFieldCell>
                 </textField>
                 <button verticalHuggingPriority="750" id="jiN-49-CJi">
-                    <rect key="frame" x="442" y="13" width="134" height="32"/>
+                    <rect key="frame" x="434" y="13" width="142" height="32"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="push" title="Rewrite Commit" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="JGJ-zD-wfi">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -201,7 +201,7 @@ DQ
                     </connections>
                 </button>
                 <button verticalHuggingPriority="750" id="2mu-cU-csS">
-                    <rect key="frame" x="348" y="13" width="92" height="32"/>
+                    <rect key="frame" x="334" y="13" width="100" height="32"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="GL2-s4-e19">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
