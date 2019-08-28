@@ -1954,9 +1954,31 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
   [[NSWorkspace sharedWorkspace] openURL:[NSURL fileURLWithPath:_repository.workingDirectoryPath isDirectory:YES]];
 }
 
+// NOTE: To reset permissions via terminal:
+
+// reset permissions of all apps in category AppleEvents ( Automation )
+// $ tccutil reset AppleEvents
+
+// reset all permissions for all apps
+// $ tccutil reset All
+
+// reset all permissions for particular bundle identifier.
+// $ tccutil reset All co.gitup.mac-debug
+
 - (IBAction)openInTerminal:(id)sender {
   NSString* script = [NSString stringWithFormat:@"tell application \"Terminal\" to do script \"cd \\\"%@\\\"\"", _repository.workingDirectoryPath];
-  [[[NSAppleScript alloc] initWithSource:script] executeAndReturnError:NULL];
+  NSDictionary *dictionary = nil;
+  [[[NSAppleScript alloc] initWithSource:script] executeAndReturnError:&dictionary];
+  if (dictionary != nil) {
+    NSString *message = (NSString *)dictionary[NSAppleScriptErrorMessage] ?: @"Unknown error!";
+    // show error?
+    NSInteger code = [dictionary[NSAppleScriptErrorNumber] integerValue];
+    NSString *key = @"NSAppleEventsUsageDescription";
+    NSString *recovery = [[NSBundle mainBundle] localizedStringForKey:key value:nil table:@"InfoPlist"];
+    NSDictionary *userInfo = @{NSLocalizedDescriptionKey : message, NSLocalizedRecoveryOptionsErrorKey : recovery};
+    NSError *error = [NSError errorWithDomain:@"com.apple.security.automation.appleEvents" code:code userInfo:userInfo];
+    [self presentError:error];
+  }
   [[NSWorkspace sharedWorkspace] launchApplication:@"Terminal"];
 }
 
