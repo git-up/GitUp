@@ -1021,8 +1021,12 @@
             withInitialFirstResponder:_createBranchTextField
                     completionHandler:^(BOOL success) {
                       if (success) {
-                        NSString* name = _createBranchTextField.stringValue;
-                        if (name.length) {
+                       NSString* name = _createBranchTextField.stringValue;
+                       name = [name stringByReplacingOccurrencesOfString:@" " withString:@"_"];
+                       name = [name stringByReplacingOccurrencesOfString:@":" withString:@"|"];
+                       name = [name stringByReplacingOccurrencesOfString:@"[" withString:@"|"];
+                       name = [name stringByReplacingOccurrencesOfString:@"]" withString:@"|"];
+                       if (name.length) {
                           [self createLocalBranchAtCommit:commit withName:name checkOut:_createBranchButton.state];
                         } else {
                           NSBeep();
