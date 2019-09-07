@@ -395,6 +395,12 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
                           }];
 }
 
+- (void)copyCommitMessage:(GCHistoryCommit*)commit {
+  NSString* message = _CleanedUpCommitMessage(commit.message);
+  [self.windowController showOverlayWithStyle:kGIOverlayStyle_Informational format:NSLocalizedString(@"Commit message copied: \"%@\"", nil), message];
+  [[NSPasteboard generalPasteboard] setString:message forType:NSPasteboardTypeString];
+}
+
 #pragma mark - Local Branches
 
 // This will abort on conflicts in workdir or index so there's no need to require a clean repo
