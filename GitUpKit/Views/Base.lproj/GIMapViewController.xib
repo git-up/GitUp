@@ -111,6 +111,12 @@ DQ
                         <action selector="editSelectedCommitMessage:" target="-2" id="PrK-v7-e6I"/>
                     </connections>
                 </menuItem>
+                <menuItem title="Copy Message…" alternate="YES" keyEquivalent="e" id="LnA-LI-dEb">
+                    <modifierMask key="keyEquivalentModifierMask" option="YES"/>
+                    <connections>
+                        <action selector="copySelectedCommitMesssage:" target="-2" id="p4K-qF-fOy"/>
+                    </connections>
+                </menuItem>
                 <menuItem title="Fixup with Parent" keyEquivalent="f" id="ss5-jL-Qe5">
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <connections>
@@ -251,10 +257,10 @@ CA
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <clipView key="contentView" drawsBackground="NO" id="K5e-oW-uzS">
                         <rect key="frame" x="1" y="1" width="278" height="58"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <textView importsGraphics="NO" richText="NO" verticallyResizable="YES" findStyle="panel" allowsUndo="YES" smartInsertDelete="YES" id="l0i-wG-st7" customClass="GICommitMessageView">
-                                <rect key="frame" x="0.0" y="75" width="278" height="58"/>
+                                <rect key="frame" x="0.0" y="75" width="293" height="58"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -446,7 +452,7 @@ Gw
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <clipView key="contentView" drawsBackground="NO" id="THQ-ht-MMy">
                         <rect key="frame" x="1" y="1" width="548" height="148"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <textView importsGraphics="NO" richText="NO" verticallyResizable="YES" findStyle="panel" allowsUndo="YES" smartInsertDelete="YES" id="leL-YY-uqs" customClass="GICommitMessageView">
                                 <rect key="frame" x="0.0" y="0.0" width="548" height="148"/>
