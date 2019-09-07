@@ -35,7 +35,7 @@
                                 <tableColumns>
                                     <tableColumn editable="NO" width="700" minWidth="40" maxWidth="10000" id="M5W-6M-rLe">
                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
-                                            <font key="font" metaFont="toolTip"/>
+                                            <font key="font" metaFont="smallSystem"/>
                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                         </tableHeaderCell>
@@ -53,7 +53,7 @@
                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="Y1E-lo-5Dv">
                                                         <rect key="frame" x="31" y="10" width="540" height="16"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                                        <textFieldCell key="cell" lineBreakMode="truncatingHead" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="left" title="Label" id="nPK-ee-7Lf">
+                                                        <textFieldCell key="cell" lineBreakMode="truncatingHead" selectable="YES" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="left" title="Label" id="nPK-ee-7Lf">
                                                             <font key="font" metaFont="systemBold" size="12"/>
                                                             <color key="textColor" name="alternateSelectedControlTextColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
