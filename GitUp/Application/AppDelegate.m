@@ -46,77 +46,20 @@
 - (void)_openRepositoryWithURL:(NSURL*)url withCloneMode:(CloneMode)cloneMode windowModeID:(WindowModeID)windowModeID;
 @end
 
-@interface WelcomeWindow : NSWindow
-@property (weak, nonatomic, readwrite) AppDelegate *appDelegate;
-- (instancetype)configuredWithAppDelegate:(AppDelegate *)appDelegate;
+@interface GIWelcomeWindowDestinationView : NSView <NSDraggingDestination>
+@property (weak, nonatomic, readonly) AppDelegate *appDelegate;
+@property (assign, nonatomic) BOOL receivingDrag;
 @end
 
-@implementation WelcomeWindow
+@implementation GIWelcomeWindowDestinationView
 
-- (instancetype)configuredWithAppDelegate:(AppDelegate *)appDelegate {
-  self.appDelegate = appDelegate;
-  return self;
+#pragma mark - Accessors
+- (AppDelegate *)appDelegate {
+  return [AppDelegate sharedDelegate];
 }
 
-- (void)awakeFromNib {
-  self.opaque = NO;
-  self.backgroundColor = [NSColor clearColor];
-  self.movableByWindowBackground = YES;
-  [self configuredWithAppDelegate:[AppDelegate sharedDelegate]];
-}
-
-- (BOOL)validateMenuItem:(NSMenuItem*)menuItem {
-  return menuItem.action == @selector(performClose:) ? YES : [super validateMenuItem:menuItem];
-}
-
-- (void)performClose:(id)sender {
-  [self.appDelegate closeWelcomeWindow:sender];
-}
-
-- (BOOL)canBecomeKeyWindow {
-  return YES;
-}
-
-@end
-
-@interface GIWelcomeWindow__DraggingInfoExtractor : NSObject
-- (BOOL)canDragItem:(id<NSDraggingInfo>)sender;
-- (NSArray <NSURL *>*)draggingItems:(id<NSDraggingInfo>)sender;
-@end
-
-@implementation GIWelcomeWindow__DraggingInfoExtractor
-- (BOOL)canDragItem:(id<NSDraggingInfo>)sender {
-  return [self draggingItems:sender].count > 0;
-}
-- (NSArray <NSURL *>*)draggingItems:(id<NSDraggingInfo>)sender {
-  return [[sender draggingPasteboard] readObjectsForClasses:@[NSURL.class] options:nil];
-}
-@end
-
-@interface GIWelcomeWindow__DestinationView : NSView
-@property (weak, nonatomic, readwrite) AppDelegate *appDelegate;
-@property (strong, nonatomic, readwrite) GIWelcomeWindow__DraggingInfoExtractor *draggingExtractor;
-@property (assign, nonatomic, readwrite) BOOL receivingDrag;
-@property (strong, nonatomic, readwrite) NSView *imageView;
-@end
-
-@interface GIWelcomeWindow__DestinationView (Configurations)
-- (instancetype)configuredWithAppDelegate:(AppDelegate *)appDelegate;
-@end
-
-@implementation GIWelcomeWindow__DestinationView (Configurations)
-- (instancetype)configuredWithAppDelegate:(AppDelegate *)appDelegate {
-  self.appDelegate = appDelegate;
-  return self;
-}
-@end
-
-@interface GIWelcomeWindow__DestinationView (NSDraggingDestination) <NSDraggingDestination>
-@end
-
-@implementation GIWelcomeWindow__DestinationView
+#pragma mark - Setup
 - (void)setup {
-  self.draggingExtractor = [GIWelcomeWindow__DraggingInfoExtractor new];
   [self registerForDraggedTypes:@[NSURLPboardType]];
 }
 
@@ -125,6 +68,7 @@
   [self setup];
 }
 
+#pragma mark - Drawing
 - (void)setReceivingDrag:(BOOL)receivingDrag {
   _receivingDrag = receivingDrag;
   [self setNeedsDisplay:YES];
@@ -138,11 +82,19 @@
     [path stroke];
   }
 }
-@end
 
-@implementation GIWelcomeWindow__DestinationView (NSDraggingDestination)
+#pragma mark - Dragging Data Extraction
+- (BOOL)canDragItem:(id<NSDraggingInfo>)sender {
+  return [self draggingItems:sender].count > 0;
+}
+
+- (NSArray <NSURL *>*)draggingItems:(id<NSDraggingInfo>)sender {
+  return [[sender draggingPasteboard] readObjectsForClasses:@[NSURL.class] options:nil];
+}
+
+#pragma mark - NSDraggingDestination
 - (NSDragOperation)draggingEntered:(id<NSDraggingInfo>)sender {
-  BOOL canDragItem = [self.draggingExtractor canDragItem:sender];
+  BOOL canDragItem = [self canDragItem:sender];
   self.receivingDrag = canDragItem;
   return canDragItem ? NSDragOperationCopy :  NSDragOperationNone;
 }
@@ -156,13 +108,13 @@
 }
 
 - (BOOL)prepareForDragOperation:(id<NSDraggingInfo>)sender {
-  return [self.draggingExtractor canDragItem:sender];
+  return [self canDragItem:sender];
 }
 
 - (BOOL)performDragOperation:(id<NSDraggingInfo>)sender {
   self.receivingDrag = NO;
   
-  NSURL *first = [self.draggingExtractor draggingItems:sender].firstObject;
+  NSURL *first = [self draggingItems:sender].firstObject;
   [self.appDelegate _openRepositoryWithURL:first withCloneMode:kCloneMode_None windowModeID:NSNotFound];
   
   return YES;
@@ -173,15 +125,41 @@
 }
 @end
 
-@interface GIWelcomeWindow : WelcomeWindow
-@property (weak, nonatomic, readwrite) IBOutlet GIWelcomeWindow__DestinationView *destinationView;
+@interface WelcomeWindow : NSWindow
+@property (weak, nonatomic, readonly) AppDelegate *appDelegate;
+@property (weak, nonatomic, readwrite) IBOutlet GIWelcomeWindowDestinationView *destinationView;
 @end
 
-@implementation GIWelcomeWindow
+@implementation WelcomeWindow
+
+#pragma mark - Accessors
+- (AppDelegate *)appDelegate {
+  return [AppDelegate sharedDelegate];
+}
+
+#pragma mark - Setup
+- (void)setup {
+  self.opaque = NO;
+  self.backgroundColor = [NSColor clearColor];
+  self.movableByWindowBackground = YES;
+}
 
 - (void)awakeFromNib {
-  [super awakeFromNib];
-  [self.destinationView configuredWithAppDelegate:self.appDelegate];
+  [self setup];
+}
+
+#pragma mark - Actions
+- (BOOL)validateMenuItem:(NSMenuItem*)menuItem {
+  return menuItem.action == @selector(performClose:) ? YES : [super validateMenuItem:menuItem];
+}
+
+- (void)performClose:(id)sender {
+  [self.appDelegate closeWelcomeWindow:sender];
+}
+
+#pragma mark - Window
+- (BOOL)canBecomeKeyWindow {
+  return YES;
 }
 
 @end
