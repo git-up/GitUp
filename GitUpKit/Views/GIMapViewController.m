@@ -935,9 +935,25 @@
   [self revertCommit:commit againstLocalBranch:self.repository.history.HEADBranch];
 }
 
+- (GCHistoryLocalBranch *)branchToDeleteForSelectedCommit:(GCHistoryCommit *)commit {
+  // return commit.localBranches.firstObject;
+  NSArray <GCHistoryLocalBranch *>* localBranches = commit.localBranches;
+//  NSArray <GCHistoryRemoteBranch *> *remoteBranches = commit.remoteBranches;
+  NSString *headBranchName = self.repository.history.HEADBranch.name;
+  NSInteger index = [localBranches indexOfObjectPassingTest:^BOOL(GCHistoryLocalBranch * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+    return ![headBranchName isEqualToString:obj.name];
+  }];
+  
+  if (index == NSNotFound) {
+    return localBranches.firstObject;
+  }
+  
+  return localBranches[index];
+}
+
 - (IBAction)deleteSelectedCommit:(id)sender {
   GCHistoryCommit* commit = _graphView.selectedCommit;
-  GCHistoryLocalBranch* localBranch = commit.localBranches.firstObject;
+  GCHistoryLocalBranch* localBranch = [self branchToDeleteForSelectedCommit:commit];
   if (localBranch) {
     NSAlert* alert = [[NSAlert alloc] init];
     alert.messageText = NSLocalizedString(@"Do you want to delete the commit or the local branch?", nil);
