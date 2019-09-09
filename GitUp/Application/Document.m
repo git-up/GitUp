@@ -1965,8 +1965,20 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 // reset all permissions for particular bundle identifier.
 // $ tccutil reset All co.gitup.mac-debug
 
-- (IBAction)openInTerminal:(id)sender {
-  NSString* script = [NSString stringWithFormat:@"tell application \"Terminal\" to do script \"cd \\\"%@\\\"\"", _repository.workingDirectoryPath];
+static NSString *kGIExternalApplicationsTerminalsNameTerminal = @"Terminal";
+static NSString *kGIExternalApplicationsTerminalsNameiTerm = @"iTerm";
+- (void)openInTerminalAppName:(NSString *)name {
+  NSString* script = [NSString stringWithFormat:@"tell application \"%@\" to do script \"cd \\\"%@\\\"\"", name, _repository.workingDirectoryPath];
+  if ([name isEqualToString:kGIExternalApplicationsTerminalsNameiTerm]) {
+    script = [NSString stringWithFormat:
+              @"""tell application \"%@\" \n"""
+               """tell current session of current window \n"""
+               """set command to \"cd \\\"%@\\\"\" \n"""
+               """write text command \n"""
+               """end tell \n"""
+               """end tell""", name, _repository.workingDirectoryPath];
+  }
+  
   NSDictionary *dictionary = nil;
   [[[NSAppleScript alloc] initWithSource:script] executeAndReturnError:&dictionary];
   if (dictionary != nil) {
@@ -1979,7 +1991,15 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
     NSError *error = [NSError errorWithDomain:@"com.apple.security.automation.appleEvents" code:code userInfo:userInfo];
     [self presentError:error];
   }
-  [[NSWorkspace sharedWorkspace] launchApplication:@"Terminal"];
+  [[NSWorkspace sharedWorkspace] launchApplication:name];
+}
+
+- (IBAction)openInTerminal:(id)sender {
+  [self openInTerminalAppName:kGIExternalApplicationsTerminalsNameTerminal];
+}
+
+- (IBAction)openIniTerm:(id)sender {
+  [self openInTerminalAppName:kGIExternalApplicationsTerminalsNameiTerm];
 }
 
 - (IBAction)dismissHelp:(id)sender {

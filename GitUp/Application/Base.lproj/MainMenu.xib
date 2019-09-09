@@ -726,6 +726,19 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                     <action selector="openInTerminal:" target="-1" id="YJM-LA-kZX"/>
                                 </connections>
                             </menuItem>
+                            <menuItem title="Open In External Terminal" id="pOr-se-1Oi">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" title="Open In External Terminal" id="dUB-iv-1C7">
+                                    <items>
+                                        <menuItem title="iTerm" id="X2d-4B-0li">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="openIniTerm:" target="-1" id="IPe-1p-hNB"/>
+                                            </connections>
+                                        </menuItem>
+                                    </items>
+                                </menu>
+                            </menuItem>
                             <menuItem title="Open in Finder…" id="NQb-m5-0rE">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
