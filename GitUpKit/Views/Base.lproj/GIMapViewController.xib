@@ -114,7 +114,7 @@ DQ
                 <menuItem title="Copy Message…" alternate="YES" keyEquivalent="e" id="LnA-LI-dEb">
                     <modifierMask key="keyEquivalentModifierMask" option="YES"/>
                     <connections>
-                        <action selector="copySelectedCommitMesssage:" target="-2" id="p4K-qF-fOy"/>
+                        <action selector="copySelectedCommitMessage:" target="-2" id="dDP-sd-Fqm"/>
                     </connections>
                 </menuItem>
                 <menuItem title="Fixup with Parent" keyEquivalent="f" id="ss5-jL-Qe5">

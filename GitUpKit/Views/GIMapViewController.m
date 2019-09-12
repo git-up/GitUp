@@ -916,7 +916,7 @@
   [self editCommitMessage:commit];
 }
 
-- (IBAction)copySelectedCommitMesssage:(id)sender {
+- (IBAction)copySelectedCommitMessage:(id)sender {
   GCHistoryCommit* commit = self.graphView.selectedNode.commit;
   [self copyCommitMessage:commit];
 }
