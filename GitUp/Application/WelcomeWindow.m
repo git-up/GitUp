@@ -15,12 +15,12 @@
 - (void)_openRepositoryWithURL:(NSURL*)url withCloneMode:(CloneMode)cloneMode windowModeID:(WindowModeID)windowModeID;
 @end
 
-@interface GIWelcomeWindowDestinationView : NSView <NSDraggingDestination>
+@interface WelcomeWindowView : NSView <NSDraggingDestination>
 @property (weak, nonatomic, readonly) AppDelegate *appDelegate;
 @property (assign, nonatomic) BOOL receivingDrag;
 @end
 
-@implementation GIWelcomeWindowDestinationView
+@implementation WelcomeWindowView
 
 #pragma mark - Accessors
 - (AppDelegate *)appDelegate {
@@ -96,7 +96,7 @@
 
 @interface WelcomeWindow ()
 @property (weak, nonatomic, readonly) AppDelegate *appDelegate;
-@property (weak, nonatomic, readwrite) IBOutlet GIWelcomeWindowDestinationView *destinationView;
+@property (weak, nonatomic, readwrite) IBOutlet WelcomeWindowView *destinationView;
 @end
 
 @implementation WelcomeWindow

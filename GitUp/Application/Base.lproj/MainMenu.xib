@@ -1140,7 +1140,7 @@ UI design by Wayne Fan</string>
                     <box boxType="custom" borderType="none" borderWidth="0.0" cornerRadius="10" title="Box" titlePosition="noTitle" id="UoN-n1-xSr">
                         <rect key="frame" x="0.0" y="0.0" width="280" height="349"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <view key="contentView" id="UVs-2r-EAT" customClass="GIWelcomeWindowDestinationView">
+                        <view key="contentView" id="UVs-2r-EAT" customClass="WelcomeWindowView">
                             <rect key="frame" x="0.0" y="0.0" width="280" height="349"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
