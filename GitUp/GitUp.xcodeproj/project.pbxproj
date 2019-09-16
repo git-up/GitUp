@@ -7,9 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0A0166DB232F85100069961E /* ToolbarCustomizeIcon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 0A0166D9232F85100069961E /* ToolbarCustomizeIcon.icns */; };
-		0A0166DC232F85100069961E /* ToolbarAdvanced.icns in Resources */ = {isa = PBXBuildFile; fileRef = 0A0166DA232F85100069961E /* ToolbarAdvanced.icns */; };
-		0A0166DD232F86560069961E /* General.icns in Resources */ = {isa = PBXBuildFile; fileRef = 0A0166D5232F84DE0069961E /* General.icns */; };
 		0AE7F5F12312C1B000B06050 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0AE7F5ED2312C1B000B06050 /* InfoPlist.strings */; };
 		165C32B61B95739700D2F894 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 165C32B51B95739700D2F894 /* QuartzCore.framework */; };
 		31CD50E3203E2E2800360B3A /* ToolbarItemWrapperView.m in Sources */ = {isa = PBXBuildFile; fileRef = 31CD50E2203E2E2800360B3A /* ToolbarItemWrapperView.m */; };
@@ -110,9 +107,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		0A0166D5232F84DE0069961E /* General.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = General.icns; path = ../../../../../../../../System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/General.icns; sourceTree = "<group>"; };
-		0A0166D9232F85100069961E /* ToolbarCustomizeIcon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = ToolbarCustomizeIcon.icns; path = ../../../../../../../../System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/ToolbarCustomizeIcon.icns; sourceTree = "<group>"; };
-		0A0166DA232F85100069961E /* ToolbarAdvanced.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = ToolbarAdvanced.icns; path = ../../../../../../../../System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/ToolbarAdvanced.icns; sourceTree = "<group>"; };
 		0AE7F5EE2312C1B000B06050 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		165C32B51B95739700D2F894 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		31CD50E1203E2E2800360B3A /* ToolbarItemWrapperView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ToolbarItemWrapperView.h; sourceTree = "<group>"; };
@@ -263,9 +257,6 @@
 		E2C338AD19F8562F00063D95 /* Application */ = {
 			isa = PBXGroup;
 			children = (
-				0A0166DA232F85100069961E /* ToolbarAdvanced.icns */,
-				0A0166D9232F85100069961E /* ToolbarCustomizeIcon.icns */,
-				0A0166D5232F84DE0069961E /* General.icns */,
 				E2C338B019F8562F00063D95 /* AppDelegate.h */,
 				E2C338B119F8562F00063D95 /* AppDelegate.m */,
 				E25EBCEA1AA3F8B700D3AF44 /* Application.xcassets */,
@@ -413,10 +404,7 @@
 			files = (
 				E25EBCEB1AA3F8B700D3AF44 /* Application.xcassets in Resources */,
 				0AE7F5F12312C1B000B06050 /* InfoPlist.strings in Resources */,
-				0A0166DD232F86560069961E /* General.icns in Resources */,
 				E2A5BE701A814970008DD47F /* Localizable.strings in Resources */,
-				0A0166DB232F85100069961E /* ToolbarCustomizeIcon.icns in Resources */,
-				0A0166DC232F85100069961E /* ToolbarAdvanced.icns in Resources */,
 				E2C338BA19F8562F00063D95 /* Document.xib in Resources */,
 				E2C338BF19F8562F00063D95 /* MainMenu.xib in Resources */,
 				E267E2741B84E42A00BAB377 /* Help.plist in Resources */,

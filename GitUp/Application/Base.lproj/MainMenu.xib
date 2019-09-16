@@ -579,17 +579,17 @@ You must close and reopen any opened repositories in GitUp after changing this s
             </view>
             <toolbar key="toolbar" implicitIdentifier="4BB9AB3D-6CFE-44F9-AC58-EC5EB9EC6AD2" autosavesConfiguration="NO" allowsUserCustomization="NO" displayMode="iconAndLabel" sizeMode="regular" id="YkS-ea-UXD">
                 <allowedToolbarItems>
-                    <toolbarItem implicitItemIdentifier="0A993B67-8232-470B-93F2-918C139C4502" explicitItemIdentifier="general" label="General" paletteLabel="General" image="General" autovalidates="NO" selectable="YES" id="Eco-Ip-wwc">
+                    <toolbarItem implicitItemIdentifier="0A993B67-8232-470B-93F2-918C139C4502" explicitItemIdentifier="general" label="General" paletteLabel="General" image="NSPreferencesGeneral" autovalidates="NO" selectable="YES" id="Eco-Ip-wwc">
                         <connections>
                             <action selector="selectPreferencePane:" target="Voe-Tx-rLC" id="P2u-HV-YJ4"/>
                         </connections>
                     </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="01E4DB1E-869A-4342-9664-49760E8059C0" explicitItemIdentifier="tools" label="Tools" paletteLabel="Tools" image="ToolbarCustomizeIcon" autovalidates="NO" selectable="YES" id="xNi-fF-77p">
+                    <toolbarItem implicitItemIdentifier="01E4DB1E-869A-4342-9664-49760E8059C0" explicitItemIdentifier="tools" label="Tools" paletteLabel="Tools" image="NSBonjour" autovalidates="NO" selectable="YES" id="xNi-fF-77p">
                         <connections>
                             <action selector="selectPreferencePane:" target="Voe-Tx-rLC" id="SvV-p6-c89"/>
                         </connections>
                     </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="5E54574B-9F92-4881-8DD0-A99676EDDF56" explicitItemIdentifier="advanced" label="Advanced" paletteLabel="Advanced" image="ToolbarAdvanced" autovalidates="NO" selectable="YES" id="doU-9n-plE">
+                    <toolbarItem implicitItemIdentifier="5E54574B-9F92-4881-8DD0-A99676EDDF56" explicitItemIdentifier="advanced" label="Advanced" paletteLabel="Advanced" image="NSAdvanced" autovalidates="NO" selectable="YES" id="doU-9n-plE">
                         <connections>
                             <action selector="selectPreferencePane:" target="Voe-Tx-rLC" id="mFG-Gz-oyR"/>
                         </connections>
@@ -1409,11 +1409,11 @@ UI design by Wayne Fan</string>
         <userDefaultsController representsSharedInstance="YES" id="AR1-cq-KNa"/>
     </objects>
     <resources>
-        <image name="General" width="128" height="128"/>
+        <image name="NSAdvanced" width="32" height="32"/>
         <image name="NSApplicationIcon" width="32" height="32"/>
+        <image name="NSBonjour" width="32" height="32"/>
+        <image name="NSPreferencesGeneral" width="32" height="32"/>
         <image name="NSStopProgressFreestandingTemplate" width="14" height="14"/>
-        <image name="ToolbarAdvanced" width="128" height="128"/>
-        <image name="ToolbarCustomizeIcon" width="512" height="512"/>
         <image name="icon_forum" width="12" height="12"/>
         <image name="icon_twitter" width="12" height="12"/>
     </resources>
