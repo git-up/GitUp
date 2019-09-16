@@ -512,7 +512,6 @@ static const void* _associatedObjectDataKey = &_associatedObjectDataKey;
       return;
 
     case kGIKeyCode_Down:
-      if (event.modifierFlags & NSCommandKeyMask) {
       if (event.modifierFlags & NSAlternateKeyMask) {
         [self _selectUncleNode];
       } else if (event.modifierFlags & NSCommandKeyMask) {
@@ -525,7 +524,6 @@ static const void* _associatedObjectDataKey = &_associatedObjectDataKey;
       return;
 
     case kGIKeyCode_Up:
-      if (event.modifierFlags & NSCommandKeyMask) {
       if (event.modifierFlags & NSAlternateKeyMask) {
         [self _selectNephewNode];
       } else if (event.modifierFlags & NSCommandKeyMask) {
