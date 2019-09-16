@@ -49,6 +49,12 @@
   [[AppDelegate sharedDelegate] handleDocumentCountChanged];
 }
 
+- (void)removeDocument:(NSDocument*)document {
+  [super removeDocument:document];
+
+  [[AppDelegate sharedDelegate] handleDocumentCountChanged];
+}
+
 - (void)newWindowForTab:(id)sender {
   [self openDocument:sender];
 }
