@@ -1140,7 +1140,7 @@ UI design by Wayne Fan</string>
                     <box boxType="custom" borderType="none" borderWidth="0.0" cornerRadius="10" title="Box" titlePosition="noTitle" id="UoN-n1-xSr">
                         <rect key="frame" x="0.0" y="0.0" width="280" height="349"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <view key="contentView" id="UVs-2r-EAT">
+                        <view key="contentView" id="UVs-2r-EAT" customClass="WelcomeWindowView">
                             <rect key="frame" x="0.0" y="0.0" width="280" height="349"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
@@ -1284,6 +1284,9 @@ UI design by Wayne Fan</string>
                     </box>
                 </subviews>
             </view>
+            <connections>
+                <outlet property="destinationView" destination="UVs-2r-EAT" id="AvQ-6L-KSz"/>
+            </connections>
             <point key="canvasLocation" x="-252" y="578.5"/>
         </window>
         <userDefaultsController representsSharedInstance="YES" id="AR1-cq-KNa"/>

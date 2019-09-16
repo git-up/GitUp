@@ -40,32 +40,6 @@
 #define kToolInstallPath @"/usr/local/bin/" kToolName
 
 @interface AppDelegate () <NSUserNotificationCenterDelegate, SUUpdaterDelegate>
-- (IBAction)closeWelcomeWindow:(id)sender;
-@end
-
-@interface WelcomeWindow : NSWindow
-@end
-
-@implementation WelcomeWindow
-
-- (void)awakeFromNib {
-  self.opaque = NO;
-  self.backgroundColor = [NSColor clearColor];
-  self.movableByWindowBackground = YES;
-}
-
-- (BOOL)validateMenuItem:(NSMenuItem*)menuItem {
-  return menuItem.action == @selector(performClose:) ? YES : [super validateMenuItem:menuItem];
-}
-
-- (void)performClose:(id)sender {
-  [[AppDelegate sharedDelegate] closeWelcomeWindow:sender];
-}
-
-- (BOOL)canBecomeKeyWindow {
-  return YES;
-}
-
 @end
 
 @implementation AppDelegate {

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0AD4625B232711B000BE28D1 /* WelcomeWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AD4625A232711B000BE28D1 /* WelcomeWindow.m */; };
 		0AE7F5F12312C1B000B06050 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0AE7F5ED2312C1B000B06050 /* InfoPlist.strings */; };
 		165C32B61B95739700D2F894 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 165C32B51B95739700D2F894 /* QuartzCore.framework */; };
 		31CD50E3203E2E2800360B3A /* ToolbarItemWrapperView.m in Sources */ = {isa = PBXBuildFile; fileRef = 31CD50E2203E2E2800360B3A /* ToolbarItemWrapperView.m */; };
@@ -107,6 +108,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0AD46259232711B000BE28D1 /* WelcomeWindow.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WelcomeWindow.h; sourceTree = "<group>"; };
+		0AD4625A232711B000BE28D1 /* WelcomeWindow.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WelcomeWindow.m; sourceTree = "<group>"; };
 		0AE7F5EE2312C1B000B06050 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		165C32B51B95739700D2F894 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		31CD50E1203E2E2800360B3A /* ToolbarItemWrapperView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ToolbarItemWrapperView.h; sourceTree = "<group>"; };
@@ -276,6 +279,8 @@
 				E2C5672C1A6D98BC00ECFE07 /* WindowController.m */,
 				31CD50E1203E2E2800360B3A /* ToolbarItemWrapperView.h */,
 				31CD50E2203E2E2800360B3A /* ToolbarItemWrapperView.m */,
+				0AD46259232711B000BE28D1 /* WelcomeWindow.h */,
+				0AD4625A232711B000BE28D1 /* WelcomeWindow.m */,
 			);
 			path = Application;
 			sourceTree = "<group>";
@@ -432,6 +437,7 @@
 				E2C5672D1A6D98BC00ECFE07 /* WindowController.m in Sources */,
 				E2C338B219F8562F00063D95 /* AppDelegate.m in Sources */,
 				E2C338B719F8562F00063D95 /* Document.m in Sources */,
+				0AD4625B232711B000BE28D1 /* WelcomeWindow.m in Sources */,
 				31CD50E3203E2E2800360B3A /* ToolbarItemWrapperView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
