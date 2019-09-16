@@ -41,6 +41,11 @@ NSString* const GIViewControllerTool_DiffMerge = @"DiffMerge";
 
 NSString* const GIViewController_DiffTool = @"GIViewController_DiffTool";
 NSString* const GIViewController_MergeTool = @"GIViewController_MergeTool";
+NSString* const GIViewController_TerminalTool = @"GIViewController_TerminalTool";
+
+// TerminalTool
+NSString* const GIViewController_TerminalTool_Terminal = @"Terminal";
+NSString* const GIViewController_TerminalTool_iTerm = @"iTerm";
 
 static NSString* _diffTemporaryDirectoryPath = nil;
 
@@ -49,7 +54,8 @@ static NSString* _diffTemporaryDirectoryPath = nil;
 + (void)initialize {
   NSDictionary* defaults = @{
     GIViewController_DiffTool : GIViewControllerTool_FileMerge,
-    GIViewController_MergeTool : GIViewControllerTool_FileMerge
+    GIViewController_MergeTool : GIViewControllerTool_FileMerge,
+    GIViewController_TerminalTool : GIViewController_TerminalTool_Terminal
   };
   [[NSUserDefaults standardUserDefaults] registerDefaults:defaults];
 
