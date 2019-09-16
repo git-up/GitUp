@@ -1965,18 +1965,31 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 // reset all permissions for particular bundle identifier.
 // $ tccutil reset All co.gitup.mac-debug
 
-static NSString *kGIExternalApplicationsTerminalsNameTerminal = @"Terminal";
-static NSString *kGIExternalApplicationsTerminalsNameiTerm = @"iTerm";
+- (NSString *)scriptForTerminalAppName:(NSString *)name {
+  if ([name isEqualToString:GIViewController_TerminalTool_Terminal]) {
+    return [NSString stringWithFormat:@"tell application \"%@\" to do script \"cd \\\"%@\\\"\"", name, _repository.workingDirectoryPath];
+  }
+  if ([name isEqualToString:GIViewController_TerminalTool_iTerm]) {
+    return [NSString stringWithFormat:
+            @"""tell application \"%@\" \n"""
+            """tell current session of current window \n"""
+            """set command to \"cd \\\"%@\\\"\" \n"""
+            """write text command \n"""
+            """end tell \n"""
+            """end tell""", name, _repository.workingDirectoryPath];
+  }
+  return nil;
+}
+
 - (void)openInTerminalAppName:(NSString *)name {
-  NSString* script = [NSString stringWithFormat:@"tell application \"%@\" to do script \"cd \\\"%@\\\"\"", name, _repository.workingDirectoryPath];
-  if ([name isEqualToString:kGIExternalApplicationsTerminalsNameiTerm]) {
-    script = [NSString stringWithFormat:
-              @"""tell application \"%@\" \n"""
-               """tell current session of current window \n"""
-               """set command to \"cd \\\"%@\\\"\" \n"""
-               """write text command \n"""
-               """end tell \n"""
-               """end tell""", name, _repository.workingDirectoryPath];
+  NSString* script = [self scriptForTerminalAppName:name];
+  
+  if (script == nil) {
+    NSUInteger code = 1000;
+    NSDictionary *userInfo = @{NSLocalizedDescriptionKey : NSLocalizedString(@"Error occured! Unsupported key in user defaults for Preferred terminal app is occured. Key is", nil)};    
+    NSError *error = [NSError errorWithDomain:@"org.gitup.preferences.terminal" code:code userInfo:userInfo];
+    [self presentError:error];
+    return;
   }
   
   NSDictionary *dictionary = nil;
@@ -1995,11 +2008,8 @@ static NSString *kGIExternalApplicationsTerminalsNameiTerm = @"iTerm";
 }
 
 - (IBAction)openInTerminal:(id)sender {
-  [self openInTerminalAppName:kGIExternalApplicationsTerminalsNameTerminal];
-}
-
-- (IBAction)openIniTerm:(id)sender {
-  [self openInTerminalAppName:kGIExternalApplicationsTerminalsNameiTerm];
+  NSString *identifier = [[NSUserDefaults standardUserDefaults] stringForKey:GIViewController_TerminalTool];
+  [self openInTerminalAppName:identifier];
 }
 
 - (IBAction)dismissHelp:(id)sender {
