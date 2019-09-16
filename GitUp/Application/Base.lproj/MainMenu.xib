@@ -278,6 +278,120 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                     </subviews>
                                 </view>
                             </tabViewItem>
+                            <tabViewItem label="{500, 262}" identifier="tools" id="uvu-wE-Rp3">
+                                <view key="view" id="TVv-0X-swR">
+                                    <rect key="frame" x="0.0" y="0.0" width="500" height="410"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="eUs-qg-nGy">
+                                            <rect key="frame" x="12" y="379" width="120" height="17"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="right" title="External Diff:" id="flJ-jc-DX7">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <popUpButton verticalHuggingPriority="750" id="hnP-iv-bsy">
+                                            <rect key="frame" x="136" y="373" width="165" height="26"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <popUpButtonCell key="cell" type="push" title="FileMerge" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" autoenablesItems="NO" altersStateOfSelectedItem="NO" selectedItem="2ct-8T-WSa" id="XqB-8h-qbH">
+                                                <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="menu"/>
+                                                <menu key="menu" autoenablesItems="NO" id="Hj8-2E-fcY">
+                                                    <items>
+                                                        <menuItem title="FileMerge" id="2ct-8T-WSa"/>
+                                                        <menuItem title="Kaleidoscope" id="Bz8-jc-Imi"/>
+                                                        <menuItem title="Beyond Compare" id="YHX-j4-tqt"/>
+                                                        <menuItem title="P4Merge" id="QJJ-jI-1nc"/>
+                                                        <menuItem title="DiffMerge" id="ZN4-61-7QM"/>
+                                                        <menuItem isSeparatorItem="YES" id="xJi-D4-zcX"/>
+                                                        <menuItem title="Git Tool" id="3bO-Nl-Iev"/>
+                                                    </items>
+                                                </menu>
+                                            </popUpButtonCell>
+                                            <connections>
+                                                <binding destination="AR1-cq-KNa" name="selectedValue" keyPath="values.GIViewController_DiffTool" id="VbQ-9o-5cy">
+                                                    <dictionary key="options">
+                                                        <bool key="NSAllowsEditingMultipleValuesSelection" value="NO"/>
+                                                        <bool key="NSConditionallySetsEnabled" value="NO"/>
+                                                        <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
+                                                    </dictionary>
+                                                </binding>
+                                            </connections>
+                                        </popUpButton>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="ep8-Hv-BTg">
+                                            <rect key="frame" x="12" y="346" width="120" height="17"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="right" title="External Merge:" id="3X7-YE-FqO">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <popUpButton verticalHuggingPriority="750" id="wIC-YU-dW2">
+                                            <rect key="frame" x="136" y="340" width="165" height="26"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <popUpButtonCell key="cell" type="push" title="FileMerge" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" autoenablesItems="NO" altersStateOfSelectedItem="NO" selectedItem="MFB-RI-wuw" id="lxS-vb-flN">
+                                                <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="menu"/>
+                                                <menu key="menu" autoenablesItems="NO" id="isf-fV-z4D">
+                                                    <items>
+                                                        <menuItem title="FileMerge" id="MFB-RI-wuw"/>
+                                                        <menuItem title="Kaleidoscope" id="AO6-Py-2o5"/>
+                                                        <menuItem title="Beyond Compare" id="Cuo-4H-a9H"/>
+                                                        <menuItem title="P4Merge" id="O2n-kY-CrU"/>
+                                                        <menuItem title="DiffMerge" id="N6F-br-PGJ"/>
+                                                        <menuItem isSeparatorItem="YES" id="rLZ-QI-beC"/>
+                                                        <menuItem title="Git Tool" id="09q-g5-uZM"/>
+                                                    </items>
+                                                </menu>
+                                            </popUpButtonCell>
+                                            <connections>
+                                                <binding destination="AR1-cq-KNa" name="selectedValue" keyPath="values.GIViewController_MergeTool" id="IrM-Ww-vbZ">
+                                                    <dictionary key="options">
+                                                        <bool key="NSAllowsEditingMultipleValuesSelection" value="NO"/>
+                                                        <bool key="NSConditionallySetsEnabled" value="NO"/>
+                                                        <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
+                                                    </dictionary>
+                                                </binding>
+                                            </connections>
+                                        </popUpButton>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="MMm-Lh-dUe">
+                                            <rect key="frame" x="12" y="315" width="120" height="17"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="right" title="External Terminal:" id="S1v-Ht-2yh">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <popUpButton verticalHuggingPriority="750" id="Q8a-BA-vqH">
+                                            <rect key="frame" x="136" y="308" width="165" height="25"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <popUpButtonCell key="cell" type="push" title="Terminal" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" autoenablesItems="NO" altersStateOfSelectedItem="NO" selectedItem="7EF-ZK-Vhf" id="OFh-fp-PGh">
+                                                <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="menu"/>
+                                                <menu key="menu" autoenablesItems="NO" id="Dqd-mY-Cdy">
+                                                    <items>
+                                                        <menuItem title="Terminal" id="7EF-ZK-Vhf"/>
+                                                        <menuItem title="iTerm" id="cm5-Ur-4zt"/>
+                                                    </items>
+                                                </menu>
+                                            </popUpButtonCell>
+                                            <connections>
+                                                <binding destination="AR1-cq-KNa" name="selectedValue" keyPath="values.GIViewController_TerminalTool" id="8Hw-ed-CRH">
+                                                    <dictionary key="options">
+                                                        <bool key="NSAllowsEditingMultipleValuesSelection" value="NO"/>
+                                                        <bool key="NSConditionallySetsEnabled" value="NO"/>
+                                                        <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
+                                                    </dictionary>
+                                                </binding>
+                                            </connections>
+                                        </popUpButton>
+                                    </subviews>
+                                </view>
+                            </tabViewItem>
                             <tabViewItem label="{500, 262}" identifier="advanced" id="Qdl-lQ-O4q">
                                 <view key="view" id="8CG-H0-Xhk">
                                     <rect key="frame" x="0.0" y="0.0" width="500" height="410"/>
@@ -465,12 +579,17 @@ You must close and reopen any opened repositories in GitUp after changing this s
             </view>
             <toolbar key="toolbar" implicitIdentifier="4BB9AB3D-6CFE-44F9-AC58-EC5EB9EC6AD2" autosavesConfiguration="NO" allowsUserCustomization="NO" displayMode="iconAndLabel" sizeMode="regular" id="YkS-ea-UXD">
                 <allowedToolbarItems>
-                    <toolbarItem implicitItemIdentifier="0A993B67-8232-470B-93F2-918C139C4502" explicitItemIdentifier="general" label="General" paletteLabel="General" image="icon_general" autovalidates="NO" selectable="YES" id="Eco-Ip-wwc">
+                    <toolbarItem implicitItemIdentifier="0A993B67-8232-470B-93F2-918C139C4502" explicitItemIdentifier="general" label="General" paletteLabel="General" image="General" autovalidates="NO" selectable="YES" id="Eco-Ip-wwc">
                         <connections>
                             <action selector="selectPreferencePane:" target="Voe-Tx-rLC" id="P2u-HV-YJ4"/>
                         </connections>
                     </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="5E54574B-9F92-4881-8DD0-A99676EDDF56" explicitItemIdentifier="advanced" label="Advanced" paletteLabel="Advanced" image="icon_advanced" autovalidates="NO" selectable="YES" id="doU-9n-plE">
+                    <toolbarItem implicitItemIdentifier="01E4DB1E-869A-4342-9664-49760E8059C0" explicitItemIdentifier="tools" label="Tools" paletteLabel="Tools" image="ToolbarCustomizeIcon" autovalidates="NO" selectable="YES" id="xNi-fF-77p">
+                        <connections>
+                            <action selector="selectPreferencePane:" target="Voe-Tx-rLC" id="SvV-p6-c89"/>
+                        </connections>
+                    </toolbarItem>
+                    <toolbarItem implicitItemIdentifier="5E54574B-9F92-4881-8DD0-A99676EDDF56" explicitItemIdentifier="advanced" label="Advanced" paletteLabel="Advanced" image="ToolbarAdvanced" autovalidates="NO" selectable="YES" id="doU-9n-plE">
                         <connections>
                             <action selector="selectPreferencePane:" target="Voe-Tx-rLC" id="mFG-Gz-oyR"/>
                         </connections>
@@ -478,6 +597,7 @@ You must close and reopen any opened repositories in GitUp after changing this s
                 </allowedToolbarItems>
                 <defaultToolbarItems>
                     <toolbarItem reference="Eco-Ip-wwc"/>
+                    <toolbarItem reference="xNi-fF-77p"/>
                     <toolbarItem reference="doU-9n-plE"/>
                 </defaultToolbarItems>
             </toolbar>
@@ -725,19 +845,6 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                 <connections>
                                     <action selector="openInTerminal:" target="-1" id="YJM-LA-kZX"/>
                                 </connections>
-                            </menuItem>
-                            <menuItem title="Open In External Terminal" id="pOr-se-1Oi">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <menu key="submenu" title="Open In External Terminal" id="dUB-iv-1C7">
-                                    <items>
-                                        <menuItem title="iTerm" id="X2d-4B-0li">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="openIniTerm:" target="-1" id="IPe-1p-hNB"/>
-                                            </connections>
-                                        </menuItem>
-                                    </items>
-                                </menu>
                             </menuItem>
                             <menuItem title="Open in Finder…" id="NQb-m5-0rE">
                                 <modifierMask key="keyEquivalentModifierMask"/>
@@ -1302,11 +1409,12 @@ UI design by Wayne Fan</string>
         <userDefaultsController representsSharedInstance="YES" id="AR1-cq-KNa"/>
     </objects>
     <resources>
+        <image name="General" width="128" height="128"/>
         <image name="NSApplicationIcon" width="32" height="32"/>
         <image name="NSStopProgressFreestandingTemplate" width="14" height="14"/>
-        <image name="icon_advanced" width="32" height="32"/>
+        <image name="ToolbarAdvanced" width="128" height="128"/>
+        <image name="ToolbarCustomizeIcon" width="512" height="512"/>
         <image name="icon_forum" width="12" height="12"/>
-        <image name="icon_general" width="32" height="32"/>
         <image name="icon_twitter" width="12" height="12"/>
     </resources>
 </document>
