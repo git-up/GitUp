@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0A01676A2330CABD0069961E /* ServicesProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A0167692330CABD0069961E /* ServicesProvider.m */; };
 		0AD4625B232711B000BE28D1 /* WelcomeWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AD4625A232711B000BE28D1 /* WelcomeWindow.m */; };
 		0AE7F5F12312C1B000B06050 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0AE7F5ED2312C1B000B06050 /* InfoPlist.strings */; };
 		165C32B61B95739700D2F894 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 165C32B51B95739700D2F894 /* QuartzCore.framework */; };
@@ -108,6 +109,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0A0167682330CABD0069961E /* ServicesProvider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ServicesProvider.h; sourceTree = "<group>"; };
+		0A0167692330CABD0069961E /* ServicesProvider.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ServicesProvider.m; sourceTree = "<group>"; };
 		0AD46259232711B000BE28D1 /* WelcomeWindow.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WelcomeWindow.h; sourceTree = "<group>"; };
 		0AD4625A232711B000BE28D1 /* WelcomeWindow.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WelcomeWindow.m; sourceTree = "<group>"; };
 		0AE7F5EE2312C1B000B06050 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -281,6 +284,8 @@
 				31CD50E2203E2E2800360B3A /* ToolbarItemWrapperView.m */,
 				0AD46259232711B000BE28D1 /* WelcomeWindow.h */,
 				0AD4625A232711B000BE28D1 /* WelcomeWindow.m */,
+				0A0167682330CABD0069961E /* ServicesProvider.h */,
+				0A0167692330CABD0069961E /* ServicesProvider.m */,
 			);
 			path = Application;
 			sourceTree = "<group>";
@@ -431,6 +436,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0A01676A2330CABD0069961E /* ServicesProvider.m in Sources */,
 				E21739F71A5080DD00EC6777 /* DocumentController.m in Sources */,
 				E2E3C9A01D771E7600AA9A62 /* GARawTracker.m in Sources */,
 				E2C338B419F8562F00063D95 /* main.m in Sources */,
