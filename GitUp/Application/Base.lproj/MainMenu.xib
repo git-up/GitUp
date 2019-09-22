@@ -1279,9 +1279,6 @@ UI design by Wayne Fan</string>
                                     </connections>
                                 </customView>
                             </subviews>
-                            <connections>
-                                <outlet property="imageView" destination="Apd-kA-Fr2" id="22r-bO-hHz"/>
-                            </connections>
                         </view>
                         <color key="fillColor" name="windowBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </box>

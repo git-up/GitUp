@@ -17,7 +17,6 @@
 
 @interface WelcomeWindowView : NSView <NSDraggingDestination>
 @property (weak, nonatomic, readonly) AppDelegate *appDelegate;
-@property (weak, nonatomic) IBOutlet NSImageView *imageView;
 @property (assign, nonatomic) BOOL receivingDrag;
 @end
 
@@ -30,7 +29,6 @@
 
 #pragma mark - Setup
 - (void)setup {
-  [self.imageView unregisterDraggedTypes];
   [self registerForDraggedTypes:@[NSURLPboardType]];
 }
 
