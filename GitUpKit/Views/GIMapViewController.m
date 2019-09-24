@@ -916,6 +916,11 @@
   [self editCommitMessage:commit];
 }
 
+- (IBAction)copySelectedCommitMessage:(id)sender {
+  GCHistoryCommit* commit = self.graphView.selectedNode.commit;
+  [self copyCommitMessage:commit];
+}
+
 - (IBAction)rewriteSelectedCommit:(id)sender {
   GCHistoryCommit* commit = self.graphView.selectedNode.commit;
   if ([self checkCleanRepositoryForOperationOnCommit:commit]) {
