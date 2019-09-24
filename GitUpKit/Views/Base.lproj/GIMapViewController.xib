@@ -111,7 +111,7 @@ DQ
                         <action selector="editSelectedCommitMessage:" target="-2" id="PrK-v7-e6I"/>
                     </connections>
                 </menuItem>
-                <menuItem title="Copy Message…" alternate="YES" keyEquivalent="e" id="LnA-LI-dEb">
+                <menuItem title="Copy Message" alternate="YES" keyEquivalent="e" id="LnA-LI-dEb">
                     <modifierMask key="keyEquivalentModifierMask" option="YES"/>
                     <connections>
                         <action selector="copySelectedCommitMessage:" target="-2" id="dDP-sd-Fqm"/>
