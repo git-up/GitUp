@@ -2006,22 +2006,20 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
                                 ];
     NSString *isNotRunningPhase = [NSString stringWithFormat:
                                    @"""tell application \"%@\" \n"""
-                                   """reopen \n"""
                                    """activate \n"""
                                    """tell current session of current window \n"""
                                    """set command to \"%@\" \n"""
                                    """write text command \n"""
                                    """end tell \n"""
-                                   """activate \n"""
                                    """end tell \n""",
                                    name, command
                                    ];
     NSString *script = [NSString stringWithFormat:
                         @"""if application \"%@\" is running then \n"""
-                        @""" %@ \n"""
-                        @"""else \n"""
-                        @""" %@ \n"""
-                        @"""end if \n""",
+                        """ %@ \n"""
+                        """else \n"""
+                        """ %@ \n"""
+                        """end if \n""",
                         name, isRunningPhase, isNotRunningPhase
                         ];
     return script;
@@ -2052,7 +2050,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
     NSError *error = [NSError errorWithDomain:@"com.apple.security.automation.appleEvents" code:code userInfo:userInfo];
     [self presentError:error];
   }
-  [[NSWorkspace sharedWorkspace] launchApplication:name];
+//  [[NSWorkspace sharedWorkspace] launchApplication:name];
 }
 
 - (IBAction)openInTerminal:(id)sender {
