@@ -1969,14 +1969,62 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
   if ([name isEqualToString:GIViewController_TerminalTool_Terminal]) {
     return [NSString stringWithFormat:@"tell application \"%@\" to do script \"cd \\\"%@\\\"\"", name, _repository.workingDirectoryPath];
   }
+  /*
+   -- if application is running, we already have a window.
+   -- so, we create new window and write our command.
+   -- otherwise, we reopen application, activate it and
+    if application "iTerm" is running then
+      tell application "iTerm"
+        tell current session of (create window with default profile)
+          set command to "cd '~/GitUp'"
+          write text command
+        end tell
+        activate
+      end tell
+    else
+      tell application "iTerm"
+        reopen
+        activate -- bring to front and also set current window to fresh window
+        tell current session of current window
+          set command to "cd '~/GitUp'"
+          write text command
+        end tell
+      end tell
+    end if
+   */
   if ([name isEqualToString:GIViewController_TerminalTool_iTerm]) {
-    return [NSString stringWithFormat:
-            @"""tell application \"%@\" \n"""
-            """tell current session of current window \n"""
-            """set command to \"cd \\\"%@\\\"\" \n"""
-            """write text command \n"""
-            """end tell \n"""
-            """end tell""", name, _repository.workingDirectoryPath];
+    NSString *command = [NSString stringWithFormat:@"cd '%@'", _repository.workingDirectoryPath];
+    NSString *isRunningPhase = [NSString stringWithFormat:
+                                @"""tell application \"%@\" \n"""
+                                """tell current session of (create window with default profile) \n"""
+                                """set command to \"%@\" \n"""
+                                """write text command \n"""
+                                """end tell \n"""
+                                """activate \n"""
+                                """end tell \n""",
+                                name, command
+                                ];
+    NSString *isNotRunningPhase = [NSString stringWithFormat:
+                                   @"""tell application \"%@\" \n"""
+                                   """reopen \n"""
+                                   """activate \n"""
+                                   """tell current session of current window \n"""
+                                   """set command to \"%@\" \n"""
+                                   """write text command \n"""
+                                   """end tell \n"""
+                                   """activate \n"""
+                                   """end tell \n""",
+                                   name, command
+                                   ];
+    NSString *script = [NSString stringWithFormat:
+                        @"""if application \"%@\" is running then \n"""
+                        @""" %@ \n"""
+                        @"""else \n"""
+                        @""" %@ \n"""
+                        @"""end if \n""",
+                        name, isRunningPhase, isNotRunningPhase
+                        ];
+    return script;
   }
   return nil;
 }
