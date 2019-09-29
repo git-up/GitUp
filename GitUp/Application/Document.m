@@ -1986,6 +1986,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
         reopen
         activate -- bring to front and also set current window to fresh window
         tell current session of current window
+          select -- give focus to current window to start typing in it.
           set command to "cd '~/GitUp'"
           write text command
         end tell
@@ -2030,15 +2031,15 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 
 - (void)openInTerminalAppName:(NSString *)name {
   NSString* script = [self scriptForTerminalAppName:name];
-  
+
   if (script == nil) {
     NSUInteger code = 1000;
-    NSDictionary *userInfo = @{NSLocalizedDescriptionKey : NSLocalizedString(@"Error occured! Unsupported key in user defaults for Preferred terminal app is occured. Key is", nil)};    
+    NSDictionary *userInfo = @{NSLocalizedDescriptionKey : NSLocalizedString(@"Error occured! Unsupported key in user defaults for Preferred terminal app is occured. Key is", nil)};
     NSError *error = [NSError errorWithDomain:@"org.gitup.preferences.terminal" code:code userInfo:userInfo];
     [self presentError:error];
     return;
   }
-  
+
   NSDictionary *dictionary = nil;
   [[[NSAppleScript alloc] initWithSource:script] executeAndReturnError:&dictionary];
   if (dictionary != nil) {
