@@ -2008,6 +2008,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
                                    @"""tell application \"%@\" \n"""
                                    """activate \n"""
                                    """tell current session of current window \n"""
+                                   """select \n"""
                                    """set command to \"%@\" \n"""
                                    """write text command \n"""
                                    """end tell \n"""
