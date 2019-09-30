@@ -1967,7 +1967,13 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 
 - (NSString *)scriptForTerminalAppName:(NSString *)name {
   if ([name isEqualToString:GIViewController_TerminalTool_Terminal]) {
-    return [NSString stringWithFormat:@"tell application \"%@\" to do script \"cd \\\"%@\\\"\"", name, _repository.workingDirectoryPath];
+    return [NSString stringWithFormat:
+            @"""tell application \"%@\" \n"""
+            """reopen \n"""
+            """activate \n"""
+            """do script \"cd \\\"%@\\\"\" \n"""
+            """end tell \n""",
+            name, _repository.workingDirectoryPath];
   }
   /*
    -- if application is running, we already have a window.
@@ -1993,7 +1999,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
       end tell
     end if
    */
-  if ([name isEqualToString:GIViewController_TerminalTool_iTerm]) {
+  if ([name isEqualToString:GIViewController_TerminalTool_iTerm] || [name isEqualToString:GIViewController_TerminalTool_Terminal]) {
     NSString *command = [NSString stringWithFormat:@"cd '%@'", _repository.workingDirectoryPath];
     NSString *isRunningPhase = [NSString stringWithFormat:
                                 @"""tell application \"%@\" \n"""
