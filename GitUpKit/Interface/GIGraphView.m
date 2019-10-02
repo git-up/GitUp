@@ -378,6 +378,9 @@ static const void* _associatedObjectDataKey = &_associatedObjectDataKey;
 
 - (void)_selectSideNodeAtPosition:(NSPoint)point {
   GILayer *layer = [self findLayerAtPosition:point.y];
+  if (layer == nil) {
+    return;
+  }
   NSUInteger index = [layer.nodes indexOfObjectPassingTest:^BOOL(GINode * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
     return obj != _selectedNode && !obj.dummy;
   }];
