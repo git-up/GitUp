@@ -1965,8 +1965,87 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 // reset all permissions for particular bundle identifier.
 // $ tccutil reset All co.gitup.mac-debug
 
-- (IBAction)openInTerminal:(id)sender {
-  NSString* script = [NSString stringWithFormat:@"tell application \"Terminal\" to do script \"cd \\\"%@\\\"\"", _repository.workingDirectoryPath];
+- (NSString *)scriptForTerminalAppName:(NSString *)name {
+  if ([name isEqualToString:GIViewController_TerminalTool_Terminal]) {
+    return [NSString stringWithFormat:
+            @"""tell application \"%@\" \n"""
+            """reopen \n"""
+            """activate \n"""
+            """do script \"cd \\\"%@\\\"\" \n"""
+            """end tell \n""",
+            name, _repository.workingDirectoryPath];
+  }
+  /*
+   -- if application is running, we already have a window.
+   -- so, we create new window and write our command.
+   -- otherwise, we reopen application, activate it and
+    if application "iTerm" is running then
+      tell application "iTerm"
+        tell current session of (create window with default profile)
+          set command to "cd '~/GitUp'"
+          write text command
+        end tell
+        activate
+      end tell
+    else
+      tell application "iTerm"
+        reopen
+        activate -- bring to front and also set current window to fresh window
+        tell current session of current window
+          select -- give focus to current window to start typing in it.
+          set command to "cd '~/GitUp'"
+          write text command
+        end tell
+      end tell
+    end if
+   */
+  if ([name isEqualToString:GIViewController_TerminalTool_iTerm] || [name isEqualToString:GIViewController_TerminalTool_Terminal]) {
+    NSString *command = [NSString stringWithFormat:@"cd '%@'", _repository.workingDirectoryPath];
+    NSString *isRunningPhase = [NSString stringWithFormat:
+                                @"""tell application \"%@\" \n"""
+                                """tell current session of (create window with default profile) \n"""
+                                """set command to \"%@\" \n"""
+                                """write text command \n"""
+                                """end tell \n"""
+                                """activate \n"""
+                                """end tell \n""",
+                                name, command
+                                ];
+    NSString *isNotRunningPhase = [NSString stringWithFormat:
+                                   @"""tell application \"%@\" \n"""
+                                   """activate \n"""
+                                   """tell current session of current window \n"""
+                                   """select \n"""
+                                   """set command to \"%@\" \n"""
+                                   """write text command \n"""
+                                   """end tell \n"""
+                                   """end tell \n""",
+                                   name, command
+                                   ];
+    NSString *script = [NSString stringWithFormat:
+                        @"""if application \"%@\" is running then \n"""
+                        """ %@ \n"""
+                        """else \n"""
+                        """ %@ \n"""
+                        """end if \n""",
+                        name, isRunningPhase, isNotRunningPhase
+                        ];
+    return script;
+  }
+  return nil;
+}
+
+- (void)openInTerminalAppName:(NSString *)name {
+  NSString* script = [self scriptForTerminalAppName:name];
+
+  if (script == nil) {
+    NSUInteger code = 1000;
+    NSDictionary *userInfo = @{NSLocalizedDescriptionKey : NSLocalizedString(@"Error occured! Unsupported key in user defaults for Preferred terminal app is occured. Key is", nil)};
+    NSError *error = [NSError errorWithDomain:@"org.gitup.preferences.terminal" code:code userInfo:userInfo];
+    [self presentError:error];
+    return;
+  }
+
   NSDictionary *dictionary = nil;
   [[[NSAppleScript alloc] initWithSource:script] executeAndReturnError:&dictionary];
   if (dictionary != nil) {
@@ -1979,7 +2058,12 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
     NSError *error = [NSError errorWithDomain:@"com.apple.security.automation.appleEvents" code:code userInfo:userInfo];
     [self presentError:error];
   }
-  [[NSWorkspace sharedWorkspace] launchApplication:@"Terminal"];
+//  [[NSWorkspace sharedWorkspace] launchApplication:name];
+}
+
+- (IBAction)openInTerminal:(id)sender {
+  NSString *identifier = [[NSUserDefaults standardUserDefaults] stringForKey:GIViewController_TerminalTool];
+  [self openInTerminalAppName:identifier];
 }
 
 - (IBAction)dismissHelp:(id)sender {

@@ -41,17 +41,79 @@ NSString* const GIViewControllerTool_DiffMerge = @"DiffMerge";
 
 NSString* const GIViewController_DiffTool = @"GIViewController_DiffTool";
 NSString* const GIViewController_MergeTool = @"GIViewController_MergeTool";
+NSString* const GIViewController_TerminalTool = @"GIViewController_TerminalTool";
+
+// TerminalTool
+NSString* const GIViewController_TerminalTool_Terminal = @"Terminal";
+NSString* const GIViewController_TerminalTool_iTerm = @"iTerm";
+static NSString* const GIViewController_TerminalTool_iTerm_Key = @"GIViewController_TerminalTool_iTerm";
+static NSString* const GIViewController_TerminalTool_iTerm_BundleIdentifier = @"com.googlecode.iterm2";
 
 static NSString* _diffTemporaryDirectoryPath = nil;
+
+@interface GILaunchServicesLocator : NSObject
++ (NSString *)bundleIdentifierForDisplayName:(NSString *)displayName;
++ (NSString *)standardDefaultsKeyForDisplayName:(NSString *)displayName;
++ (NSDictionary *)installedAppsDictionary;
++ (BOOL)hasInstalledApplicationForDisplayName:(NSString *)displayName;
++ (BOOL)hasInstalledApplicationForBundleIdentifier:(NSString *)bundleIdentifier;
+@end
+
+@import CoreServices;
+@implementation GILaunchServicesLocator
++ (NSString *)bundleIdentifierForDisplayName:(NSString *)displayName {
+  if ([displayName isEqualToString:GIViewController_TerminalTool_iTerm]) {
+    return GIViewController_TerminalTool_iTerm_BundleIdentifier;
+  }
+  return nil;
+}
++ (NSString *)standardDefaultsKeyForDisplayName:(NSString *)displayName {
+  if ([displayName isEqualToString:GIViewController_TerminalTool_iTerm]) {
+    return GIViewController_TerminalTool_iTerm_Key;
+  }
+  return nil;
+}
++ (NSDictionary *)installedAppsDictionary {
+  NSMutableDictionary *dictionary = [NSMutableDictionary new];
+  NSArray *apps = @[
+    GIViewController_TerminalTool_iTerm
+  ];
+  for (NSString *app in apps) {
+    NSString *key = [self standardDefaultsKeyForDisplayName:app];
+    if (key != nil) {
+      dictionary[key] = @([self hasInstalledApplicationForDisplayName:app]);
+    }
+  }
+  return [dictionary copy];
+}
++ (BOOL)hasInstalledApplicationForDisplayName:(NSString *)displayName {
+  return [self hasInstalledApplicationForBundleIdentifier:[self bundleIdentifierForDisplayName:displayName]];
+}
++ (BOOL)hasInstalledApplicationForBundleIdentifier:(NSString *)bundleIdentifier {
+  if (bundleIdentifier == nil) {
+    return NO;
+  }
+  
+  CFErrorRef error = NULL;
+  
+  NSArray *applications = (__bridge NSArray *)LSCopyApplicationURLsForBundleIdentifier((__bridge CFStringRef)bundleIdentifier, &error);
+  
+  return applications.count > 0;
+}
+@end
 
 @implementation GIViewController (Utilities)
 
 + (void)initialize {
   NSDictionary* defaults = @{
     GIViewController_DiffTool : GIViewControllerTool_FileMerge,
-    GIViewController_MergeTool : GIViewControllerTool_FileMerge
+    GIViewController_MergeTool : GIViewControllerTool_FileMerge,
+    GIViewController_TerminalTool : GIViewController_TerminalTool_Terminal,
   };
   [[NSUserDefaults standardUserDefaults] registerDefaults:defaults];
+  
+  NSDictionary* installedApps = [GILaunchServicesLocator installedAppsDictionary];
+  [[NSUserDefaults standardUserDefaults] registerDefaults:installedApps];
 
   if (_diffTemporaryDirectoryPath == nil) {
     _diffTemporaryDirectoryPath = [NSTemporaryDirectory() stringByAppendingPathComponent:[[NSBundle mainBundle] bundleIdentifier]];
