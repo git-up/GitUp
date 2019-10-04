@@ -376,6 +376,31 @@ static const void* _associatedObjectDataKey = &_associatedObjectDataKey;
   }
 }
 
+- (void)_selectSideNodeAtPosition:(NSPoint)point {
+  GILayer *layer = [self findLayerAtPosition:point.y];
+  if (layer == nil) {
+    return;
+  }
+  NSUInteger index = [layer.nodes indexOfObjectPassingTest:^BOOL(GINode * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+    return obj != _selectedNode && !obj.dummy;
+  }];
+  if (index != NSNotFound) {
+    [self _setSelectedNode:layer.nodes[index] display:YES scroll:YES notify:YES];
+  }
+}
+
+- (void)_selectUncleNode {
+  NSPoint position = [self positionForNode:_selectedNode];
+  NSPoint targetPosition = NSMakePoint(position.x + kSpacingX, position.y - kSpacingY);
+  [self _selectSideNodeAtPosition:targetPosition];
+}
+
+- (void)_selectNephewNode {
+  NSPoint position = [self positionForNode:_selectedNode];
+  NSPoint targetPosition = NSMakePoint(position.x + kSpacingX, position.y + kSpacingY);
+  [self _selectSideNodeAtPosition:targetPosition];
+}
+
 - (void)_selectPreviousSiblingNode {
   NSArray* nodes = _selectedNode.layer.nodes;
   NSInteger index = [nodes indexOfObject:_selectedNode];
@@ -490,7 +515,9 @@ static const void* _associatedObjectDataKey = &_associatedObjectDataKey;
       return;
 
     case kGIKeyCode_Down:
-      if (event.modifierFlags & NSCommandKeyMask) {
+      if (event.modifierFlags & NSAlternateKeyMask) {
+        [self _selectUncleNode];
+      } else if (event.modifierFlags & NSCommandKeyMask) {
         [self _scrollToBottom];
       } else if (_selectedNode) {
         [self _selectParentNode];
@@ -500,7 +527,9 @@ static const void* _associatedObjectDataKey = &_associatedObjectDataKey;
       return;
 
     case kGIKeyCode_Up:
-      if (event.modifierFlags & NSCommandKeyMask) {
+      if (event.modifierFlags & NSAlternateKeyMask) {
+        [self _selectNephewNode];
+      } else if (event.modifierFlags & NSCommandKeyMask) {
         [self _scrollToTop];
       } else if (_selectedNode) {
         [self _selectChildNode];
