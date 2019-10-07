@@ -174,7 +174,10 @@ static const void* _associatedObjectCommitKey = &_associatedObjectCommitKey;
   if ([[NSUserDefaults standardUserDefaults] boolForKey:GICommitMessageViewUserDefaultKey_ShowMargins]) {
     NSRect bounds = self.bounds;
     CGFloat offset = self.textContainerOrigin.x + self.textContainerInset.width + self.textContainer.lineFragmentPadding;
-    CGFloat charWidth = self.font.maximumAdvancement.width;  // TODO: Is this the most reliable way to get the character width of a fixed-width font?
+    CGFloat charWidth = [@"x" sizeWithAttributes:@{
+                           NSFontAttributeName : self.font
+                         }]
+                             .width;
     CGContextRef context = [[NSGraphicsContext currentContext] graphicsPort];
 
     CGContextSaveGState(context);
