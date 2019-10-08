@@ -13,14 +13,7 @@
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
-        <customObject id="Voe-Tx-rLC" customClass="AppDelegate">
-            <connections>
-                <outlet property="forumsButton" destination="ozw-os-Nc4" id="DU4-lD-lmd"/>
-                <outlet property="recentPopUpButton" destination="rck-lm-gsz" id="mPQ-v1-bTW"/>
-                <outlet property="twitterButton" destination="5ht-7L-7AO" id="BT6-TN-i3z"/>
-                <outlet property="welcomeWindow" destination="mjY-As-hbN" id="qhN-UE-SS0"/>
-            </connections>
-        </customObject>
+        <customObject id="Voe-Tx-rLC" customClass="AppDelegate"/>
         <menu title="Main Menu" systemMenu="main" id="AYu-sK-qS6">
             <items>
                 <menuItem title="GitUp" id="1Xt-HY-uBw">
@@ -396,6 +389,7 @@
                     </menu>
                 </menuItem>
             </items>
+            <point key="canvasLocation" x="132" y="153"/>
         </menu>
         <userDefaultsController representsSharedInstance="YES" id="AR1-cq-KNa"/>
         <window allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="mjY-As-hbN" userLabel="Welcome" customClass="WelcomeWindow">
@@ -557,6 +551,9 @@
             </view>
             <connections>
                 <outlet property="destinationView" destination="UVs-2r-EAT" id="AvQ-6L-KSz"/>
+                <outlet property="forumsButton" destination="ozw-os-Nc4" id="419-9M-VYK"/>
+                <outlet property="recentPopUpButton" destination="rck-lm-gsz" id="DNt-71-Rfh"/>
+                <outlet property="twitterButton" destination="5ht-7L-7AO" id="uy0-ug-BuC"/>
             </connections>
             <point key="canvasLocation" x="-185" y="548"/>
         </window>

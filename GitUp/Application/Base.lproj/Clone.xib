@@ -13,13 +13,7 @@
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
-        <customObject id="Voe-Tx-rLC" customClass="AppDelegate">
-            <connections>
-                <outlet property="cloneRecursiveButton" destination="V3d-LG-L26" id="iSp-hX-Jc0"/>
-                <outlet property="cloneURLTextField" destination="KgY-GJ-dY0" id="qXq-61-cKm"/>
-                <outlet property="cloneWindow" destination="6SP-eN-0Kv" id="Bd8-7b-vpr"/>
-            </connections>
-        </customObject>
+        <customObject id="Voe-Tx-rLC" customClass="AppDelegate"/>
         <menu title="Main Menu" systemMenu="main" id="AYu-sK-qS6">
             <items>
                 <menuItem title="GitUp" id="1Xt-HY-uBw">
@@ -397,7 +391,7 @@
             </items>
             <point key="canvasLocation" x="81" y="216"/>
         </menu>
-        <window title="Clone Repository" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="6SP-eN-0Kv">
+        <window title="Clone Repository" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="6SP-eN-0Kv" customClass="CloneWindow">
             <windowStyleMask key="styleMask" titled="YES"/>
             <rect key="contentRect" x="131" y="158" width="502" height="167"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1440" height="900"/>
@@ -470,6 +464,10 @@ Gw
                     </button>
                 </subviews>
             </view>
+            <connections>
+                <outlet property="cloneRecursiveButton" destination="V3d-LG-L26" id="heT-tV-gMj"/>
+                <outlet property="urlTextField" destination="KgY-GJ-dY0" id="Lhw-yi-pdL"/>
+            </connections>
             <point key="canvasLocation" x="-716" y="966.5"/>
         </window>
         <userDefaultsController representsSharedInstance="YES" id="AR1-cq-KNa"/>

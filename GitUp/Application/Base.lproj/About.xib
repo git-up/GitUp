@@ -13,13 +13,7 @@
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
-        <customObject id="Voe-Tx-rLC" customClass="AppDelegate">
-            <connections>
-                <outlet property="aboutPanel" destination="sHg-NM-pfN" id="nuH-JO-Zxx"/>
-                <outlet property="copyrightTextField" destination="c4g-uo-jg9" id="l3W-uq-nyp"/>
-                <outlet property="versionTextField" destination="HZC-36-Grr" id="qyt-nZ-xv3"/>
-            </connections>
-        </customObject>
+        <customObject id="Voe-Tx-rLC" customClass="AppDelegate"/>
         <menu title="Main Menu" systemMenu="main" id="AYu-sK-qS6">
             <items>
                 <menuItem title="GitUp" id="1Xt-HY-uBw">
@@ -397,7 +391,7 @@
             </items>
             <point key="canvasLocation" x="-101" y="216"/>
         </menu>
-        <window title="About GitUp" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="about" animationBehavior="default" id="sHg-NM-pfN" userLabel="About" customClass="NSPanel">
+        <window title="About GitUp" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="about" animationBehavior="default" id="sHg-NM-pfN" userLabel="About" customClass="AboutPanel">
             <windowStyleMask key="styleMask" titled="YES" closable="YES"/>
             <rect key="contentRect" x="612" y="242" width="276" height="363"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1440" height="900"/>
@@ -459,6 +453,10 @@ UI design by Wayne Fan</string>
                     </textField>
                 </subviews>
             </view>
+            <connections>
+                <outlet property="copyrightTextField" destination="c4g-uo-jg9" id="TB2-X6-0Kd"/>
+                <outlet property="versionTextField" destination="HZC-36-Grr" id="gnd-GS-oaf"/>
+            </connections>
             <point key="canvasLocation" x="114" y="441.5"/>
         </window>
         <userDefaultsController representsSharedInstance="YES" id="AR1-cq-KNa"/>

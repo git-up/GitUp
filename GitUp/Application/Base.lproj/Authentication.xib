@@ -15,10 +15,7 @@
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customObject id="Voe-Tx-rLC" customClass="AppDelegate">
             <connections>
-                <outlet property="authenticationNameTextField" destination="ohd-U6-h7y" id="jfG-3a-a5h"/>
                 <outlet property="authenticationPasswordTextField" destination="Uio-D2-Dnt" id="nNT-Jn-Q9Y"/>
-                <outlet property="authenticationURLTextField" destination="fBP-U8-T31" id="JUd-Sw-FSA"/>
-                <outlet property="authenticationWindow" destination="mcM-YD-UN9" id="ZkH-zK-43f"/>
             </connections>
         </customObject>
         <menu title="Main Menu" systemMenu="main" id="AYu-sK-qS6">
@@ -398,7 +395,7 @@
             </items>
             <point key="canvasLocation" x="-101" y="216"/>
         </menu>
-        <window title="Authentication Required" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="mcM-YD-UN9">
+        <window title="Authentication Required" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="mcM-YD-UN9" customClass="AuthenticationWindow">
             <windowStyleMask key="styleMask" titled="YES"/>
             <rect key="contentRect" x="131" y="158" width="428" height="217"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1440" height="900"/>
@@ -469,7 +466,7 @@
                         <rect key="frame" x="101" y="61" width="309" height="42"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" id="Q8S-4w-Dwm">
-                            <font key="font" metaFont="message" size="11"/>
+                            <font key="font" metaFont="label" size="11"/>
                             <string key="title">If authenticating with GitHub and two-factor authentication is enabled on your account, be sure to use a personal access token instead of your password.</string>
                             <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -505,6 +502,11 @@ Gw
                     </button>
                 </subviews>
             </view>
+            <connections>
+                <outlet property="nameTextField" destination="ohd-U6-h7y" id="g4H-oo-Siz"/>
+                <outlet property="passwordTextField" destination="Uio-D2-Dnt" id="NNY-eB-KHF"/>
+                <outlet property="urlTextField" destination="fBP-U8-T31" id="PXp-0p-TIc"/>
+            </connections>
             <point key="canvasLocation" x="-709" y="619.5"/>
         </window>
         <userDefaultsController representsSharedInstance="YES" id="AR1-cq-KNa"/>
