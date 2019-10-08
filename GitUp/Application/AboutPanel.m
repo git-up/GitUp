@@ -15,8 +15,14 @@
 - (void)setVersionString:(NSString *)versionString {
   self.versionTextField.stringValue = versionString;
 }
-
 - (void)setCopyrightString:(NSString *)copyrightString {
   self.copyrightTextField.stringValue = copyrightString;
+}
+
+- (NSString *)versionString {
+  return self.versionTextField.stringValue;
+}
+- (NSString *)copyrightString {
+  return self.copyrightTextField.stringValue;
 }
 @end
