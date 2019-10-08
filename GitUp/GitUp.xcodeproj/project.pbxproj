@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0A33885D234C91C50022528D /* Authentication.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A338853234C91C50022528D /* Authentication.xib */; };
+		0A33885E234C91C50022528D /* Preferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A338855234C91C50022528D /* Preferences.xib */; };
+		0A33885F234C91C50022528D /* About.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A338857234C91C50022528D /* About.xib */; };
+		0A338860234C91C50022528D /* Welcome.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A338859234C91C50022528D /* Welcome.xib */; };
+		0A338861234C91C50022528D /* Clone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A33885B234C91C50022528D /* Clone.xib */; };
 		0AD4625B232711B000BE28D1 /* WelcomeWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AD4625A232711B000BE28D1 /* WelcomeWindow.m */; };
 		0AE7F5F12312C1B000B06050 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0AE7F5ED2312C1B000B06050 /* InfoPlist.strings */; };
 		165C32B61B95739700D2F894 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 165C32B51B95739700D2F894 /* QuartzCore.framework */; };
@@ -108,6 +113,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0A338854234C91C50022528D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/Authentication.xib; sourceTree = "<group>"; };
+		0A338856234C91C50022528D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/Preferences.xib; sourceTree = "<group>"; };
+		0A338858234C91C50022528D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/About.xib; sourceTree = "<group>"; };
+		0A33885A234C91C50022528D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/Welcome.xib; sourceTree = "<group>"; };
+		0A33885C234C91C50022528D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/Clone.xib; sourceTree = "<group>"; };
 		0AD46259232711B000BE28D1 /* WelcomeWindow.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WelcomeWindow.h; sourceTree = "<group>"; };
 		0AD4625A232711B000BE28D1 /* WelcomeWindow.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WelcomeWindow.m; sourceTree = "<group>"; };
 		0AE7F5EE2312C1B000B06050 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -260,6 +270,11 @@
 		E2C338AD19F8562F00063D95 /* Application */ = {
 			isa = PBXGroup;
 			children = (
+				0A338857234C91C50022528D /* About.xib */,
+				0A338853234C91C50022528D /* Authentication.xib */,
+				0A33885B234C91C50022528D /* Clone.xib */,
+				0A338855234C91C50022528D /* Preferences.xib */,
+				0A338859234C91C50022528D /* Welcome.xib */,
 				E2C338B019F8562F00063D95 /* AppDelegate.h */,
 				E2C338B119F8562F00063D95 /* AppDelegate.m */,
 				E25EBCEA1AA3F8B700D3AF44 /* Application.xcassets */,
@@ -407,12 +422,17 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0A338860234C91C50022528D /* Welcome.xib in Resources */,
+				0A33885F234C91C50022528D /* About.xib in Resources */,
 				E25EBCEB1AA3F8B700D3AF44 /* Application.xcassets in Resources */,
 				0AE7F5F12312C1B000B06050 /* InfoPlist.strings in Resources */,
+				0A33885E234C91C50022528D /* Preferences.xib in Resources */,
 				E2A5BE701A814970008DD47F /* Localizable.strings in Resources */,
+				0A33885D234C91C50022528D /* Authentication.xib in Resources */,
 				E2C338BA19F8562F00063D95 /* Document.xib in Resources */,
 				E2C338BF19F8562F00063D95 /* MainMenu.xib in Resources */,
 				E267E2741B84E42A00BAB377 /* Help.plist in Resources */,
+				0A338861234C91C50022528D /* Clone.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -458,6 +478,46 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		0A338853234C91C50022528D /* Authentication.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0A338854234C91C50022528D /* Base */,
+			);
+			name = Authentication.xib;
+			sourceTree = "<group>";
+		};
+		0A338855234C91C50022528D /* Preferences.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0A338856234C91C50022528D /* Base */,
+			);
+			name = Preferences.xib;
+			sourceTree = "<group>";
+		};
+		0A338857234C91C50022528D /* About.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0A338858234C91C50022528D /* Base */,
+			);
+			name = About.xib;
+			sourceTree = "<group>";
+		};
+		0A338859234C91C50022528D /* Welcome.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0A33885A234C91C50022528D /* Base */,
+			);
+			name = Welcome.xib;
+			sourceTree = "<group>";
+		};
+		0A33885B234C91C50022528D /* Clone.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0A33885C234C91C50022528D /* Base */,
+			);
+			name = Clone.xib;
+			sourceTree = "<group>";
+		};
 		0AE7F5ED2312C1B000B06050 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
