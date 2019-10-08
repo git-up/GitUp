@@ -48,6 +48,8 @@
 	<string>Please</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2015-2019 Pierre-Olivier Latour. All rights reserved.</string>
+	<key>NSMainNibFile</key>
+	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
 </dict>
