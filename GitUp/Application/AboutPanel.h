@@ -10,8 +10,8 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface AboutPanel : NSPanel
-@property(nonatomic, weak) IBOutlet NSTextField* versionTextField;
-@property(nonatomic, weak) IBOutlet NSTextField* copyrightTextField;
+@property (nonatomic, copy) NSString *versionString;
+@property (nonatomic, copy) NSString *copyrightString;
 @end
 
 NS_ASSUME_NONNULL_END
