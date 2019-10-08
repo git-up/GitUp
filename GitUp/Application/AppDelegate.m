@@ -299,6 +299,26 @@
   }
 }
 
+#pragma mark - Loading Xibs
+- (id)_loadWindowFromBundleXibWithName:(NSString *)name expectedClass:(Class)class {
+  NSBundle *mainBundle = [NSBundle mainBundle];
+  NSArray *objects = @[];
+  [mainBundle loadNibNamed:name owner:self topLevelObjects:&objects];
+  NSArray *filteredObjects = [objects filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(id  _Nullable evaluatedObject, NSDictionary<NSString *,id> * _Nullable bindings) {
+    return [evaluatedObject isKindOfClass:class];
+  }]];
+  return filteredObjects.firstObject;
+}
+
+- (void)_loadWindowsFromBundle {
+  self.aboutPanel = [self _loadWindowFromBundleXibWithName:@"About" expectedClass:NSPanel.class];
+  self.authenticationWindow = [self _loadWindowFromBundleXibWithName:@"Authentication" expectedClass:NSWindow.class];
+  self.cloneWindow = [self _loadWindowFromBundleXibWithName:@"Clone" expectedClass:NSWindow.class];
+  self.preferencesWindow = [self _loadWindowFromBundleXibWithName:@"Preferences" expectedClass:NSWindow.class];
+  self.welcomeWindow = [self _loadWindowFromBundleXibWithName:@"Welcome" expectedClass:NSWindow.class];
+  return;
+}
+
 #pragma mark - NSApplicationDelegate
 
 - (void)applicationWillFinishLaunching:(NSNotification*)notification {
@@ -394,6 +414,9 @@
   // Load theme preference
   NSString* theme = [[NSUserDefaults standardUserDefaults] stringForKey:kUserDefaultsKey_Theme];
   [self _applyTheme:theme];
+  
+  // Load xibs
+  [self _loadWindowsFromBundle];
 
 #if __ENABLE_SUDDEN_TERMINATION__
   // Enable sudden termination
