@@ -10,10 +10,11 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface PreferencesWindow : NSWindow
-@property(nonatomic, weak) IBOutlet NSToolbar* preferencesToolbar;
-@property(nonatomic, weak) IBOutlet NSTabView* preferencesTabView;
-@property(nonatomic, weak) IBOutlet NSPopUpButton* channelPopUpButton;
-@property(nonatomic, weak) IBOutlet NSPopUpButton* themePopUpButton;
+@property (nonatomic, copy) NSArray <NSString *>*channelTitles;
+@property (nonatomic, copy) NSArray <NSString *>*themesTitles;
+@property (nonatomic, copy) NSString *selectedChannel;
+@property (nonatomic, copy) NSString *selectedTheme;
+@property (nonatomic, copy) NSString *selectedItemIdentifier;
 @end
 
 NS_ASSUME_NONNULL_END
