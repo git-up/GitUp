@@ -9,8 +9,6 @@
 /* Begin PBXBuildFile section */
 		0A338877234CE4A60022528D /* GILaunchServicesLocator.h in Headers */ = {isa = PBXBuildFile; fileRef = 0A338875234CE4A60022528D /* GILaunchServicesLocator.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0A338878234CE4A60022528D /* GILaunchServicesLocator.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A338876234CE4A60022528D /* GILaunchServicesLocator.m */; };
-		0A338879234CE6BD0022528D /* GILaunchServicesLocator.h in Headers */ = {isa = PBXBuildFile; fileRef = 0A338875234CE4A60022528D /* GILaunchServicesLocator.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		0A33887A234CE6C90022528D /* GILaunchServicesLocator.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A338876234CE4A60022528D /* GILaunchServicesLocator.m */; };
 		743BF1841B871C0200E1CA49 /* GCOrderedSet.h in Headers */ = {isa = PBXBuildFile; fileRef = 74EDB5D01B84D4C400F00E79 /* GCOrderedSet.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		749335CA1B9B7FF200225513 /* GCOrderedSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 74EDB5D11B84D4C400F00E79 /* GCOrderedSet.m */; };
 		749786941B85AAB10065BD55 /* GCOrderedSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 74EDB5D11B84D4C400F00E79 /* GCOrderedSet.m */; };
@@ -1109,7 +1107,6 @@
 				E2B9879D1B9172470097629D /* GINode.h in Headers */,
 				E21753371B91623200BE234A /* XLASLLogger.h in Headers */,
 				E21753381B91623200BE234A /* XLCallbackLogger.h in Headers */,
-				0A338879234CE6BD0022528D /* GILaunchServicesLocator.h in Headers */,
 				E21753391B91623200BE234A /* XLFacility.h in Headers */,
 				E217533A1B91623200BE234A /* XLFacilityCMacros.h in Headers */,
 				E217533B1B91623200BE234A /* XLFacilityMacros.h in Headers */,
@@ -1432,7 +1429,6 @@
 				E217537B1B91634C00BE234A /* GCRepository+Reset.m in Sources */,
 				E217537C1B91634C00BE234A /* GCRepository+Status.m in Sources */,
 				E217537D1B91634C00BE234A /* GCSnapshot.m in Sources */,
-				0A33887A234CE6C90022528D /* GILaunchServicesLocator.m in Sources */,
 				E217537E1B91634C00BE234A /* GCSQLiteRepository.m in Sources */,
 				E217537F1B91634C00BE234A /* GCStash.m in Sources */,
 				E21753801B91634C00BE234A /* GCSubmodule.m in Sources */,
