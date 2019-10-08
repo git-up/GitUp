@@ -10,8 +10,9 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface CloneWindow : NSWindow
-@property(nonatomic, weak) IBOutlet NSTextField* urlTextField;
-@property(nonatomic, weak) IBOutlet NSButton* cloneRecursiveButton;
+@property (nonatomic, copy) NSString *url;
+@property (nonatomic, assign, readonly) BOOL urlExists;
+@property (nonatomic, assign, readonly) BOOL recursive;
 @end
 
 NS_ASSUME_NONNULL_END
