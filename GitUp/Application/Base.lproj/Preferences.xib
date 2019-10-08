@@ -503,12 +503,12 @@ You must close and reopen any opened repositories in GitUp after changing this s
                 <allowedToolbarItems>
                     <toolbarItem implicitItemIdentifier="0A993B67-8232-470B-93F2-918C139C4502" explicitItemIdentifier="general" label="General" paletteLabel="General" image="icon_general" autovalidates="NO" selectable="YES" id="Eco-Ip-wwc">
                         <connections>
-                            <action selector="selectPreferencePane:" target="Voe-Tx-rLC" id="P2u-HV-YJ4"/>
+                            <action selector="selectPreferencePane:" target="3qV-q4-a6k" id="dXh-fB-c11"/>
                         </connections>
                     </toolbarItem>
                     <toolbarItem implicitItemIdentifier="5E54574B-9F92-4881-8DD0-A99676EDDF56" explicitItemIdentifier="advanced" label="Advanced" paletteLabel="Advanced" image="icon_advanced" autovalidates="NO" selectable="YES" id="doU-9n-plE">
                         <connections>
-                            <action selector="selectPreferencePane:" target="Voe-Tx-rLC" id="mFG-Gz-oyR"/>
+                            <action selector="selectPreferencePane:" target="3qV-q4-a6k" id="Rak-V3-Ht6"/>
                         </connections>
                     </toolbarItem>
                 </allowedToolbarItems>
@@ -519,8 +519,8 @@ You must close and reopen any opened repositories in GitUp after changing this s
             </toolbar>
             <connections>
                 <outlet property="channelPopUpButton" destination="7N4-S9-iWL" id="HG7-rm-uNA"/>
+                <outlet property="preferencesTabView" destination="anN-jw-l7x" id="aBp-kh-Z4b"/>
                 <outlet property="preferencesToolbar" destination="YkS-ea-UXD" id="zR9-Oa-UXN"/>
-                <outlet property="tabView" destination="anN-jw-l7x" id="Nrg-a6-xIl"/>
                 <outlet property="themePopUpButton" destination="aYx-qQ-zM6" id="dyR-7V-Sf8"/>
             </connections>
             <point key="canvasLocation" x="-8" y="1138"/>
