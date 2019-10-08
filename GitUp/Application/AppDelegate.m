@@ -29,6 +29,12 @@
 #import "ToolProtocol.h"
 #import "GARawTracker.h"
 
+#import "AboutPanel.h"
+#import "AuthenticationWindow.h"
+#import "CloneWindow.h"
+#import "PreferencesWindow.h"
+#import "WelcomeWindow.h"
+
 #define __ENABLE_SUDDEN_TERMINATION__ 1
 
 #define kNotificationUserInfoKey_Action @"action"  // NSString
@@ -40,6 +46,29 @@
 #define kToolInstallPath @"/usr/local/bin/" kToolName
 
 @interface AppDelegate () <NSUserNotificationCenterDelegate, SUUpdaterDelegate>
+@property(nonatomic, strong) NSWindow* preferencesWindow;
+@property(nonatomic, weak) NSToolbar* preferencesToolbar;
+@property(nonatomic, weak) NSTabView* preferencesTabView;
+@property(nonatomic, weak) NSPopUpButton* channelPopUpButton;
+@property(nonatomic, weak) NSPopUpButton* themePopUpButton;
+
+@property(nonatomic, strong) NSWindow* cloneWindow;
+@property(nonatomic, weak) NSTextField* cloneURLTextField;
+@property(nonatomic, weak) NSButton* cloneRecursiveButton;
+
+@property(nonatomic, strong) NSWindow* authenticationWindow;
+@property(nonatomic, weak) NSTextField* authenticationURLTextField;
+@property(nonatomic, weak) NSTextField* authenticationNameTextField;
+@property(nonatomic, weak) NSSecureTextField* authenticationPasswordTextField;
+
+@property(nonatomic, strong) NSPanel* aboutPanel;
+@property(nonatomic, weak) NSTextField* versionTextField;
+@property(nonatomic, weak) NSTextField* copyrightTextField;
+
+@property(nonatomic, strong) NSWindow* welcomeWindow;
+@property(nonatomic, weak) NSPopUpButton* recentPopUpButton;
+@property(nonatomic, weak) GILinkButton* twitterButton;
+@property(nonatomic, weak) GILinkButton* forumsButton;
 @end
 
 @implementation AppDelegate {
@@ -316,7 +345,50 @@
   self.cloneWindow = [self _loadWindowFromBundleXibWithName:@"Clone" expectedClass:NSWindow.class];
   self.preferencesWindow = [self _loadWindowFromBundleXibWithName:@"Preferences" expectedClass:NSWindow.class];
   self.welcomeWindow = [self _loadWindowFromBundleXibWithName:@"Welcome" expectedClass:NSWindow.class];
-  return;
+  [self _assignWindowsToOutlets];
+}
+
+// MARK: Remove later.
+- (void)_assignWindowsToOutlets {
+  // About
+  {
+    AboutPanel *panel = (AboutPanel *)self.aboutPanel;
+    _versionTextField = panel.versionTextField;
+    _copyrightTextField = panel.copyrightTextField;
+  }
+  
+  // Authentication
+  {
+    AuthenticationWindow *window = (AuthenticationWindow *)self.authenticationWindow;
+    _authenticationURLTextField = window.urlTextField;
+    _authenticationNameTextField = window.nameTextField;
+    _authenticationPasswordTextField = window.passwordTextField;
+  }
+  
+  // Clone
+  {
+    CloneWindow *window = (CloneWindow *)self.cloneWindow;
+    _cloneURLTextField = window.urlTextField;
+    _cloneRecursiveButton = window.cloneRecursiveButton;
+  }
+  
+  // Preferences
+  {
+    PreferencesWindow *window = (PreferencesWindow *)self.preferencesWindow;
+    _preferencesToolbar = window.preferencesToolbar;
+    _preferencesTabView = window.tabView;
+    _channelPopUpButton = window.channelPopUpButton;
+    _themePopUpButton = window.themePopUpButton;
+  }
+  
+  // Window
+  {
+    WelcomeWindow *window = (WelcomeWindow *)self.welcomeWindow;
+    _recentPopUpButton = window.recentPopUpButton;
+    // not required, can be removed.
+    _twitterButton = window.twitterButton;
+    _forumsButton = window.forumsButton;
+  }
 }
 
 #pragma mark - NSApplicationDelegate
