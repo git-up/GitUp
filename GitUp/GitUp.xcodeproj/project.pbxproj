@@ -12,6 +12,10 @@
 		0A33885F234C91C50022528D /* About.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A338857234C91C50022528D /* About.xib */; };
 		0A338860234C91C50022528D /* Welcome.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A338859234C91C50022528D /* Welcome.xib */; };
 		0A338861234C91C50022528D /* Clone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A33885B234C91C50022528D /* Clone.xib */; };
+		0A33886B234CA23A0022528D /* AboutPanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A33886A234CA23A0022528D /* AboutPanel.m */; };
+		0A33886E234CA3110022528D /* AuthenticationWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A33886D234CA3110022528D /* AuthenticationWindow.m */; };
+		0A338871234CA39B0022528D /* CloneWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A338870234CA39B0022528D /* CloneWindow.m */; };
+		0A338874234CA40F0022528D /* PreferencesWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A338873234CA40F0022528D /* PreferencesWindow.m */; };
 		0AD4625B232711B000BE28D1 /* WelcomeWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AD4625A232711B000BE28D1 /* WelcomeWindow.m */; };
 		0AE7F5F12312C1B000B06050 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0AE7F5ED2312C1B000B06050 /* InfoPlist.strings */; };
 		165C32B61B95739700D2F894 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 165C32B51B95739700D2F894 /* QuartzCore.framework */; };
@@ -118,6 +122,14 @@
 		0A338858234C91C50022528D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/About.xib; sourceTree = "<group>"; };
 		0A33885A234C91C50022528D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/Welcome.xib; sourceTree = "<group>"; };
 		0A33885C234C91C50022528D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/Clone.xib; sourceTree = "<group>"; };
+		0A338869234CA23A0022528D /* AboutPanel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AboutPanel.h; sourceTree = "<group>"; };
+		0A33886A234CA23A0022528D /* AboutPanel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AboutPanel.m; sourceTree = "<group>"; };
+		0A33886C234CA3110022528D /* AuthenticationWindow.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AuthenticationWindow.h; sourceTree = "<group>"; };
+		0A33886D234CA3110022528D /* AuthenticationWindow.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AuthenticationWindow.m; sourceTree = "<group>"; };
+		0A33886F234CA39B0022528D /* CloneWindow.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CloneWindow.h; sourceTree = "<group>"; };
+		0A338870234CA39B0022528D /* CloneWindow.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CloneWindow.m; sourceTree = "<group>"; };
+		0A338872234CA40F0022528D /* PreferencesWindow.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PreferencesWindow.h; sourceTree = "<group>"; };
+		0A338873234CA40F0022528D /* PreferencesWindow.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PreferencesWindow.m; sourceTree = "<group>"; };
 		0AD46259232711B000BE28D1 /* WelcomeWindow.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WelcomeWindow.h; sourceTree = "<group>"; };
 		0AD4625A232711B000BE28D1 /* WelcomeWindow.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WelcomeWindow.m; sourceTree = "<group>"; };
 		0AE7F5EE2312C1B000B06050 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -294,6 +306,14 @@
 				E2C5672C1A6D98BC00ECFE07 /* WindowController.m */,
 				31CD50E1203E2E2800360B3A /* ToolbarItemWrapperView.h */,
 				31CD50E2203E2E2800360B3A /* ToolbarItemWrapperView.m */,
+				0A338869234CA23A0022528D /* AboutPanel.h */,
+				0A33886A234CA23A0022528D /* AboutPanel.m */,
+				0A33886C234CA3110022528D /* AuthenticationWindow.h */,
+				0A33886D234CA3110022528D /* AuthenticationWindow.m */,
+				0A33886F234CA39B0022528D /* CloneWindow.h */,
+				0A338870234CA39B0022528D /* CloneWindow.m */,
+				0A338872234CA40F0022528D /* PreferencesWindow.h */,
+				0A338873234CA40F0022528D /* PreferencesWindow.m */,
 				0AD46259232711B000BE28D1 /* WelcomeWindow.h */,
 				0AD4625A232711B000BE28D1 /* WelcomeWindow.m */,
 			);
@@ -457,8 +477,12 @@
 				E2C5672D1A6D98BC00ECFE07 /* WindowController.m in Sources */,
 				E2C338B219F8562F00063D95 /* AppDelegate.m in Sources */,
 				E2C338B719F8562F00063D95 /* Document.m in Sources */,
+				0A338871234CA39B0022528D /* CloneWindow.m in Sources */,
 				0AD4625B232711B000BE28D1 /* WelcomeWindow.m in Sources */,
+				0A338874234CA40F0022528D /* PreferencesWindow.m in Sources */,
+				0A33886B234CA23A0022528D /* AboutPanel.m in Sources */,
 				31CD50E3203E2E2800360B3A /* ToolbarItemWrapperView.m in Sources */,
+				0A33886E234CA3110022528D /* AuthenticationWindow.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
