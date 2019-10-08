@@ -46,29 +46,11 @@
 #define kToolInstallPath @"/usr/local/bin/" kToolName
 
 @interface AppDelegate () <NSUserNotificationCenterDelegate, SUUpdaterDelegate>
-@property(nonatomic, strong) NSWindow* preferencesWindow;
-@property(nonatomic, weak) NSToolbar* preferencesToolbar;
-@property(nonatomic, weak) NSTabView* preferencesTabView;
-@property(nonatomic, weak) NSPopUpButton* channelPopUpButton;
-@property(nonatomic, weak) NSPopUpButton* themePopUpButton;
-
-@property(nonatomic, strong) NSWindow* cloneWindow;
-@property(nonatomic, weak) NSTextField* cloneURLTextField;
-@property(nonatomic, weak) NSButton* cloneRecursiveButton;
-
-@property(nonatomic, strong) NSWindow* authenticationWindow;
-@property(nonatomic, weak) NSTextField* authenticationURLTextField;
-@property(nonatomic, weak) NSTextField* authenticationNameTextField;
-@property(nonatomic, weak) NSSecureTextField* authenticationPasswordTextField;
-
-@property(nonatomic, strong) NSPanel* aboutPanel;
-@property(nonatomic, weak) NSTextField* versionTextField;
-@property(nonatomic, weak) NSTextField* copyrightTextField;
-
-@property(nonatomic, strong) NSWindow* welcomeWindow;
-@property(nonatomic, weak) NSPopUpButton* recentPopUpButton;
-@property(nonatomic, weak) GILinkButton* twitterButton;
-@property(nonatomic, weak) GILinkButton* forumsButton;
+@property(nonatomic, strong) AboutPanel* aboutPanel;
+@property(nonatomic, strong) AuthenticationWindow* authenticationWindow;
+@property(nonatomic, strong) CloneWindow* cloneWindow;
+@property(nonatomic, strong) PreferencesWindow* preferencesWindow;
+@property(nonatomic, strong) WelcomeWindow* welcomeWindow;
 @end
 
 @implementation AppDelegate {
@@ -218,86 +200,14 @@
   [self _openRepositoryWithURL:sender.representedObject withCloneMode:kCloneMode_None windowModeID:NSNotFound];
 }
 
-- (void)_willShowRecentPopUpMenu:(NSNotification*)notification {
-  NSMenu* menu = _recentPopUpButton.menu;
-  while (menu.numberOfItems > 1) {
-    [menu removeItemAtIndex:1];
-  }
-  NSArray* array = [[NSDocumentController sharedDocumentController] recentDocumentURLs];
-  if (array.count) {
-    for (NSURL* url in array) {
-      NSString* path = url.path;
-      NSString* title = path.lastPathComponent;
-      for (NSMenuItem* item in menu.itemArray) {  // TODO: Handle identical second-to-last path component
-        if ([item.title caseInsensitiveCompare:title] == NSOrderedSame) {
-          title = [NSString stringWithFormat:@"%@ — %@", path.lastPathComponent, [[path stringByDeletingLastPathComponent] lastPathComponent]];
-          path = [(NSURL*)item.representedObject path];
-          item.title = [NSString stringWithFormat:@"%@ — %@", path.lastPathComponent, [[path stringByDeletingLastPathComponent] lastPathComponent]];
-          break;
-        }
-      }
-      NSMenuItem* item = [[NSMenuItem alloc] initWithTitle:title action:@selector(_openDocument:) keyEquivalent:@""];
-      item.target = self;
-      item.representedObject = url;
-      [menu addItem:item];
-    }
-  } else {
-    NSMenuItem* item = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"No Repositories", nil) action:NULL keyEquivalent:@""];
-    item.enabled = NO;
-    [menu addItem:item];
-  }
-}
-
-- (void)awakeFromNib {
-  _welcomeMaxHeight = _welcomeWindow.frame.size.height;
-
-  _allowWelcome = -1;
-
-  _twitterButton.textAlignment = NSLeftTextAlignment;
-  _twitterButton.textFont = [NSFont boldSystemFontOfSize:11];
-  _forumsButton.textAlignment = NSLeftTextAlignment;
-  _forumsButton.textFont = [NSFont boldSystemFontOfSize:11];
-
-  _preferencesToolbar.selectedItemIdentifier = kPreferencePaneIdentifier_General;
-  [self selectPreferencePane:nil];
-
-  [_channelPopUpButton.menu removeAllItems];
-  for (NSString* string in @[ kReleaseChannel_Stable, kReleaseChannel_Continuous ]) {
-    NSMenuItem* item = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(string, nil) action:NULL keyEquivalent:@""];
-    item.representedObject = string;
-    [_channelPopUpButton.menu addItem:item];
-  }
-
-  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_willShowRecentPopUpMenu:) name:NSPopUpButtonWillPopUpNotification object:_recentPopUpButton];
-
-  NSString* theme = [[NSUserDefaults standardUserDefaults] stringForKey:kUserDefaultsKey_Theme];
-  [self _applyTheme:theme];
-  [_themePopUpButton.menu removeAllItems];
-  for (NSString* string in [self _themePreferences]) {
-    NSMenuItem* item = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(string, nil) action:NULL keyEquivalent:@""];
-    item.representedObject = string;
-    [_themePopUpButton.menu addItem:item];
-  }
-}
-
 - (void)_updatePreferencePanel {
   NSString* channel = [[NSUserDefaults standardUserDefaults] stringForKey:kUserDefaultsKey_ReleaseChannel];
-  for (NSMenuItem* item in _channelPopUpButton.menu.itemArray) {
-    if ([item.representedObject isEqualToString:channel]) {
-      [_channelPopUpButton selectItem:item];
-      break;
-    }
-  }
+  self.preferencesWindow.selectedChannel = channel;
 }
 
 - (void)_updateThemePopUpButton {
   NSString* theme = [[NSUserDefaults standardUserDefaults] stringForKey:kUserDefaultsKey_Theme];
-  for (NSMenuItem* item in _themePopUpButton.menu.itemArray) {
-    if ([item.representedObject isEqualToString:theme]) {
-      [_themePopUpButton selectItem:item];
-      break;
-    }
-  }
+  self.preferencesWindow.selectedTheme = theme;
 }
 
 - (void)_showNotificationWithTitle:(NSString*)title action:(SEL)action message:(NSString*)format, ... NS_FORMAT_FUNCTION(3, 4) {
@@ -345,84 +255,30 @@
   self.cloneWindow = [self _loadWindowFromBundleXibWithName:@"Clone" expectedClass:NSWindow.class];
   self.preferencesWindow = [self _loadWindowFromBundleXibWithName:@"Preferences" expectedClass:NSWindow.class];
   self.welcomeWindow = [self _loadWindowFromBundleXibWithName:@"Welcome" expectedClass:NSWindow.class];
-  [self _assignWindowsToOutlets];
   [self _windowsPostSetup];
 }
 
-// MARK: Remove later.
-- (void)_assignWindowsToOutlets {
-  // About
-  {
-    AboutPanel *panel = (AboutPanel *)self.aboutPanel;
-    _versionTextField = panel.versionTextField;
-    _copyrightTextField = panel.copyrightTextField;
-  }
-  
-  // Authentication
-  {
-    AuthenticationWindow *window = (AuthenticationWindow *)self.authenticationWindow;
-    _authenticationURLTextField = window.urlTextField;
-    _authenticationNameTextField = window.nameTextField;
-    _authenticationPasswordTextField = window.passwordTextField;
-  }
-  
-  // Clone
-  {
-    CloneWindow *window = (CloneWindow *)self.cloneWindow;
-    _cloneURLTextField = window.urlTextField;
-    _cloneRecursiveButton = window.cloneRecursiveButton;
-  }
-  
-  // Preferences
-  {
-    PreferencesWindow *window = (PreferencesWindow *)self.preferencesWindow;
-    _preferencesToolbar = window.preferencesToolbar;
-    _preferencesTabView = window.preferencesTabView;
-    _channelPopUpButton = window.channelPopUpButton;
-    _themePopUpButton = window.themePopUpButton;
-  }
-  
-  // Window
-  {
-    WelcomeWindow *window = (WelcomeWindow *)self.welcomeWindow;
-    _recentPopUpButton = window.recentPopUpButton;
-    // not required, can be removed.
-    _twitterButton = window.twitterButton;
-    _forumsButton = window.forumsButton;
-  }
-}
-
-// MARK: Remove later.
 - (void)_windowsPostSetup {
-  _welcomeMaxHeight = _welcomeWindow.frame.size.height;
-
   _allowWelcome = -1;
+  
+  __weak NSDocumentController *documentController = NSDocumentController.sharedDocumentController;
+  self.welcomeWindow.getRecentDocuments = ^NSArray<NSURL *> * _Nonnull{
+    return documentController.recentDocumentURLs;
+  };
+  __weak typeof(self) weakSelf = self;
+  self.welcomeWindow.configureItem = ^(NSMenuItem * _Nonnull item) {
+    item.target = weakSelf;
+    item.action = @selector(_openDocument:);
+  };
+  
+  self.preferencesWindow.selectedItemIdentifier = kPreferencePaneIdentifier_General;
 
-  _twitterButton.textAlignment = NSLeftTextAlignment;
-  _twitterButton.textFont = [NSFont boldSystemFontOfSize:11];
-  _forumsButton.textAlignment = NSLeftTextAlignment;
-  _forumsButton.textFont = [NSFont boldSystemFontOfSize:11];
-
-  _preferencesToolbar.selectedItemIdentifier = kPreferencePaneIdentifier_General;
-  [self selectPreferencePane:nil];
-
-  [_channelPopUpButton.menu removeAllItems];
-  for (NSString* string in @[ kReleaseChannel_Stable, kReleaseChannel_Continuous ]) {
-    NSMenuItem* item = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(string, nil) action:NULL keyEquivalent:@""];
-    item.representedObject = string;
-    [_channelPopUpButton.menu addItem:item];
-  }
-
-  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_willShowRecentPopUpMenu:) name:NSPopUpButtonWillPopUpNotification object:_recentPopUpButton];
+  self.preferencesWindow.channelTitles = @[ kReleaseChannel_Stable, kReleaseChannel_Continuous ];
 
   NSString* theme = [[NSUserDefaults standardUserDefaults] stringForKey:kUserDefaultsKey_Theme];
   [self _applyTheme:theme];
-  [_themePopUpButton.menu removeAllItems];
-  for (NSString* string in [self _themePreferences]) {
-    NSMenuItem* item = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(string, nil) action:NULL keyEquivalent:@""];
-    item.representedObject = string;
-    [_themePopUpButton.menu addItem:item];
-  }
+  
+  self.preferencesWindow.themesTitles = [self _themePreferences];
 }
 
 #pragma mark - NSApplicationDelegate
@@ -633,7 +489,7 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
 
 - (IBAction)changeReleaseChannel:(id)sender {
   NSString* oldChannel = [[NSUserDefaults standardUserDefaults] stringForKey:kUserDefaultsKey_ReleaseChannel];
-  NSString* newChannel = _channelPopUpButton.selectedItem.representedObject;
+  NSString* newChannel = self.preferencesWindow.selectedChannel;
   if (![newChannel isEqualToString:oldChannel]) {
     [[NSUserDefaults standardUserDefaults] setObject:newChannel forKey:kUserDefaultsKey_ReleaseChannel];
 
@@ -665,7 +521,7 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
 }
 
 - (IBAction)changeTheme:(id)sender {
-  NSString* theme = _themePopUpButton.selectedItem.representedObject;
+  NSString* theme = self.preferencesWindow.selectedTheme;
   [self _applyTheme:theme];
 }
 
@@ -682,38 +538,25 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
 }
 
 - (IBAction)showAboutPanel:(id)sender {
+  NSString *version = nil;
 #if DEBUG
-  _versionTextField.stringValue = @"DEBUG";
+  version = @"DEBUG";
 #else
   if (_updatePending) {
-    _versionTextField.stringValue = NSLocalizedString(@"Update Pending", nil);
+    version = NSLocalizedString(@"Update Pending", nil);
   } else {
-    _versionTextField.stringValue = [NSString stringWithFormat:NSLocalizedString(@"Version %@ (%@)", nil), [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"], [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"]];
+    version = [NSString stringWithFormat:NSLocalizedString(@"Version %@ (%@)", nil), [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"], [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"]];
   }
 #endif
-  _copyrightTextField.stringValue = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSHumanReadableCopyright"];
-  [_aboutPanel makeKeyAndOrderFront:nil];
+  self.aboutPanel.versionString = version;
+  self.aboutPanel.copyrightString = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSHumanReadableCopyright"];
+  [self.aboutPanel makeKeyAndOrderFront:nil];
 }
 
 - (IBAction)showPreferences:(id)sender {
   [self _updatePreferencePanel];
   [self _updateThemePopUpButton];
   [_preferencesWindow makeKeyAndOrderFront:nil];
-}
-
-- (IBAction)selectPreferencePane:(id)sender {
-  [_preferencesTabView selectTabViewItemWithIdentifier:_preferencesToolbar.selectedItemIdentifier];
-  NSSize size = NSSizeFromString(_preferencesTabView.selectedTabViewItem.label);
-  NSRect rect = [_preferencesWindow contentRectForFrameRect:_preferencesWindow.frame];
-  if (sender) {
-    rect.origin.y += rect.size.height;
-  }
-  rect.size.width = size.width;
-  rect.size.height = size.height;
-  if (sender) {
-    rect.origin.y -= rect.size.height;
-  }
-  [_preferencesWindow setFrame:[_preferencesWindow frameRectForContentRect:rect] display:YES animate:(sender ? YES : NO)];
 }
 
 - (IBAction)resetPreferences:(id)sender {
@@ -743,10 +586,9 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
 }
 
 - (void)_cloneRepositoryFromURLString:(NSString*)urlString {
-  _cloneURLTextField.stringValue = urlString;
-  _cloneRecursiveButton.state = NSOnState;
-  if ([NSApp runModalForWindow:_cloneWindow] && _cloneURLTextField.stringValue.length) {
-    NSURL* url = GCURLFromGitURL(_cloneURLTextField.stringValue);
+  self.cloneWindow.url = urlString;
+  if ([NSApp runModalForWindow:_cloneWindow] && self.cloneWindow.urlExists) {
+    NSURL* url = GCURLFromGitURL(self.cloneWindow.url);
     if (url) {
       NSString* name = [url.path.lastPathComponent stringByDeletingPathExtension];
       NSSavePanel* savePanel = [NSSavePanel savePanel];
@@ -762,7 +604,7 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
           GCRepository* repository = [[GCRepository alloc] initWithNewLocalRepository:path bare:NO error:&error];
           if (repository) {
             if ([repository addRemoteWithName:@"origin" url:url error:&error]) {
-              [self _openRepositoryWithURL:[NSURL fileURLWithPath:repository.workingDirectoryPath] withCloneMode:(_cloneRecursiveButton.state ? kCloneMode_Recursive : kCloneMode_Default)windowModeID:NSNotFound];
+              [self _openRepositoryWithURL:[NSURL fileURLWithPath:repository.workingDirectoryPath] withCloneMode:(self.cloneWindow.recursive ? kCloneMode_Recursive : kCloneMode_Default)windowModeID:NSNotFound];
             } else {
               [NSApp presentError:error];
               [[NSFileManager defaultManager] removeItemAtPath:path error:NULL];  // Ignore errors
@@ -881,16 +723,17 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
     XLOG_VERBOSE(@"Skipping Keychain lookup for repeated authentication failures");
   }
 
-  _authenticationURLTextField.stringValue = url.absoluteString;
-  _authenticationNameTextField.stringValue = *username ? *username : @"";
-  _authenticationPasswordTextField.stringValue = @"";
-  [_authenticationWindow makeFirstResponder:(*username ? _authenticationPasswordTextField : _authenticationNameTextField)];
-  if ([NSApp runModalForWindow:_authenticationWindow] && _authenticationNameTextField.stringValue.length && _authenticationPasswordTextField.stringValue.length) {
+  // So, lets' discuss.
+  self.authenticationWindow.url = url.absoluteString;
+  self.authenticationWindow.name = *username ? *username : @"";
+  self.authenticationWindow.password = @"";
+  [self.authenticationWindow makeFirstResponderWhenUsernameExists:(*username) != nil];
+  if ([NSApp runModalForWindow:self.authenticationWindow] && self.authenticationWindow.credentialsExists) {
     _authenticationURL = url;
-    _authenticationUsername = [_authenticationNameTextField.stringValue copy];
-    _authenticationPassword = [_authenticationPasswordTextField.stringValue copy];
-    *username = _authenticationNameTextField.stringValue;
-    *password = _authenticationPasswordTextField.stringValue;
+    _authenticationUsername = self.authenticationWindow.name;
+    _authenticationPassword = self.authenticationWindow.password;
+    *username = _authenticationUsername;
+    *password = _authenticationPassword;
     return YES;
   }
   return NO;
