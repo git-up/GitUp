@@ -346,6 +346,7 @@
   self.preferencesWindow = [self _loadWindowFromBundleXibWithName:@"Preferences" expectedClass:NSWindow.class];
   self.welcomeWindow = [self _loadWindowFromBundleXibWithName:@"Welcome" expectedClass:NSWindow.class];
   [self _assignWindowsToOutlets];
+  [self _windowsPostSetup];
 }
 
 // MARK: Remove later.
@@ -376,7 +377,7 @@
   {
     PreferencesWindow *window = (PreferencesWindow *)self.preferencesWindow;
     _preferencesToolbar = window.preferencesToolbar;
-    _preferencesTabView = window.tabView;
+    _preferencesTabView = window.preferencesTabView;
     _channelPopUpButton = window.channelPopUpButton;
     _themePopUpButton = window.themePopUpButton;
   }
@@ -388,6 +389,39 @@
     // not required, can be removed.
     _twitterButton = window.twitterButton;
     _forumsButton = window.forumsButton;
+  }
+}
+
+// MARK: Remove later.
+- (void)_windowsPostSetup {
+  _welcomeMaxHeight = _welcomeWindow.frame.size.height;
+
+  _allowWelcome = -1;
+
+  _twitterButton.textAlignment = NSLeftTextAlignment;
+  _twitterButton.textFont = [NSFont boldSystemFontOfSize:11];
+  _forumsButton.textAlignment = NSLeftTextAlignment;
+  _forumsButton.textFont = [NSFont boldSystemFontOfSize:11];
+
+  _preferencesToolbar.selectedItemIdentifier = kPreferencePaneIdentifier_General;
+  [self selectPreferencePane:nil];
+
+  [_channelPopUpButton.menu removeAllItems];
+  for (NSString* string in @[ kReleaseChannel_Stable, kReleaseChannel_Continuous ]) {
+    NSMenuItem* item = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(string, nil) action:NULL keyEquivalent:@""];
+    item.representedObject = string;
+    [_channelPopUpButton.menu addItem:item];
+  }
+
+  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_willShowRecentPopUpMenu:) name:NSPopUpButtonWillPopUpNotification object:_recentPopUpButton];
+
+  NSString* theme = [[NSUserDefaults standardUserDefaults] stringForKey:kUserDefaultsKey_Theme];
+  [self _applyTheme:theme];
+  [_themePopUpButton.menu removeAllItems];
+  for (NSString* string in [self _themePreferences]) {
+    NSMenuItem* item = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(string, nil) action:NULL keyEquivalent:@""];
+    item.representedObject = string;
+    [_themePopUpButton.menu addItem:item];
   }
 }
 
