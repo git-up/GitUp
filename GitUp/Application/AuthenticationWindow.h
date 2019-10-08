@@ -10,9 +10,12 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface AuthenticationWindow : NSWindow
-@property(nonatomic, weak) IBOutlet NSTextField* urlTextField;
-@property(nonatomic, weak) IBOutlet NSTextField* nameTextField;
-@property(nonatomic, weak) IBOutlet NSSecureTextField* passwordTextField;
+@property (nonatomic, copy) NSString *url;
+@property (nonatomic, copy) NSString *name;
+@property (nonatomic, copy) NSString *password;
+- (NSResponder *)firstResponderWhenUsernameExists:(BOOL)usernameExists;
+- (void)makeFirstResponderWhenUsernameExists:(BOOL)usernameExists;
+@property (nonatomic, assign, readonly) BOOL credentialsExists;
 @end
 
 NS_ASSUME_NONNULL_END
