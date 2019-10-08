@@ -319,6 +319,9 @@
   }
 #endif
 
+  // Locate installed apps.
+  [GILaunchServicesLocator setup];
+  
   // Initialize user notification center
   [[NSUserNotificationCenter defaultUserNotificationCenter] setDelegate:self];
 
