@@ -32,97 +32,7 @@
 #define kP4MergePath @"/Applications/p4merge.app/Contents/Resources/launchp4merge"
 #define kDiffMergePath @"/Applications/DiffMerge.app/Contents/Resources/diffmerge.sh"
 
-NSString* const GIViewControllerTool_FileMerge = @"FileMerge";
-NSString* const GIViewControllerTool_Kaleidoscope = @"Kaleidoscope";
-NSString* const GIViewControllerTool_BeyondCompare = @"Beyond Compare";
-NSString* const GIViewControllerTool_P4Merge = @"P4Merge";
-NSString* const GIViewControllerTool_GitTool = @"Git Tool";
-NSString* const GIViewControllerTool_DiffMerge = @"DiffMerge";
-
-NSString* const GIViewController_DiffTool = @"GIViewController_DiffTool";
-NSString* const GIViewController_MergeTool = @"GIViewController_MergeTool";
-NSString* const GIViewController_TerminalTool = @"GIViewController_TerminalTool";
-
-// TerminalTool
-NSString* const GIViewController_TerminalTool_Terminal = @"Terminal";
-NSString* const GIViewController_TerminalTool_iTerm = @"iTerm";
-static NSString* const GIViewController_TerminalTool_iTerm_Key = @"GIViewController_TerminalTool_iTerm";
-static NSString* const GIViewController_TerminalTool_iTerm_BundleIdentifier = @"com.googlecode.iterm2";
-
-static NSString* _diffTemporaryDirectoryPath = nil;
-
-@interface GILaunchServicesLocator : NSObject
-+ (NSString *)bundleIdentifierForDisplayName:(NSString *)displayName;
-+ (NSString *)standardDefaultsKeyForDisplayName:(NSString *)displayName;
-+ (NSDictionary *)installedAppsDictionary;
-+ (BOOL)hasInstalledApplicationForDisplayName:(NSString *)displayName;
-+ (BOOL)hasInstalledApplicationForBundleIdentifier:(NSString *)bundleIdentifier;
-@end
-
-@import CoreServices;
-@implementation GILaunchServicesLocator
-+ (NSString *)bundleIdentifierForDisplayName:(NSString *)displayName {
-  if ([displayName isEqualToString:GIViewController_TerminalTool_iTerm]) {
-    return GIViewController_TerminalTool_iTerm_BundleIdentifier;
-  }
-  return nil;
-}
-+ (NSString *)standardDefaultsKeyForDisplayName:(NSString *)displayName {
-  if ([displayName isEqualToString:GIViewController_TerminalTool_iTerm]) {
-    return GIViewController_TerminalTool_iTerm_Key;
-  }
-  return nil;
-}
-+ (NSDictionary *)installedAppsDictionary {
-  NSMutableDictionary *dictionary = [NSMutableDictionary new];
-  NSArray *apps = @[
-    GIViewController_TerminalTool_iTerm
-  ];
-  for (NSString *app in apps) {
-    NSString *key = [self standardDefaultsKeyForDisplayName:app];
-    if (key != nil) {
-      dictionary[key] = @([self hasInstalledApplicationForDisplayName:app]);
-    }
-  }
-  return [dictionary copy];
-}
-+ (BOOL)hasInstalledApplicationForDisplayName:(NSString *)displayName {
-  return [self hasInstalledApplicationForBundleIdentifier:[self bundleIdentifierForDisplayName:displayName]];
-}
-+ (BOOL)hasInstalledApplicationForBundleIdentifier:(NSString *)bundleIdentifier {
-  if (bundleIdentifier == nil) {
-    return NO;
-  }
-  
-  CFErrorRef error = NULL;
-  
-  NSArray *applications = (__bridge NSArray *)LSCopyApplicationURLsForBundleIdentifier((__bridge CFStringRef)bundleIdentifier, &error);
-  
-  return applications.count > 0;
-}
-@end
-
 @implementation GIViewController (Utilities)
-
-+ (void)initialize {
-  NSDictionary* defaults = @{
-    GIViewController_DiffTool : GIViewControllerTool_FileMerge,
-    GIViewController_MergeTool : GIViewControllerTool_FileMerge,
-    GIViewController_TerminalTool : GIViewController_TerminalTool_Terminal,
-  };
-  [[NSUserDefaults standardUserDefaults] registerDefaults:defaults];
-  
-  NSDictionary* installedApps = [GILaunchServicesLocator installedAppsDictionary];
-  [[NSUserDefaults standardUserDefaults] registerDefaults:installedApps];
-
-  if (_diffTemporaryDirectoryPath == nil) {
-    _diffTemporaryDirectoryPath = [NSTemporaryDirectory() stringByAppendingPathComponent:[[NSBundle mainBundle] bundleIdentifier]];
-    [[NSFileManager defaultManager] removeItemAtPath:_diffTemporaryDirectoryPath error:NULL];
-    if (![[NSFileManager defaultManager] createDirectoryAtPath:_diffTemporaryDirectoryPath withIntermediateDirectories:YES attributes:nil error:NULL]) {
-      XLOG_DEBUG_UNREACHABLE();
-    }
-  }
-}
 
 - (void)discardAllFiles {
   [self confirmUserActionWithAlertType:kGIAlertType_Stop
@@ -486,7 +396,7 @@ static NSString* _diffTemporaryDirectoryPath = nil;
   NSString* uuid = nil;
   NSError* error;
   for (GCDiffDelta* delta in deltas) {
-    NSString* oldPath = [_diffTemporaryDirectoryPath stringByAppendingPathComponent:delta.oldFile.SHA1];
+    NSString* oldPath = [GILaunchServicesLocator.diffTemporaryDirectoryPath stringByAppendingPathComponent:delta.oldFile.SHA1];
     NSString* oldExtension = delta.oldFile.path.pathExtension;
     if (oldExtension.length) {
       oldPath = [oldPath stringByAppendingPathExtension:oldExtension];
@@ -501,7 +411,7 @@ static NSString* _diffTemporaryDirectoryPath = nil;
     if ((delta.diff.type == kGCDiffType_WorkingDirectoryWithCommit) || (delta.diff.type == kGCDiffType_WorkingDirectoryWithIndex)) {
       newPath = [self.repository absolutePathForFile:delta.newFile.path];
     } else {
-      newPath = [_diffTemporaryDirectoryPath stringByAppendingPathComponent:delta.newFile.SHA1];
+      newPath = [GILaunchServicesLocator.diffTemporaryDirectoryPath stringByAppendingPathComponent:delta.newFile.SHA1];
       NSString* newExtension = delta.newFile.path.pathExtension;
       if (newExtension.length) {
         newPath = [newPath stringByAppendingPathExtension:newExtension];
@@ -539,7 +449,7 @@ static NSString* _diffTemporaryDirectoryPath = nil;
 }
 
 - (void)resolveConflictInMergeTool:(GCIndexConflict*)conflict {
-  NSString* basePath = [_diffTemporaryDirectoryPath stringByAppendingPathComponent:[[NSProcessInfo processInfo] globallyUniqueString]];
+  NSString* basePath = [GILaunchServicesLocator.diffTemporaryDirectoryPath stringByAppendingPathComponent:[[NSProcessInfo processInfo] globallyUniqueString]];
   NSString* extension = conflict.path.pathExtension;
   NSError* error;
 
@@ -846,7 +756,7 @@ static NSString* _diffTemporaryDirectoryPath = nil;
     return;
   }
 
-  NSString* newPath = [_diffTemporaryDirectoryPath stringByAppendingPathComponent:commit.shortSHA1];
+  NSString* newPath = [GILaunchServicesLocator.diffTemporaryDirectoryPath stringByAppendingPathComponent:commit.shortSHA1];
   [[NSFileManager defaultManager] removeItemAtPath:newPath error:&error];
   if (![[NSFileManager defaultManager] createDirectoryAtPath:newPath withIntermediateDirectories:NO attributes:nil error:&error]) {
     [self presentError:error];
@@ -854,7 +764,7 @@ static NSString* _diffTemporaryDirectoryPath = nil;
   }
   NSString* oldTitle = commit.shortSHA1;
 
-  NSString* oldPath = [_diffTemporaryDirectoryPath stringByAppendingPathComponent:otherCommit.shortSHA1];
+  NSString* oldPath = [GILaunchServicesLocator.diffTemporaryDirectoryPath stringByAppendingPathComponent:otherCommit.shortSHA1];
   [[NSFileManager defaultManager] removeItemAtPath:oldPath error:&error];
   if (![[NSFileManager defaultManager] createDirectoryAtPath:oldPath withIntermediateDirectories:NO attributes:nil error:&error]) {
     [self presentError:error];
