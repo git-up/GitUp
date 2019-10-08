@@ -11,9 +11,8 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface WelcomeWindow : NSWindow
-@property(nonatomic, weak) IBOutlet NSPopUpButton* recentPopUpButton;
-@property(nonatomic, weak) IBOutlet GILinkButton* twitterButton;
-@property(nonatomic, weak) IBOutlet GILinkButton* forumsButton;
+@property(nonatomic, copy) void(^configureItem)(NSMenuItem *item);
+@property(nonatomic, copy) NSArray <NSURL *>*(^getRecentDocuments)();
 @end
 
 NS_ASSUME_NONNULL_END
