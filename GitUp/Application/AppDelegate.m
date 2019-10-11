@@ -341,7 +341,7 @@
   // Initialize user notification center
   [[NSUserNotificationCenter defaultUserNotificationCenter] setDelegate:self];
 
-  // Reegister finder context menu services.
+  // Register finder context menu services.
   [NSApplication sharedApplication].servicesProvider = [ServicesProvider new];
   
   // Notify user in case app was updated since last launch
