@@ -52,7 +52,7 @@ typedef NS_ENUM(NSUInteger, GCFileMode) {
 @end
 
 @interface GCRepository : NSObject
-@property(nonatomic, assign) id<GCRepositoryDelegate> delegate;
+@property(nonatomic, weak) id<GCRepositoryDelegate> delegate;
 @property(nonatomic, readonly) NSString* repositoryPath;
 @property(nonatomic, readonly) NSString* workingDirectoryPath;  // nil for a bare repository
 @property(nonatomic, readonly, getter=isReadOnly) BOOL readOnly;

@@ -37,7 +37,7 @@ typedef NS_ENUM(NSUInteger, GIOverlayStyle) {
 @end
 
 @interface GIWindowController : NSWindowController
-@property(nonatomic, assign) id<GIWindowControllerDelegate> delegate;
+@property(nonatomic, weak) id<GIWindowControllerDelegate> delegate;
 @property(strong) GIWindow* window;  // Redeclare superclass property
 
 @property(nonatomic, readonly, getter=isOverlayVisible) BOOL overlayVisible;

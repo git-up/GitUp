@@ -33,7 +33,7 @@ extern NSString* const GIDiffContentsViewControllerUserDefaultKey_DiffViewMode; 
 @end
 
 @interface GIDiffContentsViewController : GIViewController
-@property(nonatomic, assign) id<GIDiffContentsViewControllerDelegate> delegate;
+@property(nonatomic, weak) id<GIDiffContentsViewControllerDelegate> delegate;
 @property(nonatomic) BOOL showsUntrackedAsAdded;  // Default is NO
 @property(nonatomic, copy) NSString* emptyLabel;
 @property(nonatomic, strong) NSView* headerView;

@@ -24,7 +24,7 @@
 @end
 
 @interface GICommitRewriterViewController : GICommitViewController
-@property(nonatomic, assign) id<GICommitRewriterViewControllerDelegate> delegate;
+@property(nonatomic, weak) id<GICommitRewriterViewControllerDelegate> delegate;
 - (BOOL)startRewritingCommit:(GCHistoryCommit*)commit error:(NSError**)error;
 - (BOOL)finishRewritingCommitWithMessage:(NSString*)message error:(NSError**)error;
 - (BOOL)cancelRewritingCommit:(NSError**)error;
