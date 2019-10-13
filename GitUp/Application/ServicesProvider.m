@@ -20,6 +20,12 @@
 
 @implementation ServicesProvider
 
+#pragma mark - Handle Errors
+- (void)presentError:(NSError * __autoreleasing *)error {
+  if (error && *error) {
+    [[NSDocumentController sharedDocumentController] presentError:*error];
+  }
+}
 #pragma mark - Accessors
 - (AppDelegate *)appDelegate {
   return [AppDelegate sharedDelegate];
@@ -28,6 +34,11 @@
 #pragma mark - Check pasteboard
 - (BOOL)canOpenItem:(NSPasteboard *)pasteboard {
   return [self items:pasteboard].count > 0;
+}
+
+- (BOOL)isValidGitRepositoryAtURL:(NSURL *)url error:(NSError * __autoreleasing *)error {
+  GCRepository *repository = [[GCRepository alloc] initWithExistingLocalRepository:url.path error:error];
+  return repository != nil && (error == NULL || (*error) == nil);
 }
 
 - (NSArray <NSURL *>*)items:(NSPasteboard *)pasteboard {
@@ -45,7 +56,7 @@
 // To debug services functionailty.
 // 1. Be sure that methodName ( openRepository ) is used as instance method in plist.
 // 2. Set correct send types in plist. ( NSURLPboardType for urls. )
-// 3. Open Derived data and put .app into ~/Application directory.
+// 3. Open Derived data and put .app into ~/Application directory. ( Or make a link to that app ).
 // 4. Rename app if necessary.
 // 5. Use pbs utility to refresh services.
 // 5.1. /System/Library/CoreServices/pbs -update
@@ -54,12 +65,19 @@
 // 6. Be sure that your .app is appearing in dump_cache output.
 // 7. Check finder contextual menu.
 - (void)openRepository:(NSPasteboard *)pasteboard userData:(NSString *)userData error:(NSError * __autoreleasing *)error {
-  if ([self canOpenItem:pasteboard]) {
-    NSURL *url = [self items:pasteboard].firstObject;
+  if (![self canOpenItem:pasteboard]) {
+    return;
+  }
+  
+  // check that we have a directory.
+    
+  NSURL *url = [self items:pasteboard].firstObject;
+  if ([self isValidGitRepositoryAtURL:url error:error]) {
     [self.appDelegate _openRepositoryWithURL:url withCloneMode:kCloneMode_None windowModeID:NSNotFound];
   }
   else {
-    // fill error if needed.
+    // item is not a valid git repository.
+    [self presentError:error];
   }
 }
 
