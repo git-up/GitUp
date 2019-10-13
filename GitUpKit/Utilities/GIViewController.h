@@ -18,7 +18,7 @@
 @class GIWindowController, GIViewController, GCLiveRepository, GCSnapshot;
 
 @interface GIView : NSView
-@property(nonatomic, readonly) GIViewController* viewController;
+@property(nonatomic, weak, readonly) GIViewController* viewController;
 @end
 
 @interface GIViewController : NSViewController <NSTextFieldDelegate, NSTextViewDelegate, NSTableViewDelegate>

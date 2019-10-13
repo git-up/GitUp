@@ -24,6 +24,6 @@
 @end
 
 @interface GISnapshotListViewController : GIViewController
-@property(nonatomic, assign) id<GISnapshotListViewControllerDelegate> delegate;
+@property(nonatomic, weak) id<GISnapshotListViewControllerDelegate> delegate;
 @property(nonatomic, readonly) GCSnapshot* selectedSnapshot;
 @end

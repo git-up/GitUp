@@ -26,7 +26,7 @@
 - (void)didFinishInitializing;  // For subclasses only
 - (void)didUpdatePatch;  // For subclasses only
 
-@property(nonatomic, assign) id<GIDiffViewDelegate> delegate;
+@property(nonatomic, weak) id<GIDiffViewDelegate> delegate;
 @property(nonatomic, strong) NSColor* backgroundColor;
 @property(nonatomic, strong) GCDiffPatch* patch;
 @property(nonatomic, readonly, getter=isEmpty) BOOL empty;

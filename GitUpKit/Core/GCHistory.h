@@ -38,17 +38,17 @@ typedef NS_ENUM(NSUInteger, GCHistorySorting) {
 @end
 
 @interface GCHistoryTag : GCTag
-@property(nonatomic, readonly) GCHistoryCommit* commit;  // Cached at time of last history update and DOES NOT automatically update (use -lookupCommitForTag:annotation:error: instead)
+@property(nonatomic, weak, readonly) GCHistoryCommit* commit;  // Cached at time of last history update and DOES NOT automatically update (use -lookupCommitForTag:annotation:error: instead)
 @property(nonatomic, readonly) GCTagAnnotation* annotation;  // Cached at time of last history update and DOES NOT automatically update (use -lookupCommitForTag:annotation:error: instead)
 @end
 
 @interface GCHistoryLocalBranch : GCLocalBranch
-@property(nonatomic, readonly) GCHistoryCommit* tipCommit;  // Cached at time of last history update and DOES NOT automatically update (use -lookupTipCommitForBranch:error: instead)
-@property(nonatomic, readonly) GCBranch* upstream;  // Cached at time of last history update and DOES NOT automatically update (use -lookupUpstreamForLocalBranch:error: instead) - Will be a GCHistoryLocalBranch or GCHistoryRemoteBranch
+@property(nonatomic, weak, readonly) GCHistoryCommit* tipCommit;  // Cached at time of last history update and DOES NOT automatically update (use -lookupTipCommitForBranch:error: instead)
+@property(nonatomic, weak, readonly) GCBranch* upstream;  // Cached at time of last history update and DOES NOT automatically update (use -lookupUpstreamForLocalBranch:error: instead) - Will be a GCHistoryLocalBranch or GCHistoryRemoteBranch
 @end
 
 @interface GCHistoryRemoteBranch : GCRemoteBranch
-@property(nonatomic, readonly) GCHistoryCommit* tipCommit;  // Cached at time of last history update and DOES NOT automatically update (use -lookupTipCommitForBranch:error: instead)
+@property(nonatomic, weak, readonly) GCHistoryCommit* tipCommit;  // Cached at time of last history update and DOES NOT automatically update (use -lookupTipCommitForBranch:error: instead)
 @end
 
 @interface GCHistory : NSObject
@@ -58,8 +58,8 @@ typedef NS_ENUM(NSUInteger, GCHistorySorting) {
 @property(nonatomic, readonly) NSArray* allCommits;
 @property(nonatomic, readonly) NSArray* rootCommits;
 @property(nonatomic, readonly) NSArray* leafCommits;
-@property(nonatomic, readonly) GCHistoryCommit* HEADCommit;  // nil if HEAD is unborn
-@property(nonatomic, readonly) GCHistoryLocalBranch* HEADBranch;  // nil if HEAD is detached
+@property(nonatomic, weak, readonly) GCHistoryCommit* HEADCommit;  // nil if HEAD is unborn
+@property(nonatomic, weak, readonly) GCHistoryLocalBranch* HEADBranch;  // nil if HEAD is detached
 @property(nonatomic, readonly, getter=isHEADDetached) BOOL HEADDetached;  // Convenience method
 @property(nonatomic, readonly) NSArray* tags;  // Always sorted alphabetically
 @property(nonatomic, readonly) NSArray* localBranches;  // Always sorted alphabetically

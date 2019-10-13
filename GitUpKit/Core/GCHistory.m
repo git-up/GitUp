@@ -171,7 +171,7 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
 @end
 
 @interface GCHistoryTag ()
-@property(nonatomic, assign) GCHistoryCommit* commit;
+@property(nonatomic, weak) GCHistoryCommit* commit;
 @property(nonatomic, strong) GCTagAnnotation* annotation;
 @end
 
@@ -186,15 +186,15 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
 @end
 
 @interface GCHistoryLocalBranch ()
-@property(nonatomic, assign) GCHistoryCommit* tipCommit;
-@property(nonatomic, assign) GCBranch* upstream;
+@property(nonatomic, weak) GCHistoryCommit* tipCommit;
+@property(nonatomic, weak) GCBranch* upstream;
 @end
 
 @implementation GCHistoryLocalBranch
 @end
 
 @interface GCHistoryRemoteBranch ()
-@property(nonatomic, assign) GCHistoryCommit* tipCommit;
+@property(nonatomic, weak) GCHistoryCommit* tipCommit;
 @end
 
 @implementation GCHistoryRemoteBranch
@@ -211,8 +211,8 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
 @property(nonatomic, readonly) NSMutableArray* leaves;
 @property(nonatomic, readonly) CFMutableDictionaryRef lookup;
 @property(nonatomic, strong) NSSet* tips;
-@property(nonatomic, assign) GCHistoryCommit* HEADCommit;
-@property(nonatomic, assign) GCHistoryLocalBranch* HEADBranch;
+@property(nonatomic, weak) GCHistoryCommit* HEADCommit;
+@property(nonatomic, weak) GCHistoryLocalBranch* HEADBranch;
 @property(nonatomic, strong) NSData* md5;
 @end
 

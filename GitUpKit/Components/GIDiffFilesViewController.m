@@ -29,7 +29,7 @@ static const NSPasteboardType GIPasteboardTypeFileURL = @"public.file-url";
 @end
 
 @interface GIFilesTableView : GITableView
-@property(nonatomic, assign) GIDiffFilesViewController* controller;
+@property(nonatomic, weak) GIDiffFilesViewController* controller;
 @end
 
 @interface GIDiffFilesViewController () <NSFilePromiseProviderDelegate>

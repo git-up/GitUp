@@ -52,7 +52,7 @@ extern void GIComputeHighlightRanges(const char* deletedBytes, NSUInteger delete
 @end
 
 @interface GIBranch ()
-@property(nonatomic, assign) GILine* mainLine;
+@property(nonatomic, weak) GILine* mainLine;
 @end
 
 @interface GILayer ()

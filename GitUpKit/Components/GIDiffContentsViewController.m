@@ -49,7 +49,7 @@
 @end
 
 @interface GITextDiffCellView : NSTableCellView
-@property(nonatomic, assign) GIDiffView* diffView;
+@property(nonatomic, weak) GIDiffView* diffView;
 @end
 
 @interface GIBinaryDiffCellView : NSTableCellView
@@ -71,7 +71,7 @@
 @end
 
 @interface GIContentsTableView : GITableView
-@property(nonatomic, assign) GIDiffContentsViewController* controller;
+@property(nonatomic, weak) GIDiffContentsViewController* controller;
 @end
 
 @interface GIDiffContentsViewController () <NSTableViewDataSource, GIDiffViewDelegate>

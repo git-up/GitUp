@@ -30,7 +30,7 @@
 @end
 
 @interface GIMapViewController : GIViewController <NSUserInterfaceValidations>
-@property(nonatomic, assign) id<GIMapViewControllerDelegate> delegate;
+@property(nonatomic, weak) id<GIMapViewControllerDelegate> delegate;
 @property(nonatomic, readonly) GIGraph* graph;
 @property(nonatomic, readonly) GCHistoryCommit* selectedCommit;  // Nil if no commit is selected
 @property(nonatomic, strong) GCHistory* previewHistory;
