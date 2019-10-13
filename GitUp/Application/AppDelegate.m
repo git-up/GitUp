@@ -388,6 +388,9 @@
   // Load theme preference
   NSString* theme = [[NSUserDefaults standardUserDefaults] stringForKey:kUserDefaultsKey_Theme];
   [self _applyTheme:theme];
+  
+  // Load xibs
+  [self _loadWindowsFromBundle];
 
 #if __ENABLE_SUDDEN_TERMINATION__
   // Enable sudden termination
