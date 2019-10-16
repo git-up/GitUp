@@ -16,6 +16,7 @@
 @end
 
 @interface WelcomeWindowView : NSView <NSDraggingDestination>
+
 @property (weak, nonatomic, readonly) AppDelegate *appDelegate;
 @property (weak, nonatomic) IBOutlet NSImageView *imageView;
 @property (assign, nonatomic) BOOL receivingDrag;
@@ -97,6 +98,10 @@
 @end
 
 @interface WelcomeWindow ()
+@property(nonatomic, weak) IBOutlet NSPopUpButton* recentPopUpButton;
+@property(nonatomic, weak) IBOutlet GILinkButton* twitterButton;
+@property(nonatomic, weak) IBOutlet GILinkButton* forumsButton;
+
 @property (weak, nonatomic, readonly) AppDelegate *appDelegate;
 @property (weak, nonatomic, readwrite) IBOutlet WelcomeWindowView *destinationView;
 @end
@@ -108,11 +113,57 @@
   return [AppDelegate sharedDelegate];
 }
 
+#pragma mark - Actions
+- (void)cleanupRecentEntries {
+  NSMenu* menu = self.recentPopUpButton.menu;
+  while (menu.numberOfItems > 1) {
+    [menu removeItemAtIndex:1];
+  }
+}
+- (void)willShowPopUpMenu {
+  [self cleanupRecentEntries];
+  NSMenu* menu = self.recentPopUpButton.menu;
+  NSArray* array = self.getRecentDocuments(); // [[NSDocumentController sharedDocumentController] recentDocumentURLs];
+  if (array.count) {
+    for (NSURL* url in array) {
+      NSString* path = url.path;
+      NSString* title = path.lastPathComponent;
+      for (NSMenuItem* item in menu.itemArray) {  // TODO: Handle identical second-to-last path component
+        if ([item.title caseInsensitiveCompare:title] == NSOrderedSame) {
+          title = [NSString stringWithFormat:@"%@ — %@", path.lastPathComponent, [[path stringByDeletingLastPathComponent] lastPathComponent]];
+          path = [(NSURL*)item.representedObject path];
+          item.title = [NSString stringWithFormat:@"%@ — %@", path.lastPathComponent, [[path stringByDeletingLastPathComponent] lastPathComponent]];
+          break;
+        }
+      }
+      NSMenuItem* item = [[NSMenuItem alloc] initWithTitle:title action:NULL keyEquivalent:@""];
+      item.representedObject = url;
+      if (self.configureItem) {
+        self.configureItem(item);
+      }
+      [menu addItem:item];
+    }
+  } else {
+    NSMenuItem* item = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"No Repositories", nil) action:NULL keyEquivalent:@""];
+    item.enabled = NO;
+    [menu addItem:item];
+  }
+}
+
 #pragma mark - Setup
+- (void)setupButtons {
+  // buttons
+  self.twitterButton.textAlignment = NSLeftTextAlignment;
+  self.twitterButton.textFont = [NSFont boldSystemFontOfSize:11];
+  self.forumsButton.textAlignment = NSLeftTextAlignment;
+  self.forumsButton.textFont = [NSFont boldSystemFontOfSize:11];
+  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willShowPopUpMenu) name:NSPopUpButtonWillPopUpNotification object:self.recentPopUpButton];
+}
 - (void)setup {
   self.opaque = NO;
   self.backgroundColor = [NSColor clearColor];
   self.movableByWindowBackground = YES;
+  [self setupButtons];
 }
 
 - (void)awakeFromNib {

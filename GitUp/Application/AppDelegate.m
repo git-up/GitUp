@@ -29,6 +29,8 @@
 #import "ToolProtocol.h"
 #import "GARawTracker.h"
 
+#import "WelcomeWindow.h"
+
 #define __ENABLE_SUDDEN_TERMINATION__ 1
 
 #define kNotificationUserInfoKey_Action @"action"  // NSString
@@ -40,6 +42,7 @@
 #define kToolInstallPath @"/usr/local/bin/" kToolName
 
 @interface AppDelegate () <NSUserNotificationCenterDelegate, SUUpdaterDelegate>
+@property(nonatomic, strong) WelcomeWindow* welcomeWindow;
 @end
 
 @implementation AppDelegate {
@@ -47,7 +50,6 @@
   BOOL _updatePending;
   BOOL _manualCheck;
   NSInteger _allowWelcome;
-  CGFloat _welcomeMaxHeight;
 
   BOOL _authenticationUseKeychain;
   NSURL* _authenticationURL;
@@ -189,45 +191,9 @@
   [self _openRepositoryWithURL:sender.representedObject withCloneMode:kCloneMode_None windowModeID:NSNotFound];
 }
 
-- (void)_willShowRecentPopUpMenu:(NSNotification*)notification {
-  NSMenu* menu = _recentPopUpButton.menu;
-  while (menu.numberOfItems > 1) {
-    [menu removeItemAtIndex:1];
-  }
-  NSArray* array = [[NSDocumentController sharedDocumentController] recentDocumentURLs];
-  if (array.count) {
-    for (NSURL* url in array) {
-      NSString* path = url.path;
-      NSString* title = path.lastPathComponent;
-      for (NSMenuItem* item in menu.itemArray) {  // TODO: Handle identical second-to-last path component
-        if ([item.title caseInsensitiveCompare:title] == NSOrderedSame) {
-          title = [NSString stringWithFormat:@"%@ — %@", path.lastPathComponent, [[path stringByDeletingLastPathComponent] lastPathComponent]];
-          path = [(NSURL*)item.representedObject path];
-          item.title = [NSString stringWithFormat:@"%@ — %@", path.lastPathComponent, [[path stringByDeletingLastPathComponent] lastPathComponent]];
-          break;
-        }
-      }
-      NSMenuItem* item = [[NSMenuItem alloc] initWithTitle:title action:@selector(_openDocument:) keyEquivalent:@""];
-      item.target = self;
-      item.representedObject = url;
-      [menu addItem:item];
-    }
-  } else {
-    NSMenuItem* item = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"No Repositories", nil) action:NULL keyEquivalent:@""];
-    item.enabled = NO;
-    [menu addItem:item];
-  }
-}
-
 - (void)awakeFromNib {
-  _welcomeMaxHeight = _welcomeWindow.frame.size.height;
 
   _allowWelcome = -1;
-
-  _twitterButton.textAlignment = NSLeftTextAlignment;
-  _twitterButton.textFont = [NSFont boldSystemFontOfSize:11];
-  _forumsButton.textAlignment = NSLeftTextAlignment;
-  _forumsButton.textFont = [NSFont boldSystemFontOfSize:11];
 
   _preferencesToolbar.selectedItemIdentifier = kPreferencePaneIdentifier_General;
   [self selectPreferencePane:nil];
@@ -238,8 +204,6 @@
     item.representedObject = string;
     [_channelPopUpButton.menu addItem:item];
   }
-
-  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_willShowRecentPopUpMenu:) name:NSPopUpButtonWillPopUpNotification object:_recentPopUpButton];
 
   NSString* theme = [[NSUserDefaults standardUserDefaults] stringForKey:kUserDefaultsKey_Theme];
   [self _applyTheme:theme];
@@ -297,6 +261,36 @@
       [_welcomeWindow orderOut:nil];
     }
   }
+}
+
+#pragma mark - Loading Xibs
+- (id)_loadWindowFromBundleXibWithName:(NSString *)name expectedClass:(Class)class {
+  NSBundle *mainBundle = [NSBundle mainBundle];
+  NSArray *objects = @[];
+  [mainBundle loadNibNamed:name owner:self topLevelObjects:&objects];
+  NSArray *filteredObjects = [objects filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(id  _Nullable evaluatedObject, NSDictionary<NSString *,id> * _Nullable bindings) {
+    return [evaluatedObject isKindOfClass:class];
+  }]];
+  return filteredObjects.firstObject;
+}
+
+- (void)_loadWindowsFromBundle {
+  self.welcomeWindow = [self _loadWindowFromBundleXibWithName:@"Welcome" expectedClass:NSWindow.class];
+  [self _windowsPostSetup];
+}
+
+- (void)_windowsPostSetup {
+  _allowWelcome = -1;
+  
+  __weak NSDocumentController *documentController = NSDocumentController.sharedDocumentController;
+  self.welcomeWindow.getRecentDocuments = ^NSArray<NSURL *> * _Nonnull{
+    return documentController.recentDocumentURLs;
+  };
+  __weak typeof(self) weakSelf = self;
+  self.welcomeWindow.configureItem = ^(NSMenuItem * _Nonnull item) {
+    item.target = weakSelf;
+    item.action = @selector(_openDocument:);
+  };
 }
 
 #pragma mark - NSApplicationDelegate
@@ -394,6 +388,9 @@
   // Load theme preference
   NSString* theme = [[NSUserDefaults standardUserDefaults] stringForKey:kUserDefaultsKey_Theme];
   [self _applyTheme:theme];
+  
+  // Load xibs
+  [self _loadWindowsFromBundle];
 
 #if __ENABLE_SUDDEN_TERMINATION__
   // Enable sudden termination
