@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0A0D211B23579888003A2B5F /* AboutPanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A0D211723579887003A2B5F /* AboutPanel.m */; };
+		0A0D211E23579892003A2B5F /* About.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A0D211C23579892003A2B5F /* About.xib */; };
 		0A3388BC2353BD630022528D /* Welcome.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A3388BA2353BD630022528D /* Welcome.xib */; };
 		0AD4625B232711B000BE28D1 /* WelcomeWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AD4625A232711B000BE28D1 /* WelcomeWindow.m */; };
 		0AE7F5F12312C1B000B06050 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0AE7F5ED2312C1B000B06050 /* InfoPlist.strings */; };
@@ -109,6 +111,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0A0D211723579887003A2B5F /* AboutPanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AboutPanel.m; sourceTree = "<group>"; };
+		0A0D211A23579887003A2B5F /* AboutPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutPanel.h; sourceTree = "<group>"; };
+		0A0D211D23579892003A2B5F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/About.xib; sourceTree = "<group>"; };
 		0A3388BB2353BD630022528D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/Welcome.xib; sourceTree = "<group>"; };
 		0AD46259232711B000BE28D1 /* WelcomeWindow.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WelcomeWindow.h; sourceTree = "<group>"; };
 		0AD4625A232711B000BE28D1 /* WelcomeWindow.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WelcomeWindow.m; sourceTree = "<group>"; };
@@ -281,6 +286,9 @@
 				E2C5672C1A6D98BC00ECFE07 /* WindowController.m */,
 				31CD50E1203E2E2800360B3A /* ToolbarItemWrapperView.h */,
 				31CD50E2203E2E2800360B3A /* ToolbarItemWrapperView.m */,
+				0A0D211A23579887003A2B5F /* AboutPanel.h */,
+				0A0D211723579887003A2B5F /* AboutPanel.m */,
+				0A0D211C23579892003A2B5F /* About.xib */,
 				0AD46259232711B000BE28D1 /* WelcomeWindow.h */,
 				0AD4625A232711B000BE28D1 /* WelcomeWindow.m */,
 				0A3388BA2353BD630022528D /* Welcome.xib */,
@@ -415,6 +423,7 @@
 				0AE7F5F12312C1B000B06050 /* InfoPlist.strings in Resources */,
 				E2A5BE701A814970008DD47F /* Localizable.strings in Resources */,
 				E2C338BA19F8562F00063D95 /* Document.xib in Resources */,
+				0A0D211E23579892003A2B5F /* About.xib in Resources */,
 				E2C338BF19F8562F00063D95 /* MainMenu.xib in Resources */,
 				E267E2741B84E42A00BAB377 /* Help.plist in Resources */,
 			);
@@ -442,6 +451,7 @@
 				E2C338B219F8562F00063D95 /* AppDelegate.m in Sources */,
 				E2C338B719F8562F00063D95 /* Document.m in Sources */,
 				0AD4625B232711B000BE28D1 /* WelcomeWindow.m in Sources */,
+				0A0D211B23579888003A2B5F /* AboutPanel.m in Sources */,
 				31CD50E3203E2E2800360B3A /* ToolbarItemWrapperView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -462,6 +472,14 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		0A0D211C23579892003A2B5F /* About.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0A0D211D23579892003A2B5F /* Base */,
+			);
+			name = About.xib;
+			sourceTree = "<group>";
+		};
 		0A3388BA2353BD630022528D /* Welcome.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
