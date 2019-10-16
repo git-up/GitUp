@@ -24,13 +24,13 @@
 @end
 
 @interface GIGraphView : NSView <NSUserInterfaceValidations>
-@property(nonatomic, assign) id<GIGraphViewDelegate> delegate;
+@property(nonatomic, weak) id<GIGraphViewDelegate> delegate;
 @property(nonatomic, strong) GIGraph* graph;
 @property(nonatomic) BOOL showsTagLabels;
 @property(nonatomic) BOOL showsBranchLabels;
 
-@property(nonatomic, assign) GINode* selectedNode;  // Setting this property directly does not call the delegate
-@property(nonatomic, assign) GCHistoryCommit* selectedCommit;  // Convenience method that wraps @selectedNode
+@property(nonatomic, weak) GINode* selectedNode;  // Setting this property directly does not call the delegate
+@property(nonatomic, weak) GCHistoryCommit* selectedCommit;  // Convenience method that wraps @selectedNode
 
 @property(nonatomic, readonly) NSSize minSize;
 

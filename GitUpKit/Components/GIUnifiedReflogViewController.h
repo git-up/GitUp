@@ -24,6 +24,6 @@
 @end
 
 @interface GIUnifiedReflogViewController : GIViewController
-@property(nonatomic, assign) id<GIUnifiedReflogViewControllerDelegate> delegate;
+@property(nonatomic, weak) id<GIUnifiedReflogViewControllerDelegate> delegate;
 @property(nonatomic, readonly) GCReflogEntry* selectedReflogEntry;
 @end

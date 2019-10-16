@@ -387,9 +387,7 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
 }
 
 // Override -updateChangeCount: which is trigged by NSUndoManager to do nothing and not mark document as updated
-- (void)updateChangeCount:(NSDocumentChangeType)change {
-  ;
-}
+- (void)updateChangeCount:(NSDocumentChangeType)change {}
 
 - (BOOL)presentError:(NSError*)error {
   if (error == nil) {
@@ -1507,9 +1505,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 
 #pragma mark - GICommitViewControllerDelegate
 
-- (void)commitViewController:(GICommitViewController*)controller didCreateCommit:(GCCommit*)commit {
-  ;
-}
+- (void)commitViewController:(GICommitViewController*)controller didCreateCommit:(GCCommit*)commit {}
 
 #pragma mark - GICommitRewriterViewControllerDelegate
 
@@ -1629,7 +1625,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
     if ([_windowMode isEqualToString:kWindowModeString_Map_QuickView] || [_windowMode isEqualToString:kWindowModeString_Map_Diff] || [_windowMode isEqualToString:kWindowModeString_Map_Rewrite] || [_windowMode isEqualToString:kWindowModeString_Map_Config] || [_windowMode isEqualToString:kWindowModeString_Map_Resolve]) {
       return NO;
     }
-    [(NSMenuItem*)item setState:([(NSMenuItem*)item tag] == _WindowModeIDFromString(_windowMode) ? NSOnState : NSOffState)];
+    [(NSMenuItem*)item setState:([(NSMenuItem*)item tag] == (NSInteger)(_WindowModeIDFromString(_windowMode)) ? NSOnState : NSOffState)];
     return YES;
   }
 
