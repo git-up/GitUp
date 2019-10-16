@@ -29,6 +29,7 @@
 #import "ToolProtocol.h"
 #import "GARawTracker.h"
 
+#import "AboutPanel.h"
 #import "WelcomeWindow.h"
 
 #define __ENABLE_SUDDEN_TERMINATION__ 1
@@ -42,6 +43,7 @@
 #define kToolInstallPath @"/usr/local/bin/" kToolName
 
 @interface AppDelegate () <NSUserNotificationCenterDelegate, SUUpdaterDelegate>
+@property(nonatomic, strong) AboutPanel* aboutPanel;
 @property(nonatomic, strong) WelcomeWindow* welcomeWindow;
 @end
 
@@ -275,6 +277,7 @@
 }
 
 - (void)_loadWindowsFromBundle {
+  self.aboutPanel = [self _loadWindowFromBundleXibWithName:@"About" expectedClass:NSPanel.class];
   self.welcomeWindow = [self _loadWindowFromBundleXibWithName:@"Welcome" expectedClass:NSWindow.class];
   [self _windowsPostSetup];
 }
@@ -550,17 +553,19 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
 }
 
 - (IBAction)showAboutPanel:(id)sender {
+  NSString *version = nil;
 #if DEBUG
-  _versionTextField.stringValue = @"DEBUG";
+  version = @"DEBUG";
 #else
   if (_updatePending) {
-    _versionTextField.stringValue = NSLocalizedString(@"Update Pending", nil);
+    version = NSLocalizedString(@"Update Pending", nil);
   } else {
-    _versionTextField.stringValue = [NSString stringWithFormat:NSLocalizedString(@"Version %@ (%@)", nil), [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"], [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"]];
+    version = [NSString stringWithFormat:NSLocalizedString(@"Version %@ (%@)", nil), [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"], [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"]];
   }
 #endif
-  _copyrightTextField.stringValue = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSHumanReadableCopyright"];
-  [_aboutPanel makeKeyAndOrderFront:nil];
+  self.aboutPanel.versionString = version;
+  self.aboutPanel.copyrightString = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSHumanReadableCopyright"];
+  [self.aboutPanel makeKeyAndOrderFront:nil];
 }
 
 - (IBAction)showPreferences:(id)sender {

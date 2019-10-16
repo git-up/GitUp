@@ -31,10 +31,6 @@
 @property(nonatomic, weak) IBOutlet NSTextField* authenticationNameTextField;
 @property(nonatomic, weak) IBOutlet NSSecureTextField* authenticationPasswordTextField;
 
-@property(nonatomic, strong) IBOutlet NSPanel* aboutPanel;
-@property(nonatomic, weak) IBOutlet NSTextField* versionTextField;
-@property(nonatomic, weak) IBOutlet NSTextField* copyrightTextField;
-
 + (instancetype)sharedDelegate;
 + (BOOL)loadPlainTextAuthenticationFormKeychainForURL:(NSURL*)url user:(NSString*)user username:(NSString**)username password:(NSString**)password allowInteraction:(BOOL)allowInteraction;
 + (void)savePlainTextAuthenticationToKeychainForURL:(NSURL*)url withUsername:(NSString*)username password:(NSString*)password;
