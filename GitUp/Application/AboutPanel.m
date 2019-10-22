@@ -6,23 +6,28 @@
 //
 
 #import "AboutPanel.h"
+#import "NSWindow+Loading.h"
 @interface AboutPanel ()
 @property(nonatomic, weak) IBOutlet NSTextField* versionTextField;
 @property(nonatomic, weak) IBOutlet NSTextField* copyrightTextField;
 @end
 
 @implementation AboutPanel
-- (void)setVersionString:(NSString *)versionString {
-  self.versionTextField.stringValue = versionString;
++ (instancetype)new {
+  return (AboutPanel *)[self loadWindowFromBundleXibWithName:@"AboutPanel" expectedClass:NSPanel.class];
 }
-- (void)setCopyrightString:(NSString *)copyrightString {
-  self.copyrightTextField.stringValue = copyrightString;
-}
-
-- (NSString *)versionString {
-  return self.versionTextField.stringValue;
-}
-- (NSString *)copyrightString {
-  return self.copyrightTextField.stringValue;
+- (void)populateWithDataWhenUpdateIsPending:(BOOL)updatePending {
+    NSString *version = nil;
+  #if DEBUG
+    version = @"DEBUG";
+  #else
+    if (updatePending) {
+      version = NSLocalizedString(@"Update Pending", nil);
+    } else {
+      version = [NSString stringWithFormat:NSLocalizedString(@"Version %@ (%@)", nil), [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"], [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"]];
+    }
+  #endif
+    self.versionTextField.stringValue = version;
+    self.copyrightTextField.stringValue = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSHumanReadableCopyright"];
 }
 @end
