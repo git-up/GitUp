@@ -29,7 +29,7 @@
 #import "ToolProtocol.h"
 #import "GARawTracker.h"
 
-#import "AboutPanel.h"
+#import "AboutWindowController.h"
 #import "WelcomeWindow.h"
 
 #define __ENABLE_SUDDEN_TERMINATION__ 1

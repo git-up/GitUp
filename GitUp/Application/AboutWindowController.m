@@ -1,11 +1,11 @@
 //
-//  AboutPanel.m
+//  AboutWindowController.m
 //  Application
 //
 //  Created by Dmitry Lobanov on 08.10.2019.
 //
 
-#import "AboutPanel.h"
+#import "AboutWindowController.h"
 
 @interface AboutWindowController ()
 @property(nonatomic, weak) IBOutlet NSTextField* versionTextField;
