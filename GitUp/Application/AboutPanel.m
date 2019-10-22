@@ -6,16 +6,12 @@
 //
 
 #import "AboutPanel.h"
-#import "NSWindow+Loading.h"
 @interface AboutPanel ()
 @property(nonatomic, weak) IBOutlet NSTextField* versionTextField;
 @property(nonatomic, weak) IBOutlet NSTextField* copyrightTextField;
 @end
 
 @implementation AboutPanel
-+ (instancetype)new {
-  return (AboutPanel *)[self loadWindowFromBundleXibWithName:@"AboutPanel" expectedClass:NSPanel.class];
-}
 - (void)populateWithDataWhenUpdateIsPending:(BOOL)updatePending {
     NSString *version = nil;
   #if DEBUG
