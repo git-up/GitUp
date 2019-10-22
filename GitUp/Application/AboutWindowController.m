@@ -15,7 +15,7 @@
 @implementation AboutWindowController
 
 - (instancetype)init {
-  return [super initWithWindowNibName:@"AboutPanel"];
+  return [super initWithWindowNibName:@"AboutWindowController"];
 }
 
 - (void)windowDidLoad {
