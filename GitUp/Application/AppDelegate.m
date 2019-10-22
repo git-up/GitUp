@@ -553,18 +553,8 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
 }
 
 - (IBAction)showAboutPanel:(id)sender {
-  NSString *version = nil;
-#if DEBUG
-  version = @"DEBUG";
-#else
-  if (_updatePending) {
-    version = NSLocalizedString(@"Update Pending", nil);
-  } else {
-    version = [NSString stringWithFormat:NSLocalizedString(@"Version %@ (%@)", nil), [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"], [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"]];
-  }
-#endif
-  self.aboutPanel.versionString = version;
-  self.aboutPanel.copyrightString = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSHumanReadableCopyright"];
+  self.aboutPanel = [AboutPanel new];
+  [self.aboutPanel populateWithDataWhenUpdateIsPending:_updatePending];
   [self.aboutPanel makeKeyAndOrderFront:nil];
 }
 
