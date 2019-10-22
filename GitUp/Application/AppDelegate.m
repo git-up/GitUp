@@ -553,9 +553,9 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
 }
 
 - (IBAction)showAboutPanel:(id)sender {
-  self.aboutPanel = [AboutPanel new];
-  [self.aboutPanel populateWithDataWhenUpdateIsPending:_updatePending];
-  [self.aboutPanel makeKeyAndOrderFront:nil];
+  AboutPanelWindowController *aboutPanel = [[AboutPanelWindowController alloc] init];
+  [aboutPanel populateWithDataWhenUpdateIsPending:_updatePending];
+  [aboutPanel showWindow:nil];
 }
 
 - (IBAction)showPreferences:(id)sender {
