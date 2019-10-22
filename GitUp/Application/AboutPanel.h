@@ -9,7 +9,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface AboutPanelWindowController : NSWindowController
+@interface AboutWindowController : NSWindowController
 @property(assign, nonatomic, readwrite) BOOL updatePending;
 @end
 

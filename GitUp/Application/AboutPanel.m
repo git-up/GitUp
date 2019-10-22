@@ -7,12 +7,12 @@
 
 #import "AboutPanel.h"
 
-@interface AboutPanelWindowController ()
+@interface AboutWindowController ()
 @property(nonatomic, weak) IBOutlet NSTextField* versionTextField;
 @property(nonatomic, weak) IBOutlet NSTextField* copyrightTextField;
 @end
 
-@implementation AboutPanelWindowController
+@implementation AboutWindowController
 
 - (instancetype)init {
   return [super initWithWindowNibName:@"AboutPanel"];
