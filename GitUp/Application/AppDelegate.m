@@ -43,6 +43,7 @@
 #define kToolInstallPath @"/usr/local/bin/" kToolName
 
 @interface AppDelegate () <NSUserNotificationCenterDelegate, SUUpdaterDelegate>
+@property(nonatomic, strong) AboutWindowController *aboutWindowController;
 @property(nonatomic, strong) WelcomeWindow* welcomeWindow;
 @end
 
@@ -60,6 +61,15 @@
   CFMessagePortRef _messagePort;
 }
 
+#pragma mark - Properties
+- (AboutWindowController *)aboutWindowController {
+  if (!_aboutWindowController) {
+    _aboutWindowController = [[AboutWindowController alloc] init];
+  }
+  return _aboutWindowController;
+}
+
+#pragma mark - Initialize
 + (void)initialize {
   NSDictionary* defaults = @{
     GICommitMessageViewUserDefaultKey_ShowInvisibleCharacters : @(YES),
@@ -551,9 +561,8 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
 }
 
 - (IBAction)showAboutPanel:(id)sender {
-  AboutPanelWindowController *aboutPanel = [[AboutPanelWindowController alloc] init];
-  aboutPanel.updatePending = _updatePending;
-  [aboutPanel showWindow:nil];
+  self.aboutWindowController.updatePending = _updatePending;
+  [self.aboutWindowController showWindow:nil];
 }
 
 - (IBAction)showPreferences:(id)sender {
