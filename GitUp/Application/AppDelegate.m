@@ -43,7 +43,6 @@
 #define kToolInstallPath @"/usr/local/bin/" kToolName
 
 @interface AppDelegate () <NSUserNotificationCenterDelegate, SUUpdaterDelegate>
-@property(nonatomic, strong) AboutPanel* aboutPanel;
 @property(nonatomic, strong) WelcomeWindow* welcomeWindow;
 @end
 
@@ -277,7 +276,6 @@
 }
 
 - (void)_loadWindowsFromBundle {
-  self.aboutPanel = [self _loadWindowFromBundleXibWithName:@"About" expectedClass:NSPanel.class];
   self.welcomeWindow = [self _loadWindowFromBundleXibWithName:@"Welcome" expectedClass:NSWindow.class];
   [self _windowsPostSetup];
 }
