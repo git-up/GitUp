@@ -35,7 +35,6 @@
 }
 
 - (void)populateWithDataWhenUpdateIsPending:(BOOL)updatePending {
-  [self loadWindow];
   [(AboutPanel *)self.window populateWithDataWhenUpdateIsPending:updatePending];
 }
 
