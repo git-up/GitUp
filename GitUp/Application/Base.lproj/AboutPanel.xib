@@ -6,7 +6,11 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <customObject id="-2" userLabel="File's Owner" customClass="AboutPanel"/>
+        <customObject id="-2" userLabel="File's Owner" customClass="AboutPanelWindowController">
+            <connections>
+                <outlet property="window" destination="sHg-NM-pfN" id="nBk-tW-g4b"/>
+            </connections>
+        </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <window title="About GitUp" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="about" animationBehavior="default" id="sHg-NM-pfN" userLabel="About" customClass="AboutPanel">
@@ -35,7 +39,7 @@
                         <rect key="frame" x="18" y="83" width="240" height="28"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="center" id="J3Y-wR-GFR">
-                            <font key="font" metaFont="label" size="11"/>
+                            <font key="font" metaFont="controlContent" size="11"/>
                             <string key="title">Concept &amp; code by Pierre-Olivier Latour
 UI design by Wayne Fan</string>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -46,7 +50,7 @@ UI design by Wayne Fan</string>
                         <rect key="frame" x="26" y="40" width="224" height="28"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="center" title="&lt;COPYRIGHT&gt;" id="LbE-vT-Rsk">
-                            <font key="font" metaFont="label" size="11"/>
+                            <font key="font" metaFont="controlContent" size="11"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -55,7 +59,7 @@ UI design by Wayne Fan</string>
                         <rect key="frame" x="18" y="20" width="240" height="12"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="center" title="libgit2 is Copyright © the libgit2 contributors" id="tT8-4H-E7b">
-                            <font key="font" metaFont="label" size="9"/>
+                            <font key="font" metaFont="menu" size="9"/>
                             <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
