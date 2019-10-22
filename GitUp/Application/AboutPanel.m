@@ -6,12 +6,23 @@
 //
 
 #import "AboutPanel.h"
-@interface AboutPanel ()
+
+@interface AboutPanelWindowController ()
 @property(nonatomic, weak) IBOutlet NSTextField* versionTextField;
 @property(nonatomic, weak) IBOutlet NSTextField* copyrightTextField;
 @end
 
-@implementation AboutPanel
+@implementation AboutPanelWindowController
+
+- (instancetype)init {
+  return [super initWithWindowNibName:@"AboutPanel"];
+}
+
+- (void)windowDidLoad {
+  [super windowDidLoad];
+  [self populateWithDataWhenUpdateIsPending:self.updatePending];
+}
+
 - (void)populateWithDataWhenUpdateIsPending:(BOOL)updatePending {
     NSString *version = nil;
   #if DEBUG
@@ -25,17 +36,6 @@
   #endif
     self.versionTextField.stringValue = version;
     self.copyrightTextField.stringValue = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSHumanReadableCopyright"];
-}
-@end
-
-@implementation AboutPanelWindowController
-
-- (instancetype)init {
-  return [super initWithWindowNibName:@"AboutPanel"];
-}
-
-- (void)populateWithDataWhenUpdateIsPending:(BOOL)updatePending {
-  [(AboutPanel *)self.window populateWithDataWhenUpdateIsPending:updatePending];
 }
 
 @end
