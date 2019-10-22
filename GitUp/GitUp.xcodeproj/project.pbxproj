@@ -8,9 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		0A0D211B23579888003A2B5F /* AboutPanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A0D211723579887003A2B5F /* AboutPanel.m */; };
-		0A0D211E23579892003A2B5F /* AboutPanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A0D211C23579892003A2B5F /* AboutPanel.xib */; };
+		0A0D211E23579892003A2B5F /* About.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A0D211C23579892003A2B5F /* About.xib */; };
 		0A3388BC2353BD630022528D /* Welcome.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A3388BA2353BD630022528D /* Welcome.xib */; };
-		0A74E5DD235EFF7C0025B28E /* NSWindow+Loading.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A74E5DC235EFF7C0025B28E /* NSWindow+Loading.m */; };
 		0AD4625B232711B000BE28D1 /* WelcomeWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AD4625A232711B000BE28D1 /* WelcomeWindow.m */; };
 		0AE7F5F12312C1B000B06050 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0AE7F5ED2312C1B000B06050 /* InfoPlist.strings */; };
 		165C32B61B95739700D2F894 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 165C32B51B95739700D2F894 /* QuartzCore.framework */; };
@@ -114,10 +113,8 @@
 /* Begin PBXFileReference section */
 		0A0D211723579887003A2B5F /* AboutPanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AboutPanel.m; sourceTree = "<group>"; };
 		0A0D211A23579887003A2B5F /* AboutPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutPanel.h; sourceTree = "<group>"; };
-		0A0D211D23579892003A2B5F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/AboutPanel.xib; sourceTree = "<group>"; };
+		0A0D211D23579892003A2B5F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/About.xib; sourceTree = "<group>"; };
 		0A3388BB2353BD630022528D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/Welcome.xib; sourceTree = "<group>"; };
-		0A74E5DB235EFF7C0025B28E /* NSWindow+Loading.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSWindow+Loading.h"; sourceTree = "<group>"; };
-		0A74E5DC235EFF7C0025B28E /* NSWindow+Loading.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSWindow+Loading.m"; sourceTree = "<group>"; };
 		0AD46259232711B000BE28D1 /* WelcomeWindow.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WelcomeWindow.h; sourceTree = "<group>"; };
 		0AD4625A232711B000BE28D1 /* WelcomeWindow.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WelcomeWindow.m; sourceTree = "<group>"; };
 		0AE7F5EE2312C1B000B06050 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -291,12 +288,10 @@
 				31CD50E2203E2E2800360B3A /* ToolbarItemWrapperView.m */,
 				0A0D211A23579887003A2B5F /* AboutPanel.h */,
 				0A0D211723579887003A2B5F /* AboutPanel.m */,
-				0A0D211C23579892003A2B5F /* AboutPanel.xib */,
+				0A0D211C23579892003A2B5F /* About.xib */,
 				0AD46259232711B000BE28D1 /* WelcomeWindow.h */,
 				0AD4625A232711B000BE28D1 /* WelcomeWindow.m */,
 				0A3388BA2353BD630022528D /* Welcome.xib */,
-				0A74E5DB235EFF7C0025B28E /* NSWindow+Loading.h */,
-				0A74E5DC235EFF7C0025B28E /* NSWindow+Loading.m */,
 			);
 			path = Application;
 			sourceTree = "<group>";
@@ -365,6 +360,7 @@
 					};
 					E2C338AA19F8562F00063D95 = {
 						CreatedOnToolsVersion = 6.1;
+						DevelopmentTeam = 88W3E55T4B;
 					};
 				};
 			};
@@ -427,7 +423,7 @@
 				0AE7F5F12312C1B000B06050 /* InfoPlist.strings in Resources */,
 				E2A5BE701A814970008DD47F /* Localizable.strings in Resources */,
 				E2C338BA19F8562F00063D95 /* Document.xib in Resources */,
-				0A0D211E23579892003A2B5F /* AboutPanel.xib in Resources */,
+				0A0D211E23579892003A2B5F /* About.xib in Resources */,
 				E2C338BF19F8562F00063D95 /* MainMenu.xib in Resources */,
 				E267E2741B84E42A00BAB377 /* Help.plist in Resources */,
 			);
@@ -451,7 +447,6 @@
 				E21739F71A5080DD00EC6777 /* DocumentController.m in Sources */,
 				E2E3C9A01D771E7600AA9A62 /* GARawTracker.m in Sources */,
 				E2C338B419F8562F00063D95 /* main.m in Sources */,
-				0A74E5DD235EFF7C0025B28E /* NSWindow+Loading.m in Sources */,
 				E2C5672D1A6D98BC00ECFE07 /* WindowController.m in Sources */,
 				E2C338B219F8562F00063D95 /* AppDelegate.m in Sources */,
 				E2C338B719F8562F00063D95 /* Document.m in Sources */,
@@ -477,12 +472,12 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		0A0D211C23579892003A2B5F /* AboutPanel.xib */ = {
+		0A0D211C23579892003A2B5F /* About.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
 				0A0D211D23579892003A2B5F /* Base */,
 			);
-			name = AboutPanel.xib;
+			name = About.xib;
 			sourceTree = "<group>";
 		};
 		0A3388BA2353BD630022528D /* Welcome.xib */ = {
@@ -540,7 +535,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "Mac Developer";
-				DEVELOPMENT_TEAM = 942QBE43P5;
 				HEADER_SEARCH_PATHS = "../GitUpKit/Third-Party/libgit2/include";
 				OTHER_LDFLAGS = (
 					"$(BUILD_DIR)/$(CONFIGURATION)/libgit2.a",
@@ -556,7 +550,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "Mac Developer";
-				DEVELOPMENT_TEAM = 942QBE43P5;
 				HEADER_SEARCH_PATHS = "../GitUpKit/Third-Party/libgit2/include";
 				OTHER_LDFLAGS = (
 					"$(BUILD_DIR)/$(CONFIGURATION)/libgit2.a",
@@ -591,7 +584,6 @@
 				BUNDLE_VERSION = 0;
 				BUNDLE_VERSION_STRING = 1.1;
 				CODE_SIGN_IDENTITY = "Mac Developer";
-				DEVELOPMENT_TEAM = 942QBE43P5;
 				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/Third-Party";
 				INFOPLIST_FILE = Application/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
@@ -607,7 +599,6 @@
 				BUNDLE_VERSION = 0;
 				BUNDLE_VERSION_STRING = 1.1;
 				CODE_SIGN_IDENTITY = "Mac Developer";
-				DEVELOPMENT_TEAM = 942QBE43P5;
 				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/Third-Party";
 				INFOPLIST_FILE = Application/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
