@@ -31,3 +31,16 @@
     self.copyrightTextField.stringValue = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSHumanReadableCopyright"];
 }
 @end
+
+@implementation AboutPanelWindowController
+
+- (instancetype)init {
+  return [super initWithWindowNibName:@"AboutPanel"];
+}
+
+- (void)populateWithDataWhenUpdateIsPending:(BOOL)updatePending {
+  [self loadWindow];
+  [(AboutPanel *)self.window populateWithDataWhenUpdateIsPending:updatePending];
+}
+
+@end
