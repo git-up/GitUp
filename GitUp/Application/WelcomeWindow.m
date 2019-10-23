@@ -117,17 +117,30 @@
 
 @end
 
+typedef NS_ENUM(NSInteger, WelcomeWindowControllerWindowState) {
+  WelcomeWindowControllerWindowStateNotActivated,
+  WelcomeWindowControllerWindowStateClosed,
+  WelcomeWindowControllerWindowStateShouldBeOpened
+};
 @interface WelcomeWindowControllerModel ()
-@property (assign, nonatomic, readwrite) BOOL shouldShow;
+@property (assign, nonatomic, readwrite) WelcomeWindowControllerWindowState state;
 @end
 
 @implementation WelcomeWindowControllerModel
-#pragma mark - Show
+#pragma mark - Setters
 - (void)setShouldShow {
-  self.shouldShow = YES;
+  self.state = WelcomeWindowControllerWindowStateShouldBeOpened;
 }
 - (void)setShouldHide {
-  self.shouldShow = NO;
+  self.state = WelcomeWindowControllerWindowStateClosed;
+}
+
+#pragma mark - Getters
+- (BOOL)notActivedYet {
+  return self.state == WelcomeWindowControllerWindowStateNotActivated;
+}
+- (BOOL)shouldShow {
+  return self.state == WelcomeWindowControllerWindowStateShouldBeOpened;
 }
 @end
 

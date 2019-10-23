@@ -15,9 +15,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, copy) NSArray <NSURL *>*(^getRecentDocuments)();
 @end
 
-// Add welcome window controller.
 @interface WelcomeWindowControllerModel : NSObject
 @property (assign, nonatomic, readonly) BOOL shouldShow;
+@property (assign, nonatomic, readonly) BOOL notActivedYet;
 - (void)setShouldShow;
 - (void)setShouldHide;
 
