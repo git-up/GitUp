@@ -157,9 +157,7 @@ typedef NS_ENUM(NSInteger, WelcomeWindowControllerWindowState) {
 @end
 
 @implementation WelcomeWindowController
-- (WelcomeWindow *)welcomeWindow {
-  return (WelcomeWindow *)self.window;
-}
+
 #pragma mark - Initialization
 - (instancetype)init {
   return [[super initWithWindowNibName:@"Welcome"] configuredWithModel:[[WelcomeWindowControllerModel alloc] init]];
@@ -205,7 +203,7 @@ typedef NS_ENUM(NSInteger, WelcomeWindowControllerWindowState) {
   }
 }
 
-#pragma mark - Actions
+#pragma mark - Actions/Close
 - (void)closeButtonPressed {
   [self.model setShouldHide];
   [self close];
@@ -261,4 +259,5 @@ typedef NS_ENUM(NSInteger, WelcomeWindowControllerWindowState) {
     [NSWorkspace.sharedWorkspace openURL:[NSURL URLWithString:self.model.issuesURL]];
   }
 }
+
 @end

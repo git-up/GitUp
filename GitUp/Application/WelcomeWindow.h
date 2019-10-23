@@ -16,8 +16,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)setShouldShow;
 - (void)setShouldHide;
 
-@property(nonatomic, copy) BOOL(^getUserDefaultsShouldShow)();
-
 @property(nonatomic, copy) void(^configureItem)(NSMenuItem *item);
 
 // DefaultsKeys
