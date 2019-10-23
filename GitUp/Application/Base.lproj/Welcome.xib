@@ -155,6 +155,9 @@
                                             <color key="value" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                         </userDefinedRuntimeAttribute>
                                     </userDefinedRuntimeAttributes>
+                                    <connections>
+                                        <action selector="viewIssues:" target="-1" id="aqi-az-ote"/>
+                                    </connections>
                                 </customView>
                             </subviews>
                             <connections>

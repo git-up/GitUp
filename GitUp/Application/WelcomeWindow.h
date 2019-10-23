@@ -23,7 +23,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 // URLs
 @property(nonatomic, copy) NSString *twitterURL;
-@property(nonatomic, copy) NSString *issuesURL;
 @end
 
 @interface WelcomeWindowController : NSWindowController

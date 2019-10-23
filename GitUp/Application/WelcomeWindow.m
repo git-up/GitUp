@@ -174,11 +174,9 @@ typedef NS_ENUM(NSInteger, WelcomeWindowControllerWindowState) {
   
   self.closeButton.action = @selector(closeButtonPressed);
   self.twitterButton.action = @selector(openTwitter);
-  self.forumsButton.action = @selector(viewIssues);
   
   self.closeButton.target = self;
   self.twitterButton.target = self;
-  self.forumsButton.target = self;
 }
 
 #pragma mark - Window Lifecycle
@@ -227,9 +225,9 @@ typedef NS_ENUM(NSInteger, WelcomeWindowControllerWindowState) {
       NSString* title = path.lastPathComponent;
       for (NSMenuItem* item in menu.itemArray) {  // TODO: Handle identical second-to-last path component
         if ([item.title caseInsensitiveCompare:title] == NSOrderedSame) {
-          title = [NSString stringWithFormat:@"%@ — %@", path.lastPathComponent, [[path stringByDeletingLastPathComponent] lastPathComponent]];
+          title = [NSString stringWithFormat:@"%@ — %@", path.lastPathComponent, path.stringByDeletingLastPathComponent.lastPathComponent];
           path = [(NSURL*)item.representedObject path];
-          item.title = [NSString stringWithFormat:@"%@ — %@", path.lastPathComponent, [[path stringByDeletingLastPathComponent] lastPathComponent]];
+          item.title = [NSString stringWithFormat:@"%@ — %@", path.lastPathComponent, path.stringByDeletingLastPathComponent.lastPathComponent];
           break;
         }
       }
@@ -251,12 +249,6 @@ typedef NS_ENUM(NSInteger, WelcomeWindowControllerWindowState) {
 - (void)openTwitter {
   if (self.model.twitterURL) {
     [NSWorkspace.sharedWorkspace openURL:[NSURL URLWithString:self.model.twitterURL]];
-  }
-}
-
-- (void)viewIssues {
-  if (self.model.issuesURL) {
-    [NSWorkspace.sharedWorkspace openURL:[NSURL URLWithString:self.model.issuesURL]];
   }
 }
 
