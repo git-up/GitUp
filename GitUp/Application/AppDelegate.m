@@ -29,6 +29,7 @@
 #import "ToolProtocol.h"
 #import "GARawTracker.h"
 
+#import "AboutWindowController.h"
 #import "WelcomeWindow.h"
 
 #define __ENABLE_SUDDEN_TERMINATION__ 1
@@ -42,6 +43,7 @@
 #define kToolInstallPath @"/usr/local/bin/" kToolName
 
 @interface AppDelegate () <NSUserNotificationCenterDelegate, SUUpdaterDelegate>
+@property(nonatomic, strong) AboutWindowController *aboutWindowController;
 @property(nonatomic, strong) WelcomeWindow* welcomeWindow;
 @end
 
@@ -59,6 +61,15 @@
   CFMessagePortRef _messagePort;
 }
 
+#pragma mark - Properties
+- (AboutWindowController *)aboutWindowController {
+  if (!_aboutWindowController) {
+    _aboutWindowController = [[AboutWindowController alloc] init];
+  }
+  return _aboutWindowController;
+}
+
+#pragma mark - Initialize
 + (void)initialize {
   NSDictionary* defaults = @{
     GICommitMessageViewUserDefaultKey_ShowInvisibleCharacters : @(YES),
@@ -550,17 +561,8 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
 }
 
 - (IBAction)showAboutPanel:(id)sender {
-#if DEBUG
-  _versionTextField.stringValue = @"DEBUG";
-#else
-  if (_updatePending) {
-    _versionTextField.stringValue = NSLocalizedString(@"Update Pending", nil);
-  } else {
-    _versionTextField.stringValue = [NSString stringWithFormat:NSLocalizedString(@"Version %@ (%@)", nil), [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"], [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"]];
-  }
-#endif
-  _copyrightTextField.stringValue = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSHumanReadableCopyright"];
-  [_aboutPanel makeKeyAndOrderFront:nil];
+  self.aboutWindowController.updatePending = _updatePending;
+  [self.aboutWindowController showWindow:nil];
 }
 
 - (IBAction)showPreferences:(id)sender {

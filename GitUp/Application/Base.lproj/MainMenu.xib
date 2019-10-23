@@ -521,7 +521,6 @@ You must close and reopen any opened repositories in GitUp after changing this s
         </window>
         <customObject id="Voe-Tx-rLC" customClass="AppDelegate">
             <connections>
-                <outlet property="aboutPanel" destination="sHg-NM-pfN" id="nuH-JO-Zxx"/>
                 <outlet property="authenticationNameTextField" destination="ohd-U6-h7y" id="jfG-3a-a5h"/>
                 <outlet property="authenticationPasswordTextField" destination="Uio-D2-Dnt" id="nNT-Jn-Q9Y"/>
                 <outlet property="authenticationURLTextField" destination="fBP-U8-T31" id="JUd-Sw-FSA"/>
@@ -530,12 +529,10 @@ You must close and reopen any opened repositories in GitUp after changing this s
                 <outlet property="cloneRecursiveButton" destination="V3d-LG-L26" id="iSp-hX-Jc0"/>
                 <outlet property="cloneURLTextField" destination="KgY-GJ-dY0" id="qXq-61-cKm"/>
                 <outlet property="cloneWindow" destination="6SP-eN-0Kv" id="Bd8-7b-vpr"/>
-                <outlet property="copyrightTextField" destination="c4g-uo-jg9" id="l3W-uq-nyp"/>
                 <outlet property="preferencesTabView" destination="anN-jw-l7x" id="zP7-18-Z2X"/>
                 <outlet property="preferencesToolbar" destination="YkS-ea-UXD" id="eZX-nc-ex8"/>
                 <outlet property="preferencesWindow" destination="3qV-q4-a6k" id="yO6-yX-KBA"/>
                 <outlet property="themePopUpButton" destination="aYx-qQ-zM6" id="NeK-Gb-prC"/>
-                <outlet property="versionTextField" destination="HZC-36-Grr" id="qyt-nZ-xv3"/>
             </connections>
         </customObject>
         <menu title="Main Menu" systemMenu="main" id="AYu-sK-qS6">
@@ -1098,74 +1095,9 @@ Gw
             </view>
             <point key="canvasLocation" x="-709" y="619.5"/>
         </window>
-        <window title="About GitUp" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="about" animationBehavior="default" id="sHg-NM-pfN" userLabel="About" customClass="NSPanel">
-            <windowStyleMask key="styleMask" titled="YES" closable="YES"/>
-            <rect key="contentRect" x="612" y="242" width="276" height="363"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1440" height="900"/>
-            <view key="contentView" id="3kP-0M-wu8">
-                <rect key="frame" x="0.0" y="0.0" width="276" height="363"/>
-                <autoresizingMask key="autoresizingMask"/>
-                <subviews>
-                    <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AhE-7e-PYf">
-                        <rect key="frame" x="74" y="204" width="128" height="128"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="NSApplicationIcon" id="T7r-iI-qVo"/>
-                    </imageView>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IyS-21-Jxl">
-                        <rect key="frame" x="86" y="166" width="104" height="17"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="center" title="GitUp" id="T8z-Ql-Nrv">
-                            <font key="font" metaFont="systemBold"/>
-                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
-                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="d1d-Xw-Yrr">
-                        <rect key="frame" x="18" y="83" width="240" height="28"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="center" id="J3Y-wR-GFR">
-                            <font key="font" metaFont="label" size="11"/>
-                            <string key="title">Concept &amp; code by Pierre-Olivier Latour
-UI design by Wayne Fan</string>
-                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
-                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="c4g-uo-jg9">
-                        <rect key="frame" x="26" y="40" width="224" height="28"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="center" title="&lt;COPYRIGHT&gt;" id="LbE-vT-Rsk">
-                            <font key="font" metaFont="label" size="11"/>
-                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
-                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mcm-my-4sq">
-                        <rect key="frame" x="18" y="20" width="240" height="12"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="center" title="libgit2 is Copyright © the libgit2 contributors" id="tT8-4H-E7b">
-                            <font key="font" metaFont="label" size="9"/>
-                            <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HZC-36-Grr">
-                        <rect key="frame" x="38" y="141" width="200" height="17"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="center" title="&lt;VERSION&gt;" id="yn6-7n-hPc">
-                            <font key="font" metaFont="system"/>
-                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
-                </subviews>
-            </view>
-            <point key="canvasLocation" x="114" y="441.5"/>
-        </window>
         <userDefaultsController representsSharedInstance="YES" id="AR1-cq-KNa"/>
     </objects>
     <resources>
-        <image name="NSApplicationIcon" width="32" height="32"/>
         <image name="icon_advanced" width="32" height="32"/>
         <image name="icon_general" width="32" height="32"/>
     </resources>
