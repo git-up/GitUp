@@ -45,7 +45,6 @@
 @interface AppDelegate () <NSUserNotificationCenterDelegate, SUUpdaterDelegate>
 @property(nonatomic, strong) AboutWindowController *aboutWindowController;
 @property(nonatomic, strong) WelcomeWindowController *welcomeWindowController;
-@property(nonatomic, strong) WelcomeWindow* welcomeWindow;
 @end
 
 @implementation AppDelegate {
@@ -73,30 +72,17 @@
   if (!_welcomeWindowController) {
     _welcomeWindowController = [[WelcomeWindowController alloc] init];
     
-    __weak NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    _welcomeWindowController.model.getUserDefaultsShouldShow = ^BOOL{
-      return [defaults boolForKey:kUserDefaultsKey_ShowWelcomeWindow];
-    };
-    
-    __weak NSDocumentController *documentController = NSDocumentController.sharedDocumentController;
-    _welcomeWindowController.model.getRecentDocuments = ^NSArray<NSURL *> * _Nonnull{
-      return documentController.recentDocumentURLs;
-    };
-    
+    WelcomeWindowControllerModel* model = _welcomeWindowController.model;
+    model.keyShouldShowWindow = kUserDefaultsKey_ShowWelcomeWindow;
+    model.twitterURL = kURL_Twitter;
+    model.issuesURL = kURL_Issues;
+        
     __weak typeof(self) weakSelf = self;
     _welcomeWindowController.model.configureItem = ^(NSMenuItem * _Nonnull item) {
       item.target = weakSelf;
       item.action = @selector(_openDocument:);
     };
     
-    _welcomeWindowController.model.openTwitter = ^{
-      [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:kURL_Twitter]];
-    };
-    
-    __weak AppDelegate *appDelegate = self;
-    _welcomeWindowController.model.viewIssues = ^{
-      [appDelegate viewIssues:nil];
-    };
   }
   return _welcomeWindowController;
 }
