@@ -432,10 +432,9 @@
 }
 
 - (void)applicationDidBecomeActive:(NSNotification*)notification {
-//  if (_allowWelcome < 0) {
-//    _allowWelcome = 1;
-//  }
-  [self.welcomeWindowController.model setShouldShow];
+  if (self.welcomeWindowController.model.notActivedYet) {
+    [self.welcomeWindowController.model setShouldShow];
+  }
   [self handleDocumentCountChanged];
 #if !DEBUG
   [[GARawTracker sharedTracker] sendEventWithCategory:@"application"
