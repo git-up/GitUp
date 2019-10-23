@@ -199,20 +199,16 @@ typedef NS_ENUM(NSInteger, WelcomeWindowControllerWindowState) {
 - (void)handleDocumentCountChanged {
   BOOL showWelcomeWindow = [NSUserDefaults.standardUserDefaults boolForKey:self.model.keyShouldShowWindow];
   if (showWelcomeWindow && (self.model.shouldShow) && !NSDocumentController.sharedDocumentController.documents.count) {
-    if (!self.window.visible) {
-      [self.window makeKeyAndOrderFront:nil];
-    }
+    [self showWindow:nil];
   } else {
-    if (self.window.visible) {
-      [self.window orderOut:nil];
-    }
+    [self close];
   }
 }
 
 #pragma mark - Actions
 - (void)closeButtonPressed {
   [self.model setShouldHide];
-  [self.window orderOut:nil];
+  [self close];
 }
 
 #pragma mark - Actions/Recent
