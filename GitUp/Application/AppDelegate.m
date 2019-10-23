@@ -44,6 +44,7 @@
 
 @interface AppDelegate () <NSUserNotificationCenterDelegate, SUUpdaterDelegate>
 @property(nonatomic, strong) AboutWindowController *aboutWindowController;
+@property(nonatomic, strong) WelcomeWindowController *welcomeWindowController;
 @property(nonatomic, strong) WelcomeWindow* welcomeWindow;
 @end
 
@@ -51,7 +52,6 @@
   SUUpdater* _updater;
   BOOL _updatePending;
   BOOL _manualCheck;
-  NSInteger _allowWelcome;
 
   BOOL _authenticationUseKeychain;
   NSURL* _authenticationURL;
@@ -67,6 +67,38 @@
     _aboutWindowController = [[AboutWindowController alloc] init];
   }
   return _aboutWindowController;
+}
+
+- (WelcomeWindowController *)welcomeWindowController {
+  if (!_welcomeWindowController) {
+    _welcomeWindowController = [[WelcomeWindowController alloc] init];
+    
+    __weak NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    _welcomeWindowController.model.getUserDefaultsShouldShow = ^BOOL{
+      return [defaults boolForKey:kUserDefaultsKey_ShowWelcomeWindow];
+    };
+    
+    __weak NSDocumentController *documentController = NSDocumentController.sharedDocumentController;
+    _welcomeWindowController.model.getRecentDocuments = ^NSArray<NSURL *> * _Nonnull{
+      return documentController.recentDocumentURLs;
+    };
+    
+    __weak typeof(self) weakSelf = self;
+    _welcomeWindowController.model.configureItem = ^(NSMenuItem * _Nonnull item) {
+      item.target = weakSelf;
+      item.action = @selector(_openDocument:);
+    };
+    
+    _welcomeWindowController.model.openTwitter = ^{
+      [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:kURL_Twitter]];
+    };
+    
+    __weak AppDelegate *appDelegate = self;
+    _welcomeWindowController.model.viewIssues = ^{
+      [appDelegate viewIssues:nil];
+    };
+  }
+  return _welcomeWindowController;
 }
 
 #pragma mark - Initialize
@@ -204,8 +236,6 @@
 
 - (void)awakeFromNib {
 
-  _allowWelcome = -1;
-
   _preferencesToolbar.selectedItemIdentifier = kPreferencePaneIdentifier_General;
   [self selectPreferencePane:nil];
 
@@ -224,6 +254,10 @@
     item.representedObject = string;
     [_themePopUpButton.menu addItem:item];
   }
+}
+
+- (void)handleDocumentCountChanged {
+  [self.welcomeWindowController handleDocumentCountChanged];
 }
 
 - (void)_updatePreferencePanel {
@@ -261,19 +295,6 @@
   [[NSUserNotificationCenter defaultUserNotificationCenter] deliverNotification:notification];
 }
 
-- (void)handleDocumentCountChanged {
-  BOOL showWelcomeWindow = [[NSUserDefaults standardUserDefaults] boolForKey:kUserDefaultsKey_ShowWelcomeWindow];
-  if (showWelcomeWindow && (_allowWelcome > 0) && ![[[NSDocumentController sharedDocumentController] documents] count]) {
-    if (!_welcomeWindow.visible) {
-      [_welcomeWindow makeKeyAndOrderFront:nil];
-    }
-  } else {
-    if (_welcomeWindow.visible) {
-      [_welcomeWindow orderOut:nil];
-    }
-  }
-}
-
 #pragma mark - Loading Xibs
 - (id)_loadWindowFromBundleXibWithName:(NSString *)name expectedClass:(Class)class {
   NSBundle *mainBundle = [NSBundle mainBundle];
@@ -283,25 +304,6 @@
     return [evaluatedObject isKindOfClass:class];
   }]];
   return filteredObjects.firstObject;
-}
-
-- (void)_loadWindowsFromBundle {
-  self.welcomeWindow = [self _loadWindowFromBundleXibWithName:@"Welcome" expectedClass:NSWindow.class];
-  [self _windowsPostSetup];
-}
-
-- (void)_windowsPostSetup {
-  _allowWelcome = -1;
-  
-  __weak NSDocumentController *documentController = NSDocumentController.sharedDocumentController;
-  self.welcomeWindow.getRecentDocuments = ^NSArray<NSURL *> * _Nonnull{
-    return documentController.recentDocumentURLs;
-  };
-  __weak typeof(self) weakSelf = self;
-  self.welcomeWindow.configureItem = ^(NSMenuItem * _Nonnull item) {
-    item.target = weakSelf;
-    item.action = @selector(_openDocument:);
-  };
 }
 
 #pragma mark - NSApplicationDelegate
@@ -400,9 +402,6 @@
   NSString* theme = [[NSUserDefaults standardUserDefaults] stringForKey:kUserDefaultsKey_Theme];
   [self _applyTheme:theme];
   
-  // Load xibs
-  [self _loadWindowsFromBundle];
-
 #if __ENABLE_SUDDEN_TERMINATION__
   // Enable sudden termination
   [[NSProcessInfo processInfo] enableSuddenTermination];
@@ -425,18 +424,19 @@
 
 - (BOOL)applicationShouldHandleReopen:(NSApplication*)theApplication hasVisibleWindows:(BOOL)hasVisibleWindows {
   if (!hasVisibleWindows) {
-    _allowWelcome = 1;  // Always show welcome when clicking on dock icon
+    // Always show welcome when clicking on dock icon
+    [self.welcomeWindowController.model setShouldShow];
     [self handleDocumentCountChanged];
   }
   return YES;
 }
 
 - (void)applicationDidBecomeActive:(NSNotification*)notification {
-  if (_allowWelcome < 0) {
-    _allowWelcome = 1;
-  }
+//  if (_allowWelcome < 0) {
+//    _allowWelcome = 1;
+//  }
+  [self.welcomeWindowController.model setShouldShow];
   [self handleDocumentCountChanged];
-
 #if !DEBUG
   [[GARawTracker sharedTracker] sendEventWithCategory:@"application"
                                                action:@"activate"
@@ -662,15 +662,6 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
 - (IBAction)checkForUpdates:(id)sender {
   _manualCheck = YES;
   [_updater checkForUpdatesInBackground];
-}
-
-- (IBAction)closeWelcomeWindow:(id)sender {
-  [_welcomeWindow orderOut:nil];
-  _allowWelcome = 0;
-}
-
-- (IBAction)openTwitter:(id)sender {
-  [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:kURL_Twitter]];
 }
 
 - (IBAction)installTool:(id)sender {
