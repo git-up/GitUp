@@ -97,6 +97,9 @@
 }
 @end
 
+@interface WelcomeWindow : NSWindow
+@end
+
 @implementation WelcomeWindow
 
 #pragma mark - Setup
@@ -150,7 +153,6 @@ typedef NS_ENUM(NSInteger, WelcomeWindowControllerWindowState) {
 @property(nonatomic, weak) IBOutlet GILinkButton* twitterButton;
 @property(nonatomic, weak) IBOutlet GILinkButton* forumsButton;
 
-@property (weak, nonatomic, readonly) WelcomeWindow *welcomeWindow;
 @property (strong, nonatomic, readwrite) WelcomeWindowControllerModel *model;
 @end
 
@@ -184,10 +186,6 @@ typedef NS_ENUM(NSInteger, WelcomeWindowControllerWindowState) {
 #pragma mark - Window Lifecycle
 - (void)windowDidLoad {
   [super windowDidLoad];
-  WelcomeWindow *welcomeWindow = (WelcomeWindow *)self.window;
-  welcomeWindow.configureItem = self.model.configureItem;
-  welcomeWindow.getRecentDocuments = self.model.getRecentDocuments;
-  
   [self setupUIElements];
 }
 
@@ -199,14 +197,14 @@ typedef NS_ENUM(NSInteger, WelcomeWindowControllerWindowState) {
 
 #pragma mark - Reactions
 - (void)handleDocumentCountChanged {
-  BOOL showWelcomeWindow = self.model.getUserDefaultsShouldShow();
-  if (showWelcomeWindow && (self.model.shouldShow) && ![[[NSDocumentController sharedDocumentController] documents] count]) {
-    if (!self.welcomeWindow.visible) {
-      [self.welcomeWindow makeKeyAndOrderFront:nil];
+  BOOL showWelcomeWindow = [NSUserDefaults.standardUserDefaults boolForKey:self.model.keyShouldShowWindow];
+  if (showWelcomeWindow && (self.model.shouldShow) && !NSDocumentController.sharedDocumentController.documents.count) {
+    if (!self.window.visible) {
+      [self.window makeKeyAndOrderFront:nil];
     }
   } else {
-    if (self.welcomeWindow.visible) {
-      [self.welcomeWindow orderOut:nil];
+    if (self.window.visible) {
+      [self.window orderOut:nil];
     }
   }
 }
@@ -228,7 +226,7 @@ typedef NS_ENUM(NSInteger, WelcomeWindowControllerWindowState) {
 - (void)willShowPopUpMenu {
   [self cleanupRecentEntries];
   NSMenu* menu = self.recentPopUpButton.menu;
-  NSArray* array = self.model.getRecentDocuments(); // [[NSDocumentController sharedDocumentController] recentDocumentURLs];
+  NSArray* array = NSDocumentController.sharedDocumentController.recentDocumentURLs;
   if (array.count) {
     for (NSURL* url in array) {
       NSString* path = url.path;
@@ -257,14 +255,14 @@ typedef NS_ENUM(NSInteger, WelcomeWindowControllerWindowState) {
 
 #pragma mark - Actions/Twitter&Issues
 - (void)openTwitter {
-  if (self.model.openTwitter) {
-    self.model.openTwitter();
+  if (self.model.twitterURL) {
+    [NSWorkspace.sharedWorkspace openURL:[NSURL URLWithString:self.model.twitterURL]];
   }
 }
 
 - (void)viewIssues {
-  if (self.model.viewIssues) {
-    self.model.viewIssues();
+  if (self.model.issuesURL) {
+    [NSWorkspace.sharedWorkspace openURL:[NSURL URLWithString:self.model.issuesURL]];
   }
 }
 @end

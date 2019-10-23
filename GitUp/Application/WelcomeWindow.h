@@ -10,11 +10,6 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WelcomeWindow : NSWindow
-@property(nonatomic, copy) void(^configureItem)(NSMenuItem *item);
-@property(nonatomic, copy) NSArray <NSURL *>*(^getRecentDocuments)();
-@end
-
 @interface WelcomeWindowControllerModel : NSObject
 @property (assign, nonatomic, readonly) BOOL shouldShow;
 @property (assign, nonatomic, readonly) BOOL notActivedYet;
@@ -24,10 +19,13 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, copy) BOOL(^getUserDefaultsShouldShow)();
 
 @property(nonatomic, copy) void(^configureItem)(NSMenuItem *item);
-@property(nonatomic, copy) NSArray <NSURL *>*(^getRecentDocuments)();
 
-@property(nonatomic, copy) void(^openTwitter)();
-@property(nonatomic, copy) void(^viewIssues)();
+// DefaultsKeys
+@property(nonatomic, copy) NSString *keyShouldShowWindow;
+
+// URLs
+@property(nonatomic, copy) NSString *twitterURL;
+@property(nonatomic, copy) NSString *issuesURL;
 @end
 
 @interface WelcomeWindowController : NSWindowController
