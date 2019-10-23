@@ -75,7 +75,6 @@
     WelcomeWindowControllerModel* model = _welcomeWindowController.model;
     model.keyShouldShowWindow = kUserDefaultsKey_ShowWelcomeWindow;
     model.twitterURL = kURL_Twitter;
-    model.issuesURL = kURL_Issues;
         
     __weak typeof(self) weakSelf = self;
     _welcomeWindowController.model.configureItem = ^(NSMenuItem * _Nonnull item) {
