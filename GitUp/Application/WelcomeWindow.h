@@ -11,23 +11,24 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface WelcomeWindowControllerModel : NSObject
+
+// Hide and Show
 @property (assign, nonatomic, readonly) BOOL shouldShow;
 @property (assign, nonatomic, readonly) BOOL notActivedYet;
 - (void)setShouldShow;
 - (void)setShouldHide;
 
+// Recent items configuration
 @property(nonatomic, copy) void(^configureItem)(NSMenuItem *item);
 
-// DefaultsKeys
+// UserDefaultsKeys
 @property(nonatomic, copy) NSString *keyShouldShowWindow;
 
-// URLs
-@property(nonatomic, copy) NSString *twitterURL;
 @end
 
 @interface WelcomeWindowController : NSWindowController
 @property (strong, nonatomic, readonly) WelcomeWindowControllerModel *model;
-- (instancetype)configuredWithModel:(WelcomeWindowControllerModel *)model;
+// Actions
 - (void)handleDocumentCountChanged;
 @end
 

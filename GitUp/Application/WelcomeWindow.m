@@ -10,6 +10,8 @@
 #import "AppDelegate.h"
 #import "Document.h"
 
+#define kURL_Twitter @"https://twitter.com/GitUpApp"
+
 @interface AppDelegate (WelcomeWindow)
 - (IBAction)closeWelcomeWindow:(id)sender;
 - (void)_openRepositoryWithURL:(NSURL*)url withCloneMode:(CloneMode)cloneMode windowModeID:(WindowModeID)windowModeID;
@@ -154,13 +156,17 @@ typedef NS_ENUM(NSInteger, WelcomeWindowControllerWindowState) {
 @property(nonatomic, weak) IBOutlet GILinkButton* forumsButton;
 
 @property (strong, nonatomic, readwrite) WelcomeWindowControllerModel *model;
+- (instancetype)configuredWithModel:(WelcomeWindowControllerModel *)model;
 @end
 
 @implementation WelcomeWindowController
 
 #pragma mark - Initialization
 - (instancetype)init {
-  return [[super initWithWindowNibName:@"Welcome"] configuredWithModel:[[WelcomeWindowControllerModel alloc] init]];
+  if (self = [super initWithWindowNibName:@"Welcome"]) {
+    _model = [[WelcomeWindowControllerModel alloc] init];
+  }
+  return self;
 }
 
 #pragma mark - Setup
@@ -247,9 +253,7 @@ typedef NS_ENUM(NSInteger, WelcomeWindowControllerWindowState) {
 
 #pragma mark - Actions/Twitter&Issues
 - (void)openTwitter {
-  if (self.model.twitterURL) {
-    [NSWorkspace.sharedWorkspace openURL:[NSURL URLWithString:self.model.twitterURL]];
-  }
+  [NSWorkspace.sharedWorkspace openURL:[NSURL URLWithString:kURL_Twitter]];
 }
 
 @end
