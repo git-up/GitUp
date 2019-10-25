@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WelcomeWindowControllerModel : NSObject
+@interface WelcomeWindowController : NSWindowController
 
 // Hide and Show
 @property (assign, nonatomic, readonly) BOOL shouldShow;
@@ -24,10 +24,6 @@ NS_ASSUME_NONNULL_BEGIN
 // UserDefaultsKeys
 @property(nonatomic, copy) NSString *keyShouldShowWindow;
 
-@end
-
-@interface WelcomeWindowController : NSWindowController
-@property (strong, nonatomic, readonly) WelcomeWindowControllerModel *model;
 // Actions
 - (void)handleDocumentCountChanged;
 @end

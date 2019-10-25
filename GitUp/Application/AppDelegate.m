@@ -72,11 +72,10 @@
   if (!_welcomeWindowController) {
     _welcomeWindowController = [[WelcomeWindowController alloc] init];
     
-    WelcomeWindowControllerModel* model = _welcomeWindowController.model;
-    model.keyShouldShowWindow = kUserDefaultsKey_ShowWelcomeWindow;
+    _welcomeWindowController.keyShouldShowWindow = kUserDefaultsKey_ShowWelcomeWindow;
         
     __weak typeof(self) weakSelf = self;
-    _welcomeWindowController.model.configureItem = ^(NSMenuItem * _Nonnull item) {
+    _welcomeWindowController.configureItem = ^(NSMenuItem * _Nonnull item) {
       item.target = weakSelf;
       item.action = @selector(_openDocument:);
     };
@@ -409,15 +408,15 @@
 - (BOOL)applicationShouldHandleReopen:(NSApplication*)theApplication hasVisibleWindows:(BOOL)hasVisibleWindows {
   if (!hasVisibleWindows) {
     // Always show welcome when clicking on dock icon
-    [self.welcomeWindowController.model setShouldShow];
+    [self.welcomeWindowController setShouldShow];
     [self handleDocumentCountChanged];
   }
   return YES;
 }
 
 - (void)applicationDidBecomeActive:(NSNotification*)notification {
-  if (self.welcomeWindowController.model.notActivedYet) {
-    [self.welcomeWindowController.model setShouldShow];
+  if (self.welcomeWindowController.notActivedYet) {
+    [self.welcomeWindowController setShouldShow];
   }
   [self handleDocumentCountChanged];
 #if !DEBUG

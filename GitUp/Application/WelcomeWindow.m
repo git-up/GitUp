@@ -127,27 +127,6 @@ typedef NS_ENUM(NSInteger, WelcomeWindowControllerWindowState) {
   WelcomeWindowControllerWindowStateClosed,
   WelcomeWindowControllerWindowStateShouldBeOpened
 };
-@interface WelcomeWindowControllerModel ()
-@property (assign, nonatomic, readwrite) WelcomeWindowControllerWindowState state;
-@end
-
-@implementation WelcomeWindowControllerModel
-#pragma mark - Setters
-- (void)setShouldShow {
-  self.state = WelcomeWindowControllerWindowStateShouldBeOpened;
-}
-- (void)setShouldHide {
-  self.state = WelcomeWindowControllerWindowStateClosed;
-}
-
-#pragma mark - Getters
-- (BOOL)notActivedYet {
-  return self.state == WelcomeWindowControllerWindowStateNotActivated;
-}
-- (BOOL)shouldShow {
-  return self.state == WelcomeWindowControllerWindowStateShouldBeOpened;
-}
-@end
 
 @interface WelcomeWindowController ()
 @property(nonatomic, weak) IBOutlet NSButton *closeButton;
@@ -155,18 +134,30 @@ typedef NS_ENUM(NSInteger, WelcomeWindowControllerWindowState) {
 @property(nonatomic, weak) IBOutlet GILinkButton* twitterButton;
 @property(nonatomic, weak) IBOutlet GILinkButton* forumsButton;
 
-@property (strong, nonatomic, readwrite) WelcomeWindowControllerModel *model;
-- (instancetype)configuredWithModel:(WelcomeWindowControllerModel *)model;
+@property (assign, nonatomic, readwrite) WelcomeWindowControllerWindowState state;
 @end
 
 @implementation WelcomeWindowController
+#pragma mark - States
+#pragma mark - States / Setters
+- (void)setShouldShow {
+  self.state = WelcomeWindowControllerWindowStateShouldBeOpened;
+}
+- (void)setShouldHide {
+  self.state = WelcomeWindowControllerWindowStateClosed;
+}
+
+#pragma mark - States / Getters
+- (BOOL)notActivedYet {
+  return self.state == WelcomeWindowControllerWindowStateNotActivated;
+}
+- (BOOL)shouldShow {
+  return self.state == WelcomeWindowControllerWindowStateShouldBeOpened;
+}
 
 #pragma mark - Initialization
 - (instancetype)init {
-  if (self = [super initWithWindowNibName:@"Welcome"]) {
-    _model = [[WelcomeWindowControllerModel alloc] init];
-  }
-  return self;
+  return [super initWithWindowNibName:@"Welcome"];
 }
 
 #pragma mark - Setup
@@ -191,16 +182,10 @@ typedef NS_ENUM(NSInteger, WelcomeWindowControllerWindowState) {
   [self setupUIElements];
 }
 
-#pragma mark - Configuration
-- (instancetype)configuredWithModel:(WelcomeWindowControllerModel *)model {
-  self.model = model;
-  return self;
-}
-
 #pragma mark - Reactions
 - (void)handleDocumentCountChanged {
-  BOOL showWelcomeWindow = [NSUserDefaults.standardUserDefaults boolForKey:self.model.keyShouldShowWindow];
-  if (showWelcomeWindow && (self.model.shouldShow) && !NSDocumentController.sharedDocumentController.documents.count) {
+  BOOL showWelcomeWindow = [NSUserDefaults.standardUserDefaults boolForKey:self.keyShouldShowWindow];
+  if (showWelcomeWindow && (self.shouldShow) && !NSDocumentController.sharedDocumentController.documents.count) {
     [self showWindow:nil];
   } else {
     [self close];
@@ -209,7 +194,7 @@ typedef NS_ENUM(NSInteger, WelcomeWindowControllerWindowState) {
 
 #pragma mark - Actions/Close
 - (void)closeButtonPressed {
-  [self.model setShouldHide];
+  [self setShouldHide];
   [self close];
 }
 
@@ -239,8 +224,8 @@ typedef NS_ENUM(NSInteger, WelcomeWindowControllerWindowState) {
       }
       NSMenuItem* item = [[NSMenuItem alloc] initWithTitle:title action:NULL keyEquivalent:@""];
       item.representedObject = url;
-      if (self.model.configureItem) {
-        self.model.configureItem(item);
+      if (self.configureItem) {
+        self.configureItem(item);
       }
       [menu addItem:item];
     }
