@@ -20,7 +20,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 // Recent items configuration
 @property(nonatomic, copy) void(^openDocumentAtURL)(NSURL *url);
-@property(nonatomic, copy) void(^configureItem)(NSMenuItem *item);
 
 // UserDefaultsKeys
 @property(nonatomic, copy) NSString *keyShouldShowWindow;
