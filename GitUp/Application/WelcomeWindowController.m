@@ -7,28 +7,19 @@
 
 #import "WelcomeWindowController.h"
 
-#import "AppDelegate.h"
-#import "Document.h"
-
 #define kURL_Twitter @"https://twitter.com/GitUpApp"
-
-@interface AppDelegate (WelcomeWindow)
-- (void)_openDocumentAtURL:(NSURL *)url;
-@end
 
 @interface WelcomeWindowView : NSView <NSDraggingDestination>
 
-@property (weak, nonatomic, readonly) AppDelegate *appDelegate;
+// Drag and Drop
 @property (weak, nonatomic) IBOutlet NSImageView *imageView;
 @property (assign, nonatomic) BOOL receivingDrag;
+
+// Open document
+@property (copy, nonatomic) void(^openDocumentAtURL)(NSURL *url);
 @end
 
 @implementation WelcomeWindowView
-
-#pragma mark - Accessors
-- (AppDelegate *)appDelegate {
-  return [AppDelegate sharedDelegate];
-}
 
 #pragma mark - Setup
 - (void)setup {
@@ -89,7 +80,9 @@
   
   NSURL *url = [self draggingItems:sender].firstObject;
   
-  [self.appDelegate _openDocumentAtURL:url];
+  if (self.openDocumentAtURL) {
+    self.openDocumentAtURL(url);
+  }
   
   return YES;
 }
@@ -133,7 +126,7 @@ typedef NS_ENUM(NSInteger, WelcomeWindowControllerWindowState) {
 @property(nonatomic, weak) IBOutlet NSPopUpButton* recentPopUpButton;
 @property(nonatomic, weak) IBOutlet GILinkButton* twitterButton;
 @property(nonatomic, weak) IBOutlet GILinkButton* forumsButton;
-
+@property(nonatomic, weak) IBOutlet WelcomeWindowView *destinationView;
 @property (assign, nonatomic, readwrite) WelcomeWindowControllerWindowState state;
 @end
 
@@ -174,6 +167,8 @@ typedef NS_ENUM(NSInteger, WelcomeWindowControllerWindowState) {
   
   self.closeButton.target = self;
   self.twitterButton.target = self;
+  
+  self.destinationView.openDocumentAtURL = self.openDocumentAtURL;
 }
 
 #pragma mark - Window Lifecycle
@@ -201,8 +196,10 @@ typedef NS_ENUM(NSInteger, WelcomeWindowControllerWindowState) {
 #pragma mark - Actions/Recent
 - (void)cleanupRecentEntries {
   NSMenu* menu = self.recentPopUpButton.menu;
-  while (menu.numberOfItems > 1) {
-    [menu removeItemAtIndex:1];
+  NSMenuItem* item = menu.itemArray.firstObject;
+  [menu removeAllItems];
+  if (item) {
+    [menu addItem:item];
   }
 }
 
