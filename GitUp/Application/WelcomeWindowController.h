@@ -19,6 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)setShouldHide;
 
 // Recent items configuration
+@property(nonatomic, copy) void(^openDocumentAtURL)(NSURL *url);
 @property(nonatomic, copy) void(^configureItem)(NSMenuItem *item);
 
 // UserDefaultsKeys

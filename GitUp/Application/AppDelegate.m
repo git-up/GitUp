@@ -75,9 +75,8 @@
     _welcomeWindowController.keyShouldShowWindow = kUserDefaultsKey_ShowWelcomeWindow;
         
     __weak typeof(self) weakSelf = self;
-    _welcomeWindowController.configureItem = ^(NSMenuItem * _Nonnull item) {
-      item.target = weakSelf;
-      item.action = @selector(_openDocument:);
+    _welcomeWindowController.openDocumentAtURL = ^(NSURL * _Nonnull url) {
+      [weakSelf _openDocumentAtURL:url];
     };
     
   }
@@ -213,8 +212,8 @@
                                                                }];
 }
 
-- (void)_openDocument:(NSMenuItem*)sender {
-  [self _openRepositoryWithURL:sender.representedObject withCloneMode:kCloneMode_None windowModeID:NSNotFound];
+- (void)_openDocumentAtURL:(NSURL *)url {
+  [self _openRepositoryWithURL:url withCloneMode:kCloneMode_None windowModeID:NSNotFound];
 }
 
 - (void)awakeFromNib {

@@ -13,7 +13,7 @@
 #define kURL_Twitter @"https://twitter.com/GitUpApp"
 
 @interface AppDelegate (WelcomeWindow)
-- (void)_openRepositoryWithURL:(NSURL*)url withCloneMode:(CloneMode)cloneMode windowModeID:(WindowModeID)windowModeID;
+- (void)_openDocumentAtURL:(NSURL *)url;
 @end
 
 @interface WelcomeWindowView : NSView <NSDraggingDestination>
@@ -87,8 +87,9 @@
 - (BOOL)performDragOperation:(id<NSDraggingInfo>)sender {
   self.receivingDrag = NO;
   
-  NSURL *first = [self draggingItems:sender].firstObject;
-  [self.appDelegate _openRepositoryWithURL:first withCloneMode:kCloneMode_None windowModeID:NSNotFound];
+  NSURL *url = [self draggingItems:sender].firstObject;
+  
+  [self.appDelegate _openDocumentAtURL:url];
   
   return YES;
 }
@@ -156,7 +157,7 @@ typedef NS_ENUM(NSInteger, WelcomeWindowControllerWindowState) {
 
 #pragma mark - Initialization
 - (instancetype)init {
-  return [super initWithWindowNibName:@"Welcome"];
+  return [super initWithWindowNibName:@"WelcomeWindowController"];
 }
 
 #pragma mark - Setup
@@ -205,6 +206,14 @@ typedef NS_ENUM(NSInteger, WelcomeWindowControllerWindowState) {
   }
 }
 
+- (void)didPressPopUpItem:(NSMenuItem *)item {
+  if ([item.representedObject isKindOfClass:NSURL.class]) {
+    if (self.openDocumentAtURL) {
+      self.openDocumentAtURL(item.representedObject);
+    }
+  }
+}
+
 - (void)willShowPopUpMenu {
   [self cleanupRecentEntries];
   NSMenu* menu = self.recentPopUpButton.menu;
@@ -223,9 +232,8 @@ typedef NS_ENUM(NSInteger, WelcomeWindowControllerWindowState) {
       }
       NSMenuItem* item = [[NSMenuItem alloc] initWithTitle:title action:NULL keyEquivalent:@""];
       item.representedObject = url;
-      if (self.configureItem) {
-        self.configureItem(item);
-      }
+      item.target = self;
+      item.action = @selector(didPressPopUpItem:);
       [menu addItem:item];
     }
   } else {
