@@ -9,8 +9,8 @@
 /* Begin PBXBuildFile section */
 		0A0D211B23579888003A2B5F /* AboutWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A0D211723579887003A2B5F /* AboutWindowController.m */; };
 		0A2BBECB235F9B2400912B65 /* AboutWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A2BBEC9235F9B2400912B65 /* AboutWindowController.xib */; };
-		0A3388BC2353BD630022528D /* Welcome.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A3388BA2353BD630022528D /* Welcome.xib */; };
-		0AD4625B232711B000BE28D1 /* WelcomeWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AD4625A232711B000BE28D1 /* WelcomeWindow.m */; };
+		0A3388BC2353BD630022528D /* WelcomeWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A3388BA2353BD630022528D /* WelcomeWindowController.xib */; };
+		0AD4625B232711B000BE28D1 /* WelcomeWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AD4625A232711B000BE28D1 /* WelcomeWindowController.m */; };
 		0AE7F5F12312C1B000B06050 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0AE7F5ED2312C1B000B06050 /* InfoPlist.strings */; };
 		165C32B61B95739700D2F894 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 165C32B51B95739700D2F894 /* QuartzCore.framework */; };
 		31CD50E3203E2E2800360B3A /* ToolbarItemWrapperView.m in Sources */ = {isa = PBXBuildFile; fileRef = 31CD50E2203E2E2800360B3A /* ToolbarItemWrapperView.m */; };
@@ -114,9 +114,9 @@
 		0A0D211723579887003A2B5F /* AboutWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AboutWindowController.m; sourceTree = "<group>"; };
 		0A0D211A23579887003A2B5F /* AboutWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutWindowController.h; sourceTree = "<group>"; };
 		0A2BBECA235F9B2400912B65 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/AboutWindowController.xib; sourceTree = "<group>"; };
-		0A3388BB2353BD630022528D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/Welcome.xib; sourceTree = "<group>"; };
-		0AD46259232711B000BE28D1 /* WelcomeWindow.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WelcomeWindow.h; sourceTree = "<group>"; };
-		0AD4625A232711B000BE28D1 /* WelcomeWindow.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WelcomeWindow.m; sourceTree = "<group>"; };
+		0A3388BB2353BD630022528D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/WelcomeWindowController.xib; sourceTree = "<group>"; };
+		0AD46259232711B000BE28D1 /* WelcomeWindowController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WelcomeWindowController.h; sourceTree = "<group>"; };
+		0AD4625A232711B000BE28D1 /* WelcomeWindowController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WelcomeWindowController.m; sourceTree = "<group>"; };
 		0AE7F5EE2312C1B000B06050 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		165C32B51B95739700D2F894 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		31CD50E1203E2E2800360B3A /* ToolbarItemWrapperView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ToolbarItemWrapperView.h; sourceTree = "<group>"; };
@@ -289,9 +289,9 @@
 				0A0D211A23579887003A2B5F /* AboutWindowController.h */,
 				0A0D211723579887003A2B5F /* AboutWindowController.m */,
 				0A2BBEC9235F9B2400912B65 /* AboutWindowController.xib */,
-				0AD46259232711B000BE28D1 /* WelcomeWindow.h */,
-				0AD4625A232711B000BE28D1 /* WelcomeWindow.m */,
-				0A3388BA2353BD630022528D /* Welcome.xib */,
+				0AD46259232711B000BE28D1 /* WelcomeWindowController.h */,
+				0AD4625A232711B000BE28D1 /* WelcomeWindowController.m */,
+				0A3388BA2353BD630022528D /* WelcomeWindowController.xib */,
 			);
 			path = Application;
 			sourceTree = "<group>";
@@ -419,7 +419,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E25EBCEB1AA3F8B700D3AF44 /* Application.xcassets in Resources */,
-				0A3388BC2353BD630022528D /* Welcome.xib in Resources */,
+				0A3388BC2353BD630022528D /* WelcomeWindowController.xib in Resources */,
 				0A2BBECB235F9B2400912B65 /* AboutWindowController.xib in Resources */,
 				0AE7F5F12312C1B000B06050 /* InfoPlist.strings in Resources */,
 				E2A5BE701A814970008DD47F /* Localizable.strings in Resources */,
@@ -450,7 +450,7 @@
 				E2C5672D1A6D98BC00ECFE07 /* WindowController.m in Sources */,
 				E2C338B219F8562F00063D95 /* AppDelegate.m in Sources */,
 				E2C338B719F8562F00063D95 /* Document.m in Sources */,
-				0AD4625B232711B000BE28D1 /* WelcomeWindow.m in Sources */,
+				0AD4625B232711B000BE28D1 /* WelcomeWindowController.m in Sources */,
 				0A0D211B23579888003A2B5F /* AboutWindowController.m in Sources */,
 				31CD50E3203E2E2800360B3A /* ToolbarItemWrapperView.m in Sources */,
 			);
@@ -480,12 +480,12 @@
 			name = AboutWindowController.xib;
 			sourceTree = "<group>";
 		};
-		0A3388BA2353BD630022528D /* Welcome.xib */ = {
+		0A3388BA2353BD630022528D /* WelcomeWindowController.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
 				0A3388BB2353BD630022528D /* Base */,
 			);
-			name = Welcome.xib;
+			name = WelcomeWindowController.xib;
 			sourceTree = "<group>";
 		};
 		0AE7F5ED2312C1B000B06050 /* InfoPlist.strings */ = {

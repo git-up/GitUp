@@ -1,11 +1,11 @@
 //
-//  WelcomeWindow.m
+//  WelcomeWindowController.m
 //  Application
 //
 //  Created by Dmitry Lobanov on 10/09/2019.
 //
 
-#import "WelcomeWindow.h"
+#import "WelcomeWindowController.h"
 
 #import "AppDelegate.h"
 #import "Document.h"
@@ -13,7 +13,6 @@
 #define kURL_Twitter @"https://twitter.com/GitUpApp"
 
 @interface AppDelegate (WelcomeWindow)
-- (IBAction)closeWelcomeWindow:(id)sender;
 - (void)_openRepositoryWithURL:(NSURL*)url withCloneMode:(CloneMode)cloneMode windowModeID:(WindowModeID)windowModeID;
 @end
 

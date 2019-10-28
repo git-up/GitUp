@@ -30,7 +30,7 @@
 #import "GARawTracker.h"
 
 #import "AboutWindowController.h"
-#import "WelcomeWindow.h"
+#import "WelcomeWindowController.h"
 
 #define __ENABLE_SUDDEN_TERMINATION__ 1
 

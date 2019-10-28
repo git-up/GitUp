@@ -1,5 +1,5 @@
 //
-//  WelcomeWindow.h
+//  WelcomeWindowController.h
 //  Application
 //
 //  Created by Dmitry Lobanov on 10/09/2019.
