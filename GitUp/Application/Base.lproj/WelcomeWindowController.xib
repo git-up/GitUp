@@ -9,6 +9,7 @@
         <customObject id="-2" userLabel="File's Owner" customClass="WelcomeWindowController">
             <connections>
                 <outlet property="closeButton" destination="Fwx-IU-wXQ" id="oxX-AV-ffo"/>
+                <outlet property="destinationView" destination="UVs-2r-EAT" id="br0-1Q-MbA"/>
                 <outlet property="forumsButton" destination="ozw-os-Nc4" id="xgP-Uj-SKc"/>
                 <outlet property="recentPopUpButton" destination="rck-lm-gsz" id="SFe-iy-HxX"/>
                 <outlet property="twitterButton" destination="5ht-7L-7AO" id="2AV-yQ-MVQ"/>
