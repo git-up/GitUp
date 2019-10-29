@@ -61,6 +61,32 @@
 @end
 
 @implementation AuthenticationWindowController
+#pragma mark - Initialization
+- (instancetype)init {
+  if (self = [super initWithWindowNibName:@"AuthenticationWindowController"]) {
+    self.model = [[AuthenticationWindowControllerModel alloc] init];
+  }
+  return self;
+}
+
+#pragma mark - Window Lifecycle
+- (void)beforeRunInModal {
+  self.urlTextField.stringValue = self.model.url.absoluteString;
+  self.nameTextField.stringValue = self.model.name;
+  self.passwordTextField.stringValue = self.model.password;
+  [self makeFirstResponderWhenUsernameExists:self.model.name.length > 0];
+}
+- (void)windowDidLoad {
+  [super windowDidLoad];
+  [self beforeRunInModal];
+}
+
+#pragma mark - Actions
+- (IBAction)dismissModal:(id)sender {
+  [NSApp stopModalWithCode:[(NSButton *)sender tag]];
+  [self dismissController:nil];
+}
+
 #pragma mark - FirstResponder
 - (NSResponder *)firstResponderWhenUsernameExists:(BOOL)usernameExists {
   return usernameExists ? self.passwordTextField : self.nameTextField;
@@ -92,18 +118,28 @@
     XLOG_VERBOSE(@"Skipping Keychain lookup for repeated authentication failures");
   }
 
-  self.urlTextField.stringValue = url.absoluteString;
-  self.nameTextField.stringValue = *username ? *username : @"";
-  self.passwordTextField.stringValue = @"";
-  [self makeFirstResponderWhenUsernameExists:*username != nil];
+  // TODO: Add data to model and when window is appearing, we should set data from model.
+  // We need two callbacks ( willPresentModal and didPresentModal ).
+  self.model.url = url;
+  
+  self.model.name = *username ? *username : @"";
+  self.model.password = @"";
+  
+  if (self.windowLoaded) {
+    [self beforeRunInModal];
+  }
+  else {
+    // look at -windowDidLoad when window first time loaded.
+  }
+  
   if ([NSApp runModalForWindow:self.window] && self.credentialsExists) {
-    self.model.url = url;
     self.model.name = self.nameTextField.stringValue;
     self.model.password = self.passwordTextField.stringValue;
     *username = self.model.name;
     *password = self.model.password;
     return YES;
   }
+  
   return NO;
 }
 
