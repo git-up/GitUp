@@ -7,6 +7,7 @@
 
 #import "AuthenticationWindowController.h"
 #import <GitUpKit/GitUpKit.h>
+#import <GitUpKit/XLFacilityMacros.h>
 
 @interface AuthenticationWindowControllerModel : NSObject
 @property (nonatomic, assign) BOOL useKeychain;
