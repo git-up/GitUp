@@ -42,4 +42,3 @@
 #define kURL_Wiki @"https://github.com/git-up/GitUp/wiki"
 #define kURL_ReleaseNotes @"https://github.com/git-up/GitUp/releases"
 
-#define kURL_Twitter @"https://twitter.com/GitUpApp"

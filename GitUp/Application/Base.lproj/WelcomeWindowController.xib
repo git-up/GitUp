@@ -6,10 +6,18 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <customObject id="-2" userLabel="File's Owner" customClass="NSApplication"/>
+        <customObject id="-2" userLabel="File's Owner" customClass="WelcomeWindowController">
+            <connections>
+                <outlet property="closeButton" destination="Fwx-IU-wXQ" id="oxX-AV-ffo"/>
+                <outlet property="destinationView" destination="UVs-2r-EAT" id="br0-1Q-MbA"/>
+                <outlet property="forumsButton" destination="ozw-os-Nc4" id="xgP-Uj-SKc"/>
+                <outlet property="recentPopUpButton" destination="rck-lm-gsz" id="SFe-iy-HxX"/>
+                <outlet property="twitterButton" destination="5ht-7L-7AO" id="2AV-yQ-MVQ"/>
+                <outlet property="window" destination="mjY-As-hbN" id="6Bt-UR-GyN"/>
+            </connections>
+        </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
-        <customObject id="Voe-Tx-rLC" customClass="AppDelegate"/>
         <window allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="mjY-As-hbN" userLabel="Welcome" customClass="WelcomeWindow">
             <rect key="contentRect" x="131" y="158" width="280" height="349"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1440" height="900"/>
@@ -32,9 +40,6 @@
                                         <font key="font" metaFont="system"/>
                                     </buttonCell>
                                     <accessibility description="Close window"/>
-                                    <connections>
-                                        <action selector="closeWelcomeWindow:" target="Voe-Tx-rLC" id="xWF-ok-YMZ"/>
-                                    </connections>
                                 </button>
                                 <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Apd-kA-Fr2">
                                     <rect key="frame" x="76" y="180" width="128" height="128"/>
@@ -132,9 +137,6 @@
                                             <color key="value" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                         </userDefinedRuntimeAttribute>
                                     </userDefinedRuntimeAttributes>
-                                    <connections>
-                                        <action selector="openTwitter:" target="Voe-Tx-rLC" id="CcB-Tp-tMx"/>
-                                    </connections>
                                 </customView>
                                 <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3gN-gU-6Rk">
                                     <rect key="frame" x="154" y="20" width="12" height="12"/>
@@ -155,7 +157,7 @@
                                         </userDefinedRuntimeAttribute>
                                     </userDefinedRuntimeAttributes>
                                     <connections>
-                                        <action selector="viewIssues:" target="Voe-Tx-rLC" id="C7T-gw-NmH"/>
+                                        <action selector="viewIssues:" target="-1" id="aqi-az-ote"/>
                                     </connections>
                                 </customView>
                             </subviews>
@@ -167,12 +169,6 @@
                     </box>
                 </subviews>
             </view>
-            <connections>
-                <outlet property="destinationView" destination="UVs-2r-EAT" id="AvQ-6L-KSz"/>
-                <outlet property="forumsButton" destination="ozw-os-Nc4" id="419-9M-VYK"/>
-                <outlet property="recentPopUpButton" destination="rck-lm-gsz" id="DNt-71-Rfh"/>
-                <outlet property="twitterButton" destination="5ht-7L-7AO" id="uy0-ug-BuC"/>
-            </connections>
             <point key="canvasLocation" x="-185" y="548"/>
         </window>
     </objects>
