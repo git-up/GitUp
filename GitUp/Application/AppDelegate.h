@@ -26,11 +26,6 @@
 @property(nonatomic, weak) IBOutlet NSTextField* cloneURLTextField;
 @property(nonatomic, weak) IBOutlet NSButton* cloneRecursiveButton;
 
-@property(nonatomic, strong) IBOutlet NSWindow* authenticationWindow;
-@property(nonatomic, weak) IBOutlet NSTextField* authenticationURLTextField;
-@property(nonatomic, weak) IBOutlet NSTextField* authenticationNameTextField;
-@property(nonatomic, weak) IBOutlet NSSecureTextField* authenticationPasswordTextField;
-
 + (instancetype)sharedDelegate;
 + (BOOL)loadPlainTextAuthenticationFormKeychainForURL:(NSURL*)url user:(NSString*)user username:(NSString**)username password:(NSString**)password allowInteraction:(BOOL)allowInteraction;
 + (void)savePlainTextAuthenticationToKeychainForURL:(NSURL*)url withUsername:(NSString*)username password:(NSString*)password;

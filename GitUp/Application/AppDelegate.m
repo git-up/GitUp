@@ -30,6 +30,7 @@
 #import "GARawTracker.h"
 
 #import "AboutWindowController.h"
+#import "AuthenticationWindowController.h"
 #import "WelcomeWindowController.h"
 
 #define __ENABLE_SUDDEN_TERMINATION__ 1
@@ -44,6 +45,7 @@
 
 @interface AppDelegate () <NSUserNotificationCenterDelegate, SUUpdaterDelegate>
 @property(nonatomic, strong) AboutWindowController *aboutWindowController;
+@property(nonatomic, strong) AuthenticationWindowController *authenticationWindowController;
 @property(nonatomic, strong) WelcomeWindowController *welcomeWindowController;
 @end
 
@@ -51,11 +53,6 @@
   SUUpdater* _updater;
   BOOL _updatePending;
   BOOL _manualCheck;
-
-  BOOL _authenticationUseKeychain;
-  NSURL* _authenticationURL;
-  NSString* _authenticationUsername;
-  NSString* _authenticationPassword;
 
   CFMessagePortRef _messagePort;
 }
@@ -66,6 +63,20 @@
     _aboutWindowController = [[AboutWindowController alloc] init];
   }
   return _aboutWindowController;
+}
+
+- (AuthenticationWindowController *)authenticationWindowController {
+  if (!_authenticationWindowController) {
+    _authenticationWindowController = [[AuthenticationWindowController alloc] init];
+    __weak typeof(self) weakSelf = self;
+    _authenticationWindowController.loadPlainTextAuthenticationFormKeychain = ^BOOL(NSURL * _Nonnull url, NSString * _Nonnull user, NSString *__autoreleasing *username, NSString *__autoreleasing *password) {
+      return [weakSelf.class loadPlainTextAuthenticationFormKeychainForURL:url user:user username:username password:password allowInteraction:YES];
+    };
+    _authenticationWindowController.savePlainTextAuthenticationToKeychain = ^(NSURL * _Nonnull url, NSString * _Nonnull username, NSString * _Nonnull password) {
+      [weakSelf.class savePlainTextAuthenticationToKeychainForURL:url withUsername:username password:password];
+    };
+  }
+  return _authenticationWindowController;
 }
 
 - (WelcomeWindowController *)welcomeWindowController {
@@ -707,44 +718,15 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
 #pragma mark - GCRepositoryDelegate
 
 - (void)repository:(GCRepository*)repository willStartTransferWithURL:(NSURL*)url {
-  _authenticationUseKeychain = YES;
-  _authenticationURL = nil;
-  _authenticationUsername = nil;
-  _authenticationPassword = nil;
+  [self.authenticationWindowController repository:repository willStartTransferWithURL:url];
 }
 
 - (BOOL)repository:(GCRepository*)repository requiresPlainTextAuthenticationForURL:(NSURL*)url user:(NSString*)user username:(NSString**)username password:(NSString**)password {
-  if (_authenticationUseKeychain) {
-    _authenticationUseKeychain = NO;
-    if ([self.class loadPlainTextAuthenticationFormKeychainForURL:url user:user username:username password:password allowInteraction:YES]) {
-      return YES;
-    }
-  } else {
-    XLOG_VERBOSE(@"Skipping Keychain lookup for repeated authentication failures");
-  }
-
-  _authenticationURLTextField.stringValue = url.absoluteString;
-  _authenticationNameTextField.stringValue = *username ? *username : @"";
-  _authenticationPasswordTextField.stringValue = @"";
-  [_authenticationWindow makeFirstResponder:(*username ? _authenticationPasswordTextField : _authenticationNameTextField)];
-  if ([NSApp runModalForWindow:_authenticationWindow] && _authenticationNameTextField.stringValue.length && _authenticationPasswordTextField.stringValue.length) {
-    _authenticationURL = url;
-    _authenticationUsername = [_authenticationNameTextField.stringValue copy];
-    _authenticationPassword = [_authenticationPasswordTextField.stringValue copy];
-    *username = _authenticationNameTextField.stringValue;
-    *password = _authenticationPasswordTextField.stringValue;
-    return YES;
-  }
-  return NO;
+  return [self.authenticationWindowController repository:repository requiresPlainTextAuthenticationForURL:url user:user username:username password:password];
 }
 
 - (void)repository:(GCRepository*)repository didFinishTransferWithURL:(NSURL*)url success:(BOOL)success {
-  if (success && _authenticationURL && _authenticationUsername && _authenticationPassword) {
-    [self.class savePlainTextAuthenticationToKeychainForURL:_authenticationURL withUsername:_authenticationUsername password:_authenticationPassword];
-  }
-  _authenticationURL = nil;
-  _authenticationUsername = nil;
-  _authenticationPassword = nil;
+  [self.authenticationWindowController repository:repository didFinishTransferWithURL:url success:success];
 }
 
 #pragma mark - SUUpdaterDelegate
