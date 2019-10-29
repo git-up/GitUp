@@ -84,7 +84,7 @@
 #pragma mark - Actions
 - (IBAction)dismissModal:(id)sender {
   [NSApp stopModalWithCode:[(NSButton *)sender tag]];
-  [self dismissController:nil];
+  [self close];
 }
 
 #pragma mark - FirstResponder
