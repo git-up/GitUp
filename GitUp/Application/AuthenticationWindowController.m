@@ -63,7 +63,7 @@
 @implementation AuthenticationWindowController
 #pragma mark - Initialization
 - (instancetype)init {
-  if (self = [super initWithWindowNibName:@"AuthenticationWindowController"]) {
+  if ((self = [super initWithWindowNibName:@"AuthenticationWindowController"])) {
     self.model = [[AuthenticationWindowControllerModel alloc] init];
   }
   return self;
