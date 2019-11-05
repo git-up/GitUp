@@ -8,6 +8,7 @@
 #import "AuthenticationWindowController.h"
 #import <GitUpKit/GitUpKit.h>
 #import <GitUpKit/XLFacilityMacros.h>
+#import "KeychainAccessor.h"
 
 @interface AuthenticationWindowControllerModel : NSObject
 @property (nonatomic, assign) BOOL useKeychain;
@@ -109,10 +110,8 @@
 - (BOOL)repository:(GCRepository*)repository requiresPlainTextAuthenticationForURL:(NSURL*)url user:(NSString*)user username:(NSString**)username password:(NSString**)password {
   if (self.model.useKeychain) {
     [self.model unsetUseKeychain];
-    if (self.loadPlainTextAuthenticationFormKeychain) {
-      if (self.loadPlainTextAuthenticationFormKeychain(url, user, username, password)) {
-        return YES;
-      }
+    if ([KeychainAccessor loadPlainTextAuthenticationFormKeychainForURL:url user:user username:username password:password allowInteraction:YES]) {
+      return YES;
     }
   } else {
     XLOG_VERBOSE(@"Skipping Keychain lookup for repeated authentication failures");
@@ -145,8 +144,8 @@
 
 - (void)repository:(GCRepository*)repository didFinishTransferWithURL:(NSURL*)url success:(BOOL)success {
   [self.model didFinishTransferWithURL:url success:success onResult:^(AuthenticationWindowControllerModel *model) {
-    if (model && self.savePlainTextAuthenticationToKeychain) {
-      self.savePlainTextAuthenticationToKeychain(model.url, model.name, model.password);
+    if (model) {
+      [KeychainAccessor savePlainTextAuthenticationToKeychainForURL:url username:model.name password:model.password];
     }
   }];
 }

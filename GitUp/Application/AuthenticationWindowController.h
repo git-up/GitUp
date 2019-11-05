@@ -14,10 +14,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface AuthenticationWindowController : NSWindowController
 
-// Keychain
-@property (nonatomic, readwrite) BOOL (^loadPlainTextAuthenticationFormKeychain)(NSURL *url, NSString *user, NSString * _Nullable * _Nonnull username, NSString * _Nullable * _Nonnull password);
-@property (nonatomic, readwrite) void (^savePlainTextAuthenticationToKeychain)(NSURL *url, NSString *username, NSString *password);
-
 // Repository
 - (void)repository:(GCRepository*)repository willStartTransferWithURL:(NSURL*)url;
 - (BOOL)repository:(GCRepository*)repository requiresPlainTextAuthenticationForURL:(NSURL*)url user:(NSString*)user username:(NSString * _Nullable * _Nonnull )username password:(NSString * _Nullable * _Nonnull)password;
