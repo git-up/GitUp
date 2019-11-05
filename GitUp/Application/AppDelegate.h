@@ -15,7 +15,7 @@
 
 #import <GitUpKit/GitUpKit.h>
 
-@interface AppDelegate : NSObject <NSApplicationDelegate, GCRepositoryDelegate>
+@interface AppDelegate : NSObject <NSApplicationDelegate>
 @property(nonatomic, strong) IBOutlet NSWindow* preferencesWindow;
 @property(nonatomic, weak) IBOutlet NSToolbar* preferencesToolbar;
 @property(nonatomic, weak) IBOutlet NSTabView* preferencesTabView;
@@ -27,12 +27,6 @@
 @property(nonatomic, weak) IBOutlet NSButton* cloneRecursiveButton;
 
 + (instancetype)sharedDelegate;
-+ (BOOL)loadPlainTextAuthenticationFormKeychainForURL:(NSURL*)url user:(NSString*)user username:(NSString**)username password:(NSString**)password allowInteraction:(BOOL)allowInteraction;
-+ (void)savePlainTextAuthenticationToKeychainForURL:(NSURL*)url withUsername:(NSString*)username password:(NSString*)password;
-
-- (void)repository:(GCRepository*)repository willStartTransferWithURL:(NSURL*)url;
-- (BOOL)repository:(GCRepository*)repository requiresPlainTextAuthenticationForURL:(NSURL*)url user:(NSString*)user username:(NSString**)username password:(NSString**)password;
-- (void)repository:(GCRepository*)repository didFinishTransferWithURL:(NSURL*)url success:(BOOL)success;
 
 - (void)handleDocumentCountChanged;
 @end
