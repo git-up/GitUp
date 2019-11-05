@@ -53,12 +53,9 @@
 @property(nonatomic, weak) IBOutlet NSTextField* nameTextField;
 @property(nonatomic, weak) IBOutlet NSSecureTextField* passwordTextField;
 
-// First Responder
-- (NSResponder *)firstResponderWhenUsernameExists:(BOOL)usernameExists;
-- (void)makeFirstResponderWhenUsernameExists:(BOOL)usernameExists;
-
 // Credentials
 @property (nonatomic, assign, readonly) BOOL credentialsExists;
+
 @end
 
 @implementation AuthenticationWindowController
