@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0A0C5ACB23720BAE000D84A1 /* KeychainAccessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A0C5ACA23720BAE000D84A1 /* KeychainAccessor.m */; };
 		0A0D211B23579888003A2B5F /* AboutWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A0D211723579887003A2B5F /* AboutWindowController.m */; };
 		0A2BBECB235F9B2400912B65 /* AboutWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A2BBEC9235F9B2400912B65 /* AboutWindowController.xib */; };
 		0A2F488F23683DC90072C6FB /* AuthenticationWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A2F488E23683DC90072C6FB /* AuthenticationWindowController.m */; };
@@ -113,6 +114,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0A0C5AC923720BAE000D84A1 /* KeychainAccessor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KeychainAccessor.h; sourceTree = "<group>"; };
+		0A0C5ACA23720BAE000D84A1 /* KeychainAccessor.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KeychainAccessor.m; sourceTree = "<group>"; };
 		0A0D211723579887003A2B5F /* AboutWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AboutWindowController.m; sourceTree = "<group>"; };
 		0A0D211A23579887003A2B5F /* AboutWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutWindowController.h; sourceTree = "<group>"; };
 		0A2BBECA235F9B2400912B65 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/AboutWindowController.xib; sourceTree = "<group>"; };
@@ -300,6 +303,8 @@
 				0AD46259232711B000BE28D1 /* WelcomeWindowController.h */,
 				0AD4625A232711B000BE28D1 /* WelcomeWindowController.m */,
 				0A3388BA2353BD630022528D /* WelcomeWindowController.xib */,
+				0A0C5AC923720BAE000D84A1 /* KeychainAccessor.h */,
+				0A0C5ACA23720BAE000D84A1 /* KeychainAccessor.m */,
 			);
 			path = Application;
 			sourceTree = "<group>";
@@ -463,6 +468,7 @@
 				0A0D211B23579888003A2B5F /* AboutWindowController.m in Sources */,
 				31CD50E3203E2E2800360B3A /* ToolbarItemWrapperView.m in Sources */,
 				0A2F488F23683DC90072C6FB /* AuthenticationWindowController.m in Sources */,
+				0A0C5ACB23720BAE000D84A1 /* KeychainAccessor.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
