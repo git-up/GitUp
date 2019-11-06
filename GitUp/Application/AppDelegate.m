@@ -13,13 +13,13 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#import <Security/Security.h>
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wobjc-interface-ivars"
 #import <HockeySDK/HockeySDK.h>
 #pragma clang diagnostic pop
 #import <Sparkle/Sparkle.h>
 
+#import <GitUpKit/GitUpKit.h>
 #import <GitUpKit/XLFacilityMacros.h>
 
 #import "AppDelegate.h"
@@ -47,7 +47,6 @@
 @property(nonatomic, strong) WelcomeWindowController *welcomeWindowController;
 @end
 
-#import "KeychainAccessor.h"
 @implementation AppDelegate {
   SUUpdater* _updater;
   BOOL _updatePending;
