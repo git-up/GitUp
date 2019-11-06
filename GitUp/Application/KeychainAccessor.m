@@ -6,6 +6,7 @@
 //
 
 #import "KeychainAccessor.h"
+#import <Security/Security.h>
 #import <GitUpKit/XLFacilityMacros.h>
 
 @implementation KeychainAccessor
