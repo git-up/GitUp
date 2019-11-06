@@ -16,11 +16,11 @@
 #import "Document.h"
 #import "WindowController.h"
 #import "Common.h"
-#import "AppDelegate.h"
 
 #import "KeychainAccessor.h"
 #import "AuthenticationWindowController.h"
 
+#import <GitUpKit/GitUpKit.h>
 #import <GitUpKit/XLFacilityMacros.h>
 
 #define kWindowModeString_Map @"map"
