@@ -607,9 +607,12 @@ static inline CGFloat _SquareDistanceFromPointToLine(CGFloat x0, CGFloat y0, CGF
   return SQUARE(x1 * (y2 - y0) - y1 * (x2 - x0) + x2 * y0 - y2 * x0) / (SQUARE(y2 - y0) + SQUARE(x2 - x0));
 }
 
-static void _DrawLine(GILine* line, CGContextRef context, CGFloat offset, CGFloat minY, CGFloat maxY) {
+- (void)drawLine:(GILine*)line inContext:(CGContextRef)context clampedToRect:(CGRect)dirtyRect {
+  CGFloat offset = _graph.size.height;
   NSArray* nodes = line.nodes;
   NSUInteger count = nodes.count;
+  CGFloat minY = CGRectGetMinY(dirtyRect);
+  CGFloat maxY = CGRectGetMaxY(dirtyRect);
   BOOL recompute = YES;
 
   // Generate list of node coordinates aka points
@@ -795,6 +798,7 @@ static void _DrawLine(GILine* line, CGContextRef context, CGFloat offset, CGFloa
   }
 
   // Draw line
+  CGContextBeginPath(context);
   BOOL visible = NO;
   size_t i = 0;
   while (1) {
@@ -819,7 +823,6 @@ static void _DrawLine(GILine* line, CGContextRef context, CGFloat offset, CGFloa
     if (!visible) {
       CGContextMoveToPoint(context, x0, y0);
       CGContextAddLineToPoint(context, x1, y1);
-      CGContextStrokePath(context);
 
       x0 = x1;
       y0 = y1;
@@ -831,7 +834,6 @@ static void _DrawLine(GILine* line, CGContextRef context, CGFloat offset, CGFloa
     // Draw line segment
     CGContextMoveToPoint(context, x0, y0);
     CGContextAddLineToPoint(context, x1, y1);
-    CGContextStrokePath(context);
 
     // Check if exiting visible area
     if (y0 < minY) {
@@ -846,8 +848,8 @@ static void _DrawLine(GILine* line, CGContextRef context, CGFloat offset, CGFloa
       y1 = pointList[i + 2].y;
       CGContextMoveToPoint(context, x0, y0);
       CGContextAddLineToPoint(context, x1, y1);
-      CGContextStrokePath(context);
 
+      visible = YES;
       break;  // We're done
     }
 
@@ -860,10 +862,30 @@ static void _DrawLine(GILine* line, CGContextRef context, CGFloat offset, CGFloa
     CGFloat y2 = pointList[i + 3].y;
     CGContextMoveToPoint(context, x0, y0);
     CGContextAddQuadCurveToPoint(context, x1, y1, x2, y2);
-    CGContextStrokePath(context);
 
     i += 3;
     visible = YES;
+  }
+
+  BOOL shouldDraw = visible && ^BOOL {
+    CGRect boundingBox = CGContextGetPathBoundingBox(context);
+    boundingBox.size.width = fmax(boundingBox.size.width, 1);
+    boundingBox.size.height = fmax(boundingBox.size.height, 1);
+    return [self needsToDrawRect:boundingBox];
+  }();
+
+  if (shouldDraw) {
+    XLOG_DEBUG_CHECK(!line.virtual || [[(GINode*)line.nodes[0] layer] index] == 0);
+    CGContextSaveGState(context);
+    CGContextSetLineWidth(context, line.branchMainLine && !line.virtual ? kMainLineWidth : kSubLineWidth);
+    CGContextSetLineJoin(context, kCGLineJoinRound);
+    if (line.virtual) {
+      const CGFloat pattern[] = {4, 2};
+      CGContextSetLineDash(context, 0, pattern, 2);
+    }
+    CGContextSetStrokeColorWithColor(context, line.color.CGColor);
+    CGContextStrokePath(context);
+    CGContextRestoreGState(context);
   }
 
   if (recompute) {
@@ -1433,8 +1455,9 @@ static void _DrawSelectedNode(CGContextRef context, CGFloat x, CGFloat y, GINode
   NSUInteger layerCount = layers.count;
   NSUInteger startIndex = layerCount ? [self _indexOfLayerContainingPosition:(dirtyRect.origin.y + dirtyRect.size.height + kOverdrawMargin)] : NSNotFound;
   NSUInteger endIndex = layerCount ? [self _indexOfLayerContainingPosition:dirtyRect.origin.y - kOverdrawMargin] : 0;
+  NSIndexSet* indexes = layerCount ? [[NSIndexSet alloc] initWithIndexesInRange:NSMakeRange(startIndex, MIN(endIndex + 1, layerCount) - startIndex)] : [[NSIndexSet alloc] init];
   CGFloat offset = _graph.size.height;
-  NSMutableArray* lines = [[NSMutableArray alloc] init];
+  NSMutableSet* lines = [[NSMutableSet alloc] init];
 
   // Cache attributes
   static NSDictionary* tagAttributes = nil;
@@ -1480,13 +1503,12 @@ static void _DrawSelectedNode(CGContextRef context, CGFloat x, CGFloat y, GINode
   // Draw grid
   CGContextSetLineWidth(context, 1);
   CGContextSetRGBStrokeColor(context, 1.0, 1.0, 1.0, 0.25);
-  for (NSUInteger index = startIndex; index <= endIndex; ++index) {
-    GILayer* layer = layers[index];
+  [layers enumerateObjectsAtIndexes:indexes options:0 usingBlock:^(GILayer* layer, NSUInteger index, BOOL *stop) {
     CGFloat y = CONVERT_Y(offset - layer.y);
     CGContextMoveToPoint(context, dirtyRect.origin.x, y);
     CGContextAddLineToPoint(context, dirtyRect.origin.x + dirtyRect.size.width, y);
     CGContextStrokePath(context);
-  }
+  }];
   for (NSUInteger i = 0; i < 100; ++i) {
     CGFloat x = CONVERT_X(i);
     CGContextMoveToPoint(context, x, dirtyRect.origin.y);
@@ -1495,51 +1517,31 @@ static void _DrawSelectedNode(CGContextRef context, CGFloat x, CGFloat y, GINode
   }
 #endif
 
-  // Find all lines in the drawing area
-  for (NSUInteger index = startIndex; index <= endIndex; ++index) {
-    GILayer* layer = layers[index];
-    for (GILine* line in layer.lines) {
-      if (![lines containsObject:line]) {
-        [lines addObject:line];
-      }
-    }
-  }
-
-  // Draw lines
-  if (lines.count) {
-    CGContextSetLineJoin(context, kCGLineJoinMiter);
-
+  // Draw all lines in the drawing area
+  {
     // Can’t multiply against a dark background.
     if (!self.effectiveAppearance.matchesDarkAppearance) {
       CGContextSetBlendMode(context, kCGBlendModeMultiply);
     }
 
-    for (NSInteger i = 0, count = lines.count; i < count; ++i) {
-      GILine* line = lines[i];
-      BOOL onBranchMainLine = line.branchMainLine;
-      BOOL virtualLine = line.virtual;
-      XLOG_DEBUG_CHECK(!virtualLine || [[(GINode*)line.nodes[0] layer] index] == 0);
-      if (virtualLine) {
-        onBranchMainLine = NO;
-      }
-      CGContextSetLineWidth(context, onBranchMainLine ? kMainLineWidth : kSubLineWidth);
-      CGContextSetStrokeColorWithColor(context, line.color.CGColor);
-      if (virtualLine) {
-        const CGFloat pattern[] = {4, 2};
-        CGContextSetLineDash(context, 0, pattern, 2);
-      }
-      _DrawLine(line, context, offset, dirtyRect.origin.y, dirtyRect.origin.y + dirtyRect.size.height);
-      if (virtualLine) {
-        CGContextSetLineDash(context, 0, NULL, 0);
-      }
-    }
+    [layers enumerateObjectsAtIndexes:indexes
+                              options:0
+                           usingBlock:^(GILayer* layer, NSUInteger index, BOOL* stop) {
+                             for (GILine* line in layer.lines) {
+                               if ([lines containsObject:line]) {
+                                 continue;
+                               }
+                               [self drawLine:line inContext:context clampedToRect:dirtyRect];
+                               [lines addObject:line];
+                             }
+                           }];
+
     CGContextSetBlendMode(context, kCGBlendModeNormal);
   }
 
   // Draw nodes
   CGContextSetLineWidth(context, 1);
-  for (NSUInteger index = startIndex; index <= endIndex; ++index) {
-    GILayer* layer = layers[index];
+  [layers enumerateObjectsAtIndexes:indexes options:0 usingBlock:^(GILayer* layer, NSUInteger index, BOOL *stop) {
     CGFloat y = CONVERT_Y(offset - layer.y);
     for (GINode* node in layer.nodes) {
       CGFloat x = CONVERT_X(node.x);
@@ -1566,7 +1568,7 @@ static void _DrawSelectedNode(CGContextRef context, CGFloat x, CGFloat y, GINode
 
       _DrawNode(node, context, x, y);
     }
-  }
+  }];
 
 #if __DEBUG_MAIN_LINE__ || __DEBUG_DESCENDANTS__ || __DEBUG_ANCESTORS__
   // Draw highlighted debug nodes
