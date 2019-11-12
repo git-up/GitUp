@@ -13,13 +13,13 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#import <Security/Security.h>
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wobjc-interface-ivars"
 #import <HockeySDK/HockeySDK.h>
 #pragma clang diagnostic pop
 #import <Sparkle/Sparkle.h>
 
+#import <GitUpKit/GitUpKit.h>
 #import <GitUpKit/XLFacilityMacros.h>
 
 #import "AppDelegate.h"
@@ -51,11 +51,6 @@
   SUUpdater* _updater;
   BOOL _updatePending;
   BOOL _manualCheck;
-
-  BOOL _authenticationUseKeychain;
-  NSURL* _authenticationURL;
-  NSString* _authenticationUsername;
-  NSString* _authenticationPassword;
 
   CFMessagePortRef _messagePort;
 }
@@ -101,89 +96,6 @@
 
 + (instancetype)sharedDelegate {
   return (AppDelegate*)[NSApp delegate];
-}
-
-// WARNING: We are using the same attributes for the keychain items than Git CLT appears to be using as of version 1.9.3
-+ (BOOL)loadPlainTextAuthenticationFormKeychainForURL:(NSURL*)url user:(NSString*)user username:(NSString**)username password:(NSString**)password allowInteraction:(BOOL)allowInteraction {
-  const char* serverName = url.host.UTF8String;
-  if (serverName && serverName[0]) {  // TODO: How can this be NULL?
-    const char* accountName = (*username).UTF8String;
-    SecKeychainItemRef itemRef;
-    UInt32 passwordLength;
-    void* passwordData;
-    SecKeychainSetUserInteractionAllowed(allowInteraction);  // Ignore errors
-    OSStatus status = SecKeychainFindInternetPassword(NULL,
-                                                      (UInt32)strlen(serverName), serverName,
-                                                      0, NULL,  // Any security domain
-                                                      accountName ? (UInt32)strlen(accountName) : 0, accountName,
-                                                      0, NULL,  // Any path
-                                                      0,  // Any port
-                                                      kSecProtocolTypeAny,
-                                                      kSecAuthenticationTypeAny,
-                                                      &passwordLength, &passwordData, &itemRef);
-    if (status == noErr) {
-      BOOL success = NO;
-      *password = [[NSString alloc] initWithBytes:passwordData length:passwordLength encoding:NSUTF8StringEncoding];
-      if (accountName == NULL) {
-        UInt32 tag = kSecAccountItemAttr;
-        UInt32 format = CSSM_DB_ATTRIBUTE_FORMAT_STRING;
-        SecKeychainAttributeInfo info = {1, &tag, &format};
-        SecKeychainAttributeList* attributes;
-        status = SecKeychainItemCopyAttributesAndData(itemRef, &info, NULL, &attributes, NULL, NULL);
-        if (status == noErr) {
-          XLOG_DEBUG_CHECK(attributes->count == 1);
-          XLOG_DEBUG_CHECK(attributes->attr[0].tag == kSecAccountItemAttr);
-          *username = [[NSString alloc] initWithBytes:attributes->attr[0].data length:attributes->attr[0].length encoding:NSUTF8StringEncoding];
-          success = YES;
-          SecKeychainItemFreeAttributesAndData(attributes, NULL);
-        } else {
-          XLOG_ERROR(@"SecKeychainItemCopyAttributesAndData() returned error %i", status);
-        }
-      } else {
-        success = YES;
-      }
-      SecKeychainItemFreeContent(NULL, passwordData);
-      CFRelease(itemRef);
-      if (success) {
-        return YES;
-      }
-    } else if (status != errSecItemNotFound) {
-      XLOG_ERROR(@"SecKeychainFindInternetPassword() returned error %i", status);
-    }
-  } else {
-    XLOG_WARNING(@"Unable to extract hostname from remote URL: %@", url);
-  }
-  return NO;
-}
-
-+ (void)savePlainTextAuthenticationToKeychainForURL:(NSURL*)url withUsername:(NSString*)username password:(NSString*)password {
-  SecProtocolType type;
-  if ([url.scheme isEqualToString:@"http"]) {
-    type = kSecProtocolTypeHTTP;
-  } else if ([url.scheme isEqualToString:@"https"]) {
-    type = kSecProtocolTypeHTTPS;
-  } else {
-    XLOG_DEBUG_UNREACHABLE();
-    return;
-  }
-  const char* serverName = url.host.UTF8String;
-  const char* accountName = username.UTF8String;
-  const char* accountPassword = password.UTF8String;
-  SecKeychainSetUserInteractionAllowed(true);  // Ignore errors
-  OSStatus status = SecKeychainAddInternetPassword(NULL,
-                                                   (UInt32)strlen(serverName), serverName,
-                                                   0, NULL,  // Any security domain
-                                                   accountName ? (UInt32)strlen(accountName) : 0, accountName,
-                                                   0, NULL,  // Any path
-                                                   0,  // Any port
-                                                   type,
-                                                   kSecAuthenticationTypeAny,
-                                                   (UInt32)strlen(accountPassword), accountPassword, NULL);
-  if (status != noErr) {
-    XLOG_ERROR(@"SecKeychainAddInternetPassword() returned error %i", status);
-  } else {
-    XLOG_VERBOSE(@"Successfully saved authentication in Keychain");
-  }
 }
 
 - (void)_setDocumentWindowModeID:(NSArray*)arguments {
@@ -702,49 +614,6 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
   if (action) {
     [NSApp sendAction:NSSelectorFromString(action) to:self from:nil];
   }
-}
-
-#pragma mark - GCRepositoryDelegate
-
-- (void)repository:(GCRepository*)repository willStartTransferWithURL:(NSURL*)url {
-  _authenticationUseKeychain = YES;
-  _authenticationURL = nil;
-  _authenticationUsername = nil;
-  _authenticationPassword = nil;
-}
-
-- (BOOL)repository:(GCRepository*)repository requiresPlainTextAuthenticationForURL:(NSURL*)url user:(NSString*)user username:(NSString**)username password:(NSString**)password {
-  if (_authenticationUseKeychain) {
-    _authenticationUseKeychain = NO;
-    if ([self.class loadPlainTextAuthenticationFormKeychainForURL:url user:user username:username password:password allowInteraction:YES]) {
-      return YES;
-    }
-  } else {
-    XLOG_VERBOSE(@"Skipping Keychain lookup for repeated authentication failures");
-  }
-
-  _authenticationURLTextField.stringValue = url.absoluteString;
-  _authenticationNameTextField.stringValue = *username ? *username : @"";
-  _authenticationPasswordTextField.stringValue = @"";
-  [_authenticationWindow makeFirstResponder:(*username ? _authenticationPasswordTextField : _authenticationNameTextField)];
-  if ([NSApp runModalForWindow:_authenticationWindow] && _authenticationNameTextField.stringValue.length && _authenticationPasswordTextField.stringValue.length) {
-    _authenticationURL = url;
-    _authenticationUsername = [_authenticationNameTextField.stringValue copy];
-    _authenticationPassword = [_authenticationPasswordTextField.stringValue copy];
-    *username = _authenticationNameTextField.stringValue;
-    *password = _authenticationPasswordTextField.stringValue;
-    return YES;
-  }
-  return NO;
-}
-
-- (void)repository:(GCRepository*)repository didFinishTransferWithURL:(NSURL*)url success:(BOOL)success {
-  if (success && _authenticationURL && _authenticationUsername && _authenticationPassword) {
-    [self.class savePlainTextAuthenticationToKeychainForURL:_authenticationURL withUsername:_authenticationUsername password:_authenticationPassword];
-  }
-  _authenticationURL = nil;
-  _authenticationUsername = nil;
-  _authenticationPassword = nil;
 }
 
 #pragma mark - SUUpdaterDelegate

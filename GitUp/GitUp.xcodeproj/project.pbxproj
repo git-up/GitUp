@@ -7,8 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0A0C5ACB23720BAE000D84A1 /* KeychainAccessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A0C5ACA23720BAE000D84A1 /* KeychainAccessor.m */; };
 		0A0D211B23579888003A2B5F /* AboutWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A0D211723579887003A2B5F /* AboutWindowController.m */; };
 		0A2BBECB235F9B2400912B65 /* AboutWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A2BBEC9235F9B2400912B65 /* AboutWindowController.xib */; };
+		0A2F488F23683DC90072C6FB /* AuthenticationWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A2F488E23683DC90072C6FB /* AuthenticationWindowController.m */; };
+		0A2F489223683DD60072C6FB /* AuthenticationWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A2F489023683DD60072C6FB /* AuthenticationWindowController.xib */; };
 		0A3388BC2353BD630022528D /* WelcomeWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A3388BA2353BD630022528D /* WelcomeWindowController.xib */; };
 		0AD4625B232711B000BE28D1 /* WelcomeWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AD4625A232711B000BE28D1 /* WelcomeWindowController.m */; };
 		0AE7F5F12312C1B000B06050 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0AE7F5ED2312C1B000B06050 /* InfoPlist.strings */; };
@@ -111,9 +114,14 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0A0C5AC923720BAE000D84A1 /* KeychainAccessor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KeychainAccessor.h; sourceTree = "<group>"; };
+		0A0C5ACA23720BAE000D84A1 /* KeychainAccessor.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KeychainAccessor.m; sourceTree = "<group>"; };
 		0A0D211723579887003A2B5F /* AboutWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AboutWindowController.m; sourceTree = "<group>"; };
 		0A0D211A23579887003A2B5F /* AboutWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutWindowController.h; sourceTree = "<group>"; };
 		0A2BBECA235F9B2400912B65 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/AboutWindowController.xib; sourceTree = "<group>"; };
+		0A2F488B23683DC90072C6FB /* AuthenticationWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AuthenticationWindowController.h; sourceTree = "<group>"; };
+		0A2F488E23683DC90072C6FB /* AuthenticationWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AuthenticationWindowController.m; sourceTree = "<group>"; };
+		0A2F489123683DD60072C6FB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/AuthenticationWindowController.xib; sourceTree = "<group>"; };
 		0A3388BB2353BD630022528D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/WelcomeWindowController.xib; sourceTree = "<group>"; };
 		0AD46259232711B000BE28D1 /* WelcomeWindowController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WelcomeWindowController.h; sourceTree = "<group>"; };
 		0AD4625A232711B000BE28D1 /* WelcomeWindowController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WelcomeWindowController.m; sourceTree = "<group>"; };
@@ -289,9 +297,14 @@
 				0A0D211A23579887003A2B5F /* AboutWindowController.h */,
 				0A0D211723579887003A2B5F /* AboutWindowController.m */,
 				0A2BBEC9235F9B2400912B65 /* AboutWindowController.xib */,
+				0A2F488B23683DC90072C6FB /* AuthenticationWindowController.h */,
+				0A2F488E23683DC90072C6FB /* AuthenticationWindowController.m */,
+				0A2F489023683DD60072C6FB /* AuthenticationWindowController.xib */,
 				0AD46259232711B000BE28D1 /* WelcomeWindowController.h */,
 				0AD4625A232711B000BE28D1 /* WelcomeWindowController.m */,
 				0A3388BA2353BD630022528D /* WelcomeWindowController.xib */,
+				0A0C5AC923720BAE000D84A1 /* KeychainAccessor.h */,
+				0A0C5ACA23720BAE000D84A1 /* KeychainAccessor.m */,
 			);
 			path = Application;
 			sourceTree = "<group>";
@@ -424,6 +437,7 @@
 				0AE7F5F12312C1B000B06050 /* InfoPlist.strings in Resources */,
 				E2A5BE701A814970008DD47F /* Localizable.strings in Resources */,
 				E2C338BA19F8562F00063D95 /* Document.xib in Resources */,
+				0A2F489223683DD60072C6FB /* AuthenticationWindowController.xib in Resources */,
 				E2C338BF19F8562F00063D95 /* MainMenu.xib in Resources */,
 				E267E2741B84E42A00BAB377 /* Help.plist in Resources */,
 			);
@@ -453,6 +467,8 @@
 				0AD4625B232711B000BE28D1 /* WelcomeWindowController.m in Sources */,
 				0A0D211B23579888003A2B5F /* AboutWindowController.m in Sources */,
 				31CD50E3203E2E2800360B3A /* ToolbarItemWrapperView.m in Sources */,
+				0A2F488F23683DC90072C6FB /* AuthenticationWindowController.m in Sources */,
+				0A0C5ACB23720BAE000D84A1 /* KeychainAccessor.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -478,6 +494,14 @@
 				0A2BBECA235F9B2400912B65 /* Base */,
 			);
 			name = AboutWindowController.xib;
+			sourceTree = "<group>";
+		};
+		0A2F489023683DD60072C6FB /* AuthenticationWindowController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0A2F489123683DD60072C6FB /* Base */,
+			);
+			name = AuthenticationWindowController.xib;
 			sourceTree = "<group>";
 		};
 		0A3388BA2353BD630022528D /* WelcomeWindowController.xib */ = {

@@ -16,8 +16,11 @@
 #import "Document.h"
 #import "WindowController.h"
 #import "Common.h"
-#import "AppDelegate.h"
 
+#import "KeychainAccessor.h"
+#import "AuthenticationWindowController.h"
+
+#import <GitUpKit/GitUpKit.h>
 #import <GitUpKit/XLFacilityMacros.h>
 
 #define kWindowModeString_Map @"map"
@@ -49,6 +52,7 @@
 #define kMaxProgressRefreshRate 10.0  // Hz
 
 @interface Document () <NSToolbarDelegate, NSTextFieldDelegate, GCLiveRepositoryDelegate, GIWindowControllerDelegate, GIMapViewControllerDelegate, GISnapshotListViewControllerDelegate, GIUnifiedReflogViewControllerDelegate, GICommitListViewControllerDelegate, GICommitRewriterViewControllerDelegate, GICommitSplitterViewControllerDelegate, GIConflictResolverViewControllerDelegate>
+@property (nonatomic, strong) AuthenticationWindowController *authenticationWindowController;
 @end
 
 static NSDictionary* _helpPlist = nil;
@@ -123,6 +127,15 @@ static inline WindowModeID _WindowModeIDFromString(NSString* mode) {
   BOOL _abortIndexing;
 }
 
+#pragma mark - Properties
+- (AuthenticationWindowController *)authenticationWindowController {
+  if (!_authenticationWindowController) {
+    _authenticationWindowController = [[AuthenticationWindowController alloc] init];
+  }
+  return _authenticationWindowController;
+}
+
+#pragma mark - Initialize
 + (void)initialize {
   NSString* path = [[NSBundle mainBundle] pathForResource:@"Help" ofType:@"plist"];
   if (path) {
@@ -1196,7 +1209,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 #pragma mark - GCRepositoryDelegate
 
 - (void)repository:(GCRepository*)repository willStartTransferWithURL:(NSURL*)url {
-  [[AppDelegate sharedDelegate] repository:repository willStartTransferWithURL:url];  // Forward to AppDelegate
+  [self.authenticationWindowController repository:repository willStartTransferWithURL:url];  // Forward to AuthenticationWindowController
 
   _infoTextField1.hidden = YES;
   _infoTextField2.hidden = YES;
@@ -1209,7 +1222,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 }
 
 - (BOOL)repository:(GCRepository*)repository requiresPlainTextAuthenticationForURL:(NSURL*)url user:(NSString*)user username:(NSString**)username password:(NSString**)password {
-  return [[AppDelegate sharedDelegate] repository:repository requiresPlainTextAuthenticationForURL:url user:user username:username password:password];  // Forward to AppDelegate
+  return [self.authenticationWindowController repository:repository requiresPlainTextAuthenticationForURL:url user:user username:username password:password];  // Forward to AuthenticationWindowController
 }
 
 - (void)repository:(GCRepository*)repository updateTransferProgress:(float)progress transferredBytes:(NSUInteger)bytes {
@@ -1226,7 +1239,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
   _infoTextField1.hidden = NO;
   _infoTextField2.hidden = NO;
 
-  [[AppDelegate sharedDelegate] repository:repository didFinishTransferWithURL:url success:success];  // Forward to AppDelegate
+  [self.authenticationWindowController repository:repository didFinishTransferWithURL:url success:success];  // Forward to AuthenticationWindowController
 }
 
 #pragma mark - GCLiveRepositoryDelegate
@@ -1885,7 +1898,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 }
 
 + (BOOL)repository:(GCRepository*)repository requiresPlainTextAuthenticationForURL:(NSURL*)url user:(NSString*)user username:(NSString**)username password:(NSString**)password {
-  return [[AppDelegate class] loadPlainTextAuthenticationFormKeychainForURL:url user:user username:username password:password allowInteraction:NO];
+  return [KeychainAccessor loadPlainTextAuthenticationFormKeychainForURL:url user:user username:username password:password allowInteraction:NO];
 }
 
 - (IBAction)checkForChanges:(id)sender {
