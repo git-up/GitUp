@@ -13,11 +13,7 @@
 @end
 
 @implementation CloneWindowControllerResult
-- (instancetype)initWithRepositoryURL:(NSURL *)url directoryPath:(NSString *)path recursive:(BOOL)recursive {
-  if (url == nil || path == nil) {
-    return nil;
-  }
-  
+- (instancetype)initWithRepositoryURL:(NSURL *)url directoryPath:(NSString *)path recursive:(BOOL)recursive {  
   if ((self = [super init])) {
     self.repositoryURL = url;
     self.directoryPath = path;
