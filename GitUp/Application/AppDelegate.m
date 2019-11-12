@@ -30,6 +30,7 @@
 #import "GARawTracker.h"
 
 #import "AboutWindowController.h"
+#import "CloneWindowController.h"
 #import "WelcomeWindowController.h"
 
 #define __ENABLE_SUDDEN_TERMINATION__ 1
@@ -44,6 +45,7 @@
 
 @interface AppDelegate () <NSUserNotificationCenterDelegate, SUUpdaterDelegate>
 @property(nonatomic, strong) AboutWindowController *aboutWindowController;
+@property(nonatomic, strong) CloneWindowController *cloneWindowController;
 @property(nonatomic, strong) WelcomeWindowController *welcomeWindowController;
 @end
 
@@ -61,6 +63,13 @@
     _aboutWindowController = [[AboutWindowController alloc] init];
   }
   return _aboutWindowController;
+}
+
+- (CloneWindowController *)cloneWindowController {
+  if (!_cloneWindowController) {
+    _cloneWindowController = [[CloneWindowController alloc] init];
+  }
+  return _cloneWindowController;
 }
 
 - (WelcomeWindowController *)welcomeWindowController {
@@ -506,41 +515,42 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
 }
 
 - (void)_cloneRepositoryFromURLString:(NSString*)urlString {
-  _cloneURLTextField.stringValue = urlString;
-  _cloneRecursiveButton.state = NSOnState;
-  if ([NSApp runModalForWindow:_cloneWindow] && _cloneURLTextField.stringValue.length) {
-    NSURL* url = GCURLFromGitURL(_cloneURLTextField.stringValue);
-    if (url) {
-      NSString* name = [url.path.lastPathComponent stringByDeletingPathExtension];
-      NSSavePanel* savePanel = [NSSavePanel savePanel];
-      savePanel.title = NSLocalizedString(@"Clone Repository", nil);
-      savePanel.prompt = NSLocalizedString(@"Clone", nil);
-      savePanel.nameFieldLabel = NSLocalizedString(@"Name:", nil);
-      savePanel.nameFieldStringValue = name ? name : @"";
-      savePanel.showsTagField = NO;
-      if ([savePanel runModal] == NSFileHandlingPanelOKButton) {
-        NSString* path = savePanel.URL.path;
-        NSError* error;
-        if (![[NSFileManager defaultManager] fileExistsAtPath:path followLastSymlink:NO] || [[NSFileManager defaultManager] moveItemAtPathToTrash:path error:&error]) {
-          GCRepository* repository = [[GCRepository alloc] initWithNewLocalRepository:path bare:NO error:&error];
-          if (repository) {
-            if ([repository addRemoteWithName:@"origin" url:url error:&error]) {
-              [self _openRepositoryWithURL:[NSURL fileURLWithPath:repository.workingDirectoryPath] withCloneMode:(_cloneRecursiveButton.state ? kCloneMode_Recursive : kCloneMode_Default)windowModeID:NSNotFound];
-            } else {
-              [NSApp presentError:error];
-              [[NSFileManager defaultManager] removeItemAtPath:path error:NULL];  // Ignore errors
-            }
-          } else {
-            [NSApp presentError:error];
-          }
-        } else {
-          [NSApp presentError:error];
-        }
-      }
-    } else {
+  [self.cloneWindowController runModalForURL:urlString completion:^(CloneWindowControllerResult * _Nonnull result) {
+    if (result.invalidRepository) {
       [NSApp presentError:MAKE_ERROR(@"Invalid Git repository URL")];
+      return;
     }
-  }
+    
+    if (result.emptyDirectoryPath) {
+      return;
+    }
+    
+    NSURL* url = result.repositoryURL;
+    NSString* path = result.directoryPath;
+    CloneMode cloneMode = result.recursive ? kCloneMode_Recursive : kCloneMode_Default;
+    NSError* error;
+    
+    BOOL fileDoesntExistOrEvictedToTrash = ![[NSFileManager defaultManager] fileExistsAtPath:path followLastSymlink:NO] || [[NSFileManager defaultManager] moveItemAtPathToTrash:path error:&error];
+    
+    if (!fileDoesntExistOrEvictedToTrash) {
+      [NSApp presentError:error];
+      return;
+    }
+    
+    GCRepository* repository = [[GCRepository alloc] initWithNewLocalRepository:path bare:NO error:&error];
+    if (!repository) {
+      [NSApp presentError:error];
+      return;
+    }
+    
+    if ([repository addRemoteWithName:@"origin" url:url error:&error]) {
+      [self _openRepositoryWithURL:[NSURL fileURLWithPath:repository.workingDirectoryPath] withCloneMode:cloneMode windowModeID:NSNotFound];
+    } else {
+      [NSApp presentError:error];
+      [[NSFileManager defaultManager] removeItemAtPath:path error:NULL];  // Ignore errors
+    }
+
+  }];
 }
 
 - (IBAction)cloneRepository:(id)sender {
