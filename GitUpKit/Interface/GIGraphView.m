@@ -867,13 +867,7 @@ static inline CGFloat _SquareDistanceFromPointToLine(CGFloat x0, CGFloat y0, CGF
     visible = YES;
   }
 
-  BOOL shouldDraw = visible && ^BOOL {
-    CGRect boundingBox = CGContextGetPathBoundingBox(context);
-    boundingBox.size.width = fmax(boundingBox.size.width, 1);
-    boundingBox.size.height = fmax(boundingBox.size.height, 1);
-    return [self needsToDrawRect:boundingBox];
-  }();
-
+  BOOL shouldDraw = visible && [self needsToDrawRect:CGRectInset(CGContextGetPathBoundingBox(context), -kMainLineWidth, -kMainLineWidth)];
   if (shouldDraw) {
     XLOG_DEBUG_CHECK(!line.virtual || [[(GINode*)line.nodes[0] layer] index] == 0);
     CGContextSaveGState(context);
