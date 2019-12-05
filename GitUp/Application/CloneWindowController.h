@@ -12,10 +12,10 @@ NS_ASSUME_NONNULL_BEGIN
 @interface CloneWindowControllerResult : NSObject
 @property (nonatomic, copy) NSURL *repositoryURL;
 @property (nonatomic, copy) NSString *directoryPath;
-@property (nonatomic, assign) BOOL recursive;
+@property (nonatomic) BOOL recursive;
 
-@property (nonatomic, assign, readonly) BOOL invalidRepository;
-@property (nonatomic, assign, readonly) BOOL emptyDirectoryPath;
+@property (nonatomic, readonly) BOOL invalidRepository;
+@property (nonatomic, readonly) BOOL emptyDirectoryPath;
 @end
 
 @interface CloneWindowController : NSWindowController

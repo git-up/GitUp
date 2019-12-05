@@ -34,8 +34,8 @@
 @interface CloneWindowController ()
 @property(nonatomic, weak) IBOutlet NSTextField* urlTextField;
 @property(nonatomic, weak) IBOutlet NSButton* cloneRecursiveButton;
-@property (nonatomic, assign, readonly) BOOL urlExists;
-@property (nonatomic, assign, readonly) BOOL recursive;
+@property(nonatomic, readonly) BOOL urlExists;
+@property(nonatomic, readonly) BOOL recursive;
 @end
 
 @implementation CloneWindowController
@@ -84,13 +84,11 @@
       if ([savePanel runModal] == NSFileHandlingPanelOKButton) {
         NSString *path = savePanel.URL.path;
         completion([[CloneWindowControllerResult alloc] initWithRepositoryURL:url directoryPath:path recursive:self.recursive]);
-      }
-      else {
+      } else {
         // empty directory path or cancel button pressed.
         completion([[CloneWindowControllerResult alloc] initWithRepositoryURL:url directoryPath:nil recursive:self.recursive]);
       }
-    }
-    else {
+    } else {
       // invalid repository
       completion([[CloneWindowControllerResult alloc] initWithRepositoryURL:url directoryPath:nil recursive:self.recursive]);
     }
