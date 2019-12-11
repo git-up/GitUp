@@ -31,13 +31,12 @@
 
 #import "AboutWindowController.h"
 #import "CloneWindowController.h"
+#import "PreferencesWindowController.h"
 #import "WelcomeWindowController.h"
 
 #define __ENABLE_SUDDEN_TERMINATION__ 1
 
 #define kNotificationUserInfoKey_Action @"action"  // NSString
-
-#define kPreferencePaneIdentifier_General @"general"
 
 #define kInstallerName @"install.sh"
 #define kToolName @"gitup"
@@ -46,6 +45,7 @@
 @interface AppDelegate () <NSUserNotificationCenterDelegate, SUUpdaterDelegate>
 @property(nonatomic, strong) AboutWindowController *aboutWindowController;
 @property(nonatomic, strong) CloneWindowController *cloneWindowController;
+@property(nonatomic, strong) PreferencesWindowController *preferencesWindowController;
 @property(nonatomic, strong) WelcomeWindowController *welcomeWindowController;
 @end
 
@@ -58,6 +58,7 @@
 }
 
 #pragma mark - Properties
+
 - (AboutWindowController *)aboutWindowController {
   if (!_aboutWindowController) {
     _aboutWindowController = [[AboutWindowController alloc] init];
@@ -70,6 +71,24 @@
     _cloneWindowController = [[CloneWindowController alloc] init];
   }
   return _cloneWindowController;
+}
+
+- (void)didChangeReleaseChannel:(BOOL)didChange {
+  if (didChange) {
+    _manualCheck = NO;
+    [_updater checkForUpdatesInBackground];
+  }
+}
+
+- (PreferencesWindowController *)preferencesWindowController {
+  if (!_preferencesWindowController) {
+    _preferencesWindowController = [[PreferencesWindowController alloc] init];
+    __weak typeof(self) weakSelf = self;
+    _preferencesWindowController.didChangeReleaseChannel = ^(BOOL didChange) {
+      [weakSelf didChangeReleaseChannel:didChange];
+    };
+  }
+  return _preferencesWindowController;
 }
 
 - (WelcomeWindowController *)welcomeWindowController {
@@ -93,12 +112,12 @@
     GICommitMessageViewUserDefaultKey_ShowInvisibleCharacters : @(YES),
     GICommitMessageViewUserDefaultKey_ShowMargins : @(YES),
     GICommitMessageViewUserDefaultKey_EnableSpellChecking : @(YES),
-    kUserDefaultsKey_ReleaseChannel : kReleaseChannel_Stable,
+    kUserDefaultsKey_ReleaseChannel : PreferencesWindowController_ReleaseChannel_Stable,
     kUserDefaultsKey_CheckInterval : @(15 * 60),
     kUserDefaultsKey_FirstLaunch : @(YES),
     kUserDefaultsKey_DiffWhitespaceMode : @(kGCLiveRepositoryDiffWhitespaceMode_Normal),
     kUserDefaultsKey_ShowWelcomeWindow : @(YES),
-    kUserDefaultsKey_Theme : kTheme_SystemPreference,
+    kUserDefaultsKey_Theme : PreferencesWindowController_Theme_SystemPreference,
   };
   [[NSUserDefaults standardUserDefaults] registerDefaults:defaults];
 }
@@ -137,50 +156,8 @@
   [self _openRepositoryWithURL:url withCloneMode:kCloneMode_None windowModeID:NSNotFound];
 }
 
-- (void)awakeFromNib {
-
-  _preferencesToolbar.selectedItemIdentifier = kPreferencePaneIdentifier_General;
-  [self selectPreferencePane:nil];
-
-  [_channelPopUpButton.menu removeAllItems];
-  for (NSString* string in @[ kReleaseChannel_Stable, kReleaseChannel_Continuous ]) {
-    NSMenuItem* item = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(string, nil) action:NULL keyEquivalent:@""];
-    item.representedObject = string;
-    [_channelPopUpButton.menu addItem:item];
-  }
-
-  NSString* theme = [[NSUserDefaults standardUserDefaults] stringForKey:kUserDefaultsKey_Theme];
-  [self _applyTheme:theme];
-  [_themePopUpButton.menu removeAllItems];
-  for (NSString* string in [self _themePreferences]) {
-    NSMenuItem* item = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(string, nil) action:NULL keyEquivalent:@""];
-    item.representedObject = string;
-    [_themePopUpButton.menu addItem:item];
-  }
-}
-
 - (void)handleDocumentCountChanged {
   [self.welcomeWindowController handleDocumentCountChanged];
-}
-
-- (void)_updatePreferencePanel {
-  NSString* channel = [[NSUserDefaults standardUserDefaults] stringForKey:kUserDefaultsKey_ReleaseChannel];
-  for (NSMenuItem* item in _channelPopUpButton.menu.itemArray) {
-    if ([item.representedObject isEqualToString:channel]) {
-      [_channelPopUpButton selectItem:item];
-      break;
-    }
-  }
-}
-
-- (void)_updateThemePopUpButton {
-  NSString* theme = [[NSUserDefaults standardUserDefaults] stringForKey:kUserDefaultsKey_Theme];
-  for (NSMenuItem* item in _themePopUpButton.menu.itemArray) {
-    if ([item.representedObject isEqualToString:theme]) {
-      [_themePopUpButton selectItem:item];
-      break;
-    }
-  }
 }
 
 - (void)_showNotificationWithTitle:(NSString*)title action:(SEL)action message:(NSString*)format, ... NS_FORMAT_FUNCTION(3, 4) {
@@ -196,17 +173,6 @@
   notification.informativeText = string;
 
   [[NSUserNotificationCenter defaultUserNotificationCenter] deliverNotification:notification];
-}
-
-#pragma mark - Loading Xibs
-- (id)_loadWindowFromBundleXibWithName:(NSString *)name expectedClass:(Class)class {
-  NSBundle *mainBundle = [NSBundle mainBundle];
-  NSArray *objects = @[];
-  [mainBundle loadNibNamed:name owner:self topLevelObjects:&objects];
-  NSArray *filteredObjects = [objects filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(id  _Nullable evaluatedObject, NSDictionary<NSString *,id> * _Nullable bindings) {
-    return [evaluatedObject isKindOfClass:class];
-  }]];
-  return filteredObjects.firstObject;
 }
 
 #pragma mark - NSApplicationDelegate
@@ -247,6 +213,9 @@
   }
 #endif
 
+  // Locate installed apps.
+  [GILaunchServicesLocator setup];
+  
   // Initialize user notification center
   [[NSUserNotificationCenter defaultUserNotificationCenter] setDelegate:self];
 
@@ -302,8 +271,7 @@
   }
 
   // Load theme preference
-  NSString* theme = [[NSUserDefaults standardUserDefaults] stringForKey:kUserDefaultsKey_Theme];
-  [self _applyTheme:theme];
+  [PreferencesThemeService applySelectedTheme];
   
 #if __ENABLE_SUDDEN_TERMINATION__
   // Enable sudden termination
@@ -412,44 +380,6 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
   [[NSDocumentController sharedDocumentController] openDocument:sender];
 }
 
-- (IBAction)changeReleaseChannel:(id)sender {
-  NSString* oldChannel = [[NSUserDefaults standardUserDefaults] stringForKey:kUserDefaultsKey_ReleaseChannel];
-  NSString* newChannel = _channelPopUpButton.selectedItem.representedObject;
-  if (![newChannel isEqualToString:oldChannel]) {
-    [[NSUserDefaults standardUserDefaults] setObject:newChannel forKey:kUserDefaultsKey_ReleaseChannel];
-
-    _manualCheck = NO;
-    [_updater checkForUpdatesInBackground];
-  }
-}
-
-- (NSArray*)_themePreferences {
-  return @[ kTheme_SystemPreference, kTheme_Dark, kTheme_Light ];
-}
-
-- (void)_applyTheme:(NSString*)theme {
-  if (@available(macOS 10.14, *)) {
-    NSInteger index = [[self _themePreferences] indexOfObject:theme];
-    switch (index) {
-      case 0:
-        NSApp.appearance = nil;
-        break;
-      case 1:
-        NSApp.appearance = [NSAppearance appearanceNamed:NSAppearanceNameDarkAqua];
-        break;
-      case 2:
-        NSApp.appearance = [NSAppearance appearanceNamed:NSAppearanceNameAqua];
-        break;
-    }
-  }
-  [[NSUserDefaults standardUserDefaults] setObject:theme forKey:kUserDefaultsKey_Theme];
-}
-
-- (IBAction)changeTheme:(id)sender {
-  NSString* theme = _themePopUpButton.selectedItem.representedObject;
-  [self _applyTheme:theme];
-}
-
 - (IBAction)viewWiki:(id)sender {
   [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:kURL_Wiki]];
 }
@@ -468,24 +398,7 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
 }
 
 - (IBAction)showPreferences:(id)sender {
-  [self _updatePreferencePanel];
-  [self _updateThemePopUpButton];
-  [_preferencesWindow makeKeyAndOrderFront:nil];
-}
-
-- (IBAction)selectPreferencePane:(id)sender {
-  [_preferencesTabView selectTabViewItemWithIdentifier:_preferencesToolbar.selectedItemIdentifier];
-  NSSize size = NSSizeFromString(_preferencesTabView.selectedTabViewItem.label);
-  NSRect rect = [_preferencesWindow contentRectForFrameRect:_preferencesWindow.frame];
-  if (sender) {
-    rect.origin.y += rect.size.height;
-  }
-  rect.size.width = size.width;
-  rect.size.height = size.height;
-  if (sender) {
-    rect.origin.y -= rect.size.height;
-  }
-  [_preferencesWindow setFrame:[_preferencesWindow frameRectForContentRect:rect] display:YES animate:(sender ? YES : NO)];
+  [self.preferencesWindowController showWindow:nil];
 }
 
 - (IBAction)resetPreferences:(id)sender {
