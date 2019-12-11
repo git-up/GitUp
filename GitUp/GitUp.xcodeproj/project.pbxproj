@@ -285,9 +285,6 @@
 		E2C338AD19F8562F00063D95 /* Application */ = {
 			isa = PBXGroup;
 			children = (
-				0AC8525223A11F3700479160 /* PreferencesWindowController.xib */,
-				0AC8524D23A11F2F00479160 /* PreferencesWindowController.h */,
-				0AC8525023A11F2F00479160 /* PreferencesWindowController.m */,
 				E2C338B019F8562F00063D95 /* AppDelegate.h */,
 				E2C338B119F8562F00063D95 /* AppDelegate.m */,
 				E25EBCEA1AA3F8B700D3AF44 /* Application.xcassets */,
@@ -316,6 +313,9 @@
 				0A58CD76237B4F4B00C2BDD0 /* CloneWindowController.h */,
 				0A58CD73237B4F4B00C2BDD0 /* CloneWindowController.m */,
 				0A58CD78237B4F9600C2BDD0 /* CloneWindowController.xib */,
+				0AC8524D23A11F2F00479160 /* PreferencesWindowController.h */,
+				0AC8525023A11F2F00479160 /* PreferencesWindowController.m */,
+				0AC8525223A11F3700479160 /* PreferencesWindowController.xib */,
 				0AD46259232711B000BE28D1 /* WelcomeWindowController.h */,
 				0AD4625A232711B000BE28D1 /* WelcomeWindowController.m */,
 				0A3388BA2353BD630022528D /* WelcomeWindowController.xib */,
