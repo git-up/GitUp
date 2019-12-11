@@ -15,6 +15,8 @@
 		0A3388BC2353BD630022528D /* WelcomeWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A3388BA2353BD630022528D /* WelcomeWindowController.xib */; };
 		0A58CD77237B4F4B00C2BDD0 /* CloneWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A58CD73237B4F4B00C2BDD0 /* CloneWindowController.m */; };
 		0A58CD7A237B4F9600C2BDD0 /* CloneWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A58CD78237B4F9600C2BDD0 /* CloneWindowController.xib */; };
+		0AC8525123A11F2F00479160 /* PreferencesWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AC8525023A11F2F00479160 /* PreferencesWindowController.m */; };
+		0AC8525423A11F3700479160 /* PreferencesWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0AC8525223A11F3700479160 /* PreferencesWindowController.xib */; };
 		0AD4625B232711B000BE28D1 /* WelcomeWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AD4625A232711B000BE28D1 /* WelcomeWindowController.m */; };
 		0AE7F5F12312C1B000B06050 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0AE7F5ED2312C1B000B06050 /* InfoPlist.strings */; };
 		165C32B61B95739700D2F894 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 165C32B51B95739700D2F894 /* QuartzCore.framework */; };
@@ -128,6 +130,9 @@
 		0A58CD73237B4F4B00C2BDD0 /* CloneWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CloneWindowController.m; sourceTree = "<group>"; };
 		0A58CD76237B4F4B00C2BDD0 /* CloneWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CloneWindowController.h; sourceTree = "<group>"; };
 		0A58CD79237B4F9600C2BDD0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/CloneWindowController.xib; sourceTree = "<group>"; };
+		0AC8524D23A11F2F00479160 /* PreferencesWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreferencesWindowController.h; sourceTree = "<group>"; };
+		0AC8525023A11F2F00479160 /* PreferencesWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreferencesWindowController.m; sourceTree = "<group>"; };
+		0AC8525323A11F3700479160 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/PreferencesWindowController.xib; sourceTree = "<group>"; };
 		0AD46259232711B000BE28D1 /* WelcomeWindowController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WelcomeWindowController.h; sourceTree = "<group>"; };
 		0AD4625A232711B000BE28D1 /* WelcomeWindowController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WelcomeWindowController.m; sourceTree = "<group>"; };
 		0AE7F5EE2312C1B000B06050 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -280,6 +285,9 @@
 		E2C338AD19F8562F00063D95 /* Application */ = {
 			isa = PBXGroup;
 			children = (
+				0AC8525223A11F3700479160 /* PreferencesWindowController.xib */,
+				0AC8524D23A11F2F00479160 /* PreferencesWindowController.h */,
+				0AC8525023A11F2F00479160 /* PreferencesWindowController.m */,
 				E2C338B019F8562F00063D95 /* AppDelegate.h */,
 				E2C338B119F8562F00063D95 /* AppDelegate.m */,
 				E25EBCEA1AA3F8B700D3AF44 /* Application.xcassets */,
@@ -446,6 +454,7 @@
 				0AE7F5F12312C1B000B06050 /* InfoPlist.strings in Resources */,
 				E2A5BE701A814970008DD47F /* Localizable.strings in Resources */,
 				E2C338BA19F8562F00063D95 /* Document.xib in Resources */,
+				0AC8525423A11F3700479160 /* PreferencesWindowController.xib in Resources */,
 				0A2F489223683DD60072C6FB /* AuthenticationWindowController.xib in Resources */,
 				E2C338BF19F8562F00063D95 /* MainMenu.xib in Resources */,
 				E267E2741B84E42A00BAB377 /* Help.plist in Resources */,
@@ -476,6 +485,7 @@
 				E2C338B719F8562F00063D95 /* Document.m in Sources */,
 				0AD4625B232711B000BE28D1 /* WelcomeWindowController.m in Sources */,
 				0A0D211B23579888003A2B5F /* AboutWindowController.m in Sources */,
+				0AC8525123A11F2F00479160 /* PreferencesWindowController.m in Sources */,
 				31CD50E3203E2E2800360B3A /* ToolbarItemWrapperView.m in Sources */,
 				0A2F488F23683DC90072C6FB /* AuthenticationWindowController.m in Sources */,
 				0A0C5ACB23720BAE000D84A1 /* KeychainAccessor.m in Sources */,
@@ -528,6 +538,14 @@
 				0A58CD79237B4F9600C2BDD0 /* Base */,
 			);
 			name = CloneWindowController.xib;
+			sourceTree = "<group>";
+		};
+		0AC8525223A11F3700479160 /* PreferencesWindowController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0AC8525323A11F3700479160 /* Base */,
+			);
+			name = PreferencesWindowController.xib;
 			sourceTree = "<group>";
 		};
 		0AE7F5ED2312C1B000B06050 /* InfoPlist.strings */ = {
