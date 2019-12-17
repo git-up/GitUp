@@ -32,6 +32,12 @@
 @property(nonatomic, readonly, getter=isEmpty) BOOL empty;
 - (CGFloat)updateLayoutForWidth:(CGFloat)width;
 
+@property(nonatomic, readonly) CFDictionaryRef textAttributes;
+@property(nonatomic, readonly) CTLineRef addedLine;
+@property(nonatomic, readonly) CTLineRef deletedLine;
+@property(nonatomic, readonly) CGFloat lineHeight;
+@property(nonatomic, readonly) CGFloat lineDescent;
+
 @property(nonatomic, readonly) BOOL hasSelection;
 @property(nonatomic, readonly) BOOL hasSelectedText;
 @property(nonatomic, readonly) BOOL hasSelectedLines;

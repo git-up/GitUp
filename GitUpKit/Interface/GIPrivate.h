@@ -20,14 +20,6 @@
 
 #if __GI_HAS_APPKIT__
 
-extern CFDictionaryRef GIDiffViewAttributes;
-
-extern CTLineRef GIDiffViewAddedLine;
-extern CTLineRef GIDiffViewDeletedLine;
-
-extern CGFloat GIDiffViewLineHeight;
-extern CGFloat GIDiffViewLineDescent;
-
 extern const char* GIDiffViewMissingNewlinePlaceholder;
 
 #endif
