@@ -31,7 +31,7 @@
 @end
 
 @interface GIDiffFilesViewController : GIViewController
-@property(nonatomic, assign) id<GIDiffFilesViewControllerDelegate> delegate;
+@property(nonatomic, weak) id<GIDiffFilesViewControllerDelegate> delegate;
 @property(nonatomic) BOOL showsUntrackedAsAdded;  // Default is NO
 @property(nonatomic, copy) NSString* emptyLabel;
 @property(nonatomic) BOOL allowsMultipleSelection;  // Default is NO
@@ -40,6 +40,6 @@
 @property(nonatomic, readonly) NSDictionary* conflicts;
 - (void)setDeltas:(NSArray*)deltas usingConflicts:(NSDictionary*)conflicts;
 
-@property(nonatomic, assign) GCDiffDelta* selectedDelta;
-@property(nonatomic, assign) NSArray* selectedDeltas;
+@property(nonatomic, weak) GCDiffDelta* selectedDelta;
+@property(nonatomic, weak) NSArray* selectedDeltas;
 @end

@@ -161,7 +161,7 @@ static int _CaseInsensitiveUTF8Compare(void* context, int length1, const void* b
   } else {
     result = 0;
   }
-  return result;
+  return (int)result;
 }
 
 - (BOOL)_initializeDatabase:(NSString*)path error:(NSError**)error {

@@ -18,7 +18,7 @@
 @class GINode, GILine;
 
 @interface GIBranch : NSObject
-@property(nonatomic, readonly) GILine* mainLine;  // NOT RETAINED
+@property(nonatomic, weak, readonly) GILine* mainLine;  // NOT RETAINED
 
 // Computed properties
 @property(nonatomic, readonly) GINode* tipNode;

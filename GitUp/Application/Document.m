@@ -16,8 +16,11 @@
 #import "Document.h"
 #import "WindowController.h"
 #import "Common.h"
-#import "AppDelegate.h"
 
+#import "KeychainAccessor.h"
+#import "AuthenticationWindowController.h"
+
+#import <GitUpKit/GitUpKit.h>
 #import <GitUpKit/XLFacilityMacros.h>
 
 #define kWindowModeString_Map @"map"
@@ -49,6 +52,7 @@
 #define kMaxProgressRefreshRate 10.0  // Hz
 
 @interface Document () <NSToolbarDelegate, NSTextFieldDelegate, GCLiveRepositoryDelegate, GIWindowControllerDelegate, GIMapViewControllerDelegate, GISnapshotListViewControllerDelegate, GIUnifiedReflogViewControllerDelegate, GICommitListViewControllerDelegate, GICommitRewriterViewControllerDelegate, GICommitSplitterViewControllerDelegate, GIConflictResolverViewControllerDelegate>
+@property (nonatomic, strong) AuthenticationWindowController *authenticationWindowController;
 @end
 
 static NSDictionary* _helpPlist = nil;
@@ -123,6 +127,15 @@ static inline WindowModeID _WindowModeIDFromString(NSString* mode) {
   BOOL _abortIndexing;
 }
 
+#pragma mark - Properties
+- (AuthenticationWindowController *)authenticationWindowController {
+  if (!_authenticationWindowController) {
+    _authenticationWindowController = [[AuthenticationWindowController alloc] init];
+  }
+  return _authenticationWindowController;
+}
+
+#pragma mark - Initialize
 + (void)initialize {
   NSString* path = [[NSBundle mainBundle] pathForResource:@"Help" ofType:@"plist"];
   if (path) {
@@ -387,9 +400,7 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
 }
 
 // Override -updateChangeCount: which is trigged by NSUndoManager to do nothing and not mark document as updated
-- (void)updateChangeCount:(NSDocumentChangeType)change {
-  ;
-}
+- (void)updateChangeCount:(NSDocumentChangeType)change {}
 
 - (BOOL)presentError:(NSError*)error {
   if (error == nil) {
@@ -1198,7 +1209,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 #pragma mark - GCRepositoryDelegate
 
 - (void)repository:(GCRepository*)repository willStartTransferWithURL:(NSURL*)url {
-  [[AppDelegate sharedDelegate] repository:repository willStartTransferWithURL:url];  // Forward to AppDelegate
+  [self.authenticationWindowController repository:repository willStartTransferWithURL:url];  // Forward to AuthenticationWindowController
 
   _infoTextField1.hidden = YES;
   _infoTextField2.hidden = YES;
@@ -1211,7 +1222,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 }
 
 - (BOOL)repository:(GCRepository*)repository requiresPlainTextAuthenticationForURL:(NSURL*)url user:(NSString*)user username:(NSString**)username password:(NSString**)password {
-  return [[AppDelegate sharedDelegate] repository:repository requiresPlainTextAuthenticationForURL:url user:user username:username password:password];  // Forward to AppDelegate
+  return [self.authenticationWindowController repository:repository requiresPlainTextAuthenticationForURL:url user:user username:username password:password];  // Forward to AuthenticationWindowController
 }
 
 - (void)repository:(GCRepository*)repository updateTransferProgress:(float)progress transferredBytes:(NSUInteger)bytes {
@@ -1228,7 +1239,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
   _infoTextField1.hidden = NO;
   _infoTextField2.hidden = NO;
 
-  [[AppDelegate sharedDelegate] repository:repository didFinishTransferWithURL:url success:success];  // Forward to AppDelegate
+  [self.authenticationWindowController repository:repository didFinishTransferWithURL:url success:success];  // Forward to AuthenticationWindowController
 }
 
 #pragma mark - GCLiveRepositoryDelegate
@@ -1507,9 +1518,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 
 #pragma mark - GICommitViewControllerDelegate
 
-- (void)commitViewController:(GICommitViewController*)controller didCreateCommit:(GCCommit*)commit {
-  ;
-}
+- (void)commitViewController:(GICommitViewController*)controller didCreateCommit:(GCCommit*)commit {}
 
 #pragma mark - GICommitRewriterViewControllerDelegate
 
@@ -1629,7 +1638,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
     if ([_windowMode isEqualToString:kWindowModeString_Map_QuickView] || [_windowMode isEqualToString:kWindowModeString_Map_Diff] || [_windowMode isEqualToString:kWindowModeString_Map_Rewrite] || [_windowMode isEqualToString:kWindowModeString_Map_Config] || [_windowMode isEqualToString:kWindowModeString_Map_Resolve]) {
       return NO;
     }
-    [(NSMenuItem*)item setState:([(NSMenuItem*)item tag] == _WindowModeIDFromString(_windowMode) ? NSOnState : NSOffState)];
+    [(NSMenuItem*)item setState:([(NSMenuItem*)item tag] == (NSInteger)(_WindowModeIDFromString(_windowMode)) ? NSOnState : NSOffState)];
     return YES;
   }
 
@@ -1889,7 +1898,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 }
 
 + (BOOL)repository:(GCRepository*)repository requiresPlainTextAuthenticationForURL:(NSURL*)url user:(NSString*)user username:(NSString**)username password:(NSString**)password {
-  return [[AppDelegate class] loadPlainTextAuthenticationFormKeychainForURL:url user:user username:username password:password allowInteraction:NO];
+  return [KeychainAccessor loadPlainTextAuthenticationFormKeychainForURL:url user:user username:username password:password allowInteraction:NO];
 }
 
 - (IBAction)checkForChanges:(id)sender {
@@ -1965,8 +1974,87 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 // reset all permissions for particular bundle identifier.
 // $ tccutil reset All co.gitup.mac-debug
 
-- (IBAction)openInTerminal:(id)sender {
-  NSString* script = [NSString stringWithFormat:@"tell application \"Terminal\" to do script \"cd \\\"%@\\\"\"", _repository.workingDirectoryPath];
+- (NSString *)scriptForTerminalAppName:(NSString *)name {
+  if ([name isEqualToString:GIViewController_TerminalTool_Terminal]) {
+    return [NSString stringWithFormat:
+            @"""tell application \"%@\" \n"""
+            """reopen \n"""
+            """activate \n"""
+            """do script \"cd \\\"%@\\\"\" \n"""
+            """end tell \n""",
+            name, _repository.workingDirectoryPath];
+  }
+  /*
+   -- if application is running, we already have a window.
+   -- so, we create new window and write our command.
+   -- otherwise, we reopen application, activate it and
+    if application "iTerm" is running then
+      tell application "iTerm"
+        tell current session of (create window with default profile)
+          set command to "cd '~/GitUp'"
+          write text command
+        end tell
+        activate
+      end tell
+    else
+      tell application "iTerm"
+        reopen
+        activate -- bring to front and also set current window to fresh window
+        tell current session of current window
+          select -- give focus to current window to start typing in it.
+          set command to "cd '~/GitUp'"
+          write text command
+        end tell
+      end tell
+    end if
+   */
+  if ([name isEqualToString:GIViewController_TerminalTool_iTerm] || [name isEqualToString:GIViewController_TerminalTool_Terminal]) {
+    NSString *command = [NSString stringWithFormat:@"cd '%@'", _repository.workingDirectoryPath];
+    NSString *isRunningPhase = [NSString stringWithFormat:
+                                @"""tell application \"%@\" \n"""
+                                """tell current session of (create window with default profile) \n"""
+                                """set command to \"%@\" \n"""
+                                """write text command \n"""
+                                """end tell \n"""
+                                """activate \n"""
+                                """end tell \n""",
+                                name, command
+                                ];
+    NSString *isNotRunningPhase = [NSString stringWithFormat:
+                                   @"""tell application \"%@\" \n"""
+                                   """activate \n"""
+                                   """tell current session of current window \n"""
+                                   """select \n"""
+                                   """set command to \"%@\" \n"""
+                                   """write text command \n"""
+                                   """end tell \n"""
+                                   """end tell \n""",
+                                   name, command
+                                   ];
+    NSString *script = [NSString stringWithFormat:
+                        @"""if application \"%@\" is running then \n"""
+                        """ %@ \n"""
+                        """else \n"""
+                        """ %@ \n"""
+                        """end if \n""",
+                        name, isRunningPhase, isNotRunningPhase
+                        ];
+    return script;
+  }
+  return nil;
+}
+
+- (void)openInTerminalAppName:(NSString *)name {
+  NSString* script = [self scriptForTerminalAppName:name];
+
+  if (script == nil) {
+    NSUInteger code = 1000;
+    NSDictionary *userInfo = @{NSLocalizedDescriptionKey : NSLocalizedString(@"Error occured! Unsupported key in user defaults for Preferred terminal app is occured. Key is", nil)};
+    NSError *error = [NSError errorWithDomain:@"org.gitup.preferences.terminal" code:code userInfo:userInfo];
+    [self presentError:error];
+    return;
+  }
+
   NSDictionary *dictionary = nil;
   [[[NSAppleScript alloc] initWithSource:script] executeAndReturnError:&dictionary];
   if (dictionary != nil) {
@@ -1979,7 +2067,12 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
     NSError *error = [NSError errorWithDomain:@"com.apple.security.automation.appleEvents" code:code userInfo:userInfo];
     [self presentError:error];
   }
-  [[NSWorkspace sharedWorkspace] launchApplication:@"Terminal"];
+//  [[NSWorkspace sharedWorkspace] launchApplication:name];
+}
+
+- (IBAction)openInTerminal:(id)sender {
+  NSString *identifier = [[NSUserDefaults standardUserDefaults] stringForKey:GIViewController_TerminalTool];
+  [self openInTerminalAppName:identifier];
 }
 
 - (IBAction)dismissHelp:(id)sender {

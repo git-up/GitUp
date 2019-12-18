@@ -26,14 +26,12 @@
 #import "XLFacilityMacros.h"
 
 @interface GIView ()
-@property(nonatomic, assign) GIViewController* viewController;
+@property(nonatomic, weak) GIViewController* viewController;
 @end
 
 #define OVERRIDES_METHOD(m) (method_getImplementation(class_getInstanceMethod(self.class, @selector(m))) != method_getImplementation(class_getInstanceMethod([GIViewController class], @selector(m))))
 
-@implementation GIView {
-  __unsafe_unretained GIViewController* _viewController;  // This is required since redeclaring a read-only property as "assign" still makes it strong!
-}
+@implementation GIView
 
 - (void)resizeSubviewsWithOldSize:(NSSize)oldSize {
   [super resizeSubviewsWithOldSize:oldSize];

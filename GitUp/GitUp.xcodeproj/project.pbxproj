@@ -8,10 +8,19 @@
 
 /* Begin PBXBuildFile section */
 		0A01676A2330CABD0069961E /* ServicesProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A0167692330CABD0069961E /* ServicesProvider.m */; };
-		0AD4625B232711B000BE28D1 /* WelcomeWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AD4625A232711B000BE28D1 /* WelcomeWindow.m */; };
+		0A0C5ACB23720BAE000D84A1 /* KeychainAccessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A0C5ACA23720BAE000D84A1 /* KeychainAccessor.m */; };
+		0A0D211B23579888003A2B5F /* AboutWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A0D211723579887003A2B5F /* AboutWindowController.m */; };
+		0A2BBECB235F9B2400912B65 /* AboutWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A2BBEC9235F9B2400912B65 /* AboutWindowController.xib */; };
+		0A2F488F23683DC90072C6FB /* AuthenticationWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A2F488E23683DC90072C6FB /* AuthenticationWindowController.m */; };
+		0A2F489223683DD60072C6FB /* AuthenticationWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A2F489023683DD60072C6FB /* AuthenticationWindowController.xib */; };
+		0A3388BC2353BD630022528D /* WelcomeWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A3388BA2353BD630022528D /* WelcomeWindowController.xib */; };
+		0A58CD77237B4F4B00C2BDD0 /* CloneWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A58CD73237B4F4B00C2BDD0 /* CloneWindowController.m */; };
+		0A58CD7A237B4F9600C2BDD0 /* CloneWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A58CD78237B4F9600C2BDD0 /* CloneWindowController.xib */; };
+		0AD4625B232711B000BE28D1 /* WelcomeWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AD4625A232711B000BE28D1 /* WelcomeWindowController.m */; };
 		0AE7F5F12312C1B000B06050 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0AE7F5ED2312C1B000B06050 /* InfoPlist.strings */; };
 		165C32B61B95739700D2F894 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 165C32B51B95739700D2F894 /* QuartzCore.framework */; };
 		31CD50E3203E2E2800360B3A /* ToolbarItemWrapperView.m in Sources */ = {isa = PBXBuildFile; fileRef = 31CD50E2203E2E2800360B3A /* ToolbarItemWrapperView.m */; };
+		A53C6D0C1E61A9CF0070387E /* FontSizeTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = A53C6D0B1E61A9CF0070387E /* FontSizeTransformer.m */; };
 		E212A6DE1B92100E00F62B18 /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E212A6DD1B92100E00F62B18 /* libiconv.dylib */; };
 		E21739F71A5080DD00EC6777 /* DocumentController.m in Sources */ = {isa = PBXBuildFile; fileRef = E21739F61A5080DD00EC6777 /* DocumentController.m */; };
 		E21DCAEB1B253847006424E8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E21DCAEA1B253847006424E8 /* main.m */; };
@@ -111,12 +120,26 @@
 /* Begin PBXFileReference section */
 		0A0167682330CABD0069961E /* ServicesProvider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ServicesProvider.h; sourceTree = "<group>"; };
 		0A0167692330CABD0069961E /* ServicesProvider.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ServicesProvider.m; sourceTree = "<group>"; };
-		0AD46259232711B000BE28D1 /* WelcomeWindow.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WelcomeWindow.h; sourceTree = "<group>"; };
-		0AD4625A232711B000BE28D1 /* WelcomeWindow.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WelcomeWindow.m; sourceTree = "<group>"; };
+		0A0C5AC923720BAE000D84A1 /* KeychainAccessor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KeychainAccessor.h; sourceTree = "<group>"; };
+		0A0C5ACA23720BAE000D84A1 /* KeychainAccessor.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KeychainAccessor.m; sourceTree = "<group>"; };
+		0A0D211723579887003A2B5F /* AboutWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AboutWindowController.m; sourceTree = "<group>"; };
+		0A0D211A23579887003A2B5F /* AboutWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutWindowController.h; sourceTree = "<group>"; };
+		0A2BBECA235F9B2400912B65 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/AboutWindowController.xib; sourceTree = "<group>"; };
+		0A2F488B23683DC90072C6FB /* AuthenticationWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AuthenticationWindowController.h; sourceTree = "<group>"; };
+		0A2F488E23683DC90072C6FB /* AuthenticationWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AuthenticationWindowController.m; sourceTree = "<group>"; };
+		0A2F489123683DD60072C6FB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/AuthenticationWindowController.xib; sourceTree = "<group>"; };
+		0A3388BB2353BD630022528D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/WelcomeWindowController.xib; sourceTree = "<group>"; };
+		0A58CD73237B4F4B00C2BDD0 /* CloneWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CloneWindowController.m; sourceTree = "<group>"; };
+		0A58CD76237B4F4B00C2BDD0 /* CloneWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CloneWindowController.h; sourceTree = "<group>"; };
+		0A58CD79237B4F9600C2BDD0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/CloneWindowController.xib; sourceTree = "<group>"; };
+		0AD46259232711B000BE28D1 /* WelcomeWindowController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WelcomeWindowController.h; sourceTree = "<group>"; };
+		0AD4625A232711B000BE28D1 /* WelcomeWindowController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WelcomeWindowController.m; sourceTree = "<group>"; };
 		0AE7F5EE2312C1B000B06050 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		165C32B51B95739700D2F894 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		31CD50E1203E2E2800360B3A /* ToolbarItemWrapperView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ToolbarItemWrapperView.h; sourceTree = "<group>"; };
 		31CD50E2203E2E2800360B3A /* ToolbarItemWrapperView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ToolbarItemWrapperView.m; sourceTree = "<group>"; };
+		A53C6D0A1E61A9CF0070387E /* FontSizeTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FontSizeTransformer.h; sourceTree = "<group>"; };
+		A53C6D0B1E61A9CF0070387E /* FontSizeTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FontSizeTransformer.m; sourceTree = "<group>"; };
 		E212A6DD1B92100E00F62B18 /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = usr/lib/libiconv.dylib; sourceTree = SDKROOT; };
 		E21739F51A5080DD00EC6777 /* DocumentController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DocumentController.h; sourceTree = "<group>"; };
 		E21739F61A5080DD00EC6777 /* DocumentController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DocumentController.m; sourceTree = "<group>"; };
@@ -278,14 +301,28 @@
 				0AE7F5ED2312C1B000B06050 /* InfoPlist.strings */,
 				E2C338B319F8562F00063D95 /* main.m */,
 				E2C338BD19F8562F00063D95 /* MainMenu.xib */,
+				A53C6D0A1E61A9CF0070387E /* FontSizeTransformer.h */,
+				A53C6D0B1E61A9CF0070387E /* FontSizeTransformer.m */,
 				E2C5672B1A6D98BC00ECFE07 /* WindowController.h */,
 				E2C5672C1A6D98BC00ECFE07 /* WindowController.m */,
 				31CD50E1203E2E2800360B3A /* ToolbarItemWrapperView.h */,
 				31CD50E2203E2E2800360B3A /* ToolbarItemWrapperView.m */,
-				0AD46259232711B000BE28D1 /* WelcomeWindow.h */,
-				0AD4625A232711B000BE28D1 /* WelcomeWindow.m */,
 				0A0167682330CABD0069961E /* ServicesProvider.h */,
 				0A0167692330CABD0069961E /* ServicesProvider.m */,
+				0A0D211A23579887003A2B5F /* AboutWindowController.h */,
+				0A0D211723579887003A2B5F /* AboutWindowController.m */,
+				0A2BBEC9235F9B2400912B65 /* AboutWindowController.xib */,
+				0A2F488B23683DC90072C6FB /* AuthenticationWindowController.h */,
+				0A2F488E23683DC90072C6FB /* AuthenticationWindowController.m */,
+				0A2F489023683DD60072C6FB /* AuthenticationWindowController.xib */,
+				0A58CD76237B4F4B00C2BDD0 /* CloneWindowController.h */,
+				0A58CD73237B4F4B00C2BDD0 /* CloneWindowController.m */,
+				0A58CD78237B4F9600C2BDD0 /* CloneWindowController.xib */,
+				0AD46259232711B000BE28D1 /* WelcomeWindowController.h */,
+				0AD4625A232711B000BE28D1 /* WelcomeWindowController.m */,
+				0A3388BA2353BD630022528D /* WelcomeWindowController.xib */,
+				0A0C5AC923720BAE000D84A1 /* KeychainAccessor.h */,
+				0A0C5ACA23720BAE000D84A1 /* KeychainAccessor.m */,
 			);
 			path = Application;
 			sourceTree = "<group>";
@@ -413,9 +450,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				E25EBCEB1AA3F8B700D3AF44 /* Application.xcassets in Resources */,
+				0A58CD7A237B4F9600C2BDD0 /* CloneWindowController.xib in Resources */,
+				0A3388BC2353BD630022528D /* WelcomeWindowController.xib in Resources */,
+				0A2BBECB235F9B2400912B65 /* AboutWindowController.xib in Resources */,
 				0AE7F5F12312C1B000B06050 /* InfoPlist.strings in Resources */,
 				E2A5BE701A814970008DD47F /* Localizable.strings in Resources */,
 				E2C338BA19F8562F00063D95 /* Document.xib in Resources */,
+				0A2F489223683DD60072C6FB /* AuthenticationWindowController.xib in Resources */,
 				E2C338BF19F8562F00063D95 /* MainMenu.xib in Resources */,
 				E267E2741B84E42A00BAB377 /* Help.plist in Resources */,
 			);
@@ -441,10 +482,15 @@
 				E2E3C9A01D771E7600AA9A62 /* GARawTracker.m in Sources */,
 				E2C338B419F8562F00063D95 /* main.m in Sources */,
 				E2C5672D1A6D98BC00ECFE07 /* WindowController.m in Sources */,
+				A53C6D0C1E61A9CF0070387E /* FontSizeTransformer.m in Sources */,
 				E2C338B219F8562F00063D95 /* AppDelegate.m in Sources */,
+				0A58CD77237B4F4B00C2BDD0 /* CloneWindowController.m in Sources */,
 				E2C338B719F8562F00063D95 /* Document.m in Sources */,
-				0AD4625B232711B000BE28D1 /* WelcomeWindow.m in Sources */,
+				0AD4625B232711B000BE28D1 /* WelcomeWindowController.m in Sources */,
+				0A0D211B23579888003A2B5F /* AboutWindowController.m in Sources */,
 				31CD50E3203E2E2800360B3A /* ToolbarItemWrapperView.m in Sources */,
+				0A2F488F23683DC90072C6FB /* AuthenticationWindowController.m in Sources */,
+				0A0C5ACB23720BAE000D84A1 /* KeychainAccessor.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -464,6 +510,38 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		0A2BBEC9235F9B2400912B65 /* AboutWindowController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0A2BBECA235F9B2400912B65 /* Base */,
+			);
+			name = AboutWindowController.xib;
+			sourceTree = "<group>";
+		};
+		0A2F489023683DD60072C6FB /* AuthenticationWindowController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0A2F489123683DD60072C6FB /* Base */,
+			);
+			name = AuthenticationWindowController.xib;
+			sourceTree = "<group>";
+		};
+		0A3388BA2353BD630022528D /* WelcomeWindowController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0A3388BB2353BD630022528D /* Base */,
+			);
+			name = WelcomeWindowController.xib;
+			sourceTree = "<group>";
+		};
+		0A58CD78237B4F9600C2BDD0 /* CloneWindowController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0A58CD79237B4F9600C2BDD0 /* Base */,
+			);
+			name = CloneWindowController.xib;
+			sourceTree = "<group>";
+		};
 		0AE7F5ED2312C1B000B06050 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -563,6 +641,7 @@
 				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/Third-Party";
 				INFOPLIST_FILE = Application/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MARKETING_VERSION = 1.1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = "co.gitup.mac-debug";
 				PRODUCT_NAME = GitUp;
 			};
@@ -578,6 +657,7 @@
 				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/Third-Party";
 				INFOPLIST_FILE = Application/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MARKETING_VERSION = 1.1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = co.gitup.mac;
 				PRODUCT_NAME = GitUp;
 			};

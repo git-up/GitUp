@@ -23,7 +23,7 @@
 @end
 
 @interface GIConflictResolverViewController : GIViewController
-@property(nonatomic, assign) id<GIConflictResolverViewControllerDelegate> delegate;
+@property(nonatomic, weak) id<GIConflictResolverViewControllerDelegate> delegate;
 @property(nonatomic, strong) GCCommit* ourCommit;
 @property(nonatomic, strong) GCCommit* theirCommit;
 @end

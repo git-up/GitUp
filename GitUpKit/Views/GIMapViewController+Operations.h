@@ -33,6 +33,7 @@
 - (void)cherryPickCommit:(GCHistoryCommit*)commit againstLocalBranch:(GCHistoryLocalBranch*)branch;
 - (void)revertCommit:(GCHistoryCommit*)commit againstLocalBranch:(GCHistoryLocalBranch*)branch;
 - (void)editCommitMessage:(GCHistoryCommit*)commit;
+- (void)copyCommitMessage:(GCHistoryCommit*)commit;
 
 - (void)createLocalBranchAtCommit:(GCHistoryCommit*)commit withName:(NSString*)name checkOut:(BOOL)checkOut;
 - (void)deleteLocalBranch:(GCHistoryLocalBranch*)branch;

@@ -13,17 +13,9 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#import "GIViewController.h"
+#import <Foundation/Foundation.h>
 
-@class GIUnifiedReflogViewController, GCReflogEntry, GCCommit;
+/// Transforms between the linear slider in Preferences to a non-linear list of font sizes matching the system font picker.
+@interface FontSizeTransformer : NSValueTransformer
 
-@protocol GIUnifiedReflogViewControllerDelegate <NSObject>
-@optional
-- (void)unifiedReflogViewControllerDidChangeSelection:(GIUnifiedReflogViewController*)controller;
-- (void)unifiedReflogViewController:(GIUnifiedReflogViewController*)controller didRestoreReflogEntry:(GCReflogEntry*)entry;
-@end
-
-@interface GIUnifiedReflogViewController : GIViewController
-@property(nonatomic, weak) id<GIUnifiedReflogViewControllerDelegate> delegate;
-@property(nonatomic, readonly) GCReflogEntry* selectedReflogEntry;
 @end
