@@ -9,6 +9,7 @@
 #import <AppKit/AppKit.h>
 #import "AppDelegate.h"
 #import "Document.h"
+#import <GitUpKit/GitUpKit.h>
 
 @interface AppDelegate (ServicesProvider)
 - (void)_openRepositoryWithURL:(NSURL*)url withCloneMode:(CloneMode)cloneMode windowModeID:(WindowModeID)windowModeID;
