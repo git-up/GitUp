@@ -19,12 +19,12 @@
 - (BOOL)resetIndexToHEAD:(NSError**)error;  // Like git reset --mixed HEAD but does not update reflog
 
 - (BOOL)removeFileFromIndex:(NSString*)path error:(NSError**)error;  // git rm --cached {file} - Delete file from index
-- (BOOL)removeFilesFromIndex:(NSArray<NSString *> *)paths error:(NSError**)error; // git rm --cached {file} - Delete files from index
+- (BOOL)removeFilesFromIndex:(NSArray<NSString*>*)paths error:(NSError**)error;  // git rm --cached {file} - Delete files from index
 
 - (BOOL)addFileToIndex:(NSString*)path error:(NSError**)error;  // git add {file} - Copy file from workdir to index (aka stage file)
-- (BOOL)addFilesToIndex:(NSArray<NSString *> *)paths error:(NSError**)error;
+- (BOOL)addFilesToIndex:(NSArray<NSString*>*)paths error:(NSError**)error;
 - (BOOL)resetFileInIndexToHEAD:(NSString*)path error:(NSError**)error;  // git reset --mixed {file} - Copy file from HEAD to index (aka unstage file)
-- (BOOL)resetFilesInIndexToHEAD:(NSArray<NSString *> *)paths error:(NSError**)error;
+- (BOOL)resetFilesInIndexToHEAD:(NSArray<NSString*>*)paths error:(NSError**)error;
 - (BOOL)checkoutFileFromIndex:(NSString*)path error:(NSError**)error;  // git checkout {file} - Copy file from index to workdir (aka discard file)
 - (BOOL)checkoutFilesFromIndex:(NSArray<NSString*>*)paths error:(NSError**)error;
 

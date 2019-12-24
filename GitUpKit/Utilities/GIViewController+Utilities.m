@@ -111,7 +111,7 @@ static NSString* _diffTemporaryDirectoryPath = nil;
     GIViewController_TerminalTool : GIViewController_TerminalTool_Terminal,
   };
   [[NSUserDefaults standardUserDefaults] registerDefaults:defaults];
-  
+
   NSDictionary* installedApps = [GILaunchServicesLocator installedAppsDictionary];
   [[NSUserDefaults standardUserDefaults] registerDefaults:installedApps];
 
@@ -198,14 +198,14 @@ static NSString* _diffTemporaryDirectoryPath = nil;
 }
 
 - (void)stageAllChangesForFile:(NSString*)path {
-  return [self stageAllChangesForFiles:@[path]];
+  return [self stageAllChangesForFiles:@[ path ]];
 }
 
-- (void)stageAllChangesForFiles:(NSArray<NSString *> *)paths {
+- (void)stageAllChangesForFiles:(NSArray<NSString*>*)paths {
   NSError* error;
-  NSMutableArray *existingFiles = [NSMutableArray array];
-  NSMutableArray *nonExistingFiles = [NSMutableArray array];
-  for(NSString *path in paths) {
+  NSMutableArray* existingFiles = [NSMutableArray array];
+  NSMutableArray* nonExistingFiles = [NSMutableArray array];
+  for (NSString* path in paths) {
     if ([[NSFileManager defaultManager] fileExistsAtPath:[self.repository absolutePathForFile:path]]) {
       [existingFiles addObject:path];
     } else {
@@ -214,17 +214,17 @@ static NSString* _diffTemporaryDirectoryPath = nil;
   }
 
   if (existingFiles.count > 0) {
-    if (![self.repository addFilesToIndex:existingFiles error:&error]){
+    if (![self.repository addFilesToIndex:existingFiles error:&error]) {
       [self presentError:error];
     }
   }
 
   if (nonExistingFiles.count > 0) {
-    if (![self.repository removeFilesFromIndex:nonExistingFiles error:&error]){
+    if (![self.repository removeFilesFromIndex:nonExistingFiles error:&error]) {
       [self presentError:error];
     }
   }
-  
+
   [self.repository notifyRepositoryChanged];
 }
 
@@ -239,7 +239,7 @@ static NSString* _diffTemporaryDirectoryPath = nil;
                                      if (change == kGCLineDiffChange_Deleted) {
                                        return [oldLines containsIndex:oldLineNumber];
                                      }
-    return YES;
+                                     return YES;
                                    }]) {
     [self.repository notifyRepositoryChanged];
   } else {
@@ -248,10 +248,10 @@ static NSString* _diffTemporaryDirectoryPath = nil;
 }
 
 - (void)unstageAllChangesForFile:(NSString*)path {
-  [self unstageAllChangesForFiles:@[path]];
+  [self unstageAllChangesForFiles:@[ path ]];
 }
 
-- (void)unstageAllChangesForFiles:(NSArray<NSString *>*)filePaths {
+- (void)unstageAllChangesForFiles:(NSArray<NSString*>*)filePaths {
   NSError* error;
   if ([self.repository resetFilesInIndexToHEAD:filePaths error:&error]) {
     [self.repository notifyWorkingDirectoryChanged];
@@ -280,7 +280,7 @@ static NSString* _diffTemporaryDirectoryPath = nil;
 }
 
 - (BOOL)discardAllChangesForFile:(NSString*)path resetIndex:(BOOL)resetIndex error:(NSError**)error {
-  return [self discardAllChangesForFiles:@[path]
+  return [self discardAllChangesForFiles:@[ path ]
                               resetIndex:resetIndex
                                    error:error];
 }
@@ -291,7 +291,7 @@ static NSString* _diffTemporaryDirectoryPath = nil;
     GCCommit* commit;
     if ([self.repository lookupHEADCurrentCommit:&commit branch:NULL error:error] && [self.repository resetFilesInIndexToHEAD:paths error:error]) {
       success = YES;
-      for (NSString *path in paths) {
+      for (NSString* path in paths) {
         if (commit && [self.repository checkTreeForCommit:commit containsFile:path error:NULL]) {
           if (![self.repository safeDeleteFileIfExists:path error:error] && [self.repository checkoutFileFromIndex:path error:error]) {
             return NO;
@@ -304,7 +304,7 @@ static NSString* _diffTemporaryDirectoryPath = nil;
       }
     }
   } else {
-    for (NSString *path in paths) {
+    for (NSString* path in paths) {
       if (![self.repository safeDeleteFileIfExists:path error:error]) {
         return NO;
       }
@@ -965,7 +965,7 @@ static NSString* _diffTemporaryDirectoryPath = nil;
   } else if ([identifier isEqualToString:GIViewControllerTool_BeyondCompare]) {
     [self _runBeyondCompareWithArguments:@[ [NSString stringWithFormat:@"-title1=%@", oldTitle], [NSString stringWithFormat:@"-title2=%@", newTitle], oldPath, newPath ]];
   } else if ([identifier isEqualToString:GIViewControllerTool_P4Merge] || [identifier isEqualToString:GIViewControllerTool_GitTool]) {
-      // Handled above
+    // Handled above
   } else if ([identifier isEqualToString:GIViewControllerTool_DiffMerge]) {
     [self _runDiffMergeToolWithArguments:@[ [NSString stringWithFormat:@"-t1=%@", oldTitle], [NSString stringWithFormat:@"-t2=%@", newTitle], oldPath, newPath ]];
   } else {

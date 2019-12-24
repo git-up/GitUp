@@ -189,7 +189,7 @@
   NSMutableArray* deltas = [[NSMutableArray alloc] init];
   NSMutableArray* nonSubmoduleDeltasPaths = [[NSMutableArray alloc] init];
   NSMutableArray* nonSubmoduleDeltas = [[NSMutableArray alloc] init];
-  
+
   for (GCDiffDelta* delta in selectedDeltas) {
     if (![_indexConflicts objectForKey:delta.canonicalPath]) {
       if (delta.submodule) {
@@ -201,10 +201,10 @@
       }
     }
   }
-  
+
   [self stageAllChangesForFiles:nonSubmoduleDeltasPaths];
   [deltas addObjectsFromArray:nonSubmoduleDeltas];
-  
+
   if (deltas.count) {
     _disableFeedback = YES;
     _indexFilesViewController.selectedDeltas = deltas;
@@ -233,10 +233,10 @@
       }
     }
   }
-  
+
   [self unstageAllChangesForFiles:nonSubmoduleDeltasPaths];
   [deltas addObjectsFromArray:nonSubmoduleDeltas];
-  
+
   if (deltas.count) {
     _disableFeedback = YES;
     _workdirFilesViewController.selectedDeltas = deltas;
@@ -270,8 +270,8 @@
                                     button:NSLocalizedString(@"Discard", nil)
                  suppressionUserDefaultKey:nil
                                      block:^{
-                                       NSMutableArray *selectedFiles = [NSMutableArray array];
- 
+                                       NSMutableArray* selectedFiles = [NSMutableArray array];
+
                                        for (GCDiffDelta* delta in deltas) {
                                          NSError* error;
                                          BOOL submodule = delta.submodule;
@@ -281,7 +281,6 @@
                                              break;
                                            } else {
                                              [selectedFiles addObject:delta.canonicalPath];
-
                                            }
                                          }
                                        }
@@ -290,7 +289,6 @@
                                          [self.repository notifyWorkingDirectoryChanged];
                                          [self presentError:error];
                                          if (!_workdirFilesViewController.deltas.count) {
- 
                                            _indexActive = YES;
                                            [self.view.window makeFirstResponder:_indexFilesViewController.preferredFirstResponder];
                                          }
@@ -341,7 +339,7 @@
 
 - (BOOL)diffFilesViewController:(GIDiffFilesViewController*)controller didReceiveDeltas:(NSArray*)deltas fromOtherController:(GIDiffFilesViewController*)otherController {
   if ((controller == _workdirFilesViewController) && (otherController == _indexFilesViewController)) {
-    NSMutableArray *fileDeltas = [NSMutableArray array];
+    NSMutableArray* fileDeltas = [NSMutableArray array];
     for (GCDiffDelta* delta in deltas) {
       if (![_indexConflicts objectForKey:delta.canonicalPath]) {
         if (delta.submodule) {
@@ -361,7 +359,7 @@
     }
     return YES;
   } else if ((controller == _indexFilesViewController) && (otherController == _workdirFilesViewController)) {
-    NSMutableArray *fileDeltas = [NSMutableArray array];
+    NSMutableArray* fileDeltas = [NSMutableArray array];
     for (GCDiffDelta* delta in deltas) {
       if (![_indexConflicts objectForKey:delta.canonicalPath]) {
         if (delta.submodule) {

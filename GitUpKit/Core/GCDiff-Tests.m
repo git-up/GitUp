@@ -165,16 +165,16 @@
   XCTAssertTrue([self.repository addFileToIndex:@"renamed1.txt" error:NULL]);
   [self updateFileAtPath:@"type-changed.txt" withString:@""];
   XCTAssertTrue([self.repository addFileToIndex:@"type-changed.txt" error:NULL]);
-  
-  NSArray *files = @[@".gitignore", @"modified.txt", @"deleted.txt", @"renamed1.txt", @"type-changed.txt"];
-  
+
+  NSArray* files = @[ @".gitignore", @"modified.txt", @"deleted.txt", @"renamed1.txt", @"type-changed.txt" ];
+
   // Test adding and removing multiple files
   XCTAssertTrue([self.repository removeFilesFromIndex:files error:NULL]);
   XCTAssertEqual([self.repository checkIndexStatus:NULL].deltas.count, 0);
-  
+
   XCTAssertTrue([self.repository addFilesToIndex:files error:NULL]);
   XCTAssertEqual([self.repository checkIndexStatus:NULL].deltas.count, 5);
-  
+
   XCTAssertNotNil([self.repository createCommitFromHEADWithMessage:@"Update" error:NULL]);
 
   // Touch files
@@ -189,7 +189,7 @@
 
   // Stage some files
   XCTAssertTrue([self.repository addFileToIndex:@"modified.txt" error:NULL]);
-  files = @[@"deleted.txt", @"renamed1.txt"];
+  files = @[ @"deleted.txt", @"renamed1.txt" ];
   XCTAssertTrue([self.repository removeFilesFromIndex:files error:NULL]);
   XCTAssertTrue([self.repository addFileToIndex:@"renamed2.txt" error:NULL]);
   XCTAssertTrue([self.repository addFileToIndex:@"added.txt" error:NULL]);
