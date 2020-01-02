@@ -251,9 +251,9 @@ static NSString* _diffTemporaryDirectoryPath = nil;
   [self unstageAllChangesForFiles:@[ path ]];
 }
 
-- (void)unstageAllChangesForFiles:(NSArray<NSString*>*)filePaths {
+- (void)unstageAllChangesForFiles:(NSArray<NSString*>*)paths {
   NSError* error;
-  if ([self.repository resetFilesInIndexToHEAD:filePaths error:&error]) {
+  if ([self.repository resetFilesInIndexToHEAD:paths error:&error]) {
     [self.repository notifyWorkingDirectoryChanged];
   } else {
     [self presentError:error];

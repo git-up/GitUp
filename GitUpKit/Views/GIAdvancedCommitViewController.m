@@ -188,22 +188,19 @@
 - (void)_stageSelectedFiles:(NSArray*)selectedDeltas {
   NSMutableArray* deltas = [[NSMutableArray alloc] init];
   NSMutableArray* nonSubmoduleDeltasPaths = [[NSMutableArray alloc] init];
-  NSMutableArray* nonSubmoduleDeltas = [[NSMutableArray alloc] init];
 
   for (GCDiffDelta* delta in selectedDeltas) {
     if (![_indexConflicts objectForKey:delta.canonicalPath]) {
       if (delta.submodule) {
         [self stageSubmoduleAtPath:delta.canonicalPath];
-        [deltas addObject:delta];
       } else {
         [nonSubmoduleDeltasPaths addObject:delta.canonicalPath];
-        [nonSubmoduleDeltas addObject:delta];
       }
+      [deltas addObject:delta];
     }
   }
 
   [self stageAllChangesForFiles:nonSubmoduleDeltasPaths];
-  [deltas addObjectsFromArray:nonSubmoduleDeltas];
 
   if (deltas.count) {
     _disableFeedback = YES;
@@ -221,21 +218,18 @@
 - (void)_unstageSelectedFiles:(NSArray*)selectedDeltas {
   NSMutableArray* deltas = [[NSMutableArray alloc] init];
   NSMutableArray* nonSubmoduleDeltasPaths = [[NSMutableArray alloc] init];
-  NSMutableArray* nonSubmoduleDeltas = [[NSMutableArray alloc] init];
   for (GCDiffDelta* delta in selectedDeltas) {
     if (![_indexConflicts objectForKey:delta.canonicalPath]) {
       if (delta.submodule) {
         [self unstageSubmoduleAtPath:delta.canonicalPath];
-        [deltas addObject:delta];
       } else {
         [nonSubmoduleDeltasPaths addObject:delta.canonicalPath];
-        [nonSubmoduleDeltas addObject:delta];
       }
+      [deltas addObject:delta];
     }
   }
 
   [self unstageAllChangesForFiles:nonSubmoduleDeltasPaths];
-  [deltas addObjectsFromArray:nonSubmoduleDeltas];
 
   if (deltas.count) {
     _disableFeedback = YES;

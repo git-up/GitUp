@@ -51,7 +51,7 @@ extern NSString* const GIViewController_TerminalTool_iTerm;
 - (void)stageAllChangesForFiles:(NSArray<NSString*>*)paths;
 - (void)stageSelectedChangesForFile:(NSString*)path oldLines:(NSIndexSet*)oldLines newLines:(NSIndexSet*)newLines;
 - (void)unstageAllChangesForFile:(NSString*)path;
-- (void)unstageAllChangesForFiles:(NSArray<NSString*>*)path;
+- (void)unstageAllChangesForFiles:(NSArray<NSString*>*)paths;
 - (void)unstageSelectedChangesForFile:(NSString*)path oldLines:(NSIndexSet*)oldLines newLines:(NSIndexSet*)newLines;
 
 - (BOOL)discardAllChangesForFile:(NSString*)path resetIndex:(BOOL)resetIndex error:(NSError**)error;

@@ -51,7 +51,7 @@
   for (NSString* path in paths) {
     if (![self removeFile:path fromIndex:index error:error] || (error && *error != nil)) {
       [self writeRepositoryIndex:index error:error];
-      return false;
+      return NO;
     }
   }
 
@@ -76,14 +76,14 @@
       break;
     }
 
-    shouldWriteRepository = true;
+    shouldWriteRepository = YES;
   }
 
   if (failed && shouldWriteRepository) {
     if (shouldWriteRepository) {
       [self writeRepositoryIndex:index error:NULL];
     }
-    return FALSE;
+    return NO;
   }
 
   return [self writeRepositoryIndex:index error:error];
