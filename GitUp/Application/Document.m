@@ -1975,7 +1975,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 // $ tccutil reset All co.gitup.mac-debug
 
 - (NSString *)scriptForTerminalAppName:(NSString *)name {
-  if ([name isEqualToString:GIViewController_TerminalTool_Terminal]) {
+  if ([name isEqualToString:GIPreferences_TerminalTool_Terminal]) {
     return [NSString stringWithFormat:
             @"""tell application \"%@\" \n"""
             """reopen \n"""
@@ -2008,7 +2008,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
       end tell
     end if
    */
-  if ([name isEqualToString:GIViewController_TerminalTool_iTerm] || [name isEqualToString:GIViewController_TerminalTool_Terminal]) {
+  if ([name isEqualToString:GIPreferences_TerminalTool_iTerm] || [name isEqualToString:GIPreferences_TerminalTool_Terminal]) {
     NSString *command = [NSString stringWithFormat:@"cd '%@'", _repository.workingDirectoryPath];
     NSString *isRunningPhase = [NSString stringWithFormat:
                                 @"""tell application \"%@\" \n"""
@@ -2071,7 +2071,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 }
 
 - (IBAction)openInTerminal:(id)sender {
-  NSString *identifier = [[NSUserDefaults standardUserDefaults] stringForKey:GIViewController_TerminalTool];
+  NSString *identifier = [[NSUserDefaults standardUserDefaults] stringForKey:GIPreferences_TerminalTool];
   [self openInTerminalAppName:identifier];
 }
 
