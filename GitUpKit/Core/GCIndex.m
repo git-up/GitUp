@@ -494,13 +494,15 @@ cleanup:
   git_checkout_options options = GIT_CHECKOUT_OPTIONS_INIT;
   options.checkout_strategy = GIT_CHECKOUT_FORCE | GIT_CHECKOUT_DONT_UPDATE_INDEX | GIT_CHECKOUT_DISABLE_PATHSPEC_MATCH;  // There's no reason to update the index
   options.paths.count = paths.count;
-  options.paths.strings = (char**)malloc((paths.count + 1) * sizeof(char*));
+  char** pathStrings = malloc(paths.count * sizeof(char*));
+  options.paths.strings = pathStrings;
   for (NSUInteger i = 0; i < paths.count; i++) {
     const char* filePath = GCGitPathFromFileSystemPath(paths[i]);
     options.paths.strings[i] = (char*)filePath;
   }
 
   CALL_LIBGIT2_FUNCTION_RETURN(NO, git_checkout_index, self.private, index.private, &options);
+  free(pathStrings);
   return YES;
 }
 
