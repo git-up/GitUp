@@ -7,29 +7,28 @@
 
 #import <Foundation/Foundation.h>
 NS_ASSUME_NONNULL_BEGIN
-extern NSString* const GIViewController_DiffTool;
-extern NSString* const GIViewController_MergeTool;
-extern NSString* const GIViewController_TerminalTool;
+// Settings
+extern NSString* const GIPreferences_DiffTool;
+extern NSString* const GIPreferences_MergeTool;
+extern NSString* const GIPreferences_TerminalTool;
 
 // DiffTool and MergeTool
-extern NSString* const GIViewControllerTool_FileMerge;
-extern NSString* const GIViewControllerTool_Kaleidoscope;
-extern NSString* const GIViewControllerTool_BeyondCompare;
-extern NSString* const GIViewControllerTool_P4Merge;
-extern NSString* const GIViewControllerTool_GitTool;
-extern NSString* const GIViewControllerTool_DiffMerge;
+extern NSString* const GIPreferences_DiffMergeTool_FileMerge;
+extern NSString* const GIPreferences_DiffMergeTool_Kaleidoscope;
+extern NSString* const GIPreferences_DiffMergeTool_BeyondCompare;
+extern NSString* const GIPreferences_DiffMergeTool_P4Merge;
+extern NSString* const GIPreferences_DiffMergeTool_GitTool;
+extern NSString* const GIPreferences_DiffMergeTool_DiffMerge;
 
 // TerminalTool
-extern NSString* const GIViewController_TerminalTool_Terminal;
-extern NSString* const GIViewController_TerminalTool_iTerm;
+extern NSString* const GIPreferences_TerminalTool_Terminal;
+extern NSString* const GIPreferences_TerminalTool_iTerm;
 
 @interface GILaunchServicesLocator : NSObject
 #pragma mark - Setup
 + (void)setup;
 
 #pragma mark - Installed Apps
-+ (NSString *)bundleIdentifierForDisplayName:(NSString *)displayName;
-+ (NSString *)standardDefaultsKeyForDisplayName:(NSString *)displayName;
 + (NSDictionary *)installedAppsDictionary;
 + (BOOL)hasInstalledApplicationForDisplayName:(NSString *)displayName;
 + (BOOL)hasInstalledApplicationForBundleIdentifier:(NSString *)bundleIdentifier;

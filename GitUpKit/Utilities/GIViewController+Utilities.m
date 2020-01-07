@@ -423,21 +423,21 @@
     }
     NSString* newTitle = delta.newFile.path;
 
-    NSString* identifier = [[NSUserDefaults standardUserDefaults] stringForKey:GIViewController_DiffTool];
-    if ([identifier isEqualToString:GIViewControllerTool_FileMerge]) {
+    NSString* identifier = [[NSUserDefaults standardUserDefaults] stringForKey:GIPreferences_DiffTool];
+    if ([identifier isEqualToString:GIPreferences_DiffMergeTool_FileMerge]) {
       [self _runFileMergeWithArguments:@[ oldPath, newPath ]];
-    } else if ([identifier isEqualToString:GIViewControllerTool_Kaleidoscope]) {
+    } else if ([identifier isEqualToString:GIPreferences_DiffMergeTool_Kaleidoscope]) {
       if (uuid == nil) {
         uuid = [[NSUUID UUID] UUIDString];
       }
       [self _runKaleidoscopeWithArguments:@[ @"--partial-changeset", @"--UUID", uuid, @"--no-wait", @"--label", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleName"], @"--relative-path", delta.canonicalPath, oldPath, newPath ]];
-    } else if ([identifier isEqualToString:GIViewControllerTool_BeyondCompare]) {
+    } else if ([identifier isEqualToString:GIPreferences_DiffMergeTool_BeyondCompare]) {
       [self _runBeyondCompareWithArguments:@[ [NSString stringWithFormat:@"-title1=%@", oldTitle], [NSString stringWithFormat:@"-title2=%@", newTitle], oldPath, newPath ]];
-    } else if ([identifier isEqualToString:GIViewControllerTool_P4Merge]) {
+    } else if ([identifier isEqualToString:GIPreferences_DiffMergeTool_P4Merge]) {
       [self _runP4MergeWithArguments:@[ @"-nl", oldTitle, @"-nr", newTitle, oldPath, newPath ]];
-    } else if ([identifier isEqualToString:GIViewControllerTool_GitTool]) {
+    } else if ([identifier isEqualToString:GIPreferences_DiffMergeTool_GitTool]) {
       [self _runDiffGitToolForFile:delta.canonicalPath withOldPath:oldPath newPath:newPath];
-    } else if ([identifier isEqualToString:GIViewControllerTool_DiffMerge]) {
+    } else if ([identifier isEqualToString:GIPreferences_DiffMergeTool_DiffMerge]) {
       [self _runDiffMergeToolWithArguments:@[ [NSString stringWithFormat:@"-t1=%@", oldTitle], [NSString stringWithFormat:@"-t2=%@", newTitle], oldPath, newPath ]];
     } else {
       XLOG_DEBUG_UNREACHABLE();
@@ -498,8 +498,8 @@
   NSString* mergeTitle = conflict.path.lastPathComponent;
 
   NSMutableArray* arguments = [[NSMutableArray alloc] init];
-  NSString* identifier = [[NSUserDefaults standardUserDefaults] stringForKey:GIViewController_MergeTool];
-  if ([identifier isEqualToString:GIViewControllerTool_FileMerge]) {
+  NSString* identifier = [[NSUserDefaults standardUserDefaults] stringForKey:GIPreferences_MergeTool];
+  if ([identifier isEqualToString:GIPreferences_DiffMergeTool_FileMerge]) {
     [arguments addObject:ourPath];
     [arguments addObject:theirPath];
     if (ancestorPath) {
@@ -509,7 +509,7 @@
     [arguments addObject:@"-merge"];
     [arguments addObject:mergePath];
     [self _runFileMergeWithArguments:arguments];
-  } else if ([identifier isEqualToString:GIViewControllerTool_Kaleidoscope]) {
+  } else if ([identifier isEqualToString:GIPreferences_DiffMergeTool_Kaleidoscope]) {
     [arguments addObject:@"--merge"];
     [arguments addObject:@"--no-wait"];
     [arguments addObject:@"--output"];
@@ -521,7 +521,7 @@
     [arguments addObject:ourPath];
     [arguments addObject:theirPath];
     [self _runKaleidoscopeWithArguments:arguments];
-  } else if ([identifier isEqualToString:GIViewControllerTool_BeyondCompare]) {
+  } else if ([identifier isEqualToString:GIPreferences_DiffMergeTool_BeyondCompare]) {
     [arguments addObject:[NSString stringWithFormat:@"-title1=%@", ourTitle]];
     [arguments addObject:[NSString stringWithFormat:@"-title2=%@", theirTitle]];
     if (ancestorPath) {
@@ -535,7 +535,7 @@
       [arguments addObject:ancestorPath];
     }
     [self _runBeyondCompareWithArguments:arguments];
-  } else if ([identifier isEqualToString:GIViewControllerTool_P4Merge]) {
+  } else if ([identifier isEqualToString:GIPreferences_DiffMergeTool_P4Merge]) {
     [arguments addObject:@"-nl"];
     [arguments addObject:ourTitle];
     [arguments addObject:@"-nr"];
@@ -553,9 +553,9 @@
     [arguments addObject:theirPath];
     [arguments addObject:mergePath];
     [self _runP4MergeWithArguments:arguments];
-  } else if ([identifier isEqualToString:GIViewControllerTool_GitTool]) {
+  } else if ([identifier isEqualToString:GIPreferences_DiffMergeTool_GitTool]) {
     [self _runMergeGitToolForFile:mergePath withOldPath:ourPath newPath:theirPath basePath:ancestorPath];
-  } else if ([identifier isEqualToString:GIViewControllerTool_DiffMerge]) {
+  } else if ([identifier isEqualToString:GIPreferences_DiffMergeTool_DiffMerge]) {
     [arguments addObject:[NSString stringWithFormat:@"-r=%@", mergePath]];
     [arguments addObject:[NSString stringWithFormat:@"-t1=%@", ourTitle]];
     [arguments addObject:[NSString stringWithFormat:@"-t2=%@", ancestorTitle]];
@@ -746,7 +746,7 @@
 
 // TODO: Use private app directory
 - (void)launchDiffToolWithCommit:(GCCommit*)commit otherCommit:(GCCommit*)otherCommit {
-  NSString* identifier = [[NSUserDefaults standardUserDefaults] stringForKey:GIViewController_DiffTool];
+  NSString* identifier = [[NSUserDefaults standardUserDefaults] stringForKey:GIPreferences_DiffTool];
   NSString* uuid = nil;
   NSError* error;
 
@@ -801,17 +801,17 @@
           return;
         }
 
-        if ([identifier isEqualToString:GIViewControllerTool_Kaleidoscope]) {
+        if ([identifier isEqualToString:GIPreferences_DiffMergeTool_Kaleidoscope]) {
           if (uuid == nil) {
             uuid = [[NSUUID UUID] UUIDString];
           }
           [self _runKaleidoscopeWithArguments:@[ @"--partial-changeset", @"--UUID", uuid, @"--no-wait", @"--label", [NSString stringWithFormat:@"%@ ▶ %@", oldTitle, newTitle], @"--relative-path", delta.canonicalPath, oldPath2, newPath2 ]];
-        } else if ([identifier isEqualToString:GIViewControllerTool_P4Merge]) {
+        } else if ([identifier isEqualToString:GIPreferences_DiffMergeTool_P4Merge]) {
           NSString* oldTitle2 = [NSString stringWithFormat:@"[%@] %@", oldTitle, delta.oldFile.path];
           NSString* newTitle2 = [NSString stringWithFormat:@"[%@] %@", newTitle, delta.newFile.path];
           [self _runP4MergeWithArguments:@[ @"-nl", oldTitle2, @"-nr", newTitle2, oldPath2, newPath2 ]];
           usleep(250 * 1000);  // TODO: Calling launchp4merge too frequently drops diffs
-        } else if ([identifier isEqualToString:GIViewControllerTool_GitTool]) {
+        } else if ([identifier isEqualToString:GIPreferences_DiffMergeTool_GitTool]) {
           [self _runDiffGitToolForFile:delta.canonicalPath withOldPath:oldPath2 newPath:newPath2];
         }
         break;
@@ -823,17 +823,17 @@
     }
   }
 
-  if ([identifier isEqualToString:GIViewControllerTool_FileMerge]) {
+  if ([identifier isEqualToString:GIPreferences_DiffMergeTool_FileMerge]) {
     [self _runFileMergeWithArguments:@[ oldPath, newPath ]];
-  } else if ([identifier isEqualToString:GIViewControllerTool_Kaleidoscope]) {
+  } else if ([identifier isEqualToString:GIPreferences_DiffMergeTool_Kaleidoscope]) {
     if (uuid) {
       [self _runKaleidoscopeWithArguments:@[ @"--mark-changeset-as-closed", uuid ]];
     }
-  } else if ([identifier isEqualToString:GIViewControllerTool_BeyondCompare]) {
+  } else if ([identifier isEqualToString:GIPreferences_DiffMergeTool_BeyondCompare]) {
     [self _runBeyondCompareWithArguments:@[ [NSString stringWithFormat:@"-title1=%@", oldTitle], [NSString stringWithFormat:@"-title2=%@", newTitle], oldPath, newPath ]];
-  } else if ([identifier isEqualToString:GIViewControllerTool_P4Merge] || [identifier isEqualToString:GIViewControllerTool_GitTool]) {
+  } else if ([identifier isEqualToString:GIPreferences_DiffMergeTool_P4Merge] || [identifier isEqualToString:GIPreferences_DiffMergeTool_GitTool]) {
     ;  // Handled above
-  } else if ([identifier isEqualToString:GIViewControllerTool_DiffMerge]) {
+  } else if ([identifier isEqualToString:GIPreferences_DiffMergeTool_DiffMerge]) {
     [self _runDiffMergeToolWithArguments:@[ [NSString stringWithFormat:@"-t1=%@", oldTitle], [NSString stringWithFormat:@"-t2=%@", newTitle], oldPath, newPath ]];
   } else {
     XLOG_DEBUG_UNREACHABLE();

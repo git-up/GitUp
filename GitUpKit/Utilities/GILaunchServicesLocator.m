@@ -8,34 +8,62 @@
 #import "GILaunchServicesLocator.h"
 #import "XLFacilityMacros.h"
 
-NSString* const GIViewControllerTool_FileMerge = @"FileMerge";
-NSString* const GIViewControllerTool_Kaleidoscope = @"Kaleidoscope";
-NSString* const GIViewControllerTool_BeyondCompare = @"Beyond Compare";
-NSString* const GIViewControllerTool_P4Merge = @"P4Merge";
-NSString* const GIViewControllerTool_GitTool = @"Git Tool";
-NSString* const GIViewControllerTool_DiffMerge = @"DiffMerge";
+// Settings
+NSString* const GIPreferences_DiffTool = @"GIPreferences_DiffTool";
+NSString* const GIPreferences_MergeTool = @"GIPreferences_MergeTool";
+NSString* const GIPreferences_TerminalTool = @"GIPreferences_TerminalTool";
 
-NSString* const GIViewController_DiffTool = @"GIViewController_DiffTool";
-NSString* const GIViewController_MergeTool = @"GIViewController_MergeTool";
-NSString* const GIViewController_TerminalTool = @"GIViewController_TerminalTool";
+// DiffMerge / Entries
+NSString* const GIPreferences_DiffMergeTool_FileMerge = @"FileMerge";
+NSString* const GIPreferences_DiffMergeTool_Kaleidoscope = @"Kaleidoscope";
+NSString* const GIPreferences_DiffMergeTool_BeyondCompare = @"Beyond Compare";
+NSString* const GIPreferences_DiffMergeTool_P4Merge = @"P4Merge";
+NSString* const GIPreferences_DiffMergeTool_GitTool = @"Git Tool";
+NSString* const GIPreferences_DiffMergeTool_DiffMerge = @"DiffMerge";
 
-// TerminalTool
-NSString* const GIViewController_TerminalTool_Terminal = @"Terminal";
-NSString* const GIViewController_TerminalTool_iTerm = @"iTerm";
-static NSString* const GIViewController_TerminalTool_iTerm_Key = @"GIViewController_TerminalTool_iTerm";
-static NSString* const GIViewController_TerminalTool_iTerm_BundleIdentifier = @"com.googlecode.iterm2";
+// TerminalTool / Entries
+NSString* const GIPreferences_TerminalTool_Terminal = @"Terminal";
+NSString* const GIPreferences_TerminalTool_iTerm = @"iTerm";
+
+// TerminalTool/iTerm
+static NSString* const GIPreferences_TerminalTool_iTerm_Key = @"GIPreferences_TerminalTool_iTerm";
+static NSString* const GIPreferences_TerminalTool_iTerm_BundleIdentifier = @"com.googlecode.iterm2";
 
 // Diff Tools Supplement
 static NSString* _diffTemporaryDirectoryPath = nil;
+
+// NOTE: Actually, it is an extension of DisplayNames enum.
+// It contains methods
+// func bundleIdentfier() -> String?
+// func standardDefaultsKey() -> String?
+@interface GILaunchServicesLocatorHelper : NSObject
++ (nullable NSString *)bundleIdentifierForDisplayName:(NSString *)displayName;
++ (nullable NSString *)standardDefaultsKeyForDisplayName:(NSString *)displayName;
+@end
+
+@implementation GILaunchServicesLocatorHelper
++ (nullable NSString *)bundleIdentifierForDisplayName:(NSString *)displayName {
+  if ([displayName isEqualToString:GIPreferences_TerminalTool_iTerm]) {
+    return GIPreferences_TerminalTool_iTerm_BundleIdentifier;
+  }
+  return nil;
+}
++ (nullable NSString *)standardDefaultsKeyForDisplayName:(NSString *)displayName {
+  if ([displayName isEqualToString:GIPreferences_TerminalTool_iTerm]) {
+    return GIPreferences_TerminalTool_iTerm_Key;
+  }
+  return nil;
+}
+@end
 
 @import CoreServices;
 @implementation GILaunchServicesLocator
 #pragma mark - Setup
 + (void)setup {
   NSDictionary* defaults = @{
-    GIViewController_DiffTool : GIViewControllerTool_FileMerge,
-    GIViewController_MergeTool : GIViewControllerTool_FileMerge,
-    GIViewController_TerminalTool : GIViewController_TerminalTool_Terminal,
+    GIPreferences_DiffTool : GIPreferences_DiffMergeTool_FileMerge,
+    GIPreferences_MergeTool : GIPreferences_DiffMergeTool_FileMerge,
+    GIPreferences_TerminalTool : GIPreferences_TerminalTool_Terminal,
   };
   [[NSUserDefaults standardUserDefaults] registerDefaults:defaults];
   
@@ -52,25 +80,13 @@ static NSString* _diffTemporaryDirectoryPath = nil;
 }
 
 #pragma mark - Installed Apps
-+ (NSString *)bundleIdentifierForDisplayName:(NSString *)displayName {
-  if ([displayName isEqualToString:GIViewController_TerminalTool_iTerm]) {
-    return GIViewController_TerminalTool_iTerm_BundleIdentifier;
-  }
-  return nil;
-}
-+ (NSString *)standardDefaultsKeyForDisplayName:(NSString *)displayName {
-  if ([displayName isEqualToString:GIViewController_TerminalTool_iTerm]) {
-    return GIViewController_TerminalTool_iTerm_Key;
-  }
-  return nil;
-}
 + (NSDictionary *)installedAppsDictionary {
   NSMutableDictionary *dictionary = [NSMutableDictionary new];
   NSArray *apps = @[
-    GIViewController_TerminalTool_iTerm
+    GIPreferences_TerminalTool_iTerm
   ];
   for (NSString *app in apps) {
-    NSString *key = [self standardDefaultsKeyForDisplayName:app];
+    NSString *key = [GILaunchServicesLocatorHelper standardDefaultsKeyForDisplayName:app];
     if (key != nil) {
       dictionary[key] = @([self hasInstalledApplicationForDisplayName:app]);
     }
@@ -78,14 +94,19 @@ static NSString* _diffTemporaryDirectoryPath = nil;
   return [dictionary copy];
 }
 + (BOOL)hasInstalledApplicationForDisplayName:(NSString *)displayName {
-  return [self hasInstalledApplicationForBundleIdentifier:[self bundleIdentifierForDisplayName:displayName]];
+  return [self hasInstalledApplicationForBundleIdentifier:[GILaunchServicesLocatorHelper bundleIdentifierForDisplayName:displayName]];
 }
 + (BOOL)hasInstalledApplicationForBundleIdentifier:(NSString *)bundleIdentifier {
   if (bundleIdentifier == nil) {
     return NO;
   }
   CFErrorRef error = NULL;
-  NSArray *applications = (__bridge NSArray *)LSCopyApplicationURLsForBundleIdentifier((__bridge CFStringRef)bundleIdentifier, &error);
+  NSArray *applications = CFBridgingRelease(LSCopyApplicationURLsForBundleIdentifier((__bridge CFStringRef)bundleIdentifier, &error));
+  if (error) {
+    //TODO: Handle error.
+    CFRelease(error);
+    return NO;
+  }
   return applications.count > 0;
 }
 
