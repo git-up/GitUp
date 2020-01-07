@@ -270,14 +270,17 @@
                                          NSError* error;
                                          BOOL submodule = delta.submodule;
                                          if (submodule) {
+                                           // We handle every submodules deltas individually
                                            if (![self discardSubmoduleAtPath:delta.canonicalPath resetIndex:NO error:&error]) {
                                              [self presentError:error];
                                              break;
-                                           } else {
-                                             [selectedFiles addObject:delta.canonicalPath];
                                            }
+                                         } else {
+                                           // Otherwise we collect file delta paths to batch process them afterwards
+                                           [selectedFiles addObject:delta.canonicalPath];
                                          }
                                        }
+
                                        NSError* error;
                                        if (![self discardAllChangesForFiles:selectedFiles resetIndex:NO error:&error]) {
                                          [self.repository notifyWorkingDirectoryChanged];
