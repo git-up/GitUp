@@ -95,7 +95,7 @@ static NSString * const PreferencesWindowController_Identifier_General = @"gener
   self.selectedTheme = theme;
   NSString* channel = [NSUserDefaults.standardUserDefaults stringForKey:kUserDefaultsKey_ReleaseChannel];
   self.selectedChannel = channel;
-  [self selectPreferencePane:nil];
+  [self selectPreferencePane:self];
   [super showWindow:sender];
 }
 

@@ -23,11 +23,11 @@ extern NSString* const PreferencesWindowController_Theme_Dark;
 @end
 
 @interface PreferencesWindowController : NSWindowController
-@property (nonatomic, copy) NSArray <NSString *>*channelTitles;
-@property (nonatomic, copy) NSArray <NSString *>*themesTitles;
-@property (nonatomic, copy) NSString *selectedChannel;
-@property (nonatomic, copy) NSString *selectedTheme;
-@property (nonatomic, copy) NSString *selectedItemIdentifier;
+@property (nonatomic, copy) NSArray<NSString*>* channelTitles;
+@property (nonatomic, copy) NSArray<NSString*>* themesTitles;
+@property (nonatomic, copy) NSString* selectedChannel;
+@property (nonatomic, copy) NSString* selectedTheme;
+@property (nonatomic, copy) NSString* selectedItemIdentifier;
 
 @property (nonatomic, copy) void(^didChangeReleaseChannel)(BOOL);
 @end
