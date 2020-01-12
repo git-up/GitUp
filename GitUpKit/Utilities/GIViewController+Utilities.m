@@ -34,26 +34,6 @@
 
 @implementation GIViewController (Utilities)
 
-+ (void)initialize {
-  NSDictionary* defaults = @{
-    GIViewController_DiffTool : GIViewControllerTool_FileMerge,
-    GIViewController_MergeTool : GIViewControllerTool_FileMerge,
-    GIViewController_TerminalTool : GIViewController_TerminalTool_Terminal,
-  };
-  [[NSUserDefaults standardUserDefaults] registerDefaults:defaults];
-
-  NSDictionary* installedApps = [GILaunchServicesLocator installedAppsDictionary];
-  [[NSUserDefaults standardUserDefaults] registerDefaults:installedApps];
-
-  if (_diffTemporaryDirectoryPath == nil) {
-    _diffTemporaryDirectoryPath = [NSTemporaryDirectory() stringByAppendingPathComponent:[[NSBundle mainBundle] bundleIdentifier]];
-    [[NSFileManager defaultManager] removeItemAtPath:_diffTemporaryDirectoryPath error:NULL];
-    if (![[NSFileManager defaultManager] createDirectoryAtPath:_diffTemporaryDirectoryPath withIntermediateDirectories:YES attributes:nil error:NULL]) {
-      XLOG_DEBUG_UNREACHABLE();
-    }
-  }
-}
-
 - (void)discardAllFiles {
   [self confirmUserActionWithAlertType:kGIAlertType_Stop
                                  title:NSLocalizedString(@"Are you sure you want to discard changes in all working directory files?", nil)
