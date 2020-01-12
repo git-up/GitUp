@@ -34,6 +34,26 @@
 
 @implementation GIViewController (Utilities)
 
++ (void)initialize {
+  NSDictionary* defaults = @{
+    GIViewController_DiffTool : GIViewControllerTool_FileMerge,
+    GIViewController_MergeTool : GIViewControllerTool_FileMerge,
+    GIViewController_TerminalTool : GIViewController_TerminalTool_Terminal,
+  };
+  [[NSUserDefaults standardUserDefaults] registerDefaults:defaults];
+
+  NSDictionary* installedApps = [GILaunchServicesLocator installedAppsDictionary];
+  [[NSUserDefaults standardUserDefaults] registerDefaults:installedApps];
+
+  if (_diffTemporaryDirectoryPath == nil) {
+    _diffTemporaryDirectoryPath = [NSTemporaryDirectory() stringByAppendingPathComponent:[[NSBundle mainBundle] bundleIdentifier]];
+    [[NSFileManager defaultManager] removeItemAtPath:_diffTemporaryDirectoryPath error:NULL];
+    if (![[NSFileManager defaultManager] createDirectoryAtPath:_diffTemporaryDirectoryPath withIntermediateDirectories:YES attributes:nil error:NULL]) {
+      XLOG_DEBUG_UNREACHABLE();
+    }
+  }
+}
+
 - (void)discardAllFiles {
   [self confirmUserActionWithAlertType:kGIAlertType_Stop
                                  title:NSLocalizedString(@"Are you sure you want to discard changes in all working directory files?", nil)
@@ -108,13 +128,34 @@
 }
 
 - (void)stageAllChangesForFile:(NSString*)path {
+  return [self stageAllChangesForFiles:@[ path ]];
+}
+
+- (void)stageAllChangesForFiles:(NSArray<NSString*>*)paths {
   NSError* error;
-  BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:[self.repository absolutePathForFile:path] followLastSymlink:NO];
-  if ((fileExists && [self.repository addFileToIndex:path error:&error]) || (!fileExists && [self.repository removeFileFromIndex:path error:&error])) {
-    [self.repository notifyRepositoryChanged];
-  } else {
-    [self presentError:error];
+  NSMutableArray* existingFiles = [NSMutableArray array];
+  NSMutableArray* nonExistingFiles = [NSMutableArray array];
+  for (NSString* path in paths) {
+    if ([[NSFileManager defaultManager] fileExistsAtPath:[self.repository absolutePathForFile:path]]) {
+      [existingFiles addObject:path];
+    } else {
+      [nonExistingFiles addObject:path];
+    }
   }
+
+  if (existingFiles.count > 0) {
+    if (![self.repository addFilesToIndex:existingFiles error:&error]) {
+      [self presentError:error];
+    }
+  }
+
+  if (nonExistingFiles.count > 0) {
+    if (![self.repository removeFilesFromIndex:nonExistingFiles error:&error]) {
+      [self presentError:error];
+    }
+  }
+
+  [self.repository notifyRepositoryChanged];
 }
 
 - (void)stageSelectedChangesForFile:(NSString*)path oldLines:(NSIndexSet*)oldLines newLines:(NSIndexSet*)newLines {
@@ -137,8 +178,12 @@
 }
 
 - (void)unstageAllChangesForFile:(NSString*)path {
+  [self unstageAllChangesForFiles:@[ path ]];
+}
+
+- (void)unstageAllChangesForFiles:(NSArray<NSString*>*)paths {
   NSError* error;
-  if ([self.repository resetFileInIndexToHEAD:path error:&error]) {
+  if ([self.repository resetFilesInIndexToHEAD:paths error:&error]) {
     [self.repository notifyWorkingDirectoryChanged];
   } else {
     [self presentError:error];
@@ -165,18 +210,36 @@
 }
 
 - (BOOL)discardAllChangesForFile:(NSString*)path resetIndex:(BOOL)resetIndex error:(NSError**)error {
+  return [self discardAllChangesForFiles:@[ path ]
+                              resetIndex:resetIndex
+                                   error:error];
+}
+
+- (BOOL)discardAllChangesForFiles:(NSArray<NSString*>*)paths resetIndex:(BOOL)resetIndex error:(NSError**)error {
   BOOL success = NO;
   if (resetIndex) {
     GCCommit* commit;
-    if ([self.repository lookupHEADCurrentCommit:&commit branch:NULL error:error] && [self.repository resetFileInIndexToHEAD:path error:error]) {
-      if (commit && [self.repository checkTreeForCommit:commit containsFile:path error:NULL]) {
-        success = [self.repository safeDeleteFileIfExists:path error:error] && [self.repository checkoutFileFromIndex:path error:error];
-      } else {
-        success = [self.repository safeDeleteFile:path error:error];
+    if ([self.repository lookupHEADCurrentCommit:&commit branch:NULL error:error] && [self.repository resetFilesInIndexToHEAD:paths error:error]) {
+      success = YES;
+      for (NSString* path in paths) {
+        if (commit && [self.repository checkTreeForCommit:commit containsFile:path error:NULL]) {
+          if (![self.repository safeDeleteFileIfExists:path error:error] && [self.repository checkoutFileFromIndex:path error:error]) {
+            return NO;
+          }
+        } else {
+          if (![self.repository safeDeleteFileIfExists:path error:error]) {
+            return NO;
+          }
+        }
       }
     }
   } else {
-    success = [self.repository safeDeleteFileIfExists:path error:error] && [self.repository checkoutFileFromIndex:path error:error];
+    for (NSString* path in paths) {
+      if (![self.repository safeDeleteFileIfExists:path error:error]) {
+        return NO;
+      }
+    }
+    success = [self.repository checkoutFilesFromIndex:paths error:error];
   }
   return success;
 }
@@ -832,7 +895,7 @@
   } else if ([identifier isEqualToString:GIPreferences_DiffMergeTool_BeyondCompare]) {
     [self _runBeyondCompareWithArguments:@[ [NSString stringWithFormat:@"-title1=%@", oldTitle], [NSString stringWithFormat:@"-title2=%@", newTitle], oldPath, newPath ]];
   } else if ([identifier isEqualToString:GIPreferences_DiffMergeTool_P4Merge] || [identifier isEqualToString:GIPreferences_DiffMergeTool_GitTool]) {
-    ;  // Handled above
+    // Handled above
   } else if ([identifier isEqualToString:GIPreferences_DiffMergeTool_DiffMerge]) {
     [self _runDiffMergeToolWithArguments:@[ [NSString stringWithFormat:@"-t1=%@", oldTitle], [NSString stringWithFormat:@"-t2=%@", newTitle], oldPath, newPath ]];
   } else {
