@@ -48,11 +48,14 @@ extern NSString* const GIViewController_TerminalTool_iTerm;
 - (void)discardSubmoduleAtPath:(NSString*)path resetIndex:(BOOL)resetIndex;  // Prompts user
 
 - (void)stageAllChangesForFile:(NSString*)path;
+- (void)stageAllChangesForFiles:(NSArray<NSString*>*)paths;
 - (void)stageSelectedChangesForFile:(NSString*)path oldLines:(NSIndexSet*)oldLines newLines:(NSIndexSet*)newLines;
 - (void)unstageAllChangesForFile:(NSString*)path;
+- (void)unstageAllChangesForFiles:(NSArray<NSString*>*)paths;
 - (void)unstageSelectedChangesForFile:(NSString*)path oldLines:(NSIndexSet*)oldLines newLines:(NSIndexSet*)newLines;
 
 - (BOOL)discardAllChangesForFile:(NSString*)path resetIndex:(BOOL)resetIndex error:(NSError**)error;
+- (BOOL)discardAllChangesForFiles:(NSArray<NSString*>*)paths resetIndex:(BOOL)resetIndex error:(NSError**)error;
 - (void)discardAllChangesForFile:(NSString*)path resetIndex:(BOOL)resetIndex;  // Prompts user
 - (BOOL)discardSelectedChangesForFile:(NSString*)path oldLines:(NSIndexSet*)oldLines newLines:(NSIndexSet*)newLines resetIndex:(BOOL)resetIndex error:(NSError**)error;
 - (void)discardSelectedChangesForFile:(NSString*)path oldLines:(NSIndexSet*)oldLines newLines:(NSIndexSet*)newLines resetIndex:(BOOL)resetIndex;  // Prompts user
