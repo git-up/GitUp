@@ -14,24 +14,9 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #import "GIViewController.h"
+#import "GILaunchServicesLocator.h"
 
 @class GCCommit, GCIndex, GCDiffDelta, GCIndexConflict;
-
-extern NSString* const GIViewController_DiffTool;
-extern NSString* const GIViewController_MergeTool;
-extern NSString* const GIViewController_TerminalTool;
-
-// DiffTool and MergeTool
-extern NSString* const GIViewControllerTool_FileMerge;
-extern NSString* const GIViewControllerTool_Kaleidoscope;
-extern NSString* const GIViewControllerTool_BeyondCompare;
-extern NSString* const GIViewControllerTool_P4Merge;
-extern NSString* const GIViewControllerTool_GitTool;
-extern NSString* const GIViewControllerTool_DiffMerge;
-
-// TerminalTool
-extern NSString* const GIViewController_TerminalTool_Terminal;
-extern NSString* const GIViewController_TerminalTool_iTerm;
 
 @protocol GIMergeConflictResolver <NSObject>
 - (BOOL)resolveMergeConflictsWithOurCommit:(GCCommit*)ourCommit theirCommit:(GCCommit*)theirCommit;

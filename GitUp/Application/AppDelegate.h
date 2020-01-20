@@ -16,12 +16,6 @@
 #import <AppKit/AppKit.h>
 
 @interface AppDelegate : NSObject <NSApplicationDelegate>
-@property(nonatomic, strong) IBOutlet NSWindow* preferencesWindow;
-@property(nonatomic, weak) IBOutlet NSToolbar* preferencesToolbar;
-@property(nonatomic, weak) IBOutlet NSTabView* preferencesTabView;
-@property(nonatomic, weak) IBOutlet NSPopUpButton* channelPopUpButton;
-@property(nonatomic, weak) IBOutlet NSPopUpButton* themePopUpButton;
 + (instancetype)sharedDelegate;
-
 - (void)handleDocumentCountChanged;
 @end

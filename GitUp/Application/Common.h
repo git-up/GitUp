@@ -15,12 +15,6 @@
 
 #define MAKE_ERROR(message) [NSError errorWithDomain:@"App" code:-1 userInfo:@{NSLocalizedDescriptionKey : message}]
 
-#define kReleaseChannel_Stable @"stable"
-#define kReleaseChannel_Continuous @"continuous"
-#define kTheme_SystemPreference @"systemTheme"
-#define kTheme_Dark @"darkTheme"
-#define kTheme_Light @"lightTheme"
-
 #define kUserDefaultsKey_FirstLaunch @"FirstLaunch"  // BOOL
 #define kUserDefaultsKey_SkipInstallCLT @"SkipInstallCLT"  // BOOL
 #define kUserDefaultsKey_LastVersion @"LastVersion"  // NSUInteger

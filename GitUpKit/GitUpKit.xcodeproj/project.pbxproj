@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0AC8525923A122C400479160 /* GILaunchServicesLocator.h in Headers */ = {isa = PBXBuildFile; fileRef = 0AC8525723A122C400479160 /* GILaunchServicesLocator.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		0AC8525A23A122C400479160 /* GILaunchServicesLocator.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AC8525823A122C400479160 /* GILaunchServicesLocator.m */; };
 		743BF1841B871C0200E1CA49 /* GCOrderedSet.h in Headers */ = {isa = PBXBuildFile; fileRef = 74EDB5D01B84D4C400F00E79 /* GCOrderedSet.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		749335CA1B9B7FF200225513 /* GCOrderedSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 74EDB5D11B84D4C400F00E79 /* GCOrderedSet.m */; };
 		749786941B85AAB10065BD55 /* GCOrderedSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 74EDB5D11B84D4C400F00E79 /* GCOrderedSet.m */; };
@@ -423,6 +425,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0AC8525723A122C400479160 /* GILaunchServicesLocator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GILaunchServicesLocator.h; sourceTree = "<group>"; };
+		0AC8525823A122C400479160 /* GILaunchServicesLocator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GILaunchServicesLocator.m; sourceTree = "<group>"; };
 		74EDB5D01B84D4C400F00E79 /* GCOrderedSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCOrderedSet.h; sourceTree = "<group>"; };
 		74EDB5D11B84D4C400F00E79 /* GCOrderedSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCOrderedSet.m; sourceTree = "<group>"; };
 		74EDB5D51B84E06500F00E79 /* GCOrderedSet-Tests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GCOrderedSet-Tests.m"; sourceTree = "<group>"; };
@@ -760,6 +764,8 @@
 				E22941D41AC11E31000A83AF /* GIAppKit.m */,
 				E22942251AC12E5C000A83AF /* GIColorView.h */,
 				E22942261AC12E5C000A83AF /* GIColorView.m */,
+				0AC8525723A122C400479160 /* GILaunchServicesLocator.h */,
+				0AC8525823A122C400479160 /* GILaunchServicesLocator.m */,
 				E22941E31AC11EBB000A83AF /* GILinkButton.h */,
 				E22941E41AC11EBB000A83AF /* GILinkButton.m */,
 				E22941D51AC11E31000A83AF /* GIModalView.h */,
@@ -1167,6 +1173,7 @@
 				E267E1F21B84D85500BAB377 /* GCRepository+Utilities.h in Headers */,
 				E267E2221B84DBE700BAB377 /* GIAppKit.h in Headers */,
 				E267E2231B84DBE700BAB377 /* GIColorView.h in Headers */,
+				0AC8525923A122C400479160 /* GILaunchServicesLocator.h in Headers */,
 				E267E2241B84DBE700BAB377 /* GILinkButton.h in Headers */,
 				E267E2251B84DBE700BAB377 /* GIModalView.h in Headers */,
 				E267E2261B84DBE700BAB377 /* GIViewController.h in Headers */,
@@ -1530,6 +1537,7 @@
 				E267E2DC1B84F2BE00BAB377 /* XLLogRecord.m in Sources */,
 				E267E2DD1B84F2BE00BAB377 /* XLStandardLogger.m in Sources */,
 				E267E2DE1B84F2BE00BAB377 /* XLDatabaseLogger.m in Sources */,
+				0AC8525A23A122C400479160 /* GILaunchServicesLocator.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
