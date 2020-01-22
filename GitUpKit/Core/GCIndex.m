@@ -485,24 +485,12 @@ cleanup:
 }
 
 - (BOOL)checkoutFileToWorkingDirectory:(NSString*)path fromIndex:(GCIndex*)index error:(NSError**)error {
-  return [self checkoutFilesToWorkingDirectory:@[ path ]
-                                     fromIndex:index
-                                         error:error];
-}
-
-- (BOOL)checkoutFilesToWorkingDirectory:(NSArray<NSString*>*)paths fromIndex:(GCIndex*)index error:(NSError**)error {
   git_checkout_options options = GIT_CHECKOUT_OPTIONS_INIT;
   options.checkout_strategy = GIT_CHECKOUT_FORCE | GIT_CHECKOUT_DONT_UPDATE_INDEX | GIT_CHECKOUT_DISABLE_PATHSPEC_MATCH;  // There's no reason to update the index
-  options.paths.count = paths.count;
-  char** pathStrings = malloc(paths.count * sizeof(char*));
-  options.paths.strings = pathStrings;
-  for (NSUInteger i = 0; i < paths.count; i++) {
-    const char* filePath = GCGitPathFromFileSystemPath(paths[i]);
-    options.paths.strings[i] = (char*)filePath;
-  }
-
+  options.paths.count = 1;
+  const char* filePath = GCGitPathFromFileSystemPath(path);
+  options.paths.strings = (char**)&filePath;
   CALL_LIBGIT2_FUNCTION_RETURN(NO, git_checkout_index, self.private, index.private, &options);
-  free(pathStrings);
   return YES;
 }
 

@@ -187,21 +187,16 @@
 
 - (void)_stageSelectedFiles:(NSArray*)selectedDeltas {
   NSMutableArray* deltas = [[NSMutableArray alloc] init];
-  NSMutableArray* nonSubmoduleDeltasPaths = [[NSMutableArray alloc] init];
-
   for (GCDiffDelta* delta in selectedDeltas) {
     if (![_indexConflicts objectForKey:delta.canonicalPath]) {
       if (delta.submodule) {
         [self stageSubmoduleAtPath:delta.canonicalPath];
       } else {
-        [nonSubmoduleDeltasPaths addObject:delta.canonicalPath];
+        [self stageAllChangesForFile:delta.canonicalPath];
       }
       [deltas addObject:delta];
     }
   }
-
-  [self stageAllChangesForFiles:nonSubmoduleDeltasPaths];
-
   if (deltas.count) {
     _disableFeedback = YES;
     _indexFilesViewController.selectedDeltas = deltas;
@@ -217,20 +212,16 @@
 
 - (void)_unstageSelectedFiles:(NSArray*)selectedDeltas {
   NSMutableArray* deltas = [[NSMutableArray alloc] init];
-  NSMutableArray* nonSubmoduleDeltasPaths = [[NSMutableArray alloc] init];
   for (GCDiffDelta* delta in selectedDeltas) {
     if (![_indexConflicts objectForKey:delta.canonicalPath]) {
       if (delta.submodule) {
         [self unstageSubmoduleAtPath:delta.canonicalPath];
       } else {
-        [nonSubmoduleDeltasPaths addObject:delta.canonicalPath];
+        [self unstageAllChangesForFile:delta.canonicalPath];
       }
       [deltas addObject:delta];
     }
   }
-
-  [self unstageAllChangesForFiles:nonSubmoduleDeltasPaths];
-
   if (deltas.count) {
     _disableFeedback = YES;
     _workdirFilesViewController.selectedDeltas = deltas;
@@ -264,31 +255,18 @@
                                     button:NSLocalizedString(@"Discard", nil)
                  suppressionUserDefaultKey:nil
                                      block:^{
-                                       NSMutableArray* selectedFiles = [NSMutableArray array];
-
                                        for (GCDiffDelta* delta in deltas) {
                                          NSError* error;
                                          BOOL submodule = delta.submodule;
-                                         if (submodule) {
-                                           // We handle every submodules deltas individually
-                                           if (![self discardSubmoduleAtPath:delta.canonicalPath resetIndex:NO error:&error]) {
-                                             [self presentError:error];
-                                             break;
-                                           }
-                                         } else {
-                                           // Otherwise we collect file delta paths to batch process them afterwards
-                                           [selectedFiles addObject:delta.canonicalPath];
+                                         if ((submodule && ![self discardSubmoduleAtPath:delta.canonicalPath resetIndex:NO error:&error]) || (!submodule && ![self discardAllChangesForFile:delta.canonicalPath resetIndex:NO error:&error])) {
+                                           [self presentError:error];
+                                           break;
                                          }
                                        }
-
-                                       NSError* error;
-                                       if (![self discardAllChangesForFiles:selectedFiles resetIndex:NO error:&error]) {
-                                         [self.repository notifyWorkingDirectoryChanged];
-                                         [self presentError:error];
-                                         if (!_workdirFilesViewController.deltas.count) {
-                                           _indexActive = YES;
-                                           [self.view.window makeFirstResponder:_indexFilesViewController.preferredFirstResponder];
-                                         }
+                                       [self.repository notifyWorkingDirectoryChanged];
+                                       if (!_workdirFilesViewController.deltas.count) {
+                                         _indexActive = YES;
+                                         [self.view.window makeFirstResponder:_indexFilesViewController.preferredFirstResponder];
                                        }
                                      }];
     } else {
@@ -336,17 +314,15 @@
 
 - (BOOL)diffFilesViewController:(GIDiffFilesViewController*)controller didReceiveDeltas:(NSArray*)deltas fromOtherController:(GIDiffFilesViewController*)otherController {
   if ((controller == _workdirFilesViewController) && (otherController == _indexFilesViewController)) {
-    NSMutableArray* fileDeltas = [NSMutableArray array];
     for (GCDiffDelta* delta in deltas) {
       if (![_indexConflicts objectForKey:delta.canonicalPath]) {
         if (delta.submodule) {
           [self unstageSubmoduleAtPath:delta.canonicalPath];
         } else {
-          [fileDeltas addObject:delta.canonicalPath];
+          [self unstageAllChangesForFile:delta.canonicalPath];
         }
       }
     }
-    [self unstageAllChangesForFiles:fileDeltas];
     _disableFeedback = YES;
     _workdirFilesViewController.selectedDeltas = deltas;
     _disableFeedback = NO;
@@ -356,17 +332,15 @@
     }
     return YES;
   } else if ((controller == _indexFilesViewController) && (otherController == _workdirFilesViewController)) {
-    NSMutableArray* fileDeltas = [NSMutableArray array];
     for (GCDiffDelta* delta in deltas) {
       if (![_indexConflicts objectForKey:delta.canonicalPath]) {
         if (delta.submodule) {
           [self stageSubmoduleAtPath:delta.canonicalPath];
         } else {
-          [fileDeltas addObject:delta.canonicalPath];
+          [self stageAllChangesForFile:delta.canonicalPath];
         }
       }
     }
-    [self stageAllChangesForFiles:fileDeltas];
     _disableFeedback = YES;
     _indexFilesViewController.selectedDeltas = deltas;
     _disableFeedback = NO;
