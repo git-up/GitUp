@@ -283,12 +283,13 @@
 
                                        NSError* error;
                                        if (![self discardAllChangesForFiles:selectedFiles resetIndex:NO error:&error]) {
-                                         [self.repository notifyWorkingDirectoryChanged];
                                          [self presentError:error];
-                                         if (!_workdirFilesViewController.deltas.count) {
-                                           _indexActive = YES;
-                                           [self.view.window makeFirstResponder:_indexFilesViewController.preferredFirstResponder];
-                                         }
+                                       }
+
+                                       [self.repository notifyWorkingDirectoryChanged];
+                                       if (!_workdirFilesViewController.deltas.count) {
+                                         _indexActive = YES;
+                                         [self.view.window makeFirstResponder:_indexFilesViewController.preferredFirstResponder];
                                        }
                                      }];
     } else {
