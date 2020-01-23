@@ -492,7 +492,7 @@ cleanup:
 
 - (BOOL)checkoutFilesToWorkingDirectory:(NSArray<NSString*>*)paths fromIndex:(GCIndex*)index error:(NSError**)error {
   git_checkout_options options = GIT_CHECKOUT_OPTIONS_INIT;
-  options.checkout_strategy = GIT_CHECKOUT_FORCE | GIT_CHECKOUT_DONT_UPDATE_INDEX | GIT_CHECKOUT_DISABLE_PATHSPEC_MATCH;  // There's no reason to update the index
+  options.checkout_strategy = GIT_CHECKOUT_FORCE | GIT_CHECKOUT_DONT_UPDATE_INDEX;  // There's no reason to update the index
   options.paths.count = paths.count;
   char** pathStrings = malloc(paths.count * sizeof(char*));
   options.paths.strings = pathStrings;
