@@ -497,7 +497,7 @@ cleanup:
   char** pathStrings = malloc(paths.count * sizeof(char*));
   options.paths.strings = pathStrings;
   for (NSUInteger i = 0; i < paths.count; i++) {
-    const char* filePath = GCGitPathFromFileSystemPath(paths[i]);
+    const char* filePath = GCGitPathFromFileSystemPath([NSRegularExpression escapedPatternForString:paths[i]]);
     options.paths.strings[i] = (char*)filePath;
   }
 
