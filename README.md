@@ -40,6 +40,11 @@ To build GitUp yourself, simply run the command `git clone --recursive https://g
 <img src="http://i.imgur.com/dWpJExk.png">
 </p>
 
+**Alternatively**, if you do have a developer account, you can create the file "Xcode-Configurations/DEVELOPMENT_TEAM.xcconfig" with the following build setting as its content:
+> DEVELOPMENT_TEAM = [Your TeamID]
+
+For a more detailed description of this, you can have a look at the comments at the end of the file "Xcode-Configurations/Base.xcconfig". 
+
 GitUpKit
 ========
 
