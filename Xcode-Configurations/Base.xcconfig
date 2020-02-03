@@ -53,3 +53,42 @@ GCC_WARN_UNUSED_VARIABLE = YES
 GITUP_PLATFORM[sdk=macosx*] = MacOSX
 GITUP_PLATFORM[sdk=iphonesimulator*] = iPhoneSimulator
 GITUP_PLATFORM[sdk=iphoneos*] = iPhoneOS
+
+#include? "DEVELOPMENT_TEAM.xcconfig"
+
+// Create the file DEVELOPMENT_TEAM.xcconfig
+// in the "Xcode-Configurations" directory within the project directory
+// with the following build setting:
+// DEVELOPMENT_TEAM = [Your TeamID]
+
+// Hint: some recent Xcode versions appear to automatically create an empty file
+// for you on the first build. This build will fail, or course,
+// because code-signing can’t work without the DEVELOPMENT_TEAM set.
+// Just fill it in and everything should work.
+
+// You can find your team ID by logging into your Apple Developer account
+// and going to
+// https://developer.apple.com/account/#/membership
+// It should be listed under “Team ID”.
+
+// To set this system up for your own project,
+// copy the "Xcode-config" directory there,
+// add it to your Xcode project,
+// navigate to your project settings
+// (root icon in the Xcode Project Navigator)
+// click on the project icon there,
+// click on the “Info” tab
+// under “Configurations”
+// open the “Debug”, “Release”,
+// and any other build configurations you might have.
+// There you can set the pull-down menus in the
+// “Based on Configuration File” column to “Shared”.
+// Done.
+
+// Don’t forget to add the DEVELOPMENT_TEAM.xcconfig file to your .gitignore:
+// # User-specific xcconfig files
+// Xcode-config/DEVELOPMENT_TEAM.xcconfig
+
+// You can now remove the “DevelopmentTeam = AB1234C5DE;” entries from the
+// .xcodeproj/project.pbxproj if you want to.
+
