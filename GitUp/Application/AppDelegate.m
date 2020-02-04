@@ -23,6 +23,7 @@
 #import <GitUpKit/XLFacilityMacros.h>
 
 #import "AppDelegate.h"
+#import "ServicesProvider.h"
 #import "DocumentController.h"
 #import "Document.h"
 #import "Common.h"
@@ -220,6 +221,9 @@
   // Initialize user notification center
   [[NSUserNotificationCenter defaultUserNotificationCenter] setDelegate:self];
 
+  // Register finder context menu services.
+  [NSApplication sharedApplication].servicesProvider = [ServicesProvider new];
+  
   // Notify user in case app was updated since last launch
   NSString* currentVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
   NSString* lastVersion = [[NSUserDefaults standardUserDefaults] objectForKey:kUserDefaultsKey_LastVersion];

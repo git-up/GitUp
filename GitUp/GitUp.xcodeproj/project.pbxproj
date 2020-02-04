@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0A01676A2330CABD0069961E /* ServicesProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A0167692330CABD0069961E /* ServicesProvider.m */; };
 		0A0C5ACB23720BAE000D84A1 /* KeychainAccessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A0C5ACA23720BAE000D84A1 /* KeychainAccessor.m */; };
 		0A0D211B23579888003A2B5F /* AboutWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A0D211723579887003A2B5F /* AboutWindowController.m */; };
 		0A2BBECB235F9B2400912B65 /* AboutWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A2BBEC9235F9B2400912B65 /* AboutWindowController.xib */; };
@@ -119,6 +120,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0A0167682330CABD0069961E /* ServicesProvider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ServicesProvider.h; sourceTree = "<group>"; };
+		0A0167692330CABD0069961E /* ServicesProvider.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ServicesProvider.m; sourceTree = "<group>"; };
 		0A0C5AC923720BAE000D84A1 /* KeychainAccessor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KeychainAccessor.h; sourceTree = "<group>"; };
 		0A0C5ACA23720BAE000D84A1 /* KeychainAccessor.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KeychainAccessor.m; sourceTree = "<group>"; };
 		0A0D211723579887003A2B5F /* AboutWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AboutWindowController.m; sourceTree = "<group>"; };
@@ -311,6 +314,8 @@
 				E2C5672C1A6D98BC00ECFE07 /* WindowController.m */,
 				31CD50E1203E2E2800360B3A /* ToolbarItemWrapperView.h */,
 				31CD50E2203E2E2800360B3A /* ToolbarItemWrapperView.m */,
+				0A0167682330CABD0069961E /* ServicesProvider.h */,
+				0A0167692330CABD0069961E /* ServicesProvider.m */,
 				0A0D211A23579887003A2B5F /* AboutWindowController.h */,
 				0A0D211723579887003A2B5F /* AboutWindowController.m */,
 				0A2BBEC9235F9B2400912B65 /* AboutWindowController.xib */,
@@ -482,6 +487,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0A01676A2330CABD0069961E /* ServicesProvider.m in Sources */,
 				E21739F71A5080DD00EC6777 /* DocumentController.m in Sources */,
 				E2E3C9A01D771E7600AA9A62 /* GARawTracker.m in Sources */,
 				E2C338B419F8562F00063D95 /* main.m in Sources */,
