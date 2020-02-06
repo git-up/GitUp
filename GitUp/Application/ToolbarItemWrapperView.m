@@ -27,6 +27,9 @@
       if (field.enabled && field.selectable) {
         return hit;
       }
+
+      // We recognised the view but it is not enabled and selectable, so we need to break this loop iteration
+      continue;
     }
 
     if ([child isKindOfClass:[NSControl class]]) {
