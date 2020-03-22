@@ -5,7 +5,9 @@ GitUp
 
 **Work quickly, safely, and without headaches. The Git interface you've been missing all your life has finally arrived.**
 
-<img src="https://i.imgur.com/JuQIxJu.png" width="45%" height="45%"><img src="https://i.imgur.com/9rgXktz.png" width="45%" height="45%">
+<p align="center">
+<img src="https://i.imgur.com/JuQIxJu.png" width="50%" height="50%"><img src="https://i.imgur.com/9rgXktz.png" width="50%" height="50%">
+</p>
 
 Git recently celebrated its 10 years anniversary, but most engineers are still confused by its intricacy (3 of the [top 5 questions of all time](http://stackoverflow.com/questions?sort=votes) on Stack Overflow are Git related). Since Git turns even simple actions into mystifying commands (“git add” to stage versus “git reset HEAD” to unstage anyone?), it’s no surprise users waste time, get frustrated, distract the rest of their team for help, or worse, screw up their repo!
 
