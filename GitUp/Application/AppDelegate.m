@@ -15,7 +15,6 @@
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wobjc-interface-ivars"
-#import <HockeySDK/HockeySDK.h>
 #pragma clang diagnostic pop
 #import <Sparkle/Sparkle.h>
 
@@ -184,12 +183,6 @@
   [DocumentController sharedDocumentController];
 
 #if !DEBUG
-  // Initialize HockeyApp
-  [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"65233b0e034e4fcbaf6754afba3b2b23"];
-  [[BITHockeyManager sharedHockeyManager] setDisableMetricsManager:YES];
-  [[BITHockeyManager sharedHockeyManager] setDisableFeedbackManager:YES];
-  [[BITHockeyManager sharedHockeyManager] startManager];
-
   // Initialize Google Analytics
   [[GARawTracker sharedTracker] startWithTrackingID:@"UA-83409580-1"];
 #endif
