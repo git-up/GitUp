@@ -278,6 +278,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = DB72901622C833E3007AB8F7 /* Debug.xcconfig */;
 			buildSettings = {
+				ENABLE_HARDENED_RUNTIME = NO;
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -286,6 +287,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = DB72901722C833E3007AB8F7 /* Release.xcconfig */;
 			buildSettings = {
+				ENABLE_HARDENED_RUNTIME = NO;
 				SDKROOT = iphoneos;
 			};
 			name = Release;
