@@ -936,10 +936,9 @@
 }
 
 - (GCHistoryLocalBranch *)branchToDeleteForSelectedCommit:(GCHistoryCommit *)commit {
-  // return commit.localBranches.firstObject;
   NSArray <GCHistoryLocalBranch *>* localBranches = commit.localBranches;
-//  NSArray <GCHistoryRemoteBranch *> *remoteBranches = commit.remoteBranches;
   NSString *headBranchName = self.repository.history.HEADBranch.name;
+  
   NSInteger index = [localBranches indexOfObjectPassingTest:^BOOL(GCHistoryLocalBranch * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
     return ![headBranchName isEqualToString:obj.name];
   }];
