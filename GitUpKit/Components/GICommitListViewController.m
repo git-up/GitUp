@@ -19,6 +19,7 @@
 
 #import "GICommitListViewController.h"
 
+#import "GCLiveRepository+Utilities.h"
 #import "GIInterface.h"
 #import "XLFacilityMacros.h"
 
@@ -241,6 +242,15 @@
 - (void)tableViewSelectionDidChange:(NSNotification*)notification {
   if ([_delegate respondsToSelector:@selector(commitListViewControllerDidChangeSelection:)]) {
     [_delegate commitListViewControllerDidChangeSelection:self];
+  }
+}
+
+- (void)keyDown:(NSEvent *)event {
+  if (event.keyCode == kGIKeyCode_Return) {
+    GCHistoryCommit *commit = [self selectedCommit];
+    [self.repository smartCheckoutCommit:commit window:self.view.window];
+  } else {
+    [super keyDown:event];
   }
 }
 
