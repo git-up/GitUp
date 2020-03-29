@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		0AC8525923A122C400479160 /* GILaunchServicesLocator.h in Headers */ = {isa = PBXBuildFile; fileRef = 0AC8525723A122C400479160 /* GILaunchServicesLocator.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0AC8525A23A122C400479160 /* GILaunchServicesLocator.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AC8525823A122C400479160 /* GILaunchServicesLocator.m */; };
+		1DF371CD22F5262300EF7BD9 /* GCLiveRepository+Utilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 1DF371CB22F5262300EF7BD9 /* GCLiveRepository+Utilities.h */; };
+		1DF371CE22F5262300EF7BD9 /* GCLiveRepository+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DF371CC22F5262300EF7BD9 /* GCLiveRepository+Utilities.m */; };
 		743BF1841B871C0200E1CA49 /* GCOrderedSet.h in Headers */ = {isa = PBXBuildFile; fileRef = 74EDB5D01B84D4C400F00E79 /* GCOrderedSet.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		749335CA1B9B7FF200225513 /* GCOrderedSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 74EDB5D11B84D4C400F00E79 /* GCOrderedSet.m */; };
 		749786941B85AAB10065BD55 /* GCOrderedSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 74EDB5D11B84D4C400F00E79 /* GCOrderedSet.m */; };
@@ -427,6 +429,8 @@
 /* Begin PBXFileReference section */
 		0AC8525723A122C400479160 /* GILaunchServicesLocator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GILaunchServicesLocator.h; sourceTree = "<group>"; };
 		0AC8525823A122C400479160 /* GILaunchServicesLocator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GILaunchServicesLocator.m; sourceTree = "<group>"; };
+		1DF371CB22F5262300EF7BD9 /* GCLiveRepository+Utilities.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GCLiveRepository+Utilities.h"; sourceTree = "<group>"; };
+		1DF371CC22F5262300EF7BD9 /* GCLiveRepository+Utilities.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "GCLiveRepository+Utilities.m"; sourceTree = "<group>"; };
 		74EDB5D01B84D4C400F00E79 /* GCOrderedSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCOrderedSet.h; sourceTree = "<group>"; };
 		74EDB5D11B84D4C400F00E79 /* GCOrderedSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCOrderedSet.m; sourceTree = "<group>"; };
 		74EDB5D51B84E06500F00E79 /* GCOrderedSet-Tests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GCOrderedSet-Tests.m"; sourceTree = "<group>"; };
@@ -875,6 +879,8 @@
 				E259C2D61A64FAEA0079616B /* GCRepository+Utilities-Tests.m */,
 				E218A58C1A56706600DFF1DF /* GCRepository+Utilities.h */,
 				E218A58D1A56706600DFF1DF /* GCRepository+Utilities.m */,
+				1DF371CB22F5262300EF7BD9 /* GCLiveRepository+Utilities.h */,
+				1DF371CC22F5262300EF7BD9 /* GCLiveRepository+Utilities.m */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1183,6 +1189,7 @@
 				E267E2371B84DC3900BAB377 /* GIDiffContentsViewController.h in Headers */,
 				E267E2381B84DC3900BAB377 /* GIDiffFilesViewController.h in Headers */,
 				E267E2391B84DC3900BAB377 /* GISnapshotListViewController.h in Headers */,
+				1DF371CD22F5262300EF7BD9 /* GCLiveRepository+Utilities.h in Headers */,
 				E267E23A1B84DC3900BAB377 /* GIUnifiedReflogViewController.h in Headers */,
 				E267E24D1B84DC7D00BAB377 /* GIAdvancedCommitViewController.h in Headers */,
 				E267E24E1B84DC7D00BAB377 /* GICommitRewriterViewController.h in Headers */,
@@ -1514,6 +1521,7 @@
 				E267E2311B84DC2600BAB377 /* GICommitListViewController.m in Sources */,
 				E267E2321B84DC2600BAB377 /* GIDiffContentsViewController.m in Sources */,
 				E267E2331B84DC2600BAB377 /* GIDiffFilesViewController.m in Sources */,
+				1DF371CE22F5262300EF7BD9 /* GCLiveRepository+Utilities.m in Sources */,
 				E267E2341B84DC2600BAB377 /* GISnapshotListViewController.m in Sources */,
 				E267E2351B84DC2600BAB377 /* GIUnifiedReflogViewController.m in Sources */,
 				E267E2591B84DCA100BAB377 /* GIAdvancedCommitViewController.m in Sources */,

@@ -21,10 +21,6 @@
 - (BOOL)checkCleanRepositoryForOperationOnCommit:(GCCommit*)commit;
 - (BOOL)checkCleanRepositoryForOperationOnBranch:(GCLocalBranch*)branch;
 
-- (void)checkoutCommit:(GCHistoryCommit*)commit;
-- (void)checkoutLocalBranch:(GCHistoryLocalBranch*)branch;
-- (void)checkoutRemoteBranch:(GCHistoryRemoteBranch*)remoteBranch;
-
 - (void)swapCommitWithParent:(GCHistoryCommit*)commit;
 - (void)swapCommitWithChild:(GCHistoryCommit*)commit;
 - (void)squashCommitWithParent:(GCHistoryCommit*)commit;
