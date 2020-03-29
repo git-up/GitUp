@@ -49,8 +49,6 @@
 		E2C5672D1A6D98BC00ECFE07 /* WindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C5672C1A6D98BC00ECFE07 /* WindowController.m */; };
 		E2E3C9A01D771E7600AA9A62 /* GARawTracker.m in Sources */ = {isa = PBXBuildFile; fileRef = E2E3C99F1D771E7600AA9A62 /* GARawTracker.m */; };
 		E2E3C9A21D771E9D00AA9A62 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2E3C9A11D771E9D00AA9A62 /* SystemConfiguration.framework */; };
-		E2E3C9A41D77227F00AA9A62 /* HockeySDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2E3C9A31D77227F00AA9A62 /* HockeySDK.framework */; };
-		E2E3C9A51D77228F00AA9A62 /* HockeySDK.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = E2E3C9A31D77227F00AA9A62 /* HockeySDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -111,7 +109,6 @@
 			dstSubfolderSpec = 10;
 			files = (
 				E267E1F31B84D93300BAB377 /* Sparkle.framework in Copy Frameworks */,
-				E2E3C9A51D77228F00AA9A62 /* HockeySDK.framework in Copy Frameworks */,
 				E28A16E61B87023C00218332 /* GitUpKit.framework in Copy Frameworks */,
 			);
 			name = "Copy Frameworks";
@@ -208,7 +205,6 @@
 				E2C338D719F85C2E00063D95 /* Cocoa.framework in Frameworks */,
 				E267E26B1B84E07E00BAB377 /* Security.framework in Frameworks */,
 				E28A16E51B87023200218332 /* GitUpKit.framework in Frameworks */,
-				E2E3C9A41D77227F00AA9A62 /* HockeySDK.framework in Frameworks */,
 				E2653D251A5B2FBD006A9871 /* Sparkle.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
