@@ -634,7 +634,7 @@ static void _StreamCallback(ConstFSEventStreamRef streamRef, void* clientCallBac
 
   CFAbsoluteTime time = CFAbsoluteTimeGetCurrent();
   if (_statusMode == kGCLiveRepositoryStatusMode_Unified) {
-    unifiedDiff = [self diffWorkingDirectoryWithHEAD:nil
+    unifiedDiff = [self diffWorkingDirectoryWithHEAD:self.filePattern
                                              options:(self.diffBaseOptions | kGCDiffOption_IncludeUntracked | kGCDiffOption_FindRenames)
                                    maxInterHunkLines:_diffMaxInterHunkLines
                                      maxContextLines:_diffMaxContextLines
@@ -644,13 +644,13 @@ static void _StreamCallback(ConstFSEventStreamRef streamRef, void* clientCallBac
     }
   } else {
     XLOG_DEBUG_CHECK(_statusMode == kGCLiveRepositoryStatusMode_Normal);
-    indexDiff = [self diffRepositoryIndexWithHEAD:nil
+    indexDiff = [self diffRepositoryIndexWithHEAD:self.filePattern
                                           options:(self.diffBaseOptions | kGCDiffOption_FindRenames)
                                 maxInterHunkLines:_diffMaxInterHunkLines
                                   maxContextLines:_diffMaxContextLines
                                             error:&error];
     if (indexDiff) {
-      workdirDiff = [self diffWorkingDirectoryWithRepositoryIndex:nil
+      workdirDiff = [self diffWorkingDirectoryWithRepositoryIndex:self.filePattern
                                                           options:(self.diffBaseOptions | kGCDiffOption_IncludeUntracked)
                                                 maxInterHunkLines:_diffMaxInterHunkLines
                                                   maxContextLines:_diffMaxContextLines
@@ -728,6 +728,15 @@ static void _StreamCallback(ConstFSEventStreamRef streamRef, void* clientCallBac
       [self.delegate repository:self stashesUpdateDidFailWithError:error];
     }
   }
+}
+
+#pragma mark - FilePattern
+- (void)updateFilePattern:(NSString *)filePattern {
+  if ([self.filePattern isEqualToString:filePattern]) {
+    return;
+  }
+  self.filePattern = filePattern == nil ? nil : [NSString stringWithFormat:@"*%@*", filePattern];
+  [self _updateStatus:YES];
 }
 
 #pragma mark - Operations
