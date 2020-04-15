@@ -56,8 +56,16 @@
   [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(textDidChange:) name:NSTextDidChangeNotification object:nil];
 }
 
+- (void)resetSearch {
+  [self.searchTextField setStringValue:@""];
+  [self.repository updateFilePattern:nil];
+}
+
+- (void)unsetSearch {
+  [NSNotificationCenter.defaultCenter removeObserver:self];
+}
+
 - (void)textDidChange:(NSNotification *)notification {
-  NSLog(@"NewValue: %@", self.searchTextField.stringValue);
   NSString *text = self.searchTextField.stringValue;
   if ([@"" isEqualToString:text]) {
     [self.repository updateFilePattern:nil];
@@ -121,6 +129,15 @@
 
   XLOG_DEBUG_CHECK(self.repository.statusMode == kGCLiveRepositoryStatusMode_Normal);
   self.repository.statusMode = kGCLiveRepositoryStatusMode_Disabled;
+}
+
+- (void)viewWillDisappear {
+  [super viewWillDisappear];
+  [self resetSearch];
+}
+
+- (void)dealloc {
+  [self unsetSearch];
 }
 
 #pragma mark - Repository Handling
