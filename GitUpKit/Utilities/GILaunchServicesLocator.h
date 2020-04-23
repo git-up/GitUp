@@ -29,12 +29,12 @@ extern NSString* const GIPreferences_TerminalTool_iTerm;
 + (void)setup;
 
 #pragma mark - Installed Apps
-+ (NSDictionary *)installedAppsDictionary;
-+ (BOOL)hasInstalledApplicationForDisplayName:(NSString *)displayName;
-+ (BOOL)hasInstalledApplicationForBundleIdentifier:(NSString *)bundleIdentifier;
++ (NSDictionary*)installedAppsDictionary;
++ (BOOL)hasInstalledApplicationForDisplayName:(NSString*)displayName;
++ (BOOL)hasInstalledApplicationForBundleIdentifier:(NSString*)bundleIdentifier;
 
 #pragma mark - Diff Tools Supplement
-@property (nonatomic, copy, class) NSString *diffTemporaryDirectoryPath;
+@property(nonatomic, copy, class) NSString* diffTemporaryDirectoryPath;
 @end
 
 NS_ASSUME_NONNULL_END

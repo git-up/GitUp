@@ -904,18 +904,18 @@
   [self revertCommit:commit againstLocalBranch:self.repository.history.HEADBranch];
 }
 
-- (GCHistoryLocalBranch *)branchToDeleteForSelectedCommit:(GCHistoryCommit *)commit {
-  NSArray <GCHistoryLocalBranch *>* localBranches = commit.localBranches;
-  NSString *headBranchName = self.repository.history.HEADBranch.name;
-  
-  NSInteger index = [localBranches indexOfObjectPassingTest:^BOOL(GCHistoryLocalBranch * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+- (GCHistoryLocalBranch*)branchToDeleteForSelectedCommit:(GCHistoryCommit*)commit {
+  NSArray<GCHistoryLocalBranch*>* localBranches = commit.localBranches;
+  NSString* headBranchName = self.repository.history.HEADBranch.name;
+
+  NSInteger index = [localBranches indexOfObjectPassingTest:^BOOL(GCHistoryLocalBranch* _Nonnull obj, NSUInteger idx, BOOL* _Nonnull stop) {
     return ![headBranchName isEqualToString:obj.name];
   }];
-  
+
   if (index == NSNotFound) {
     return localBranches.firstObject;
   }
-  
+
   return localBranches[index];
 }
 

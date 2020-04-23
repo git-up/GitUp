@@ -9,11 +9,11 @@
 #import <GitUpKit/GitUpKit.h>
 
 @interface CloneWindowControllerResult ()
-- (instancetype)initWithRepositoryURL:(NSURL *)url directoryPath:(NSString *)path recursive:(BOOL)recursive;
+- (instancetype)initWithRepositoryURL:(NSURL*)url directoryPath:(NSString*)path recursive:(BOOL)recursive;
 @end
 
 @implementation CloneWindowControllerResult
-- (instancetype)initWithRepositoryURL:(NSURL *)url directoryPath:(NSString *)path recursive:(BOOL)recursive {  
+- (instancetype)initWithRepositoryURL:(NSURL*)url directoryPath:(NSString*)path recursive:(BOOL)recursive {
   if ((self = [super init])) {
     self.repositoryURL = url;
     self.directoryPath = path;
@@ -57,16 +57,16 @@
 
 #pragma mark - Actions
 - (IBAction)dismissModal:(id)sender {
-  [NSApp stopModalWithCode:[(NSButton *)sender tag]];
+  [NSApp stopModalWithCode:[(NSButton*)sender tag]];
   [self close];
 }
 
 #pragma mark - Modal
-- (void)runModalForURL:(NSString *)url completion:(nonnull void (^)(CloneWindowControllerResult * _Nonnull))completion {
+- (void)runModalForURL:(NSString*)url completion:(nonnull void (^)(CloneWindowControllerResult* _Nonnull))completion {
   if (!completion) {
     return;
   }
-  
+
   self.url = url;
   if (self.windowLoaded) {
     [self beforeRunInModal];
@@ -82,7 +82,7 @@
       savePanel.nameFieldStringValue = name ? name : @"";
       savePanel.showsTagField = NO;
       if ([savePanel runModal] == NSFileHandlingPanelOKButton) {
-        NSString *path = savePanel.URL.path;
+        NSString* path = savePanel.URL.path;
         completion([[CloneWindowControllerResult alloc] initWithRepositoryURL:url directoryPath:path recursive:self.recursive]);
       } else {
         // empty directory path or cancel button pressed.

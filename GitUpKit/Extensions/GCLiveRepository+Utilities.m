@@ -9,7 +9,7 @@
 
 @implementation GCLiveRepository (Utilities)
 
-- (void)smartCheckoutCommit:(GCHistoryCommit *)commit window:(NSWindow *)window {
+- (void)smartCheckoutCommit:(GCHistoryCommit*)commit window:(NSWindow*)window {
   if (![self validateCheckoutCommit:commit]) {
     NSBeep();
     return;
@@ -27,13 +27,14 @@
       [alert addButtonWithTitle:NSLocalizedString(@"Checkout Commit", nil)];
       [alert addButtonWithTitle:NSLocalizedString(@"Cancel", nil)];
       alert.type = kGIAlertType_Note;
-      [alert beginSheetModalForWindow:window completionHandler:^(NSModalResponse returnCode) {
-        if (returnCode == NSAlertFirstButtonReturn) {
-          [self checkoutRemoteBranch:branch window:window];
-        } else if (returnCode == NSAlertSecondButtonReturn) {
-          [self _checkoutCommit:target window:window];
-        }
-      }];
+      [alert beginSheetModalForWindow:window
+                    completionHandler:^(NSModalResponse returnCode) {
+                      if (returnCode == NSAlertFirstButtonReturn) {
+                        [self checkoutRemoteBranch:branch window:window];
+                      } else if (returnCode == NSAlertSecondButtonReturn) {
+                        [self _checkoutCommit:target window:window];
+                      }
+                    }];
     } else {
       [self _checkoutCommit:target window:window];
     }
@@ -41,7 +42,7 @@
 }
 
 // This will abort on conflicts in workdir or index so there's no need to require a clean repo
-- (void)checkoutRemoteBranch:(GCHistoryRemoteBranch*)remoteBranch window:(NSWindow *)window {
+- (void)checkoutRemoteBranch:(GCHistoryRemoteBranch*)remoteBranch window:(NSWindow*)window {
   NSError* error;
   [self setUndoActionName:[NSString stringWithFormat:NSLocalizedString(@"Checkout Remote Branch \"%@\"", nil), remoteBranch.name]];
   if (![self performOperationWithReason:@"checkout_remote_branch"
@@ -62,12 +63,12 @@
                                }
                                return YES;
                              }]) {
-                               [window presentError:error];
-                             }
+    [window presentError:error];
+  }
 }
 
 // This will preemptively abort on conflicts in workdir or index so there's no need to require a clean repo
-- (void)_checkoutLocalBranch:(GCHistoryLocalBranch*)branch window:(NSWindow *)window {
+- (void)_checkoutLocalBranch:(GCHistoryLocalBranch*)branch window:(NSWindow*)window {
   NSError* error;
   [self setUndoActionName:[NSString stringWithFormat:NSLocalizedString(@"Checkout Branch \"%@\"", nil), branch.name]];
   if (![self performOperationWithReason:@"checkout_branch"
@@ -77,12 +78,12 @@
                              usingBlock:^BOOL(GCLiveRepository* repository, NSError** outError) {
                                return [repository checkoutLocalBranch:branch options:kGCCheckoutOption_UpdateSubmodulesRecursively error:outError];
                              }]) {
-                               [window presentError:error];
-                             }
+    [window presentError:error];
+  }
 }
 
 // This will preemptively abort on conflicts in workdir or index so there's no need to require a clean repo
-- (void)_checkoutCommit:(GCHistoryCommit*)commit window:(NSWindow *)window {
+- (void)_checkoutCommit:(GCHistoryCommit*)commit window:(NSWindow*)window {
   NSError* error;
   [self setUndoActionName:NSLocalizedString(@"Checkout Commit", nil)];
   if (![self performOperationWithReason:@"checkout_commit"
@@ -92,8 +93,8 @@
                              usingBlock:^BOOL(GCLiveRepository* repository, NSError** outError) {
                                return [repository checkoutCommit:commit options:kGCCheckoutOption_UpdateSubmodulesRecursively error:outError];
                              }]) {
-                               [window presentError:error];
-                             }
+    [window presentError:error];
+  }
 }
 
 - (id)smartCheckoutTarget:(GCHistoryCommit*)commit {

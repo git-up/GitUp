@@ -7,7 +7,6 @@
 
 #import <AppKit/AppKit.h>
 
-
 NS_ASSUME_NONNULL_BEGIN
 
 @class GCRepository;
@@ -16,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 // Repository
 - (void)repository:(GCRepository*)repository willStartTransferWithURL:(NSURL*)url;
-- (BOOL)repository:(GCRepository*)repository requiresPlainTextAuthenticationForURL:(NSURL*)url user:(NSString*)user username:(NSString * _Nullable * _Nonnull )username password:(NSString * _Nullable * _Nonnull)password;
+- (BOOL)repository:(GCRepository*)repository requiresPlainTextAuthenticationForURL:(NSURL*)url user:(NSString*)user username:(NSString* _Nullable* _Nonnull)username password:(NSString* _Nullable* _Nonnull)password;
 - (void)repository:(GCRepository*)repository didFinishTransferWithURL:(NSURL*)url success:(BOOL)success;
 @end
 

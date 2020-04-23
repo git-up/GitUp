@@ -52,7 +52,7 @@
 #define kMaxProgressRefreshRate 10.0  // Hz
 
 @interface Document () <NSToolbarDelegate, NSTextFieldDelegate, GCLiveRepositoryDelegate, GIWindowControllerDelegate, GIMapViewControllerDelegate, GISnapshotListViewControllerDelegate, GIUnifiedReflogViewControllerDelegate, GICommitListViewControllerDelegate, GICommitRewriterViewControllerDelegate, GICommitSplitterViewControllerDelegate, GIConflictResolverViewControllerDelegate>
-@property (nonatomic, strong) AuthenticationWindowController *authenticationWindowController;
+@property(nonatomic, strong) AuthenticationWindowController* authenticationWindowController;
 @end
 
 static NSDictionary* _helpPlist = nil;
@@ -128,7 +128,7 @@ static inline WindowModeID _WindowModeIDFromString(NSString* mode) {
 }
 
 #pragma mark - Properties
-- (AuthenticationWindowController *)authenticationWindowController {
+- (AuthenticationWindowController*)authenticationWindowController {
   if (!_authenticationWindowController) {
     _authenticationWindowController = [[AuthenticationWindowController alloc] init];
   }
@@ -400,7 +400,8 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
 }
 
 // Override -updateChangeCount: which is trigged by NSUndoManager to do nothing and not mark document as updated
-- (void)updateChangeCount:(NSDocumentChangeType)change {}
+- (void)updateChangeCount:(NSDocumentChangeType)change {
+}
 
 - (BOOL)presentError:(NSError*)error {
   if (error == nil) {
@@ -1518,7 +1519,8 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 
 #pragma mark - GICommitViewControllerDelegate
 
-- (void)commitViewController:(GICommitViewController*)controller didCreateCommit:(GCCommit*)commit {}
+- (void)commitViewController:(GICommitViewController*)controller didCreateCommit:(GCCommit*)commit {
+}
 
 #pragma mark - GICommitRewriterViewControllerDelegate
 
@@ -1974,15 +1976,25 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 // reset all permissions for particular bundle identifier.
 // $ tccutil reset All co.gitup.mac-debug
 
-- (NSString *)scriptForTerminalAppName:(NSString *)name {
+- (NSString*)scriptForTerminalAppName:(NSString*)name {
   if ([name isEqualToString:GIPreferences_TerminalTool_Terminal]) {
     return [NSString stringWithFormat:
-            @"""tell application \"%@\" \n"""
-            """reopen \n"""
-            """activate \n"""
-            """do script \"cd \\\"%@\\\"\" \n"""
-            """end tell \n""",
-            name, _repository.workingDirectoryPath];
+                         @""
+                          "tell application \"%@\" \n"
+                          ""
+                          ""
+                          "reopen \n"
+                          ""
+                          ""
+                          "activate \n"
+                          ""
+                          ""
+                          "do script \"cd \\\"%@\\\"\" \n"
+                          ""
+                          ""
+                          "end tell \n"
+                          "",
+                         name, _repository.workingDirectoryPath];
   }
   /*
    -- if application is running, we already have a window.
@@ -2009,69 +2021,106 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
     end if
    */
   if ([name isEqualToString:GIPreferences_TerminalTool_iTerm] || [name isEqualToString:GIPreferences_TerminalTool_Terminal]) {
-    NSString *command = [NSString stringWithFormat:@"cd '%@'", _repository.workingDirectoryPath];
-    NSString *isRunningPhase = [NSString stringWithFormat:
-                                @"""tell application \"%@\" \n"""
-                                """tell current session of (create window with default profile) \n"""
-                                """set command to \"%@\" \n"""
-                                """write text command \n"""
-                                """end tell \n"""
-                                """activate \n"""
-                                """end tell \n""",
-                                name, command
-                                ];
-    NSString *isNotRunningPhase = [NSString stringWithFormat:
-                                   @"""tell application \"%@\" \n"""
-                                   """activate \n"""
-                                   """tell current session of current window \n"""
-                                   """select \n"""
-                                   """set command to \"%@\" \n"""
-                                   """write text command \n"""
-                                   """end tell \n"""
-                                   """end tell \n""",
-                                   name, command
-                                   ];
-    NSString *script = [NSString stringWithFormat:
-                        @"""if application \"%@\" is running then \n"""
-                        """ %@ \n"""
-                        """else \n"""
-                        """ %@ \n"""
-                        """end if \n""",
-                        name, isRunningPhase, isNotRunningPhase
-                        ];
+    NSString* command = [NSString stringWithFormat:@"cd '%@'", _repository.workingDirectoryPath];
+    NSString* isRunningPhase = [NSString stringWithFormat:
+                                             @""
+                                              "tell application \"%@\" \n"
+                                              ""
+                                              ""
+                                              "tell current session of (create window with default profile) \n"
+                                              ""
+                                              ""
+                                              "set command to \"%@\" \n"
+                                              ""
+                                              ""
+                                              "write text command \n"
+                                              ""
+                                              ""
+                                              "end tell \n"
+                                              ""
+                                              ""
+                                              "activate \n"
+                                              ""
+                                              ""
+                                              "end tell \n"
+                                              "",
+                                             name, command];
+    NSString* isNotRunningPhase = [NSString stringWithFormat:
+                                                @""
+                                                 "tell application \"%@\" \n"
+                                                 ""
+                                                 ""
+                                                 "activate \n"
+                                                 ""
+                                                 ""
+                                                 "tell current session of current window \n"
+                                                 ""
+                                                 ""
+                                                 "select \n"
+                                                 ""
+                                                 ""
+                                                 "set command to \"%@\" \n"
+                                                 ""
+                                                 ""
+                                                 "write text command \n"
+                                                 ""
+                                                 ""
+                                                 "end tell \n"
+                                                 ""
+                                                 ""
+                                                 "end tell \n"
+                                                 "",
+                                                name, command];
+    NSString* script = [NSString stringWithFormat:
+                                     @""
+                                      "if application \"%@\" is running then \n"
+                                      ""
+                                      ""
+                                      " %@ \n"
+                                      ""
+                                      ""
+                                      "else \n"
+                                      ""
+                                      ""
+                                      " %@ \n"
+                                      ""
+                                      ""
+                                      "end if \n"
+                                      "",
+                                     name, isRunningPhase, isNotRunningPhase];
     return script;
   }
   return nil;
 }
 
-- (void)openInTerminalAppName:(NSString *)name {
+- (void)openInTerminalAppName:(NSString*)name {
   NSString* script = [self scriptForTerminalAppName:name];
 
   if (script == nil) {
     NSUInteger code = 1000;
-    NSDictionary *userInfo = @{NSLocalizedDescriptionKey : NSLocalizedString(@"Error occured! Unsupported key in user defaults for Preferred terminal app is occured. Key is", nil)};
-    NSError *error = [NSError errorWithDomain:@"org.gitup.preferences.terminal" code:code userInfo:userInfo];
+    NSDictionary* userInfo = @{NSLocalizedDescriptionKey : NSLocalizedString(@"Error occured! Unsupported key in user defaults for Preferred terminal app is occured. Key is", nil)};
+    NSError* error = [NSError errorWithDomain:@"org.gitup.preferences.terminal" code:code userInfo:userInfo];
     [self presentError:error];
     return;
   }
 
-  NSDictionary *dictionary = nil;
+  NSDictionary* dictionary = nil;
   [[[NSAppleScript alloc] initWithSource:script] executeAndReturnError:&dictionary];
   if (dictionary != nil) {
-    NSString *message = (NSString *)dictionary[NSAppleScriptErrorMessage] ?: @"Unknown error!";
+    NSString* message = (NSString*)dictionary[NSAppleScriptErrorMessage] ?: @"Unknown error!";
     // show error?
     NSInteger code = [dictionary[NSAppleScriptErrorNumber] integerValue];
-    NSString *key = @"NSAppleEventsUsageDescription";
-    NSString *recovery = [[NSBundle mainBundle] localizedStringForKey:key value:nil table:@"InfoPlist"];
-    NSDictionary *userInfo = @{NSLocalizedDescriptionKey : message, NSLocalizedRecoveryOptionsErrorKey : recovery};
-    NSError *error = [NSError errorWithDomain:@"com.apple.security.automation.appleEvents" code:code userInfo:userInfo];
+    NSString* key = @"NSAppleEventsUsageDescription";
+    NSString* recovery = [[NSBundle mainBundle] localizedStringForKey:key value:nil table:@"InfoPlist"];
+    NSDictionary* userInfo = @{NSLocalizedDescriptionKey : message, NSLocalizedRecoveryOptionsErrorKey : recovery};
+    NSError* error = [NSError errorWithDomain:@"com.apple.security.automation.appleEvents" code:code userInfo:userInfo];
     [self presentError:error];
   }
-//  [[NSWorkspace sharedWorkspace] launchApplication:name];
+  //  [[NSWorkspace sharedWorkspace] launchApplication:name];
 }
 
 - (IBAction)openInTerminal:(id)sender {
-  NSString *identifier = [[NSUserDefaults standardUserDefaults] stringForKey:GIPreferences_TerminalTool];
+  NSString* identifier = [[NSUserDefaults standardUserDefaults] stringForKey:GIPreferences_TerminalTool];
   [self openInTerminalAppName:identifier];
 }
 

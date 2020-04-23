@@ -19,15 +19,15 @@ NSString* const PreferencesWindowController_Theme_Light = @"lightTheme";
 NSString* const PreferencesWindowController_Theme_Dark = @"darkTheme";
 
 #pragma mark - Preferences / Item Identifiers
-static NSString * const PreferencesWindowController_Identifier_General = @"general";
+static NSString* const PreferencesWindowController_Identifier_General = @"general";
 
 @interface PreferencesThemeService ()
-+ (NSAppearanceName)appearanceNameWithTheme:(NSString *)theme;
-+ (void)applyTheme:(NSString *)theme;
++ (NSAppearanceName)appearanceNameWithTheme:(NSString*)theme;
++ (void)applyTheme:(NSString*)theme;
 @end
 
 @implementation PreferencesThemeService
-+ (NSAppearanceName)appearanceNameWithTheme:(NSString *)theme {
++ (NSAppearanceName)appearanceNameWithTheme:(NSString*)theme {
   if (@available(macOS 10.14, *)) {
     if ([theme isEqualToString:PreferencesWindowController_Theme_Dark]) {
       return NSAppearanceNameDarkAqua;
@@ -42,13 +42,13 @@ static NSString * const PreferencesWindowController_Identifier_General = @"gener
   return nil;
 }
 
-+ (void)applyTheme:(NSString *)theme {
++ (void)applyTheme:(NSString*)theme {
   NSAppearanceName name = [self appearanceNameWithTheme:theme];
   NSApp.appearance = name != nil ? [NSAppearance appearanceNamed:name] : nil;
   [NSUserDefaults.standardUserDefaults setObject:theme forKey:kUserDefaultsKey_Theme];
 }
 
-+ (NSString *)selectedTheme {
++ (NSString*)selectedTheme {
   return [NSUserDefaults.standardUserDefaults stringForKey:kUserDefaultsKey_Theme];
 }
 
@@ -74,18 +74,18 @@ static NSString * const PreferencesWindowController_Identifier_General = @"gener
 #pragma mark - Window Lifecycle
 - (void)windowDidLoad {
   [super windowDidLoad];
-  
+
   self.channelTitles = @[
     PreferencesWindowController_ReleaseChannel_Stable,
     PreferencesWindowController_ReleaseChannel_Continuous
   ];
-  
+
   self.themesTitles = @[
     PreferencesWindowController_Theme_SystemPreference,
     PreferencesWindowController_Theme_Light,
     PreferencesWindowController_Theme_Dark
   ];
-  
+
   self.selectedItemIdentifier = PreferencesWindowController_Identifier_General;
 }
 
@@ -100,7 +100,7 @@ static NSString * const PreferencesWindowController_Identifier_General = @"gener
 }
 
 #pragma mark - PopUp Buttons
-- (void)setChannelTitles:(NSArray<NSString *> *)channelTitles {
+- (void)setChannelTitles:(NSArray<NSString*>*)channelTitles {
   [self.channelPopUpButton.menu removeAllItems];
   for (NSString* string in channelTitles) {
     NSMenuItem* item = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(string, nil) action:NULL keyEquivalent:@""];
@@ -109,7 +109,7 @@ static NSString * const PreferencesWindowController_Identifier_General = @"gener
   }
 }
 
-- (void)setThemesTitles:(NSArray<NSString *> *)themesTitles {
+- (void)setThemesTitles:(NSArray<NSString*>*)themesTitles {
   [self.themePopUpButton.menu removeAllItems];
   for (NSString* string in themesTitles) {
     NSMenuItem* item = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(string, nil) action:NULL keyEquivalent:@""];
@@ -118,16 +118,16 @@ static NSString * const PreferencesWindowController_Identifier_General = @"gener
   }
 }
 
-- (NSArray<NSString *> *)channelTitles {
+- (NSArray<NSString*>*)channelTitles {
   return self.channelPopUpButton.itemTitles;
 }
 
-- (NSArray<NSString *> *)themesTitles {
+- (NSArray<NSString*>*)themesTitles {
   return self.themePopUpButton.itemTitles;
 }
 
-- (void)setSelectedChannel:(NSString *)selectedChannel {
-  for (NSMenuItem *item in self.channelPopUpButton.itemArray) {
+- (void)setSelectedChannel:(NSString*)selectedChannel {
+  for (NSMenuItem* item in self.channelPopUpButton.itemArray) {
     if ([item.representedObject isEqualToString:selectedChannel]) {
       [self.channelPopUpButton selectItem:item];
       break;
@@ -135,8 +135,8 @@ static NSString * const PreferencesWindowController_Identifier_General = @"gener
   }
 }
 
-- (void)setSelectedTheme:(NSString *)selectedTheme {
-  for (NSMenuItem *item in self.themePopUpButton.itemArray) {
+- (void)setSelectedTheme:(NSString*)selectedTheme {
+  for (NSMenuItem* item in self.themePopUpButton.itemArray) {
     if ([item.representedObject isEqualToString:selectedTheme]) {
       [self.themePopUpButton selectItem:item];
       break;
@@ -144,28 +144,28 @@ static NSString * const PreferencesWindowController_Identifier_General = @"gener
   }
 }
 
-- (NSString *)selectedChannel {
+- (NSString*)selectedChannel {
   return self.channelPopUpButton.selectedItem.representedObject;
 }
 
-- (NSString *)selectedTheme {
+- (NSString*)selectedTheme {
   return self.themePopUpButton.selectedItem.representedObject;
 }
 
 #pragma mark - Selection
-- (void)setSelectedItemIdentifier:(NSString *)selectedItemIdentifier {
+- (void)setSelectedItemIdentifier:(NSString*)selectedItemIdentifier {
   self.preferencesToolbar.selectedItemIdentifier = selectedItemIdentifier;
   [self selectPreferencePane:nil];
 }
 
-- (NSString *)selectedItemIdentifier {
+- (NSString*)selectedItemIdentifier {
   return self.preferencesToolbar.selectedItemIdentifier;
 }
 
 #pragma mark - Actions
 #pragma mark - Actions / Select Preference Pane
 - (IBAction)selectPreferencePane:(id)sender {
-  NSWindow *window = self.window;
+  NSWindow* window = self.window;
   [_preferencesTabView selectTabViewItemWithIdentifier:_preferencesToolbar.selectedItemIdentifier];
   NSSize size = NSSizeFromString(_preferencesTabView.selectedTabViewItem.label);
   NSRect rect = [window contentRectForFrameRect:window.frame];

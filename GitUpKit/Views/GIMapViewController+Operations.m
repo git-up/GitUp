@@ -340,7 +340,7 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
 - (void)copyCommitMessage:(GCHistoryCommit*)commit {
   NSString* message = _CleanedUpCommitMessage(commit.message);
   [self.windowController showOverlayWithStyle:kGIOverlayStyle_Informational format:NSLocalizedString(@"Commit message copied: \"%@\"", nil), message];
-  [[NSPasteboard generalPasteboard] declareTypes:@[NSStringPboardType] owner:nil];
+  [[NSPasteboard generalPasteboard] declareTypes:@[ NSStringPboardType ] owner:nil];
   [[NSPasteboard generalPasteboard] setString:message forType:NSPasteboardTypeString];
 }
 

@@ -12,13 +12,13 @@ NS_ASSUME_NONNULL_BEGIN
 @interface GCLiveRepository (Utilities)
 
 /// Attempt to checkout branch matching commit or fallback to commit. Window is used to present modal dialog.
-- (void)smartCheckoutCommit:(GCHistoryCommit *)commit window:(NSWindow *)window;
+- (void)smartCheckoutCommit:(GCHistoryCommit*)commit window:(NSWindow*)window;
 
 /// Returns target for smart checkout
 - (id)smartCheckoutTarget:(GCHistoryCommit*)commit;
 
 /// Checkout remote branch and ask user to create local branch if none exists. Window is used to present modal dialog.
-- (void)checkoutRemoteBranch:(GCHistoryRemoteBranch*)remoteBranch window:(NSWindow *)window;
+- (void)checkoutRemoteBranch:(GCHistoryRemoteBranch*)remoteBranch window:(NSWindow*)window;
 
 @end
 

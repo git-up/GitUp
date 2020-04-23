@@ -12,11 +12,11 @@
 @interface WelcomeWindowView : NSView <NSDraggingDestination>
 
 // Drag and Drop
-@property (weak, nonatomic) IBOutlet NSImageView *imageView;
-@property (assign, nonatomic) BOOL receivingDrag;
+@property(weak, nonatomic) IBOutlet NSImageView* imageView;
+@property(assign, nonatomic) BOOL receivingDrag;
 
 // Open document
-@property (copy, nonatomic) void(^openDocumentAtURL)(NSURL *url);
+@property(copy, nonatomic) void (^openDocumentAtURL)(NSURL* url);
 @end
 
 @implementation WelcomeWindowView
@@ -24,7 +24,7 @@
 #pragma mark - Setup
 - (void)setup {
   [self.imageView unregisterDraggedTypes];
-  [self registerForDraggedTypes:@[NSURLPboardType]];
+  [self registerForDraggedTypes:@[ NSURLPboardType ]];
 }
 
 - (void)awakeFromNib {
@@ -41,7 +41,7 @@
 - (void)drawRect:(NSRect)dirtyRect {
   if (self.receivingDrag) {
     [NSColor.selectedControlColor set];
-    NSBezierPath *path = [NSBezierPath bezierPathWithRoundedRect:self.bounds xRadius:10 yRadius:10];
+    NSBezierPath* path = [NSBezierPath bezierPathWithRoundedRect:self.bounds xRadius:10 yRadius:10];
     path.lineWidth = 5;
     [path stroke];
   }
@@ -52,15 +52,15 @@
   return [self draggingItems:sender].count > 0;
 }
 
-- (NSArray <NSURL *>*)draggingItems:(id<NSDraggingInfo>)sender {
-  return [[sender draggingPasteboard] readObjectsForClasses:@[NSURL.class] options:nil];
+- (NSArray<NSURL*>*)draggingItems:(id<NSDraggingInfo>)sender {
+  return [[sender draggingPasteboard] readObjectsForClasses:@[ NSURL.class ] options:nil];
 }
 
 #pragma mark - NSDraggingDestination
 - (NSDragOperation)draggingEntered:(id<NSDraggingInfo>)sender {
   BOOL canDragItem = [self canDragItem:sender];
   self.receivingDrag = canDragItem;
-  return canDragItem ? NSDragOperationCopy :  NSDragOperationNone;
+  return canDragItem ? NSDragOperationCopy : NSDragOperationNone;
 }
 
 - (void)draggingEnded:(id<NSDraggingInfo>)sender {
@@ -77,13 +77,13 @@
 
 - (BOOL)performDragOperation:(id<NSDraggingInfo>)sender {
   self.receivingDrag = NO;
-  
-  NSURL *url = [self draggingItems:sender].firstObject;
-  
+
+  NSURL* url = [self draggingItems:sender].firstObject;
+
   if (self.openDocumentAtURL) {
     self.openDocumentAtURL(url);
   }
-  
+
   return YES;
 }
 
@@ -122,12 +122,12 @@ typedef NS_ENUM(NSInteger, WelcomeWindowControllerWindowState) {
 };
 
 @interface WelcomeWindowController ()
-@property(nonatomic, weak) IBOutlet NSButton *closeButton;
+@property(nonatomic, weak) IBOutlet NSButton* closeButton;
 @property(nonatomic, weak) IBOutlet NSPopUpButton* recentPopUpButton;
 @property(nonatomic, weak) IBOutlet GILinkButton* twitterButton;
 @property(nonatomic, weak) IBOutlet GILinkButton* forumsButton;
-@property(nonatomic, weak) IBOutlet WelcomeWindowView *destinationView;
-@property (assign, nonatomic, readwrite) WelcomeWindowControllerWindowState state;
+@property(nonatomic, weak) IBOutlet WelcomeWindowView* destinationView;
+@property(assign, nonatomic, readwrite) WelcomeWindowControllerWindowState state;
 @end
 
 @implementation WelcomeWindowController
@@ -159,15 +159,15 @@ typedef NS_ENUM(NSInteger, WelcomeWindowControllerWindowState) {
   self.twitterButton.textFont = [NSFont boldSystemFontOfSize:11];
   self.forumsButton.textAlignment = NSLeftTextAlignment;
   self.forumsButton.textFont = [NSFont boldSystemFontOfSize:11];
-  
+
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willShowPopUpMenu) name:NSPopUpButtonWillPopUpNotification object:self.recentPopUpButton];
-  
+
   self.closeButton.action = @selector(closeButtonPressed);
   self.twitterButton.action = @selector(openTwitter);
-  
+
   self.closeButton.target = self;
   self.twitterButton.target = self;
-  
+
   self.destinationView.openDocumentAtURL = self.openDocumentAtURL;
 }
 
@@ -203,7 +203,7 @@ typedef NS_ENUM(NSInteger, WelcomeWindowControllerWindowState) {
   }
 }
 
-- (void)didPressPopUpItem:(NSMenuItem *)item {
+- (void)didPressPopUpItem:(NSMenuItem*)item {
   if ([item.representedObject isKindOfClass:NSURL.class]) {
     if (self.openDocumentAtURL) {
       self.openDocumentAtURL(item.representedObject);

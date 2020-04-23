@@ -24,18 +24,18 @@
 }
 
 - (void)populateWithDataWhenUpdateIsPending:(BOOL)updatePending {
-    NSString *version = nil;
-  #if DEBUG
-    version = @"DEBUG";
-  #else
-    if (updatePending) {
-      version = NSLocalizedString(@"Update Pending", nil);
-    } else {
-      version = [NSString stringWithFormat:NSLocalizedString(@"Version %@ (%@)", nil), [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"], [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"]];
-    }
-  #endif
-    self.versionTextField.stringValue = version;
-    self.copyrightTextField.stringValue = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSHumanReadableCopyright"];
+  NSString* version = nil;
+#if DEBUG
+  version = @"DEBUG";
+#else
+  if (updatePending) {
+    version = NSLocalizedString(@"Update Pending", nil);
+  } else {
+    version = [NSString stringWithFormat:NSLocalizedString(@"Version %@ (%@)", nil), [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"], [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"]];
+  }
+#endif
+  self.versionTextField.stringValue = version;
+  self.copyrightTextField.stringValue = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSHumanReadableCopyright"];
 }
 
 @end

@@ -13,16 +13,16 @@ NS_ASSUME_NONNULL_BEGIN
 @interface WelcomeWindowController : NSWindowController
 
 // Hide and Show
-@property (assign, nonatomic, readonly) BOOL shouldShow;
-@property (assign, nonatomic, readonly) BOOL notActivedYet;
+@property(assign, nonatomic, readonly) BOOL shouldShow;
+@property(assign, nonatomic, readonly) BOOL notActivedYet;
 - (void)setShouldShow;
 - (void)setShouldHide;
 
 // Recent items configuration
-@property(nonatomic, copy) void(^openDocumentAtURL)(NSURL *url);
+@property(nonatomic, copy) void (^openDocumentAtURL)(NSURL* url);
 
 // UserDefaultsKeys
-@property(nonatomic, copy) NSString *keyShouldShowWindow;
+@property(nonatomic, copy) NSString* keyShouldShowWindow;
 
 // Actions
 - (void)handleDocumentCountChanged;

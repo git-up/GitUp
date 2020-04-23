@@ -191,9 +191,9 @@ static const void* _associatedObjectCommitKey = &_associatedObjectCommitKey;
     NSRect bounds = self.bounds;
     CGFloat offset = self.textContainerOrigin.x + self.textContainerInset.width + self.textContainer.lineFragmentPadding;
     CGFloat charWidth = [@"x" sizeWithAttributes:@{
-                           NSFontAttributeName : self.font
-                         }]
-                             .width;
+                          NSFontAttributeName : self.font
+                        }]
+                            .width;
     CGContextRef context = [[NSGraphicsContext currentContext] graphicsPort];
 
     CGContextSaveGState(context);
