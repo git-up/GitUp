@@ -35,4 +35,3 @@
 #define kURL_Issues @"https://github.com/git-up/GitUp/issues"
 #define kURL_Wiki @"https://github.com/git-up/GitUp/wiki"
 #define kURL_ReleaseNotes @"https://github.com/git-up/GitUp/releases"
-

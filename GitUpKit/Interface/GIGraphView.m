@@ -377,11 +377,11 @@ static const void* _associatedObjectDataKey = &_associatedObjectDataKey;
 }
 
 - (void)_selectSideNodeAtPosition:(NSPoint)point {
-  GILayer *layer = [self findLayerAtPosition:point.y];
+  GILayer* layer = [self findLayerAtPosition:point.y];
   if (layer == nil) {
     return;
   }
-  NSUInteger index = [layer.nodes indexOfObjectPassingTest:^BOOL(GINode * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+  NSUInteger index = [layer.nodes indexOfObjectPassingTest:^BOOL(GINode* _Nonnull obj, NSUInteger idx, BOOL* _Nonnull stop) {
     return obj != _selectedNode && !obj.dummy;
   }];
   if (index != NSNotFound) {
@@ -1497,12 +1497,14 @@ static void _DrawSelectedNode(CGContextRef context, CGFloat x, CGFloat y, GINode
   // Draw grid
   CGContextSetLineWidth(context, 1);
   CGContextSetRGBStrokeColor(context, 1.0, 1.0, 1.0, 0.25);
-  [layers enumerateObjectsAtIndexes:indexes options:0 usingBlock:^(GILayer* layer, NSUInteger index, BOOL *stop) {
-    CGFloat y = CONVERT_Y(offset - layer.y);
-    CGContextMoveToPoint(context, dirtyRect.origin.x, y);
-    CGContextAddLineToPoint(context, dirtyRect.origin.x + dirtyRect.size.width, y);
-    CGContextStrokePath(context);
-  }];
+  [layers enumerateObjectsAtIndexes:indexes
+                            options:0
+                         usingBlock:^(GILayer* layer, NSUInteger index, BOOL* stop) {
+                           CGFloat y = CONVERT_Y(offset - layer.y);
+                           CGContextMoveToPoint(context, dirtyRect.origin.x, y);
+                           CGContextAddLineToPoint(context, dirtyRect.origin.x + dirtyRect.size.width, y);
+                           CGContextStrokePath(context);
+                         }];
   for (NSUInteger i = 0; i < 100; ++i) {
     CGFloat x = CONVERT_X(i);
     CGContextMoveToPoint(context, x, dirtyRect.origin.y);
@@ -1535,34 +1537,36 @@ static void _DrawSelectedNode(CGContextRef context, CGFloat x, CGFloat y, GINode
 
   // Draw nodes
   CGContextSetLineWidth(context, 1);
-  [layers enumerateObjectsAtIndexes:indexes options:0 usingBlock:^(GILayer* layer, NSUInteger index, BOOL *stop) {
-    CGFloat y = CONVERT_Y(offset - layer.y);
-    for (GINode* node in layer.nodes) {
-      CGFloat x = CONVERT_X(node.x);
+  [layers enumerateObjectsAtIndexes:indexes
+                            options:0
+                         usingBlock:^(GILayer* layer, NSUInteger index, BOOL* stop) {
+                           CGFloat y = CONVERT_Y(offset - layer.y);
+                           for (GINode* node in layer.nodes) {
+                             CGFloat x = CONVERT_X(node.x);
 
-      if (layer.index == 0) {
-        _DrawTipNode(node, context, x, y);
-        continue;
-      }
+                             if (layer.index == 0) {
+                               _DrawTipNode(node, context, x, y);
+                               continue;
+                             }
 
-      if (node.dummy) {
+                             if (node.dummy) {
 #if __DEBUG_DRAWING__
-        CGContextSetRGBFillColor(context, 1.0, 1.0, 1.0, 1.0);
-        CGContextFillRect(context, CGRectMake(x - 2, y - 2, 4, 4));
-        CGContextSetRGBFillColor(context, 0.0, 0.0, 0.0, 1.0);
-        CGContextFillRect(context, CGRectMake(x - 1, y - 1, 2, 2));
+                               CGContextSetRGBFillColor(context, 1.0, 1.0, 1.0, 1.0);
+                               CGContextFillRect(context, CGRectMake(x - 2, y - 2, 4, 4));
+                               CGContextSetRGBFillColor(context, 0.0, 0.0, 0.0, 1.0);
+                               CGContextFillRect(context, CGRectMake(x - 1, y - 1, 2, 2));
 #endif
-        continue;
-      }
+                               continue;
+                             }
 
-      if (node.commit.root) {
-        _DrawRootNode(node, context, x, y);
-        continue;
-      }
+                             if (node.commit.root) {
+                               _DrawRootNode(node, context, x, y);
+                               continue;
+                             }
 
-      _DrawNode(node, context, x, y);
-    }
-  }];
+                             _DrawNode(node, context, x, y);
+                           }
+                         }];
 
 #if __DEBUG_MAIN_LINE__ || __DEBUG_DESCENDANTS__ || __DEBUG_ANCESTORS__
   // Draw highlighted debug nodes

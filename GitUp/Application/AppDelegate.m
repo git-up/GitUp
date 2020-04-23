@@ -43,10 +43,10 @@
 #define kToolInstallPath @"/usr/local/bin/" kToolName
 
 @interface AppDelegate () <NSUserNotificationCenterDelegate, SUUpdaterDelegate>
-@property(nonatomic, strong) AboutWindowController *aboutWindowController;
-@property(nonatomic, strong) CloneWindowController *cloneWindowController;
-@property(nonatomic, strong) PreferencesWindowController *preferencesWindowController;
-@property(nonatomic, strong) WelcomeWindowController *welcomeWindowController;
+@property(nonatomic, strong) AboutWindowController* aboutWindowController;
+@property(nonatomic, strong) CloneWindowController* cloneWindowController;
+@property(nonatomic, strong) PreferencesWindowController* preferencesWindowController;
+@property(nonatomic, strong) WelcomeWindowController* welcomeWindowController;
 @end
 
 @implementation AppDelegate {
@@ -59,14 +59,14 @@
 
 #pragma mark - Properties
 
-- (AboutWindowController *)aboutWindowController {
+- (AboutWindowController*)aboutWindowController {
   if (!_aboutWindowController) {
     _aboutWindowController = [[AboutWindowController alloc] init];
   }
   return _aboutWindowController;
 }
 
-- (CloneWindowController *)cloneWindowController {
+- (CloneWindowController*)cloneWindowController {
   if (!_cloneWindowController) {
     _cloneWindowController = [[CloneWindowController alloc] init];
   }
@@ -80,7 +80,7 @@
   }
 }
 
-- (PreferencesWindowController *)preferencesWindowController {
+- (PreferencesWindowController*)preferencesWindowController {
   if (!_preferencesWindowController) {
     _preferencesWindowController = [[PreferencesWindowController alloc] init];
     __weak typeof(self) weakSelf = self;
@@ -91,17 +91,16 @@
   return _preferencesWindowController;
 }
 
-- (WelcomeWindowController *)welcomeWindowController {
+- (WelcomeWindowController*)welcomeWindowController {
   if (!_welcomeWindowController) {
     _welcomeWindowController = [[WelcomeWindowController alloc] init];
-    
+
     _welcomeWindowController.keyShouldShowWindow = kUserDefaultsKey_ShowWelcomeWindow;
-        
+
     __weak typeof(self) weakSelf = self;
-    _welcomeWindowController.openDocumentAtURL = ^(NSURL * _Nonnull url) {
+    _welcomeWindowController.openDocumentAtURL = ^(NSURL* _Nonnull url) {
       [weakSelf _openDocumentAtURL:url];
     };
-    
   }
   return _welcomeWindowController;
 }
@@ -153,7 +152,7 @@
                                                                }];
 }
 
-- (void)_openDocumentAtURL:(NSURL *)url {
+- (void)_openDocumentAtURL:(NSURL*)url {
   [self _openRepositoryWithURL:url withCloneMode:kCloneMode_None windowModeID:NSNotFound];
 }
 
@@ -210,13 +209,13 @@
 
   // Locate installed apps.
   [GILaunchServicesLocator setup];
-  
+
   // Initialize user notification center
   [[NSUserNotificationCenter defaultUserNotificationCenter] setDelegate:self];
 
   // Register finder context menu services.
   [NSApplication sharedApplication].servicesProvider = [ServicesProvider new];
-  
+
   // Notify user in case app was updated since last launch
   NSString* currentVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
   NSString* lastVersion = [[NSUserDefaults standardUserDefaults] objectForKey:kUserDefaultsKey_LastVersion];
@@ -270,7 +269,7 @@
 
   // Load theme preference
   [PreferencesThemeService applySelectedTheme];
-  
+
 #if __ENABLE_SUDDEN_TERMINATION__
   // Enable sudden termination
   [[NSProcessInfo processInfo] enableSuddenTermination];
@@ -426,42 +425,42 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
 }
 
 - (void)_cloneRepositoryFromURLString:(NSString*)urlString {
-  [self.cloneWindowController runModalForURL:urlString completion:^(CloneWindowControllerResult * _Nonnull result) {
-    if (result.invalidRepository) {
-      [NSApp presentError:MAKE_ERROR(@"Invalid Git repository URL")];
-      return;
-    }
-    
-    if (result.emptyDirectoryPath) {
-      return;
-    }
-    
-    NSURL* url = result.repositoryURL;
-    NSString* path = result.directoryPath;
-    CloneMode cloneMode = result.recursive ? kCloneMode_Recursive : kCloneMode_Default;
-    NSError* error;
-    
-    BOOL fileDoesntExistOrEvictedToTrash = ![[NSFileManager defaultManager] fileExistsAtPath:path followLastSymlink:NO] || [[NSFileManager defaultManager] moveItemAtPathToTrash:path error:&error];
-    
-    if (!fileDoesntExistOrEvictedToTrash) {
-      [NSApp presentError:error];
-      return;
-    }
-    
-    GCRepository* repository = [[GCRepository alloc] initWithNewLocalRepository:path bare:NO error:&error];
-    if (!repository) {
-      [NSApp presentError:error];
-      return;
-    }
-    
-    if ([repository addRemoteWithName:@"origin" url:url error:&error]) {
-      [self _openRepositoryWithURL:[NSURL fileURLWithPath:repository.workingDirectoryPath] withCloneMode:cloneMode windowModeID:NSNotFound];
-    } else {
-      [NSApp presentError:error];
-      [[NSFileManager defaultManager] removeItemAtPath:path error:NULL];  // Ignore errors
-    }
+  [self.cloneWindowController runModalForURL:urlString
+                                  completion:^(CloneWindowControllerResult* _Nonnull result) {
+                                    if (result.invalidRepository) {
+                                      [NSApp presentError:MAKE_ERROR(@"Invalid Git repository URL")];
+                                      return;
+                                    }
 
-  }];
+                                    if (result.emptyDirectoryPath) {
+                                      return;
+                                    }
+
+                                    NSURL* url = result.repositoryURL;
+                                    NSString* path = result.directoryPath;
+                                    CloneMode cloneMode = result.recursive ? kCloneMode_Recursive : kCloneMode_Default;
+                                    NSError* error;
+
+                                    BOOL fileDoesntExistOrEvictedToTrash = ![[NSFileManager defaultManager] fileExistsAtPath:path followLastSymlink:NO] || [[NSFileManager defaultManager] moveItemAtPathToTrash:path error:&error];
+
+                                    if (!fileDoesntExistOrEvictedToTrash) {
+                                      [NSApp presentError:error];
+                                      return;
+                                    }
+
+                                    GCRepository* repository = [[GCRepository alloc] initWithNewLocalRepository:path bare:NO error:&error];
+                                    if (!repository) {
+                                      [NSApp presentError:error];
+                                      return;
+                                    }
+
+                                    if ([repository addRemoteWithName:@"origin" url:url error:&error]) {
+                                      [self _openRepositoryWithURL:[NSURL fileURLWithPath:repository.workingDirectoryPath] withCloneMode:cloneMode windowModeID:NSNotFound];
+                                    } else {
+                                      [NSApp presentError:error];
+                                      [[NSFileManager defaultManager] removeItemAtPath:path error:NULL];  // Ignore errors
+                                    }
+                                  }];
 }
 
 - (IBAction)cloneRepository:(id)sender {

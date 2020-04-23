@@ -245,9 +245,9 @@
   }
 }
 
-- (void)keyDown:(NSEvent *)event {
+- (void)keyDown:(NSEvent*)event {
   if (event.keyCode == kGIKeyCode_Return) {
-    GCHistoryCommit *commit = [self selectedCommit];
+    GCHistoryCommit* commit = [self selectedCommit];
     [self.repository smartCheckoutCommit:commit window:self.view.window];
   } else {
     [super keyDown:event];

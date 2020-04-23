@@ -11,12 +11,12 @@
 #import "KeychainAccessor.h"
 
 @interface AuthenticationWindowControllerModel : NSObject
-@property (nonatomic, assign) BOOL useKeychain;
-@property (nonatomic, copy) NSURL *url;
-@property (nonatomic, copy) NSString *name;
-@property (nonatomic, copy) NSString *password;
+@property(nonatomic, assign) BOOL useKeychain;
+@property(nonatomic, copy) NSURL* url;
+@property(nonatomic, copy) NSString* name;
+@property(nonatomic, copy) NSString* password;
 
-@property (nonatomic, assign, readonly) BOOL isValid;
+@property(nonatomic, assign, readonly) BOOL isValid;
 @end
 
 @implementation AuthenticationWindowControllerModel
@@ -32,10 +32,10 @@
   self.name = nil;
   self.password = nil;
 }
-- (void)didFinishTransferWithURL:(NSURL *)url success:(BOOL)success onResult:(void(^)(AuthenticationWindowControllerModel *model))onResult {
+- (void)didFinishTransferWithURL:(NSURL*)url success:(BOOL)success onResult:(void (^)(AuthenticationWindowControllerModel* model))onResult {
   if (onResult) {
     BOOL shouldPassModel = success && self.isValid;
-    onResult( shouldPassModel ? self : nil );
+    onResult(shouldPassModel ? self : nil);
   }
   self.url = nil;
   self.name = nil;
@@ -46,7 +46,7 @@
 @interface AuthenticationWindowController ()
 
 // Model
-@property (nonatomic, strong) AuthenticationWindowControllerModel *model;
+@property(nonatomic, strong) AuthenticationWindowControllerModel* model;
 
 // Outlets
 @property(nonatomic, weak) IBOutlet NSTextField* urlTextField;
@@ -54,7 +54,7 @@
 @property(nonatomic, weak) IBOutlet NSSecureTextField* passwordTextField;
 
 // Credentials
-@property (nonatomic, assign, readonly) BOOL credentialsExists;
+@property(nonatomic, assign, readonly) BOOL credentialsExists;
 
 @end
 
@@ -81,12 +81,12 @@
 
 #pragma mark - Actions
 - (IBAction)dismissModal:(id)sender {
-  [NSApp stopModalWithCode:[(NSButton *)sender tag]];
+  [NSApp stopModalWithCode:[(NSButton*)sender tag]];
   [self close];
 }
 
 #pragma mark - FirstResponder
-- (NSResponder *)firstResponderWhenUsernameExists:(BOOL)usernameExists {
+- (NSResponder*)firstResponderWhenUsernameExists:(BOOL)usernameExists {
   return usernameExists ? self.passwordTextField : self.nameTextField;
 }
 
@@ -117,17 +117,16 @@
   // TODO: Add data to model and when window is appearing, we should set data from model.
   // We need two callbacks ( willPresentModal and didPresentModal ).
   self.model.url = url;
-  
+
   self.model.name = *username ? *username : @"";
   self.model.password = @"";
-  
+
   if (self.windowLoaded) {
     [self beforeRunInModal];
-  }
-  else {
+  } else {
     // look at -windowDidLoad when window first time loaded.
   }
-  
+
   if ([NSApp runModalForWindow:self.window] && self.credentialsExists) {
     self.model.name = self.nameTextField.stringValue;
     self.model.password = self.passwordTextField.stringValue;
@@ -135,16 +134,18 @@
     *password = self.model.password;
     return YES;
   }
-  
+
   return NO;
 }
 
 - (void)repository:(GCRepository*)repository didFinishTransferWithURL:(NSURL*)url success:(BOOL)success {
-  [self.model didFinishTransferWithURL:url success:success onResult:^(AuthenticationWindowControllerModel *model) {
-    if (model) {
-      [KeychainAccessor savePlainTextAuthenticationToKeychainForURL:url username:model.name password:model.password];
-    }
-  }];
+  [self.model didFinishTransferWithURL:url
+                               success:success
+                              onResult:^(AuthenticationWindowControllerModel* model) {
+                                if (model) {
+                                  [KeychainAccessor savePlainTextAuthenticationToKeychainForURL:url username:model.name password:model.password];
+                                }
+                              }];
 }
 
 @end

@@ -37,18 +37,18 @@ static NSString* _diffTemporaryDirectoryPath = nil;
 // func bundleIdentfier() -> String?
 // func standardDefaultsKey() -> String?
 @interface GILaunchServicesLocatorHelper : NSObject
-+ (nullable NSString *)bundleIdentifierForDisplayName:(NSString *)displayName;
-+ (nullable NSString *)standardDefaultsKeyForDisplayName:(NSString *)displayName;
++ (nullable NSString*)bundleIdentifierForDisplayName:(NSString*)displayName;
++ (nullable NSString*)standardDefaultsKeyForDisplayName:(NSString*)displayName;
 @end
 
 @implementation GILaunchServicesLocatorHelper
-+ (nullable NSString *)bundleIdentifierForDisplayName:(NSString *)displayName {
++ (nullable NSString*)bundleIdentifierForDisplayName:(NSString*)displayName {
   if ([displayName isEqualToString:GIPreferences_TerminalTool_iTerm]) {
     return GIPreferences_TerminalTool_iTerm_BundleIdentifier;
   }
   return nil;
 }
-+ (nullable NSString *)standardDefaultsKeyForDisplayName:(NSString *)displayName {
++ (nullable NSString*)standardDefaultsKeyForDisplayName:(NSString*)displayName {
   if ([displayName isEqualToString:GIPreferences_TerminalTool_iTerm]) {
     return GIPreferences_TerminalTool_iTerm_Key;
   }
@@ -66,10 +66,10 @@ static NSString* _diffTemporaryDirectoryPath = nil;
     GIPreferences_TerminalTool : GIPreferences_TerminalTool_Terminal,
   };
   [[NSUserDefaults standardUserDefaults] registerDefaults:defaults];
-  
+
   NSDictionary* installedApps = [GILaunchServicesLocator installedAppsDictionary];
   [[NSUserDefaults standardUserDefaults] registerDefaults:installedApps];
-  
+
   if (_diffTemporaryDirectoryPath == nil) {
     _diffTemporaryDirectoryPath = [NSTemporaryDirectory() stringByAppendingPathComponent:[[NSBundle mainBundle] bundleIdentifier]];
     [[NSFileManager defaultManager] removeItemAtPath:_diffTemporaryDirectoryPath error:NULL];
@@ -80,28 +80,28 @@ static NSString* _diffTemporaryDirectoryPath = nil;
 }
 
 #pragma mark - Installed Apps
-+ (NSDictionary *)installedAppsDictionary {
-  NSMutableDictionary *dictionary = [NSMutableDictionary new];
-  NSArray *apps = @[
++ (NSDictionary*)installedAppsDictionary {
+  NSMutableDictionary* dictionary = [NSMutableDictionary new];
+  NSArray* apps = @[
     GIPreferences_TerminalTool_iTerm
   ];
-  for (NSString *app in apps) {
-    NSString *key = [GILaunchServicesLocatorHelper standardDefaultsKeyForDisplayName:app];
+  for (NSString* app in apps) {
+    NSString* key = [GILaunchServicesLocatorHelper standardDefaultsKeyForDisplayName:app];
     if (key != nil) {
       dictionary[key] = @([self hasInstalledApplicationForDisplayName:app]);
     }
   }
   return [dictionary copy];
 }
-+ (BOOL)hasInstalledApplicationForDisplayName:(NSString *)displayName {
++ (BOOL)hasInstalledApplicationForDisplayName:(NSString*)displayName {
   return [self hasInstalledApplicationForBundleIdentifier:[GILaunchServicesLocatorHelper bundleIdentifierForDisplayName:displayName]];
 }
-+ (BOOL)hasInstalledApplicationForBundleIdentifier:(NSString *)bundleIdentifier {
++ (BOOL)hasInstalledApplicationForBundleIdentifier:(NSString*)bundleIdentifier {
   if (bundleIdentifier == nil) {
     return NO;
   }
   CFErrorRef error = NULL;
-  NSArray *applications = CFBridgingRelease(LSCopyApplicationURLsForBundleIdentifier((__bridge CFStringRef)bundleIdentifier, &error));
+  NSArray* applications = CFBridgingRelease(LSCopyApplicationURLsForBundleIdentifier((__bridge CFStringRef)bundleIdentifier, &error));
   if (error) {
     //TODO: Handle error.
     CFRelease(error);
@@ -111,10 +111,10 @@ static NSString* _diffTemporaryDirectoryPath = nil;
 }
 
 #pragma mark - Diff Tools Supplement
-+ (void)setDiffTemporaryDirectoryPath:(NSString *)diffTemporaryDirectoryPath {
++ (void)setDiffTemporaryDirectoryPath:(NSString*)diffTemporaryDirectoryPath {
   _diffTemporaryDirectoryPath = diffTemporaryDirectoryPath;
 }
-+ (NSString *)diffTemporaryDirectoryPath {
++ (NSString*)diffTemporaryDirectoryPath {
   return _diffTemporaryDirectoryPath;
 }
 @end
