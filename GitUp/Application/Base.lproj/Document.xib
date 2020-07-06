@@ -557,7 +557,7 @@ Adjust settings in Show menu</string>
                     </connections>
                 </button>
                 <segmentedControl verticalHuggingPriority="750" id="RvM-Rz-Je8">
-                    <rect key="frame" x="3" y="3" width="110" height="25"/>
+                    <rect key="frame" x="3" y="3" width="118" height="25"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <segmentedCell key="cell" borderStyle="border" alignment="left" style="texturedSquare" trackingMode="selectOne" id="vbd-3d-MTF">
                         <font key="font" metaFont="system"/>
