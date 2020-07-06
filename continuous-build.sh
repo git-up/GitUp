@@ -1,5 +1,12 @@
 #!/bin/sh -ex
 
+EMAIL="$1"
+ASC_PROVIDER="$2"
+if [[ "$EMAIL" == "" || "$ASC_PROVIDER" == "" ]]; then
+  echo "Usage ./continuous-build.sh \"email\" \"asc_provider\". Run \`xcrun altool --list-providers -u email -p password\` to get potential asc_provider."
+  exit 1
+fi
+
 CHANNEL="continuous"
 
 PRODUCT_NAME="GitUp"
@@ -16,6 +23,38 @@ xcodebuild archive -scheme "Application" -archivePath "../build/$PRODUCT_NAME.xc
 xcodebuild -exportArchive -exportOptionsPlist "Export-Options.plist" -archivePath "../build/$PRODUCT_NAME.xcarchive" -exportPath "../build/$PRODUCT_NAME"
 popd
 
+FULL_PRODUCT_NAME="$PRODUCT_NAME.app"
+PRODUCT_PATH="`pwd`/build/$PRODUCT_NAME/$FULL_PRODUCT_NAME"  # Must be absolute path
+ARCHIVE_NAME="$PRODUCT_NAME.zip"
+ARCHIVE_PATH="build/$ARCHIVE_NAME"
+
+##### Notarize zip file
+
+ditto -c -k --keepParent "$PRODUCT_PATH" "$ARCHIVE_PATH"
+
+UUID=`xcrun altool --notarize-app --primary-bundle-id "co.gitup.mac.zip" -u $EMAIL -p "@keychain:password" --asc-provider $ASC_PROVIDER --file $ARCHIVE_PATH | grep "RequestUUID = " | sed 's/^.*= //'`
+
+if [ "$UUID" == "" ]; then
+    echo "No request UUID found"
+    exit 1
+fi
+
+while true; do
+    sleep 60
+    STATUS_CODE=`xcrun altool --notarization-info $UUID -u "$EMAIL" -p "@keychain:password" | grep "Status Code" | sed 's/^.*: //' | xargs`
+    if [ "$STATUS_CODE" == "0" ]; then
+        echo "Notarization Success! - $STATUS_CODE"
+        break
+    fi
+    echo "Not notarized yet - $STATUS_CODE"
+done
+
+##### Staple app and regenerate zip
+
+xcrun stapler staple "$PRODUCT_PATH"
+
+ditto -c -k --keepParent "$PRODUCT_PATH" "$ARCHIVE_PATH"
+
 ##### Tag build
 
 git tag -f "b$VERSION"
@@ -23,23 +62,16 @@ git push -f origin "b$VERSION"
 
 ##### Upload to S3 and update Appcast
 
-FULL_PRODUCT_NAME="$PRODUCT_NAME.app"
-PRODUCT_PATH="`pwd`/build/$PRODUCT_NAME/$FULL_PRODUCT_NAME"  # Must be absolute path
 INFO_PLIST_PATH="$PRODUCT_PATH/Contents/Info.plist"
 VERSION_ID=`defaults read "$INFO_PLIST_PATH" "CFBundleVersion"`
 VERSION_STRING=`defaults read "$INFO_PLIST_PATH" "CFBundleShortVersionString"`
 MIN_OS=`defaults read "$INFO_PLIST_PATH" "LSMinimumSystemVersion"`
 
-ARCHIVE_NAME="$PRODUCT_NAME.zip"
 BACKUP_ARCHIVE_NAME="$PRODUCT_NAME-$VERSION_ID.zip"
 APPCAST_URL="https://s3-us-west-2.amazonaws.com/gitup-builds/$CHANNEL/$APPCAST_NAME"
 ARCHIVE_URL="https://s3-us-west-2.amazonaws.com/gitup-builds/$CHANNEL/$ARCHIVE_NAME"
 BACKUP_ARCHIVE_URL="https://s3-us-west-2.amazonaws.com/gitup-builds/$CHANNEL/$BACKUP_ARCHIVE_NAME"
-
-ARCHIVE_PATH="build/$ARCHIVE_NAME"
 APPCAST_PATH="GitUp/SparkleAppcast.xml"
-
-ditto -c -k --keepParent "$PRODUCT_PATH" "$ARCHIVE_PATH"
 
 ARCHIVE_SIZE=`stat -f "%z" "$ARCHIVE_PATH"`
 
@@ -49,3 +81,5 @@ perl -p -e "s|__APPCAST_TITLE__|$PRODUCT_NAME|g;s|__APPCAST_URL__|$APPCAST_URL|g
 aws s3 cp "$ARCHIVE_PATH" "s3://gitup-builds/$CHANNEL/$BACKUP_ARCHIVE_NAME"
 aws s3 cp "s3://gitup-builds/$CHANNEL/$BACKUP_ARCHIVE_NAME" "s3://gitup-builds/$CHANNEL/$ARCHIVE_NAME"
 aws s3 cp "$EDITED_APPCAST_PATH" "s3://gitup-builds/$CHANNEL/$APPCAST_NAME"
+
+osascript -e 'display notification "Successfully completed continuous build" with title "GitUp Script" sound name "Hero"'
