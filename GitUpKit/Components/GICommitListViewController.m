@@ -245,13 +245,23 @@
   }
 }
 
+- (void)smartCheckoutSelectedCommit {
+  GCHistoryCommit* commit = [self selectedCommit];
+  [self.repository smartCheckoutCommit:commit window:self.view.window];
+}
+
 - (void)keyDown:(NSEvent*)event {
   if (event.keyCode == kGIKeyCode_Return) {
-    GCHistoryCommit* commit = [self selectedCommit];
-    [self.repository smartCheckoutCommit:commit window:self.view.window];
+    [self smartCheckoutSelectedCommit];
   } else {
     [super keyDown:event];
   }
+}
+
+#pragma mark - Actions
+
+- (IBAction)doubleClicked:(id)sender {
+  [self smartCheckoutSelectedCommit];
 }
 
 @end
