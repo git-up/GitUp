@@ -315,7 +315,8 @@ static int _ReferenceForEachCallback(const char* refname, void* payload) {
   if (path) {
     static NSString* cachedPATH = nil;
     if (cachedPATH == nil) {
-      GCTask* task = [[GCTask alloc] initWithExecutablePath:@"/bin/bash"];  // TODO: Handle user shell not being bash
+      NSString* shell = NSProcessInfo.processInfo.environment[@"SHELL"] ?: @"/bin/bash";
+      GCTask* task = [[GCTask alloc] initWithExecutablePath:shell];
       NSData* data;
       if (![task runWithArguments:@[ @"-l", @"-c", @"echo -n $PATH" ] stdin:NULL stdout:&data stderr:NULL exitStatus:NULL error:error]) {
         return NO;
