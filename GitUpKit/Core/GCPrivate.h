@@ -138,6 +138,7 @@ extern int git_submodule_foreach_block(git_repository* repo, int (^block)(git_su
 @property(nonatomic) NSTimeInterval executionTimeOut;  // Default is 0.0 i.e. no timeout
 @property(nonatomic, copy) NSDictionary* additionalEnvironment;
 @property(nonatomic, copy) NSString* currentDirectoryPath;
+@property(nonatomic) BOOL fallBackToDefaultInterpreter;
 - (instancetype)initWithExecutablePath:(NSString*)path;
 - (BOOL)runWithArguments:(NSArray*)arguments stdin:(NSData*)stdin stdout:(NSData**)stdout stderr:(NSData**)stderr exitStatus:(int*)exitStatus error:(NSError**)error;  // Returns NO if "exitStatus" is NULL and executable exits with a non-zero status
 @end

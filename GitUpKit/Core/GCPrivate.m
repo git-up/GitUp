@@ -67,7 +67,7 @@
   }
 }
 
-- (BOOL)runWithArguments:(NSArray*)arguments stdin:(NSData*)stdin stdout:(NSData**)stdout stderr:(NSData**)stderr exitStatus:(int*)exitStatus error:(NSError**)error {
+- (BOOL)_runWithDefaultInterpreter:(BOOL)useSH arguments:(NSArray*)arguments stdin:(NSData*)stdin stdout:(NSData**)stdout stderr:(NSData**)stderr exitStatus:(int*)exitStatus error:(NSError**)error {
   BOOL success = NO;
   NSPipe* inPipe = nil;
   NSPipe* outPipe = nil;
@@ -75,12 +75,13 @@
   NSTimer* timer = nil;
 
   NSTask* task = [[NSTask alloc] init];
-  task.launchPath = _executablePath;
+  task.launchPath = useSH ? @"/bin/sh" : _executablePath;
   NSMutableDictionary* environment = [[NSMutableDictionary alloc] initWithDictionary:[[NSProcessInfo processInfo] environment]];
   [environment addEntriesFromDictionary:_additionalEnvironment];
   task.environment = environment;
   task.currentDirectoryPath = _currentDirectoryPath ? _currentDirectoryPath : [[NSFileManager defaultManager] currentDirectoryPath];
-  task.arguments = arguments ? arguments : @[];
+  NSArray* interpreterArguments = useSH ? @[ _executablePath ] : @[];
+  task.arguments = [interpreterArguments arrayByAddingObjectsFromArray:arguments];
 
   if (stdin) {
     inPipe = [[NSPipe alloc] init];
@@ -168,6 +169,11 @@ cleanup:
   _outData = nil;
   _errorData = nil;
   return success;
+}
+
+
+- (BOOL)runWithArguments:(NSArray*)arguments stdin:(NSData*)stdin stdout:(NSData**)stdout stderr:(NSData**)stderr exitStatus:(int*)exitStatus error:(NSError**)error {
+  return [self _runWithDefaultInterpreter:NO arguments:arguments stdin:stdin stdout:stdout stderr:stderr exitStatus:exitStatus error:error] || (self.fallBackToDefaultInterpreter && [self _runWithDefaultInterpreter:YES arguments:arguments stdin:stdin stdout:stdout stderr:stderr exitStatus:exitStatus error:error]);
 }
 
 @end

@@ -310,17 +310,24 @@ static int _ReferenceForEachCallback(const char* refname, void* payload) {
   return [[NSFileManager defaultManager] isExecutableFileAtPath:path] ? path : nil;
 }
 
+- (NSString*)getPATHUsingShell:(NSString*)shell error:(NSError**)error {
+  GCTask* task = [[GCTask alloc] initWithExecutablePath:shell];
+  NSData* data;
+  // `-l` is not supported with `-c` in all shells (tcsh), so try without.
+  // Some shells use quoting of $PATH to trigger POSIX compatibility behavior (fish).
+  // Not all shells support `-n` on `echo`.
+  if (![task runWithArguments:@[ @"-l", @"-c", @"echo \"$PATH\"" ] stdin:NULL stdout:&data stderr:NULL exitStatus:NULL error:error] && ![task runWithArguments:@[ @"-c", @"echo \"$PATH\"" ] stdin:NULL stdout:&data stderr:NULL exitStatus:NULL error:error]) {
+    return nil;
+  }
+  return [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
+}
+
 - (BOOL)runHookWithName:(NSString*)name arguments:(NSArray*)arguments standardInput:(NSString*)standardInput error:(NSError**)error {
   NSString* path = [self pathForHookWithName:name];
   if (path) {
     static NSString* cachedPATH = nil;
     if (cachedPATH == nil) {
-      GCTask* task = [[GCTask alloc] initWithExecutablePath:@"/bin/bash"];  // TODO: Handle user shell not being bash
-      NSData* data;
-      if (![task runWithArguments:@[ @"-l", @"-c", @"echo -n $PATH" ] stdin:NULL stdout:&data stderr:NULL exitStatus:NULL error:error]) {
-        return NO;
-      }
-      cachedPATH = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+      cachedPATH = [self getPATHUsingShell:NSProcessInfo.processInfo.environment[@"SHELL"] error:error] ?: [self getPATHUsingShell:@"/bin/sh" error:error];
       XLOG_DEBUG_CHECK(cachedPATH);
     }
 
@@ -328,6 +335,7 @@ static int _ReferenceForEachCallback(const char* refname, void* payload) {
     GCTask* task = [[GCTask alloc] initWithExecutablePath:path];
     task.currentDirectoryPath = self.workingDirectoryPath;  // TODO: Is this the right working directory?
     task.additionalEnvironment = @{@"PATH" : cachedPATH};
+    task.fallBackToDefaultInterpreter = YES;
     int status;
     NSData* stdoutData;
     NSData* stderrData;
