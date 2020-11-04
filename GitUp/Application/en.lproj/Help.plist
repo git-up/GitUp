@@ -65,7 +65,7 @@ Press [Cmd-Arrow-Up] or [Cmd-Arrow-Down] to select the previous or next commit, 
 		<key>contents</key>
 		<array>
 			<string>The Diff view shows you the diff between the current HEAD of the repository and any other commit.
-Press [i] or [Spacebar] to exit.</string>
+Press [i] or [Esc] to exit.</string>
 		</array>
 		<key>link</key>
 		<string>https://github.com/git-up/GitUp/wiki/Viewing-Diffs-in-GitUp</string>
