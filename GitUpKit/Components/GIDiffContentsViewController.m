@@ -41,6 +41,7 @@
 @end
 
 @interface GIHeaderDiffCellView : NSTableCellView
+@property(nonatomic, weak) IBOutlet NSTextField* titleField;
 @property(nonatomic, weak) IBOutlet NSButton* menuButton;
 @property(nonatomic, weak) IBOutlet NSButton* actionButton;
 @property(nonatomic, strong) NSColor* backgroundColor;
@@ -118,7 +119,7 @@ NSString* const GIDiffContentsViewControllerUserDefaultKey_DiffViewMode = @"GIDi
 }
 
 - (void)setActionButtonLabel:(NSString*)label {
-  NSTextField* titleField = self.textField;
+  NSTextField* titleField = self.titleField;
   NSRect titleFrame = titleField.frame;
   NSRect buttonFrame = _actionButton.frame;
   if (label.length) {
@@ -597,9 +598,9 @@ static inline NSString* _StringFromFileMode(GCFileMode mode) {
     [string setAttributes:attributes range:oldPathRange];
     [string setAttributes:attributes range:newPathRange];
     [string endEditing];
-    view.textField.attributedStringValue = string;
+    view.titleField.attributedStringValue = string;
   } else {
-    view.textField.stringValue = label;
+    view.titleField.stringValue = label;
   }
   BOOL hasActionMenu = [_delegate respondsToSelector:@selector(diffContentsViewController:willShowContextualMenuForDelta:conflict:)];
   view.menuButton.hidden = !hasActionMenu;
