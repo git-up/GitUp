@@ -1149,7 +1149,7 @@
 		E217485D1B911B5200BE234A /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1020;
+				LastUpgradeCheck = 1220;
 				ORGANIZATIONNAME = "";
 				TargetAttributes = {
 					E2174BD41B91240400BE234A = {
@@ -1522,6 +1522,7 @@
 					"-Wno-incompatible-pointer-types",
 					"-Wno-shorten-64-to-32",
 					"-Wno-format",
+					"-Wno-bool-operation",
 				);
 			};
 			name = Debug;
@@ -1569,6 +1570,7 @@
 					"-Wno-incompatible-pointer-types",
 					"-Wno-shorten-64-to-32",
 					"-Wno-format",
+					"-Wno-bool-operation",
 				);
 			};
 			name = Release;
