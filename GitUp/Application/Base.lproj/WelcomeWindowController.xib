@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="15400" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17506" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15400"/>
+        <deployment version="110000" identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17506"/>
+        <capability name="System colors introduced in macOS 10.14" minToolsVersion="10.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -20,7 +21,7 @@
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <window allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="mjY-As-hbN" userLabel="Welcome" customClass="WelcomeWindow">
             <rect key="contentRect" x="131" y="158" width="280" height="349"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1440" height="900"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1025"/>
             <view key="contentView" id="36m-6r-JT2">
                 <rect key="frame" x="0.0" y="0.0" width="280" height="349"/>
                 <autoresizingMask key="autoresizingMask"/>
@@ -28,7 +29,7 @@
                     <box fixedFrame="YES" boxType="custom" borderType="none" borderWidth="0.0" cornerRadius="10" title="Box" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="UoN-n1-xSr">
                         <rect key="frame" x="0.0" y="0.0" width="280" height="349"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <view key="contentView" ambiguous="YES" id="UVs-2r-EAT" customClass="WelcomeWindowView">
+                        <view key="contentView" id="UVs-2r-EAT" customClass="WelcomeWindowView">
                             <rect key="frame" x="0.0" y="0.0" width="280" height="349"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
@@ -84,7 +85,7 @@
                                             </customView>
                                         </subviews>
                                     </view>
-                                    <color key="fillColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="fillColor" name="alternatingContentBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </box>
                                 <box verticalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="FXE-km-lcD">
                                     <rect key="frame" x="0.0" y="85" width="280" height="5"/>
@@ -102,7 +103,7 @@
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                 <popUpButtonCell key="cell" type="bevel" title="Recently Opened…" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" pullsDown="YES" autoenablesItems="NO" altersStateOfSelectedItem="NO" selectedItem="BnD-OX-t50" id="TkZ-yA-jfp">
                                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                                    <font key="font" metaFont="system"/>
+                                                    <font key="font" metaFont="menu"/>
                                                     <string key="keyEquivalent"></string>
                                                     <menu key="menu" autoenablesItems="NO" id="SuZ-b2-YNW">
                                                         <items>
@@ -113,7 +114,7 @@
                                             </popUpButton>
                                         </subviews>
                                     </view>
-                                    <color key="fillColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="fillColor" name="alternatingContentBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </box>
                                 <box verticalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="3Ya-QW-NlZ">
                                     <rect key="frame" x="0.0" y="49" width="280" height="5"/>
@@ -169,12 +170,12 @@
                     </box>
                 </subviews>
             </view>
-            <point key="canvasLocation" x="-185" y="548"/>
+            <point key="canvasLocation" x="-185" y="547.5"/>
         </window>
     </objects>
     <resources>
         <image name="NSApplicationIcon" width="32" height="32"/>
-        <image name="NSStopProgressFreestandingTemplate" width="14" height="14"/>
+        <image name="NSStopProgressFreestandingTemplate" width="15" height="15"/>
         <image name="icon_forum" width="12" height="12"/>
         <image name="icon_twitter" width="12" height="12"/>
     </resources>
