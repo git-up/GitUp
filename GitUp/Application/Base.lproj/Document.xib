@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17506" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17506"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -67,53 +67,53 @@
             <windowCollectionBehavior key="collectionBehavior" fullScreenPrimary="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="253" y="204" width="1000" height="500"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1417"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1025"/>
             <value key="minSize" type="size" width="800" height="400"/>
             <view key="contentView" id="gIp-Ho-8D9">
                 <rect key="frame" x="0.0" y="0.0" width="1000" height="500"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <customView hidden="YES" appearanceType="aqua" id="Zjf-1c-7Wk" customClass="GIColorView">
+                    <customView hidden="YES" appearanceType="aqua" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Zjf-1c-7Wk" customClass="GIColorView">
                         <rect key="frame" x="0.0" y="450" width="1000" height="50"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <subviews>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" setsMaxLayoutWidthAtFirstLayout="YES" id="hTO-MR-3XZ">
-                                <rect key="frame" x="8" y="8" width="718" height="31"/>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hTO-MR-3XZ">
+                                <rect key="frame" x="8" y="8" width="818" height="31"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" controlSize="small" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="left" title="&lt;HELP&gt;" id="de5-iD-6RU">
-                                    <font key="font" metaFont="toolTip"/>
+                                    <font key="font" metaFont="smallSystem"/>
                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <button verticalHuggingPriority="750" id="W0y-nq-maS">
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="W0y-nq-maS">
                                 <rect key="frame" x="910" y="16" width="80" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="roundRect" title="Continue" bezelStyle="roundedRect" alignment="center" controlSize="small" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="3Bn-bb-IAI">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="toolTip"/>
+                                    <font key="font" usesAppearanceFont="YES"/>
                                 </buttonCell>
                                 <connections>
                                     <action selector="dismissHelp:" target="-2" id="6SE-nM-Khn"/>
                                 </connections>
                             </button>
-                            <button verticalHuggingPriority="750" id="etB-ce-0PB">
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="etB-ce-0PB">
                                 <rect key="frame" x="832" y="16" width="60" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="roundRect" title="Got It!" bezelStyle="roundedRect" alignment="center" controlSize="small" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="U4W-Zh-R2B">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="toolTip"/>
+                                    <font key="font" usesAppearanceFont="YES"/>
                                 </buttonCell>
                                 <connections>
                                     <action selector="dismissHelp:" target="-2" id="ZhX-zZ-Pix"/>
                                 </connections>
                             </button>
-                            <button verticalHuggingPriority="750" id="cA6-Ht-e3Z">
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cA6-Ht-e3Z">
                                 <rect key="frame" x="900" y="16" width="90" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="roundRect" title="Learn More…" bezelStyle="roundedRect" alignment="center" controlSize="small" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ux0-pi-0du">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="toolTip"/>
+                                    <font key="font" usesAppearanceFont="YES"/>
                                 </buttonCell>
                                 <connections>
                                     <action selector="openHelp:" target="-2" id="9JT-bA-cXq"/>
@@ -126,7 +126,7 @@
                             </userDefinedRuntimeAttribute>
                         </userDefinedRuntimeAttributes>
                     </customView>
-                    <tabView drawsBackground="NO" allowsTruncatedLabels="NO" type="noTabsNoBorder" id="8LX-i4-RBG">
+                    <tabView fixedFrame="YES" drawsBackground="NO" allowsTruncatedLabels="NO" type="noTabsNoBorder" translatesAutoresizingMaskIntoConstraints="NO" id="8LX-i4-RBG">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="500"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <font key="font" metaFont="system"/>
@@ -203,15 +203,15 @@
             <rect key="frame" x="0.0" y="0.0" width="1000" height="500"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <customView id="399-bl-TuH">
+                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="399-bl-TuH">
                     <rect key="frame" x="0.0" y="46" width="1000" height="454"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 </customView>
-                <customView hidden="YES" id="4K3-nK-X1O">
+                <customView hidden="YES" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4K3-nK-X1O">
                     <rect key="frame" x="385" y="71" width="230" height="48"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" setsMaxLayoutWidthAtFirstLayout="YES" id="O4P-2Y-hlm">
+                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="O4P-2Y-hlm">
                             <rect key="frame" x="8" y="8" width="214" height="34"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                             <textFieldCell key="cell" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="center" id="xrs-OY-P88">
@@ -224,16 +224,16 @@ Adjust settings in Show menu</string>
                         </textField>
                     </subviews>
                 </customView>
-                <box verticalHuggingPriority="750" boxType="separator" id="mWX-Pk-UvH">
+                <box verticalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="mWX-Pk-UvH">
                     <rect key="frame" x="0.0" y="43" width="1000" height="5"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                 </box>
-                <popUpButton id="Fov-GV-gD7">
+                <popUpButton fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Fov-GV-gD7">
                     <rect key="frame" x="11" y="9" width="82" height="25"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <popUpButtonCell key="cell" type="push" title="Show" bezelStyle="rounded" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" pullsDown="YES" preferredEdge="maxY" selectedItem="9kl-kD-1vf" id="6Tc-ix-fh5">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="system"/>
+                        <font key="font" metaFont="menu"/>
                         <menu key="menu" id="FSB-Wc-ZmT">
                             <items>
                                 <menuItem title="Show" state="on" hidden="YES" id="hR8-Mf-qwD"/>
@@ -275,38 +275,38 @@ Adjust settings in Show menu</string>
                         </menu>
                     </popUpButtonCell>
                 </popUpButton>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="cbp-6y-jbG">
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cbp-6y-jbG">
                     <rect key="frame" x="100" y="24" width="800" height="14"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="center" title="&lt;INFO LINE 1&gt;" id="1X5-xy-mOw">
-                        <font key="font" metaFont="toolTip"/>
+                        <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="eEA-mo-3Uq">
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eEA-mo-3Uq">
                     <rect key="frame" x="100" y="8" width="800" height="14"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="center" title="&lt;INFO LINE 2&gt;" id="ecG-9J-PlG">
-                        <font key="font" metaFont="toolTip"/>
+                        <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <textField hidden="YES" horizontalHuggingPriority="251" verticalHuggingPriority="750" id="dry-dR-hSD">
+                <textField hidden="YES" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dry-dR-hSD">
                     <rect key="frame" x="363" y="23" width="274" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="center" title="Remote operation in progress - Please wait…" id="vXh-uB-Jji">
-                        <font key="font" metaFont="toolTip"/>
+                        <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <progressIndicator hidden="YES" maxValue="100" indeterminate="YES" style="bar" id="O1S-WY-ikg">
+                <progressIndicator hidden="YES" fixedFrame="YES" maxValue="100" indeterminate="YES" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="O1S-WY-ikg">
                     <rect key="frame" x="378" y="4" width="244" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </progressIndicator>
-                <button toolTip="Pull current branch from upstream" verticalHuggingPriority="750" id="bVm-VR-ap5">
+                <button toolTip="Pull current branch from upstream" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bVm-VR-ap5">
                     <rect key="frame" x="926" y="5" width="37" height="32"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                     <buttonCell key="cell" type="push" bezelStyle="rounded" image="icon_action_fetch" imagePosition="only" alignment="center" borderStyle="border" inset="2" id="SFq-Wx-Us0">
@@ -317,7 +317,7 @@ Adjust settings in Show menu</string>
                         <action selector="pullCurrentBranch:" target="-1" id="Dna-1c-lER"/>
                     </connections>
                 </button>
-                <button toolTip="Push current branch to upstream" verticalHuggingPriority="750" id="NjF-Aj-I7c">
+                <button toolTip="Push current branch to upstream" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NjF-Aj-I7c">
                     <rect key="frame" x="955" y="5" width="37" height="32"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                     <buttonCell key="cell" type="push" bezelStyle="rounded" image="icon_action_push" imagePosition="only" alignment="center" borderStyle="border" inset="2" id="dhk-Ry-6pb">
@@ -335,7 +335,7 @@ Adjust settings in Show menu</string>
             <rect key="frame" x="0.0" y="0.0" width="1000" height="500"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <customView id="7Lz-mJ-yDg">
+                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7Lz-mJ-yDg">
                     <rect key="frame" x="0.0" y="0.0" width="1000" height="500"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 </customView>
@@ -346,7 +346,7 @@ Adjust settings in Show menu</string>
             <rect key="frame" x="0.0" y="0.0" width="1000" height="500"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <customView id="wgF-0m-Wo6">
+                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wgF-0m-Wo6">
                     <rect key="frame" x="0.0" y="0.0" width="1000" height="500"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 </customView>
@@ -357,7 +357,7 @@ Adjust settings in Show menu</string>
             <rect key="frame" x="0.0" y="0.0" width="1000" height="500"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <customView id="bDk-TS-Gf5">
+                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bDk-TS-Gf5">
                     <rect key="frame" x="0.0" y="0.0" width="1000" height="500"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 </customView>
@@ -368,11 +368,11 @@ Adjust settings in Show menu</string>
             <rect key="frame" x="0.0" y="0.0" width="261" height="500"/>
             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" heightSizable="YES"/>
             <subviews>
-                <customView id="TAF-BH-RXj">
+                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TAF-BH-RXj">
                     <rect key="frame" x="1" y="46" width="260" height="454"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
                 </customView>
-                <button verticalHuggingPriority="750" id="bvP-z4-n9x">
+                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bvP-z4-n9x">
                     <rect key="frame" x="86" y="5" width="88" height="32"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <buttonCell key="cell" type="push" title="Done" bezelStyle="rounded" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="QV1-K4-raG">
@@ -383,11 +383,11 @@ Adjust settings in Show menu</string>
                         <action selector="toggleTags:" target="-2" id="eYy-3x-jbj"/>
                     </connections>
                 </button>
-                <box horizontalHuggingPriority="750" boxType="separator" id="gbn-Tx-Mt6">
+                <box horizontalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="gbn-Tx-Mt6">
                     <rect key="frame" x="-2" y="0.0" width="5" height="500"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
                 </box>
-                <box verticalHuggingPriority="750" boxType="separator" id="IFu-ad-WoU">
+                <box verticalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="IFu-ad-WoU">
                     <rect key="frame" x="1" y="43" width="260" height="5"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </box>
@@ -398,11 +398,11 @@ Adjust settings in Show menu</string>
             <rect key="frame" x="0.0" y="0.0" width="261" height="500"/>
             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" heightSizable="YES"/>
             <subviews>
-                <customView id="4Od-pU-cwC">
+                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4Od-pU-cwC">
                     <rect key="frame" x="1" y="46" width="260" height="454"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
                 </customView>
-                <button verticalHuggingPriority="750" id="6Ni-2N-Ux7">
+                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6Ni-2N-Ux7">
                     <rect key="frame" x="86" y="5" width="88" height="32"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <buttonCell key="cell" type="push" title="Done" bezelStyle="rounded" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="G4D-l9-GAh">
@@ -413,11 +413,11 @@ Adjust settings in Show menu</string>
                         <action selector="toggleAncestors:" target="-2" id="cRN-q3-d3h"/>
                     </connections>
                 </button>
-                <box horizontalHuggingPriority="750" boxType="separator" id="i5t-9R-reS">
+                <box horizontalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="i5t-9R-reS">
                     <rect key="frame" x="-2" y="0.0" width="5" height="500"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
                 </box>
-                <box verticalHuggingPriority="750" boxType="separator" id="lo1-B5-5pc">
+                <box verticalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="lo1-B5-5pc">
                     <rect key="frame" x="1" y="43" width="260" height="5"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </box>
@@ -430,11 +430,11 @@ Adjust settings in Show menu</string>
             <rect key="frame" x="0.0" y="0.0" width="261" height="500"/>
             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" heightSizable="YES"/>
             <subviews>
-                <customView id="8Xd-B3-3KB">
+                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8Xd-B3-3KB">
                     <rect key="frame" x="1" y="46" width="260" height="454"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
                 </customView>
-                <button verticalHuggingPriority="750" id="rOD-bh-eJs">
+                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rOD-bh-eJs">
                     <rect key="frame" x="86" y="5" width="88" height="32"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <buttonCell key="cell" type="push" title="Done" bezelStyle="rounded" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="mu6-y9-mEl">
@@ -445,11 +445,11 @@ Adjust settings in Show menu</string>
                         <action selector="toggleSnapshots:" target="-2" id="xEj-EP-Pu2"/>
                     </connections>
                 </button>
-                <box horizontalHuggingPriority="750" boxType="separator" id="BaD-c2-XFv">
+                <box horizontalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="BaD-c2-XFv">
                     <rect key="frame" x="-2" y="0.0" width="5" height="500"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
                 </box>
-                <box verticalHuggingPriority="750" boxType="separator" id="Usm-DE-GWR">
+                <box verticalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="Usm-DE-GWR">
                     <rect key="frame" x="1" y="43" width="260" height="5"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </box>
@@ -460,11 +460,11 @@ Adjust settings in Show menu</string>
             <rect key="frame" x="0.0" y="0.0" width="261" height="500"/>
             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" heightSizable="YES"/>
             <subviews>
-                <customView id="2JB-mH-NdY">
+                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2JB-mH-NdY">
                     <rect key="frame" x="1" y="46" width="260" height="454"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
                 </customView>
-                <button verticalHuggingPriority="750" id="l3F-kQ-tsG">
+                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="l3F-kQ-tsG">
                     <rect key="frame" x="86" y="5" width="88" height="32"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <buttonCell key="cell" type="push" title="Done" bezelStyle="rounded" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Vb7-E2-czh">
@@ -475,11 +475,11 @@ Adjust settings in Show menu</string>
                         <action selector="toggleReflog:" target="-2" id="iy2-Rc-GIe"/>
                     </connections>
                 </button>
-                <box horizontalHuggingPriority="750" boxType="separator" id="2s4-Rc-CUd">
+                <box horizontalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="2s4-Rc-CUd">
                     <rect key="frame" x="-2" y="0.0" width="5" height="500"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
                 </box>
-                <box verticalHuggingPriority="750" boxType="separator" id="eoI-52-5pL">
+                <box verticalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="eoI-52-5pL">
                     <rect key="frame" x="1" y="43" width="260" height="5"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </box>
@@ -490,11 +490,11 @@ Adjust settings in Show menu</string>
             <rect key="frame" x="0.0" y="0.0" width="261" height="500"/>
             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" heightSizable="YES"/>
             <subviews>
-                <customView id="Km9-N7-i9Z">
+                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Km9-N7-i9Z">
                     <rect key="frame" x="1" y="0.0" width="260" height="500"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
                 </customView>
-                <box horizontalHuggingPriority="750" boxType="separator" id="kME-Ra-FDy">
+                <box horizontalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="kME-Ra-FDy">
                     <rect key="frame" x="-2" y="0.0" width="5" height="500"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
                 </box>
@@ -505,7 +505,7 @@ Adjust settings in Show menu</string>
             <rect key="frame" x="0.0" y="0.0" width="320" height="32"/>
             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
             <subviews>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="tYR-pC-pUm">
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tYR-pC-pUm">
                     <rect key="frame" x="0.0" y="14" width="320" height="17"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                     <textFieldCell key="cell" lineBreakMode="truncatingMiddle" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="center" title="&lt;REPOSITORY&gt;" usesSingleLineMode="YES" id="IrL-wK-jB6">
@@ -514,7 +514,7 @@ Adjust settings in Show menu</string>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="FYB-ck-ZCF">
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FYB-ck-ZCF">
                     <rect key="frame" x="0.0" y="2" width="320" height="11"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                     <textFieldCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="center" title="&lt;INFO&gt;" usesSingleLineMode="YES" id="ueS-Kv-b9C">
@@ -530,7 +530,7 @@ Adjust settings in Show menu</string>
             <rect key="frame" x="0.0" y="0.0" width="220" height="32"/>
             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
             <subviews>
-                <button toolTip="Select next commit" verticalHuggingPriority="750" id="XLH-eo-cDO">
+                <button toolTip="Select next commit" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XLH-eo-cDO">
                     <rect key="frame" x="3" y="3" width="28" height="25"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="icon_nav_up" imagePosition="only" alignment="center" state="on" borderStyle="border" inset="2" id="6oq-0x-6JA">
@@ -543,7 +543,7 @@ Adjust settings in Show menu</string>
                         <action selector="selectNextCommit:" target="-2" id="ELb-0V-1uX"/>
                     </connections>
                 </button>
-                <button toolTip="Select previous commit" verticalHuggingPriority="750" id="Xfs-0l-8it">
+                <button toolTip="Select previous commit" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Xfs-0l-8it">
                     <rect key="frame" x="33" y="3" width="28" height="25"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="icon_nav_down" imagePosition="only" alignment="center" state="on" borderStyle="border" inset="2" id="hN6-p6-EDX">
@@ -556,7 +556,7 @@ Adjust settings in Show menu</string>
                         <action selector="selectPreviousCommit:" target="-2" id="cHX-Hx-4Op"/>
                     </connections>
                 </button>
-                <segmentedControl verticalHuggingPriority="750" id="RvM-Rz-Je8">
+                <segmentedControl verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RvM-Rz-Je8">
                     <rect key="frame" x="3" y="3" width="118" height="25"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <segmentedCell key="cell" borderStyle="border" alignment="left" style="texturedSquare" trackingMode="selectOne" id="vbd-3d-MTF">
@@ -584,7 +584,7 @@ Adjust settings in Show menu</string>
             <rect key="frame" x="0.0" y="0.0" width="260" height="32"/>
             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
             <subviews>
-                <searchField toolTip="Search repository" wantsLayer="YES" verticalHuggingPriority="750" id="mcD-hz-JrS">
+                <searchField toolTip="Search repository" wantsLayer="YES" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mcD-hz-JrS">
                     <rect key="frame" x="77" y="5" width="180" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                     <searchFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" allowsUndo="NO" borderStyle="bezel" placeholderString="" usesSingleLineMode="YES" bezelStyle="round" id="3QH-Xd-ctD">
@@ -597,7 +597,7 @@ Adjust settings in Show menu</string>
                         <outlet property="delegate" destination="-2" id="aY0-ts-HbB"/>
                     </connections>
                 </searchField>
-                <button toolTip="Show or hide Snapshots" verticalHuggingPriority="750" id="yWu-L8-6Ms">
+                <button toolTip="Show or hide Snapshots" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yWu-L8-6Ms">
                     <rect key="frame" x="43" y="3" width="25" height="25"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="icon_nav_snapshot" imagePosition="only" alignment="center" borderStyle="border" inset="2" id="rrq-JQ-Zyn">
@@ -608,7 +608,7 @@ Adjust settings in Show menu</string>
                         <action selector="toggleSnapshots:" target="-2" id="AYc-qO-01Q"/>
                     </connections>
                 </button>
-                <button id="FEG-0e-0JW">
+                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FEG-0e-0JW">
                     <rect key="frame" x="241" y="3" width="16" height="25"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="icon_nav_min" imagePosition="only" alignment="center" inset="2" id="x0U-ct-UgO">
@@ -623,30 +623,35 @@ Adjust settings in Show menu</string>
             <point key="canvasLocation" x="150" y="496"/>
         </customView>
         <customView id="ifo-84-dTf" userLabel="Reset View">
-            <rect key="frame" x="0.0" y="0.0" width="300" height="19"/>
+            <rect key="frame" x="0.0" y="0.0" width="192" height="16"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
-                <button id="YLR-fG-kTA">
-                    <rect key="frame" x="-2" y="-2" width="223" height="18"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                <button translatesAutoresizingMaskIntoConstraints="NO" id="YLR-fG-kTA">
+                    <rect key="frame" x="-2" y="-1" width="194" height="18"/>
                     <buttonCell key="cell" type="check" title="Also remove untracked files" bezelStyle="regularSquare" imagePosition="left" inset="2" id="Idb-eZ-oUH">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
                 </button>
             </subviews>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="YLR-fG-kTA" secondAttribute="trailing" id="8cg-2R-xci"/>
+                <constraint firstAttribute="bottom" secondItem="YLR-fG-kTA" secondAttribute="bottom" id="KHD-gE-rP8"/>
+                <constraint firstItem="YLR-fG-kTA" firstAttribute="top" secondItem="ifo-84-dTf" secondAttribute="top" id="N0G-GI-wNu"/>
+                <constraint firstItem="YLR-fG-kTA" firstAttribute="leading" secondItem="ifo-84-dTf" secondAttribute="leading" id="qpT-Z2-YPV"/>
+            </constraints>
             <point key="canvasLocation" x="960" y="1327.5"/>
         </customView>
         <window allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="F4T-LV-HgR" userLabel="Settings Window">
             <windowStyleMask key="styleMask" titled="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="131" y="158" width="450" height="173"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1025"/>
             <view key="contentView" id="l4r-5b-f0f">
                 <rect key="frame" x="0.0" y="0.0" width="450" height="173"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <button id="8hM-1U-Hhn">
+                    <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8hM-1U-Hhn">
                         <rect key="frame" x="18" y="137" width="176" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="check" title="Search commit diffs" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="c4v-9V-r5S">
@@ -654,18 +659,18 @@ Adjust settings in Show menu</string>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                     </button>
-                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="de2-Yp-MzO">
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="de2-Yp-MzO">
                         <rect key="frame" x="36" y="61" width="396" height="70"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" id="nO1-ig-ikF">
-                            <font key="font" metaFont="toolTip"/>
+                            <font key="font" metaFont="smallSystem"/>
                             <string key="title">GitUp searches only commit messages by default, but it can also search their diffs (text files only). This requires indexing the diffs of all commits in the repository which can take a long time.
 Changing this setting requires re-indexing the repository, which will automatically happen the next time you open it in GitUp.</string>
                             <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <button verticalHuggingPriority="750" id="dhw-0H-Z8w">
+                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dhw-0H-Z8w">
                         <rect key="frame" x="324" y="13" width="112" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="push" title="Done" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Vef-Dr-NCs">
