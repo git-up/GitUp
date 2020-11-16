@@ -1669,7 +1669,10 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
   alert.messageText = NSLocalizedString(@"Are you sure you want to reset the index and working directory to the current checkout?", nil);
   alert.informativeText = NSLocalizedString(@"Any operation in progress (merge, rebase, etc...) will be aborted, and any uncommitted change, including in submodules, will be discarded.\n\nThis action cannot be undone.", nil);
   alert.accessoryView = _resetView;
-  [alert addButtonWithTitle:NSLocalizedString(@"Reset", nil)];
+  NSButton* reset = [alert addButtonWithTitle:NSLocalizedString(@"Reset", nil)];
+  if (@available(macOS 11, *)) {
+    reset.hasDestructiveAction = YES;
+  }
   [alert addButtonWithTitle:NSLocalizedString(@"Cancel", nil)];
   [alert beginSheetModalForWindow:_mainWindow
                 completionHandler:^(NSInteger returnCode) {

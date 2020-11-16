@@ -236,6 +236,11 @@
     if (type == kGIAlertType_Danger) {
       defaultButton.keyEquivalent = @"";
     }
+    if (@available(macOS 11, *)) {
+      if (type == kGIAlertType_Stop || type == kGIAlertType_Danger) {
+        defaultButton.hasDestructiveAction = YES;
+      }
+    }
     [alert addButtonWithTitle:NSLocalizedString(@"Cancel", nil)];
     [self presentAlert:alert
         completionHandler:^(NSInteger returnCode) {
