@@ -1,14 +1,14 @@
 {
   "images" : [
     {
+      "filename" : "icon_nav_stash.png",
       "idiom" : "universal",
-      "scale" : "1x",
-      "filename" : "icon_nav_min.png"
+      "scale" : "1x"
     },
     {
+      "filename" : "icon_nav_stash@2x.png",
       "idiom" : "universal",
-      "scale" : "2x",
-      "filename" : "icon_nav_min@2x.png"
+      "scale" : "2x"
     },
     {
       "idiom" : "universal",
@@ -16,8 +16,8 @@
     }
   ],
   "info" : {
-    "version" : 1,
-    "author" : "xcode"
+    "author" : "xcode",
+    "version" : 1
   },
   "properties" : {
     "template-rendering-intent" : "template"

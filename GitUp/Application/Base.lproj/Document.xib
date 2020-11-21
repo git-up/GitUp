@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17506"/>
+        <capability name="Search Toolbar Item" minToolsVersion="12.0" minSystemVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -11,7 +12,6 @@
                 <outlet property="ancestorsControllerView" destination="4Od-pU-cwC" id="rKi-Xf-O9z"/>
                 <outlet property="ancestorsView" destination="Yj4-Sl-8P8" id="uNx-x0-4Kg"/>
                 <outlet property="contentView" destination="gIp-Ho-8D9" id="BwU-UD-4Je"/>
-                <outlet property="exitButton" destination="FEG-0e-0JW" id="VpC-s7-grz"/>
                 <outlet property="helpContinueButton" destination="W0y-nq-maS" id="tO3-ij-oea"/>
                 <outlet property="helpDismissButton" destination="etB-ce-0PB" id="iMt-Ga-rPE"/>
                 <outlet property="helpOpenButton" destination="cA6-Ht-e3Z" id="GWb-T7-oe0"/>
@@ -19,18 +19,14 @@
                 <outlet property="helpView" destination="Zjf-1c-7Wk" id="V4P-Tc-ofE"/>
                 <outlet property="hiddenWarningView" destination="4K3-nK-X1O" id="und-Lh-TE7"/>
                 <outlet property="indexDiffsButton" destination="8hM-1U-Hhn" id="iu9-J3-Muk"/>
-                <outlet property="infoTextField0" destination="FYB-ck-ZCF" id="BOg-Ti-fbd"/>
                 <outlet property="infoTextField1" destination="cbp-6y-jbG" id="kuD-M7-wz2"/>
                 <outlet property="infoTextField2" destination="eEA-mo-3Uq" id="ZP6-ud-zOc"/>
-                <outlet property="leftView" destination="d4D-Mc-I9O" id="Lqi-IU-ziC"/>
                 <outlet property="mainTabView" destination="8LX-i4-RBG" id="CKf-8g-erJ"/>
                 <outlet property="mainWindow" destination="xOd-HO-29H" id="YqJ-z0-2YQ"/>
                 <outlet property="mapContainerView" destination="KTA-UW-CKM" id="8sn-Xg-Vjz"/>
                 <outlet property="mapControllerView" destination="399-bl-TuH" id="cZj-7k-l5R"/>
                 <outlet property="mapView" destination="p3q-Tt-mR8" id="Qym-7v-5bw"/>
-                <outlet property="modeControl" destination="RvM-Rz-Je8" id="rYt-Pf-y7Q"/>
-                <outlet property="nextButton" destination="Xfs-0l-8it" id="fur-Jm-uN9"/>
-                <outlet property="previousButton" destination="XLH-eo-cDO" id="6U9-OU-OII"/>
+                <outlet property="navigateItem" destination="PpN-AL-Paw" id="iEh-KZ-DgL"/>
                 <outlet property="progressIndicator" destination="O1S-WY-ikg" id="eav-iG-Df8"/>
                 <outlet property="progressTextField" destination="dry-dR-hSD" id="0Tw-VD-BhT"/>
                 <outlet property="pullButton" destination="bVm-VR-ap5" id="h55-bA-dHp"/>
@@ -42,27 +38,24 @@
                 <outlet property="resolveView" destination="tZK-eu-LXR" id="0qK-cM-Lal"/>
                 <outlet property="rewriteControllerView" destination="7Lz-mJ-yDg" id="ZB9-NY-Bnk"/>
                 <outlet property="rewriteView" destination="fB6-Pq-Qmr" id="FJ8-XM-D2D"/>
-                <outlet property="rightView" destination="kfr-yg-mn6" id="UIP-iT-f37"/>
                 <outlet property="searchControllerView" destination="Km9-N7-i9Z" id="Yea-TO-TcK"/>
-                <outlet property="searchField" destination="mcD-hz-JrS" id="6JR-6C-V0Y"/>
+                <outlet property="searchItem" destination="VAf-r7-CLn" id="yZw-VY-id9"/>
                 <outlet property="searchView" destination="hXJ-hB-b5A" id="6L9-1X-Isb"/>
                 <outlet property="settingsWindow" destination="F4T-LV-HgR" id="wPd-kE-nqf"/>
                 <outlet property="showMenu" destination="FSB-Wc-ZmT" id="62B-DC-buw"/>
-                <outlet property="snapshotsButton" destination="yWu-L8-6Ms" id="Ica-of-jKz"/>
                 <outlet property="snapshotsControllerView" destination="8Xd-B3-3KB" id="804-E4-bq6"/>
+                <outlet property="snapshotsItem" destination="Aag-2S-fcP" id="Z5V-jN-VtJ"/>
                 <outlet property="snapshotsView" destination="pJT-Vs-rsm" id="UB6-5y-QWa"/>
                 <outlet property="splitControllerView" destination="wgF-0m-Wo6" id="Ngg-aG-4sM"/>
                 <outlet property="splitView" destination="Nqd-ay-ONW" id="SfE-RZ-0DR"/>
                 <outlet property="tagsControllerView" destination="TAF-BH-RXj" id="wI7-ld-6W1"/>
                 <outlet property="tagsView" destination="eCQ-B2-xMC" id="63O-8R-I74"/>
-                <outlet property="titleTextField" destination="tYR-pC-pUm" id="P2n-zk-zN2"/>
-                <outlet property="titleView" destination="ghu-yR-ohT" id="atG-82-W8A"/>
-                <outlet property="toolbar" destination="zqd-ET-8Ln" id="a5y-pm-2pj"/>
+                <outlet property="titleItem" destination="zlv-TE-Jdd" id="J1W-Bl-ndm"/>
                 <outlet property="untrackedButton" destination="YLR-fG-kTA" id="NW6-fp-q4i"/>
                 <outlet property="window" destination="xOd-HO-29H" id="JIz-fz-R2o"/>
             </connections>
         </customObject>
-        <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="xOd-HO-29H" userLabel="Main Window" customClass="GIWindow">
+        <window title="Window" separatorStyle="line" allowsToolTipsWhenApplicationIsInactive="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="xOd-HO-29H" userLabel="Main Window" customClass="GIWindow">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowCollectionBehavior key="collectionBehavior" fullScreenPrimary="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
@@ -71,7 +64,7 @@
             <value key="minSize" type="size" width="800" height="400"/>
             <view key="contentView" id="gIp-Ho-8D9">
                 <rect key="frame" x="0.0" y="0.0" width="1000" height="500"/>
-                <autoresizingMask key="autoresizingMask"/>
+                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 <subviews>
                     <customView hidden="YES" appearanceType="aqua" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Zjf-1c-7Wk" customClass="GIColorView">
                         <rect key="frame" x="0.0" y="450" width="1000" height="50"/>
@@ -189,16 +182,142 @@
                     </tabView>
                 </subviews>
             </view>
+            <toolbar key="toolbar" implicitIdentifier="42EAA8AB-C985-49E8-81F5-068903B112A9" centeredItem="zlv-TE-Jdd" autosavesConfiguration="NO" allowsUserCustomization="NO" displayMode="iconOnly" sizeMode="regular" id="eX2-uf-7aH">
+                <allowedToolbarItems>
+                    <toolbarItem implicitItemIdentifier="A92F3C85-EACE-4514-BB1A-5F30C4BF0BCB" label="Navigation" paletteLabel="Navigation" tag="-1" sizingBehavior="auto" navigational="YES" id="PpN-AL-Paw" customClass="GICustomToolbarItem">
+                        <nil key="toolTip"/>
+                        <customView key="view" placeholderIntrinsicWidth="infinite" placeholderIntrinsicHeight="30" id="37X-Xb-n3X">
+                            <rect key="frame" x="0.0" y="14" width="110" height="30"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                            <subviews>
+                                <segmentedControl verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="add-88-IzA" userLabel="Mode">
+                                    <rect key="frame" x="-5" y="-5" width="120" height="40"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="25" id="FmD-Tc-tEO"/>
+                                    </constraints>
+                                    <segmentedCell key="cell" controlSize="large" borderStyle="border" alignment="left" segmentDistribution="fillEqually" style="texturedRounded" trackingMode="selectOne" id="Qz2-7V-Eoi">
+                                        <font key="font" metaFont="system"/>
+                                        <segments>
+                                            <segment toolTip="Map View" image="icon_nav_map" imageScaling="none" selected="YES"/>
+                                            <segment toolTip="Commit View" image="square.and.pencil" catalog="system" imageScaling="none" tag="1"/>
+                                            <segment toolTip="Stashes View" image="line.horizontal.3" catalog="system" imageScaling="none" tag="2"/>
+                                        </segments>
+                                    </segmentedCell>
+                                    <connections>
+                                        <action selector="switchMode:" target="-2" id="9tx-YA-YB2"/>
+                                    </connections>
+                                </segmentedControl>
+                                <segmentedControl hidden="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ROz-yN-TzG" userLabel="Navigate">
+                                    <rect key="frame" x="-6" y="-6" width="122" height="42"/>
+                                    <segmentedCell key="cell" controlSize="large" borderStyle="border" alignment="left" segmentDistribution="fillEqually" style="separated" trackingMode="momentary" id="8Lo-Bb-qnP">
+                                        <font key="font" metaFont="system"/>
+                                        <segments>
+                                            <segment toolTip="Close detail view" image="arrow.down.right.and.arrow.up.left" catalog="system" imageScaling="none"/>
+                                            <segment toolTip="Select next commit" image="chevron.up" catalog="system" imageScaling="none" tag="1"/>
+                                            <segment toolTip="Select previous commit" image="chevron.down" catalog="system" imageScaling="none" tag="2"/>
+                                        </segments>
+                                    </segmentedCell>
+                                    <connections>
+                                        <action selector="navigate:" target="-2" id="Fln-bk-u8F"/>
+                                    </connections>
+                                </segmentedControl>
+                            </subviews>
+                            <constraints>
+                                <constraint firstItem="ROz-yN-TzG" firstAttribute="height" secondItem="add-88-IzA" secondAttribute="height" id="0pz-q0-PEF"/>
+                                <constraint firstItem="add-88-IzA" firstAttribute="top" secondItem="37X-Xb-n3X" secondAttribute="top" id="6fO-dH-Ono"/>
+                                <constraint firstAttribute="trailing" secondItem="ROz-yN-TzG" secondAttribute="trailing" id="9rV-42-Pxs"/>
+                                <constraint firstAttribute="bottom" secondItem="ROz-yN-TzG" secondAttribute="bottom" id="BbF-Rp-Gql"/>
+                                <constraint firstItem="ROz-yN-TzG" firstAttribute="top" secondItem="37X-Xb-n3X" secondAttribute="top" id="Nos-ws-d0r"/>
+                                <constraint firstAttribute="bottom" secondItem="add-88-IzA" secondAttribute="bottom" id="pYe-lH-LSg"/>
+                                <constraint firstItem="ROz-yN-TzG" firstAttribute="leading" secondItem="37X-Xb-n3X" secondAttribute="leading" id="rU3-3h-nVY"/>
+                                <constraint firstAttribute="trailing" secondItem="add-88-IzA" secondAttribute="trailing" id="wb1-Oe-fok"/>
+                                <constraint firstItem="add-88-IzA" firstAttribute="leading" secondItem="37X-Xb-n3X" secondAttribute="leading" id="wqA-wA-Qqp"/>
+                            </constraints>
+                        </customView>
+                        <connections>
+                            <outlet property="primaryControl" destination="add-88-IzA" id="FDt-jP-mMW"/>
+                            <outlet property="secondaryControl" destination="ROz-yN-TzG" id="8qC-s0-HZe"/>
+                        </connections>
+                    </toolbarItem>
+                    <toolbarItem implicitItemIdentifier="89ED100D-5049-4D73-A50D-A28F816E23FC" label="Repository and Info" paletteLabel="Repository and Info" tag="-1" visibilityPriority="1001" sizingBehavior="auto" id="zlv-TE-Jdd" customClass="GICustomToolbarItem">
+                        <nil key="toolTip"/>
+                        <customView key="view" placeholderIntrinsicWidth="infinite" placeholderIntrinsicHeight="32" id="Brh-if-1sc" customClass="ToolbarItemWrapperView">
+                            <rect key="frame" x="0.0" y="14" width="320" height="32"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                            <subviews>
+                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="zUE-5V-emO">
+                                    <rect key="frame" x="108" y="15" width="105" height="16"/>
+                                    <textFieldCell key="cell" lineBreakMode="truncatingMiddle" alignment="center" title="&lt;REPOSITORY&gt;" usesSingleLineMode="YES" id="0Qx-h1-gQz">
+                                        <font key="font" usesAppearanceFont="YES"/>
+                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                    </textFieldCell>
+                                </textField>
+                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="khT-H7-lYh">
+                                    <rect key="frame" x="139" y="2" width="42" height="11"/>
+                                    <textFieldCell key="cell" controlSize="mini" lineBreakMode="truncatingTail" alignment="center" title="&lt;INFO&gt;" usesSingleLineMode="YES" id="hfx-R0-kYj">
+                                        <font key="font" metaFont="miniSystem"/>
+                                        <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                    </textFieldCell>
+                                </textField>
+                            </subviews>
+                            <constraints>
+                                <constraint firstItem="zUE-5V-emO" firstAttribute="centerX" secondItem="Brh-if-1sc" secondAttribute="centerX" id="HcV-vM-bUk"/>
+                                <constraint firstAttribute="bottom" secondItem="khT-H7-lYh" secondAttribute="bottom" constant="2" id="IB8-la-hwt"/>
+                                <constraint firstItem="zUE-5V-emO" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Brh-if-1sc" secondAttribute="leading" id="d87-Ss-Rz0"/>
+                                <constraint firstItem="khT-H7-lYh" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Brh-if-1sc" secondAttribute="leading" id="eyI-1z-g62"/>
+                                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="320" id="fpk-8r-jKO"/>
+                                <constraint firstItem="zUE-5V-emO" firstAttribute="top" secondItem="Brh-if-1sc" secondAttribute="top" constant="1" id="m9Y-yz-SwX"/>
+                                <constraint firstItem="khT-H7-lYh" firstAttribute="top" secondItem="zUE-5V-emO" secondAttribute="bottom" constant="2" id="rFg-iN-UjD"/>
+                                <constraint firstItem="khT-H7-lYh" firstAttribute="centerX" secondItem="Brh-if-1sc" secondAttribute="centerX" id="yEO-OG-Kk7"/>
+                            </constraints>
+                        </customView>
+                        <connections>
+                            <outlet property="primaryControl" destination="zUE-5V-emO" id="wXM-8p-SMb"/>
+                            <outlet property="secondaryControl" destination="khT-H7-lYh" id="3YC-ek-EN6"/>
+                        </connections>
+                    </toolbarItem>
+                    <toolbarItem implicitItemIdentifier="B5339F67-DADA-4EB4-8EBA-79AA8C91CC9C" label="Snapshots" paletteLabel="Snapshots" image="clock.arrow.circlepath" catalog="system" sizingBehavior="auto" id="Aag-2S-fcP" customClass="GICustomToolbarItem">
+                        <nil key="toolTip"/>
+                        <button key="view" verticalHuggingPriority="750" id="9B3-Yw-IMy">
+                            <rect key="frame" x="17" y="14" width="29" height="23"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                            <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="clock.arrow.circlepath" catalog="system" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="e0W-3F-oLF">
+                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
+                                <font key="font" metaFont="system"/>
+                            </buttonCell>
+                        </button>
+                        <connections>
+                            <action selector="toggleSnapshots:" target="-2" id="4j5-51-HOG"/>
+                        </connections>
+                    </toolbarItem>
+                    <searchToolbarItem implicitItemIdentifier="878782B0-E4BB-4A0F-9A42-C7EE99D6FB54" label="Search" paletteLabel="Search" visibilityPriority="1001" id="VAf-r7-CLn" customClass="GISearchToolbarItem">
+                        <nil key="toolTip"/>
+                        <searchField key="view" toolTip="Search repository" verticalHuggingPriority="750" id="gxd-dx-ngX">
+                            <rect key="frame" x="0.0" y="0.0" width="180" height="21"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                            <searchFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" allowsUndo="NO" sendsActionOnEndEditing="YES" borderStyle="bezel" usesSingleLineMode="YES" bezelStyle="round" sendsSearchStringImmediately="YES" id="K1S-by-vXb">
+                                <font key="font" usesAppearanceFont="YES"/>
+                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                            </searchFieldCell>
+                            <connections>
+                                <outlet property="delegate" destination="-2" id="5fT-LJ-07H"/>
+                            </connections>
+                        </searchField>
+                        <connections>
+                            <action selector="performSearch:" target="-2" id="I4P-wB-O5J"/>
+                        </connections>
+                    </searchToolbarItem>
+                </allowedToolbarItems>
+                <defaultToolbarItems/>
+                <connections>
+                    <outlet property="delegate" destination="-2" id="YNn-Pj-uPM"/>
+                </connections>
+            </toolbar>
             <point key="canvasLocation" x="-175" y="59"/>
         </window>
-        <toolbar implicitIdentifier="89AE3532-BCB4-43C9-851D-DE84F3247405" autosavesConfiguration="NO" allowsUserCustomization="NO" displayMode="iconOnly" sizeMode="regular" id="zqd-ET-8Ln">
-            <allowedToolbarItems/>
-            <defaultToolbarItems/>
-            <connections>
-                <outlet property="delegate" destination="-2" id="f0T-KE-b2F"/>
-            </connections>
-            <point key="canvasLocation" x="322" y="681"/>
-        </toolbar>
         <customView id="p3q-Tt-mR8" userLabel="Map View">
             <rect key="frame" x="0.0" y="0.0" width="1000" height="500"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -501,127 +620,6 @@ Adjust settings in Show menu</string>
             </subviews>
             <point key="canvasLocation" x="-512.5" y="1242"/>
         </customView>
-        <customView id="ghu-yR-ohT" userLabel="Title View" customClass="ToolbarItemWrapperView">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="32"/>
-            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-            <subviews>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tYR-pC-pUm">
-                    <rect key="frame" x="0.0" y="14" width="320" height="17"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                    <textFieldCell key="cell" lineBreakMode="truncatingMiddle" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="center" title="&lt;REPOSITORY&gt;" usesSingleLineMode="YES" id="IrL-wK-jB6">
-                        <font key="font" metaFont="system"/>
-                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                </textField>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FYB-ck-ZCF">
-                    <rect key="frame" x="0.0" y="2" width="320" height="11"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                    <textFieldCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="center" title="&lt;INFO&gt;" usesSingleLineMode="YES" id="ueS-Kv-b9C">
-                        <font key="font" metaFont="miniSystem"/>
-                        <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                </textField>
-            </subviews>
-            <point key="canvasLocation" x="200" y="408"/>
-        </customView>
-        <customView id="d4D-Mc-I9O" userLabel="Left View" customClass="ToolbarItemWrapperView">
-            <rect key="frame" x="0.0" y="0.0" width="220" height="32"/>
-            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-            <subviews>
-                <button toolTip="Select next commit" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XLH-eo-cDO">
-                    <rect key="frame" x="3" y="3" width="28" height="25"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="icon_nav_up" imagePosition="only" alignment="center" state="on" borderStyle="border" inset="2" id="6oq-0x-6JA">
-                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="system"/>
-                        <string key="keyEquivalent"></string>
-                        <modifierMask key="keyEquivalentModifierMask" command="YES"/>
-                    </buttonCell>
-                    <connections>
-                        <action selector="selectNextCommit:" target="-2" id="ELb-0V-1uX"/>
-                    </connections>
-                </button>
-                <button toolTip="Select previous commit" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Xfs-0l-8it">
-                    <rect key="frame" x="33" y="3" width="28" height="25"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="icon_nav_down" imagePosition="only" alignment="center" state="on" borderStyle="border" inset="2" id="hN6-p6-EDX">
-                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="system"/>
-                        <string key="keyEquivalent"></string>
-                        <modifierMask key="keyEquivalentModifierMask" command="YES"/>
-                    </buttonCell>
-                    <connections>
-                        <action selector="selectPreviousCommit:" target="-2" id="cHX-Hx-4Op"/>
-                    </connections>
-                </button>
-                <segmentedControl verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RvM-Rz-Je8">
-                    <rect key="frame" x="3" y="3" width="118" height="25"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <segmentedCell key="cell" borderStyle="border" alignment="left" style="texturedSquare" trackingMode="selectOne" id="vbd-3d-MTF">
-                        <font key="font" metaFont="system"/>
-                        <segments>
-                            <segment toolTip="Map View" image="icon_nav_map" imageScaling="none" width="34">
-                                <nil key="label"/>
-                            </segment>
-                            <segment toolTip="Commit View" image="icon_nav_commit" imageScaling="none" width="34" tag="1">
-                                <nil key="label"/>
-                            </segment>
-                            <segment toolTip="Stashes View" image="icon_nav_stash" imageScaling="none" width="34" tag="2">
-                                <nil key="label"/>
-                            </segment>
-                        </segments>
-                    </segmentedCell>
-                    <connections>
-                        <action selector="switchMode:" target="-2" id="iO1-zq-07Y"/>
-                    </connections>
-                </segmentedControl>
-            </subviews>
-            <point key="canvasLocation" x="469" y="496"/>
-        </customView>
-        <customView id="kfr-yg-mn6" userLabel="Right View" customClass="ToolbarItemWrapperView">
-            <rect key="frame" x="0.0" y="0.0" width="260" height="32"/>
-            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-            <subviews>
-                <searchField toolTip="Search repository" wantsLayer="YES" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mcD-hz-JrS">
-                    <rect key="frame" x="77" y="5" width="180" height="22"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                    <searchFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" allowsUndo="NO" borderStyle="bezel" placeholderString="" usesSingleLineMode="YES" bezelStyle="round" id="3QH-Xd-ctD">
-                        <font key="font" metaFont="system"/>
-                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                    </searchFieldCell>
-                    <connections>
-                        <action selector="performSearch:" target="-2" id="OVf-uK-I0i"/>
-                        <outlet property="delegate" destination="-2" id="aY0-ts-HbB"/>
-                    </connections>
-                </searchField>
-                <button toolTip="Show or hide Snapshots" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yWu-L8-6Ms">
-                    <rect key="frame" x="43" y="3" width="25" height="25"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                    <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="icon_nav_snapshot" imagePosition="only" alignment="center" borderStyle="border" inset="2" id="rrq-JQ-Zyn">
-                        <behavior key="behavior" pushIn="YES" changeContents="YES" lightByContents="YES"/>
-                        <font key="font" metaFont="system"/>
-                    </buttonCell>
-                    <connections>
-                        <action selector="toggleSnapshots:" target="-2" id="AYc-qO-01Q"/>
-                    </connections>
-                </button>
-                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FEG-0e-0JW">
-                    <rect key="frame" x="241" y="3" width="16" height="25"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                    <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="icon_nav_min" imagePosition="only" alignment="center" inset="2" id="x0U-ct-UgO">
-                        <behavior key="behavior" lightByContents="YES"/>
-                        <font key="font" metaFont="system"/>
-                    </buttonCell>
-                    <connections>
-                        <action selector="exit:" target="-2" id="3vV-tT-dOp"/>
-                    </connections>
-                </button>
-            </subviews>
-            <point key="canvasLocation" x="150" y="496"/>
-        </customView>
         <customView id="ifo-84-dTf" userLabel="Reset View">
             <rect key="frame" x="0.0" y="0.0" width="192" height="16"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -690,14 +688,14 @@ DQ
         </window>
     </objects>
     <resources>
+        <image name="arrow.down.right.and.arrow.up.left" catalog="system" width="16" height="15"/>
+        <image name="chevron.down" catalog="system" width="15" height="9"/>
+        <image name="chevron.up" catalog="system" width="15" height="9"/>
+        <image name="clock.arrow.circlepath" catalog="system" width="17" height="15"/>
         <image name="icon_action_fetch" width="10" height="14"/>
         <image name="icon_action_push" width="10" height="14"/>
-        <image name="icon_nav_commit" width="15" height="15"/>
-        <image name="icon_nav_down" width="16" height="16"/>
         <image name="icon_nav_map" width="15" height="15"/>
-        <image name="icon_nav_min" width="12" height="12"/>
-        <image name="icon_nav_snapshot" width="15" height="15"/>
-        <image name="icon_nav_stash" width="15" height="15"/>
-        <image name="icon_nav_up" width="16" height="16"/>
+        <image name="line.horizontal.3" catalog="system" width="16" height="9"/>
+        <image name="square.and.pencil" catalog="system" width="17" height="15"/>
     </resources>
 </document>

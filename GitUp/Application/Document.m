@@ -39,10 +39,6 @@
 #define kSideViewIdentifier_Reflog @"reflog"
 #define kSideViewIdentifier_Ancestors @"ancestors"
 
-#define kToolbarItem_Left @"left"
-#define kToolbarItem_Title @"title"
-#define kToolbarItem_Right @"right"
-
 #define kRestorableStateKey_WindowMode @"windowMode"
 
 #define kSideViewAnimationDuration 0.15  // seconds
@@ -51,8 +47,24 @@
 
 #define kMaxProgressRefreshRate 10.0  // Hz
 
+#define kNavigateMinWidth 174.0
+#define kNavigateSegmentWidth 34.0
+#define kTitleMaxWidth HUGE_VALF
+#define kSearchFieldCompactWidth 180.0
+#define kSearchFieldExpandedWidth 238.0
+
+typedef NS_ENUM(NSInteger, NavigationAction) {
+  kNavigationAction_Exit = 0,
+  kNavigationAction_Next,
+  kNavigationAction_Previous
+};
+
 @interface Document () <NSToolbarDelegate, NSTextFieldDelegate, GCLiveRepositoryDelegate, GIWindowControllerDelegate, GIMapViewControllerDelegate, GISnapshotListViewControllerDelegate, GIUnifiedReflogViewControllerDelegate, GICommitListViewControllerDelegate, GICommitRewriterViewControllerDelegate, GICommitSplitterViewControllerDelegate, GIConflictResolverViewControllerDelegate>
 @property(nonatomic, strong) AuthenticationWindowController* authenticationWindowController;
+@property(nonatomic) IBOutlet GICustomToolbarItem* navigateItem;
+@property(nonatomic) IBOutlet GICustomToolbarItem* titleItem;
+@property(nonatomic) IBOutlet NSToolbarItem* snapshotsItem;
+@property(nonatomic) IBOutlet NSToolbarItem<GISearchToolbarItem>* searchItem;
 @end
 
 static NSDictionary* _helpPlist = nil;
@@ -82,6 +94,10 @@ static inline WindowModeID _WindowModeIDFromString(NSString* mode) {
   }
   XLOG_DEBUG_UNREACHABLE();
   return kWindowModeID_Map;
+}
+
+static inline BOOL _WindowModeIsPrimary(NSString* mode) {
+  return [mode isEqualToString:kWindowModeString_Map] || [mode isEqualToString:kWindowModeString_Commit] || [mode isEqualToString:kWindowModeString_Stashes];
 }
 
 @implementation Document {
@@ -281,31 +297,37 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
   if (frameString) {
     [_mainWindow setFrameFromString:frameString];
   }
-  [_mainWindow setToolbar:_toolbar];
-  _mainWindow.titleVisibility = NSWindowTitleHidden;
-  _contentView.wantsLayer = YES;
-  _leftView.wantsLayer = YES;
-  _titleView.wantsLayer = YES;
-  _rightView.wantsLayer = YES;
 
-  // Text fields must be drawn on an opaque background pre-Mojave to avoid
-  // subpixel antialiasing issues during animation.
-  if (@available(macOS 10.14, *)) {
+  NSSegmentedControl* modeControl = (NSSegmentedControl*)_navigateItem.primaryControl;
+  NSSegmentedControl* navigateControl = (NSSegmentedControl*)_navigateItem.secondaryControl;
+  if (@available(macOS 11, *)) {
+    // Fully custom symbols not available before 11.0.
+    [modeControl setImage:[NSImage imageNamed:@"circle.2.line.diagonal"] forSegment:kWindowModeID_Map];
   } else {
+    _mainWindow.titleVisibility = NSWindowTitleHidden;
+    [modeControl setWidth:kNavigateSegmentWidth forSegment:kWindowModeID_Map];
+    [modeControl setWidth:kNavigateSegmentWidth forSegment:kWindowModeID_Commit];
+    [modeControl setWidth:kNavigateSegmentWidth forSegment:kWindowModeID_Stashes];
+    [navigateControl setWidth:kNavigateSegmentWidth forSegment:kNavigationAction_Exit];
+    [navigateControl setWidth:kNavigateSegmentWidth forSegment:kNavigationAction_Next];
+    [navigateControl setWidth:kNavigateSegmentWidth forSegment:kNavigationAction_Previous];
+  }
+
+  if (@available(macOS 10.14, *)) {
+    NSLayoutConstraint* searchFieldPreferredWidth = [_searchItem.searchField.widthAnchor constraintEqualToConstant:kSearchFieldCompactWidth];
+    searchFieldPreferredWidth.priority = NSLayoutPriorityDefaultHigh - 20;
+    NSLayoutConstraint* searchFieldMaxWidth = [_searchItem.searchField.widthAnchor constraintLessThanOrEqualToConstant:kSearchFieldExpandedWidth];
+    [NSLayoutConstraint activateConstraints:@[ searchFieldPreferredWidth, searchFieldMaxWidth ]];
+  } else {
+    _navigateItem.minSize = NSMakeSize(kNavigateMinWidth, _navigateItem.minSize.height);
+    _titleItem.maxSize = NSMakeSize(kTitleMaxWidth, _titleItem.maxSize.height);
+
+    // Text fields must be drawn on an opaque background pre-Mojave to avoid
+    // subpixel antialiasing issues during animation.
     for (NSTextField* field in @[ _infoTextField1, _infoTextField2, _progressTextField ]) {
       field.drawsBackground = YES;
       field.backgroundColor = _mainWindow.backgroundColor;
     }
-  }
-
-  if (@available(macOS 10.11, *)) {
-    // Fields have different alignment rects from their bounds starting in 10.11
-    // and will appear slightly small when laid out just by autoresizing.
-    // Manually make it its preferred height to align with the snapshots button.
-    CGRect searchFieldFrame = _searchField.frame;
-    searchFieldFrame.size.height = [_searchField sizeThatFits:searchFieldFrame.size].height;
-    searchFieldFrame.origin.y = floor(NSMidY(_snapshotsButton.frame) - (searchFieldFrame.size.height / 2));
-    _searchField.frame = searchFieldFrame;
   }
 
   _mapViewController = [[GIMapViewController alloc] initWithRepository:_repository];
@@ -386,7 +408,6 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
   _hiddenWarningView.layer.cornerRadius = 10.0;
 
   [self _setSearchFieldPlaceholder:NSLocalizedString(@"Preparing Search…", nil)];
-  _searchField.enabled = NO;
 
   for (NSMenuItem* item in _showMenu.itemArray) {  // We don't want first responder targets
     if (item.target == nil && item.action != NULL) {
@@ -527,7 +548,7 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
           if (success) {
             _searchReady = YES;
             [self _setSearchFieldPlaceholder:NSLocalizedString(@"Search Repository…", nil)];
-            _searchField.enabled = YES;
+            [_searchItem validate];
           } else {
             [self _setSearchFieldPlaceholder:NSLocalizedString(@"Search Unavailable", nil)];
             [self presentError:error];
@@ -607,7 +628,12 @@ static inline NSString* _FormatCommitCount(NSNumberFormatter* formatter, NSUInte
 - (void)_updateTitleBar {
   [_windowController synchronizeWindowTitleWithDocumentName];
   NSUInteger totalCount = _repository.history.allCommits.count;
-  _infoTextField0.stringValue = [NSString stringWithFormat:NSLocalizedString(@"%@", nil), _FormatCommitCount(_numberFormatter, totalCount)];
+  NSString* countText = [NSString stringWithFormat:NSLocalizedString(@"%@", nil), _FormatCommitCount(_numberFormatter, totalCount)];
+  _titleItem.primaryControl.stringValue = _windowController.window.title;
+  _titleItem.secondaryControl.stringValue = countText;
+  if (@available(macOS 11.0, *)) {
+    _windowController.window.subtitle = countText;
+  }
 }
 
 static NSString* _StringFromRepositoryState(GCRepositoryState state) {
@@ -749,39 +775,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 
 // NSToolbar automatic validation fires very often and at unpredictable times so we just do everything by hand
 - (void)_updateToolBar {
-  if ([_windowMode isEqualToString:kWindowModeString_Map_QuickView] || [_windowMode isEqualToString:kWindowModeString_Map_Diff] || [_windowMode isEqualToString:kWindowModeString_Map_Rewrite] || [_windowMode isEqualToString:kWindowModeString_Map_Split] || [_windowMode isEqualToString:kWindowModeString_Map_Resolve] || [_windowMode isEqualToString:kWindowModeString_Map_Config]) {
-    _modeControl.hidden = YES;
-    if (_quickViewCommits) {
-      _previousButton.hidden = NO;
-      _previousButton.enabled = [self validateUserInterfaceItem:(id)_previousButton];
-      _nextButton.hidden = NO;
-      _nextButton.enabled = [self validateUserInterfaceItem:(id)_nextButton];
-    } else {
-      _previousButton.hidden = YES;
-      _nextButton.hidden = YES;
-    }
-
-    _snapshotsButton.hidden = YES;
-    _searchField.hidden = YES;
-    _exitButton.hidden = ([_windowMode isEqualToString:kWindowModeString_Map_Rewrite] || [_windowMode isEqualToString:kWindowModeString_Map_Split] || [_windowMode isEqualToString:kWindowModeString_Map_Resolve]);
-  } else {
-    _modeControl.hidden = NO;
-    _modeControl.enabled = !_windowController.hasModalView && !_repository.hasBackgroundOperationInProgress;
-    _previousButton.hidden = YES;
-    _nextButton.hidden = YES;
-
-    if ([_windowMode isEqualToString:kWindowModeString_Map]) {
-      _snapshotsButton.hidden = NO;
-      _snapshotsButton.enabled = [self validateUserInterfaceItem:(id)_snapshotsButton];
-      _snapshotsButton.state = _snapshotsView.superview ? NSControlStateValueOn : NSControlStateValueOff;
-      _searchField.hidden = NO;
-      _searchField.enabled = [self validateUserInterfaceItem:(id)_searchField];
-    } else {
-      _snapshotsButton.hidden = YES;
-      _searchField.hidden = YES;
-    }
-    _exitButton.hidden = YES;
-  }
+  [_mainWindow.toolbar validateVisibleItems];
 }
 
 - (void)_didBecomeActive:(NSNotification*)notification {
@@ -791,16 +785,12 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
     [_repository setUndoActionName:NSLocalizedString(@"External Changes", nil)];
     _repository.automaticSnapshotsEnabled = NO;
   }
-
-  [self _updateToolBar];
 }
 
 - (void)_didResignActive:(NSNotification*)notification {
   if (![_windowMode isEqualToString:kWindowModeString_Map_Resolve]) {  // Don't take automatic snapshots while conflict resolver is on screen
     _repository.automaticSnapshotsEnabled = YES;
   }
-
-  [self _updateToolBar];
 }
 
 - (void)_setWindowMode:(NSString*)mode {
@@ -815,7 +805,6 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 
     _windowMode = mode;
     [_mainTabView selectTabViewItemWithIdentifier:_windowMode];
-    [_modeControl selectSegmentWithTag:_WindowModeIDFromString(_windowMode)];
 
     // Don't let AppKit guess / restore first responder
     if ([_windowMode isEqualToString:kWindowModeString_Map]) {
@@ -859,7 +848,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 }
 
 - (BOOL)setWindowModeID:(WindowModeID)modeID {
-  if (!_mainWindow.attachedSheet && !_modeControl.hidden && _modeControl.enabled) {
+  if (!_mainWindow.attachedSheet && !_navigateItem.primaryControl.hidden && _navigateItem.primaryControl.enabled) {
     [self _setWindowMode:_WindowModeStringFromID(modeID)];
     return YES;
   }
@@ -1161,28 +1150,12 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 
 #pragma mark - NSToolbarDelegate
 
-- (NSToolbarItem*)toolbar:(NSToolbar*)toolbar itemForItemIdentifier:(NSString*)identifier willBeInsertedIntoToolbar:(BOOL)flag {
-  NSToolbarItem* item = [[NSToolbarItem alloc] initWithItemIdentifier:identifier];
-  if ([identifier isEqualToString:kToolbarItem_Title]) {
-    item.view = _titleView;
-    item.minSize = NSMakeSize(100, _titleView.frame.size.height);
-    item.maxSize = NSMakeSize(HUGE_VALF, _titleView.frame.size.height);
-  } else if ([identifier isEqualToString:kToolbarItem_Left]) {
-    item.view = _leftView;
-  } else if ([identifier isEqualToString:kToolbarItem_Right]) {
-    item.view = _rightView;
-  } else {
-    XLOG_DEBUG_UNREACHABLE();
-  }
-  return item;
-}
-
 - (NSArray*)toolbarDefaultItemIdentifiers:(NSToolbar*)toolbar {
-  return @[ kToolbarItem_Left, kToolbarItem_Title, kToolbarItem_Right ];
-}
-
-- (NSArray*)toolbarAllowedItemIdentifiers:(NSToolbar*)toolbar {
-  return [self toolbarDefaultItemIdentifiers:toolbar];
+  if (@available(macOS 11, *)) {
+    return @[ _navigateItem.itemIdentifier, NSToolbarFlexibleSpaceItemIdentifier, _snapshotsItem.itemIdentifier, _searchItem.itemIdentifier ];
+  } else {
+    return @[ _navigateItem.itemIdentifier, NSToolbarSpaceItemIdentifier, _titleItem.itemIdentifier, NSToolbarFlexibleSpaceItemIdentifier, _snapshotsItem.itemIdentifier, _searchItem.itemIdentifier ];
+  }
 }
 
 #pragma mark - NSTextFieldDelegate
@@ -1637,13 +1610,37 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
   }
 
   if (item.action == @selector(switchMode:)) {
-    if ([_windowMode isEqualToString:kWindowModeString_Map_QuickView] || [_windowMode isEqualToString:kWindowModeString_Map_Diff] || [_windowMode isEqualToString:kWindowModeString_Map_Rewrite] || [_windowMode isEqualToString:kWindowModeString_Map_Config] || [_windowMode isEqualToString:kWindowModeString_Map_Resolve]) {
+    NSSegmentedControl* modeControl = [(id<NSObject>)item isKindOfClass:NSSegmentedControl.self] ? (NSSegmentedControl*)item : nil;
+    NSMenuItem* menuItem = [(id<NSObject>)item isKindOfClass:NSMenuItem.self] ? (NSMenuItem*)item : nil;
+    BOOL isIncompatibleMode = !_WindowModeIsPrimary(_windowMode);
+
+    modeControl.hidden = isIncompatibleMode;
+    if (isIncompatibleMode) {
       return NO;
     }
-    [(NSMenuItem*)item setState:([(NSMenuItem*)item tag] == (NSInteger)(_WindowModeIDFromString(_windowMode)) ? NSOnState : NSOffState)];
-    return YES;
+
+    WindowModeID windowModeID = _WindowModeIDFromString(_windowMode);
+    [modeControl selectSegmentWithTag:windowModeID];
+    menuItem.state = menuItem.tag == windowModeID ? NSOnState : NSOffState;
+
+    return !_windowController.hasModalView;
   }
 
+  if (item.action == @selector(navigate:)) {
+    NSSegmentedControl* navigateControl = (NSSegmentedControl*)item;
+    BOOL isIncompatibleMode = _WindowModeIsPrimary(_windowMode);
+
+    navigateControl.hidden = isIncompatibleMode;
+    if (isIncompatibleMode) {
+      return NO;
+    }
+
+    [navigateControl setEnabled:[_windowMode isEqualToString:kWindowModeString_Map_QuickView] || [_windowMode isEqualToString:kWindowModeString_Map_Diff] || [_windowMode isEqualToString:kWindowModeString_Map_Config] forSegment:kNavigationAction_Exit];
+    [navigateControl setEnabled:[_windowMode isEqualToString:kWindowModeString_Map_QuickView] && [self _hasNextQuickView] forSegment:kNavigationAction_Next];
+    [navigateControl setEnabled:[_windowMode isEqualToString:kWindowModeString_Map_QuickView] && [self _hasPreviousQuickView] forSegment:kNavigationAction_Previous];
+
+    return YES;
+  }
   if (item.action == @selector(selectPreviousCommit:)) {
     return [_windowMode isEqualToString:kWindowModeString_Map_QuickView] && [self _hasPreviousQuickView] ? YES : NO;
   }
@@ -1690,7 +1687,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
   if ([sender isKindOfClass:[NSMenuItem class]]) {
     [self _setWindowMode:_WindowModeStringFromID([(NSMenuItem*)sender tag])];
   } else {
-    [self _setWindowMode:_WindowModeStringFromID(_modeControl.selectedSegment)];
+    [self _setWindowMode:_WindowModeStringFromID([(NSSegmentedControl*)sender selectedSegment])];
   }
 }
 
@@ -1840,21 +1837,21 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 - (void)_setSearchFieldPlaceholder:(NSString*)placeholder {
   if (@available(macOS 10.12, *)) {
     // 10.12: there are centering issues, and all are fixed by triggering a layout pass.
-    _searchField.placeholderString = placeholder;
-    _searchField.needsLayout = YES;
+    _searchItem.searchField.placeholderString = placeholder;
+    _searchItem.searchField.needsLayout = YES;
   } else {
     // 10.11 and earlier: search placeholders have the same length to work around incorrect centering.
     placeholder = [placeholder stringByPaddingToLength:18 withString:@" " startingAtIndex:0];
-    _searchField.placeholderString = placeholder;
+    _searchItem.searchField.placeholderString = placeholder;
   }
 }
 
 - (IBAction)performSearch:(id)sender {
-  NSString* query = _searchField.stringValue;
+  NSString* query = _searchItem.searchField.stringValue;
   if (query.length) {
     CFAbsoluteTime time = CFAbsoluteTimeGetCurrent();
     NSArray* results = [_repository findCommitsMatching:query];
-    XLOG_VERBOSE(@"Searched %lu commits in \"%@\" for \"%@\" in %.3f seconds finding %lu matches", _repository.history.allCommits.count, _repository.repositoryPath, self.searchField.stringValue, CFAbsoluteTimeGetCurrent() - time, results.count);
+    XLOG_VERBOSE(@"Searched %lu commits in \"%@\" for \"%@\" in %.3f seconds finding %lu matches", _repository.history.allCommits.count, _repository.repositoryPath, query, CFAbsoluteTimeGetCurrent() - time, results.count);
 
     _searchResultsViewController.results = results;
     if (_searchView.superview == nil) {
@@ -1874,12 +1871,26 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 }
 
 - (IBAction)focusSearch:(id)sender {
-  [_mainWindow makeFirstResponder:_searchField];
+  [_searchItem beginSearchInteraction];
 }
 
 - (IBAction)closeSearch:(id)sender {
-  _searchField.stringValue = @"";
+  _searchItem.searchField.stringValue = @"";
   [self performSearch:nil];
+}
+
+- (IBAction)navigate:(NSSegmentedControl*)sender {
+  switch ((NavigationAction)sender.selectedSegment) {
+    case kNavigationAction_Exit:
+      [self exit:sender];
+      break;
+    case kNavigationAction_Next:
+      [self selectNextCommit:sender];
+      break;
+    case kNavigationAction_Previous:
+      [self selectPreviousCommit:sender];
+      break;
+  }
 }
 
 - (IBAction)exit:(id)sender {

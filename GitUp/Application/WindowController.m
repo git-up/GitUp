@@ -28,11 +28,13 @@
   self.window.delegate = self;
 }
 
-- (void)synchronizeWindowTitleWithDocumentName {
-  [super synchronizeWindowTitleWithDocumentName];
-
-  NSString* title = [NSString stringWithFormat:@"%@ • %@", [(Document*)self.document displayName], NSLocalizedString([(Document*)self.document windowMode], nil)];
-  [[(Document*)self.document titleTextField] setStringValue:title];
+- (NSString*)windowTitleForDocumentDisplayName:(NSString*)displayName {
+  NSString* displayMode = NSLocalizedString([(Document*)self.document windowMode], nil);
+  if (@available(macOS 11, *)) {
+    return [NSString stringWithFormat:@"%@ — %@", displayName, displayMode];
+  } else {
+    return [NSString stringWithFormat:@"%@ • %@", displayName, displayMode];
+  }
 }
 
 - (NSUndoManager*)windowWillReturnUndoManager:(NSWindow*)window {

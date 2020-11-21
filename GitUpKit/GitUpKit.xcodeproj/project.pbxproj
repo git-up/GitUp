@@ -16,6 +16,8 @@
 		749786941B85AAB10065BD55 /* GCOrderedSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 74EDB5D11B84D4C400F00E79 /* GCOrderedSet.m */; };
 		74EDB5D61B84E06500F00E79 /* GCOrderedSet-Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 74EDB5D51B84E06500F00E79 /* GCOrderedSet-Tests.m */; };
 		74EDB5D71B8517F500F00E79 /* GCOrderedSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 74EDB5D11B84D4C400F00E79 /* GCOrderedSet.m */; };
+		DB7CBCA225762721001185AA /* GICustomToolbarItem.h in Headers */ = {isa = PBXBuildFile; fileRef = DB7CBCA025762721001185AA /* GICustomToolbarItem.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DB7CBCA325762721001185AA /* GICustomToolbarItem.m in Sources */ = {isa = PBXBuildFile; fileRef = DB7CBCA125762721001185AA /* GICustomToolbarItem.m */; };
 		DBCF675722CAE12500969D4A /* NSColor+GINamedColors.h in Headers */ = {isa = PBXBuildFile; fileRef = DBDFBC1A22B61290003EEC6C /* NSColor+GINamedColors.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DBDFBC0C22B610F1003EEC6C /* Interface.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DBDFBC0B22B610F1003EEC6C /* Interface.xcassets */; };
 		DBDFBC0F22B61135003EEC6C /* NSBundle+GitUpKit.h in Headers */ = {isa = PBXBuildFile; fileRef = DBDFBC0D22B61135003EEC6C /* NSBundle+GitUpKit.h */; };
@@ -434,6 +436,8 @@
 		74EDB5D01B84D4C400F00E79 /* GCOrderedSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCOrderedSet.h; sourceTree = "<group>"; };
 		74EDB5D11B84D4C400F00E79 /* GCOrderedSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCOrderedSet.m; sourceTree = "<group>"; };
 		74EDB5D51B84E06500F00E79 /* GCOrderedSet-Tests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GCOrderedSet-Tests.m"; sourceTree = "<group>"; };
+		DB7CBCA025762721001185AA /* GICustomToolbarItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GICustomToolbarItem.h; sourceTree = "<group>"; };
+		DB7CBCA125762721001185AA /* GICustomToolbarItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GICustomToolbarItem.m; sourceTree = "<group>"; };
 		DBDFBC0B22B610F1003EEC6C /* Interface.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Interface.xcassets; sourceTree = "<group>"; };
 		DBDFBC0D22B61135003EEC6C /* NSBundle+GitUpKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSBundle+GitUpKit.h"; sourceTree = "<group>"; };
 		DBDFBC0E22B61135003EEC6C /* NSBundle+GitUpKit.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSBundle+GitUpKit.m"; sourceTree = "<group>"; };
@@ -768,6 +772,8 @@
 				E22941D41AC11E31000A83AF /* GIAppKit.m */,
 				E22942251AC12E5C000A83AF /* GIColorView.h */,
 				E22942261AC12E5C000A83AF /* GIColorView.m */,
+				DB7CBCA025762721001185AA /* GICustomToolbarItem.h */,
+				DB7CBCA125762721001185AA /* GICustomToolbarItem.m */,
 				0AC8525723A122C400479160 /* GILaunchServicesLocator.h */,
 				0AC8525823A122C400479160 /* GILaunchServicesLocator.m */,
 				E22941E31AC11EBB000A83AF /* GILinkButton.h */,
@@ -1210,6 +1216,7 @@
 				E267E2CE1B84F29F00BAB377 /* XLFacilityCMacros.h in Headers */,
 				E267E2CF1B84F29F00BAB377 /* XLFacilityMacros.h in Headers */,
 				E267E2D01B84F29F00BAB377 /* XLFileLogger.h in Headers */,
+				DB7CBCA225762721001185AA /* GICustomToolbarItem.h in Headers */,
 				E267E2D11B84F29F00BAB377 /* XLFunctions.h in Headers */,
 				E267E2D21B84F29F00BAB377 /* XLLogger.h in Headers */,
 				E267E2D31B84F29F00BAB377 /* XLLogRecord.h in Headers */,
@@ -1528,6 +1535,7 @@
 				E267E25A1B84DCA100BAB377 /* GICommitRewriterViewController.m in Sources */,
 				E267E25B1B84DCA100BAB377 /* GICommitSplitterViewController.m in Sources */,
 				E267E25C1B84DCA100BAB377 /* GICommitViewController.m in Sources */,
+				DB7CBCA325762721001185AA /* GICustomToolbarItem.m in Sources */,
 				E267E25D1B84DCA100BAB377 /* GIConfigViewController.m in Sources */,
 				E267E25E1B84DCA100BAB377 /* GIConflictResolverViewController.m in Sources */,
 				E267E25F1B84DCA100BAB377 /* GIDiffViewController.m in Sources */,
