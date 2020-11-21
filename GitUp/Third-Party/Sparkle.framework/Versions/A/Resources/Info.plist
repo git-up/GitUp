@@ -3,13 +3,13 @@
 <plist version="1.0">
 <dict>
 	<key>BuildMachineOSBuild</key>
-	<string>14F27</string>
+	<string>20B28</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleExecutable</key>
 	<string>Sparkle</string>
 	<key>CFBundleIdentifier</key>
-	<string>org.andymatuschak.Sparkle</string>
+	<string>org.sparkle-project.Sparkle</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -17,24 +17,32 @@
 	<key>CFBundlePackageType</key>
 	<string>FMWK</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.11.0 git-16c3534</string>
+	<string>1.24.0 a-67-g0e162c98</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleSupportedPlatforms</key>
+	<array>
+		<string>MacOSX</string>
+	</array>
 	<key>CFBundleVersion</key>
-	<string>1.11.0</string>
+	<string>1.24.0</string>
 	<key>DTCompiler</key>
 	<string>com.apple.compilers.llvm.clang.1_0</string>
 	<key>DTPlatformBuild</key>
-	<string>6E35b</string>
+	<string>12C5020f</string>
+	<key>DTPlatformName</key>
+	<string>macosx</string>
 	<key>DTPlatformVersion</key>
-	<string>GM</string>
+	<string>11.1</string>
 	<key>DTSDKBuild</key>
-	<string>14D125</string>
+	<string>20C5048g</string>
 	<key>DTSDKName</key>
-	<string>macosx10.10</string>
+	<string>macosx11.1</string>
 	<key>DTXcode</key>
-	<string>0640</string>
+	<string>1230</string>
 	<key>DTXcodeBuild</key>
-	<string>6E35b</string>
+	<string>12C5020f</string>
+	<key>LSMinimumSystemVersion</key>
+	<string>10.7</string>
 </dict>
 </plist>
