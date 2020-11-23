@@ -49,6 +49,7 @@
                                                 <rect key="frame" x="0.0" y="0.0" width="300" height="454"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                <tableViewGridLines key="gridStyleMask" horizontal="YES"/>
                                                 <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                                 <tableColumns>
                                                     <tableColumn editable="NO" width="268" minWidth="40" maxWidth="1000" id="sMJ-Ww-cFI">
@@ -121,7 +122,7 @@
                                     </scroller>
                                 </scrollView>
                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2vp-ts-xnS">
-                                    <rect key="frame" x="68" y="272" width="164" height="18"/>
+                                    <rect key="frame" x="10" y="252" width="280" height="18"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="center" title="No Stashes" id="zsp-Bw-JJB">
                                         <font key="font" metaFont="system" size="14"/>

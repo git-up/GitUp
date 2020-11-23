@@ -286,24 +286,14 @@ static const void* _associatedObjectCommitKey = &_associatedObjectCommitKey;
   }
 }
 
-- (void)drawRect:(NSRect)dirtyRect {
-  NSRect bounds = self.bounds;
-  CGContextRef context = [[NSGraphicsContext currentContext] graphicsPort];
-
-  [NSColor.gitUpSeparatorColor setStroke];
-  CGContextMoveToPoint(context, 0, 0.5);
-  CGContextAddLineToPoint(context, bounds.size.width, 0.5);
-  CGContextStrokePath(context);
-  if (_row == 0) {
-    CGContextMoveToPoint(context, 0, bounds.size.height - 0.5);
-    CGContextAddLineToPoint(context, bounds.size.width, bounds.size.height - 0.5);
-    CGContextStrokePath(context);
-  }
-}
-
 @end
 
 @implementation GITableView
+
+- (void)awakeFromNib {
+  [super awakeFromNib];
+  self.gridColor = NSColor.gitUpSeparatorColor;
+}
 
 - (BOOL)validateProposedFirstResponder:(NSResponder*)responder forEvent:(NSEvent*)event {
   return YES;

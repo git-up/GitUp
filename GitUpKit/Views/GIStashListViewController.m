@@ -114,9 +114,11 @@
 
   if (_stashes.count == 0) {
     _emptyLabel.hidden = NO;
+    _tableView.gridStyleMask = 0;
     [self tableViewSelectionDidChange:nil];  // Work around a bug where -tableViewSelectionDidChange is not called when emptying the table
   } else {
     _emptyLabel.hidden = YES;
+    _tableView.gridStyleMask = NSTableViewSolidHorizontalGridLineMask;
   }
 }
 
