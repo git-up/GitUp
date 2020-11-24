@@ -38,4 +38,6 @@
 @property(class, strong, readonly) NSColor* gitUpConfigGlobalBackgroundColor;
 @property(class, strong, readonly) NSColor* gitUpConfigHighlightBackgroundColor;
 
+@property(class, strong, readonly) NSColor* gitUpCommitHeaderBackgroundColor;
+
 @end

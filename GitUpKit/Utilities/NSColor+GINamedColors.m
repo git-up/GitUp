@@ -116,6 +116,7 @@ IMPLEMENT_NAMED_COLOR(DiffUntrackedBackground, "diff/untracked_background", 0.75
 IMPLEMENT_NAMED_COLOR(ConfigConflictBackground, "config/conflict_background", 1, 0.95, 0.95, 1)
 IMPLEMENT_NAMED_COLOR(ConfigGlobalBackground, "config/global_background", 0.95, 1, 0.95, 1)
 IMPLEMENT_NAMED_COLOR(ConfigHighlightBackground, "config/highlight_background", 1, 1, 0, 0.5)
+IMPLEMENT_NAMED_COLOR(CommitHeaderBackground, "commit/header_background", 0.5, 0.5, 0.5, 1)
 
 #undef IMPLEMENT_NAMED_COLOR
 
