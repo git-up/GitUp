@@ -45,6 +45,17 @@ CGFloat GIFontSize(void) {
 
 static const void* _associatedObjectCommitKey = &_associatedObjectCommitKey;
 
+void GIPerformOnMainRunLoop(dispatch_block_t block) {
+  // Equivalent to `[[NSRunLoop mainRunLoop] performBlock:]` on 10.12+
+  CFRunLoopRef runLoop = CFRunLoopGetMain();
+  CFRunLoopPerformBlock(runLoop, kCFRunLoopCommonModes, ^{
+    @autoreleasepool {
+      block();
+    }
+  });
+  CFRunLoopWakeUp(runLoop);
+}
+
 @implementation NSMutableAttributedString (GIAppKit)
 
 - (void)appendString:(NSString*)string withAttributes:(NSDictionary*)attributes {

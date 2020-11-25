@@ -31,6 +31,8 @@ extern CGFloat const GIDefaultFontSize;
 
 FOUNDATION_EXPORT CGFloat GIFontSize(void);  // Reads GIUserDefaultKey_FontSize, falling back to GIDefaultFontSize if the user defaults value is not usable.
 
+FOUNDATION_EXPORT void GIPerformOnMainRunLoop(dispatch_block_t block);
+
 @interface NSMutableAttributedString (GIAppKit)
 - (void)appendString:(NSString*)string withAttributes:(NSDictionary*)attributes;
 @end
