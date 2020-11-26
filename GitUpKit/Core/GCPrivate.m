@@ -171,7 +171,6 @@ cleanup:
   return success;
 }
 
-
 - (BOOL)runWithArguments:(NSArray*)arguments stdin:(NSData*)stdin stdout:(NSData**)stdout stderr:(NSData**)stderr exitStatus:(int*)exitStatus error:(NSError**)error {
   return [self _runWithDefaultInterpreter:NO arguments:arguments stdin:stdin stdout:stdout stderr:stderr exitStatus:exitStatus error:error] || (self.fallBackToDefaultInterpreter && [self _runWithDefaultInterpreter:YES arguments:arguments stdin:stdin stdout:stdout stderr:stderr exitStatus:exitStatus error:error]);
 }
