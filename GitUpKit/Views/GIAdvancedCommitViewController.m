@@ -59,6 +59,8 @@
 - (void)resetSearch {
   [self.searchTextField setStringValue:@""];
   [self.repository updateFilePattern:nil];
+  self.searchTextField.nextKeyView = self.messageTextView;
+  self.searchTextField.nextResponder = self.messageTextView;
 }
 
 - (void)unsetSearch {
