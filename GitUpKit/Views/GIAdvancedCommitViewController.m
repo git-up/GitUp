@@ -66,11 +66,9 @@
   BOOL isSearchDisabled = [@"" isEqualToString:text];
   if (isSearchDisabled) {
     [self.repository updateFilePattern:nil];
-    self.commitButton.toolTip = nil;
   }
   else {
     [self.repository updateFilePattern:text];
-    self.commitButton.toolTip = NSLocalizedString(@"Search in progress", nil);
   }
   [self _updateCommitButton];
 }
