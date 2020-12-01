@@ -54,7 +54,7 @@
 
 #pragma mark - Search
 - (void)setupSearch {
-  [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(textDidChange:) name:NSTextDidChangeNotification object:nil];
+  self.searchTextField.delegate = self;
 }
 
 - (void)resetSearch {
@@ -64,17 +64,16 @@
   self.searchTextField.nextResponder = self.messageTextView;
 }
 
-- (void)unsetSearch {
-  [NSNotificationCenter.defaultCenter removeObserver:self];
-}
-
-- (void)textDidChange:(NSNotification *)notification {
-  NSString *text = self.searchTextField.stringValue;
-  if ([@"" isEqualToString:text]) {
-    [self.repository updateFilePattern:nil];
-  }
-  else {
-    [self.repository updateFilePattern:text];
+#pragma mark - NSControlTextEditingDelegate
+- (void)controlTextDidChange:(NSNotification *)obj {
+  if (obj.object == self.searchTextField) {
+    NSString *text = self.searchTextField.stringValue;
+    if ([@"" isEqualToString:text]) {
+      [self.repository updateFilePattern:nil];
+    }
+    else {
+      [self.repository updateFilePattern:text];
+    }
   }
 }
 
@@ -144,10 +143,6 @@
 - (void)viewWillDisappear {
   [super viewWillDisappear];
   [self resetSearch];
-}
-
-- (void)dealloc {
-  [self unsetSearch];
 }
 
 #pragma mark - Repository Handling
