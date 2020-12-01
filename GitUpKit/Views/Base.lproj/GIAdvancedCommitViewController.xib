@@ -16,6 +16,7 @@
                 <outlet property="indexHeaderView" destination="0zR-9s-ty2" id="BLn-7k-Ti2"/>
                 <outlet property="infoTextField" destination="H0U-9x-3Cl" id="xIS-An-utS"/>
                 <outlet property="messageTextView" destination="ZGk-oR-MNP" id="bmf-B6-urc"/>
+                <outlet property="searchTextField" destination="rXa-ct-fRp" id="TLE-I1-vQt"/>
                 <outlet property="stageButton" destination="nf2-5l-LHg" id="Y5g-wM-FRo"/>
                 <outlet property="unstageButton" destination="0n6-Tx-H9g" id="RRF-VA-co7"/>
                 <outlet property="view" destination="Mge-gB-T5T" id="Dk7-8C-xIa"/>
@@ -123,8 +124,28 @@
                                                                     </subviews>
                                                                 </customView>
                                                                 <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SLl-qM-6U5">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="300" height="168"/>
+                                                                    <rect key="frame" x="0.0" y="26" width="300" height="142"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                                </customView>
+                                                                <customView id="4rD-aM-CGa">
+                                                                    <rect key="frame" x="0.0" y="0.0" width="300" height="27"/>
+                                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                                                                    <subviews>
+                                                                        <searchField wantsLayer="YES" verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rXa-ct-fRp">
+                                                                            <rect key="frame" x="5" y="1" width="290" height="24"/>
+                                                                            <searchFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" borderStyle="bezel" usesSingleLineMode="YES" bezelStyle="round" id="AfE-YO-lmL">
+                                                                                <font key="font" metaFont="system"/>
+                                                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                            </searchFieldCell>
+                                                                        </searchField>
+                                                                    </subviews>
+                                                                    <constraints>
+                                                                        <constraint firstItem="rXa-ct-fRp" firstAttribute="leading" secondItem="4rD-aM-CGa" secondAttribute="leading" constant="5" id="33R-mP-Dv6"/>
+                                                                        <constraint firstAttribute="bottom" secondItem="rXa-ct-fRp" secondAttribute="bottom" constant="1" id="PIM-R7-rlZ"/>
+                                                                        <constraint firstItem="rXa-ct-fRp" firstAttribute="top" secondItem="4rD-aM-CGa" secondAttribute="top" constant="2" id="nxl-no-ckt"/>
+                                                                        <constraint firstAttribute="trailing" secondItem="rXa-ct-fRp" secondAttribute="trailing" constant="5" id="z48-Ps-ceO"/>
+                                                                    </constraints>
                                                                 </customView>
                                                             </subviews>
                                                         </customView>
