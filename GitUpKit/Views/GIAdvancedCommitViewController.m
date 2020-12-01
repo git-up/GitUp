@@ -28,7 +28,7 @@
 #import "GIWindowController.h"
 #import "XLFacilityMacros.h"
 
-@interface GIAdvancedCommitViewController () <GIDiffFilesViewControllerDelegate, GIDiffContentsViewControllerDelegate>
+@interface GIAdvancedCommitViewController () <GIDiffFilesViewControllerDelegate, GIDiffContentsViewControllerDelegate, NSSearchFieldDelegate>
 @property(nonatomic, weak) IBOutlet GIColorView* workdirHeaderView;
 @property(nonatomic, weak) IBOutlet NSView* workdirFilesView;
 @property(nonatomic, weak) IBOutlet GIColorView* indexHeaderView;
@@ -38,6 +38,7 @@
 @property(nonatomic, weak) IBOutlet NSButton* commitButton;
 @property(nonatomic, weak) IBOutlet NSButton* stageButton;
 @property(nonatomic, weak) IBOutlet NSButton* discardButton;
+@property(nonatomic, weak) IBOutlet NSTextField* searchTextField;
 @end
 
 @implementation GIAdvancedCommitViewController {
@@ -51,6 +52,23 @@
   BOOL _disableFeedback;
 }
 
+#pragma mark - Search
+- (void)setupSearch {
+  [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(textDidChange:) name:NSTextDidChangeNotification object:nil];
+}
+
+- (void)textDidChange:(NSNotification *)notification {
+  NSLog(@"NewValue: %@", self.searchTextField.stringValue);
+  NSString *text = self.searchTextField.stringValue;
+  if ([@"" isEqualToString:text]) {
+    [self.repository updateFilePattern:nil];
+  }
+  else {
+    [self.repository updateFilePattern:text];
+  }
+}
+
+#pragma mark - View Lifecycle
 - (void)loadView {
   [super loadView];
 
@@ -76,6 +94,7 @@
   [_diffContentsView replaceWithView:_diffContentsViewController.view];
 
   self.messageTextView.string = @"";
+  [self setupSearch];
 }
 
 - (void)viewWillAppear {
@@ -112,6 +131,7 @@
   self.repository.statusMode = kGCLiveRepositoryStatusMode_Disabled;
 }
 
+#pragma mark - Repository Handling
 - (void)repositoryStatusDidUpdate {
   [super repositoryStatusDidUpdate];
 
@@ -165,19 +185,20 @@
   [self _updateCommitButton];
 }
 
+- (void)didCreateCommit:(GCCommit*)commit {
+  [super didCreateCommit:commit];
+
+  _indexActive = NO;
+  [self.view.window makeFirstResponder:_workdirFilesViewController.preferredFirstResponder];
+}
+
+#pragma mark - First Responder
 // We can't use the default implementation since we need a dynamic first-responder
 - (NSView*)preferredFirstResponder {
   if (_indexStatus.deltas.count && !_workdirStatus.deltas.count) {
     return _indexFilesViewController.preferredFirstResponder;
   }
   return _workdirFilesViewController.preferredFirstResponder;
-}
-
-- (void)didCreateCommit:(GCCommit*)commit {
-  [super didCreateCommit:commit];
-
-  _indexActive = NO;
-  [self.view.window makeFirstResponder:_workdirFilesViewController.preferredFirstResponder];
 }
 
 #pragma mark - GIDiffFilesViewControllerDelegate
