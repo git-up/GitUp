@@ -54,6 +54,7 @@
 #pragma mark - Search
 - (void)setupSearch {
   self.searchTextField.delegate = self;
+  self.searchTextField.placeholderString = NSLocalizedString(@"Filter files", nil);
 }
 
 - (void)resetSearch {
