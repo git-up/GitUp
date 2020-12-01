@@ -22,12 +22,15 @@
 #import "GIDiffContentsViewController.h"
 #import "GIViewController+Utilities.h"
 
+#import "GIColorView.h"
 #import "GIInterface.h"
 #import "GIWindowController.h"
 #import "XLFacilityMacros.h"
 
 @interface GIAdvancedCommitViewController () <GIDiffFilesViewControllerDelegate, GIDiffContentsViewControllerDelegate>
+@property(nonatomic, weak) IBOutlet GIColorView* workdirHeaderView;
 @property(nonatomic, weak) IBOutlet NSView* workdirFilesView;
+@property(nonatomic, weak) IBOutlet GIColorView* indexHeaderView;
 @property(nonatomic, weak) IBOutlet NSView* indexFilesView;
 @property(nonatomic, weak) IBOutlet NSView* diffContentsView;
 @property(nonatomic, weak) IBOutlet NSButton* unstageButton;
@@ -50,11 +53,15 @@
 - (void)loadView {
   [super loadView];
 
+  _workdirHeaderView.backgroundColor = NSColor.gitUpCommitHeaderBackgroundColor;
+
   _workdirFilesViewController = [[GIDiffFilesViewController alloc] initWithRepository:self.repository];
   _workdirFilesViewController.delegate = self;
   _workdirFilesViewController.allowsMultipleSelection = YES;
   _workdirFilesViewController.emptyLabel = NSLocalizedString(@"No changes in working directory", nil);
   [_workdirFilesView replaceWithView:_workdirFilesViewController.view];
+
+  _indexHeaderView.backgroundColor = NSColor.gitUpCommitHeaderBackgroundColor;
 
   _indexFilesViewController = [[GIDiffFilesViewController alloc] initWithRepository:self.repository];
   _indexFilesViewController.delegate = self;

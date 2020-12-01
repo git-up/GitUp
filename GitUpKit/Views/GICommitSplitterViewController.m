@@ -22,6 +22,7 @@
 #import "GIDiffContentsViewController.h"
 
 #import "GCCore.h"
+#import "GIColorView.h"
 #import "GIInterface.h"
 #import "GCHistory+Rewrite.h"
 #import "GIWindowController.h"
@@ -31,7 +32,9 @@
 
 @interface GICommitSplitterViewController () <GIDiffFilesViewControllerDelegate, GIDiffContentsViewControllerDelegate>
 @property(nonatomic, weak) IBOutlet NSTextField* titleTextField;
+@property(nonatomic, weak) IBOutlet GIColorView* filesViewNewHeader;
 @property(nonatomic, weak) IBOutlet NSView* filesViewNew;
+@property(nonatomic, weak) IBOutlet GIColorView* filesViewOldHeader;
 @property(nonatomic, weak) IBOutlet NSView* filesViewOld;
 @property(nonatomic, weak) IBOutlet NSView* diffContentsView;
 @property(nonatomic, weak) IBOutlet NSButton* continueButton;
@@ -65,11 +68,15 @@
 - (void)loadView {
   [super loadView];
 
+  _filesViewNewHeader.backgroundColor = NSColor.gitUpCommitHeaderBackgroundColor;
+
   _filesViewControllerNew = [[GIDiffFilesViewController alloc] initWithRepository:self.repository];
   _filesViewControllerNew.delegate = self;
   _filesViewControllerNew.allowsMultipleSelection = YES;
   _filesViewControllerNew.emptyLabel = NSLocalizedString(@"No changes in commit", nil);
   [_filesViewNew replaceWithView:_filesViewControllerNew.view];
+
+  _filesViewOldHeader.backgroundColor = NSColor.gitUpCommitHeaderBackgroundColor;
 
   _filesViewControllerOld = [[GIDiffFilesViewController alloc] initWithRepository:self.repository];
   _filesViewControllerOld.delegate = self;
