@@ -58,22 +58,31 @@
 }
 
 - (void)resetSearch {
-  [self.searchTextField setStringValue:@""];
-  [self.repository updateFilePattern:nil];
-  self.searchTextField.nextKeyView = self.messageTextView;
-  self.searchTextField.nextResponder = self.messageTextView;
+  self.searchTextField.stringValue = @"";
+  [self onSearchTextDidChange:self.searchTextField.stringValue];
+}
+
+- (void)onSearchTextDidChange:(NSString *)text {
+  BOOL isSearchDisabled = [@"" isEqualToString:text];
+  if (isSearchDisabled) {
+    [self.repository updateFilePattern:nil];
+    self.commitButton.toolTip = nil;
+  }
+  else {
+    [self.repository updateFilePattern:text];
+    self.commitButton.toolTip = NSLocalizedString(@"Search in progress", nil);
+  }
+  [self _updateCommitButton];
+}
+
+- (BOOL)searchInProgress {
+  return self.repository.filePattern != nil;
 }
 
 #pragma mark - NSControlTextEditingDelegate
 - (void)controlTextDidChange:(NSNotification *)obj {
   if (obj.object == self.searchTextField) {
-    NSString *text = self.searchTextField.stringValue;
-    if ([@"" isEqualToString:text]) {
-      [self.repository updateFilePattern:nil];
-    }
-    else {
-      [self.repository updateFilePattern:text];
-    }
+    [self onSearchTextDidChange:self.searchTextField.stringValue];
   }
 }
 
@@ -155,7 +164,18 @@
 }
 
 - (void)_updateCommitButton {
-  _commitButton.enabled = _indexStatus.modified || (self.repository.state == kGCRepositoryState_Merge) || self.amendButton.state;  // Creating an empty commit is OK for a merge or when amending
+  _commitButton.enabled =
+  _indexStatus.modified
+  || (self.repository.state == kGCRepositoryState_Merge)
+  || self.amendButton.state;  // Creating an empty commit is OK for a merge or when amending
+  _commitButton.enabled = _commitButton.enabled && !self.searchInProgress;
+  
+  if (self.searchInProgress) {
+    _commitButton.toolTip = NSLocalizedString(@"Search in progress", @"");
+  }
+  else {
+    _commitButton.toolTip = nil;
+  }
 }
 
 - (void)_reloadContents {
