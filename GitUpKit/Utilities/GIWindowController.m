@@ -361,7 +361,11 @@ static void _TimerCallBack(CFRunLoopTimerRef timer, void* info) {
   }];
 
   if (_handler) {
-    dispatch_async(dispatch_get_main_queue(), ^{  // Defer the callback a bit to ensure animations run in parallel to callback execution
+    // Defer the callback a bit to ensure animations run in parallel to callback execution
+    //
+    // Performed on the main run loop instead of the main queue to ensure that the
+    // main queue is serviced during a modal session
+    GIPerformOnMainRunLoop(^{
       _handler(success);
       _handler = NULL;
     });
