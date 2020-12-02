@@ -104,50 +104,80 @@
                                                                 </button>
                                                             </subviews>
                                                         </customView>
-                                                        <customView fixedFrame="YES" id="1t4-og-I2D">
+                                                        <customView id="1t4-og-I2D">
                                                             <rect key="frame" x="0.0" y="250" width="300" height="202"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
-                                                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0zR-9s-ty2" customClass="GIColorView">
-                                                                    <rect key="frame" x="0.0" y="168" width="300" height="34"/>
-                                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                                                <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="0.0" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Dta-bM-TRe">
+                                                                    <rect key="frame" x="0.0" y="0.0" width="300" height="202"/>
                                                                     <subviews>
-                                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hEs-Hp-dbT">
-                                                                            <rect key="frame" x="8" y="9" width="60" height="17"/>
-                                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                            <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingTail" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="left" title="Index" id="UV4-jc-9yJ">
-                                                                                <font key="font" metaFont="systemBold"/>
-                                                                                <color key="textColor" name="alternateSelectedControlTextColor" catalog="System" colorSpace="catalog"/>
-                                                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                            </textFieldCell>
-                                                                        </textField>
+                                                                        <customView translatesAutoresizingMaskIntoConstraints="NO" id="0zR-9s-ty2" customClass="GIColorView">
+                                                                            <rect key="frame" x="0.0" y="168" width="300" height="34"/>
+                                                                            <subviews>
+                                                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hEs-Hp-dbT">
+                                                                                    <rect key="frame" x="8" y="9" width="60" height="17"/>
+                                                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                                    <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingTail" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="left" title="Index" id="UV4-jc-9yJ">
+                                                                                        <font key="font" metaFont="systemBold"/>
+                                                                                        <color key="textColor" name="alternateSelectedControlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                                    </textFieldCell>
+                                                                                </textField>
+                                                                            </subviews>
+                                                                            <constraints>
+                                                                                <constraint firstAttribute="height" constant="34" id="n3T-uA-Bc3"/>
+                                                                            </constraints>
+                                                                        </customView>
+                                                                        <customView id="SLl-qM-6U5">
+                                                                            <rect key="frame" x="0.0" y="27" width="300" height="141"/>
+                                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                                        </customView>
+                                                                        <customView translatesAutoresizingMaskIntoConstraints="NO" id="4rD-aM-CGa">
+                                                                            <rect key="frame" x="0.0" y="0.0" width="300" height="27"/>
+                                                                            <subviews>
+                                                                                <searchField wantsLayer="YES" verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rXa-ct-fRp">
+                                                                                    <rect key="frame" x="5" y="1" width="290" height="24"/>
+                                                                                    <searchFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" borderStyle="bezel" usesSingleLineMode="YES" bezelStyle="round" id="AfE-YO-lmL">
+                                                                                        <font key="font" metaFont="system"/>
+                                                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                                    </searchFieldCell>
+                                                                                </searchField>
+                                                                            </subviews>
+                                                                            <constraints>
+                                                                                <constraint firstItem="rXa-ct-fRp" firstAttribute="leading" secondItem="4rD-aM-CGa" secondAttribute="leading" constant="5" id="33R-mP-Dv6"/>
+                                                                                <constraint firstAttribute="bottom" secondItem="rXa-ct-fRp" secondAttribute="bottom" constant="1" id="PIM-R7-rlZ"/>
+                                                                                <constraint firstAttribute="height" constant="27" id="UIy-5a-ea5"/>
+                                                                                <constraint firstItem="rXa-ct-fRp" firstAttribute="top" secondItem="4rD-aM-CGa" secondAttribute="top" constant="2" id="nxl-no-ckt"/>
+                                                                                <constraint firstAttribute="trailing" secondItem="rXa-ct-fRp" secondAttribute="trailing" constant="5" id="z48-Ps-ceO"/>
+                                                                            </constraints>
+                                                                            <connections>
+                                                                                <binding destination="pIr-U8-fFt" name="hidden" keyPath="values.CommitView.EnableFilterField" id="ivo-Aa-0Lo">
+                                                                                    <dictionary key="options">
+                                                                                        <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                                                    </dictionary>
+                                                                                </binding>
+                                                                            </connections>
+                                                                        </customView>
                                                                     </subviews>
-                                                                </customView>
-                                                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SLl-qM-6U5">
-                                                                    <rect key="frame" x="0.0" y="26" width="300" height="142"/>
-                                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                                </customView>
-                                                                <customView id="4rD-aM-CGa">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="300" height="27"/>
-                                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
-                                                                    <subviews>
-                                                                        <searchField wantsLayer="YES" verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rXa-ct-fRp">
-                                                                            <rect key="frame" x="5" y="1" width="290" height="24"/>
-                                                                            <searchFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" borderStyle="bezel" usesSingleLineMode="YES" bezelStyle="round" id="AfE-YO-lmL">
-                                                                                <font key="font" metaFont="system"/>
-                                                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                            </searchFieldCell>
-                                                                        </searchField>
-                                                                    </subviews>
-                                                                    <constraints>
-                                                                        <constraint firstItem="rXa-ct-fRp" firstAttribute="leading" secondItem="4rD-aM-CGa" secondAttribute="leading" constant="5" id="33R-mP-Dv6"/>
-                                                                        <constraint firstAttribute="bottom" secondItem="rXa-ct-fRp" secondAttribute="bottom" constant="1" id="PIM-R7-rlZ"/>
-                                                                        <constraint firstItem="rXa-ct-fRp" firstAttribute="top" secondItem="4rD-aM-CGa" secondAttribute="top" constant="2" id="nxl-no-ckt"/>
-                                                                        <constraint firstAttribute="trailing" secondItem="rXa-ct-fRp" secondAttribute="trailing" constant="5" id="z48-Ps-ceO"/>
-                                                                    </constraints>
-                                                                </customView>
+                                                                    <visibilityPriorities>
+                                                                        <integer value="1000"/>
+                                                                        <integer value="1000"/>
+                                                                        <integer value="1000"/>
+                                                                    </visibilityPriorities>
+                                                                    <customSpacing>
+                                                                        <real value="3.4028234663852886e+38"/>
+                                                                        <real value="3.4028234663852886e+38"/>
+                                                                        <real value="3.4028234663852886e+38"/>
+                                                                    </customSpacing>
+                                                                </stackView>
                                                             </subviews>
+                                                            <constraints>
+                                                                <constraint firstAttribute="bottom" secondItem="Dta-bM-TRe" secondAttribute="bottom" id="TbC-JO-fOw"/>
+                                                                <constraint firstAttribute="trailing" secondItem="Dta-bM-TRe" secondAttribute="trailing" id="afu-eM-9Rd"/>
+                                                                <constraint firstItem="Dta-bM-TRe" firstAttribute="top" secondItem="1t4-og-I2D" secondAttribute="top" id="pjn-O5-Rey"/>
+                                                                <constraint firstItem="Dta-bM-TRe" firstAttribute="leading" secondItem="1t4-og-I2D" secondAttribute="leading" id="zPm-6v-fsz"/>
+                                                            </constraints>
                                                         </customView>
                                                     </subviews>
                                                     <holdingPriorities>
@@ -292,5 +322,6 @@ DQ
             </subviews>
             <point key="canvasLocation" x="576" y="511"/>
         </view>
+        <userDefaultsController representsSharedInstance="YES" id="pIr-U8-fFt"/>
     </objects>
 </document>
