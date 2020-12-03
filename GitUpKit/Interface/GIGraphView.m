@@ -57,6 +57,7 @@
 #define kSelectedOffsetX 28
 #define kSelectedCornerRadius 5.0
 #define kSelectedTipHeight 8.0
+#define kSelectedBorderWidth 2.0
 
 #define kContextualMenuOffsetX 10
 #define kContextualMenuOffsetY -10
@@ -74,7 +75,7 @@
 #define CONVERT_X(x) (kSpacingX + (x)*kSpacingX)
 #define CONVERT_Y(y) (kSpacingY + (y)*kSpacingY)
 #define SQUARE(x) ((x) * (x))
-#define SELECTED_NODE_BOUNDS(x, y) NSMakeRect(x - kSpacingX / 2, y - kSelectedLabelMaxHeight / 2, kSelectedLabelMaxWidth + kSpacingX / 2 + 40, kSelectedLabelMaxHeight)
+#define SELECTED_NODE_BOUNDS(x, y) NSMakeRect(x - kSpacingX / 2, y - (kSelectedLabelMaxHeight / 2) - kSelectedBorderWidth, kSelectedLabelMaxWidth + kSpacingX / 2 + 40, kSelectedLabelMaxHeight + (kSelectedBorderWidth * 2))
 #define NODE_LABEL_BOUNDS(x, y) NSMakeRect(x - kSpacingX / 2, y - kSpacingY / 2, kNodeLabelMaxWidth + kSpacingX / 2 + 30, kNodeLabelMaxHeight + kSpacingY / 2)
 #define HEAD_BOUNDS(x, y) NSMakeRect(x - 20, y - 10, 40, 20)
 
@@ -1366,7 +1367,7 @@ static void _DrawSelectedNode(CGContextRef context, CGFloat x, CGFloat y, GINode
   CGContextFillPath(context);
 
   CGContextSetStrokeColorWithColor(context, NSColor.textBackgroundColor.CGColor);
-  CGContextSetLineWidth(context, 2);
+  CGContextSetLineWidth(context, kSelectedBorderWidth);
   CGContextAddPath(context, labelPath);
   CGContextStrokePath(context);
 
