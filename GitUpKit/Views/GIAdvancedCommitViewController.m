@@ -25,6 +25,9 @@
 #import "GIColorView.h"
 #import "GIInterface.h"
 #import "GIWindowController.h"
+
+#import "NSView+Embedding.h"
+
 #import "XLFacilityMacros.h"
 
 @interface GIAdvancedCommitViewController () <GIDiffFilesViewControllerDelegate, GIDiffContentsViewControllerDelegate, NSSearchFieldDelegate>
@@ -102,7 +105,7 @@
   _indexFilesViewController.delegate = self;
   _indexFilesViewController.allowsMultipleSelection = YES;
   _indexFilesViewController.emptyLabel = NSLocalizedString(@"No changes in index", nil);
-  [_indexFilesView replaceWithView:_indexFilesViewController.view];
+  [_indexFilesView embedView:_indexFilesViewController.view];
 
   _diffContentsViewController = [[GIDiffContentsViewController alloc] initWithRepository:self.repository];
   _diffContentsViewController.delegate = self;
