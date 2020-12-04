@@ -16,7 +16,7 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "E267E1A71B84D6C500BAB377"
                BuildableName = "GitUpKit.framework"
-               BlueprintName = "GitUpKit (OSX)"
+               BlueprintName = "GitUpKit (macOS)"
                ReferencedContainer = "container:GitUpKit.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -63,7 +63,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E267E1A71B84D6C500BAB377"
             BuildableName = "GitUpKit.framework"
-            BlueprintName = "GitUpKit (OSX)"
+            BlueprintName = "GitUpKit (macOS)"
             ReferencedContainer = "container:GitUpKit.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -79,7 +79,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E267E1A71B84D6C500BAB377"
             BuildableName = "GitUpKit.framework"
-            BlueprintName = "GitUpKit (OSX)"
+            BlueprintName = "GitUpKit (macOS)"
             ReferencedContainer = "container:GitUpKit.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

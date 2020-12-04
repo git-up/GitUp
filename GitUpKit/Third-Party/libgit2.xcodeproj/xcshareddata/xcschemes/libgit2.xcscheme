@@ -7,16 +7,16 @@
       buildImplicitDependencies = "YES">
       <BuildActionEntries>
          <BuildActionEntry
-            buildForTesting = "NO"
-            buildForRunning = "NO"
-            buildForProfiling = "NO"
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
             buildForArchiving = "YES"
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E2174BD41B91240400BE234A"
+               BlueprintIdentifier = "DB4464842567228400D36981"
                BuildableName = "libgit2.a"
-               BlueprintName = "libgit2 (OSX)"
+               BlueprintName = "libgit2"
                ReferencedContainer = "container:libgit2.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -47,12 +47,21 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "DB4464842567228400D36981"
+            BuildableName = "libgit2.a"
+            BlueprintName = "libgit2"
+            ReferencedContainer = "container:libgit2.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">
    </AnalyzeAction>
    <ArchiveAction
-      buildConfiguration = "Distribution"
+      buildConfiguration = "Release"
       revealArchiveInOrganizer = "YES">
    </ArchiveAction>
 </Scheme>
