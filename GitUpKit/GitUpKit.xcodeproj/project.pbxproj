@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0A5BF6A62578EFB300B98F4F /* NSView+Embedding.h in Headers */ = {isa = PBXBuildFile; fileRef = 0A5BF6A42578EFB200B98F4F /* NSView+Embedding.h */; };
+		0A5BF6A72578EFB300B98F4F /* NSView+Embedding.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A5BF6A52578EFB300B98F4F /* NSView+Embedding.m */; };
 		0AC8525923A122C400479160 /* GILaunchServicesLocator.h in Headers */ = {isa = PBXBuildFile; fileRef = 0AC8525723A122C400479160 /* GILaunchServicesLocator.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0AC8525A23A122C400479160 /* GILaunchServicesLocator.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AC8525823A122C400479160 /* GILaunchServicesLocator.m */; };
 		1DF371CD22F5262300EF7BD9 /* GCLiveRepository+Utilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 1DF371CB22F5262300EF7BD9 /* GCLiveRepository+Utilities.h */; };
@@ -427,6 +429,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0A5BF6A42578EFB200B98F4F /* NSView+Embedding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSView+Embedding.h"; sourceTree = "<group>"; };
+		0A5BF6A52578EFB300B98F4F /* NSView+Embedding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSView+Embedding.m"; sourceTree = "<group>"; };
 		0AC8525723A122C400479160 /* GILaunchServicesLocator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GILaunchServicesLocator.h; sourceTree = "<group>"; };
 		0AC8525823A122C400479160 /* GILaunchServicesLocator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GILaunchServicesLocator.m; sourceTree = "<group>"; };
 		1DF371CB22F5262300EF7BD9 /* GCLiveRepository+Utilities.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GCLiveRepository+Utilities.h"; sourceTree = "<group>"; };
@@ -870,6 +874,8 @@
 		E2735B2119FF763300ED0CC4 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				0A5BF6A42578EFB200B98F4F /* NSView+Embedding.h */,
+				0A5BF6A52578EFB300B98F4F /* NSView+Embedding.m */,
 				E259C2D41A64FAA40079616B /* GCHistory+Rewrite-Tests.m */,
 				E2D414891A02D68700B99634 /* GCHistory+Rewrite.h */,
 				E2D4148A1A02D68700B99634 /* GCHistory+Rewrite.m */,
@@ -1187,6 +1193,7 @@
 				E267E2281B84DBE700BAB377 /* GIWindowController.h in Headers */,
 				E267E2361B84DC3900BAB377 /* GICommitListViewController.h in Headers */,
 				E267E2371B84DC3900BAB377 /* GIDiffContentsViewController.h in Headers */,
+				0A5BF6A62578EFB300B98F4F /* NSView+Embedding.h in Headers */,
 				E267E2381B84DC3900BAB377 /* GIDiffFilesViewController.h in Headers */,
 				E267E2391B84DC3900BAB377 /* GISnapshotListViewController.h in Headers */,
 				1DF371CD22F5262300EF7BD9 /* GCLiveRepository+Utilities.h in Headers */,
@@ -1470,6 +1477,7 @@
 				E267E1D11B84D83100BAB377 /* GCBranch.m in Sources */,
 				E267E1D21B84D83100BAB377 /* GCCommit.m in Sources */,
 				E267E1D31B84D83100BAB377 /* GCCommitDatabase.m in Sources */,
+				0A5BF6A72578EFB300B98F4F /* NSView+Embedding.m in Sources */,
 				E267E1D41B84D83100BAB377 /* GCDiff.m in Sources */,
 				E267E1D51B84D83100BAB377 /* GCFoundation.m in Sources */,
 				E267E1D61B84D83100BAB377 /* GCFunctions.m in Sources */,

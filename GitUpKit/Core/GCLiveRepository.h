@@ -99,6 +99,8 @@ extern NSString* const GCLiveRepositoryAmendOperationReason;
 @property(nonatomic, readonly) GCDiff* workingDirectoryStatus;  // Nil on error
 @property(nonatomic, readonly) GCDiff* indexStatus;  // Nil on error
 @property(nonatomic, readonly) NSDictionary* indexConflicts;  // Nil on error
+@property(nonatomic, copy) NSString *filePattern;
+- (void)updateFilePattern:(NSString *)filePattern;
 
 @property(nonatomic, getter=areStashesEnabled) BOOL stashesEnabled;  // Default is NO - Should be enabled *after* setting delegate so any error can be received
 @property(nonatomic, readonly) NSArray* stashes;  // Nil on error
