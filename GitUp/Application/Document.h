@@ -15,13 +15,13 @@
 
 #import <AppKit/AppKit.h>
 
-typedef NS_ENUM(NSUInteger, CloneMode) {
+typedef NS_ENUM(NSInteger, CloneMode) {
   kCloneMode_None = 0,
   kCloneMode_Default,
   kCloneMode_Recursive
 };
 
-typedef NS_ENUM(NSUInteger, WindowModeID) {
+typedef NS_ENUM(NSInteger, WindowModeID) {
   kWindowModeID_Map = 0,
   kWindowModeID_Commit,
   kWindowModeID_Stashes
@@ -31,8 +31,6 @@ typedef NS_ENUM(NSUInteger, WindowModeID) {
 @property(nonatomic, strong) IBOutlet NSWindow* mainWindow;
 @property(nonatomic, strong) IBOutlet NSView* contentView;
 
-@property(nonatomic, strong) IBOutlet NSToolbar* toolbar;
-
 @property(nonatomic, weak) IBOutlet NSView* helpView;
 @property(nonatomic, weak) IBOutlet NSTextField* helpTextField;
 @property(nonatomic, weak) IBOutlet NSButton* helpContinueButton;
@@ -41,20 +39,6 @@ typedef NS_ENUM(NSUInteger, WindowModeID) {
 
 @property(nonatomic, weak) IBOutlet NSTabView* mainTabView;
 @property(nonatomic, weak) IBOutlet NSView* mapContainerView;
-
-@property(nonatomic, strong) IBOutlet NSView* titleView;
-@property(nonatomic, weak) IBOutlet NSTextField* titleTextField;
-@property(nonatomic, weak) IBOutlet NSTextField* infoTextField0;
-
-@property(nonatomic, strong) IBOutlet NSView* leftView;
-@property(nonatomic, weak) IBOutlet NSSegmentedControl* modeControl;
-@property(nonatomic, weak) IBOutlet NSButton* previousButton;
-@property(nonatomic, weak) IBOutlet NSButton* nextButton;
-
-@property(nonatomic, strong) IBOutlet NSView* rightView;
-@property(nonatomic, weak) IBOutlet NSButton* snapshotsButton;
-@property(nonatomic, weak) IBOutlet NSSearchField* searchField;
-@property(nonatomic, weak) IBOutlet NSButton* exitButton;
 
 @property(nonatomic, strong) IBOutlet NSView* mapView;
 @property(nonatomic, weak) IBOutlet NSView* mapControllerView;  // Temporary placeholder replaced by actual controller view at load time

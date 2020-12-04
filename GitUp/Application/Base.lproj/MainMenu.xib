@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="15702" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17506" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15702"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17506"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NSApplication">
@@ -328,6 +328,17 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="wBs-5b-oQz"/>
+                            <menuItem title="Next" tag="1" hidden="YES" keyEquivalent="" allowsKeyEquivalentWhenHidden="YES" id="8aW-fl-K6T">
+                                <connections>
+                                    <action selector="selectNextCommit:" target="-1" id="AUr-da-Zp6"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Previous" tag="2" hidden="YES" keyEquivalent="" allowsKeyEquivalentWhenHidden="YES" id="XLU-32-fu2">
+                                <connections>
+                                    <action selector="selectPreviousCommit:" target="-1" id="O7Q-bR-X53"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" hidden="YES" id="exI-ua-dYT"/>
                             <menuItem title="Enter Full Screen" keyEquivalent="f" id="AWl-Ry-evk">
                                 <modifierMask key="keyEquivalentModifierMask" control="YES" command="YES"/>
                                 <connections>
