@@ -20,22 +20,18 @@
 		0AC8525423A11F3700479160 /* PreferencesWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0AC8525223A11F3700479160 /* PreferencesWindowController.xib */; };
 		0AD4625B232711B000BE28D1 /* WelcomeWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AD4625A232711B000BE28D1 /* WelcomeWindowController.m */; };
 		0AE7F5F12312C1B000B06050 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0AE7F5ED2312C1B000B06050 /* InfoPlist.strings */; };
-		165C32B61B95739700D2F894 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 165C32B51B95739700D2F894 /* QuartzCore.framework */; };
 		31CD50E3203E2E2800360B3A /* ToolbarItemWrapperView.m in Sources */ = {isa = PBXBuildFile; fileRef = 31CD50E2203E2E2800360B3A /* ToolbarItemWrapperView.m */; };
 		A53C6D0C1E61A9CF0070387E /* FontSizeTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = A53C6D0B1E61A9CF0070387E /* FontSizeTransformer.m */; };
-		E212A6DE1B92100E00F62B18 /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E212A6DD1B92100E00F62B18 /* libiconv.dylib */; };
+		DBBEE685256B0A0200F96DAF /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = DBBEE684256B0A0200F96DAF /* libiconv.tbd */; };
+		DBBEE688256B0A0A00F96DAF /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = DBBEE687256B0A0A00F96DAF /* libz.tbd */; };
+		DBBEE6C0256B0B2100F96DAF /* libgit2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DB0D250E256738F600E6F48A /* libgit2.a */; };
 		E21739F71A5080DD00EC6777 /* DocumentController.m in Sources */ = {isa = PBXBuildFile; fileRef = E21739F61A5080DD00EC6777 /* DocumentController.m */; };
 		E21DCAEB1B253847006424E8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E21DCAEA1B253847006424E8 /* main.m */; };
 		E21DCAF31B253919006424E8 /* gitup in Copy Tool */ = {isa = PBXBuildFile; fileRef = E21DCAE81B253847006424E8 /* gitup */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		E21DCAF51B254117006424E8 /* install.sh in Copy Tool */ = {isa = PBXBuildFile; fileRef = E21DCAF41B254112006424E8 /* install.sh */; };
-		E21DCAF61B254F33006424E8 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2C338D819F85C3400063D95 /* Foundation.framework */; };
-		E21DCAF71B254F53006424E8 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E28200AC1A7D71EE00DA4096 /* CoreServices.framework */; };
-		E21DCAF81B255471006424E8 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E2C3394419F85D4B00063D95 /* libz.dylib */; };
-		E23C9B291B92104500ACA5A9 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2B14B561A88102C00003E64 /* Security.framework */; };
 		E25EBCEB1AA3F8B700D3AF44 /* Application.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E25EBCEA1AA3F8B700D3AF44 /* Application.xcassets */; };
 		E2653D251A5B2FBD006A9871 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2653D241A5B2FBD006A9871 /* Sparkle.framework */; };
 		E267E1F31B84D93300BAB377 /* Sparkle.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = E2653D241A5B2FBD006A9871 /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		E267E26B1B84E07E00BAB377 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2B14B561A88102C00003E64 /* Security.framework */; };
 		E267E2741B84E42A00BAB377 /* Help.plist in Resources */ = {isa = PBXBuildFile; fileRef = E2BDA0671AD47A2F00E69729 /* Help.plist */; };
 		E28A16E51B87023200218332 /* GitUpKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E28A16E01B87021600218332 /* GitUpKit.framework */; };
 		E28A16E61B87023C00218332 /* GitUpKit.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = E28A16E01B87021600218332 /* GitUpKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -45,19 +41,17 @@
 		E2C338B719F8562F00063D95 /* Document.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C338B619F8562F00063D95 /* Document.m */; };
 		E2C338BA19F8562F00063D95 /* Document.xib in Resources */ = {isa = PBXBuildFile; fileRef = E2C338B819F8562F00063D95 /* Document.xib */; };
 		E2C338BF19F8562F00063D95 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = E2C338BD19F8562F00063D95 /* MainMenu.xib */; };
-		E2C338D719F85C2E00063D95 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2C338D619F85C2E00063D95 /* Cocoa.framework */; };
 		E2C5672D1A6D98BC00ECFE07 /* WindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C5672C1A6D98BC00ECFE07 /* WindowController.m */; };
 		E2E3C9A01D771E7600AA9A62 /* GARawTracker.m in Sources */ = {isa = PBXBuildFile; fileRef = E2E3C99F1D771E7600AA9A62 /* GARawTracker.m */; };
-		E2E3C9A21D771E9D00AA9A62 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2E3C9A11D771E9D00AA9A62 /* SystemConfiguration.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		E21753051B9150AE00BE234A /* PBXContainerItemProxy */ = {
+		DBBEE6BE256B0B1C00F96DAF /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = E28A16DA1B87021600218332 /* GitUpKit.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = E267E1A71B84D6C500BAB377;
-			remoteInfo = GitUpKit;
+			remoteInfo = "GitUpKit (macOS)";
 		};
 		E217538A1B91641F00BE234A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -137,31 +131,29 @@
 		0AD46259232711B000BE28D1 /* WelcomeWindowController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WelcomeWindowController.h; sourceTree = "<group>"; };
 		0AD4625A232711B000BE28D1 /* WelcomeWindowController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WelcomeWindowController.m; sourceTree = "<group>"; };
 		0AE7F5EE2312C1B000B06050 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		165C32B51B95739700D2F894 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		1D2DA2F923E9E99700691DEF /* GitUp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = GitUp.entitlements; sourceTree = "<group>"; };
 		31CD50E1203E2E2800360B3A /* ToolbarItemWrapperView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ToolbarItemWrapperView.h; sourceTree = "<group>"; };
 		31CD50E2203E2E2800360B3A /* ToolbarItemWrapperView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ToolbarItemWrapperView.m; sourceTree = "<group>"; };
 		3DB98C7D23E091650039B454 /* DEVELOPMENT_TEAM.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = DEVELOPMENT_TEAM.xcconfig; sourceTree = "<group>"; };
 		A53C6D0A1E61A9CF0070387E /* FontSizeTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FontSizeTransformer.h; sourceTree = "<group>"; };
 		A53C6D0B1E61A9CF0070387E /* FontSizeTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FontSizeTransformer.m; sourceTree = "<group>"; };
-		E212A6DD1B92100E00F62B18 /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = usr/lib/libiconv.dylib; sourceTree = SDKROOT; };
+		DB0D250E256738F600E6F48A /* libgit2.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libgit2.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		DBBEE684256B0A0200F96DAF /* libiconv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.tbd; path = usr/lib/libiconv.tbd; sourceTree = SDKROOT; };
+		DBBEE687256B0A0A00F96DAF /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		E21739F51A5080DD00EC6777 /* DocumentController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DocumentController.h; sourceTree = "<group>"; };
 		E21739F61A5080DD00EC6777 /* DocumentController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DocumentController.m; sourceTree = "<group>"; };
 		E21DCAE81B253847006424E8 /* gitup */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = gitup; sourceTree = BUILT_PRODUCTS_DIR; };
 		E21DCAEA1B253847006424E8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		E21DCAF41B254112006424E8 /* install.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = install.sh; sourceTree = "<group>"; };
-		E222FF7E1B9210F600507E77 /* libcrypto.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcrypto.dylib; path = usr/lib/libcrypto.dylib; sourceTree = SDKROOT; };
 		E24306981B276D0B00CE8CCB /* ToolProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ToolProtocol.h; sourceTree = "<group>"; };
 		E25EBCEA1AA3F8B700D3AF44 /* Application.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Application.xcassets; sourceTree = "<group>"; };
 		E2653D241A5B2FBD006A9871 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = "Third-Party/Sparkle.framework"; sourceTree = SOURCE_ROOT; };
 		E27E37561B86F670000A551A /* Base.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Base.xcconfig; sourceTree = "<group>"; };
 		E27E37571B86F670000A551A /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		E27E37591B86F670000A551A /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
-		E28200AC1A7D71EE00DA4096 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = System/Library/Frameworks/CoreServices.framework; sourceTree = SDKROOT; };
 		E28A16DA1B87021600218332 /* GitUpKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GitUpKit.xcodeproj; path = ../GitUpKit/GitUpKit.xcodeproj; sourceTree = "<group>"; };
 		E2A5BE6C1A80E560008DD47F /* Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Common.h; sourceTree = "<group>"; };
 		E2A5BE6F1A814970008DD47F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
-		E2B14B561A88102C00003E64 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		E2BDA0681AD47A2F00E69729 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = en; path = en.lproj/Help.plist; sourceTree = "<group>"; };
 		E2C338AB19F8562F00063D95 /* GitUp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GitUp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E2C338AF19F8562F00063D95 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -170,17 +162,12 @@
 		E2C338B319F8562F00063D95 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		E2C338B519F8562F00063D95 /* Document.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Document.h; sourceTree = "<group>"; };
 		E2C338B619F8562F00063D95 /* Document.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Document.m; sourceTree = "<group>"; };
-		E2C338D619F85C2E00063D95 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
-		E2C338D819F85C3400063D95 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		E2C3394419F85D4B00063D95 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		E2C5672B1A6D98BC00ECFE07 /* WindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WindowController.h; sourceTree = "<group>"; };
 		E2C5672C1A6D98BC00ECFE07 /* WindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WindowController.m; sourceTree = "<group>"; };
 		E2C8C91519FABC5100DA54AA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/Document.xib; sourceTree = "<group>"; };
 		E2C8C91619FABC5100DA54AA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		E2E3C99E1D771E7600AA9A62 /* GARawTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GARawTracker.h; sourceTree = "<group>"; };
 		E2E3C99F1D771E7600AA9A62 /* GARawTracker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GARawTracker.m; sourceTree = "<group>"; };
-		E2E3C9A11D771E9D00AA9A62 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
-		E2E3C9A31D77227F00AA9A62 /* HockeySDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HockeySDK.framework; path = "Third-Party/HockeySDK.framework"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -188,11 +175,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E23C9B291B92104500ACA5A9 /* Security.framework in Frameworks */,
-				E21DCAF71B254F53006424E8 /* CoreServices.framework in Frameworks */,
-				E21DCAF61B254F33006424E8 /* Foundation.framework in Frameworks */,
-				E212A6DE1B92100E00F62B18 /* libiconv.dylib in Frameworks */,
-				E21DCAF81B255471006424E8 /* libz.dylib in Frameworks */,
+				DBBEE685256B0A0200F96DAF /* libiconv.tbd in Frameworks */,
+				DBBEE6C0256B0B2100F96DAF /* libgit2.a in Frameworks */,
+				DBBEE688256B0A0A00F96DAF /* libz.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -200,10 +185,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E2E3C9A21D771E9D00AA9A62 /* SystemConfiguration.framework in Frameworks */,
-				165C32B61B95739700D2F894 /* QuartzCore.framework in Frameworks */,
-				E2C338D719F85C2E00063D95 /* Cocoa.framework in Frameworks */,
-				E267E26B1B84E07E00BAB377 /* Security.framework in Frameworks */,
 				E28A16E51B87023200218332 /* GitUpKit.framework in Frameworks */,
 				E2653D251A5B2FBD006A9871 /* Sparkle.framework in Frameworks */,
 			);
@@ -212,22 +193,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		E20A52341A80D1BF003546C3 /* Framework and Libraries */ = {
+		DB0D250D256738F600E6F48A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				E2E3C9A11D771E9D00AA9A62 /* SystemConfiguration.framework */,
-				E2C338D619F85C2E00063D95 /* Cocoa.framework */,
-				E2C338D819F85C3400063D95 /* Foundation.framework */,
-				E28200AC1A7D71EE00DA4096 /* CoreServices.framework */,
-				165C32B51B95739700D2F894 /* QuartzCore.framework */,
-				E2B14B561A88102C00003E64 /* Security.framework */,
-				E2E3C9A31D77227F00AA9A62 /* HockeySDK.framework */,
+				DB0D250E256738F600E6F48A /* libgit2.a */,
+				DBBEE684256B0A0200F96DAF /* libiconv.tbd */,
+				DBBEE687256B0A0A00F96DAF /* libz.tbd */,
 				E2653D241A5B2FBD006A9871 /* Sparkle.framework */,
-				E222FF7E1B9210F600507E77 /* libcrypto.dylib */,
-				E212A6DD1B92100E00F62B18 /* libiconv.dylib */,
-				E2C3394419F85D4B00063D95 /* libz.dylib */,
 			);
-			name = "Framework and Libraries";
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		E21DCAE91B253847006424E8 /* Tool */ = {
@@ -269,7 +243,7 @@
 				E21DCAE91B253847006424E8 /* Tool */,
 				E2C338AD19F8562F00063D95 /* Application */,
 				E2E3C99D1D771E7600AA9A62 /* GARawTracker */,
-				E20A52341A80D1BF003546C3 /* Framework and Libraries */,
+				DB0D250D256738F600E6F48A /* Frameworks */,
 				E27E37551B86F670000A551A /* Xcode-Configurations */,
 				E2C338AC19F8562F00063D95 /* Products */,
 			);
@@ -358,7 +332,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				E21753061B9150AE00BE234A /* PBXTargetDependency */,
+				DBBEE6BF256B0B1C00F96DAF /* PBXTargetDependency */,
 			);
 			name = Tool;
 			productName = Tool;
@@ -529,10 +503,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		E21753061B9150AE00BE234A /* PBXTargetDependency */ = {
+		DBBEE6BF256B0B1C00F96DAF /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			name = GitUpKit;
-			targetProxy = E21753051B9150AE00BE234A /* PBXContainerItemProxy */;
+			name = "GitUpKit (macOS)";
+			targetProxy = DBBEE6BE256B0B1C00F96DAF /* PBXContainerItemProxy */;
 		};
 		E21DCAF11B2538C5006424E8 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -629,11 +603,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				HEADER_SEARCH_PATHS = "../GitUpKit/Third-Party/libgit2/include";
-				OTHER_LDFLAGS = (
-					"$(BUILD_DIR)/$(CONFIGURATION)/libgit2.a",
-					"../GitUpKit/Third-Party/libssl/$(GITUP_PLATFORM)/lib/libcrypto.a",
-					"../GitUpKit/Third-Party/libssh2/$(GITUP_PLATFORM)/lib/libssh2.a",
-				);
 				PRODUCT_NAME = gitup;
 				SKIP_INSTALL = YES;
 			};
@@ -643,11 +612,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				HEADER_SEARCH_PATHS = "../GitUpKit/Third-Party/libgit2/include";
-				OTHER_LDFLAGS = (
-					"$(BUILD_DIR)/$(CONFIGURATION)/libgit2.a",
-					"../GitUpKit/Third-Party/libssl/$(GITUP_PLATFORM)/lib/libcrypto.a",
-					"../GitUpKit/Third-Party/libssh2/$(GITUP_PLATFORM)/lib/libssh2.a",
-				);
 				PRODUCT_NAME = gitup;
 				SKIP_INSTALL = YES;
 			};

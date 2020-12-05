@@ -1,4 +1,4 @@
-ARCHS[sdk=macosx*] = x86_64
+ARCHS[sdk=macosx*] = $(ARCHS_STANDARD_64_BIT)
 ARCHS[sdk=iphonesimulator*] = $(ARCHS_STANDARD_64_BIT)
 ARCHS[sdk=iphoneos*] = $(ARCHS_STANDARD_64_BIT)
 
@@ -50,13 +50,6 @@ GCC_WARN_UNUSED_VARIABLE = YES
 SUPPORTS_MACCATALYST = NO
 
 ENABLE_HARDENED_RUNTIME[sdk=macosx*] = YES
-
-// GITUP_PLATFORM determines where to find header files and precompiled libs
-// required for build on case-sensitive systems, for ex. headers of libssh2 located in
-// "GitUpKit/Third-Party/libssh2/MacOSX/include" folder.
-GITUP_PLATFORM[sdk=macosx*] = MacOSX
-GITUP_PLATFORM[sdk=iphonesimulator*] = iPhoneSimulator
-GITUP_PLATFORM[sdk=iphoneos*] = iPhoneOS
 
 #include? "DEVELOPMENT_TEAM.xcconfig"
 
