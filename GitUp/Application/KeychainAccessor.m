@@ -15,7 +15,7 @@
 + (BOOL)loadPlainTextAuthenticationFormKeychainForURL:(NSURL*)url user:(NSString*)user username:(NSString**)username password:(NSString**)password allowInteraction:(BOOL)allowInteraction {
   const char* serverName = url.host.UTF8String;
   if (serverName && serverName[0]) {  // TODO: How can this be NULL?
-    const char* accountName = (*username).UTF8String;
+    const char* accountName = user.UTF8String;
     SecKeychainItemRef itemRef;
     UInt32 passwordLength;
     void* passwordData;
@@ -48,6 +48,7 @@
           XLOG_ERROR(@"SecKeychainItemCopyAttributesAndData() returned error %i", status);
         }
       } else {
+        *username = [user copy];
         success = YES;
       }
       SecKeychainItemFreeContent(NULL, passwordData);
