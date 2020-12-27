@@ -2,7 +2,7 @@
 
 # Run GitUpKit unit tests
 pushd "GitUpKit"
-xcodebuild test -scheme "GitUpKit (OSX)"
+xcodebuild test -scheme "GitUpKit (macOS)"
 popd
 
 # Build GitUp without signing
