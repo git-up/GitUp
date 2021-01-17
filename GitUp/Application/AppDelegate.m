@@ -131,10 +131,24 @@
 }
 
 - (void)_openRepositoryWithURL:(NSURL*)url withCloneMode:(CloneMode)cloneMode windowModeID:(WindowModeID)windowModeID {
+  [self _openRepositoryWithURL:url inTab:NO withCloneMode:cloneMode windowModeID:windowModeID];
+}
+
+- (void)_openRepositoryWithURL:(NSURL*)url inTab:(BOOL)inTab withCloneMode:(CloneMode)cloneMode windowModeID:(WindowModeID)windowModeID {
   [[NSDocumentController sharedDocumentController] openDocumentWithContentsOfURL:url
-                                                                         display:YES
+                                                                         display:!inTab
                                                                completionHandler:^(NSDocument* document, BOOL documentWasAlreadyOpen, NSError* openError) {
                                                                  if (document) {
+                                                                   if (inTab) {
+                                                                     if (!documentWasAlreadyOpen) {
+                                                                       [document makeWindowControllers];
+                                                                       if (@available(macOS 10.12, *)) {
+                                                                         document.windowControllers.firstObject.window.tabbingMode = NSWindowTabbingModePreferred;
+                                                                       }
+                                                                     }
+                                                                     [document showWindows];
+                                                                   }
+                                                                   
                                                                    if (documentWasAlreadyOpen) {
                                                                      if ((NSUInteger)windowModeID != NSNotFound) {
                                                                        [(Document*)document setWindowModeID:windowModeID];
@@ -346,18 +360,20 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
 
 - (NSDictionary*)_processToolCommand:(NSDictionary*)input {
   NSString* command = [input objectForKey:kToolDictionaryKey_Command];
+  NSString* option = [input objectForKey:kToolDictionaryKey_Option];
   NSString* repository = [[input objectForKey:kToolDictionaryKey_Repository] stringByStandardizingPath];
   if (!command.length || !repository.length) {
     return @{kToolDictionaryKey_Error : @"Invalid command"};
   }
+  BOOL openInTab = [option isEqualToString:@kToolOption_Tab];
   if ([command isEqualToString:@kToolCommand_Open]) {
-    [self _openRepositoryWithURL:[NSURL fileURLWithPath:repository] withCloneMode:kCloneMode_None windowModeID:NSNotFound];
+    [self _openRepositoryWithURL:[NSURL fileURLWithPath:repository] inTab:openInTab withCloneMode:kCloneMode_None windowModeID:NSNotFound];
   } else if ([command isEqualToString:@kToolCommand_Map]) {
-    [self _openRepositoryWithURL:[NSURL fileURLWithPath:repository] withCloneMode:kCloneMode_None windowModeID:kWindowModeID_Map];
+    [self _openRepositoryWithURL:[NSURL fileURLWithPath:repository] inTab:openInTab withCloneMode:kCloneMode_None windowModeID:kWindowModeID_Map];
   } else if ([command isEqualToString:@kToolCommand_Commit]) {
-    [self _openRepositoryWithURL:[NSURL fileURLWithPath:repository] withCloneMode:kCloneMode_None windowModeID:kWindowModeID_Commit];
+    [self _openRepositoryWithURL:[NSURL fileURLWithPath:repository] inTab:openInTab withCloneMode:kCloneMode_None windowModeID:kWindowModeID_Commit];
   } else if ([command isEqualToString:@kToolCommand_Stash]) {
-    [self _openRepositoryWithURL:[NSURL fileURLWithPath:repository] withCloneMode:kCloneMode_None windowModeID:kWindowModeID_Stashes];
+    [self _openRepositoryWithURL:[NSURL fileURLWithPath:repository] inTab:openInTab withCloneMode:kCloneMode_None windowModeID:kWindowModeID_Stashes];
   } else {
     return @{kToolDictionaryKey_Error : [NSString stringWithFormat:@"Unknown command '%@'", command]};
   }

@@ -26,14 +26,18 @@
 #define kCommunicationTimeOut 3.0
 
 static char* _help = "\
-Usage: %s [command]\n\
+Usage: %s [command] [options]\n\
+\n\
+Examples:\n\
+  gitup\n\
+  gitup stash\n\
+  gitup commit -t\n\
 \n\
 Commands:\n\
-\n\
 " kToolCommand_Help "\n\
   Show this help.\n\
 \n\
-" kToolCommand_Open " (default)\n\
+" kToolCommand_Open " (default, can be omitted)\n\
   Open the current Git repository in GitUp.\n\
 \n\
 " kToolCommand_Map "\n\
@@ -45,15 +49,37 @@ Commands:\n\
 " kToolCommand_Stash "\n\
   Open the current Git repository in GitUp in Stashes view.\n\
 \n\
+Options:\n\
+" kToolOption_Help "\n\
+  Show this help.\n\
+\n\
+" kToolOption_Tab "\n\
+  Open the current Git repository as a tab in GitUp.\n\
 ";
+
+BOOL isEqual(const char* stringA, const char* stringB);
+BOOL isEqualToAny(const char* string, int count, ...);
 
 // We don't care about free'ing resources since the tool is one-shot
 int main(int argc, const char* argv[]) {
   BOOL success = NO;
   @autoreleasepool {
-    const char* command = argc >= 2 ? argv[1] : "open";
+    const char* command = "open";
+    const char* option = "";
+    
+    for (int i = 1; i < argc; i++) {
+      const char* arg = argv[i];
+      // Commands
+      if (isEqualToAny(arg, 5, kToolCommand_Help, kToolCommand_Open, kToolCommand_Map, kToolCommand_Commit, kToolCommand_Stash)) {
+        command = arg;
+      }
+      // Options
+      if (isEqualToAny(arg, 2, kToolOption_Help, kToolOption_Tab)) {
+        option = arg;
+      }
+    }
 
-    if (!strcmp(command, kToolCommand_Help)) {
+    if (isEqual(command, kToolCommand_Help) || isEqual(option, kToolOption_Help)) {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wformat-nonliteral"
       fprintf(stdout, _help, basename((char*)argv[0]));
@@ -91,6 +117,7 @@ int main(int argc, const char* argv[]) {
                   // Send message
                   NSMutableDictionary* message = [[NSMutableDictionary alloc] init];
                   [message setObject:[NSString stringWithUTF8String:command] forKey:kToolDictionaryKey_Command];
+                  [message setObject:[NSString stringWithUTF8String:option] forKey:kToolDictionaryKey_Option];
                   [message setObject:repositoryPath forKey:kToolDictionaryKey_Repository];
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wunguarded-availability"
@@ -142,4 +169,22 @@ int main(int argc, const char* argv[]) {
     }
   }
   return success ? 0 : 1;
+}
+
+BOOL isEqual(const char* stringA, const char* stringB) {
+  return strcmp(stringA, stringB) == 0;
+}
+
+BOOL isEqualToAny(const char* string, int count, ...) {
+  va_list ap;
+  va_start (ap, count);         /* Initialize the argument list. */
+  
+  for (int i = 0; i < count; i++) {
+    const char* aString = va_arg(ap, const char*);
+    if (isEqual(string, aString)) {
+      return YES;
+    }
+  }
+  va_end (ap);                  /* Clean up. */
+  return NO;
 }
