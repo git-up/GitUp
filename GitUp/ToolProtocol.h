@@ -25,7 +25,11 @@
 #define kToolCommand_Commit "commit"
 #define kToolCommand_Stash "stash"
 
+#define kToolOption_Help "-h"
+#define kToolOption_Tab "-t"
+
 #define kToolDictionaryKey_Command @"command"  // NSString
 #define kToolDictionaryKey_Repository @"repository"  // NSString
+#define kToolDictionaryKey_Option @"option"  // NSString
 
 #define kToolDictionaryKey_Error @"error"  // NSString
