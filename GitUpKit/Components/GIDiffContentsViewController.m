@@ -340,10 +340,10 @@ static NSImage* _untrackedImage = nil;
           GCDiffPatch* patch = [self.repository makePatchForDiffDelta:delta isBinary:&isBinary error:&error];
           if (patch) {
             XLOG_DEBUG_CHECK(!isBinary || patch.empty);
-            
-            BOOL isImage = [[NSImage alloc] initWithContentsOfFile:[self.repository absolutePathForFile: delta.canonicalPath]] != nil;
+
+            BOOL isImage = [[NSImage alloc] initWithContentsOfFile:[self.repository absolutePathForFile:delta.canonicalPath]] != nil;
             if (isImage) {
-              GIImageDiffView* imageDiffView = [[GIImageDiffView alloc] initWithRepository: self.repository];
+              GIImageDiffView* imageDiffView = [[GIImageDiffView alloc] initWithRepository:self.repository];
               imageDiffView.delta = delta;
               data.imageDiffView = imageDiffView;
             } else if (patch.empty) {

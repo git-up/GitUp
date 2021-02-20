@@ -27,7 +27,7 @@
 @end
 
 @implementation GIImageDiffView
-- (id)initWithRepository:(GCLiveRepository *)repository {
+- (id)initWithRepository:(GCLiveRepository*)repository {
   self = [super initWithFrame:CGRectZero];
   self.repository = repository;
   _percentage = 0.5;
@@ -74,7 +74,7 @@
   [self addGestureRecognizer:_clickGestureRecognizer];
 }
 
-- (void)setDelta:(GCDiffDelta *)delta {
+- (void)setDelta:(GCDiffDelta*)delta {
   if (delta != _delta) {
     _delta = delta;
     [self updateCurrentImage];
@@ -166,7 +166,7 @@
                                                 fittedImageFrame.origin.y - kBorderWidth,
                                                 fittedImageFrame.size.width * (1 - _percentage) + kBorderWidth,
                                                 fittedImageFrame.size.height + 2 * kBorderWidth);
-    _dividerView.frame = CGRectMake(fittedImageFrame.origin.x + dividerOffset -  kDividerWidth / 2,
+    _dividerView.frame = CGRectMake(fittedImageFrame.origin.x + dividerOffset - kDividerWidth / 2,
                                     fittedImageFrame.origin.y - kBorderWidth,
                                     kDividerWidth,
                                     fittedImageFrame.size.height + 2 * kBorderWidth);
@@ -212,13 +212,13 @@
                     actualImageHeight);
 }
 
-- (NSSize) originalDiffImageSize {
+- (NSSize)originalDiffImageSize {
   CGFloat maxHeight = MAX(_currentImageView.image.size.height, _oldImageView.image.size.height);
   CGFloat maxWidth = MAX(_currentImageView.image.size.width, _oldImageView.image.size.width);
   return NSMakeSize(maxWidth, maxHeight);
 }
 
-- (void)didMoveSplit:(NSGestureRecognizer *)gestureRecognizer {
+- (void)didMoveSplit:(NSGestureRecognizer*)gestureRecognizer {
   CGRect imageFrame = [self fittedImageFrame];
   CGFloat unboundPercentage = ([gestureRecognizer locationInView:self].x - imageFrame.origin.x) / imageFrame.size.width;
   self.percentage = MIN(1, MAX(0, unboundPercentage));
