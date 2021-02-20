@@ -25,4 +25,12 @@
 - (CGFloat)desiredHeightForWidth:(CGFloat)width {
   return width * 2;
 }
+
+- (void)drawRect:(NSRect)dirtyRect {
+  [self updateFrames];
+}
+
+- (void)updateFrames {
+  _currentImageView.frame = self.frame;
+}
 @end
