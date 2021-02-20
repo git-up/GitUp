@@ -7,6 +7,8 @@
 #import <QuartzCore/CATransaction.h>
 
 #define kImageInset 10
+#define kBorderWidth 8
+#define kDividerWidth 2
 
 @interface GIImageDiffView ()
 @property(nonatomic, strong) NSPanGestureRecognizer* panGestureRecognizer;
@@ -16,6 +18,9 @@
 @property(nonatomic, strong) NSImageView* currentImageView;
 @property(nonatomic, strong) CALayer* oldImageMaskLayer;
 @property(nonatomic, strong) CALayer* currentImageMaskLayer;
+@property(nonatomic, strong) CALayer* oldImageBorderLayer;
+@property(nonatomic, strong) CALayer* currentImageBorderLayer;
+@property(nonatomic, strong) NSView* dividerView;
 @property(nonatomic) CGFloat percentage;
 @end
 
@@ -31,6 +36,11 @@
 - (void)setupView {
   self.wantsLayer = true;
 
+  _oldImageBorderLayer = [[CALayer alloc] init];
+  _currentImageBorderLayer = [[CALayer alloc] init];
+  [self.layer addSublayer:_oldImageBorderLayer];
+  [self.layer addSublayer:_currentImageBorderLayer];
+
   _currentImageView = [[NSImageView alloc] init];
   _oldImageView = [[NSImageView alloc] init];
   [self addSubview:_currentImageView];
@@ -45,6 +55,9 @@
   _currentImageMaskLayer.backgroundColor = NSColor.blackColor.CGColor;
   _currentImageView.wantsLayer = true;
   _currentImageView.layer.mask = _currentImageMaskLayer;
+
+  _dividerView = [[NSView alloc] init];
+  [self addSubview:_dividerView];
 
   _panGestureRecognizer = [[NSPanGestureRecognizer alloc] initWithTarget:self action:@selector(didMoveSplit:)];
   _clickGestureRecognizer = [[NSClickGestureRecognizer alloc] initWithTarget:self action:@selector(didMoveSplit:)];
@@ -108,8 +121,15 @@
 - (void)drawRect:(NSRect)dirtyRect {
   [CATransaction begin];
   [CATransaction setDisableActions:YES];
+  [self updateColors];
   [self updateFrames];
   [CATransaction commit];
+}
+
+- (void)updateColors {
+  _oldImageBorderLayer.backgroundColor = NSColor.gitUpDiffDeletedTextHighlightColor.CGColor;
+  _currentImageBorderLayer.backgroundColor = NSColor.gitUpDiffAddedTextHighlightColor.CGColor;
+  _dividerView.layer.backgroundColor = NSColor.gitUpDiffModifiedBackgroundColor.CGColor;
 }
 
 - (void)updateFrames {
@@ -127,6 +147,18 @@
                                               0,
                                               fittedImageFrame.size.width * (1 - _percentage),
                                               fittedImageFrame.size.height);
+    _oldImageBorderLayer.frame = CGRectMake(fittedImageFrame.origin.x - kBorderWidth,
+                                            fittedImageFrame.origin.y - kBorderWidth,
+                                            dividerOffset + kBorderWidth,
+                                            fittedImageFrame.size.height + 2 * kBorderWidth);
+    _currentImageBorderLayer.frame = CGRectMake(fittedImageFrame.origin.x + dividerOffset,
+                                                fittedImageFrame.origin.y - kBorderWidth,
+                                                fittedImageFrame.size.width * (1 - _percentage) + kBorderWidth,
+                                                fittedImageFrame.size.height + 2 * kBorderWidth);
+    _dividerView.frame = CGRectMake(fittedImageFrame.origin.x + dividerOffset -  kDividerWidth / 2,
+                                    fittedImageFrame.origin.y - kBorderWidth,
+                                    kDividerWidth,
+                                    fittedImageFrame.size.height + 2 * kBorderWidth);
   } else {
     _currentImageMaskLayer.frame = CGRectMake(0,
                                               0,
