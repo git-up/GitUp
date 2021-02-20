@@ -7,6 +7,7 @@
 
 @interface GIImageDiffView ()
 @property(nonatomic, strong) GCLiveRepository* repository;
+@property(nonatomic, strong) NSImageView* oldImageView;
 @property(nonatomic, strong) NSImageView* currentImageView;
 @end
 
@@ -20,7 +21,9 @@
 
 - (void)setupView {
   _currentImageView = [[NSImageView alloc] init];
+  _oldImageView = [[NSImageView alloc] init];
   [self addSubview:_currentImageView];
+  [self addSubview:_oldImageView];
 }
 
 - (void)setDelta:(GCDiffDelta*)delta {
