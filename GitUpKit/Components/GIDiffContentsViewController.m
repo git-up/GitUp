@@ -56,6 +56,7 @@
 @end
 
 @interface GIImageDiffCellView : NSTableCellView
+@property(nonatomic, weak) GIImageDiffView* imageDiffView;
 @end
 
 @interface GIBinaryDiffCellView : NSTableCellView
@@ -450,10 +451,14 @@ static NSImage* _untrackedImage = nil;
     row -= 1;
   }
   if (row % 2) {
-    GITextDiffCellView* view = [rowView viewAtColumn:0];
-    if ([view isKindOfClass:[GITextDiffCellView class]]) {
-      [view.diffView removeFromSuperview];
-      view.diffView = nil;
+    GITextDiffCellView* textDiffView = [rowView viewAtColumn:0];
+    GIImageDiffCellView* imageDiffView = [rowView viewAtColumn:0];
+    if ([textDiffView isKindOfClass:[GITextDiffCellView class]]) {
+      [textDiffView.diffView removeFromSuperview];
+      textDiffView.diffView = nil;
+    } else if ([imageDiffView isKindOfClass:[GIImageDiffCellView class]]) {
+      [imageDiffView.imageDiffView removeFromSuperview];
+      imageDiffView.imageDiffView = nil;
     }
   }
 }
@@ -499,6 +504,12 @@ static inline NSString* _StringFromFileMode(GCFileMode mode) {
       return view;
     } else if (data.imageDiffView) {
       GIImageDiffCellView* view = [_tableView makeViewWithIdentifier:@"image" owner:self];
+      XLOG_DEBUG_CHECK(view.imageDiffView == nil);
+      XLOG_DEBUG_CHECK(data.imageDiffView.superview == nil);
+      data.imageDiffView.frame = view.bounds;
+      data.imageDiffView.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
+      [view addSubview:data.imageDiffView];
+      view.imageDiffView = data.imageDiffView;
       return view;
     } else if (data.empty) {
       GIEmptyDiffCellView* view = [_tableView makeViewWithIdentifier:@"empty" owner:self];
