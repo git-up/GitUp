@@ -55,6 +55,9 @@
 @property(nonatomic, weak) GIDiffView* diffView;
 @end
 
+@interface GIImageDiffCellView : NSTableCellView
+@end
+
 @interface GIBinaryDiffCellView : NSTableCellView
 @end
 
@@ -143,6 +146,9 @@ NSString* const GIDiffContentsViewControllerUserDefaultKey_DiffViewMode = @"GIDi
 @end
 
 @implementation GITextDiffCellView
+@end
+
+@implementation GIImageDiffCellView
 @end
 
 @implementation GIBinaryDiffCellView
@@ -490,6 +496,9 @@ static inline NSString* _StringFromFileMode(GCFileMode mode) {
       data.diffView.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
       [view addSubview:data.diffView];
       view.diffView = data.diffView;
+      return view;
+    } else if (data.imageDiffView) {
+      GIImageDiffCellView* view = [_tableView makeViewWithIdentifier:@"image" owner:self];
       return view;
     } else if (data.empty) {
       GIEmptyDiffCellView* view = [_tableView makeViewWithIdentifier:@"empty" owner:self];
