@@ -4,6 +4,7 @@
 
 #import "GIPrivate.h"
 #import "GILaunchServicesLocator.h"
+#import <QuartzCore/CATransaction.h>
 
 #define kImageInset 10
 
@@ -103,7 +104,10 @@
 }
 
 - (void)drawRect:(NSRect)dirtyRect {
+  [CATransaction begin];
+  [CATransaction setDisableActions:YES];
   [self updateFrames];
+  [CATransaction commit];
 }
 
 - (void)updateFrames {
