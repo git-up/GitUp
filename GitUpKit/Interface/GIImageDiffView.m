@@ -80,14 +80,14 @@
 }
 
 - (void)updateFrames {
-  _oldImageView.frame = CGRectMake(self.frame.origin.x,
-                                       self.frame.origin.y,
-                                       self.frame.size.width,
-                                       self.frame.size.height / 2);
-  _currentImageView.frame = CGRectMake(self.frame.origin.x,
-                                   self.frame.origin.y + self.frame.size.height / 2,
-                                   self.frame.size.width,
-                                   self.frame.size.height / 2);
+  CGRect fittedImageFrame = [self fittedImageFrame];
+  _currentImageView.frame = fittedImageFrame;
+  if (_oldImageView.image != nil) {
+    _oldImageView.frame = fittedImageFrame;
+    [_oldImageView setHidden:false];
+  } else {
+    [_oldImageView setHidden:true];
+  }
 }
 
 - (CGRect)fittedImageFrame {
