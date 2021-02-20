@@ -5,6 +5,8 @@
 #import "GIPrivate.h"
 #import "GILaunchServicesLocator.h"
 
+#define kImageInset 10
+
 @interface GIImageDiffView ()
 @property(nonatomic, strong) GCLiveRepository* repository;
 @property(nonatomic, strong) NSImageView* oldImageView;
@@ -86,6 +88,27 @@
                                    self.frame.origin.y + self.frame.size.height / 2,
                                    self.frame.size.width,
                                    self.frame.size.height / 2);
+}
+
+- (CGRect)fittedImageFrame {
+  CGFloat maxContentWidth = self.frame.size.width - 2 * kImageInset;
+  CGFloat maxContentHeight = self.frame.size.height - 2 * kImageInset;
+  CGFloat originalImageWidth = [self originalDiffImageSize].width;
+  CGFloat originalImageHeight = [self originalDiffImageSize].height;
+
+  CGFloat scaledImageWidth = MIN(originalImageWidth, maxContentWidth);
+  CGFloat scaledImageHeight = MIN(originalImageHeight, maxContentHeight);
+  CGFloat widthScalingFactor = scaledImageWidth / originalImageWidth;
+  CGFloat heightScalingFactor = scaledImageHeight / originalImageHeight;
+  CGFloat minimumScalingFactor = MIN(widthScalingFactor, heightScalingFactor);
+
+  CGFloat actualImageWidth = originalImageWidth * minimumScalingFactor;
+  CGFloat actualImageHeight = originalImageHeight * minimumScalingFactor;
+
+  return CGRectMake((self.frame.size.width - actualImageWidth) / 2,
+                    self.bounds.size.height - actualImageHeight - kImageInset,
+                    actualImageWidth,
+                    actualImageHeight);
 }
 
 - (NSSize)originalDiffImageSize {
