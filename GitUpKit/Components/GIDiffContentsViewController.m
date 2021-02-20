@@ -343,7 +343,7 @@ static NSImage* _untrackedImage = nil;
 
             BOOL isImage = [[NSImage alloc] initWithContentsOfFile:[self.repository absolutePathForFile:delta.canonicalPath]] != nil;
             if (isImage) {
-              GIImageDiffView* imageDiffView = [[GIImageDiffView alloc] initWithFrame:CGRectZero];
+              GIImageDiffView* imageDiffView = [[GIImageDiffView alloc] initWithRepository:self.repository];
               data.imageDiffView = imageDiffView;
             } else if (patch.empty) {
               data.empty = !isBinary;
