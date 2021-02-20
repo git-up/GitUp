@@ -87,4 +87,10 @@
                                    self.frame.size.width,
                                    self.frame.size.height / 2);
 }
+
+- (NSSize)originalDiffImageSize {
+  CGFloat maxHeight = MAX(_currentImageView.image.size.height, _oldImageView.image.size.height);
+  CGFloat maxWidth = MAX(_currentImageView.image.size.width, _oldImageView.image.size.width);
+  return NSMakeSize(maxWidth, maxHeight);
+}
 @end
