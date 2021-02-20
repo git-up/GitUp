@@ -30,6 +30,7 @@
   if (delta != _delta) {
     _delta = delta;
     [self updateCurrentImage];
+    [self updateOldImage];
   }
 }
 
@@ -49,6 +50,23 @@
     newPath = [self.repository absolutePathForFile:_delta.canonicalPath];
   }
   _currentImageView.image = [[NSImage alloc] initWithContentsOfFile:newPath];
+}
+
+- (void)updateOldImage {
+  NSError* error;
+  if (_delta.oldFile.SHA1 != nil) {
+    NSString* oldPath = [GILaunchServicesLocator.diffTemporaryDirectoryPath stringByAppendingPathComponent:_delta.oldFile.SHA1];
+    NSString* oldExtension = _delta.oldFile.path.pathExtension;
+    if (oldExtension.length) {
+      oldPath = [oldPath stringByAppendingPathExtension:oldExtension];
+    }
+    if (![[NSFileManager defaultManager] fileExistsAtPath:oldPath]) {
+      [self.repository exportBlobWithSHA1:_delta.oldFile.SHA1 toPath:oldPath error:&error];
+    }
+    _oldImageView.image = [[NSImage alloc] initWithContentsOfFile:oldPath];
+  } else {
+    _oldImageView.image = nil;
+  }
 }
 
 - (CGFloat)desiredHeightForWidth:(CGFloat)width {
