@@ -3,6 +3,7 @@
 #endif
 
 #import "GIPrivate.h"
+#import "GILaunchServicesLocator.h"
 
 @interface GIImageDiffView ()
 @property(nonatomic, strong) GCLiveRepository* repository;
@@ -30,7 +31,20 @@
 }
 
 - (void)updateCurrentImage {
-  NSString* newPath = [self.repository absolutePathForFile:_delta.canonicalPath];
+  NSError* error;
+  NSString* newPath;
+  if (_delta.newFile.SHA1 != nil) {
+    newPath = [GILaunchServicesLocator.diffTemporaryDirectoryPath stringByAppendingPathComponent:_delta.newFile.SHA1];
+    NSString* newExtension = _delta.newFile.path.pathExtension;
+    if (newExtension.length) {
+      newPath = [newPath stringByAppendingPathExtension:newExtension];
+    }
+    if (![[NSFileManager defaultManager] fileExistsAtPath:newPath]) {
+      [self.repository exportBlobWithSHA1:_delta.newFile.SHA1 toPath:newPath error:&error];
+    }
+  } else {
+    newPath = [self.repository absolutePathForFile:_delta.canonicalPath];
+  }
   _currentImageView.image = [[NSImage alloc] initWithContentsOfFile:newPath];
 }
 
