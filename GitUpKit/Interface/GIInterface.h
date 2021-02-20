@@ -39,4 +39,5 @@
 #import "GISplitDiffView.h"
 #import "GIUnifiedDiffView.h"
 #import "NSColor+GINamedColors.h"
+#import "GIImageDiffView.h"
 #endif
