@@ -37,6 +37,7 @@
 @property(nonatomic, strong) GCDiffDelta* delta;
 @property(nonatomic, strong) GCIndexConflict* conflict;
 @property(nonatomic, strong) GIDiffView* diffView;
+@property(nonatomic, strong) GIImageDiffView* imageDiffView;
 @property(nonatomic, getter=isEmpty) BOOL empty;
 @end
 
@@ -332,7 +333,12 @@ static NSImage* _untrackedImage = nil;
           GCDiffPatch* patch = [self.repository makePatchForDiffDelta:delta isBinary:&isBinary error:&error];
           if (patch) {
             XLOG_DEBUG_CHECK(!isBinary || patch.empty);
-            if (patch.empty) {
+
+            BOOL isImage = [[NSImage alloc] initWithContentsOfFile:[self.repository absolutePathForFile:delta.canonicalPath]] != nil;
+            if (isImage) {
+              GIImageDiffView* imageDiffView = [[GIImageDiffView alloc] initWithFrame:CGRectZero];
+              data.imageDiffView = imageDiffView;
+            } else if (patch.empty) {
               data.empty = !isBinary;
             } else {
               GIDiffView* diffView = [[[self _diffViewClassForChange:delta.change] alloc] initWithFrame:NSZeroRect];
