@@ -23,8 +23,10 @@
 }
 
 - (void)setDelta:(GCDiffDelta*)delta {
-  _delta = delta;
-  [self updateCurrentImage];
+  if (delta != _delta) {
+    _delta = delta;
+    [self updateCurrentImage];
+  }
 }
 
 - (void)updateCurrentImage {
