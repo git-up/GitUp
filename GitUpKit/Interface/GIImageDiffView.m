@@ -11,12 +11,14 @@
 @property(nonatomic, strong) GCLiveRepository* repository;
 @property(nonatomic, strong) NSImageView* oldImageView;
 @property(nonatomic, strong) NSImageView* currentImageView;
+@property(nonatomic) CGFloat percentage;
 @end
 
 @implementation GIImageDiffView
 - (id)initWithRepository:(GCLiveRepository*)repository {
   self = [super initWithFrame:CGRectZero];
   self.repository = repository;
+  _percentage = 0.5;
   [self setupView];
   return self;
 }
