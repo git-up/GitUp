@@ -60,6 +60,13 @@
 }
 
 - (void)updateFrames {
-  _currentImageView.frame = self.frame;
+  _oldImageView.frame = CGRectMake(self.frame.origin.x,
+                                       self.frame.origin.y,
+                                       self.frame.size.width,
+                                       self.frame.size.height / 2);
+  _currentImageView.frame = CGRectMake(self.frame.origin.x,
+                                   self.frame.origin.y + self.frame.size.height / 2,
+                                   self.frame.size.width,
+                                   self.frame.size.height / 2);
 }
 @end
