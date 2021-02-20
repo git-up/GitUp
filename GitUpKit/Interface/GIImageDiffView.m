@@ -6,13 +6,20 @@
 
 @interface GIImageDiffView ()
 @property(nonatomic, strong) GCLiveRepository* repository;
+@property(nonatomic, strong) NSImageView* currentImageView;
 @end
 
 @implementation GIImageDiffView
 - (id)initWithRepository:(GCLiveRepository*)repository {
   self = [super initWithFrame:CGRectZero];
   self.repository = repository;
+  [self setupView];
   return self;
+}
+
+- (void)setupView {
+  _currentImageView = [[NSImageView alloc] init];
+  [self addSubview:_currentImageView];
 }
 
 - (CGFloat)desiredHeightForWidth:(CGFloat)width {
