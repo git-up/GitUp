@@ -22,6 +22,16 @@
   [self addSubview:_currentImageView];
 }
 
+- (void)setDelta:(GCDiffDelta*)delta {
+  _delta = delta;
+  [self updateCurrentImage];
+}
+
+- (void)updateCurrentImage {
+  NSString* newPath = [self.repository absolutePathForFile:_delta.canonicalPath];
+  _currentImageView.image = [[NSImage alloc] initWithContentsOfFile:newPath];
+}
+
 - (CGFloat)desiredHeightForWidth:(CGFloat)width {
   return width * 2;
 }
