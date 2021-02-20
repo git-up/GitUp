@@ -37,6 +37,7 @@
 @property(nonatomic, strong) GCDiffDelta* delta;
 @property(nonatomic, strong) GCIndexConflict* conflict;
 @property(nonatomic, strong) GIDiffView* diffView;
+@property(nonatomic, strong) GIImageDiffView* imageDiffView;
 @property(nonatomic, getter=isEmpty) BOOL empty;
 @end
 
@@ -52,6 +53,10 @@
 
 @interface GITextDiffCellView : NSTableCellView
 @property(nonatomic, weak) GIDiffView* diffView;
+@end
+
+@interface GIImageDiffCellView : NSTableCellView
+@property(nonatomic, weak) GIImageDiffView* imageDiffView;
 @end
 
 @interface GIBinaryDiffCellView : NSTableCellView
@@ -142,6 +147,9 @@ NSString* const GIDiffContentsViewControllerUserDefaultKey_DiffViewMode = @"GIDi
 @end
 
 @implementation GITextDiffCellView
+@end
+
+@implementation GIImageDiffCellView
 @end
 
 @implementation GIBinaryDiffCellView
@@ -332,7 +340,13 @@ static NSImage* _untrackedImage = nil;
           GCDiffPatch* patch = [self.repository makePatchForDiffDelta:delta isBinary:&isBinary error:&error];
           if (patch) {
             XLOG_DEBUG_CHECK(!isBinary || patch.empty);
-            if (patch.empty) {
+            
+            BOOL isImage = [[NSImage alloc] initWithContentsOfFile:[self.repository absolutePathForFile: delta.canonicalPath]] != nil;
+            if (isImage) {
+              GIImageDiffView* imageDiffView = [[GIImageDiffView alloc] initWithRepository: self.repository];
+              imageDiffView.delta = delta;
+              data.imageDiffView = imageDiffView;
+            } else if (patch.empty) {
               data.empty = !isBinary;
             } else {
               GIDiffView* diffView = [[[self _diffViewClassForChange:delta.change] alloc] initWithFrame:NSZeroRect];
@@ -438,10 +452,14 @@ static NSImage* _untrackedImage = nil;
     row -= 1;
   }
   if (row % 2) {
-    GITextDiffCellView* view = [rowView viewAtColumn:0];
-    if ([view isKindOfClass:[GITextDiffCellView class]]) {
-      [view.diffView removeFromSuperview];
-      view.diffView = nil;
+    GITextDiffCellView* textDiffView = [rowView viewAtColumn:0];
+    GIImageDiffCellView* imageDiffView = [rowView viewAtColumn:0];
+    if ([textDiffView isKindOfClass:[GITextDiffCellView class]]) {
+      [textDiffView.diffView removeFromSuperview];
+      textDiffView.diffView = nil;
+    } else if ([imageDiffView isKindOfClass:[GIImageDiffCellView class]]) {
+      [imageDiffView.imageDiffView removeFromSuperview];
+      imageDiffView.imageDiffView = nil;
     }
   }
 }
@@ -484,6 +502,15 @@ static inline NSString* _StringFromFileMode(GCFileMode mode) {
       data.diffView.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
       [view addSubview:data.diffView];
       view.diffView = data.diffView;
+      return view;
+    } else if (data.imageDiffView) {
+      GIImageDiffCellView* view = [_tableView makeViewWithIdentifier:@"image" owner:self];
+      XLOG_DEBUG_CHECK(view.imageDiffView == nil);
+      XLOG_DEBUG_CHECK(data.imageDiffView.superview == nil);
+      data.imageDiffView.frame = view.bounds;
+      data.imageDiffView.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
+      [view addSubview:data.imageDiffView];
+      view.imageDiffView = data.imageDiffView;
       return view;
     } else if (data.empty) {
       GIEmptyDiffCellView* view = [_tableView makeViewWithIdentifier:@"empty" owner:self];
@@ -626,6 +653,8 @@ static inline NSString* _StringFromFileMode(GCFileMode mode) {
     GCDiffDelta* delta = data.delta;
     if (data.diffView) {
       return [data.diffView updateLayoutForWidth:[_tableView.tableColumns[0] width]];
+    } else if (data.imageDiffView) {
+      return [data.imageDiffView desiredHeightForWidth:[_tableView.tableColumns[0] width]];
     } else if (data.empty) {
       return _emptyViewHeight;
     } else if (data.conflict) {
