@@ -126,6 +126,10 @@
                                               fittedImageFrame.size.width * (1 - _percentage),
                                               fittedImageFrame.size.height);
   } else {
+    _currentImageMaskLayer.frame = CGRectMake(0,
+                                              0,
+                                              fittedImageFrame.size.width,
+                                              fittedImageFrame.size.height);
     [_oldImageView setHidden:true];
   }
 }
