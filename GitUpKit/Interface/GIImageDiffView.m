@@ -35,6 +35,7 @@
     _delta = delta;
     [self updateCurrentImage];
     [self updateOldImage];
+    self.percentage = 0.5;
   }
 }
 
