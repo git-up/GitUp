@@ -8,6 +8,8 @@
 #define kImageInset 10
 
 @interface GIImageDiffView ()
+@property(nonatomic, strong) NSPanGestureRecognizer* panGestureRecognizer;
+@property(nonatomic, strong) NSClickGestureRecognizer* clickGestureRecognizer;
 @property(nonatomic, strong) GCLiveRepository* repository;
 @property(nonatomic, strong) NSImageView* oldImageView;
 @property(nonatomic, strong) NSImageView* currentImageView;
@@ -40,6 +42,11 @@
   _currentImageMaskLayer.backgroundColor = NSColor.blackColor.CGColor;
   _currentImageView.wantsLayer = true;
   _currentImageView.layer.mask = _currentImageMaskLayer;
+
+  _panGestureRecognizer = [[NSPanGestureRecognizer alloc] initWithTarget:self action:@selector(didMoveSplit:)];
+  _clickGestureRecognizer = [[NSClickGestureRecognizer alloc] initWithTarget:self action:@selector(didMoveSplit:)];
+  [self addGestureRecognizer:_panGestureRecognizer];
+  [self addGestureRecognizer:_clickGestureRecognizer];
 }
 
 - (void)setDelta:(GCDiffDelta*)delta {
@@ -49,6 +56,11 @@
     [self updateOldImage];
     self.percentage = 0.5;
   }
+}
+
+- (void)setPercentage:(CGFloat)percentage {
+  _percentage = percentage;
+  [self setNeedsDisplay:true];
 }
 
 - (void)updateCurrentImage {
@@ -151,5 +163,11 @@
   CGFloat maxHeight = MAX(_currentImageView.image.size.height, _oldImageView.image.size.height);
   CGFloat maxWidth = MAX(_currentImageView.image.size.width, _oldImageView.image.size.width);
   return NSMakeSize(maxWidth, maxHeight);
+}
+
+- (void)didMoveSplit:(NSGestureRecognizer*)gestureRecognizer {
+  CGRect imageFrame = [self fittedImageFrame];
+  CGFloat unboundPercentage = ([gestureRecognizer locationInView:self].x - imageFrame.origin.x) / imageFrame.size.width;
+  self.percentage = MIN(1, MAX(0, unboundPercentage));
 }
 @end
