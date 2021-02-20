@@ -21,6 +21,8 @@
 @property(nonatomic, strong) CALayer* oldImageBorderLayer;
 @property(nonatomic, strong) CALayer* currentImageBorderLayer;
 @property(nonatomic, strong) NSView* dividerView;
+@property(nonatomic, strong) CALayer* transparencyCheckerboardLayer;
+@property(nonatomic, strong) NSColor* checkerboardColor;
 @property(nonatomic) CGFloat percentage;
 @end
 
@@ -40,6 +42,13 @@
   _currentImageBorderLayer = [[CALayer alloc] init];
   [self.layer addSublayer:_oldImageBorderLayer];
   [self.layer addSublayer:_currentImageBorderLayer];
+
+  _transparencyCheckerboardLayer = [[CALayer alloc] init];
+  NSBundle* bundle = NSBundle.gitUpKitBundle;
+  NSImage* patternImage = [bundle imageForResource:@"background_pattern"];
+  _checkerboardColor = [NSColor colorWithPatternImage:patternImage];
+  _transparencyCheckerboardLayer.backgroundColor = _checkerboardColor.CGColor;
+  [self.layer addSublayer:_transparencyCheckerboardLayer];
 
   _currentImageView = [[NSImageView alloc] init];
   _oldImageView = [[NSImageView alloc] init];
@@ -130,10 +139,12 @@
   _oldImageBorderLayer.backgroundColor = NSColor.gitUpDiffDeletedTextHighlightColor.CGColor;
   _currentImageBorderLayer.backgroundColor = NSColor.gitUpDiffAddedTextHighlightColor.CGColor;
   _dividerView.layer.backgroundColor = NSColor.gitUpDiffModifiedBackgroundColor.CGColor;
+  _transparencyCheckerboardLayer.backgroundColor = _checkerboardColor.CGColor;
 }
 
 - (void)updateFrames {
   CGRect fittedImageFrame = [self fittedImageFrame];
+  _transparencyCheckerboardLayer.frame = fittedImageFrame;
   _currentImageView.frame = fittedImageFrame;
   if (_oldImageView.image != nil) {
     _oldImageView.frame = fittedImageFrame;
