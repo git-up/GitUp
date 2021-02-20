@@ -11,6 +11,8 @@
 @property(nonatomic, strong) GCLiveRepository* repository;
 @property(nonatomic, strong) NSImageView* oldImageView;
 @property(nonatomic, strong) NSImageView* currentImageView;
+@property(nonatomic, strong) CALayer* oldImageMaskLayer;
+@property(nonatomic, strong) CALayer* currentImageMaskLayer;
 @property(nonatomic) CGFloat percentage;
 @end
 
@@ -28,6 +30,16 @@
   _oldImageView = [[NSImageView alloc] init];
   [self addSubview:_currentImageView];
   [self addSubview:_oldImageView];
+
+  _oldImageMaskLayer = [[CALayer alloc] init];
+  _oldImageMaskLayer.backgroundColor = NSColor.blackColor.CGColor;
+  _oldImageView.wantsLayer = true;
+  _oldImageView.layer.mask = _oldImageMaskLayer;
+
+  _currentImageMaskLayer = [[CALayer alloc] init];
+  _currentImageMaskLayer.backgroundColor = NSColor.blackColor.CGColor;
+  _currentImageView.wantsLayer = true;
+  _currentImageView.layer.mask = _currentImageMaskLayer;
 }
 
 - (void)setDelta:(GCDiffDelta*)delta {
@@ -88,6 +100,15 @@
   if (_oldImageView.image != nil) {
     _oldImageView.frame = fittedImageFrame;
     [_oldImageView setHidden:false];
+    CGFloat dividerOffset = fittedImageFrame.size.width * _percentage;
+    _oldImageMaskLayer.frame = CGRectMake(0,
+                                          0,
+                                          dividerOffset,
+                                          fittedImageFrame.size.height);
+    _currentImageMaskLayer.frame = CGRectMake(dividerOffset,
+                                              0,
+                                              fittedImageFrame.size.width * (1 - _percentage),
+                                              fittedImageFrame.size.height);
   } else {
     [_oldImageView setHidden:true];
   }
