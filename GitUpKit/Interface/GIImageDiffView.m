@@ -8,4 +8,7 @@
 @end
 
 @implementation GIImageDiffView
+- (CGFloat)desiredHeightForWidth:(CGFloat)width {
+  return width * 2;
+}
 @end

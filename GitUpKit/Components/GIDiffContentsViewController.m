@@ -641,6 +641,8 @@ static inline NSString* _StringFromFileMode(GCFileMode mode) {
     GCDiffDelta* delta = data.delta;
     if (data.diffView) {
       return [data.diffView updateLayoutForWidth:[_tableView.tableColumns[0] width]];
+    } else if (data.imageDiffView) {
+      return [data.imageDiffView desiredHeightForWidth:[_tableView.tableColumns[0] width]];
     } else if (data.empty) {
       return _emptyViewHeight;
     } else if (data.conflict) {
