@@ -72,7 +72,7 @@
 }
 
 - (CGFloat)desiredHeightForWidth:(CGFloat)width {
-  return width * 2;
+  return [self desiredImageFrame:width].size.height + 2 * kImageInset;
 }
 
 - (void)drawRect:(NSRect)dirtyRect {
@@ -88,6 +88,18 @@
   } else {
     [_oldImageView setHidden:true];
   }
+}
+
+- (CGRect)desiredImageFrame:(CGFloat)width {
+  CGFloat maxContentWidth = width - 2 * kImageInset;
+  CGFloat originalImageWidth = [self originalDiffImageSize].width;
+  CGFloat originalImageHeight = [self originalDiffImageSize].height;
+
+  CGFloat scaledImageWidth = MIN(originalImageWidth, maxContentWidth);
+  CGFloat scaledImageHeight = originalImageHeight * scaledImageWidth / originalImageWidth;
+
+  CGFloat x = (width - scaledImageWidth) / 2;
+  return CGRectMake(x, self.bounds.size.height - scaledImageHeight - kImageInset, scaledImageWidth, scaledImageHeight);
 }
 
 - (CGRect)fittedImageFrame {
