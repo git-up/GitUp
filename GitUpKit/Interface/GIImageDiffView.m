@@ -117,8 +117,13 @@
 - (void)drawRect:(NSRect)dirtyRect {
   [CATransaction begin];
   [CATransaction setDisableActions:YES];
+  [self updateColors];
   [self updateFrames];
   [CATransaction commit];
+}
+
+- (void)updateColors {
+  _transparencyCheckerboardLayer.backgroundColor = _checkerboardColor.CGColor;
 }
 
 - (void)updateFrames {
