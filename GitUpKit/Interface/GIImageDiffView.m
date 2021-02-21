@@ -16,6 +16,8 @@
 @property(nonatomic, strong) NSImageView* currentImageView;
 @property(nonatomic, strong) CALayer* oldImageMaskLayer;
 @property(nonatomic, strong) CALayer* currentImageMaskLayer;
+@property(nonatomic, strong) CALayer* transparencyCheckerboardLayer;
+@property(nonatomic, strong) NSColor* checkerboardColor;
 @property(nonatomic) CGFloat percentage;
 @end
 
@@ -29,6 +31,15 @@
 }
 
 - (void)setupView {
+  self.wantsLayer = true;
+
+  _transparencyCheckerboardLayer = [[CALayer alloc] init];
+  NSBundle* bundle = NSBundle.gitUpKitBundle;
+  NSImage* patternImage = [bundle imageForResource:@"background_pattern"];
+  _checkerboardColor = [NSColor colorWithPatternImage:patternImage];
+  _transparencyCheckerboardLayer.backgroundColor = _checkerboardColor.CGColor;
+  [self.layer addSublayer:_transparencyCheckerboardLayer];
+
   _currentImageView = [[NSImageView alloc] init];
   _oldImageView = [[NSImageView alloc] init];
   [self addSubview:_currentImageView];
@@ -112,6 +123,7 @@
 
 - (void)updateFrames {
   CGRect fittedImageFrame = [self fittedImageFrame];
+  _transparencyCheckerboardLayer.frame = fittedImageFrame;
   _currentImageView.frame = fittedImageFrame;
   if (_oldImageView.image != nil) {
     _oldImageView.frame = fittedImageFrame;
