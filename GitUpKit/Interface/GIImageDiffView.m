@@ -7,6 +7,7 @@
 #import <QuartzCore/CATransaction.h>
 
 #define kImageInset 10
+#define kBorderWidth 8
 
 @interface GIImageDiffView ()
 @property(nonatomic, strong) NSPanGestureRecognizer* panGestureRecognizer;
@@ -16,6 +17,8 @@
 @property(nonatomic, strong) NSImageView* currentImageView;
 @property(nonatomic, strong) CALayer* oldImageMaskLayer;
 @property(nonatomic, strong) CALayer* currentImageMaskLayer;
+@property(nonatomic, strong) CALayer* oldImageBorderLayer;
+@property(nonatomic, strong) CALayer* currentImageBorderLayer;
 @property(nonatomic, strong) CALayer* transparencyCheckerboardLayer;
 @property(nonatomic, strong) NSColor* checkerboardColor;
 @property(nonatomic) CGFloat percentage;
@@ -32,6 +35,11 @@
 
 - (void)setupView {
   self.wantsLayer = true;
+
+  _oldImageBorderLayer = [[CALayer alloc] init];
+  _currentImageBorderLayer = [[CALayer alloc] init];
+  [self.layer addSublayer:_oldImageBorderLayer];
+  [self.layer addSublayer:_currentImageBorderLayer];
 
   _transparencyCheckerboardLayer = [[CALayer alloc] init];
   NSBundle* bundle = NSBundle.gitUpKitBundle;
@@ -123,6 +131,8 @@
 }
 
 - (void)updateColors {
+  _oldImageBorderLayer.backgroundColor = NSColor.gitUpDiffDeletedTextHighlightColor.CGColor;
+  _currentImageBorderLayer.backgroundColor = NSColor.gitUpDiffAddedTextHighlightColor.CGColor;
   _transparencyCheckerboardLayer.backgroundColor = _checkerboardColor.CGColor;
 }
 
@@ -142,6 +152,14 @@
                                               0,
                                               fittedImageFrame.size.width * (1 - _percentage),
                                               fittedImageFrame.size.height);
+    _oldImageBorderLayer.frame = CGRectMake(fittedImageFrame.origin.x - kBorderWidth,
+                                            fittedImageFrame.origin.y - kBorderWidth,
+                                            dividerOffset + kBorderWidth,
+                                            fittedImageFrame.size.height + 2 * kBorderWidth);
+    _currentImageBorderLayer.frame = CGRectMake(fittedImageFrame.origin.x + dividerOffset,
+                                                fittedImageFrame.origin.y - kBorderWidth,
+                                                fittedImageFrame.size.width * (1 - _percentage) + kBorderWidth,
+                                                fittedImageFrame.size.height + 2 * kBorderWidth);
   } else {
     _currentImageMaskLayer.frame = CGRectMake(0,
                                               0,
