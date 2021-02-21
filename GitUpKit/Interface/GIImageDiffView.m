@@ -8,6 +8,7 @@
 
 #define kImageInset 10
 #define kBorderWidth 8
+#define kDividerWidth 2
 
 @interface GIImageDiffView ()
 @property(nonatomic, strong) NSPanGestureRecognizer* panGestureRecognizer;
@@ -19,6 +20,7 @@
 @property(nonatomic, strong) CALayer* currentImageMaskLayer;
 @property(nonatomic, strong) CALayer* oldImageBorderLayer;
 @property(nonatomic, strong) CALayer* currentImageBorderLayer;
+@property(nonatomic, strong) NSView* dividerView;
 @property(nonatomic, strong) CALayer* transparencyCheckerboardLayer;
 @property(nonatomic, strong) NSColor* checkerboardColor;
 @property(nonatomic) CGFloat percentage;
@@ -62,6 +64,9 @@
   _currentImageMaskLayer.backgroundColor = NSColor.blackColor.CGColor;
   _currentImageView.wantsLayer = true;
   _currentImageView.layer.mask = _currentImageMaskLayer;
+
+  _dividerView = [[NSView alloc] init];
+  [self addSubview:_dividerView];
 
   _panGestureRecognizer = [[NSPanGestureRecognizer alloc] initWithTarget:self action:@selector(didMoveSplit:)];
   _clickGestureRecognizer = [[NSClickGestureRecognizer alloc] initWithTarget:self action:@selector(didMoveSplit:)];
@@ -133,6 +138,7 @@
 - (void)updateColors {
   _oldImageBorderLayer.backgroundColor = NSColor.gitUpDiffDeletedTextHighlightColor.CGColor;
   _currentImageBorderLayer.backgroundColor = NSColor.gitUpDiffAddedTextHighlightColor.CGColor;
+  _dividerView.layer.backgroundColor = NSColor.gitUpDiffModifiedBackgroundColor.CGColor;
   _transparencyCheckerboardLayer.backgroundColor = _checkerboardColor.CGColor;
 }
 
@@ -160,6 +166,10 @@
                                                 fittedImageFrame.origin.y - kBorderWidth,
                                                 fittedImageFrame.size.width * (1 - _percentage) + kBorderWidth,
                                                 fittedImageFrame.size.height + 2 * kBorderWidth);
+    _dividerView.frame = CGRectMake(fittedImageFrame.origin.x + dividerOffset - kDividerWidth / 2,
+                                    fittedImageFrame.origin.y - kBorderWidth,
+                                    kDividerWidth,
+                                    fittedImageFrame.size.height + 2 * kBorderWidth);
   } else {
     _currentImageMaskLayer.frame = CGRectMake(0,
                                               0,
