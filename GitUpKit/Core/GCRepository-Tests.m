@@ -77,6 +77,82 @@
   XCTAssertFalse([[GCRepository alloc] initWithNewLocalRepository:self.repository.workingDirectoryPath bare:NO error:NULL]);
 }
 
+- (void)testPathForHookWithName {
+  NSString* path = [NSTemporaryDirectory() stringByAppendingPathComponent:[[NSProcessInfo processInfo] globallyUniqueString]];
+
+  // Create dummy local repo
+  GCRepository* repository = [self createLocalRepositoryAtPath:path bare:NO];
+
+  NSString* hookName = @"pre-commit";
+  XCTAssertEqualObjects([repository pathForHookWithName:hookName], NULL);
+
+  // Create dummy hook file
+  NSString* hookFilePath = [[repository.repositoryPath stringByAppendingPathComponent:@"hooks"] stringByAppendingPathComponent:hookName];
+  [self _createDummyHookFile:hookFilePath];
+
+  XCTAssertEqualObjects([repository pathForHookWithName:hookName], hookFilePath);
+
+  // Destroy dummy local repository
+  [self destroyLocalRepository:repository];
+}
+
+- (void)testPathForHookWithName_AbsoluteCustomHooksPath {
+  NSString* path = [NSTemporaryDirectory() stringByAppendingPathComponent:[[NSProcessInfo processInfo] globallyUniqueString]];
+
+  // Create dummy local repo
+  GCRepository* repository = [self createLocalRepositoryAtPath:path bare:NO];
+
+  // Set absolute path to core.hooksPath
+  NSString* hooksPath = [path stringByAppendingPathComponent:@"custom-hooks-path"];
+  XCTAssertTrue([repository writeConfigOptionForLevel:kGCConfigLevel_Local variable:@"core.hooksPath" withValue:hooksPath error:NULL]);
+
+  NSString* hookName = @"pre-commit";
+  XCTAssertEqualObjects([repository pathForHookWithName:hookName], NULL);
+
+  // Create dummy hook file
+  NSString* hookFilePath = [hooksPath stringByAppendingPathComponent:hookName];
+  [self _createDummyHookFile:hookFilePath];
+
+  XCTAssertEqualObjects([repository pathForHookWithName:hookName], hookFilePath);
+
+  // Destroy dummy local repository
+  [self destroyLocalRepository:repository];
+}
+
+- (void)testPathForHookWithName_RelativeCustomHooksPath {
+  NSString* path = [NSTemporaryDirectory() stringByAppendingPathComponent:[[NSProcessInfo processInfo] globallyUniqueString]];
+
+  // Create dummy local repo
+  GCRepository* repository = [self createLocalRepositoryAtPath:path bare:NO];
+
+  // Set relative path to core.hooksPath
+  NSString* hooksPath = @"./custom-hooks-path";
+  XCTAssertTrue([repository writeConfigOptionForLevel:kGCConfigLevel_Local variable:@"core.hooksPath" withValue:hooksPath error:NULL]);
+
+  NSString* hookName = @"pre-commit";
+  XCTAssertEqualObjects([repository pathForHookWithName:hookName], NULL);
+
+  // Create dummy hook file
+  NSString* hookFilePath = [[repository.workingDirectoryPath stringByAppendingPathComponent:hooksPath] stringByAppendingPathComponent:hookName];
+  [self _createDummyHookFile:hookFilePath];
+
+  XCTAssertEqualObjects([repository pathForHookWithName:hookName], hookFilePath);
+
+  // Destroy dummy local repository
+  [self destroyLocalRepository:repository];
+}
+
+- (void)_createDummyHookFile:(NSString*)path {
+  [[NSFileManager defaultManager] createDirectoryAtPath:[path stringByDeletingLastPathComponent]
+                            withIntermediateDirectories:NO
+                                             attributes:NULL
+                                                  error:NULL];
+  [[NSFileManager defaultManager] createFileAtPath:path
+                                          contents:[@"echo 'Hello world'\n" dataUsingEncoding:NSUTF8StringEncoding]
+                                        attributes:@{NSFilePosixPermissions : @0x755}];
+  XCTAssertTrue([[NSFileManager defaultManager] fileExistsAtPath:path]);
+}
+
 @end
 
 @implementation GCSingleCommitRepositoryTests (GCRepository)

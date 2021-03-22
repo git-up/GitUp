@@ -306,7 +306,16 @@ static int _ReferenceForEachCallback(const char* refname, void* payload) {
 #if !TARGET_OS_IPHONE
 
 - (NSString*)pathForHookWithName:(NSString*)name {
-  NSString* path = [[self.repositoryPath stringByAppendingPathComponent:@"hooks"] stringByAppendingPathComponent:name];
+  NSString* hooksPath = [[self readConfigOptionForVariable:@"core.hooksPath" error:NULL] value];
+  if (hooksPath.length > 0) {
+    hooksPath = hooksPath.stringByExpandingTildeInPath;
+    if (!hooksPath.absolutePath) {
+      hooksPath = [self.workingDirectoryPath stringByAppendingPathComponent:hooksPath];
+    }
+  } else {
+    hooksPath = [self.repositoryPath stringByAppendingPathComponent:@"hooks"];
+  }
+  NSString* path = [hooksPath stringByAppendingPathComponent:name];
   return [[NSFileManager defaultManager] isExecutableFileAtPath:path] ? path : nil;
 }
 
