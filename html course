@@ -1,0 +1,36 @@
+<html>
+    <head>
+        <title>nowshath basic over all review</title>
+    </head>
+<body>
+    <h1>basic creation of HTML</h1>
+    <h3>bold and italic</h3> <hr>
+    <p> <i>nowshath<i> is a <b> good person </b> </p>
+        <h3>sub and super script</h3> <hr>
+        <p>math formula x <sup>2</sup>+y <sup>2</sup>  </p>
+        <p>science formula H <sub>2</sub>O</p> <hr>
+        <h3>break and horizondal rotine</h3>
+        <p>nowshath <br>pvr street <br>namakkal <br> </p> <hr>
+        <h3>stronge and emphasis</h3>
+        <p>both same of bold and italic</p> <hr>
+        <h3>quote and block quote</h3>
+        <p>nowshath is a <q>business man</q></p> <hr>
+        <p>nowshath is a super man <blockquote>family cute</blockquote></p>
+        <h3>abbrevation and accoronamy</h3>
+        <p> <abbr title="ENGINEERING".Er></abbr> nowshath ECE</p> <hr>
+        <p> <acronym title="VIANS"VAJEETH BASHA,IMRAN,ABDUL,NEELU,SHAMSHATH></acronym> </p> <hr>
+        <h3> citetation and defination </h3>
+        <p><cite>nowshath</cite> nowshath is a normal man</p> <hr>
+        <p> defination </p>
+        <address> nowsahath <br>pvr strret <br>namakkak </address> <hr>
+        <h3>dele insert strike</h3>
+        <p>nowshath is a <del>good man</del> <ins>greate man</ins></p> <hr>
+        <p>nowstah silling the watch is the <strike>10</strike> <strike>20</strike></p>
+        <h3>add image</h3>
+        <p> <img src="icing creme.PNG" alt=" icing creme" title="mass "> </p><hr>
+        <p><figure>icing creme.PNG</figure> <figcaption>icing cream</figcaption> </p>
+        <h3>basic link</h3>
+        <p> <a href="https://www.youtube.com/watch?v=7cVpA4rME8w">YOUTUPE  </a> following nowshath html devrelopre </p><hr>
+
+</body>
+    </html>
