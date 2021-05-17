@@ -911,10 +911,10 @@ cleanup:
 
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_config_new, &config);
   if (configPath) {
-    CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_config_add_file_ondisk, config, configPath.fileSystemRepresentation, GIT_CONFIG_LEVEL_LOCAL, false);
+    CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_config_add_file_ondisk, config, configPath.fileSystemRepresentation, GIT_CONFIG_LEVEL_LOCAL, repository, false);
   } else {
     _configPath = [NSTemporaryDirectory() stringByAppendingPathComponent:[[NSProcessInfo processInfo] globallyUniqueString]];
-    CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_config_add_file_ondisk, config, _configPath.fileSystemRepresentation, GIT_CONFIG_LEVEL_LOCAL, false);
+    CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_config_add_file_ondisk, config, _configPath.fileSystemRepresentation, GIT_CONFIG_LEVEL_LOCAL, repository, false);
   }
   git_repository_set_config(repository, config);
 
