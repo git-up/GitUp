@@ -93,7 +93,7 @@ static inline int _FindConfig(git_repository* repo, GCConfigLevel level, git_buf
     case kGCConfigLevel_Global:
       return git_config_find_global(buffer);
     case kGCConfigLevel_Local:
-      return git_config_find_local(repo, buffer);
+      return gitup_config_find_local(repo, buffer);
   }
   return GIT_ERROR;
 }
