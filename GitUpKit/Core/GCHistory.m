@@ -752,7 +752,7 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
           CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_commit_lookup, &headCommit, self.private, resolvedReference.resolvedTarget);
           headTip = [[GCCommit alloc] initWithRepository:self commit:headCommit];
           if (resolvedReference != serializedReference) {
-            CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_reference_create_virtual, &headReference, self.private, resolvedReference.name, resolvedReference.resolvedTarget);
+            CALL_LIBGIT2_FUNCTION_GOTO(cleanup, gitup_reference_create_virtual, &headReference, self.private, resolvedReference.name, resolvedReference.resolvedTarget);
           }
         }
         break;
@@ -824,7 +824,7 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
           NSString* remoteName = [config objectForKey:[NSString stringWithFormat:@"branch.%s.remote", git_reference_shorthand(reference)]];
           NSString* mergeName = [config objectForKey:[NSString stringWithFormat:@"branch.%s.merge", git_reference_shorthand(reference)]];
           if (remoteName.length && mergeName.length) {
-            int status = git_branch_upstream_name_from_merge_remote_names(&upstreamName, self.private, remoteName.UTF8String, mergeName.UTF8String);
+            int status = gitup_branch_upstream_name_from_merge_remote_names(&upstreamName, self.private, remoteName.UTF8String, mergeName.UTF8String);
             if ((status != GIT_OK) && (status != GIT_ENOTFOUND)) {
               LOG_LIBGIT2_ERROR(status);  // Don't fail because of corrupted config
             }
@@ -873,11 +873,11 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
       git_reference* reference = NULL;
       switch (serializedReference.type) {
         case GIT_REF_OID:
-          CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_reference_create_virtual, &reference, self.private, serializedReference.name, serializedReference.directTarget);
+          CALL_LIBGIT2_FUNCTION_GOTO(cleanup, gitup_reference_create_virtual, &reference, self.private, serializedReference.name, serializedReference.directTarget);
           break;
 
         case GIT_REF_SYMBOLIC:
-          CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_reference_symbolic_create_virtual, &reference, self.private, serializedReference.name, serializedReference.symbolicTarget);
+          CALL_LIBGIT2_FUNCTION_GOTO(cleanup, gitup_reference_symbolic_create_virtual, &reference, self.private, serializedReference.name, serializedReference.symbolicTarget);
           break;
 
         default:
