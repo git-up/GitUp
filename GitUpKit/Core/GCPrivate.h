@@ -19,6 +19,7 @@
 #pragma clang diagnostic ignored "-Wdocumentation"
 #pragma clang diagnostic ignored "-Wpadded"
 #import <git2.h>
+#import <gitup_extensions.h>
 #import <git2/transaction.h>
 #import <git2/sys/commit.h>
 #import <git2/sys/odb_backend.h>
