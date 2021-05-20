@@ -447,7 +447,6 @@
 		0A7D6DF72655BF860002E3E7 /* unicode_builtin.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = unicode_builtin.c; sourceTree = "<group>"; };
 		0A7D6DF92655BF860002E3E7 /* util.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = util.c; sourceTree = "<group>"; };
 		0A7D6E052655BF860002E3E7 /* crypt_commoncrypto.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = crypt_commoncrypto.c; sourceTree = "<group>"; };
-		0A7D6E1B265677D90002E3E7 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		DB4465732567262400D36981 /* libssh2.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = libssh2.xcframework; sourceTree = "<group>"; };
 		DB4465742567262400D36981 /* libcrypto.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = libcrypto.xcframework; sourceTree = "<group>"; };
 		DB4465752567262400D36981 /* libssl.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = libssl.xcframework; sourceTree = "<group>"; };
@@ -687,7 +686,6 @@
 		DB4465722567262300D36981 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				0A7D6E1B265677D90002E3E7 /* Security.framework */,
 				DB4465742567262400D36981 /* libcrypto.xcframework */,
 				DB4465732567262400D36981 /* libssh2.xcframework */,
 				DB4465752567262400D36981 /* libssl.xcframework */,
