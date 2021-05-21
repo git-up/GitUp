@@ -7,6 +7,22 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0A1DA44D2657C23E0041E737 /* libcrypto.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB4465742567262400D36981 /* libcrypto.xcframework */; };
+		0A1DA44E2657C23E0041E737 /* libssl.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB4465752567262400D36981 /* libssl.xcframework */; };
+		0A1DA44F2657C23E0041E737 /* libssh2.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB4465732567262400D36981 /* libssh2.xcframework */; };
+		0A1DA5012657C2470041E737 /* libcrypto.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB4465742567262400D36981 /* libcrypto.xcframework */; };
+		0A1DA5022657C2470041E737 /* libssl.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB4465752567262400D36981 /* libssl.xcframework */; };
+		0A1DA5032657C2470041E737 /* libssh2.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB4465732567262400D36981 /* libssh2.xcframework */; };
+		0A1DA5082657C3C00041E737 /* http_parser.c in Sources */ = {isa = PBXBuildFile; fileRef = E21751601B912B8E00BE234A /* http_parser.c */; };
+		0A1DA5092657C5020041E737 /* libhttp-client.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A1DA4532657C23E0041E737 /* libhttp-client.a */; };
+		0A1DA50A2657C5B40041E737 /* ntlm.c in Sources */ = {isa = PBXBuildFile; fileRef = 0A7D6DF62655BF860002E3E7 /* ntlm.c */; };
+		0A1DA50B2657C5B90041E737 /* unicode_builtin.c in Sources */ = {isa = PBXBuildFile; fileRef = 0A7D6DF72655BF860002E3E7 /* unicode_builtin.c */; };
+		0A1DA50C2657C5BF0041E737 /* util.c in Sources */ = {isa = PBXBuildFile; fileRef = 0A7D6DF92655BF860002E3E7 /* util.c */; };
+		0A1DA50D2657C5C70041E737 /* crypt_commoncrypto.c in Sources */ = {isa = PBXBuildFile; fileRef = 0A7D6E052655BF860002E3E7 /* crypt_commoncrypto.c */; settings = {COMPILER_FLAGS = "-Wno-deprecated"; }; };
+		0A1DA50E2657C6260041E737 /* libntlmclient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A1DA5072657C2470041E737 /* libntlmclient.a */; };
+		0A1DA50F2657CBC20041E737 /* libcrypto.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB4465742567262400D36981 /* libcrypto.xcframework */; };
+		0A1DA5102657CBC20041E737 /* libssh2.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB4465732567262400D36981 /* libssh2.xcframework */; };
+		0A1DA5112657CBC20041E737 /* libssl.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB4465752567262400D36981 /* libssl.xcframework */; };
 		0A7D6CC32655BD7B0002E3E7 /* transaction.c in Sources */ = {isa = PBXBuildFile; fileRef = 0A7D6C402655BD760002E3E7 /* transaction.c */; };
 		0A7D6CC42655BD7B0002E3E7 /* ident.c in Sources */ = {isa = PBXBuildFile; fileRef = 0A7D6C412655BD760002E3E7 /* ident.c */; };
 		0A7D6CC52655BD7B0002E3E7 /* config_parse.c in Sources */ = {isa = PBXBuildFile; fileRef = 0A7D6C422655BD760002E3E7 /* config_parse.c */; };
@@ -172,17 +188,11 @@
 		0A7D6D8D2655BECC0002E3E7 /* map.c in Sources */ = {isa = PBXBuildFile; fileRef = 0A7D6D8B2655BECC0002E3E7 /* map.c */; };
 		0A7D6D912655BEE30002E3E7 /* stdalloc.c in Sources */ = {isa = PBXBuildFile; fileRef = 0A7D6D8F2655BEE30002E3E7 /* stdalloc.c */; };
 		0A7D6D922655BEE30002E3E7 /* win32_crtdbg.c in Sources */ = {isa = PBXBuildFile; fileRef = 0A7D6D902655BEE30002E3E7 /* win32_crtdbg.c */; };
-		0A7D6E072655BF860002E3E7 /* ntlm.c in Sources */ = {isa = PBXBuildFile; fileRef = 0A7D6DF62655BF860002E3E7 /* ntlm.c */; };
-		0A7D6E082655BF860002E3E7 /* unicode_builtin.c in Sources */ = {isa = PBXBuildFile; fileRef = 0A7D6DF72655BF860002E3E7 /* unicode_builtin.c */; };
-		0A7D6E092655BF860002E3E7 /* util.c in Sources */ = {isa = PBXBuildFile; fileRef = 0A7D6DF92655BF860002E3E7 /* util.c */; };
-		0A7D6E0D2655BF860002E3E7 /* crypt_commoncrypto.c in Sources */ = {isa = PBXBuildFile; fileRef = 0A7D6E052655BF860002E3E7 /* crypt_commoncrypto.c */; settings = {COMPILER_FLAGS = "-Wno-deprecated"; }; };
-		0A7D6E1D26567A0C0002E3E7 /* libcrypto.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB4465742567262400D36981 /* libcrypto.xcframework */; };
-		0A7D6E1E26567A0C0002E3E7 /* libssl.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB4465752567262400D36981 /* libssl.xcframework */; };
-		DB44650D2567228400D36981 /* http_parser.c in Sources */ = {isa = PBXBuildFile; fileRef = E21751601B912B8E00BE234A /* http_parser.c */; };
-		DB4465762567262400D36981 /* libssh2.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB4465732567262400D36981 /* libssh2.xcframework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0A1DA4532657C23E0041E737 /* libhttp-client.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libhttp-client.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		0A1DA5072657C2470041E737 /* libntlmclient.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libntlmclient.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		0A7D6C402655BD760002E3E7 /* transaction.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = transaction.c; sourceTree = "<group>"; };
 		0A7D6C412655BD760002E3E7 /* ident.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ident.c; sourceTree = "<group>"; };
 		0A7D6C422655BD760002E3E7 /* config_parse.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = config_parse.c; sourceTree = "<group>"; };
@@ -459,13 +469,35 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		0A1DA44C2657C23E0041E737 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0A1DA44D2657C23E0041E737 /* libcrypto.xcframework in Frameworks */,
+				0A1DA44E2657C23E0041E737 /* libssl.xcframework in Frameworks */,
+				0A1DA44F2657C23E0041E737 /* libssh2.xcframework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0A1DA5002657C2470041E737 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0A1DA5012657C2470041E737 /* libcrypto.xcframework in Frameworks */,
+				0A1DA5022657C2470041E737 /* libssl.xcframework in Frameworks */,
+				0A1DA5032657C2470041E737 /* libssh2.xcframework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E2174BD21B91240400BE234A /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0A7D6E1D26567A0C0002E3E7 /* libcrypto.xcframework in Frameworks */,
-				0A7D6E1E26567A0C0002E3E7 /* libssl.xcframework in Frameworks */,
-				DB4465762567262400D36981 /* libssh2.xcframework in Frameworks */,
+				0A1DA50F2657CBC20041E737 /* libcrypto.xcframework in Frameworks */,
+				0A1DA5102657CBC20041E737 /* libssh2.xcframework in Frameworks */,
+				0A1DA5112657CBC20041E737 /* libssl.xcframework in Frameworks */,
+				0A1DA50E2657C6260041E737 /* libntlmclient.a in Frameworks */,
+				0A1DA5092657C5020041E737 /* libhttp-client.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -720,6 +752,8 @@
 			isa = PBXGroup;
 			children = (
 				E2174BD51B91240400BE234A /* libgit2.a */,
+				0A1DA4532657C23E0041E737 /* libhttp-client.a */,
+				0A1DA5072657C2470041E737 /* libntlmclient.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -902,6 +936,38 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		0A1DA3A02657C23E0041E737 /* http-client */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0A1DA4502657C23E0041E737 /* Build configuration list for PBXNativeTarget "http-client" */;
+			buildPhases = (
+				0A1DA3A12657C23E0041E737 /* Sources */,
+				0A1DA44C2657C23E0041E737 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "http-client";
+			productName = git2;
+			productReference = 0A1DA4532657C23E0041E737 /* libhttp-client.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		0A1DA4542657C2470041E737 /* ntlmclient */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0A1DA5042657C2470041E737 /* Build configuration list for PBXNativeTarget "ntlmclient" */;
+			buildPhases = (
+				0A1DA4552657C2470041E737 /* Sources */,
+				0A1DA5002657C2470041E737 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ntlmclient;
+			productName = git2;
+			productReference = 0A1DA5072657C2470041E737 /* libntlmclient.a */;
+			productType = "com.apple.product-type.library.static";
+		};
 		E2174BD41B91240400BE234A /* libgit2 */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = E2174BD61B91240400BE234A /* Build configuration list for PBXNativeTarget "libgit2" */;
@@ -941,11 +1007,32 @@
 			projectRoot = "";
 			targets = (
 				E2174BD41B91240400BE234A /* libgit2 */,
+				0A1DA3A02657C23E0041E737 /* http-client */,
+				0A1DA4542657C2470041E737 /* ntlmclient */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
+		0A1DA3A12657C23E0041E737 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0A1DA5082657C3C00041E737 /* http_parser.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0A1DA4552657C2470041E737 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0A1DA50A2657C5B40041E737 /* ntlm.c in Sources */,
+				0A1DA50B2657C5B90041E737 /* unicode_builtin.c in Sources */,
+				0A1DA50C2657C5BF0041E737 /* util.c in Sources */,
+				0A1DA50D2657C5C70041E737 /* crypt_commoncrypto.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E2174BD11B91240400BE234A /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1048,7 +1135,6 @@
 				0A7D6D132655BD7B0002E3E7 /* posix.c in Sources */,
 				0A7D6D432655BD7B0002E3E7 /* merge_file.c in Sources */,
 				0A7D6D1A2655BD7B0002E3E7 /* varint.c in Sources */,
-				0A7D6E0D2655BF860002E3E7 /* crypt_commoncrypto.c in Sources */,
 				0A7D6CF32655BD7B0002E3E7 /* oid.c in Sources */,
 				0A7D6D0C2655BD7B0002E3E7 /* path.c in Sources */,
 				0A7D6CC92655BD7B0002E3E7 /* odb.c in Sources */,
@@ -1068,11 +1154,9 @@
 				0A7D6CC32655BD7B0002E3E7 /* transaction.c in Sources */,
 				0A7D6D042655BD7B0002E3E7 /* gitup_clone.c in Sources */,
 				0A7D6D022655BD7B0002E3E7 /* pack-objects.c in Sources */,
-				0A7D6E092655BF860002E3E7 /* util.c in Sources */,
 				0A7D6CE22655BD7B0002E3E7 /* annotated_commit.c in Sources */,
 				0A7D6D032655BD7B0002E3E7 /* patch_generate.c in Sources */,
 				0A7D6CCA2655BD7B0002E3E7 /* buf_text.c in Sources */,
-				0A7D6E072655BF860002E3E7 /* ntlm.c in Sources */,
 				0A7D6CC72655BD7B0002E3E7 /* net.c in Sources */,
 				0A7D6CE02655BD7B0002E3E7 /* commit_list.c in Sources */,
 				0A7D6CF52655BD7B0002E3E7 /* proxy.c in Sources */,
@@ -1099,7 +1183,6 @@
 				0A7D6D562655BDD50002E3E7 /* auth_ntlm.c in Sources */,
 				0A7D6D142655BD7B0002E3E7 /* pool.c in Sources */,
 				0A7D6CFA2655BD7B0002E3E7 /* cherrypick.c in Sources */,
-				DB44650D2567228400D36981 /* http_parser.c in Sources */,
 				0A7D6D5E2655BDD50002E3E7 /* git.c in Sources */,
 				0A7D6CE82655BD7B0002E3E7 /* notes.c in Sources */,
 				0A7D6CCB2655BD7B0002E3E7 /* config_entries.c in Sources */,
@@ -1111,7 +1194,6 @@
 				0A7D6CCC2655BD7B0002E3E7 /* config_snapshot.c in Sources */,
 				0A7D6CEF2655BD7B0002E3E7 /* refdb.c in Sources */,
 				0A7D6D842655BEB00002E3E7 /* xmerge.c in Sources */,
-				0A7D6E082655BF860002E3E7 /* unicode_builtin.c in Sources */,
 				0A7D6D602655BDD50002E3E7 /* auth.c in Sources */,
 				0A7D6D742655BE710002E3E7 /* collisiondetect.c in Sources */,
 				0A7D6CE12655BD7B0002E3E7 /* message.c in Sources */,
@@ -1126,6 +1208,149 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
+		0A1DA4512657C23E0041E737 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				EXECUTABLE_PREFIX = lib;
+				FRAMEWORK_SEARCH_PATHS = (
+					libssh2.xcframework/,
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"'SHA1DC_NO_STANDARD_INCLUDES=1'",
+					"'SHA1DC_CUSTOM_INCLUDE_SHA1_C=\"common.h\"'",
+					"'SHA1DC_CUSTOM_INCLUDE_UBC_CHECK_C=\"common.h\"'",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"libgit2/deps/http-parser",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SDKROOT)/usr/lib/system",
+				);
+				OTHER_CFLAGS = (
+					"-D_GNU_SOURCE",
+					"-Wall",
+					"-Wextra",
+					"-fvisibility=hidden",
+					"-fPIC",
+					"-Wdocumentation",
+					"-Wno-documentation-deprecated-sync",
+					"-Wno-missing-field-initializers",
+					"-Wstrict-aliasing",
+					"-Wstrict-prototypes",
+					"-Wdeclaration-after-statement",
+					"-Wshift-count-overflow",
+					"-Wunused-const-variable",
+					"-Wunused-function",
+					"-Wint-conversion",
+					"-Wformat",
+					"-Wformat-security",
+					"-Wmissing-declarations",
+					"-D_DEBUG",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.github.libgit2;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRIP_INSTALLED_PRODUCT = NO;
+				USE_HEADERMAP = NO;
+			};
+			name = Debug;
+		};
+		0A1DA4522657C23E0041E737 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				EXECUTABLE_PREFIX = lib;
+				FRAMEWORK_SEARCH_PATHS = (
+					libssh2.xcframework/,
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"'SHA1DC_NO_STANDARD_INCLUDES=1'",
+					"'SHA1DC_CUSTOM_INCLUDE_SHA1_C=\"common.h\"'",
+					"'SHA1DC_CUSTOM_INCLUDE_UBC_CHECK_C=\"common.h\"'",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"libgit2/deps/http-parser",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SDKROOT)/usr/lib/system",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.github.libgit2;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRIP_INSTALLED_PRODUCT = NO;
+				USE_HEADERMAP = NO;
+			};
+			name = Release;
+		};
+		0A1DA5052657C2470041E737 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				EXECUTABLE_PREFIX = lib;
+				FRAMEWORK_SEARCH_PATHS = (
+					libssh2.xcframework/,
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"'SHA1DC_NO_STANDARD_INCLUDES=1'",
+					"'SHA1DC_CUSTOM_INCLUDE_SHA1_C=\"common.h\"'",
+					"'SHA1DC_CUSTOM_INCLUDE_UBC_CHECK_C=\"common.h\"'",
+					"'NTLM_STATIC=1'",
+					CRYPT_COMMONCRYPTO,
+				);
+				HEADER_SEARCH_PATHS = (
+					"libssh2.xcframework/**",
+					"$(inherited)",
+					libgit2/deps/ntlmclient,
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SDKROOT)/usr/lib/system",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.github.libgit2;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRIP_INSTALLED_PRODUCT = NO;
+				USE_HEADERMAP = NO;
+			};
+			name = Debug;
+		};
+		0A1DA5062657C2470041E737 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				EXECUTABLE_PREFIX = lib;
+				FRAMEWORK_SEARCH_PATHS = (
+					libssh2.xcframework/,
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"'SHA1DC_NO_STANDARD_INCLUDES=1'",
+					"'SHA1DC_CUSTOM_INCLUDE_SHA1_C=\"common.h\"'",
+					"'SHA1DC_CUSTOM_INCLUDE_UBC_CHECK_C=\"common.h\"'",
+					"'NTLM_STATIC=1'",
+					CRYPT_COMMONCRYPTO,
+				);
+				HEADER_SEARCH_PATHS = (
+					"libssh2.xcframework/**",
+					"$(inherited)",
+					libgit2/deps/ntlmclient,
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SDKROOT)/usr/lib/system",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.github.libgit2;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRIP_INSTALLED_PRODUCT = NO;
+				USE_HEADERMAP = NO;
+			};
+			name = Release;
+		};
 		E217486A1B911B5200BE234A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = DB72906522C83EB1007AB8F7 /* Debug.xcconfig */;
@@ -1135,24 +1360,6 @@
 				CLANG_WARN_UNREACHABLE_CODE = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"_FILE_OFFSET_BITS=64",
-					HAVE_QSORT_R,
-					GIT_THREADS,
-					GIT_USE_ICONV,
-					GIT_SHA1_COMMON_CRYPTO,
-					GIT_SECURE_TRANSPORT,
-					GIT_HTTPS,
-					GIT_SSH,
-					GIT_USE_STAT_MTIMESPEC,
-					GIT_USE_NSEC,
-					GIT_ARCH_64,
-					CRYPT_COMMONCRYPTO,
-					"'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'",
-					"'SHA1DC_NO_STANDARD_INCLUDES=1'",
-					"'SHA1DC_CUSTOM_INCLUDE_SHA1_C=\"common.h\"'",
-					"'SHA1DC_CUSTOM_INCLUDE_UBC_CHECK_C=\"common.h\"'",
-				);
 				GCC_WARN_UNINITIALIZED_AUTOS = NO;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = (
@@ -1202,18 +1409,6 @@
 				CLANG_WARN_COMMA = NO;
 				CLANG_WARN_UNREACHABLE_CODE = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"_FILE_OFFSET_BITS=64",
-					HAVE_QSORT_R,
-					GIT_SSH,
-					GIT_SHA1_COMMON_CRYPTO,
-					HAVE_QSORT_R_BSD,
-					"SHA1DC_NO_STANDARD_INCLUDES=1",
-					"SHA1DC_CUSTOM_INCLUDE_SHA1_C=\"common.h\"",
-					"SHA1DC_CUSTOM_INCLUDE_UBC_CHECK_C=\"common.h\"",
-					"NTLM_STATIC=1",
-					CRYPT_COMMONCRYPTO,
-				);
 				GCC_WARN_UNINITIALIZED_AUTOS = NO;
 				OTHER_CFLAGS = (
 					"-D_GNU_SOURCE",
@@ -1258,11 +1453,17 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				EXECUTABLE_PREFIX = lib;
-				FRAMEWORK_SEARCH_PATHS = (
-					libssh2.xcframework/,
-					"$(inherited)",
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"'_FILE_OFFSET_BITS=64'",
+					HAVE_QSORT_R_BSD,
+					GIT_SSH,
+					"'SHA1DC_NO_STANDARD_INCLUDES=1'",
+					"'SHA1DC_CUSTOM_INCLUDE_SHA1_C=\"common.h\"'",
+					"'SHA1DC_CUSTOM_INCLUDE_UBC_CHECK_C=\"common.h\"'",
 				);
 				HEADER_SEARCH_PATHS = (
+					"libssh2.xcframework/**/**",
 					"$(inherited)",
 					libgit2/src,
 					libgit2/include,
@@ -1285,11 +1486,17 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				EXECUTABLE_PREFIX = lib;
-				FRAMEWORK_SEARCH_PATHS = (
-					libssh2.xcframework/,
-					"$(inherited)",
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"'_FILE_OFFSET_BITS=64'",
+					HAVE_QSORT_R_BSD,
+					GIT_SSH,
+					"'SHA1DC_NO_STANDARD_INCLUDES=1'",
+					"'SHA1DC_CUSTOM_INCLUDE_SHA1_C=\"common.h\"'",
+					"'SHA1DC_CUSTOM_INCLUDE_UBC_CHECK_C=\"common.h\"'",
 				);
 				HEADER_SEARCH_PATHS = (
+					"libssh2.xcframework/**/**",
 					"$(inherited)",
 					libgit2/src,
 					libgit2/include,
@@ -1311,6 +1518,24 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		0A1DA4502657C23E0041E737 /* Build configuration list for PBXNativeTarget "http-client" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0A1DA4512657C23E0041E737 /* Debug */,
+				0A1DA4522657C23E0041E737 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		0A1DA5042657C2470041E737 /* Build configuration list for PBXNativeTarget "ntlmclient" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0A1DA5052657C2470041E737 /* Debug */,
+				0A1DA5062657C2470041E737 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		E21748601B911B5200BE234A /* Build configuration list for PBXProject "libgit2" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
