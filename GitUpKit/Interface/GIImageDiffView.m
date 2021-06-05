@@ -9,6 +9,7 @@
 #define kImageInset 10
 #define kBorderWidth 8
 #define kDividerWidth 2
+#define kMaxImageDimension 4000
 
 @interface GIImageDiffView ()
 @property(nonatomic, strong) NSPanGestureRecognizer* panGestureRecognizer;
@@ -103,7 +104,7 @@
   } else {
     newPath = [self.repository absolutePathForFile:_delta.canonicalPath];
   }
-  _currentImageView.image = [[NSImage alloc] initWithContentsOfFile:newPath];
+  _currentImageView.image = [self generateLimitedSizeImageFromPath:newPath];
 }
 
 - (void)updateOldImage {
@@ -117,10 +118,31 @@
     if (![[NSFileManager defaultManager] fileExistsAtPath:oldPath]) {
       [self.repository exportBlobWithSHA1:_delta.oldFile.SHA1 toPath:oldPath error:&error];
     }
-    _oldImageView.image = [[NSImage alloc] initWithContentsOfFile:oldPath];
+    _oldImageView.image = [self generateLimitedSizeImageFromPath:oldPath];
   } else {
     _oldImageView.image = nil;
   }
+}
+
+- (NSImage*)generateLimitedSizeImageFromPath:(NSString*)path {
+  CGImageSourceRef imageSource = CGImageSourceCreateWithURL((CFURLRef)[NSURL fileURLWithPath:path], NULL);
+  if (!imageSource) {
+    return nil;
+  }
+
+  CFDictionaryRef options = (CFDictionaryRef)CFBridgingRetain(@{
+    (id)kCGImageSourceCreateThumbnailWithTransform : @YES,
+    (id)kCGImageSourceCreateThumbnailFromImageAlways : @YES,
+    (id)kCGImageSourceThumbnailMaxPixelSize : @(kMaxImageDimension)
+  });
+  CGImageRef image = CGImageSourceCreateThumbnailAtIndex(imageSource, 0, options);
+  NSImage* convertedImage = [[NSImage alloc] initWithCGImage:image size:NSZeroSize];
+
+  CGImageRelease(image);
+  CFRelease(options);
+  CFRelease(imageSource);
+
+  return convertedImage;
 }
 
 - (CGFloat)desiredHeightForWidth:(CGFloat)width {
