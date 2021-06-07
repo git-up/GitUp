@@ -343,7 +343,7 @@ static NSImage* _untrackedImage = nil;
 
             CFStringRef fileExtension = CFBridgingRetain(delta.canonicalPath.pathExtension);
             CFStringRef fileUTI = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, fileExtension, NULL);
-            BOOL isImage = UTTypeConformsTo(fileUTI, kUTTypeImage);
+            BOOL isImage = [NSImage.imageTypes containsObject:(__bridge NSString * _Nonnull)(fileUTI)];
             CFRelease(fileUTI);
             CFRelease(fileExtension);
             if (isImage) {
