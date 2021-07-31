@@ -811,6 +811,7 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
         GCCommit* referenceCommit = [[GCCommit alloc] initWithRepository:self commit:commit];
         GCTagAnnotation* referenceAnnotation = tag ? [[GCTagAnnotation alloc] initWithRepository:self tag:tag] : nil;
         git_buf upstreamName = {0};
+        git_buf upstreamName2 = {0};
         if (git_reference_is_tag(reference)) {
           referenceObject = [[GCHistoryTag alloc] initWithRepository:self reference:reference];
           [tags addObject:referenceObject];
@@ -821,10 +822,16 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
             XLOG_DEBUG_CHECK(headBranch == nil);
             headBranch = (GCHistoryLocalBranch*)referenceObject;
           }
+          
           NSString* remoteName = [config objectForKey:[NSString stringWithFormat:@"branch.%s.remote", git_reference_shorthand(reference)]];
           NSString* mergeName = [config objectForKey:[NSString stringWithFormat:@"branch.%s.merge", git_reference_shorthand(reference)]];
           if (remoteName.length && mergeName.length) {
             int status = gitup_branch_upstream_name_from_merge_remote_names(&upstreamName, self.private, remoteName.UTF8String, mergeName.UTF8String);
+            int status_again = gitup_branch_upstream_name(&upstreamName2, self.private, git_reference_name(reference));
+            if (status == status_again && !strcmp(upstreamName.ptr, upstreamName2.ptr)) {
+              XLOG_DEBUG(@"Everything is fine");
+            }
+            /// compare them
             if ((status != GIT_OK) && (status != GIT_ENOTFOUND)) {
               LOG_LIBGIT2_ERROR(status);  // Don't fail because of corrupted config
             }
