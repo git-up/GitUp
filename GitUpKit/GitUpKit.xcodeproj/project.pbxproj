@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0A1DA51E265806140041E737 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A1DA51D265806140041E737 /* Security.framework */; };
+		0A4881D726C7B4CF00289CF9 /* Libgit2Origin in Frameworks */ = {isa = PBXBuildFile; productRef = 0A4881D626C7B4CF00289CF9 /* Libgit2Origin */; };
 		0AC8525923A122C400479160 /* GILaunchServicesLocator.h in Headers */ = {isa = PBXBuildFile; fileRef = 0AC8525723A122C400479160 /* GILaunchServicesLocator.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0AC8525A23A122C400479160 /* GILaunchServicesLocator.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AC8525823A122C400479160 /* GILaunchServicesLocator.m */; };
 		1DADC0DA25A25D54008C2C35 /* libsqlite3.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = DBBEE637256B08D300F96DAF /* libsqlite3.xcframework */; };
@@ -22,10 +24,8 @@
 		DB7CBCA225762721001185AA /* GICustomToolbarItem.h in Headers */ = {isa = PBXBuildFile; fileRef = DB7CBCA025762721001185AA /* GICustomToolbarItem.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DB7CBCA325762721001185AA /* GICustomToolbarItem.m in Sources */ = {isa = PBXBuildFile; fileRef = DB7CBCA125762721001185AA /* GICustomToolbarItem.m */; };
 		DBBEE638256B08D300F96DAF /* libsqlite3.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = DBBEE637256B08D300F96DAF /* libsqlite3.xcframework */; };
-		DBBEE643256B092400F96DAF /* libgit2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E21752F61B914EC000BE234A /* libgit2.a */; };
 		DBBEE64D256B094000F96DAF /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = DBBEE64C256B094000F96DAF /* libz.tbd */; };
 		DBBEE655256B095000F96DAF /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = DBBEE654256B095000F96DAF /* libiconv.tbd */; };
-		DBBEE669256B098A00F96DAF /* libgit2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E21752F61B914EC000BE234A /* libgit2.a */; };
 		DBBEE66A256B099300F96DAF /* libsqlite3.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = DBBEE637256B08D300F96DAF /* libsqlite3.xcframework */; };
 		DBBEE674256B09B500F96DAF /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = DBBEE654256B095000F96DAF /* libiconv.tbd */; };
 		DBBEE675256B09B500F96DAF /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = DBBEE64C256B094000F96DAF /* libz.tbd */; };
@@ -43,7 +43,6 @@
 		E2146C8F1A57F3BC00F4550B /* GCObject.m in Sources */ = {isa = PBXBuildFile; fileRef = E2146C8D1A57F3BC00F4550B /* GCObject.m */; };
 		E21739F41A4FE39E00EC6777 /* GCFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = E21739F21A4FE39E00EC6777 /* GCFunctions.m */; };
 		E21739FF1A51FA6200EC6777 /* GCSubmodule.m in Sources */ = {isa = PBXBuildFile; fileRef = E21739FD1A51FA6200EC6777 /* GCSubmodule.m */; };
-		E21753091B91516600BE234A /* libgit2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E21752F61B914EC000BE234A /* libgit2.a */; };
 		E21753371B91623200BE234A /* XLASLLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = E267E2AD1B84F27800BAB377 /* XLASLLogger.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		E21753381B91623200BE234A /* XLCallbackLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = E267E2AF1B84F27800BAB377 /* XLCallbackLogger.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		E21753391B91623200BE234A /* XLFacility.h in Headers */ = {isa = PBXBuildFile; fileRef = E267E2B11B84F27800BAB377 /* XLFacility.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -382,38 +381,10 @@
 		E2FEED4A1AEAA75F00CBED80 /* GCCommitDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = E2FEED451AEAA6AD00CBED80 /* GCCommitDatabase.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		DBBFFF4C256736FF00AE139C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E21752ED1B914EC000BE234A /* libgit2.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = E2174BD41B91240400BE234A;
-			remoteInfo = libgit2;
-		};
-		DBBFFF502567371C00AE139C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E21752ED1B914EC000BE234A /* libgit2.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = E2174BD41B91240400BE234A;
-			remoteInfo = libgit2;
-		};
-		E21752F51B914EC000BE234A /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E21752ED1B914EC000BE234A /* libgit2.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = E2174BD51B91240400BE234A;
-			remoteInfo = libgit2;
-		};
-		E217530A1B91517300BE234A /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E21752ED1B914EC000BE234A /* libgit2.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = E2174BD41B91240400BE234A;
-			remoteInfo = libgit2;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
+		0A1DA512265805C30041E737 /* libcommonCrypto.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libcommonCrypto.tbd; path = usr/lib/system/libcommonCrypto.tbd; sourceTree = SDKROOT; };
+		0A1DA51D265806140041E737 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		0A4881D326C7B49700289CF9 /* libgit2 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = libgit2; path = "Third-Party/libgit2"; sourceTree = "<group>"; };
 		0AC8525723A122C400479160 /* GILaunchServicesLocator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GILaunchServicesLocator.h; sourceTree = "<group>"; };
 		0AC8525823A122C400479160 /* GILaunchServicesLocator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GILaunchServicesLocator.m; sourceTree = "<group>"; };
 		1DF371CB22F5262300EF7BD9 /* GCLiveRepository+Utilities.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GCLiveRepository+Utilities.h"; sourceTree = "<group>"; };
@@ -447,7 +418,6 @@
 		E21739F21A4FE39E00EC6777 /* GCFunctions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCFunctions.m; sourceTree = "<group>"; };
 		E21739FC1A51FA6200EC6777 /* GCSubmodule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCSubmodule.h; sourceTree = "<group>"; };
 		E21739FD1A51FA6200EC6777 /* GCSubmodule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCSubmodule.m; sourceTree = "<group>"; };
-		E21752ED1B914EC000BE234A /* libgit2.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = libgit2.xcodeproj; path = "Third-Party/libgit2.xcodeproj"; sourceTree = "<group>"; };
 		E217531B1B91613300BE234A /* GitUpKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = GitUpKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E218A5881A566F6A00DFF1DF /* GCReferenceTransform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCReferenceTransform.h; sourceTree = "<group>"; };
 		E218A5891A566F6A00DFF1DF /* GCReferenceTransform.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCReferenceTransform.m; sourceTree = "<group>"; };
@@ -653,7 +623,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				DBBEE674256B09B500F96DAF /* libiconv.tbd in Frameworks */,
-				DBBEE669256B098A00F96DAF /* libgit2.a in Frameworks */,
 				DBBEE66A256B099300F96DAF /* libsqlite3.xcframework in Frameworks */,
 				DBBEE675256B09B500F96DAF /* libz.tbd in Frameworks */,
 			);
@@ -663,10 +632,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0A1DA51E265806140041E737 /* Security.framework in Frameworks */,
 				DBBEE655256B095000F96DAF /* libiconv.tbd in Frameworks */,
-				DBBEE643256B092400F96DAF /* libgit2.a in Frameworks */,
-				DBBEE638256B08D300F96DAF /* libsqlite3.xcframework in Frameworks */,
+				0A4881D726C7B4CF00289CF9 /* Libgit2Origin in Frameworks */,
 				DBBEE64D256B094000F96DAF /* libz.tbd in Frameworks */,
+				DBBEE638256B08D300F96DAF /* libsqlite3.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -675,7 +645,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				1DADC0DE25A25D5D008C2C35 /* libiconv.tbd in Frameworks */,
-				E21753091B91516600BE234A /* libgit2.a in Frameworks */,
 				1DADC0DA25A25D54008C2C35 /* libsqlite3.xcframework in Frameworks */,
 				1DADC0E225A25D63008C2C35 /* libz.tbd in Frameworks */,
 			);
@@ -687,19 +656,13 @@
 		DBBFFF4E2567370900AE139C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0A1DA51D265806140041E737 /* Security.framework */,
+				0A1DA512265805C30041E737 /* libcommonCrypto.tbd */,
 				DBBEE654256B095000F96DAF /* libiconv.tbd */,
 				DBBEE637256B08D300F96DAF /* libsqlite3.xcframework */,
 				DBBEE64C256B094000F96DAF /* libz.tbd */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		E21752EE1B914EC000BE234A /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				E21752F61B914EC000BE234A /* libgit2.a */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		E21A88DC1A942CCA00255AC3 /* Components */ = {
@@ -867,7 +830,7 @@
 		E2C338A219F8562F00063D95 = {
 			isa = PBXGroup;
 			children = (
-				E21752ED1B914EC000BE234A /* libgit2.xcodeproj */,
+				0A4881D326C7B49700289CF9 /* libgit2 */,
 				E267E1AA1B84D6C500BAB377 /* GitUpKit.h */,
 				E267E1AC1B84D6C500BAB377 /* Info.plist */,
 				E22941E61AC11F56000A83AF /* Views */,
@@ -1202,7 +1165,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				DBBFFF512567371C00AE139C /* PBXTargetDependency */,
 			);
 			name = "GitUpKit (iOS)";
 			productName = "GitUpKit (iOS)";
@@ -1222,9 +1184,11 @@
 			buildRules = (
 			);
 			dependencies = (
-				DBBFFF4D256736FF00AE139C /* PBXTargetDependency */,
 			);
 			name = "GitUpKit (macOS)";
+			packageProductDependencies = (
+				0A4881D626C7B4CF00289CF9 /* Libgit2Origin */,
+			);
 			productName = GitUpKit;
 			productReference = E267E1A81B84D6C500BAB377 /* GitUpKit.framework */;
 			productType = "com.apple.product-type.framework";
@@ -1239,7 +1203,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				E217530B1B91517300BE234A /* PBXTargetDependency */,
 			);
 			name = Tests;
 			productName = GitUpTests;
@@ -1280,12 +1243,6 @@
 			mainGroup = E2C338A219F8562F00063D95;
 			productRefGroup = E2C338AC19F8562F00063D95 /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = E21752EE1B914EC000BE234A /* Products */;
-					ProjectRef = E21752ED1B914EC000BE234A /* libgit2.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				E267E1A71B84D6C500BAB377 /* GitUpKit (macOS) */,
@@ -1294,16 +1251,6 @@
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		E21752F61B914EC000BE234A /* libgit2.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libgit2.a;
-			remoteRef = E21752F51B914EC000BE234A /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		E267E1A61B84D6C500BAB377 /* Resources */ = {
@@ -1592,24 +1539,6 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
-/* Begin PBXTargetDependency section */
-		DBBFFF4D256736FF00AE139C /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = libgit2;
-			targetProxy = DBBFFF4C256736FF00AE139C /* PBXContainerItemProxy */;
-		};
-		DBBFFF512567371C00AE139C /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = libgit2;
-			targetProxy = DBBFFF502567371C00AE139C /* PBXContainerItemProxy */;
-		};
-		E217530B1B91517300BE234A /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = libgit2;
-			targetProxy = E217530A1B91517300BE234A /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
-
 /* Begin PBXVariantGroup section */
 		E21A88F81A97173300255AC3 /* GIUnifiedReflogViewController.xib */ = {
 			isa = PBXVariantGroup;
@@ -1803,6 +1732,10 @@
 					"@executable_path/../Frameworks",
 					"@loader_path/Frameworks",
 				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SDKROOT)/usr/lib/system",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = co.gitup.kit;
 				PRODUCT_NAME = GitUpKit;
 				SDKROOT = macosx;
@@ -1822,6 +1755,10 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 					"@loader_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SDKROOT)/usr/lib/system",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = co.gitup.kit;
 				PRODUCT_NAME = GitUpKit;
@@ -1918,6 +1855,13 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		0A4881D626C7B4CF00289CF9 /* Libgit2Origin */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Libgit2Origin;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = E2C338A319F8562F00063D95 /* Project object */;
 }
