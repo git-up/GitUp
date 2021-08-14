@@ -237,7 +237,7 @@ cleanup:
 - (NSArray*)listSubmodules:(NSError**)error {
   NSMutableArray* submodules = [[NSMutableArray alloc] init];
   int status = git_submodule_foreach_block(self.private, ^int(git_submodule* submodule, const char* name) {  // This calls git_submodule_reload_all(false)
-    gitup_submodule_retain(submodule);
+    gitup_submodule_dup(submodule);
     [submodules addObject:[[GCSubmodule alloc] initWithRepository:self submodule:submodule]];
     return GIT_OK;
   });

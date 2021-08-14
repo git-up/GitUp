@@ -821,13 +821,10 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
             XLOG_DEBUG_CHECK(headBranch == nil);
             headBranch = (GCHistoryLocalBranch*)referenceObject;
           }
-          NSString* remoteName = [config objectForKey:[NSString stringWithFormat:@"branch.%s.remote", git_reference_shorthand(reference)]];
-          NSString* mergeName = [config objectForKey:[NSString stringWithFormat:@"branch.%s.merge", git_reference_shorthand(reference)]];
-          if (remoteName.length && mergeName.length) {
-            int status = gitup_branch_upstream_name_from_merge_remote_names(&upstreamName, self.private, remoteName.UTF8String, mergeName.UTF8String);
-            if ((status != GIT_OK) && (status != GIT_ENOTFOUND)) {
-              LOG_LIBGIT2_ERROR(status);  // Don't fail because of corrupted config
-            }
+          
+          int status = gitup_branch_upstream_name(&upstreamName, self.private, git_reference_name(reference));          
+          if ((status != GIT_OK) && (status != GIT_ENOTFOUND)) {
+            LOG_LIBGIT2_ERROR(status);  // Don't fail because of corrupted config
           }
         } else if (git_reference_is_remote(reference)) {
           referenceObject = [[GCHistoryRemoteBranch alloc] initWithRepository:self reference:reference];
