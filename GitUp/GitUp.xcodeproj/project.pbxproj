@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 48;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -14,6 +14,7 @@
 		0A2F488F23683DC90072C6FB /* AuthenticationWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A2F488E23683DC90072C6FB /* AuthenticationWindowController.m */; };
 		0A2F489223683DD60072C6FB /* AuthenticationWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A2F489023683DD60072C6FB /* AuthenticationWindowController.xib */; };
 		0A3388BC2353BD630022528D /* WelcomeWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A3388BA2353BD630022528D /* WelcomeWindowController.xib */; };
+		0A4881DC26C7B98D00289CF9 /* Libgit2Origin in Frameworks */ = {isa = PBXBuildFile; productRef = 0A4881DB26C7B98D00289CF9 /* Libgit2Origin */; };
 		0A58CD77237B4F4B00C2BDD0 /* CloneWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A58CD73237B4F4B00C2BDD0 /* CloneWindowController.m */; };
 		0A58CD7A237B4F9600C2BDD0 /* CloneWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A58CD78237B4F9600C2BDD0 /* CloneWindowController.xib */; };
 		0AC8525123A11F2F00479160 /* PreferencesWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AC8525023A11F2F00479160 /* PreferencesWindowController.m */; };
@@ -24,7 +25,6 @@
 		A53C6D0C1E61A9CF0070387E /* FontSizeTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = A53C6D0B1E61A9CF0070387E /* FontSizeTransformer.m */; };
 		DBBEE685256B0A0200F96DAF /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = DBBEE684256B0A0200F96DAF /* libiconv.tbd */; };
 		DBBEE688256B0A0A00F96DAF /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = DBBEE687256B0A0A00F96DAF /* libz.tbd */; };
-		DBBEE6C0256B0B2100F96DAF /* libgit2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DB0D250E256738F600E6F48A /* libgit2.a */; };
 		E21739F71A5080DD00EC6777 /* DocumentController.m in Sources */ = {isa = PBXBuildFile; fileRef = E21739F61A5080DD00EC6777 /* DocumentController.m */; };
 		E21DCAEB1B253847006424E8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E21DCAEA1B253847006424E8 /* main.m */; };
 		E21DCAF31B253919006424E8 /* gitup in Copy Tool */ = {isa = PBXBuildFile; fileRef = E21DCAE81B253847006424E8 /* gitup */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
@@ -176,7 +176,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DBBEE685256B0A0200F96DAF /* libiconv.tbd in Frameworks */,
-				DBBEE6C0256B0B2100F96DAF /* libgit2.a in Frameworks */,
+				0A4881DC26C7B98D00289CF9 /* Libgit2Origin in Frameworks */,
 				DBBEE688256B0A0A00F96DAF /* libz.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -335,6 +335,9 @@
 				DBBEE6BF256B0B1C00F96DAF /* PBXTargetDependency */,
 			);
 			name = Tool;
+			packageProductDependencies = (
+				0A4881DB26C7B98D00289CF9 /* Libgit2Origin */,
+			);
 			productName = Tool;
 			productReference = E21DCAE81B253847006424E8 /* gitup */;
 			productType = "com.apple.product-type.tool";
@@ -642,7 +645,10 @@
 				CODE_SIGN_ENTITLEMENTS = Application/GitUp.entitlements;
 				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/Third-Party";
 				INFOPLIST_FILE = Application/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
 				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "co.gitup.mac-debug";
 				PRODUCT_NAME = GitUp;
@@ -658,7 +664,10 @@
 				CODE_SIGN_ENTITLEMENTS = Application/GitUp.entitlements;
 				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/Third-Party";
 				INFOPLIST_FILE = Application/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
 				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = co.gitup.mac;
 				PRODUCT_NAME = GitUp;
@@ -696,6 +705,13 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		0A4881DB26C7B98D00289CF9 /* Libgit2Origin */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Libgit2Origin;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = E2C338A319F8562F00063D95 /* Project object */;
 }
