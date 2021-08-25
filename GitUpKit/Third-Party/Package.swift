@@ -2,6 +2,7 @@
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
+import Foundation
 
 let libgit2OriginPath = "./libgit2"
 let httpClientPath = "\(libgit2OriginPath)/deps/http-parser"
@@ -11,6 +12,59 @@ let librariesPath = "."
 let libssh2Path = "\(librariesPath)/libssh2.xcframework"
 let libsslPath = "\(librariesPath)/libssl.xcframework"
 let libcryptoPath = "\(librariesPath)/libcrypto.xcframework"
+
+enum FeaturesExtractor {
+    private struct Define: CustomStringConvertible {
+        let define: String
+        let value: String
+        var description: String {
+            "\(define) \(value)"
+        }
+    }
+    private static var packageSwiftDirectory: URL? {
+        var directory = URL.init(fileURLWithPath: "\(#file)")
+        if directory.lastPathComponent == "Package.swift" {
+            directory.deleteLastPathComponent()
+        }
+        return directory
+    }
+    
+    private static var libgit2Directory: URL? {
+        packageSwiftDirectory?.appendingPathComponent("libgit2")
+    }
+    
+    private static var featuresPath: URL {
+        libgit2Directory?.appendingPathComponent("include/git2/sys/features.h") ?? .init(fileURLWithPath: "")
+    }
+    
+    private static func shouldAddExtraDefine(featuresPath: URL, define: Define) -> Bool {
+        
+        guard let string = try? String.init(contentsOf: featuresPath, encoding: .utf8) else {
+            return false
+        }
+        
+        return !string.contains("#define \(define)")
+    }
+    
+    private static func fixedExtraDefine(featuresPath: URL, define: Define) -> [CSetting] {
+        shouldAddExtraDefine(featuresPath: featuresPath, define: define) ? [ .define(define.define, to: define.value) ] : []
+    }
+    
+    private static func fixedExtraDefine(define: Define) -> [CSetting] { fixedExtraDefine(featuresPath: featuresPath, define: define) }
+
+    private static func fixedExtraSSHDefines() -> [CSetting] {
+        let defines: [Define] = [
+            .init(define: "GIT_SSH", value: "1"),
+            .init(define: "GIT_SSH_MEMORY_CREDENTIALS", value: "1")
+        ]
+        return defines.flatMap(fixedExtraDefine(define:))
+    }
+    
+    static func extraLibgit2CSettings() -> [CSetting] {
+        let fixedLibgit2CSettings = fixedExtraSSHDefines()
+        return fixedLibgit2CSettings
+    }
+}
 
 let package = Package(
     name: "SwiftPackage",
@@ -95,7 +149,7 @@ let package = Package(
                     .define("SHA1DC_NO_STANDARD_INCLUDES", to: "1"),
                     .define("SHA1DC_CUSTOM_INCLUDE_SHA1_C", to: "\"common.h\""),
                     .define("SHA1DC_CUSTOM_INCLUDE_UBC_CHECK_C", to: "\"common.h\""),
-                ],
+                ] + FeaturesExtractor.extraLibgit2CSettings(),
                 cxxSettings: nil,
                 swiftSettings: nil,
                 linkerSettings: [
@@ -155,5 +209,3 @@ let package = Package(
         .binaryTarget(name: "libcrypto", path: libcryptoPath),
     ]
 )
-
-print("package: \(String(describing: package))")
