@@ -1771,7 +1771,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E27E37501B86F5D1000A551A /* Debug.xcconfig */;
 			buildSettings = {
-				HEADER_SEARCH_PATHS = "Third-Party/libgit2/include";
 			};
 			name = Debug;
 		};
@@ -1779,7 +1778,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E27E37521B86F5D1000A551A /* Release.xcconfig */;
 			buildSettings = {
-				HEADER_SEARCH_PATHS = "Third-Party/libgit2/include";
 			};
 			name = Release;
 		};
