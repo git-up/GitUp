@@ -384,9 +384,9 @@
 /* Begin PBXFileReference section */
 		0A1DA512265805C30041E737 /* libcommonCrypto.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libcommonCrypto.tbd; path = usr/lib/system/libcommonCrypto.tbd; sourceTree = SDKROOT; };
 		0A1DA51D265806140041E737 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
-		0A4881D326C7B49700289CF9 /* libgit2 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = libgit2; path = "Third-Party/libgit2"; sourceTree = "<group>"; };
 		0AC8525723A122C400479160 /* GILaunchServicesLocator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GILaunchServicesLocator.h; sourceTree = "<group>"; };
 		0AC8525823A122C400479160 /* GILaunchServicesLocator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GILaunchServicesLocator.m; sourceTree = "<group>"; };
+		0AD01C0B26D6A11C0068A02E /* Third-Party */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "Third-Party"; sourceTree = "<group>"; };
 		1DF371CB22F5262300EF7BD9 /* GCLiveRepository+Utilities.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GCLiveRepository+Utilities.h"; sourceTree = "<group>"; };
 		1DF371CC22F5262300EF7BD9 /* GCLiveRepository+Utilities.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "GCLiveRepository+Utilities.m"; sourceTree = "<group>"; };
 		74EDB5D01B84D4C400F00E79 /* GCOrderedSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCOrderedSet.h; sourceTree = "<group>"; };
@@ -830,7 +830,7 @@
 		E2C338A219F8562F00063D95 = {
 			isa = PBXGroup;
 			children = (
-				0A4881D326C7B49700289CF9 /* libgit2 */,
+				0AD01C0B26D6A11C0068A02E /* Third-Party */,
 				E267E1AA1B84D6C500BAB377 /* GitUpKit.h */,
 				E267E1AC1B84D6C500BAB377 /* Info.plist */,
 				E22941E61AC11F56000A83AF /* Views */,
