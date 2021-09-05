@@ -197,7 +197,8 @@ let package = Package(
                 publicHeadersPath: ".",
                 cSettings: [
                     .define("NTLM_STATIC", to: "1"),
-                    .define("CRYPT_COMMONCRYPTO")
+                    .define("CRYPT_COMMONCRYPTO"),
+                    .define("UNICODE_ICONV", to: "1")
                 ],
                 cxxSettings: nil,
                 swiftSettings: nil,
