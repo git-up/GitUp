@@ -5,6 +5,7 @@
 #import "GIPrivate.h"
 #import "GILaunchServicesLocator.h"
 #import <QuartzCore/CATransaction.h>
+#import <ImageIO/ImageIO.h>
 
 #define kImageInset 10
 #define kBorderWidth 8
@@ -24,7 +25,10 @@
 @property(nonatomic, strong) NSView* dividerView;
 @property(nonatomic, strong) CALayer* transparencyCheckerboardLayer;
 @property(nonatomic, strong) NSColor* checkerboardColor;
+@property(nonatomic, strong) NSProgressIndicator* progressIndicator;
 @property(nonatomic) CGFloat percentage;
+@property(nonatomic) NSSize oldImageSize;
+@property(nonatomic) NSSize currentImageSize;
 @end
 
 @implementation GIImageDiffView
@@ -69,6 +73,12 @@
   _dividerView = [[NSView alloc] init];
   [self addSubview:_dividerView];
 
+  _progressIndicator = [[NSProgressIndicator alloc] initWithFrame:NSMakeRect(0, 0, 30, 30)];
+  _progressIndicator.style = NSProgressIndicatorStyleSpinning;
+  [self addSubview:_progressIndicator];
+  [_progressIndicator startAnimation:self];
+  _progressIndicator.hidden = true;
+
   _panGestureRecognizer = [[NSPanGestureRecognizer alloc] initWithTarget:self action:@selector(didMoveSplit:)];
   _clickGestureRecognizer = [[NSClickGestureRecognizer alloc] initWithTarget:self action:@selector(didMoveSplit:)];
   [self addGestureRecognizer:_panGestureRecognizer];
@@ -104,7 +114,14 @@
   } else {
     newPath = [self.repository absolutePathForFile:_delta.canonicalPath];
   }
-  _currentImageView.image = [self generateLimitedSizeImageFromPath:newPath];
+  _currentImageSize = [self imageSizeWithoutLoadingFromPath:newPath];
+  dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    NSImage* limitedSizeImage = [self generateLimitedSizeImageFromPath:newPath];
+    dispatch_async(dispatch_get_main_queue(), ^{
+      _currentImageView.image = limitedSizeImage;
+      [self setNeedsDisplay:true];
+    });
+  });
 }
 
 - (void)updateOldImage {
@@ -118,10 +135,52 @@
     if (![[NSFileManager defaultManager] fileExistsAtPath:oldPath]) {
       [self.repository exportBlobWithSHA1:_delta.oldFile.SHA1 toPath:oldPath error:&error];
     }
-    _oldImageView.image = [self generateLimitedSizeImageFromPath:oldPath];
+    _oldImageSize = [self imageSizeWithoutLoadingFromPath:oldPath];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+      NSImage* limitedSizeImage = [self generateLimitedSizeImageFromPath:oldPath];
+      dispatch_async(dispatch_get_main_queue(), ^{
+        _oldImageView.image = limitedSizeImage;
+        [self setNeedsDisplay:true];
+      });
+    });
   } else {
     _oldImageView.image = nil;
   }
+}
+
+- (NSSize)imageSizeWithoutLoadingFromPath:(NSString*)path {
+  NSURL* imageFileURL = [NSURL fileURLWithPath:path];
+  CGImageSourceRef imageSource = CGImageSourceCreateWithURL((CFURLRef)imageFileURL, NULL);
+  if (imageSource == NULL) {
+    return NSZeroSize;
+  }
+  CFDictionaryRef imageProperties = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, NULL);
+  CFRelease(imageSource);
+
+  CGFloat width = 0.0f;
+  CGFloat height = 0.0f;
+  if (imageProperties != NULL) {
+    CFNumberRef widthNum = CFDictionaryGetValue(imageProperties, kCGImagePropertyPixelWidth);
+    if (widthNum != NULL) {
+      CFNumberGetValue(widthNum, kCFNumberCGFloatType, &width);
+    }
+    CFNumberRef heightNum = CFDictionaryGetValue(imageProperties, kCGImagePropertyPixelHeight);
+    if (heightNum != NULL) {
+      CFNumberGetValue(heightNum, kCFNumberCGFloatType, &height);
+    }
+    CFNumberRef orientationNum = CFDictionaryGetValue(imageProperties, kCGImagePropertyOrientation);
+    if (orientationNum != NULL) {
+      int orientation;
+      CFNumberGetValue(orientationNum, kCFNumberIntType, &orientation);
+      if (orientation > 4) {
+        CGFloat temp = width;
+        width = height;
+        height = temp;
+      }
+    }
+    CFRelease(imageProperties);
+  }
+  return NSMakeSize(width, height);
 }
 
 - (NSImage*)generateLimitedSizeImageFromPath:(NSString*)path {
@@ -154,6 +213,7 @@
   [CATransaction setDisableActions:YES];
   [self updateColors];
   [self updateFrames];
+  _progressIndicator.hidden = _currentImageView.image != nil || _oldImageView.image != nil;
   [CATransaction commit];
 }
 
@@ -166,6 +226,11 @@
 
 - (void)updateFrames {
   CGRect fittedImageFrame = [self fittedImageFrame];
+  _progressIndicator.frame = CGRectMake(
+      (fittedImageFrame.size.width - _progressIndicator.frame.size.width) / 2,
+      (fittedImageFrame.size.height - _progressIndicator.frame.size.height) / 2,
+      _progressIndicator.frame.size.width,
+      _progressIndicator.frame.size.height);
   _transparencyCheckerboardLayer.frame = fittedImageFrame;
   _currentImageView.frame = fittedImageFrame;
   if (_oldImageView.image != nil) {
@@ -235,8 +300,8 @@
 }
 
 - (NSSize)originalDiffImageSize {
-  CGFloat maxHeight = MAX(_currentImageView.image.size.height, _oldImageView.image.size.height);
-  CGFloat maxWidth = MAX(_currentImageView.image.size.width, _oldImageView.image.size.width);
+  CGFloat maxHeight = MAX(_currentImageSize.height, _oldImageSize.height);
+  CGFloat maxWidth = MAX(_currentImageSize.width, _oldImageSize.width);
   return NSMakeSize(maxWidth, maxHeight);
 }
 
