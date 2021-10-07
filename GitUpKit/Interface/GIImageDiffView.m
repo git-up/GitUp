@@ -233,7 +233,7 @@
       _progressIndicator.frame.size.height);
   _transparencyCheckerboardLayer.frame = fittedImageFrame;
   _currentImageView.frame = fittedImageFrame;
-  if (_oldImageView.image != nil) {
+  if (_oldImageView.image != nil && _currentImageView.image != nil) {
     _oldImageView.frame = fittedImageFrame;
     [_oldImageView setHidden:false];
     CGFloat dividerOffset = fittedImageFrame.size.width * _percentage;
@@ -257,6 +257,17 @@
                                     fittedImageFrame.origin.y - kBorderWidth,
                                     kDividerWidth,
                                     fittedImageFrame.size.height + 2 * kBorderWidth);
+  } else if (_oldImageView.image != nil) {
+    [_oldImageView setHidden:false];
+    _oldImageView.frame = fittedImageFrame;
+    _oldImageMaskLayer.frame = CGRectMake(0,
+                                          0,
+                                          fittedImageFrame.size.width,
+                                          fittedImageFrame.size.height);
+    _oldImageBorderLayer.frame = CGRectMake(fittedImageFrame.origin.x - kBorderWidth,
+                                            fittedImageFrame.origin.y - kBorderWidth,
+                                            fittedImageFrame.size.width + 2 * kBorderWidth,
+                                            fittedImageFrame.size.height + 2 * kBorderWidth);
   } else {
     _currentImageMaskLayer.frame = CGRectMake(0,
                                               0,
