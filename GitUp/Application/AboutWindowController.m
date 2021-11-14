@@ -20,19 +20,15 @@
 
 - (void)windowDidLoad {
   [super windowDidLoad];
-  [self populateWithDataWhenUpdateIsPending:self.updatePending];
+  [self configureUI];
 }
 
-- (void)populateWithDataWhenUpdateIsPending:(BOOL)updatePending {
+- (void)configureUI {
   NSString* version = nil;
 #if DEBUG
   version = @"DEBUG";
 #else
-  if (updatePending) {
-    version = NSLocalizedString(@"Update Pending", nil);
-  } else {
-    version = [NSString stringWithFormat:NSLocalizedString(@"Version %@ (%@)", nil), [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"], [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"]];
-  }
+  version = [NSString stringWithFormat:NSLocalizedString(@"Version %@ (%@)", nil), [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"], [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"]];
 #endif
   self.versionTextField.stringValue = version;
   self.copyrightTextField.stringValue = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSHumanReadableCopyright"];
