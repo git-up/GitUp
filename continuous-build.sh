@@ -1,12 +1,5 @@
 #!/bin/sh -ex
 
-EMAIL="$1"
-ASC_PROVIDER="$2"
-if [[ "$EMAIL" == "" || "$ASC_PROVIDER" == "" ]]; then
-  echo "Usage ./continuous-build.sh \"email\" \"asc_provider\". Run \`xcrun altool --list-providers -u email -p password\` to get potential asc_provider."
-  exit 1
-fi
-
 CHANNEL="continuous"
 
 PRODUCT_NAME="GitUp"
@@ -32,22 +25,10 @@ ARCHIVE_PATH="build/$ARCHIVE_NAME"
 
 ditto -c -k --keepParent "$PRODUCT_PATH" "$ARCHIVE_PATH"
 
-UUID=`xcrun altool --notarize-app --primary-bundle-id "co.gitup.mac.zip" -u $EMAIL -p "@keychain:password" --asc-provider $ASC_PROVIDER --file $ARCHIVE_PATH | grep "RequestUUID = " | sed 's/^.*= //'`
+# "PersonalNotary" is the profile name assigned from `notarytool store-credentials`
+xcrun notarytool submit $ARCHIVE_PATH --keychain-profile "PersonalNotary" --wait
 
-if [ "$UUID" == "" ]; then
-    echo "No request UUID found"
-    exit 1
-fi
-
-while true; do
-    sleep 60
-    STATUS_CODE=`xcrun altool --notarization-info $UUID -u "$EMAIL" -p "@keychain:password" | grep "Status Code" | sed 's/^.*: //' | xargs`
-    if [ "$STATUS_CODE" == "0" ]; then
-        echo "Notarization Success! - $STATUS_CODE"
-        break
-    fi
-    echo "Not notarized yet - $STATUS_CODE"
-done
+echo "Notarization has completed"
 
 ##### Staple app and regenerate zip
 
