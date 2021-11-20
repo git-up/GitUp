@@ -111,17 +111,17 @@
     if (![[NSFileManager defaultManager] fileExistsAtPath:newPath]) {
       [self.repository exportBlobWithSHA1:_delta.newFile.SHA1 toPath:newPath error:&error];
     }
-  } else {
-    newPath = [self.repository absolutePathForFile:_delta.canonicalPath];
-  }
-  _currentImageSize = [self imageSizeWithoutLoadingFromPath:newPath];
-  dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-    NSImage* limitedSizeImage = [self generateLimitedSizeImageFromPath:newPath];
-    dispatch_async(dispatch_get_main_queue(), ^{
-      _currentImageView.image = limitedSizeImage;
-      [self setNeedsDisplay:true];
+    _currentImageSize = [self imageSizeWithoutLoadingFromPath:newPath];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+      NSImage* limitedSizeImage = [self generateLimitedSizeImageFromPath:newPath];
+      dispatch_async(dispatch_get_main_queue(), ^{
+        _currentImageView.image = limitedSizeImage;
+        [self setNeedsDisplay:true];
+      });
     });
-  });
+  } else {
+    _currentImageView.image = nil;
+  }
 }
 
 - (void)updateOldImage {
@@ -150,36 +150,51 @@
 
 - (NSSize)imageSizeWithoutLoadingFromPath:(NSString*)path {
   NSURL* imageFileURL = [NSURL fileURLWithPath:path];
-  CGImageSourceRef imageSource = CGImageSourceCreateWithURL((CFURLRef)imageFileURL, NULL);
-  if (imageSource == NULL) {
-    return NSZeroSize;
-  }
-  CFDictionaryRef imageProperties = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, NULL);
-  CFRelease(imageSource);
-
+  CFStringRef fileUTI = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (__bridge CFStringRef)path.pathExtension, NULL);
+  BOOL isPDF = [(__bridge NSString *)fileUTI isEqualToString:@"com.adobe.pdf"];
+  CFRelease(fileUTI);
+  
   CGFloat width = 0.0f;
   CGFloat height = 0.0f;
-  if (imageProperties != NULL) {
-    CFNumberRef widthNum = CFDictionaryGetValue(imageProperties, kCGImagePropertyPixelWidth);
-    if (widthNum != NULL) {
-      CFNumberGetValue(widthNum, kCFNumberCGFloatType, &width);
+  
+  if (isPDF) {
+    CGPDFDocumentRef document = CGPDFDocumentCreateWithURL((CFURLRef)imageFileURL);
+    CGPDFPageRef page = CGPDFDocumentGetPage(document, 1);
+    CGRect mediaBox = CGPDFPageGetBoxRect(page, kCGPDFMediaBox);
+    width = mediaBox.size.width;
+    height = mediaBox.size.height;
+    CGPDFDocumentRelease(document);
+  } else {
+    CGImageSourceRef imageSource = CGImageSourceCreateWithURL((CFURLRef)imageFileURL, NULL);
+    if (imageSource == NULL) {
+      return NSZeroSize;
     }
-    CFNumberRef heightNum = CFDictionaryGetValue(imageProperties, kCGImagePropertyPixelHeight);
-    if (heightNum != NULL) {
-      CFNumberGetValue(heightNum, kCFNumberCGFloatType, &height);
-    }
-    CFNumberRef orientationNum = CFDictionaryGetValue(imageProperties, kCGImagePropertyOrientation);
-    if (orientationNum != NULL) {
-      int orientation;
-      CFNumberGetValue(orientationNum, kCFNumberIntType, &orientation);
-      if (orientation > 4) {
-        CGFloat temp = width;
-        width = height;
-        height = temp;
+    CFDictionaryRef imageProperties = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, NULL);
+    CFRelease(imageSource);
+    
+    if (imageProperties != NULL) {
+      CFNumberRef widthNum = CFDictionaryGetValue(imageProperties, kCGImagePropertyPixelWidth);
+      if (widthNum != NULL) {
+        CFNumberGetValue(widthNum, kCFNumberCGFloatType, &width);
       }
+      CFNumberRef heightNum = CFDictionaryGetValue(imageProperties, kCGImagePropertyPixelHeight);
+      if (heightNum != NULL) {
+        CFNumberGetValue(heightNum, kCFNumberCGFloatType, &height);
+      }
+      CFNumberRef orientationNum = CFDictionaryGetValue(imageProperties, kCGImagePropertyOrientation);
+      if (orientationNum != NULL) {
+        int orientation;
+        CFNumberGetValue(orientationNum, kCFNumberIntType, &orientation);
+        if (orientation > 4) {
+          CGFloat temp = width;
+          width = height;
+          height = temp;
+        }
+      }
+      CFRelease(imageProperties);
     }
-    CFRelease(imageProperties);
   }
+  
   return NSMakeSize(width, height);
 }
 
@@ -279,11 +294,19 @@
 
 - (CGRect)desiredImageFrame:(CGFloat)width {
   CGFloat maxContentWidth = width - 2 * kImageInset;
-  CGFloat originalImageWidth = [self originalDiffImageSize].width;
-  CGFloat originalImageHeight = [self originalDiffImageSize].height;
+  CGSize originalImageSize = [self originalDiffImageSize];
+  CGFloat adjustedImageWidth = originalImageSize.width;
+  CGFloat adjustedImageHeight = originalImageSize.height;
+  
+  if (adjustedImageWidth < CGFLOAT_EPSILON) {
+    adjustedImageWidth = 200;
+  }
+  if (adjustedImageHeight < CGFLOAT_EPSILON) {
+    adjustedImageHeight = 200;
+  }
 
-  CGFloat scaledImageWidth = MIN(originalImageWidth, maxContentWidth);
-  CGFloat scaledImageHeight = originalImageHeight * scaledImageWidth / originalImageWidth;
+  CGFloat scaledImageWidth = MIN(adjustedImageWidth, maxContentWidth);
+  CGFloat scaledImageHeight = adjustedImageHeight * scaledImageWidth / adjustedImageWidth;
 
   CGFloat x = (width - scaledImageWidth) / 2;
   return CGRectMake(x, self.bounds.size.height - scaledImageHeight - kImageInset, scaledImageWidth, scaledImageHeight);
@@ -292,17 +315,25 @@
 - (CGRect)fittedImageFrame {
   CGFloat maxContentWidth = self.frame.size.width - 2 * kImageInset;
   CGFloat maxContentHeight = self.frame.size.height - 2 * kImageInset;
-  CGFloat originalImageWidth = [self originalDiffImageSize].width;
-  CGFloat originalImageHeight = [self originalDiffImageSize].height;
+  CGSize originalImageSize = [self originalDiffImageSize];
+  CGFloat adjustedImageWidth = originalImageSize.width;
+  CGFloat adjustedImageHeight = originalImageSize.height;
+  
+  if (adjustedImageWidth < CGFLOAT_EPSILON) {
+    adjustedImageWidth = 200;
+  }
+  if (adjustedImageHeight < CGFLOAT_EPSILON) {
+    adjustedImageHeight = 200;
+  }
 
-  CGFloat scaledImageWidth = MIN(originalImageWidth, maxContentWidth);
-  CGFloat scaledImageHeight = MIN(originalImageHeight, maxContentHeight);
-  CGFloat widthScalingFactor = scaledImageWidth / originalImageWidth;
-  CGFloat heightScalingFactor = scaledImageHeight / originalImageHeight;
+  CGFloat scaledImageWidth = MIN(adjustedImageWidth, maxContentWidth);
+  CGFloat scaledImageHeight = MIN(adjustedImageHeight, maxContentHeight);
+  CGFloat widthScalingFactor = scaledImageWidth / adjustedImageWidth;
+  CGFloat heightScalingFactor = scaledImageHeight / adjustedImageHeight;
   CGFloat minimumScalingFactor = MIN(widthScalingFactor, heightScalingFactor);
 
-  CGFloat actualImageWidth = originalImageWidth * minimumScalingFactor;
-  CGFloat actualImageHeight = originalImageHeight * minimumScalingFactor;
+  CGFloat actualImageWidth = adjustedImageWidth * minimumScalingFactor;
+  CGFloat actualImageHeight = adjustedImageHeight * minimumScalingFactor;
 
   return CGRectMake((self.frame.size.width - actualImageWidth) / 2,
                     self.bounds.size.height - actualImageHeight - kImageInset,

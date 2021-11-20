@@ -341,11 +341,10 @@ static NSImage* _untrackedImage = nil;
           if (patch) {
             XLOG_DEBUG_CHECK(!isBinary || patch.empty);
 
-            CFStringRef fileExtension = CFBridgingRetain(delta.canonicalPath.pathExtension);
+            CFStringRef fileExtension = (__bridge CFStringRef)delta.canonicalPath.pathExtension;
             CFStringRef fileUTI = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, fileExtension, NULL);
-            BOOL isImage = [NSImage.imageTypes containsObject:(__bridge NSString * _Nonnull)(fileUTI)];
+            BOOL isImage = [NSImage.imageTypes containsObject:(__bridge NSString *)(fileUTI)];
             CFRelease(fileUTI);
-            CFRelease(fileExtension);
             if (isImage) {
               GIImageDiffView* imageDiffView = [[GIImageDiffView alloc] initWithRepository:self.repository];
               imageDiffView.delta = delta;
