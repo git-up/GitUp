@@ -44,7 +44,9 @@ static NSString* const PreferencesWindowController_Identifier_General = @"genera
 
 + (void)applyTheme:(NSString*)theme {
   NSAppearanceName name = [self appearanceNameWithTheme:theme];
-  NSApp.appearance = name != nil ? [NSAppearance appearanceNamed:name] : nil;
+  if (@available(macOS 10.14, *)) {
+    NSApp.appearance = name != nil ? [NSAppearance appearanceNamed:name] : nil;
+  }
   [NSUserDefaults.standardUserDefaults setObject:theme forKey:kUserDefaultsKey_Theme];
 }
 
