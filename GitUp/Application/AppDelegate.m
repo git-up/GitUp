@@ -584,4 +584,11 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
   XLOG_INFO(@"Installing app update for version %@", item.versionString);
 }
 
+- (void)updater:(SUUpdater*)updater willInstallUpdateOnQuit:(SUAppcastItem*)item immediateInstallationInvocation:(NSInvocation*)invocation {
+  XLOG_INFO(@"Will install app update for version %@ on quit", item.versionString);
+  [self _showNotificationWithTitle:NSLocalizedString(@"Update Available", nil)
+                            action:NULL
+                           message:NSLocalizedString(@"Relaunch GitUp to update to version %@ (%@).", nil), item.displayVersionString, item.versionString];
+}
+
 @end
