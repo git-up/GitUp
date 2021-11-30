@@ -116,6 +116,7 @@
     kUserDefaultsKey_FirstLaunch : @(YES),
     kUserDefaultsKey_DiffWhitespaceMode : @(kGCLiveRepositoryDiffWhitespaceMode_Normal),
     kUserDefaultsKey_ShowWelcomeWindow : @(YES),
+    kUserDefaultsKey_AskSetUpstreamOnPush : @(YES),
     kUserDefaultsKey_Theme : PreferencesWindowController_Theme_SystemPreference,
   };
   [[NSUserDefaults standardUserDefaults] registerDefaults:defaults];

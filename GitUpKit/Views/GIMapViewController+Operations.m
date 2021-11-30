@@ -32,6 +32,7 @@
 #define kUserDefaultsKey_SkipPushLocalBranchToRemoteWarning kUserDefaultsPrefix "SkipPushLocalBranchToRemoteWarning"
 #define kUserDefaultsKey_SkipFetchRemoteBranchesWarning kUserDefaultsPrefix "SkipFetchRemoteBranchesWarning"
 #define kUserDefaultsKey_AllowReturnKeyForDangerousRemoteOperations kUserDefaultsPrefix "AllowReturnKeyForDangerousRemoteOperations"
+#define kUserDefaultsKey_AskSetUpstreamOnPush @"AskSetUpstreamOnPush"  // BOOL
 
 @interface GIMapViewController (Internal)
 - (void)_promptForCommitMessage:(NSString*)message withTitle:(NSString*)title button:(NSString*)button block:(void (^)(NSString* message))block;
@@ -803,8 +804,10 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
             NSError* localError;
             GCHistoryLocalBranch* updatedBranch = [self.repository.history historyLocalBranchForLocalBranch:branch];  // Reload branch to check upstream!
             GCRemoteBranch* remoteBranch = [self.repository findRemoteBranchWithName:[NSString stringWithFormat:@"%@/%@", remote.name, branch.name] error:&localError];
+            BOOL askSetUpstreamOnPushSetting = [[NSUserDefaults standardUserDefaults] boolForKey:kUserDefaultsKey_AskSetUpstreamOnPush];
             if (updatedBranch && remoteBranch) {
               if (![updatedBranch.upstream isEqualToBranch:remoteBranch]) {
+                if (askSetUpstreamOnPushSetting) {
                 [self confirmUserActionWithAlertType:kGIAlertType_Note
                                                title:[NSString stringWithFormat:NSLocalizedString(@"Do you want to set the upstream for \"%@\"?", nil), updatedBranch.name]
                                              message:[NSString stringWithFormat:NSLocalizedString(@"This will configure the local branch \"%@\" to track the remote branch \"%@\" you just pushed to.", nil), updatedBranch.name, remoteBranch.name]
@@ -813,6 +816,9 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
                                                block:^{
                                                  [self setUpstream:remoteBranch forLocalBranch:branch];
                                                }];
+                } else {
+                  [self setUpstream:remoteBranch forLocalBranch:branch];
+                }
               }
             } else {
               [self presentError:localError];
