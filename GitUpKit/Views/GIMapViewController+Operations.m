@@ -804,10 +804,10 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
             NSError* localError;
             GCHistoryLocalBranch* updatedBranch = [self.repository.history historyLocalBranchForLocalBranch:branch];  // Reload branch to check upstream!
             GCRemoteBranch* remoteBranch = [self.repository findRemoteBranchWithName:[NSString stringWithFormat:@"%@/%@", remote.name, branch.name] error:&localError];
-            BOOL askSetUpstreamOnPushSetting = [[NSUserDefaults standardUserDefaults] boolForKey:kUserDefaultsKey_AskSetUpstreamOnPush];
+            BOOL askSetUpstreamOnPush = [[NSUserDefaults standardUserDefaults] boolForKey:kUserDefaultsKey_AskSetUpstreamOnPush];
             if (updatedBranch && remoteBranch) {
               if (![updatedBranch.upstream isEqualToBranch:remoteBranch]) {
-                if (askSetUpstreamOnPushSetting) {
+                if (askSetUpstreamOnPush) {
                 [self confirmUserActionWithAlertType:kGIAlertType_Note
                                                title:[NSString stringWithFormat:NSLocalizedString(@"Do you want to set the upstream for \"%@\"?", nil), updatedBranch.name]
                                              message:[NSString stringWithFormat:NSLocalizedString(@"This will configure the local branch \"%@\" to track the remote branch \"%@\" you just pushed to.", nil), updatedBranch.name, remoteBranch.name]

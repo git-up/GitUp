@@ -22,22 +22,22 @@
             <rect key="contentRect" x="940" y="240" width="498" height="500"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1536" height="960"/>
             <view key="contentView" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uEJ-lO-PMl">
-                <rect key="frame" x="0.0" y="0.0" width="498" height="459"/>
+                <rect key="frame" x="0.0" y="0.0" width="498" height="508"/>
                 <userGuides>
                     <userLayoutGuide location="138" affinity="minX"/>
                     <userLayoutGuide location="559" affinity="minY"/>
                 </userGuides>
                 <subviews>
                     <tabView type="noTabsNoBorder" translatesAutoresizingMaskIntoConstraints="NO" id="anN-jw-l7x">
-                        <rect key="frame" x="0.0" y="0.0" width="498" height="459"/>
+                        <rect key="frame" x="0.0" y="0.0" width="498" height="508"/>
                         <font key="font" metaFont="system"/>
                         <tabViewItems>
                             <tabViewItem label="{500, 480}" identifier="general" id="M8N-WY-xpP">
                                 <view key="view" translatesAutoresizingMaskIntoConstraints="NO" id="ZJf-t1-iGB">
-                                    <rect key="frame" x="0.0" y="0.0" width="498" height="459"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="498" height="508"/>
                                     <subviews>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="EBQ-WH-0CZ">
-                                            <rect key="frame" x="51" y="431" width="81" height="16"/>
+                                            <rect key="frame" x="51" y="480" width="81" height="16"/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Appearance:" id="KoF-W9-skh">
                                                 <font key="font" metaFont="system"/>
                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -45,7 +45,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <button translatesAutoresizingMaskIntoConstraints="NO" id="2WQ-hK-j2t">
-                                            <rect key="frame" x="137" y="430" width="166" height="18"/>
+                                            <rect key="frame" x="137" y="479" width="166" height="18"/>
                                             <buttonCell key="cell" type="check" title="Show welcome window" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="x90-KD-anh">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="system"/>
@@ -61,7 +61,7 @@
                                             </connections>
                                         </button>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="IO8-Wx-DRo">
-                                            <rect key="frame" x="32" y="407" width="100" height="16"/>
+                                            <rect key="frame" x="32" y="456" width="100" height="16"/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Diff Generation:" id="cxW-C3-fIQ">
                                                 <font key="font" metaFont="system"/>
                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -69,7 +69,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <matrix verticalHuggingPriority="750" allowsEmptySelection="NO" autorecalculatesCellSize="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zwg-99-t9E">
-                                            <rect key="frame" x="137" y="365" width="271" height="58"/>
+                                            <rect key="frame" x="137" y="406" width="271" height="58"/>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                             <size key="cellSize" width="271" height="18"/>
                                             <size key="intercellSpacing" width="4" height="2"/>
@@ -104,7 +104,7 @@
                                             </connections>
                                         </matrix>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="YZU-dx-gjr">
-                                            <rect key="frame" x="51" y="333" width="81" height="16"/>
+                                            <rect key="frame" x="51" y="374" width="81" height="16"/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Diffs Layout:" id="B0V-bN-usw">
                                                 <font key="font" metaFont="system"/>
                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -112,7 +112,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <matrix verticalHuggingPriority="750" allowsEmptySelection="NO" autorecalculatesCellSize="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pP3-w2-KOs">
-                                            <rect key="frame" x="137" y="291" width="280" height="58"/>
+                                            <rect key="frame" x="137" y="332" width="280" height="58"/>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                             <size key="cellSize" width="280" height="18"/>
                                             <size key="intercellSpacing" width="4" height="2"/>
@@ -147,7 +147,7 @@
                                             </connections>
                                         </matrix>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="lyZ-cf-MT6">
-                                            <rect key="frame" x="70" y="259" width="62" height="16"/>
+                                            <rect key="frame" x="70" y="300" width="62" height="16"/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="right" title="Commits:" id="6J8-35-XZI">
                                                 <font key="font" metaFont="system"/>
                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -155,7 +155,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <button translatesAutoresizingMaskIntoConstraints="NO" id="CQY-oC-oQ8">
-                                            <rect key="frame" x="137" y="258" width="132" height="18"/>
+                                            <rect key="frame" x="137" y="299" width="132" height="18"/>
                                             <buttonCell key="cell" type="check" title="Use Simple mode" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="rMb-zc-NF1">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="system"/>
@@ -171,7 +171,7 @@
                                             </connections>
                                         </button>
                                         <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="355" translatesAutoresizingMaskIntoConstraints="NO" id="jee-vl-BUt">
-                                            <rect key="frame" x="137" y="195" width="353" height="56"/>
+                                            <rect key="frame" x="137" y="236" width="353" height="56"/>
                                             <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" id="v99-tx-ohB">
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <string key="title">In "Simple" commit mode, GitUp unifies the working directory and index i.e. there is no staging area.
@@ -181,7 +181,7 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="mC1-sE-MTH">
-                                            <rect key="frame" x="30" y="167" width="102" height="16"/>
+                                            <rect key="frame" x="30" y="172" width="102" height="16"/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="right" title="Message Editor:" id="5Hr-DF-QKw">
                                                 <font key="font" metaFont="system"/>
                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -189,7 +189,7 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                             </textFieldCell>
                                         </textField>
                                         <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="6" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fix-oz-Sj9">
-                                            <rect key="frame" x="139" y="123" width="257" height="60"/>
+                                            <rect key="frame" x="139" y="128" width="257" height="60"/>
                                             <subviews>
                                                 <button translatesAutoresizingMaskIntoConstraints="NO" id="T1B-3i-hRB">
                                                     <rect key="frame" x="-2" y="43" width="180" height="18"/>
@@ -252,7 +252,7 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                             </customSpacing>
                                         </stackView>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="1hO-bG-lcd">
-                                            <rect key="frame" x="82" y="89" width="50" height="16"/>
+                                            <rect key="frame" x="82" y="94" width="50" height="16"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" title="Theme:" id="JLz-xa-wP4">
                                                 <font key="font" usesAppearanceFont="YES"/>
                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -260,7 +260,7 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                             </textFieldCell>
                                         </textField>
                                         <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="aYx-qQ-zM6" userLabel="Theme">
-                                            <rect key="frame" x="136" y="83" width="100" height="25"/>
+                                            <rect key="frame" x="136" y="88" width="100" height="25"/>
                                             <popUpButtonCell key="cell" type="push" title="&lt;THEME&gt;" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="Sc6-iK-E7E" id="VKw-op-BDT">
                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="menu"/>
@@ -314,9 +314,17 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Hay-Es-YXQ">
+                                            <rect key="frame" x="94" y="204" width="38" height="16"/>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Push:" id="adw-OE-okd">
+                                                <font key="font" usesAppearanceFont="YES"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
                                         <button translatesAutoresizingMaskIntoConstraints="NO" id="hiI-QD-U0Q">
-                                            <rect key="frame" x="137" y="19" width="187" height="18"/>
-                                            <buttonCell key="cell" type="check" title="Ask Set Upstream on push" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="Wi7-L1-z3w">
+                                            <rect key="frame" x="137" y="203" width="203" height="18"/>
+                                            <buttonCell key="cell" type="check" title="Ask to Set Upstream on push" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="Wi7-L1-z3w">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
@@ -330,14 +338,6 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                                 </binding>
                                             </connections>
                                         </button>
-                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Hay-Es-YXQ">
-                                            <rect key="frame" x="94" y="20" width="38" height="16"/>
-                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Push:" id="adw-OE-okd">
-                                                <font key="font" usesAppearanceFont="YES"/>
-                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                            </textFieldCell>
-                                        </textField>
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="IO8-Wx-DRo" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="ZJf-t1-iGB" secondAttribute="leading" constant="10" id="2ex-dK-dWo"/>
@@ -346,15 +346,14 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                         <constraint firstItem="2WQ-hK-j2t" firstAttribute="leading" secondItem="aYx-qQ-zM6" secondAttribute="leading" id="5tA-Gg-3G1"/>
                                         <constraint firstItem="QSz-xx-ptB" firstAttribute="centerY" secondItem="dxk-On-hYI" secondAttribute="centerY" id="7LX-oM-QiR"/>
                                         <constraint firstItem="1hO-bG-lcd" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="ZJf-t1-iGB" secondAttribute="leading" constant="10" id="7Ma-eb-Gtn"/>
-                                        <constraint firstAttribute="bottom" secondItem="hiI-QD-U0Q" secondAttribute="bottom" constant="20" id="88e-Gi-gSL"/>
                                         <constraint firstItem="Hay-Es-YXQ" firstAttribute="trailing" secondItem="EBQ-WH-0CZ" secondAttribute="trailing" id="9TW-jL-rhx"/>
-                                        <constraint firstItem="fix-oz-Sj9" firstAttribute="top" secondItem="jee-vl-BUt" secondAttribute="bottom" constant="12" id="A3o-Ad-7bL"/>
                                         <constraint firstItem="YZU-dx-gjr" firstAttribute="top" secondItem="pP3-w2-KOs" secondAttribute="top" id="C1c-qT-71g"/>
                                         <constraint firstItem="dxk-On-hYI" firstAttribute="leading" secondItem="QSz-xx-ptB" secondAttribute="trailing" constant="10" id="Cpk-pT-wGb"/>
                                         <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="CQY-oC-oQ8" secondAttribute="trailing" constant="10" id="DFC-Ey-SO8"/>
                                         <constraint firstItem="2WQ-hK-j2t" firstAttribute="leading" secondItem="pP3-w2-KOs" secondAttribute="leading" constant="2" id="DHu-5D-ouj"/>
                                         <constraint firstItem="2WQ-hK-j2t" firstAttribute="leading" secondItem="CQY-oC-oQ8" secondAttribute="leading" id="DQM-yN-59t"/>
-                                        <constraint firstItem="zwg-99-t9E" firstAttribute="top" secondItem="2WQ-hK-j2t" secondAttribute="bottom" constant="8" symbolic="YES" id="Eb4-6W-tLj"/>
+                                        <constraint firstItem="hiI-QD-U0Q" firstAttribute="top" secondItem="jee-vl-BUt" secondAttribute="bottom" constant="16" id="E4W-Qq-P8m"/>
+                                        <constraint firstItem="zwg-99-t9E" firstAttribute="top" secondItem="2WQ-hK-j2t" secondAttribute="bottom" constant="16" id="Eb4-6W-tLj"/>
                                         <constraint firstItem="YZU-dx-gjr" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="ZJf-t1-iGB" secondAttribute="leading" constant="10" id="Ewo-pn-gSB"/>
                                         <constraint firstItem="2WQ-hK-j2t" firstAttribute="leading" secondItem="jee-vl-BUt" secondAttribute="leading" id="FBm-MS-FfG"/>
                                         <constraint firstItem="2WQ-hK-j2t" firstAttribute="leading" secondItem="fix-oz-Sj9" secondAttribute="leading" id="H5P-5Y-RK4"/>
@@ -372,12 +371,11 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                         <constraint firstItem="mgF-aC-Vfq" firstAttribute="centerY" secondItem="LTz-FU-LbV" secondAttribute="centerY" id="bi7-pk-eF1"/>
                                         <constraint firstItem="EBQ-WH-0CZ" firstAttribute="trailing" secondItem="mC1-sE-MTH" secondAttribute="trailing" id="bl7-8k-tAX"/>
                                         <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="pP3-w2-KOs" secondAttribute="trailing" constant="10" id="cUF-MW-m9t"/>
-                                        <constraint firstItem="QSz-xx-ptB" firstAttribute="top" secondItem="aYx-qQ-zM6" secondAttribute="bottom" constant="15" id="cdn-Ti-bdL"/>
+                                        <constraint firstItem="QSz-xx-ptB" firstAttribute="top" secondItem="aYx-qQ-zM6" secondAttribute="bottom" constant="20" id="cdn-Ti-bdL"/>
                                         <constraint firstItem="EBQ-WH-0CZ" firstAttribute="centerY" secondItem="2WQ-hK-j2t" secondAttribute="centerY" id="dL5-Rr-83q"/>
                                         <constraint firstItem="mC1-sE-MTH" firstAttribute="top" secondItem="fix-oz-Sj9" secondAttribute="top" id="e11-ey-4aU"/>
                                         <constraint firstItem="lyZ-cf-MT6" firstAttribute="centerY" secondItem="CQY-oC-oQ8" secondAttribute="centerY" id="eYc-ik-acE"/>
                                         <constraint firstItem="2WQ-hK-j2t" firstAttribute="leading" secondItem="zwg-99-t9E" secondAttribute="leading" constant="2" id="eZq-Za-xE8"/>
-                                        <constraint firstItem="hiI-QD-U0Q" firstAttribute="top" secondItem="QSz-xx-ptB" secondAttribute="bottom" constant="16" id="fkS-Y9-Aub"/>
                                         <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="dxk-On-hYI" secondAttribute="trailing" constant="10" id="hZx-Do-VYm"/>
                                         <constraint firstItem="LTz-FU-LbV" firstAttribute="leading" secondItem="2WQ-hK-j2t" secondAttribute="leading" id="i4K-oS-kqx"/>
                                         <constraint firstItem="EBQ-WH-0CZ" firstAttribute="trailing" secondItem="1hO-bG-lcd" secondAttribute="trailing" id="iR8-A4-9Bs"/>
@@ -388,11 +386,13 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                         <constraint firstItem="hiI-QD-U0Q" firstAttribute="leading" secondItem="2WQ-hK-j2t" secondAttribute="leading" id="n3x-pi-Rb9"/>
                                         <constraint firstItem="EBQ-WH-0CZ" firstAttribute="trailing" secondItem="lyZ-cf-MT6" secondAttribute="trailing" id="nDg-CZ-4YV"/>
                                         <constraint firstItem="LTz-FU-LbV" firstAttribute="centerY" secondItem="QSz-xx-ptB" secondAttribute="centerY" id="rjR-G7-PVw"/>
+                                        <constraint firstAttribute="bottom" secondItem="QSz-xx-ptB" secondAttribute="bottom" constant="52" id="rwj-30-YVt"/>
                                         <constraint firstItem="lyZ-cf-MT6" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="ZJf-t1-iGB" secondAttribute="leading" constant="10" id="uVB-R6-n34"/>
                                         <constraint firstItem="1hO-bG-lcd" firstAttribute="centerY" secondItem="aYx-qQ-zM6" secondAttribute="centerY" id="vNr-Bb-ysG"/>
                                         <constraint firstItem="mgF-aC-Vfq" firstAttribute="trailing" secondItem="1hO-bG-lcd" secondAttribute="trailing" id="wFz-ZV-kpx"/>
                                         <constraint firstItem="Hay-Es-YXQ" firstAttribute="centerY" secondItem="hiI-QD-U0Q" secondAttribute="centerY" id="weS-v3-0c7"/>
                                         <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="aYx-qQ-zM6" secondAttribute="trailing" constant="10" id="xIp-h3-RxP"/>
+                                        <constraint firstItem="fix-oz-Sj9" firstAttribute="top" secondItem="hiI-QD-U0Q" secondAttribute="bottom" constant="16" id="y6z-yB-4y6"/>
                                         <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="zwg-99-t9E" secondAttribute="trailing" constant="10" id="zLX-zx-mdO"/>
                                     </constraints>
                                 </view>
