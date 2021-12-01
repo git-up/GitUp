@@ -61,7 +61,7 @@
                                             </connections>
                                         </button>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="IO8-Wx-DRo">
-                                            <rect key="frame" x="32" y="456" width="100" height="16"/>
+                                            <rect key="frame" x="32" y="448" width="100" height="16"/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Diff Generation:" id="cxW-C3-fIQ">
                                                 <font key="font" metaFont="system"/>
                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -374,6 +374,7 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                         <constraint firstItem="QSz-xx-ptB" firstAttribute="top" secondItem="aYx-qQ-zM6" secondAttribute="bottom" constant="20" id="cdn-Ti-bdL"/>
                                         <constraint firstItem="EBQ-WH-0CZ" firstAttribute="centerY" secondItem="2WQ-hK-j2t" secondAttribute="centerY" id="dL5-Rr-83q"/>
                                         <constraint firstItem="mC1-sE-MTH" firstAttribute="top" secondItem="fix-oz-Sj9" secondAttribute="top" id="e11-ey-4aU"/>
+                                        <constraint firstItem="IO8-Wx-DRo" firstAttribute="top" secondItem="zwg-99-t9E" secondAttribute="top" id="eHH-Zz-UxB"/>
                                         <constraint firstItem="lyZ-cf-MT6" firstAttribute="centerY" secondItem="CQY-oC-oQ8" secondAttribute="centerY" id="eYc-ik-acE"/>
                                         <constraint firstItem="2WQ-hK-j2t" firstAttribute="leading" secondItem="zwg-99-t9E" secondAttribute="leading" constant="2" id="eZq-Za-xE8"/>
                                         <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="dxk-On-hYI" secondAttribute="trailing" constant="10" id="hZx-Do-VYm"/>
@@ -382,7 +383,6 @@ You must close and reopen any opened repositories in GitUp after changing this s
                                         <constraint firstItem="mC1-sE-MTH" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="ZJf-t1-iGB" secondAttribute="leading" constant="10" id="iew-ya-tgL"/>
                                         <constraint firstItem="CQY-oC-oQ8" firstAttribute="top" secondItem="pP3-w2-KOs" secondAttribute="bottom" constant="16" id="jd5-gF-vbv"/>
                                         <constraint firstItem="jee-vl-BUt" firstAttribute="top" secondItem="CQY-oC-oQ8" secondAttribute="bottom" constant="8" id="lay-Xr-ShF"/>
-                                        <constraint firstItem="IO8-Wx-DRo" firstAttribute="top" secondItem="EBQ-WH-0CZ" secondAttribute="bottom" constant="8" symbolic="YES" id="mth-tI-DDq"/>
                                         <constraint firstItem="hiI-QD-U0Q" firstAttribute="leading" secondItem="2WQ-hK-j2t" secondAttribute="leading" id="n3x-pi-Rb9"/>
                                         <constraint firstItem="EBQ-WH-0CZ" firstAttribute="trailing" secondItem="lyZ-cf-MT6" secondAttribute="trailing" id="nDg-CZ-4YV"/>
                                         <constraint firstItem="LTz-FU-LbV" firstAttribute="centerY" secondItem="QSz-xx-ptB" secondAttribute="centerY" id="rjR-G7-PVw"/>
