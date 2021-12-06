@@ -51,7 +51,6 @@
 
 @implementation AppDelegate {
   SUUpdater* _updater;
-  BOOL _updatePending;
   BOOL _manualCheck;
 
   CFMessagePortRef _messagePort;
@@ -117,6 +116,7 @@
     kUserDefaultsKey_FirstLaunch : @(YES),
     kUserDefaultsKey_DiffWhitespaceMode : @(kGCLiveRepositoryDiffWhitespaceMode_Normal),
     kUserDefaultsKey_ShowWelcomeWindow : @(YES),
+    kUserDefaultsKey_AskSetUpstreamOnPush : @(YES),
     kUserDefaultsKey_Theme : PreferencesWindowController_Theme_SystemPreference,
   };
   [[NSUserDefaults standardUserDefaults] registerDefaults:defaults];
@@ -212,9 +212,8 @@
   if (![[NSUserDefaults standardUserDefaults] boolForKey:kUserDefaultsKey_DisableSparkle]) {
     _updater = [SUUpdater sharedUpdater];
     _updater.delegate = self;
-    _updater.automaticallyChecksForUpdates = NO;
+    _updater.automaticallyChecksForUpdates = YES;
     _updater.sendsSystemProfile = NO;
-    _updater.automaticallyDownloadsUpdates = YES;
 
     _manualCheck = NO;
     [_updater checkForUpdatesInBackground];
@@ -382,9 +381,9 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
 
 #pragma mark - Actions
 
-- (BOOL)validateUserInterfaceItem:(id<NSValidatedUserInterfaceItem>)anItem {
-  if (anItem.action == @selector(checkForUpdates:)) {
-    return _updater && !_updatePending && ![_updater updateInProgress];
+- (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
+  if (menuItem.action == @selector(checkForUpdates:)) {
+    return [_updater validateMenuItem:menuItem];
   }
   return YES;
 }
@@ -406,7 +405,6 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
 }
 
 - (IBAction)showAboutPanel:(id)sender {
-  self.aboutWindowController.updatePending = _updatePending;
   [self.aboutWindowController showWindow:nil];
 }
 
@@ -562,14 +560,6 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
 - (void)updater:(SUUpdater*)updater didFindValidUpdate:(SUAppcastItem*)item {
   NSString* channel = [[NSUserDefaults standardUserDefaults] stringForKey:kUserDefaultsKey_ReleaseChannel];
   XLOG_INFO(@"Did find app update on channel '%@' for version %@", channel, item.versionString);
-  if (_manualCheck) {
-    NSAlert* alert = [[NSAlert alloc] init];
-    alert.messageText = NSLocalizedString(@"A GitUp update is available!", nil);
-    alert.informativeText = NSLocalizedString(@"The update will download automatically in the background and be installed when you quit GitUp.", nil);
-    [alert addButtonWithTitle:NSLocalizedString(@"OK", nil)];
-    alert.type = kGIAlertType_Note;
-    [alert runModal];
-  }
 }
 
 - (void)updaterDidNotFindUpdate:(SUUpdater*)updater {
@@ -597,7 +587,6 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
 
 - (void)updater:(SUUpdater*)updater willInstallUpdateOnQuit:(SUAppcastItem*)item immediateInstallationInvocation:(NSInvocation*)invocation {
   XLOG_INFO(@"Will install app update for version %@ on quit", item.versionString);
-  _updatePending = YES;
   [self _showNotificationWithTitle:NSLocalizedString(@"Update Available", nil)
                             action:NULL
                            message:NSLocalizedString(@"Relaunch GitUp to update to version %@ (%@).", nil), item.displayVersionString, item.versionString];

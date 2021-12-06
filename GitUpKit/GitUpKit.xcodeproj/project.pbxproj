@@ -16,6 +16,8 @@
 		1DADC0E225A25D63008C2C35 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = DBBEE64C256B094000F96DAF /* libz.tbd */; };
 		1DF371CD22F5262300EF7BD9 /* GCLiveRepository+Utilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 1DF371CB22F5262300EF7BD9 /* GCLiveRepository+Utilities.h */; };
 		1DF371CE22F5262300EF7BD9 /* GCLiveRepository+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DF371CC22F5262300EF7BD9 /* GCLiveRepository+Utilities.m */; };
+		6D8E3F0B25D90E1300AAFC17 /* GIImageDiffView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D8E3F0A25D90E1300AAFC17 /* GIImageDiffView.m */; };
+		6D8E3F1025D90E3400AAFC17 /* GIImageDiffView.h in Headers */ = {isa = PBXBuildFile; fileRef = 6D8E3F0F25D90E3400AAFC17 /* GIImageDiffView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		743BF1841B871C0200E1CA49 /* GCOrderedSet.h in Headers */ = {isa = PBXBuildFile; fileRef = 74EDB5D01B84D4C400F00E79 /* GCOrderedSet.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		749335CA1B9B7FF200225513 /* GCOrderedSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 74EDB5D11B84D4C400F00E79 /* GCOrderedSet.m */; };
 		749786941B85AAB10065BD55 /* GCOrderedSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 74EDB5D11B84D4C400F00E79 /* GCOrderedSet.m */; };
@@ -389,6 +391,8 @@
 		0AD01C0B26D6A11C0068A02E /* Third-Party */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "Third-Party"; sourceTree = "<group>"; };
 		1DF371CB22F5262300EF7BD9 /* GCLiveRepository+Utilities.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GCLiveRepository+Utilities.h"; sourceTree = "<group>"; };
 		1DF371CC22F5262300EF7BD9 /* GCLiveRepository+Utilities.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "GCLiveRepository+Utilities.m"; sourceTree = "<group>"; };
+		6D8E3F0A25D90E1300AAFC17 /* GIImageDiffView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GIImageDiffView.m; sourceTree = "<group>"; };
+		6D8E3F0F25D90E3400AAFC17 /* GIImageDiffView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GIImageDiffView.h; sourceTree = "<group>"; };
 		74EDB5D01B84D4C400F00E79 /* GCOrderedSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCOrderedSet.h; sourceTree = "<group>"; };
 		74EDB5D11B84D4C400F00E79 /* GCOrderedSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCOrderedSet.m; sourceTree = "<group>"; };
 		74EDB5D51B84E06500F00E79 /* GCOrderedSet-Tests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GCOrderedSet-Tests.m"; sourceTree = "<group>"; };
@@ -964,6 +968,8 @@
 				DBDFBC0B22B610F1003EEC6C /* Interface.xcassets */,
 				E2D4DEAD1A4D592000B6AF66 /* GIBranch.h */,
 				E2D4DEAE1A4D592000B6AF66 /* GIBranch.m */,
+				6D8E3F0A25D90E1300AAFC17 /* GIImageDiffView.m */,
+				6D8E3F0F25D90E3400AAFC17 /* GIImageDiffView.h */,
 				E23186031B139CB900A93CCF /* GIConstants.h */,
 				E2891AB41AE1684A00E58C77 /* GIDiffView.h */,
 				E2891AB51AE1684A00E58C77 /* GIDiffView.m */,
@@ -1122,6 +1128,7 @@
 				E267E2391B84DC3900BAB377 /* GISnapshotListViewController.h in Headers */,
 				1DF371CD22F5262300EF7BD9 /* GCLiveRepository+Utilities.h in Headers */,
 				E267E23A1B84DC3900BAB377 /* GIUnifiedReflogViewController.h in Headers */,
+				6D8E3F1025D90E3400AAFC17 /* GIImageDiffView.h in Headers */,
 				E267E24D1B84DC7D00BAB377 /* GIAdvancedCommitViewController.h in Headers */,
 				E267E24E1B84DC7D00BAB377 /* GICommitRewriterViewController.h in Headers */,
 				E267E24F1B84DC7D00BAB377 /* GICommitSplitterViewController.h in Headers */,
@@ -1422,6 +1429,7 @@
 				E267E2291B84DBF800BAB377 /* GIAppKit.m in Sources */,
 				E267E22A1B84DBF800BAB377 /* GIColorView.m in Sources */,
 				E267E22B1B84DBF800BAB377 /* GILinkButton.m in Sources */,
+				6D8E3F0B25D90E1300AAFC17 /* GIImageDiffView.m in Sources */,
 				DBDFBC1122B61135003EEC6C /* NSBundle+GitUpKit.m in Sources */,
 				E267E22C1B84DBF800BAB377 /* GIModalView.m in Sources */,
 				E267E22D1B84DBF800BAB377 /* GIViewController.m in Sources */,

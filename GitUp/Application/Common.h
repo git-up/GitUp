@@ -21,6 +21,7 @@
 #define kUserDefaultsKey_ReleaseChannel @"ReleaseChannel"  // NSString
 #define kUserDefaultsKey_CheckInterval @"CheckInterval"  // NSInteger
 #define kUserDefaultsKey_SimpleCommit @"SimpleCommit"  // BOOL
+#define kUserDefaultsKey_AskSetUpstreamOnPush @"AskSetUpstreamOnPush"  // BOOL
 #define kUserDefaultsKey_DisableSparkle @"DisableSparkle"  // BOOL
 #define kUserDefaultsKey_DiffWhitespaceMode @"DiffWhitespaceMode"  // NSUInteger
 #define kUserDefaultsKey_ShowWelcomeWindow @"ShowWelcomeWindow"  // BOOL

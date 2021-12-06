@@ -44,7 +44,9 @@ static NSString* const PreferencesWindowController_Identifier_General = @"genera
 
 + (void)applyTheme:(NSString*)theme {
   NSAppearanceName name = [self appearanceNameWithTheme:theme];
-  NSApp.appearance = name != nil ? [NSAppearance appearanceNamed:name] : nil;
+  if (@available(macOS 10.14, *)) {
+    NSApp.appearance = name != nil ? [NSAppearance appearanceNamed:name] : nil;
+  }
   [NSUserDefaults.standardUserDefaults setObject:theme forKey:kUserDefaultsKey_Theme];
 }
 
@@ -87,14 +89,19 @@ static NSString* const PreferencesWindowController_Identifier_General = @"genera
   ];
 
   self.selectedItemIdentifier = PreferencesWindowController_Identifier_General;
+  
+  [self loadUserDefaults];
 }
 
-- (void)showWindow:(id)sender {
-  // sync NSUserDefaults
+- (void)loadUserDefaults {
   NSString* theme = [NSUserDefaults.standardUserDefaults stringForKey:kUserDefaultsKey_Theme];
   self.selectedTheme = theme;
   NSString* channel = [NSUserDefaults.standardUserDefaults stringForKey:kUserDefaultsKey_ReleaseChannel];
   self.selectedChannel = channel;
+}
+
+- (void)showWindow:(id)sender {
+  [self loadUserDefaults];
   [self selectPreferencePane:self];
   [super showWindow:sender];
 }
