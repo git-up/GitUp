@@ -111,6 +111,10 @@
     if (![[NSFileManager defaultManager] fileExistsAtPath:newPath]) {
       [self.repository exportBlobWithSHA1:_delta.newFile.SHA1 toPath:newPath error:&error];
     }
+  } else if (_delta.canonicalPath && _delta.oldFile.SHA1 == nil) {
+    newPath = [self.repository absolutePathForFile:_delta.canonicalPath];
+  }
+  if (newPath) {
     _currentImageSize = [self imageSizeWithoutLoadingFromPath:newPath];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
       NSImage* limitedSizeImage = [self generateLimitedSizeImageFromPath:newPath];
