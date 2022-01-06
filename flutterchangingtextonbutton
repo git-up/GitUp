@@ -1,0 +1,71 @@
+import 'package:flutter/material.dart';
+void main(){
+  runApp(MyApp());
+}
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: "Home Page",
+
+      home: homepage(),
+    );
+  }
+
+}
+class homepage extends StatefulWidget {
+  const homepage({Key? key}) : super(key: key);
+
+  @override
+  _homepageState createState() => _homepageState();
+
+}
+
+
+
+class _homepageState extends State<homepage> {
+  String text="Hello world";
+ void _changedText(){
+   setState(() {
+     if(text.startsWith("H")) {
+       text = "Activated";
+
+     }else
+       {
+         text="you have pressed this button again";
+       }
+   });
+ }
+
+  Widget _bodywidget(){
+    return Container(
+      padding: const EdgeInsets.all(8.0) ,
+      child: new Center(
+        child: new Column(
+          children: [
+            new Text(text),
+            new RaisedButton(
+              child: new Text("Click"),
+              onPressed:_changedText,
+
+            )
+          ],
+        ),
+      ),
+
+    );
+  }
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: new Text("Home Page"),
+        backgroundColor: Colors.brown,
+
+      ),
+      body: _bodywidget()
+    );
+  }
+}
