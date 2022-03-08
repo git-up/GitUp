@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17506" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="19162" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17506"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19162"/>
         <capability name="Search Toolbar Item" minToolsVersion="12.0" minSystemVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -191,9 +191,10 @@
                             <autoresizingMask key="autoresizingMask"/>
                             <subviews>
                                 <segmentedControl verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="add-88-IzA" userLabel="Mode">
-                                    <rect key="frame" x="-5" y="-5" width="120" height="40"/>
+                                    <rect key="frame" x="-5" y="-5" width="118" height="40"/>
                                     <constraints>
                                         <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="25" id="FmD-Tc-tEO"/>
+                                        <constraint firstAttribute="width" constant="108" id="jFj-Fi-nar"/>
                                     </constraints>
                                     <segmentedCell key="cell" controlSize="large" borderStyle="border" alignment="left" segmentDistribution="fillEqually" style="texturedRounded" trackingMode="selectOne" id="Qz2-7V-Eoi">
                                         <font key="font" metaFont="system"/>
@@ -208,7 +209,10 @@
                                     </connections>
                                 </segmentedControl>
                                 <segmentedControl hidden="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ROz-yN-TzG" userLabel="Navigate">
-                                    <rect key="frame" x="-6" y="-6" width="122" height="42"/>
+                                    <rect key="frame" x="-6" y="-6" width="120" height="42"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="108" id="py4-bn-xS9"/>
+                                    </constraints>
                                     <segmentedCell key="cell" controlSize="large" borderStyle="border" alignment="left" segmentDistribution="fillEqually" style="separated" trackingMode="momentary" id="8Lo-Bb-qnP">
                                         <font key="font" metaFont="system"/>
                                         <segments>
@@ -225,12 +229,12 @@
                             <constraints>
                                 <constraint firstItem="ROz-yN-TzG" firstAttribute="height" secondItem="add-88-IzA" secondAttribute="height" id="0pz-q0-PEF"/>
                                 <constraint firstItem="add-88-IzA" firstAttribute="top" secondItem="37X-Xb-n3X" secondAttribute="top" id="6fO-dH-Ono"/>
-                                <constraint firstAttribute="trailing" secondItem="ROz-yN-TzG" secondAttribute="trailing" id="9rV-42-Pxs"/>
+                                <constraint firstAttribute="trailing" secondItem="ROz-yN-TzG" secondAttribute="trailing" constant="2" id="9rV-42-Pxs"/>
                                 <constraint firstAttribute="bottom" secondItem="ROz-yN-TzG" secondAttribute="bottom" id="BbF-Rp-Gql"/>
                                 <constraint firstItem="ROz-yN-TzG" firstAttribute="top" secondItem="37X-Xb-n3X" secondAttribute="top" id="Nos-ws-d0r"/>
                                 <constraint firstAttribute="bottom" secondItem="add-88-IzA" secondAttribute="bottom" id="pYe-lH-LSg"/>
                                 <constraint firstItem="ROz-yN-TzG" firstAttribute="leading" secondItem="37X-Xb-n3X" secondAttribute="leading" id="rU3-3h-nVY"/>
-                                <constraint firstAttribute="trailing" secondItem="add-88-IzA" secondAttribute="trailing" id="wb1-Oe-fok"/>
+                                <constraint firstAttribute="trailing" secondItem="add-88-IzA" secondAttribute="trailing" constant="2" id="wb1-Oe-fok"/>
                                 <constraint firstItem="add-88-IzA" firstAttribute="leading" secondItem="37X-Xb-n3X" secondAttribute="leading" id="wqA-wA-Qqp"/>
                             </constraints>
                         </customView>
@@ -688,14 +692,14 @@ DQ
         </window>
     </objects>
     <resources>
-        <image name="arrow.down.right.and.arrow.up.left" catalog="system" width="16" height="15"/>
-        <image name="chevron.down" catalog="system" width="15" height="9"/>
-        <image name="chevron.up" catalog="system" width="15" height="9"/>
+        <image name="arrow.down.right.and.arrow.up.left" catalog="system" width="17" height="15"/>
+        <image name="chevron.down" catalog="system" width="16" height="9"/>
+        <image name="chevron.up" catalog="system" width="16" height="9"/>
         <image name="clock.arrow.circlepath" catalog="system" width="17" height="15"/>
         <image name="icon_action_fetch" width="10" height="14"/>
         <image name="icon_action_push" width="10" height="14"/>
         <image name="icon_nav_map" width="15" height="15"/>
-        <image name="line.horizontal.3" catalog="system" width="16" height="9"/>
-        <image name="square.and.pencil" catalog="system" width="17" height="15"/>
+        <image name="line.horizontal.3" catalog="system" width="17" height="9"/>
+        <image name="square.and.pencil" catalog="system" width="16" height="15"/>
     </resources>
 </document>
