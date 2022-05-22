@@ -342,39 +342,44 @@ void GIPerformOnMainRunLoop(dispatch_block_t block) {
 
 - (NSUInteger)layoutManager:(NSLayoutManager *)layoutManager shouldGenerateGlyphs:(const CGGlyph *)glyphs properties:(const NSGlyphProperty *)props characterIndexes:(const NSUInteger *)charIndexes font:(NSFont *)aFont forGlyphRange:(NSRange)glyphRange {
   
-  CGGlyph *replacementGlyphs = (CGGlyph *)glyphs;
-  NSGlyphProperty *replacementProperties = (NSGlyphProperty *)props;
+  XLOG_DEBUG_CHECK([aFont.fontName isEqualToString:@"Menlo-Regular"]);
   
-  if ([[NSUserDefaults standardUserDefaults] boolForKey:GICommitMessageViewUserDefaultKey_ShowInvisibleCharacters]) {
+  if (layoutManager.showsInvisibleCharacters) {
     NSTextStorage *textStorage = layoutManager.textStorage;
     size_t glyphSize = sizeof(CGGlyph) * glyphRange.length;
-    replacementGlyphs = malloc(glyphSize);
     size_t propertySize = sizeof(NSGlyphProperty) * glyphRange.length;
-    replacementProperties = malloc(propertySize);
+    CGGlyph *replacementGlyphs = malloc(glyphSize);
+    NSGlyphProperty *replacementProperties = malloc(propertySize);
     memcpy(replacementGlyphs, glyphs, glyphSize);
     memcpy(replacementProperties, props, propertySize);
     NSString *string = textStorage.string;
+    
+    NSCharacterSet *spaceCharacterSet = [NSCharacterSet characterSetWithCharactersInString:@" "];
+    NSCharacterSet *newlineCharacterSet = [NSCharacterSet characterSetWithCharactersInString:@"\n"];
+    
     NSUInteger i = 0;
     while (i < glyphRange.length) {
-      NSUInteger characterIndex = i + glyphRange.location;
+      NSUInteger characterIndex = charIndexes[i];
       unichar character = [string characterAtIndex:characterIndex];
-      NSRange glyphRangeAtIndex = [string rangeOfComposedCharacterSequenceAtIndex:characterIndex];
-      NSUInteger glyphRangeAtIndexLength = glyphRangeAtIndex.length;
-      NSLog(@"LDD: %@", NSStringFromRange(glyphRangeAtIndex));
       
-      if ([NSCharacterSet.whitespaceCharacterSet characterIsMember:character]) {
+      if ([spaceCharacterSet characterIsMember:character]) {
         replacementGlyphs[i] = (CGGlyph)[aFont glyphWithName:@"periodcentered"];
         
-      } else if ([[NSCharacterSet characterSetWithCharactersInString:@"\n"] characterIsMember:character]) {
+      } else if ([newlineCharacterSet characterIsMember:character]) {
         replacementGlyphs[i] = (CGGlyph)[aFont glyphWithName:@"carriagereturn"];
         replacementProperties[i] = 0;
       }
       
-      i += glyphRangeAtIndexLength;
+      i += [string rangeOfComposedCharacterSequenceAtIndex:characterIndex].length;
     }
+    
+    [self setGlyphs:replacementGlyphs properties:replacementProperties characterIndexes:charIndexes font:aFont forGlyphRange:glyphRange];
+    
+    free(replacementGlyphs);
+    free(replacementProperties);
+  } else {
+    [self setGlyphs:glyphs properties:props characterIndexes:charIndexes font:aFont forGlyphRange:glyphRange];
   }
-  
-  [self setGlyphs:replacementGlyphs properties:replacementProperties characterIndexes:charIndexes font:aFont forGlyphRange:glyphRange];
 
   return glyphRange.length;
 }
