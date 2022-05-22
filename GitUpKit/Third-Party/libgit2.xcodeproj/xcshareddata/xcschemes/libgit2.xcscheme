@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1220"
+   LastUpgradeVersion = "1340"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "DB4464842567228400D36981"
+               BlueprintIdentifier = "E2174BD41B91240400BE234A"
                BuildableName = "libgit2.a"
                BlueprintName = "libgit2"
                ReferencedContainer = "container:libgit2.xcodeproj">
@@ -50,7 +50,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "DB4464842567228400D36981"
+            BlueprintIdentifier = "E2174BD41B91240400BE234A"
             BuildableName = "libgit2.a"
             BlueprintName = "libgit2"
             ReferencedContainer = "container:libgit2.xcodeproj">

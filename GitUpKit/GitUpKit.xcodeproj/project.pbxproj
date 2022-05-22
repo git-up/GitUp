@@ -1259,7 +1259,7 @@
 		E2C338A319F8562F00063D95 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1220;
+				LastUpgradeCheck = 1340;
 				ORGANIZATIONNAME = "";
 				TargetAttributes = {
 					E217531A1B91613300BE234A = {
@@ -1843,6 +1843,7 @@
 			baseConfigurationReference = E27E37501B86F5D1000A551A /* Debug.xcconfig */;
 			buildSettings = {
 				HEADER_SEARCH_PATHS = "Third-Party/libgit2/include";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 			};
 			name = Debug;
 		};
@@ -1851,6 +1852,7 @@
 			baseConfigurationReference = E27E37521B86F5D1000A551A /* Release.xcconfig */;
 			buildSettings = {
 				HEADER_SEARCH_PATHS = "Third-Party/libgit2/include";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 			};
 			name = Release;
 		};

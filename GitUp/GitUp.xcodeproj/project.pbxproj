@@ -366,7 +366,7 @@
 		E2C338A319F8562F00063D95 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1220;
+				LastUpgradeCheck = 1340;
 				ORGANIZATIONNAME = "";
 				TargetAttributes = {
 					E21DCAE71B253847006424E8 = {
@@ -621,6 +621,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E27E37571B86F670000A551A /* Debug.xcconfig */;
 			buildSettings = {
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				SDKROOT = macosx;
 			};
 			name = Debug;
@@ -629,6 +630,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E27E37591B86F670000A551A /* Release.xcconfig */;
 			buildSettings = {
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				SDKROOT = macosx;
 			};
 			name = Release;

@@ -1004,7 +1004,7 @@
 		E217485D1B911B5200BE234A /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1220;
+				LastUpgradeCheck = 1340;
 				ORGANIZATIONNAME = "";
 			};
 			buildConfigurationList = E21748601B911B5200BE234A /* Build configuration list for PBXProject "libgit2" */;
@@ -1199,6 +1199,7 @@
 					GIT_ARCH_64,
 				);
 				GCC_WARN_UNINITIALIZED_AUTOS = NO;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator";
@@ -1239,6 +1240,7 @@
 					GIT_ARCH_64,
 				);
 				GCC_WARN_UNINITIALIZED_AUTOS = NO;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				SDKROOT = macosx;
 				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator";
 				WARNING_CFLAGS = (
