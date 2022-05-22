@@ -42,7 +42,6 @@
 		E2C338BA19F8562F00063D95 /* Document.xib in Resources */ = {isa = PBXBuildFile; fileRef = E2C338B819F8562F00063D95 /* Document.xib */; };
 		E2C338BF19F8562F00063D95 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = E2C338BD19F8562F00063D95 /* MainMenu.xib */; };
 		E2C5672D1A6D98BC00ECFE07 /* WindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C5672C1A6D98BC00ECFE07 /* WindowController.m */; };
-		E2E3C9A01D771E7600AA9A62 /* GARawTracker.m in Sources */ = {isa = PBXBuildFile; fileRef = E2E3C99F1D771E7600AA9A62 /* GARawTracker.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -166,8 +165,6 @@
 		E2C5672C1A6D98BC00ECFE07 /* WindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WindowController.m; sourceTree = "<group>"; };
 		E2C8C91519FABC5100DA54AA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/Document.xib; sourceTree = "<group>"; };
 		E2C8C91619FABC5100DA54AA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
-		E2E3C99E1D771E7600AA9A62 /* GARawTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GARawTracker.h; sourceTree = "<group>"; };
-		E2E3C99F1D771E7600AA9A62 /* GARawTracker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GARawTracker.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -242,7 +239,6 @@
 				E24306981B276D0B00CE8CCB /* ToolProtocol.h */,
 				E21DCAE91B253847006424E8 /* Tool */,
 				E2C338AD19F8562F00063D95 /* Application */,
-				E2E3C99D1D771E7600AA9A62 /* GARawTracker */,
 				DB0D250D256738F600E6F48A /* Frameworks */,
 				E27E37551B86F670000A551A /* Xcode-Configurations */,
 				E2C338AC19F8562F00063D95 /* Products */,
@@ -307,16 +303,6 @@
 				0A0C5ACA23720BAE000D84A1 /* KeychainAccessor.m */,
 			);
 			path = Application;
-			sourceTree = "<group>";
-		};
-		E2E3C99D1D771E7600AA9A62 /* GARawTracker */ = {
-			isa = PBXGroup;
-			children = (
-				E2E3C99E1D771E7600AA9A62 /* GARawTracker.h */,
-				E2E3C99F1D771E7600AA9A62 /* GARawTracker.m */,
-			);
-			name = GARawTracker;
-			path = "Third-Party/GARawTracker/GARawTracker";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -484,7 +470,6 @@
 			files = (
 				0A01676A2330CABD0069961E /* ServicesProvider.m in Sources */,
 				E21739F71A5080DD00EC6777 /* DocumentController.m in Sources */,
-				E2E3C9A01D771E7600AA9A62 /* GARawTracker.m in Sources */,
 				E2C338B419F8562F00063D95 /* main.m in Sources */,
 				E2C5672D1A6D98BC00ECFE07 /* WindowController.m in Sources */,
 				A53C6D0C1E61A9CF0070387E /* FontSizeTransformer.m in Sources */,

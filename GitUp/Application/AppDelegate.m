@@ -27,7 +27,6 @@
 #import "Document.h"
 #import "Common.h"
 #import "ToolProtocol.h"
-#import "GARawTracker.h"
 
 #import "AboutWindowController.h"
 #import "CloneWindowController.h"
@@ -195,11 +194,6 @@
   // Initialize custom subclass of NSDocumentController
   [DocumentController sharedDocumentController];
 
-#if !DEBUG
-  // Initialize Google Analytics
-  [[GARawTracker sharedTracker] startWithTrackingID:@"UA-83409580-1"];
-#endif
-
   [[NSAppleEventManager sharedAppleEventManager] setEventHandler:self
                                                      andSelector:@selector(_getUrl:withReplyEvent:)
                                                    forEventClass:kInternetEventClass
@@ -317,13 +311,6 @@
     [self.welcomeWindowController setShouldShow];
   }
   [self handleDocumentCountChanged];
-#if !DEBUG
-  [[GARawTracker sharedTracker] sendEventWithCategory:@"application"
-                                               action:@"activate"
-                                                label:nil
-                                                value:nil
-                                      completionBlock:NULL];
-#endif
 }
 
 #if __ENABLE_SUDDEN_TERMINATION__
