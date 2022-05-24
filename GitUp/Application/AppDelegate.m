@@ -427,7 +427,11 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
 
 - (void)_cloneRepositoryFromURLString:(NSString*)urlString {
   [self.cloneWindowController runModalForURL:urlString
-                                  completion:^(CloneWindowControllerResult* _Nonnull result) {
+                                  completion:^(CloneWindowControllerResult* _Nullable result) {
+                                    if (!result) {
+                                      return;
+                                    }
+
                                     if (result.invalidRepository) {
                                       [NSApp presentError:MAKE_ERROR(@"Invalid Git repository URL")];
                                       return;
