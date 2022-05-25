@@ -95,7 +95,6 @@ let package = Package(
                 exclude: [
                     // ./
                     "xcode",
-                    "binaries",
                     "ci",
                     "cmake",
                     "deps",
