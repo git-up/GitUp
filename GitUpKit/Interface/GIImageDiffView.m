@@ -151,12 +151,12 @@
 - (NSSize)imageSizeWithoutLoadingFromPath:(NSString*)path {
   NSURL* imageFileURL = [NSURL fileURLWithPath:path];
   CFStringRef fileUTI = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (__bridge CFStringRef)path.pathExtension, NULL);
-  BOOL isPDF = [(__bridge NSString *)fileUTI isEqualToString:@"com.adobe.pdf"];
+  BOOL isPDF = [(__bridge NSString*)fileUTI isEqualToString:@"com.adobe.pdf"];
   CFRelease(fileUTI);
-  
+
   CGFloat width = 0.0f;
   CGFloat height = 0.0f;
-  
+
   if (isPDF) {
     CGPDFDocumentRef document = CGPDFDocumentCreateWithURL((CFURLRef)imageFileURL);
     CGPDFPageRef page = CGPDFDocumentGetPage(document, 1);
@@ -171,7 +171,7 @@
     }
     CFDictionaryRef imageProperties = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, NULL);
     CFRelease(imageSource);
-    
+
     if (imageProperties != NULL) {
       CFNumberRef widthNum = CFDictionaryGetValue(imageProperties, kCGImagePropertyPixelWidth);
       if (widthNum != NULL) {
@@ -194,7 +194,7 @@
       CFRelease(imageProperties);
     }
   }
-  
+
   return NSMakeSize(width, height);
 }
 
@@ -297,7 +297,7 @@
   CGSize originalImageSize = [self originalDiffImageSize];
   CGFloat adjustedImageWidth = originalImageSize.width;
   CGFloat adjustedImageHeight = originalImageSize.height;
-  
+
   if (adjustedImageWidth < CGFLOAT_EPSILON) {
     adjustedImageWidth = 200;
   }
@@ -318,7 +318,7 @@
   CGSize originalImageSize = [self originalDiffImageSize];
   CGFloat adjustedImageWidth = originalImageSize.width;
   CGFloat adjustedImageHeight = originalImageSize.height;
-  
+
   if (adjustedImageWidth < CGFLOAT_EPSILON) {
     adjustedImageWidth = 200;
   }

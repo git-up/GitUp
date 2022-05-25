@@ -343,7 +343,7 @@ static NSImage* _untrackedImage = nil;
 
             CFStringRef fileExtension = (__bridge CFStringRef)delta.canonicalPath.pathExtension;
             CFStringRef fileUTI = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, fileExtension, NULL);
-            BOOL isImage = [NSImage.imageTypes containsObject:(__bridge NSString *)(fileUTI)];
+            BOOL isImage = [NSImage.imageTypes containsObject:(__bridge NSString*)(fileUTI)];
             CFRelease(fileUTI);
             if (isImage) {
               GIImageDiffView* imageDiffView = [[GIImageDiffView alloc] initWithRepository:self.repository];

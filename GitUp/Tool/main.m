@@ -66,7 +66,7 @@ int main(int argc, const char* argv[]) {
   @autoreleasepool {
     const char* command = "open";
     const char* option = "";
-    
+
     for (int i = 1; i < argc; i++) {
       const char* arg = argv[i];
       // Commands
@@ -177,14 +177,14 @@ BOOL isEqual(const char* stringA, const char* stringB) {
 
 BOOL isEqualToAny(const char* string, int count, ...) {
   va_list ap;
-  va_start (ap, count);         /* Initialize the argument list. */
-  
+  va_start(ap, count); /* Initialize the argument list. */
+
   for (int i = 0; i < count; i++) {
     const char* aString = va_arg(ap, const char*);
     if (isEqual(string, aString)) {
       return YES;
     }
   }
-  va_end (ap);                  /* Clean up. */
+  va_end(ap); /* Clean up. */
   return NO;
 }

@@ -18,8 +18,8 @@
 // Performs validation of a custom control view, or any one of two control
 // children.
 @interface GICustomToolbarItem : NSToolbarItem
-@property (nonatomic, weak) IBOutlet NSControl* primaryControl;
-@property (nonatomic, weak) IBOutlet NSControl* secondaryControl;
+@property(nonatomic, weak) IBOutlet NSControl* primaryControl;
+@property(nonatomic, weak) IBOutlet NSControl* secondaryControl;
 + (void)validateAsUserInterfaceItem:(id)item;
 @end
 

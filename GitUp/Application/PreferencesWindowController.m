@@ -89,7 +89,7 @@ static NSString* const PreferencesWindowController_Identifier_General = @"genera
   ];
 
   self.selectedItemIdentifier = PreferencesWindowController_Identifier_General;
-  
+
   [self loadUserDefaults];
 }
 

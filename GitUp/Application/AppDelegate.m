@@ -147,7 +147,7 @@
                                                                      }
                                                                      [document showWindows];
                                                                    }
-                                                                   
+
                                                                    if (documentWasAlreadyOpen) {
                                                                      if ((NSUInteger)windowModeID != NSNotFound) {
                                                                        [(Document*)document setWindowModeID:windowModeID];
@@ -353,7 +353,7 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
 
 #pragma mark - Actions
 
-- (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
+- (BOOL)validateMenuItem:(NSMenuItem*)menuItem {
   if (menuItem.action == @selector(checkForUpdates:)) {
     return [_updater validateMenuItem:menuItem];
   }

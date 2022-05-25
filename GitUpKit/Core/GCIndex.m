@@ -356,7 +356,7 @@ cleanup:
   [patch enumerateUsingBeginHunkHandler:NULL
                             lineHandler:^(GCLineDiffChange change, NSUInteger oldLineNumber, NSUInteger newLineNumber, const char* contentBytes, NSUInteger contentLength) {
                               /* Comparing workdir to index:
-     
+
      Change      | Filter     | Write?
      ------------|------------|------------
      Unmodified  | -          | YES
@@ -366,7 +366,7 @@ cleanup:
      ------------|------------|------------
      Deleted     | YES        | NO
                  | NO         | YES
-     
+
      */
                               BOOL shouldWrite = YES;
                               switch (change) {
@@ -452,7 +452,7 @@ cleanup:
   [patch enumerateUsingBeginHunkHandler:NULL
                             lineHandler:^(GCLineDiffChange change, NSUInteger oldLineNumber, NSUInteger newLineNumber, const char* contentBytes, NSUInteger contentLength) {
                               /* Comparing index to commit:
-     
+
      Change      | Filter     | Write?
      ------------|------------|------------
      Unmodified  | -          | YES
@@ -462,7 +462,7 @@ cleanup:
      ------------|------------|------------
      Deleted     | YES        | YES
                  | NO         | NO
-     
+
      */
                               BOOL shouldWrite = YES;
                               switch (change) {
@@ -530,7 +530,7 @@ cleanup:
     [patch enumerateUsingBeginHunkHandler:NULL
                               lineHandler:^(GCLineDiffChange change, NSUInteger oldLineNumber, NSUInteger newLineNumber, const char* contentBytes, NSUInteger contentLength) {
                                 /* Comparing workdir to index:
-       
+
        Change      | Filter     | Write?
        ------------|------------|------------
        Unmodified  | -          | YES
@@ -540,7 +540,7 @@ cleanup:
        ------------|------------|------------
        Deleted     | YES        | YES
                    | NO         | NO
-       
+
        */
                                 BOOL shouldWrite = YES;
                                 switch (change) {
@@ -638,7 +638,7 @@ cleanup:
   [patch enumerateUsingBeginHunkHandler:NULL
                             lineHandler:^(GCLineDiffChange change, NSUInteger oldLineNumber, NSUInteger newLineNumber, const char* contentBytes, NSUInteger contentLength) {
                               /* Comparing other index to index:
-     
+
      Change      | Filter     | Write?
      ------------|------------|------------
      Unmodified  | -          | YES
@@ -648,7 +648,7 @@ cleanup:
      ------------|------------|------------
      Deleted     | YES        | NO
                  | NO         | YES
-     
+
      */
                               BOOL shouldWrite = YES;
                               switch (change) {
