@@ -27,7 +27,6 @@
 #import "Document.h"
 #import "Common.h"
 #import "ToolProtocol.h"
-#import "GARawTracker.h"
 
 #import "AboutWindowController.h"
 #import "CloneWindowController.h"
@@ -194,16 +193,6 @@
 - (void)applicationWillFinishLaunching:(NSNotification*)notification {
   // Initialize custom subclass of NSDocumentController
   [DocumentController sharedDocumentController];
-
-#if !DEBUG
-  // Initialize Google Analytics
-  [[GARawTracker sharedTracker] startWithTrackingID:@"UA-83409580-1"];
-#endif
-
-  [[NSAppleEventManager sharedAppleEventManager] setEventHandler:self
-                                                     andSelector:@selector(_getUrl:withReplyEvent:)
-                                                   forEventClass:kInternetEventClass
-                                                      andEventID:kAEGetURL];
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification*)notification {
@@ -289,16 +278,6 @@
 #endif
 }
 
-- (void)_getUrl:(NSAppleEventDescriptor*)event withReplyEvent:(NSAppleEventDescriptor*)replyEvent {
-  NSURL* url = [NSURL URLWithString:[event paramDescriptorForKeyword:keyDirectObject].stringValue];
-  BOOL isGitHubMacScheme = [url.scheme rangeOfString:@"github-mac" options:NSCaseInsensitiveSearch].location != NSNotFound;
-  BOOL isOpenRepoHost = [url.host rangeOfString:@"openRepo" options:NSCaseInsensitiveSearch].location != NSNotFound;
-  NSString* path = url.path.length ? [url.path substringFromIndex:1] : nil;
-  if (isGitHubMacScheme && isOpenRepoHost && path) {
-    [self _cloneRepositoryFromURLString:path];
-  }
-}
-
 - (BOOL)applicationShouldOpenUntitledFile:(NSApplication*)sender {
   return NO;
 }
@@ -317,13 +296,6 @@
     [self.welcomeWindowController setShouldShow];
   }
   [self handleDocumentCountChanged];
-#if !DEBUG
-  [[GARawTracker sharedTracker] sendEventWithCategory:@"application"
-                                               action:@"activate"
-                                                label:nil
-                                                value:nil
-                                      completionBlock:NULL];
-#endif
 }
 
 #if __ENABLE_SUDDEN_TERMINATION__
@@ -440,7 +412,11 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
 
 - (void)_cloneRepositoryFromURLString:(NSString*)urlString {
   [self.cloneWindowController runModalForURL:urlString
-                                  completion:^(CloneWindowControllerResult* _Nonnull result) {
+                                  completion:^(CloneWindowControllerResult* _Nullable result) {
+                                    if (!result) {
+                                      return;
+                                    }
+
                                     if (result.invalidRepository) {
                                       [NSApp presentError:MAKE_ERROR(@"Invalid Git repository URL")];
                                       return;

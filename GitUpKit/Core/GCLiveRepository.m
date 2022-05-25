@@ -959,6 +959,7 @@ static void _StreamCallback(ConstFSEventStreamRef streamRef, void* clientCallBac
                                               }];
   } else {
     XLOG_DEBUG_UNREACHABLE();
+    completion(NO, GCNewError(-1, [NSString stringWithFormat:@"No database when calling %@", NSStringFromSelector(_cmd)]));
   }
 }
 

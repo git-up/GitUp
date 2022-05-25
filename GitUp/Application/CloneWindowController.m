@@ -63,10 +63,6 @@
 
 #pragma mark - Modal
 - (void)runModalForURL:(NSString*)url completion:(nonnull void (^)(CloneWindowControllerResult* _Nonnull))completion {
-  if (!completion) {
-    return;
-  }
-
   self.url = url;
   if (self.windowLoaded) {
     [self beforeRunInModal];
@@ -92,6 +88,8 @@
       // invalid repository
       completion([[CloneWindowControllerResult alloc] initWithRepositoryURL:url directoryPath:nil recursive:self.recursive]);
     }
+  } else {
+    completion(nil);
   }
 }
 

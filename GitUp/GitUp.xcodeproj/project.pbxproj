@@ -42,7 +42,6 @@
 		E2C338BA19F8562F00063D95 /* Document.xib in Resources */ = {isa = PBXBuildFile; fileRef = E2C338B819F8562F00063D95 /* Document.xib */; };
 		E2C338BF19F8562F00063D95 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = E2C338BD19F8562F00063D95 /* MainMenu.xib */; };
 		E2C5672D1A6D98BC00ECFE07 /* WindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C5672C1A6D98BC00ECFE07 /* WindowController.m */; };
-		E2E3C9A01D771E7600AA9A62 /* GARawTracker.m in Sources */ = {isa = PBXBuildFile; fileRef = E2E3C99F1D771E7600AA9A62 /* GARawTracker.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -166,8 +165,6 @@
 		E2C5672C1A6D98BC00ECFE07 /* WindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WindowController.m; sourceTree = "<group>"; };
 		E2C8C91519FABC5100DA54AA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/Document.xib; sourceTree = "<group>"; };
 		E2C8C91619FABC5100DA54AA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
-		E2E3C99E1D771E7600AA9A62 /* GARawTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GARawTracker.h; sourceTree = "<group>"; };
-		E2E3C99F1D771E7600AA9A62 /* GARawTracker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GARawTracker.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -242,7 +239,6 @@
 				E24306981B276D0B00CE8CCB /* ToolProtocol.h */,
 				E21DCAE91B253847006424E8 /* Tool */,
 				E2C338AD19F8562F00063D95 /* Application */,
-				E2E3C99D1D771E7600AA9A62 /* GARawTracker */,
 				DB0D250D256738F600E6F48A /* Frameworks */,
 				E27E37551B86F670000A551A /* Xcode-Configurations */,
 				E2C338AC19F8562F00063D95 /* Products */,
@@ -309,16 +305,6 @@
 			path = Application;
 			sourceTree = "<group>";
 		};
-		E2E3C99D1D771E7600AA9A62 /* GARawTracker */ = {
-			isa = PBXGroup;
-			children = (
-				E2E3C99E1D771E7600AA9A62 /* GARawTracker.h */,
-				E2E3C99F1D771E7600AA9A62 /* GARawTracker.m */,
-			);
-			name = GARawTracker;
-			path = "Third-Party/GARawTracker/GARawTracker";
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -369,7 +355,7 @@
 		E2C338A319F8562F00063D95 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1220;
+				LastUpgradeCheck = 1340;
 				ORGANIZATIONNAME = "";
 				TargetAttributes = {
 					E21DCAE71B253847006424E8 = {
@@ -487,7 +473,6 @@
 			files = (
 				0A01676A2330CABD0069961E /* ServicesProvider.m in Sources */,
 				E21739F71A5080DD00EC6777 /* DocumentController.m in Sources */,
-				E2E3C9A01D771E7600AA9A62 /* GARawTracker.m in Sources */,
 				E2C338B419F8562F00063D95 /* main.m in Sources */,
 				E2C5672D1A6D98BC00ECFE07 /* WindowController.m in Sources */,
 				A53C6D0C1E61A9CF0070387E /* FontSizeTransformer.m in Sources */,
@@ -624,6 +609,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E27E37571B86F670000A551A /* Debug.xcconfig */;
 			buildSettings = {
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				SDKROOT = macosx;
 			};
 			name = Debug;
@@ -632,6 +618,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E27E37591B86F670000A551A /* Release.xcconfig */;
 			buildSettings = {
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				SDKROOT = macosx;
 			};
 			name = Release;
@@ -646,7 +633,7 @@
 				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/Third-Party";
 				INFOPLIST_FILE = Application/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				MARKETING_VERSION = 1.3;
+				MARKETING_VERSION = 1.3.1;
 				PRODUCT_BUNDLE_IDENTIFIER = "co.gitup.mac-debug";
 				PRODUCT_NAME = GitUp;
 			};
@@ -662,7 +649,7 @@
 				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/Third-Party";
 				INFOPLIST_FILE = Application/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				MARKETING_VERSION = 1.3;
+				MARKETING_VERSION = 1.3.1;
 				PRODUCT_BUNDLE_IDENTIFIER = co.gitup.mac;
 				PRODUCT_NAME = GitUp;
 			};

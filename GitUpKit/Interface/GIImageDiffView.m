@@ -111,17 +111,17 @@
     if (![[NSFileManager defaultManager] fileExistsAtPath:newPath]) {
       [self.repository exportBlobWithSHA1:_delta.newFile.SHA1 toPath:newPath error:&error];
     }
-    _currentImageSize = [self imageSizeWithoutLoadingFromPath:newPath];
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-      NSImage* limitedSizeImage = [self generateLimitedSizeImageFromPath:newPath];
-      dispatch_async(dispatch_get_main_queue(), ^{
-        _currentImageView.image = limitedSizeImage;
-        [self setNeedsDisplay:true];
-      });
-    });
   } else {
-    _currentImageView.image = nil;
+    newPath = [self.repository absolutePathForFile:_delta.canonicalPath];
   }
+  _currentImageSize = [self imageSizeWithoutLoadingFromPath:newPath];
+  dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    NSImage* limitedSizeImage = [self generateLimitedSizeImageFromPath:newPath];
+    dispatch_async(dispatch_get_main_queue(), ^{
+      _currentImageView.image = limitedSizeImage;
+      [self setNeedsDisplay:true];
+    });
+  });
 }
 
 - (void)updateOldImage {

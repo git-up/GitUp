@@ -20,7 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface CloneWindowController : NSWindowController
 @property(nonatomic, copy) NSString* url;
-- (void)runModalForURL:(NSString*)url completion:(void (^)(CloneWindowControllerResult* result))completion;
+- (void)runModalForURL:(NSString*)url completion:(void (^)(CloneWindowControllerResult* _Nullable result))completion;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -170,7 +170,9 @@ void GIPerformOnMainRunLoop(dispatch_block_t block) {
   [super awakeFromNib];
 
   [self updateFont];
-  self.continuousSpellCheckingEnabled = [[NSUserDefaults standardUserDefaults] boolForKey:GICommitMessageViewUserDefaultKey_EnableSpellChecking];
+  
+  NSUserDefaults *defaults = NSUserDefaults.standardUserDefaults;
+  self.continuousSpellCheckingEnabled = [defaults boolForKey:GICommitMessageViewUserDefaultKey_EnableSpellChecking];
   self.automaticSpellingCorrectionEnabled = NO;  // Don't trust IB
   self.grammarCheckingEnabled = NO;  // Don't trust IB
   self.automaticLinkDetectionEnabled = NO;  // Don't trust IB
@@ -182,11 +184,13 @@ void GIPerformOnMainRunLoop(dispatch_block_t block) {
   self.textColor = NSColor.textColor;  // Don't trust IB
   self.backgroundColor = NSColor.textBackgroundColor;  // Don't trust IB
   [self.textContainer replaceLayoutManager:[[GILayoutManager alloc] init]];
+  
+  self.layoutManager.showsInvisibleCharacters = [defaults boolForKey:GICommitMessageViewUserDefaultKey_ShowInvisibleCharacters];
 
-  [[NSUserDefaults standardUserDefaults] addObserver:self forKeyPath:GICommitMessageViewUserDefaultKey_ShowInvisibleCharacters options:0 context:(__bridge void*)[GICommitMessageView class]];
-  [[NSUserDefaults standardUserDefaults] addObserver:self forKeyPath:GICommitMessageViewUserDefaultKey_ShowMargins options:0 context:(__bridge void*)[GICommitMessageView class]];
-  [[NSUserDefaults standardUserDefaults] addObserver:self forKeyPath:GICommitMessageViewUserDefaultKey_EnableSpellChecking options:0 context:(__bridge void*)[GICommitMessageView class]];
-  [[NSUserDefaults standardUserDefaults] addObserver:self forKeyPath:GIUserDefaultKey_FontSize options:0 context:(__bridge void*)[GICommitMessageView class]];
+  [defaults addObserver:self forKeyPath:GICommitMessageViewUserDefaultKey_ShowInvisibleCharacters options:0 context:(__bridge void*)[GICommitMessageView class]];
+  [defaults addObserver:self forKeyPath:GICommitMessageViewUserDefaultKey_ShowMargins options:0 context:(__bridge void*)[GICommitMessageView class]];
+  [defaults addObserver:self forKeyPath:GICommitMessageViewUserDefaultKey_EnableSpellChecking options:0 context:(__bridge void*)[GICommitMessageView class]];
+  [defaults addObserver:self forKeyPath:GIUserDefaultKey_FontSize options:0 context:(__bridge void*)[GICommitMessageView class]];
 }
 
 - (void)updateFont {
@@ -233,10 +237,7 @@ void GIPerformOnMainRunLoop(dispatch_block_t block) {
 - (void)observeValueForKeyPath:(NSString*)keyPath ofObject:(id)object change:(NSDictionary*)change context:(void*)context {
   if (context == (__bridge void*)[GICommitMessageView class]) {
     if ([keyPath isEqualToString:GICommitMessageViewUserDefaultKey_ShowInvisibleCharacters]) {
-      NSRange range = NSMakeRange(0, self.textStorage.length);
-      [self.layoutManager invalidateGlyphsForCharacterRange:range changeInLength:0 actualCharacterRange:NULL];
-      [self.layoutManager invalidateLayoutForCharacterRange:range isSoft:NO actualCharacterRange:NULL];
-      [self setNeedsDisplay:YES];
+      self.layoutManager.showsInvisibleCharacters = [[NSUserDefaults standardUserDefaults] boolForKey:GICommitMessageViewUserDefaultKey_ShowInvisibleCharacters];
     } else if ([keyPath isEqualToString:GICommitMessageViewUserDefaultKey_ShowMargins]) {
       [self setNeedsDisplay:YES];
     } else if ([keyPath isEqualToString:GICommitMessageViewUserDefaultKey_EnableSpellChecking]) {
@@ -325,32 +326,70 @@ void GIPerformOnMainRunLoop(dispatch_block_t block) {
 
 @end
 
+@interface GILayoutManager() <NSLayoutManagerDelegate>
+@end
+
 @implementation GILayoutManager
 
-- (void)drawGlyphsForGlyphRange:(NSRange)range atPoint:(NSPoint)point {
-  if ([[NSUserDefaults standardUserDefaults] boolForKey:GICommitMessageViewUserDefaultKey_ShowInvisibleCharacters]) {
-    NSTextStorage* storage = self.textStorage;
-    NSString* string = storage.string;
-    for (NSUInteger glyphIndex = range.location; glyphIndex < range.location + range.length; ++glyphIndex) {
-      NSUInteger characterIndex = [self characterIndexForGlyphAtIndex:glyphIndex];
-      switch ([string characterAtIndex:characterIndex]) {
-        case ' ': {
-          NSFont* font = [storage attribute:NSFontAttributeName atIndex:characterIndex effectiveRange:NULL];
-          XLOG_DEBUG_CHECK([font.fontName isEqualToString:@"Menlo-Regular"]);
-          [self replaceGlyphAtIndex:glyphIndex withGlyph:[font glyphWithName:@"periodcentered"]];
-          break;
-        }
-
-        case '\n': {
-          NSFont* font = [storage attribute:NSFontAttributeName atIndex:characterIndex effectiveRange:NULL];
-          XLOG_DEBUG_CHECK([font.fontName isEqualToString:@"Menlo-Regular"]);
-          [self replaceGlyphAtIndex:glyphIndex withGlyph:[font glyphWithName:@"carriagereturn"]];
-          break;
-        }
-      }
-    }
+- (instancetype)init {
+  self = [super init];
+  if (self) {
+    self.delegate = self;
   }
-  [super drawGlyphsForGlyphRange:range atPoint:point];
+  
+  return self;
+}
+
+- (NSUInteger)layoutManager:(NSLayoutManager *)layoutManager shouldGenerateGlyphs:(const CGGlyph *)glyphs properties:(const NSGlyphProperty *)props characterIndexes:(const NSUInteger *)charIndexes font:(NSFont *)aFont forGlyphRange:(NSRange)glyphRange {
+  
+  XLOG_DEBUG_CHECK([aFont.fontName isEqualToString:@"Menlo-Regular"]);
+  
+  if (layoutManager.showsInvisibleCharacters) {
+    NSTextStorage *textStorage = layoutManager.textStorage;
+    size_t glyphSize = sizeof(CGGlyph) * glyphRange.length;
+    size_t propertySize = sizeof(NSGlyphProperty) * glyphRange.length;
+    CGGlyph *replacementGlyphs = malloc(glyphSize);
+    NSGlyphProperty *replacementProperties = malloc(propertySize);
+    memcpy(replacementGlyphs, glyphs, glyphSize);
+    memcpy(replacementProperties, props, propertySize);
+    NSString *string = textStorage.string;
+    
+    NSCharacterSet *spaceCharacterSet = [NSCharacterSet characterSetWithCharactersInString:@" "];
+    NSCharacterSet *newlineCharacterSet = [NSCharacterSet characterSetWithCharactersInString:@"\n"];
+    
+    NSUInteger i = 0;
+    while (i < glyphRange.length) {
+      NSUInteger characterIndex = charIndexes[i];
+      unichar character = [string characterAtIndex:characterIndex];
+      
+      if ([spaceCharacterSet characterIsMember:character]) {
+        replacementGlyphs[i] = (CGGlyph)[aFont glyphWithName:@"periodcentered"];
+        
+      } else if ([newlineCharacterSet characterIsMember:character]) {
+        replacementGlyphs[i] = (CGGlyph)[aFont glyphWithName:@"carriagereturn"];
+        replacementProperties[i] = 0;
+      }
+      
+      i += [string rangeOfComposedCharacterSequenceAtIndex:characterIndex].length;
+    }
+    
+    [self setGlyphs:replacementGlyphs properties:replacementProperties characterIndexes:charIndexes font:aFont forGlyphRange:glyphRange];
+    
+    free(replacementGlyphs);
+    free(replacementProperties);
+  } else {
+    [self setGlyphs:glyphs properties:props characterIndexes:charIndexes font:aFont forGlyphRange:glyphRange];
+  }
+
+  return glyphRange.length;
+}
+
+- (NSControlCharacterAction)layoutManager:(NSLayoutManager *)layoutManager shouldUseAction:(NSControlCharacterAction)action forControlCharacterAtIndex:(NSUInteger)characterIndex {
+  if (layoutManager.showsInvisibleCharacters && action & NSControlCharacterActionLineBreak) {
+    [layoutManager setNotShownAttribute:NO forGlyphAtIndex:[layoutManager glyphIndexForCharacterAtIndex:characterIndex]];
+  }
+
+  return action;
 }
 
 @end
