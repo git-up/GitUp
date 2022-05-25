@@ -193,11 +193,6 @@
 - (void)applicationWillFinishLaunching:(NSNotification*)notification {
   // Initialize custom subclass of NSDocumentController
   [DocumentController sharedDocumentController];
-
-  [[NSAppleEventManager sharedAppleEventManager] setEventHandler:self
-                                                     andSelector:@selector(_getUrl:withReplyEvent:)
-                                                   forEventClass:kInternetEventClass
-                                                      andEventID:kAEGetURL];
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification*)notification {
@@ -281,16 +276,6 @@
   // Enable sudden termination
   [[NSProcessInfo processInfo] enableSuddenTermination];
 #endif
-}
-
-- (void)_getUrl:(NSAppleEventDescriptor*)event withReplyEvent:(NSAppleEventDescriptor*)replyEvent {
-  NSURL* url = [NSURL URLWithString:[event paramDescriptorForKeyword:keyDirectObject].stringValue];
-  BOOL isGitHubMacScheme = [url.scheme rangeOfString:@"github-mac" options:NSCaseInsensitiveSearch].location != NSNotFound;
-  BOOL isOpenRepoHost = [url.host rangeOfString:@"openRepo" options:NSCaseInsensitiveSearch].location != NSNotFound;
-  NSString* path = url.path.length ? [url.path substringFromIndex:1] : nil;
-  if (isGitHubMacScheme && isOpenRepoHost && path) {
-    [self _cloneRepositoryFromURLString:path];
-  }
 }
 
 - (BOOL)applicationShouldOpenUntitledFile:(NSApplication*)sender {
