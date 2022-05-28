@@ -13,9 +13,6 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#if __has_feature(objc_arc)
-#error This file requires MRC
-#endif
 
 #import "GIPrivate.h"
 
@@ -28,9 +25,9 @@
   if ((self = [super init])) {
     _primaryLine = line;
     _layer = layer;
-    _commit = [commit retain];
+    _commit = commit;
     _dummy = dummy;
-    _alternateCommit = [alternateCommit retain];
+    _alternateCommit = alternateCommit;
   }
   return self;
 }
@@ -39,10 +36,8 @@
   if (_parentCount > 2) {
     CFRelease(_additionalParents);
   }
-  [_alternateCommit release];
-  [_commit release];
-
-  [super dealloc];
+  _alternateCommit = nil;
+  _commit = nil;
 }
 
 - (GINode*)parentAtIndex:(NSUInteger)index {
@@ -51,7 +46,7 @@
     return _mainParent;
   }
   if (_parentCount == 2) {
-    return index ? _additionalParents : _mainParent;
+    return index ? (__bridge GINode *)_additionalParents : _mainParent;
   }
   return CFArrayGetValueAtIndex(_additionalParents, index);
 }
@@ -60,16 +55,16 @@
   if (_parentCount == 0) {
     _mainParent = parent;
   } else if (_parentCount == 1) {
-    _additionalParents = parent;
+    _additionalParents = (__bridge void *)parent;
   } else if (_parentCount == 2) {
     CFMutableArrayRef array = CFArrayCreateMutable(kCFAllocatorDefault, 0, NULL);
-    CFArrayAppendValue(array, _mainParent);
+    CFArrayAppendValue(array, (__bridge const void *)(_mainParent));
     CFArrayAppendValue(array, _additionalParents);
-    CFArrayAppendValue(array, parent);
+    CFArrayAppendValue(array, (__bridge const void *)(parent));
     _additionalParents = array;
   } else {
     XLOG_DEBUG_CHECK(CFArrayGetCount(_additionalParents) == (CFIndex)_parentCount);
-    CFArrayAppendValue(_additionalParents, parent);
+    CFArrayAppendValue(_additionalParents, (__bridge const void *)(parent));
   }
   _parentCount += 1;
 }
