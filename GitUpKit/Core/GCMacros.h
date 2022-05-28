@@ -177,13 +177,13 @@ static inline BOOL __GCPointerListContains(GCPointerList* list, void* pointer) {
 
 #define GC_POINTER_LIST_CONTAINS(name, pointer) __GCPointerListContains(&name, pointer)
 
-#define GC_POINTER_LIST_FOR_LOOP_VARIABLE(name, variable) \
-  variable = GC_POINTER_LIST_GET(name, 0);                \
-  for (size_t __##variable = 0; (__##variable < name.count) && (variable = GC_POINTER_LIST_GET(name, __##variable), 1); ++__##variable)
+#define GC_POINTER_LIST_FOR_LOOP_NO_BRIDGE(name, type, variable) \
+  type variable = (type)GC_POINTER_LIST_GET(name, 0);                \
+  for (size_t __##variable = 0; (__##variable < name.count) && (variable = (type)GC_POINTER_LIST_GET(name, __##variable), 1); ++__##variable)
 
 #define GC_POINTER_LIST_FOR_LOOP(name, type, variable) \
-  type variable;                                       \
-  GC_POINTER_LIST_FOR_LOOP_VARIABLE(name, variable)
+  type variable = (__bridge type)GC_POINTER_LIST_GET(name, 0);                \
+  for (size_t __##variable = 0; (__##variable < name.count) && (variable = (__bridge type)GC_POINTER_LIST_GET(name, __##variable), 1); ++__##variable)
 
 #define GC_POINTER_LIST_REVERSE_FOR_LOOP(name, type, variable)                   \
   type variable = name.count ? GC_POINTER_LIST_GET(name, name.count - 1) : NULL; \
