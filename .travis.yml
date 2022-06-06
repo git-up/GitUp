@@ -1,3 +1,0 @@
-language: objective-c
-script: ./travis-build.sh
-osx_image: xcode10.3
