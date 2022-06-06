@@ -1,9 +1,0 @@
-#include "Base"
-
-GCC_PREPROCESSOR_DEFINITIONS = DEBUG=1
-WARNING_CFLAGS = -Wall -Weverything -Wno-pedantic -Wno-padded -Wno-direct-ivar-access -Wno-documentation-unknown-command -Wno-objc-missing-property-synthesis -Wno-implicit-retain-self -Wno-explicit-ownership-type -Wno-assign-enum -Wno-cast-align -Wno-switch-enum -Wno-cstring-format-directive -Wno-cast-qual -Wno-nullable-to-nonnull-conversion -Wno-reserved-id-macro -Wno-nonnull -Wno-double-promotion -Wno-objc-messaging-id -Wno-auto-import -Wno-atimport-in-framework-header
-
-ONLY_ACTIVE_ARCH = YES
-DEBUG_INFORMATION_FORMAT = dwarf
-GCC_OPTIMIZATION_LEVEL = 0
-ENABLE_TESTABILITY = YES
