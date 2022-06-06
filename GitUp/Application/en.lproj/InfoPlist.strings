@@ -1,9 +1,0 @@
-/* 
-  InfoPlist.strings
-  GitUp
-
-  Created by Dmitry Lobanov on 25/08/2019.
-  
-*/
-
-"NSAppleEventsUsageDescription" = "Please give access to Terminal via Apple Script.";
