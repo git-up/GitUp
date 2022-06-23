@@ -1867,6 +1867,7 @@
 					"$(inherited)",
 					"__GI_HAS_APPKIT__=0",
 				);
+				GENERATE_INFOPLIST_FILE = YES;
 				PRODUCT_NAME = GitUpTests;
 				SDKROOT = macosx;
 			};
@@ -1883,6 +1884,7 @@
 					"$(inherited)",
 					"__GI_HAS_APPKIT__=0",
 				);
+				GENERATE_INFOPLIST_FILE = YES;
 				PRODUCT_NAME = GitUpTests;
 				SDKROOT = macosx;
 			};
