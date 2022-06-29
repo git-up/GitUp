@@ -314,7 +314,7 @@ void GIPerformOnMainRunLoop(dispatch_block_t block) {
 // NSTableView built-in fallback for tab key when not editable cell is around is to change the first responder to the next key view directly without using -selectNextKeyView:
 - (void)keyDown:(NSEvent*)event {
   if (event.keyCode == kGIKeyCode_Tab) {
-    if (event.modifierFlags & NSShiftKeyMask) {
+    if (event.modifierFlags & NSEventModifierFlagShift) {
       [self.window selectPreviousKeyView:nil];
     } else {
       [self.window selectNextKeyView:nil];

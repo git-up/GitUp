@@ -155,9 +155,9 @@ typedef NS_ENUM(NSInteger, WelcomeWindowControllerWindowState) {
 
 #pragma mark - Setup
 - (void)setupUIElements {
-  self.twitterButton.textAlignment = NSLeftTextAlignment;
+  self.twitterButton.textAlignment = NSTextAlignmentLeft;
   self.twitterButton.textFont = [NSFont boldSystemFontOfSize:11];
-  self.forumsButton.textAlignment = NSLeftTextAlignment;
+  self.forumsButton.textAlignment = NSTextAlignmentLeft;
   self.forumsButton.textFont = [NSFont boldSystemFontOfSize:11];
 
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willShowPopUpMenu) name:NSPopUpButtonWillPopUpNotification object:self.recentPopUpButton];

@@ -107,7 +107,7 @@ int main(int argc, const char* argv[]) {
             NSString* appPath = [[[executablePath stringByDeletingLastPathComponent] stringByDeletingLastPathComponent] stringByDeletingLastPathComponent];  // Remove "Contents/SharedSupport/{executable}"
             LSLaunchURLSpec spec = {0};
             spec.appURL = (__bridge CFURLRef)[NSURL fileURLWithPath:appPath isDirectory:YES];
-            spec.launchFlags = kLSLaunchNoParams | kLSLaunchAndDisplayErrors;
+            spec.launchFlags = kLSLaunchAndDisplayErrors;
             OSStatus status = LSOpenFromURLSpec(&spec, NULL);
             if (status == noErr) {
               CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent();

@@ -24,7 +24,7 @@
 }
 
 - (void)_initialize {
-  _textAlignment = NSCenterTextAlignment;
+  _textAlignment = NSTextAlignmentCenter;
   _textFont = [NSFont systemFontOfSize:[NSFont systemFontSize]];
   _linkColor = [NSColor darkGrayColor];
   _alternateLinkColor = [NSColor blackColor];

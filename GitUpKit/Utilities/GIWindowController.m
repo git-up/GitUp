@@ -44,7 +44,7 @@
 
 - (void)keyDown:(NSEvent*)event {
   if (event.keyCode == kGIKeyCode_Tab) {
-    if (event.modifierFlags & NSShiftKeyMask) {
+    if (event.modifierFlags & NSEventModifierFlagShift) {
       [self.window selectPreviousKeyView:nil];
     } else {
       [self.window selectNextKeyView:nil];
@@ -136,7 +136,7 @@ static void _WalkViewTree(NSView* view, NSMutableArray* array) {
 }
 
 - (void)sendEvent:(NSEvent*)event {
-  BOOL escapeKeyDown = (event.type == NSKeyDown) && (event.keyCode == kGIKeyCode_Esc);
+  BOOL escapeKeyDown = (event.type == NSEventTypeKeyDown) && (event.keyCode == kGIKeyCode_Esc);
   if (escapeKeyDown && self.windowController.hasModalView) {
     [self.windowController stopModalView:NO];
   } else if (escapeKeyDown && self.windowController.overlayVisible) {
