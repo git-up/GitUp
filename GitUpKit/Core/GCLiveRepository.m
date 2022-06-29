@@ -26,7 +26,7 @@
 
 #import "GCPrivate.h"
 
-#import "XLFunctions.h"
+#import "XLFacilityMacros.h"
 
 #define kFSLatency 0.5
 #define kUpdateLatency 0.5
