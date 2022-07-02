@@ -1835,15 +1835,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 }
 
 - (void)_setSearchFieldPlaceholder:(NSString*)placeholder {
-  if (@available(macOS 10.12, *)) {
-    // 10.12: there are centering issues, and all are fixed by triggering a layout pass.
-    _searchItem.searchField.placeholderString = placeholder;
-    _searchItem.searchField.needsLayout = YES;
-  } else {
-    // 10.11 and earlier: search placeholders have the same length to work around incorrect centering.
-    placeholder = [placeholder stringByPaddingToLength:18 withString:@" " startingAtIndex:0];
-    _searchItem.searchField.placeholderString = placeholder;
-  }
+  _searchItem.searchField.placeholderString = placeholder;
 }
 
 - (IBAction)performSearch:(id)sender {

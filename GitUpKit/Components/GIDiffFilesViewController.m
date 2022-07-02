@@ -210,17 +210,15 @@ static NSImage* _untrackedImage = nil;
   NSURL* url = [NSURL fileURLWithPath:path isDirectory:NO];
   [pasteboardItem setString:url.absoluteString forType:GIPasteboardTypeFileURL];
 
-  if (@available(macOS 10.12, *)) {
-    if (GC_FILE_MODE_IS_FILE(delta.oldFile.mode) || GC_FILE_MODE_IS_FILE(delta.newFile.mode)) {
-      NSString* pathExtension = delta.canonicalPath.pathExtension;
-      NSString* utType = (__bridge_transfer NSString*)UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (__bridge CFStringRef)pathExtension, kUTTypeData);
-
-      if (utType) {
-        GIDiffFileProvider* provider = [[GIDiffFileProvider alloc] initWithFileType:utType delegate:self];
-        provider.userInfo = delta;
-        provider.overridePasteboardWriter = pasteboardItem;
-        return provider;
-      }
+  if (GC_FILE_MODE_IS_FILE(delta.oldFile.mode) || GC_FILE_MODE_IS_FILE(delta.newFile.mode)) {
+    NSString* pathExtension = delta.canonicalPath.pathExtension;
+    NSString* utType = (__bridge_transfer NSString*)UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (__bridge CFStringRef)pathExtension, kUTTypeData);
+    
+    if (utType) {
+      GIDiffFileProvider* provider = [[GIDiffFileProvider alloc] initWithFileType:utType delegate:self];
+      provider.userInfo = delta;
+      provider.overridePasteboardWriter = pasteboardItem;
+      return provider;
     }
   }
 

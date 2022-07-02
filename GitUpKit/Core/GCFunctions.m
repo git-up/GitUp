@@ -151,10 +151,8 @@ int GCExchangeFileData(const char* path1, const char* path2) {
     return attrListStatus;
   }
 
-  if (@available(macOS 10.12, iOS 10.0, tvOS 10.0, watchOS 3.0, *)) {
-    if ((attrBuf.attr.capabilities[VOL_CAPABILITIES_INTERFACES] & VOL_CAP_INT_RENAME_SWAP) == VOL_CAP_INT_RENAME_SWAP) {
-      return renamex_np(path1, path2, RENAME_SWAP);
-    }
+  if ((attrBuf.attr.capabilities[VOL_CAPABILITIES_INTERFACES] & VOL_CAP_INT_RENAME_SWAP) == VOL_CAP_INT_RENAME_SWAP) {
+    return renamex_np(path1, path2, RENAME_SWAP);
   }
 
   if ((attrBuf.attr.capabilities[VOL_CAPABILITIES_INTERFACES] & VOL_CAP_INT_EXCHANGEDATA) == VOL_CAP_INT_EXCHANGEDATA) {

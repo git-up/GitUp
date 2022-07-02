@@ -141,9 +141,7 @@
                                                                    if (inTab) {
                                                                      if (!documentWasAlreadyOpen) {
                                                                        [document makeWindowControllers];
-                                                                       if (@available(macOS 10.12, *)) {
-                                                                         document.windowControllers.firstObject.window.tabbingMode = NSWindowTabbingModePreferred;
-                                                                       }
+                                                                       document.windowControllers.firstObject.window.tabbingMode = NSWindowTabbingModePreferred;
                                                                      }
                                                                      [document showWindows];
                                                                    }
