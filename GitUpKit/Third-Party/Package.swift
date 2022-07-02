@@ -68,6 +68,7 @@ enum FeaturesExtractor {
 
 let package = Package(
     name: "SwiftPackage",
+    platforms: [.macOS(.v10_13)],
     products: [
         // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(name: "Libgit2Origin",
