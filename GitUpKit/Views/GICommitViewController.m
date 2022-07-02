@@ -90,7 +90,7 @@
     [string appendString:NSLocalizedString(@"Committing as ", nil) withAttributes:@{NSFontAttributeName : [NSFont systemFontOfSize:fontSize]}];
     [string appendString:user withAttributes:@{NSFontAttributeName : [NSFont boldSystemFontOfSize:fontSize]}];
   }
-  [string setAlignment:NSCenterTextAlignment range:NSMakeRange(0, string.length)];
+  [string setAlignment:NSTextAlignmentCenter range:NSMakeRange(0, string.length)];
   [string endEditing];
   _infoTextField.attributedStringValue = string;
 

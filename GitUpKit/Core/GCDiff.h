@@ -71,21 +71,21 @@ typedef void (^GCDiffEndHunkHandler)(void);
 @end
 
 /* "x" means non-nil, "-" means nil and [X] means canonical path
- 
+
                 Old       New
  Unmodified     [X]        -
  Ignored        [X]        -
  Untracked      [X]        -
  Unreadable     [X]        -
- 
+
  Added           -        [X]
  Deleted        [X]        -
  Modified        x        [X]
- 
+
  Renamed         x        [X]
  Copied          x        [X]
  TypeChanged     x        [X]
- 
+
  Conflicted      x        [X]
  */
 @interface GCDiffDelta : NSObject

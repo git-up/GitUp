@@ -170,8 +170,8 @@ void GIPerformOnMainRunLoop(dispatch_block_t block) {
   [super awakeFromNib];
 
   [self updateFont];
-  
-  NSUserDefaults *defaults = NSUserDefaults.standardUserDefaults;
+
+  NSUserDefaults* defaults = NSUserDefaults.standardUserDefaults;
   self.continuousSpellCheckingEnabled = [defaults boolForKey:GICommitMessageViewUserDefaultKey_EnableSpellChecking];
   self.automaticSpellingCorrectionEnabled = NO;  // Don't trust IB
   self.grammarCheckingEnabled = NO;  // Don't trust IB
@@ -184,7 +184,7 @@ void GIPerformOnMainRunLoop(dispatch_block_t block) {
   self.textColor = NSColor.textColor;  // Don't trust IB
   self.backgroundColor = NSColor.textBackgroundColor;  // Don't trust IB
   [self.textContainer replaceLayoutManager:[[GILayoutManager alloc] init]];
-  
+
   self.layoutManager.showsInvisibleCharacters = [defaults boolForKey:GICommitMessageViewUserDefaultKey_ShowInvisibleCharacters];
 
   [defaults addObserver:self forKeyPath:GICommitMessageViewUserDefaultKey_ShowInvisibleCharacters options:0 context:(__bridge void*)[GICommitMessageView class]];
@@ -314,7 +314,7 @@ void GIPerformOnMainRunLoop(dispatch_block_t block) {
 // NSTableView built-in fallback for tab key when not editable cell is around is to change the first responder to the next key view directly without using -selectNextKeyView:
 - (void)keyDown:(NSEvent*)event {
   if (event.keyCode == kGIKeyCode_Tab) {
-    if (event.modifierFlags & NSShiftKeyMask) {
+    if (event.modifierFlags & NSEventModifierFlagShift) {
       [self.window selectPreviousKeyView:nil];
     } else {
       [self.window selectNextKeyView:nil];
@@ -326,7 +326,7 @@ void GIPerformOnMainRunLoop(dispatch_block_t block) {
 
 @end
 
-@interface GILayoutManager() <NSLayoutManagerDelegate>
+@interface GILayoutManager () <NSLayoutManagerDelegate>
 @end
 
 @implementation GILayoutManager
@@ -336,45 +336,44 @@ void GIPerformOnMainRunLoop(dispatch_block_t block) {
   if (self) {
     self.delegate = self;
   }
-  
+
   return self;
 }
 
-- (NSUInteger)layoutManager:(NSLayoutManager *)layoutManager shouldGenerateGlyphs:(const CGGlyph *)glyphs properties:(const NSGlyphProperty *)props characterIndexes:(const NSUInteger *)charIndexes font:(NSFont *)aFont forGlyphRange:(NSRange)glyphRange {
-  
+- (NSUInteger)layoutManager:(NSLayoutManager*)layoutManager shouldGenerateGlyphs:(const CGGlyph*)glyphs properties:(const NSGlyphProperty*)props characterIndexes:(const NSUInteger*)charIndexes font:(NSFont*)aFont forGlyphRange:(NSRange)glyphRange {
   XLOG_DEBUG_CHECK([aFont.fontName isEqualToString:@"Menlo-Regular"]);
-  
+
   if (layoutManager.showsInvisibleCharacters) {
-    NSTextStorage *textStorage = layoutManager.textStorage;
+    NSTextStorage* textStorage = layoutManager.textStorage;
     size_t glyphSize = sizeof(CGGlyph) * glyphRange.length;
     size_t propertySize = sizeof(NSGlyphProperty) * glyphRange.length;
-    CGGlyph *replacementGlyphs = malloc(glyphSize);
-    NSGlyphProperty *replacementProperties = malloc(propertySize);
+    CGGlyph* replacementGlyphs = malloc(glyphSize);
+    NSGlyphProperty* replacementProperties = malloc(propertySize);
     memcpy(replacementGlyphs, glyphs, glyphSize);
     memcpy(replacementProperties, props, propertySize);
-    NSString *string = textStorage.string;
-    
-    NSCharacterSet *spaceCharacterSet = [NSCharacterSet characterSetWithCharactersInString:@" "];
-    NSCharacterSet *newlineCharacterSet = [NSCharacterSet characterSetWithCharactersInString:@"\n"];
-    
+    NSString* string = textStorage.string;
+
+    NSCharacterSet* spaceCharacterSet = [NSCharacterSet characterSetWithCharactersInString:@" "];
+    NSCharacterSet* newlineCharacterSet = [NSCharacterSet characterSetWithCharactersInString:@"\n"];
+
     NSUInteger i = 0;
     while (i < glyphRange.length) {
       NSUInteger characterIndex = charIndexes[i];
       unichar character = [string characterAtIndex:characterIndex];
-      
+
       if ([spaceCharacterSet characterIsMember:character]) {
         replacementGlyphs[i] = (CGGlyph)[aFont glyphWithName:@"periodcentered"];
-        
+
       } else if ([newlineCharacterSet characterIsMember:character]) {
         replacementGlyphs[i] = (CGGlyph)[aFont glyphWithName:@"carriagereturn"];
         replacementProperties[i] = 0;
       }
-      
+
       i += [string rangeOfComposedCharacterSequenceAtIndex:characterIndex].length;
     }
-    
+
     [self setGlyphs:replacementGlyphs properties:replacementProperties characterIndexes:charIndexes font:aFont forGlyphRange:glyphRange];
-    
+
     free(replacementGlyphs);
     free(replacementProperties);
   } else {
@@ -384,7 +383,7 @@ void GIPerformOnMainRunLoop(dispatch_block_t block) {
   return glyphRange.length;
 }
 
-- (NSControlCharacterAction)layoutManager:(NSLayoutManager *)layoutManager shouldUseAction:(NSControlCharacterAction)action forControlCharacterAtIndex:(NSUInteger)characterIndex {
+- (NSControlCharacterAction)layoutManager:(NSLayoutManager*)layoutManager shouldUseAction:(NSControlCharacterAction)action forControlCharacterAtIndex:(NSUInteger)characterIndex {
   if (layoutManager.showsInvisibleCharacters && action & NSControlCharacterActionLineBreak) {
     [layoutManager setNotShownAttribute:NO forGlyphAtIndex:[layoutManager glyphIndexForCharacterAtIndex:characterIndex]];
   }

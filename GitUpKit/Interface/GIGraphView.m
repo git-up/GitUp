@@ -457,7 +457,7 @@ static const void* _associatedObjectDataKey = &_associatedObjectDataKey;
       }
       [_delegate graphView:self didDoubleClickOnNode:node];
     }
-  } else if (event.modifierFlags & NSControlKeyMask) {
+  } else if (event.modifierFlags & NSEventModifierFlagControl) {
     if (node && !node.dummy) {
       [self _showContextualMenuForNode:node];
     }
@@ -500,7 +500,7 @@ static const void* _associatedObjectDataKey = &_associatedObjectDataKey;
 - (void)keyDown:(NSEvent*)event {
   switch (event.keyCode) {
     case kGIKeyCode_Tab:
-      if (event.modifierFlags & NSShiftKeyMask) {
+      if (event.modifierFlags & NSEventModifierFlagShift) {
         [self.window selectPreviousKeyView:nil];
       } else {
         [self.window selectNextKeyView:nil];
@@ -512,7 +512,7 @@ static const void* _associatedObjectDataKey = &_associatedObjectDataKey;
       return;
 
     case kGIKeyCode_Left:
-      if (event.modifierFlags & NSCommandKeyMask) {
+      if (event.modifierFlags & NSEventModifierFlagCommand) {
         [self _scrollToLeft];
       } else if (_selectedNode) {
         [self _selectPreviousSiblingNode];
@@ -522,7 +522,7 @@ static const void* _associatedObjectDataKey = &_associatedObjectDataKey;
       return;
 
     case kGIKeyCode_Right:
-      if (event.modifierFlags & NSCommandKeyMask) {
+      if (event.modifierFlags & NSEventModifierFlagCommand) {
         [self _scrollToRight];
       } else if (_selectedNode) {
         [self _selectNextSiblingNode];
@@ -532,9 +532,9 @@ static const void* _associatedObjectDataKey = &_associatedObjectDataKey;
       return;
 
     case kGIKeyCode_Down:
-      if (event.modifierFlags & NSAlternateKeyMask) {
+      if (event.modifierFlags & NSEventModifierFlagOption) {
         [self _selectUncleNode];
-      } else if (event.modifierFlags & NSCommandKeyMask) {
+      } else if (event.modifierFlags & NSEventModifierFlagCommand) {
         [self _scrollToBottom];
       } else if (_selectedNode) {
         [self _selectParentNode];
@@ -544,9 +544,9 @@ static const void* _associatedObjectDataKey = &_associatedObjectDataKey;
       return;
 
     case kGIKeyCode_Up:
-      if (event.modifierFlags & NSAlternateKeyMask) {
+      if (event.modifierFlags & NSEventModifierFlagOption) {
         [self _selectNephewNode];
-      } else if (event.modifierFlags & NSCommandKeyMask) {
+      } else if (event.modifierFlags & NSEventModifierFlagCommand) {
         [self _scrollToTop];
       } else if (_selectedNode) {
         [self _selectChildNode];

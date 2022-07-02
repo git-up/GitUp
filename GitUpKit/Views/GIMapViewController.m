@@ -551,7 +551,7 @@
         unichar character = 0x08;
         characters = [NSString stringWithCharacters:&character length:1];  // Backspace
       }
-      NSUInteger modifiers = event.modifierFlags & (NSCommandKeyMask | NSAlternateKeyMask | NSControlKeyMask);
+      NSUInteger modifiers = event.modifierFlags & (NSEventModifierFlagCommand | NSEventModifierFlagOption | NSEventModifierFlagControl);
       for (NSMenuItem* item in _contextualMenu.itemArray) {
         if ([item.keyEquivalent isEqualToString:characters] && (item.keyEquivalentModifierMask == modifiers) && [self validateUserInterfaceItem:item]) {
           if ([NSApp sendAction:item.action to:self from:item]) {

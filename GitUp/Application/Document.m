@@ -228,7 +228,7 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
       }
     } else {
 #if DEBUG
-      if ([NSEvent modifierFlags] & NSAlternateKeyMask) {
+      if ([NSEvent modifierFlags] & NSEventModifierFlagOption) {
         [[NSFileManager defaultManager] removeItemAtPath:_repository.privateAppDirectoryPath error:NULL];
         XLOG_WARNING(@"Resetting private data for repository \"%@\"", _repository.repositoryPath);
       }
@@ -290,7 +290,7 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
 - (void)windowControllerDidLoadNib:(NSWindowController*)windowController {
   CGFloat fontSize = _infoTextField2.font.pointSize;
   NSMutableParagraphStyle* style = [[NSMutableParagraphStyle alloc] init];
-  style.alignment = NSCenterTextAlignment;
+  style.alignment = NSTextAlignmentCenter;
   _stateAttributes = @{NSParagraphStyleAttributeName : style, NSForegroundColorAttributeName : NSColor.systemRedColor, NSFontAttributeName : [NSFont boldSystemFontOfSize:fontSize]};
 
   NSString* frameString = [_repository userInfoForKey:kRepositoryUserInfoKey_MainWindowFrame];
@@ -701,7 +701,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
         [string appendString:branch.name withAttributes:@{NSFontAttributeName : [NSFont boldSystemFontOfSize:fontSize]}];
         [string appendString:NSLocalizedString(@" • tracking upstream ", nil) withAttributes:@{NSFontAttributeName : [NSFont systemFontOfSize:fontSize]}];
         [string appendString:upstream.name withAttributes:@{NSFontAttributeName : [NSFont boldSystemFontOfSize:fontSize]}];
-        [string setAlignment:NSCenterTextAlignment range:NSMakeRange(0, string.length)];
+        [string setAlignment:NSTextAlignmentCenter range:NSMakeRange(0, string.length)];
         [string endEditing];
         _infoTextField1.attributedStringValue = string;
 
@@ -746,7 +746,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
         [string beginEditing];
         [string appendString:NSLocalizedString(@"On branch ", nil) withAttributes:@{NSFontAttributeName : [NSFont systemFontOfSize:fontSize]}];
         [string appendString:branch.name withAttributes:@{NSFontAttributeName : [NSFont boldSystemFontOfSize:fontSize]}];
-        [string setAlignment:NSCenterTextAlignment range:NSMakeRange(0, string.length)];
+        [string setAlignment:NSTextAlignmentCenter range:NSMakeRange(0, string.length)];
         [string endEditing];
         _infoTextField1.attributedStringValue = string;
 
@@ -1294,7 +1294,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
         if (_searchView.superview) {
           GCHistoryCommit* commit = _searchResultsViewController.selectedCommit;
           if (commit) {
-            if (event.modifierFlags & NSAlternateKeyMask) {
+            if (event.modifierFlags & NSEventModifierFlagOption) {
               [_mapViewController launchDiffToolWithCommit:commit otherCommit:commit.parents.firstObject];  // Use main-line
             } else {
               [self _enterQuickViewWithHistoryCommit:commit commitList:_searchResultsViewController.commits];
@@ -1304,7 +1304,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
         } else if (_tagsView.superview) {
           GCHistoryCommit* commit = _tagsViewController.selectedCommit;
           if (commit) {
-            if (event.modifierFlags & NSAlternateKeyMask) {
+            if (event.modifierFlags & NSEventModifierFlagOption) {
               [_mapViewController launchDiffToolWithCommit:commit otherCommit:commit.parents.firstObject];  // Use main-line
             } else {
               [self _enterQuickViewWithHistoryCommit:commit commitList:_tagsViewController.commits];
@@ -1312,7 +1312,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
             handled = YES;
           }
         } else if (_reflogView.superview) {
-          if (event.modifierFlags & NSAlternateKeyMask) {
+          if (event.modifierFlags & NSEventModifierFlagOption) {
             [_windowController showOverlayWithStyle:kGIOverlayStyle_Help message:NSLocalizedString(@"External Diff is not available for reflog entries", nil)];
           } else {
             [_windowController showOverlayWithStyle:kGIOverlayStyle_Help message:NSLocalizedString(@"Quick View is not available for reflog entries", nil)];
@@ -1321,7 +1321,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
         } else if (_ancestorsView.superview) {
           GCHistoryCommit* commit = _ancestorsViewController.selectedCommit;
           if (commit) {
-            if (event.modifierFlags & NSAlternateKeyMask) {
+            if (event.modifierFlags & NSEventModifierFlagOption) {
               [_mapViewController launchDiffToolWithCommit:commit otherCommit:commit.parents.firstObject];  // Use main-line
             } else {
               [self _enterQuickViewWithHistoryCommit:commit commitList:_ancestorsViewController.commits];
@@ -1533,7 +1533,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
   // TODO: Is re-entering NSApp's event loop really AppKit-safe (it appears to partially break NSAnimationContext animations for instance)?
   _resolvingConflicts = 0;
   while (!_resolvingConflicts) {
-    NSEvent* event = [NSApp nextEventMatchingMask:NSAnyEventMask untilDate:[NSDate distantFuture] inMode:NSModalPanelRunLoopMode dequeue:YES];
+    NSEvent* event = [NSApp nextEventMatchingMask:NSEventMaskAny untilDate:[NSDate distantFuture] inMode:NSModalPanelRunLoopMode dequeue:YES];
     [NSApp sendEvent:event];
   }
 

@@ -808,14 +808,14 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
             if (updatedBranch && remoteBranch) {
               if (![updatedBranch.upstream isEqualToBranch:remoteBranch]) {
                 if (askSetUpstreamOnPush) {
-                [self confirmUserActionWithAlertType:kGIAlertType_Note
-                                               title:[NSString stringWithFormat:NSLocalizedString(@"Do you want to set the upstream for \"%@\"?", nil), updatedBranch.name]
-                                             message:[NSString stringWithFormat:NSLocalizedString(@"This will configure the local branch \"%@\" to track the remote branch \"%@\" you just pushed to.", nil), updatedBranch.name, remoteBranch.name]
-                                              button:NSLocalizedString(@"Set Upstream", nil)
-                           suppressionUserDefaultKey:nil
-                                               block:^{
-                                                 [self setUpstream:remoteBranch forLocalBranch:branch];
-                                               }];
+                  [self confirmUserActionWithAlertType:kGIAlertType_Note
+                                                 title:[NSString stringWithFormat:NSLocalizedString(@"Do you want to set the upstream for \"%@\"?", nil), updatedBranch.name]
+                                               message:[NSString stringWithFormat:NSLocalizedString(@"This will configure the local branch \"%@\" to track the remote branch \"%@\" you just pushed to.", nil), updatedBranch.name, remoteBranch.name]
+                                                button:NSLocalizedString(@"Set Upstream", nil)
+                             suppressionUserDefaultKey:nil
+                                                 block:^{
+                                                   [self setUpstream:remoteBranch forLocalBranch:branch];
+                                                 }];
                 } else {
                   [self setUpstream:remoteBranch forLocalBranch:branch];
                 }

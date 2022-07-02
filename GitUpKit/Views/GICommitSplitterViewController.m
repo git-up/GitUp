@@ -389,7 +389,7 @@ cleanup:
 }
 
 - (BOOL)diffFilesViewController:(GIDiffFilesViewController*)controller handleKeyDownEvent:(NSEvent*)event {
-  if (!(event.modifierFlags & NSDeviceIndependentModifierFlagsMask)) {
+  if (!(event.modifierFlags & NSEventModifierFlagDeviceIndependentFlagsMask)) {
     if (event.keyCode == kGIKeyCode_Return) {
       [self _diffFilesViewControllerDidPressReturn:controller];
       return YES;
@@ -462,7 +462,7 @@ cleanup:
 }
 
 - (BOOL)diffContentsViewController:(GIDiffContentsViewController*)controller handleKeyDownEvent:(NSEvent*)event {
-  if (!(event.modifierFlags & NSDeviceIndependentModifierFlagsMask)) {
+  if (!(event.modifierFlags & NSEventModifierFlagDeviceIndependentFlagsMask)) {
     if (event.keyCode == kGIKeyCode_Return) {
       [self _diffContentsViewControllerDidPressReturn:controller];
       return YES;

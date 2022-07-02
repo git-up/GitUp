@@ -103,7 +103,7 @@ static NSString* _diffTemporaryDirectoryPath = nil;
   CFErrorRef error = NULL;
   NSArray* applications = CFBridgingRelease(LSCopyApplicationURLsForBundleIdentifier((__bridge CFStringRef)bundleIdentifier, &error));
   if (error) {
-    //TODO: Handle error.
+    // TODO: Handle error.
     CFRelease(error);
     return NO;
   }

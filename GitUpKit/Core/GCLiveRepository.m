@@ -20,9 +20,13 @@
 #import <sys/stat.h>
 #import <sys/attr.h>
 
+#if DEBUG
+#import <stdatomic.h>
+#endif
+
 #import "GCPrivate.h"
 
-#import "XLFunctions.h"
+#import "XLFacilityMacros.h"
 
 #define kFSLatency 0.5
 #define kUpdateLatency 0.5
@@ -53,7 +57,7 @@ NSString* const GCLiveRepositoryCommitOperationReason = @"commit";
 NSString* const GCLiveRepositoryAmendOperationReason = @"amend";
 
 #if DEBUG
-static int32_t _allocatedCount = 0;
+static _Atomic int32_t _allocatedCount = ATOMIC_VAR_INIT(0);
 #endif
 
 @implementation GCLiveRepository {
@@ -87,7 +91,7 @@ static int32_t _allocatedCount = 0;
   if (repository) {
     repository->_gitDirectory = -1;  // Prevents calling close(0) in -dealloc in case super returns nil
 #if DEBUG
-    OSAtomicIncrement32(&_allocatedCount);
+    atomic_fetch_add(&_allocatedCount, 1);
 #endif
   }
   return repository;
@@ -96,7 +100,8 @@ static int32_t _allocatedCount = 0;
 #if DEBUG
 
 + (NSUInteger)allocatedCount {
-  return _allocatedCount;
+  int32_t count = atomic_load(&_allocatedCount);
+  return count;
 }
 
 #endif
@@ -260,7 +265,7 @@ static void _StreamCallback(ConstFSEventStreamRef streamRef, void* clientCallBac
     close(_gitDirectory);
   }
 #if DEBUG
-  OSAtomicDecrement32(&_allocatedCount);
+  atomic_fetch_sub(&_allocatedCount, 1);
 #endif
 }
 

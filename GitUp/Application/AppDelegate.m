@@ -147,7 +147,7 @@
                                                                      }
                                                                      [document showWindows];
                                                                    }
-                                                                   
+
                                                                    if (documentWasAlreadyOpen) {
                                                                      if ((NSUInteger)windowModeID != NSNotFound) {
                                                                        [(Document*)document setWindowModeID:windowModeID];
@@ -353,7 +353,7 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
 
 #pragma mark - Actions
 
-- (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
+- (BOOL)validateMenuItem:(NSMenuItem*)menuItem {
   if (menuItem.action == @selector(checkForUpdates:)) {
     return [_updater validateMenuItem:menuItem];
   }
@@ -394,7 +394,7 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
   savePanel.prompt = NSLocalizedString(@"Create", nil);
   savePanel.nameFieldLabel = NSLocalizedString(@"Name:", nil);
   savePanel.showsTagField = NO;
-  if ([savePanel runModal] == NSFileHandlingPanelOKButton) {
+  if ([savePanel runModal] == NSModalResponseOK) {
     NSString* path = savePanel.URL.path;
     NSError* error;
     if (![[NSFileManager defaultManager] fileExistsAtPath:path followLastSymlink:NO] || [[NSFileManager defaultManager] moveItemAtPathToTrash:path error:&error]) {

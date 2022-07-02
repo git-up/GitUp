@@ -58,4 +58,6 @@
 #import <GitUpKit/GISimpleCommitViewController.h>
 #import <GitUpKit/GIStashListViewController.h>
 
+#import <GitUpKit/XLFacilityMacros.h>
+
 #endif

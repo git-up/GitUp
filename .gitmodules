@@ -1,6 +1,3 @@
-[submodule "XLFacility"]
-	path = GitUpKit/Third-Party/XLFacility
-	url = https://github.com/swisspol/XLFacility.git
 [submodule "libgit2"]
 	path = GitUpKit/Third-Party/libgit2
 	url = https://github.com/git-up/libgit2.git
