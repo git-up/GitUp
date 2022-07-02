@@ -77,7 +77,7 @@
       savePanel.nameFieldLabel = NSLocalizedString(@"Name:", nil);
       savePanel.nameFieldStringValue = name ? name : @"";
       savePanel.showsTagField = NO;
-      if ([savePanel runModal] == NSFileHandlingPanelOKButton) {
+      if ([savePanel runModal] == NSModalResponseOK) {
         NSString* path = savePanel.URL.path;
         completion([[CloneWindowControllerResult alloc] initWithRepositoryURL:url directoryPath:path recursive:self.recursive]);
       } else {

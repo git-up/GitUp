@@ -394,7 +394,7 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
   savePanel.prompt = NSLocalizedString(@"Create", nil);
   savePanel.nameFieldLabel = NSLocalizedString(@"Name:", nil);
   savePanel.showsTagField = NO;
-  if ([savePanel runModal] == NSFileHandlingPanelOKButton) {
+  if ([savePanel runModal] == NSModalResponseOK) {
     NSString* path = savePanel.URL.path;
     NSError* error;
     if (![[NSFileManager defaultManager] fileExistsAtPath:path followLastSymlink:NO] || [[NSFileManager defaultManager] moveItemAtPathToTrash:path error:&error]) {
