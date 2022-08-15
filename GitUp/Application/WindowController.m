@@ -28,15 +28,6 @@
   self.window.delegate = self;
 }
 
-- (NSString*)windowTitleForDocumentDisplayName:(NSString*)displayName {
-  NSString* displayMode = NSLocalizedString([(Document*)self.document windowMode], nil);
-  if (@available(macOS 11, *)) {
-    return [NSString stringWithFormat:@"%@ — %@", displayName, displayMode];
-  } else {
-    return [NSString stringWithFormat:@"%@ • %@", displayName, displayMode];
-  }
-}
-
 - (NSUndoManager*)windowWillReturnUndoManager:(NSWindow*)window {
   return [(Document*)self.document undoManager];
 }
