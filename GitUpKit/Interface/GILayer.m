@@ -13,10 +13,6 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#if __has_feature(objc_arc)
-#error This file requires MRC
-#endif
-
 #import "GIPrivate.h"
 
 @implementation GILayer {
@@ -37,16 +33,14 @@
 - (void)dealloc {
   CFRelease(_lines);
   CFRelease(_nodes);
-
-  [super dealloc];
 }
 
 - (NSArray*)nodes {
-  return (NSArray*)_nodes;
+  return (__bridge NSArray*)_nodes;
 }
 
 - (NSArray*)lines {
-  return (NSArray*)_lines;
+  return (__bridge NSArray*)_lines;
 }
 
 - (void)addNode:(GINode*)node {
