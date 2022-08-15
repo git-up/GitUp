@@ -81,7 +81,6 @@ NSData* GCCleanedUpCommitMessage(NSString* message) {
   if (message.length) {
     git_buf buffer = {0};
     if (git_message_prettify(&buffer, message.UTF8String, 0, 0) == GIT_OK) {
-      XLOG_DEBUG_CHECK(buffer.asize > buffer.size);
       XLOG_DEBUG_CHECK(buffer.ptr[buffer.size] == 0);
       data = [[NSData alloc] initWithBytes:buffer.ptr length:(buffer.size + 1)];
       git_buf_free(&buffer);

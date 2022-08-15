@@ -51,9 +51,9 @@ static const void* _associatedObjectKey = &_associatedObjectKey;
   git_config* config;
   XCTAssertEqual(git_config_new(&config), GIT_OK);
   if (!repo.bare) {
-    XCTAssertEqual(git_config_add_file_ondisk(config, [[repo.repositoryPath stringByAppendingPathComponent:@"config"] fileSystemRepresentation], GIT_CONFIG_LEVEL_LOCAL, true), GIT_OK);
+    XCTAssertEqual(git_config_add_file_ondisk(config, [[repo.repositoryPath stringByAppendingPathComponent:@"config"] fileSystemRepresentation], GIT_CONFIG_LEVEL_LOCAL, repo.private, true), GIT_OK);
   }
-  XCTAssertEqual(git_config_add_file_ondisk(config, configPath.fileSystemRepresentation, GIT_CONFIG_LEVEL_APP, true), GIT_OK);
+  XCTAssertEqual(git_config_add_file_ondisk(config, configPath.fileSystemRepresentation, GIT_CONFIG_LEVEL_APP, repo.private, true), GIT_OK);
   git_repository_set_config(repo.private, config);
   git_config_free(config);
 

@@ -237,7 +237,7 @@ cleanup:
 - (NSArray*)listSubmodules:(NSError**)error {
   NSMutableArray* submodules = [[NSMutableArray alloc] init];
   int status = git_submodule_foreach_block(self.private, ^int(git_submodule* submodule, const char* name) {  // This calls git_submodule_reload_all(false)
-    git_submodule_retain(submodule);
+    gitup_submodule_dup(submodule);
     [submodules addObject:[[GCSubmodule alloc] initWithRepository:self submodule:submodule]];
     return GIT_OK;
   });
@@ -275,7 +275,7 @@ cleanup:
         NSString* modulePath = [[self.repositoryPath stringByAppendingPathComponent:@"modules"] stringByAppendingPathComponent:submodule.path];
         git_repository* moduleRepository;
         CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_repository_open, &moduleRepository, modulePath.fileSystemRepresentation);  // If the working directory is gone, then we must have a module around, otherwise the submodule was not initialized
-        status = git_repository_update_gitlink(moduleRepository, true);  // This re-creates the workdir and its parent directories and the gitlink inside
+        status = gitup_repository_update_gitlink(moduleRepository, true);  // This re-creates the workdir and its parent directories and the gitlink inside
         git_repository_free(moduleRepository);
         CHECK_LIBGIT2_FUNCTION_CALL(goto cleanup, status, == GIT_OK);
         status = git_submodule_open(&subRepository, submodule.private);

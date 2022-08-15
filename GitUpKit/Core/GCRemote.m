@@ -446,8 +446,8 @@ cleanup:
   git_buf mergeBuffer = {0};
   git_remote* remote = NULL;
 
-  CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_branch_upstream_remote, &remoteBuffer, self.private, name);
-  CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_branch_upstream_merge, &mergeBuffer, self.private, name);
+  CALL_LIBGIT2_FUNCTION_GOTO(cleanup, gitup_branch_upstream_remote, &remoteBuffer, self.private, name);
+  CALL_LIBGIT2_FUNCTION_GOTO(cleanup, gitup_branch_upstream_merge, &mergeBuffer, self.private, name);
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_remote_lookup, &remote, self.private, remoteBuffer.ptr);
   if (![self _pushSourceReference:name toRemote:remote destinationReference:mergeBuffer.ptr force:force error:error]) {
     goto cleanup;
@@ -634,11 +634,16 @@ cleanup:
 - (BOOL)cloneUsingRemote:(GCRemote*)remote recursive:(BOOL)recursive error:(NSError**)error {
   [self willStartRemoteTransferWithURL:remote.URL];
 
+//  git_fetch_options fetchOptions = GIT_FETCH_OPTIONS_INIT;
+//  [self setRemoteCallbacks:&fetchOptions.callbacks];
+//  git_checkout_options checkoutOptions = GIT_CHECKOUT_OPTIONS_INIT;
+//  checkoutOptions.checkout_strategy = GIT_CHECKOUT_SAFE;
+  
   git_fetch_options fetchOptions = GIT_FETCH_OPTIONS_INIT;
   [self setRemoteCallbacks:&fetchOptions.callbacks];
   git_checkout_options checkoutOptions = GIT_CHECKOUT_OPTIONS_INIT;
   checkoutOptions.checkout_strategy = GIT_CHECKOUT_SAFE;
-  int status = git_clone_into(self.private, remote.private, &fetchOptions, &checkoutOptions, NULL);  // This will fail if the repository is not empty
+  int status = gitup_clone_into(self.private, remote.private, &fetchOptions, &checkoutOptions, NULL);  // This will fail if the repository is not empty
 
   [self didFinishRemoteTransferWithURL:remote.URL success:(status == GIT_OK)];
   CHECK_LIBGIT2_FUNCTION_CALL(return NO, status, == GIT_OK);
