@@ -55,6 +55,7 @@
 #import <GitUpKit/GIMapViewController.h>
 #import <GitUpKit/GIMapViewController+Operations.h>
 #import <GitUpKit/GIQuickViewController.h>
+#import <GitUpKit/GIQuickViewControllerWithCommitsList.h>
 #import <GitUpKit/GISimpleCommitViewController.h>
 #import <GitUpKit/GIStashListViewController.h>
 

@@ -1204,12 +1204,34 @@ cleanup:
 
 #pragma mark - File
 
-- (NSArray*)lookupCommitsForFile:(NSString*)path followRenames:(BOOL)follow error:(NSError**)error {
+@end
+
+@interface GCRepositoryHistoryFileOptions ()
+@property (nonatomic) BOOL followRenames;
+@property (nonatomic) BOOL includeMerges;
+@property (nonatomic) BOOL shouldIteroverWhenObjectNotFoundInTreeEntryByPath;
+@end
+
+@implementation GCRepositoryHistoryFileOptions
+#pragma mark - Initialization
+- (instancetype)initWithFollowRenames:(BOOL)followRenames includeMerges:(BOOL)includeMerges shouldIteroverWhenObjectNotFoundInTreeEntryByPath:(BOOL)shouldIteroverWhenObjectNotFoundInTreeEntryByPath {
+  if ((self = [super init])) {
+    self.followRenames = followRenames;
+    self.includeMerges = includeMerges;
+    self.shouldIteroverWhenObjectNotFoundInTreeEntryByPath = shouldIteroverWhenObjectNotFoundInTreeEntryByPath;
+  }
+  return self;
+}
+@end
+
+@implementation GCRepository (GCHistoryFile)
+- (NSArray*)lookupCommitsForFile:(NSString*)path options:(GCRepositoryHistoryFileOptions *)options error:(NSError**)error {
+  GCRepositoryHistoryFileOptions* theOptions = options ?: [[GCRepositoryHistoryFileOptions alloc] init];
   NSMutableArray* commits = nil;
   char* fileName = strdup(GCGitPathFromFileSystemPath(path));
   git_revwalk* walker = NULL;
   git_oid oid;
-
+  
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_revwalk_new, &walker, self.private);
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_revwalk_push_head, walker);
   git_revwalk_sorting(walker, GIT_SORT_TOPOLOGICAL);
@@ -1231,6 +1253,12 @@ cleanup:
           status = git_tree_entry_bypath(&entry, tree, fileName);
           if (status == GIT_OK) {
             for (unsigned int i = 0, count = git_commit_parentcount(commit); i < count; ++i) {
+              if (count > 1 && !theOptions.includeMerges) {
+                break;
+              }
+              if (commit == NULL) {
+                break;
+              }
               git_commit* parentCommit;
               status = git_commit_parent(&parentCommit, commit, i);
               if (status == GIT_OK) {
@@ -1239,17 +1267,19 @@ cleanup:
                 if (status == GIT_OK) {
                   git_diff* diff = NULL;
                   status = git_diff_tree_to_tree(&diff, self.private, parentTree, tree, &diffOptions);
-                  if ((status == GIT_OK) && follow) {
+                  if ((status == GIT_OK) && theOptions.followRenames) {
                     status = git_diff_find_similar(diff, &findOptions);
                   }
                   if (status == GIT_OK) {
                     for (size_t i2 = 0, count2 = git_diff_num_deltas(diff); i2 < count2; ++i2) {
                       const git_diff_delta* delta = git_diff_get_delta(diff, i2);
                       if (strcmp(delta->new_file.path, fileName) == 0) {
-                        GCCommit* newCommit = [[GCCommit alloc] initWithRepository:self commit:commit];
+                        // here we need to retain commit.
+                        git_commit *copy_commit;
+                        git_commit_dup(&copy_commit, commit);
+                        GCCommit* newCommit = [[GCCommit alloc] initWithRepository:self commit:copy_commit];
                         [commits addObject:newCommit];
                         [newCommit release];
-                        commit = NULL;
                         if (delta->status == GIT_DELTA_RENAMED) {
                           free(fileName);
                           fileName = strdup(delta->old_file.path);
@@ -1266,10 +1296,11 @@ cleanup:
                 }
                 git_commit_free(parentCommit);
               }
-            }
+            } // end of for-loop (count = git_commit_parentcount(commit))
             git_tree_entry_free(entry);
           } else if (status == GIT_ENOTFOUND) {
-            status = GIT_ITEROVER;
+            // ignore error if option not set.
+            status = theOptions.shouldIteroverWhenObjectNotFoundInTreeEntryByPath ? GIT_ITEROVER : GIT_OK;
           }
           git_tree_free(tree);
         }
@@ -1285,11 +1316,15 @@ cleanup:
     }
     CHECK_LIBGIT2_FUNCTION_CALL(goto cleanup, status, == GIT_OK);
   }
-
+  
 cleanup:
   git_revwalk_free(walker);
   free(fileName);
   return [commits autorelease];
+}
+
+- (NSArray*)lookupCommitsForFile:(NSString*)path followRenames:(BOOL)follow error:(NSError**)error {
+  return [self lookupCommitsForFile:path options:[[GCRepositoryHistoryFileOptions alloc] initWithFollowRenames:follow includeMerges:NO shouldIteroverWhenObjectNotFoundInTreeEntryByPath:NO] error:error];
 }
 
 @end
