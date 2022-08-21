@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		0A1DA51E265806140041E737 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A1DA51D265806140041E737 /* Security.framework */; };
 		0A4881D726C7B4CF00289CF9 /* Libgit2Origin in Frameworks */ = {isa = PBXBuildFile; productRef = 0A4881D626C7B4CF00289CF9 /* Libgit2Origin */; };
+		0AC3E00E28B2E49100309094 /* NSView+Embedding.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AC3E00C28B2E49100309094 /* NSView+Embedding.m */; };
+		0AC3E00F28B2E49100309094 /* NSView+Embedding.h in Headers */ = {isa = PBXBuildFile; fileRef = 0AC3E00D28B2E49100309094 /* NSView+Embedding.h */; };
+		0AC3E01228B2E49F00309094 /* GIQuickViewControllerWithCommitsList.h in Headers */ = {isa = PBXBuildFile; fileRef = 0AC3E01028B2E49F00309094 /* GIQuickViewControllerWithCommitsList.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		0AC3E01328B2E49F00309094 /* GIQuickViewControllerWithCommitsList.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AC3E01128B2E49F00309094 /* GIQuickViewControllerWithCommitsList.m */; };
 		0AC8525923A122C400479160 /* GILaunchServicesLocator.h in Headers */ = {isa = PBXBuildFile; fileRef = 0AC8525723A122C400479160 /* GILaunchServicesLocator.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0AC8525A23A122C400479160 /* GILaunchServicesLocator.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AC8525823A122C400479160 /* GILaunchServicesLocator.m */; };
 		1D615D81286BEDC600FFF7E7 /* XLFacilityMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 1D615D7E286BE79200FFF7E7 /* XLFacilityMacros.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -343,6 +347,10 @@
 /* Begin PBXFileReference section */
 		0A1DA512265805C30041E737 /* libcommonCrypto.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libcommonCrypto.tbd; path = usr/lib/system/libcommonCrypto.tbd; sourceTree = SDKROOT; };
 		0A1DA51D265806140041E737 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		0AC3E00C28B2E49100309094 /* NSView+Embedding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSView+Embedding.m"; sourceTree = "<group>"; };
+		0AC3E00D28B2E49100309094 /* NSView+Embedding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSView+Embedding.h"; sourceTree = "<group>"; };
+		0AC3E01028B2E49F00309094 /* GIQuickViewControllerWithCommitsList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GIQuickViewControllerWithCommitsList.h; sourceTree = "<group>"; };
+		0AC3E01128B2E49F00309094 /* GIQuickViewControllerWithCommitsList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GIQuickViewControllerWithCommitsList.m; sourceTree = "<group>"; };
 		0AC8525723A122C400479160 /* GILaunchServicesLocator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GILaunchServicesLocator.h; sourceTree = "<group>"; };
 		0AC8525823A122C400479160 /* GILaunchServicesLocator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GILaunchServicesLocator.m; sourceTree = "<group>"; };
 		0AD01C0B26D6A11C0068A02E /* Third-Party */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "Third-Party"; sourceTree = "<group>"; };
@@ -673,7 +681,6 @@
 		E22941E61AC11F56000A83AF /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				E229421A1AC11FF6000A83AF /* Views.xcassets */,
 				E22941F71AC11F56000A83AF /* GIAdvancedCommitViewController.h */,
 				E22941F81AC11F56000A83AF /* GIAdvancedCommitViewController.m */,
 				E22941E71AC11F56000A83AF /* GIAdvancedCommitViewController.xib */,
@@ -685,10 +692,10 @@
 				E229421E1AC120A8000A83AF /* GICommitSplitterViewController.xib */,
 				E22941F91AC11F56000A83AF /* GICommitViewController.h */,
 				E22941FA1AC11F56000A83AF /* GICommitViewController.m */,
+				E22941E91AC11F56000A83AF /* GIConfigViewController-Help.txt */,
 				E22941FB1AC11F56000A83AF /* GIConfigViewController.h */,
 				E22941FC1AC11F56000A83AF /* GIConfigViewController.m */,
 				E22941EB1AC11F56000A83AF /* GIConfigViewController.xib */,
-				E22941E91AC11F56000A83AF /* GIConfigViewController-Help.txt */,
 				E2BDA0701AD5B97B00E69729 /* GIConflictResolverViewController.h */,
 				E2BDA0711AD5B97B00E69729 /* GIConflictResolverViewController.m */,
 				E2BDA0731AD5B98A00E69729 /* GIConflictResolverViewController.xib */,
@@ -697,18 +704,21 @@
 				E22941ED1AC11F56000A83AF /* GIDiffViewController.xib */,
 				E22942011AC11F56000A83AF /* GIMapViewController.h */,
 				E22942021AC11F56000A83AF /* GIMapViewController.m */,
+				E22941EF1AC11F56000A83AF /* GIMapViewController.xib */,
 				E22941FF1AC11F56000A83AF /* GIMapViewController+Operations.h */,
 				E22942001AC11F56000A83AF /* GIMapViewController+Operations.m */,
-				E22941EF1AC11F56000A83AF /* GIMapViewController.xib */,
 				E22942031AC11F56000A83AF /* GIQuickViewController.h */,
 				E22942041AC11F56000A83AF /* GIQuickViewController.m */,
 				E22941F11AC11F56000A83AF /* GIQuickViewController.xib */,
+				0AC3E01028B2E49F00309094 /* GIQuickViewControllerWithCommitsList.h */,
+				0AC3E01128B2E49F00309094 /* GIQuickViewControllerWithCommitsList.m */,
 				E22942051AC11F56000A83AF /* GISimpleCommitViewController.h */,
 				E22942061AC11F56000A83AF /* GISimpleCommitViewController.m */,
 				E22941F31AC11F56000A83AF /* GISimpleCommitViewController.xib */,
 				E22942071AC11F56000A83AF /* GIStashListViewController.h */,
 				E22942081AC11F56000A83AF /* GIStashListViewController.m */,
 				E22941F51AC11F56000A83AF /* GIStashListViewController.xib */,
+				E229421A1AC11FF6000A83AF /* Views.xcassets */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -719,14 +729,16 @@
 				E259C2D41A64FAA40079616B /* GCHistory+Rewrite-Tests.m */,
 				E2D414891A02D68700B99634 /* GCHistory+Rewrite.h */,
 				E2D4148A1A02D68700B99634 /* GCHistory+Rewrite.m */,
+				1DF371CB22F5262300EF7BD9 /* GCLiveRepository+Utilities.h */,
+				1DF371CC22F5262300EF7BD9 /* GCLiveRepository+Utilities.m */,
 				E2790D441ACF12E200965A98 /* GCRepository+Index-Tests.m */,
 				E2790D451ACF12E200965A98 /* GCRepository+Index.h */,
 				E2790D461ACF12E200965A98 /* GCRepository+Index.m */,
 				E259C2D61A64FAEA0079616B /* GCRepository+Utilities-Tests.m */,
 				E218A58C1A56706600DFF1DF /* GCRepository+Utilities.h */,
 				E218A58D1A56706600DFF1DF /* GCRepository+Utilities.m */,
-				1DF371CB22F5262300EF7BD9 /* GCLiveRepository+Utilities.h */,
-				1DF371CC22F5262300EF7BD9 /* GCLiveRepository+Utilities.m */,
+				0AC3E00D28B2E49100309094 /* NSView+Embedding.h */,
+				0AC3E00C28B2E49100309094 /* NSView+Embedding.m */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -969,8 +981,10 @@
 				E267E1BD1B84D80500BAB377 /* GCCore.h in Headers */,
 				E267E1BE1B84D80500BAB377 /* GCDiff.h in Headers */,
 				E267E2A61B84F02A00BAB377 /* GCError.h in Headers */,
+				0AC3E01228B2E49F00309094 /* GIQuickViewControllerWithCommitsList.h in Headers */,
 				E267E1BF1B84D80500BAB377 /* GCFoundation.h in Headers */,
 				E267E1C01B84D80500BAB377 /* GCFunctions.h in Headers */,
+				0AC3E00F28B2E49100309094 /* NSView+Embedding.h in Headers */,
 				E267E1C11B84D80500BAB377 /* GCHistory.h in Headers */,
 				E267E1C21B84D80500BAB377 /* GCIndex.h in Headers */,
 				E267E1C31B84D80500BAB377 /* GCLiveRepository.h in Headers */,
@@ -1265,6 +1279,7 @@
 				E267E1D51B84D83100BAB377 /* GCFoundation.m in Sources */,
 				E267E1D61B84D83100BAB377 /* GCFunctions.m in Sources */,
 				E267E1D71B84D83100BAB377 /* GCHistory.m in Sources */,
+				0AC3E00E28B2E49100309094 /* NSView+Embedding.m in Sources */,
 				E267E1D81B84D83100BAB377 /* GCIndex.m in Sources */,
 				E267E1D91B84D83100BAB377 /* GCLiveRepository.m in Sources */,
 				DBDFBC1D22B61290003EEC6C /* NSColor+GINamedColors.m in Sources */,
@@ -1330,6 +1345,7 @@
 				E267E2631B84DCA100BAB377 /* GISimpleCommitViewController.m in Sources */,
 				E267E2641B84DCA100BAB377 /* GIStashListViewController.m in Sources */,
 				0AC8525A23A122C400479160 /* GILaunchServicesLocator.m in Sources */,
+				0AC3E01328B2E49F00309094 /* GIQuickViewControllerWithCommitsList.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -17,6 +17,7 @@
 		0A4881DC26C7B98D00289CF9 /* Libgit2Origin in Frameworks */ = {isa = PBXBuildFile; productRef = 0A4881DB26C7B98D00289CF9 /* Libgit2Origin */; };
 		0A58CD77237B4F4B00C2BDD0 /* CloneWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A58CD73237B4F4B00C2BDD0 /* CloneWindowController.m */; };
 		0A58CD7A237B4F9600C2BDD0 /* CloneWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A58CD78237B4F9600C2BDD0 /* CloneWindowController.xib */; };
+		0AC3E01928B2E4F400309094 /* QuickViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AC3E01528B2E4F400309094 /* QuickViewModel.m */; };
 		0AC8525123A11F2F00479160 /* PreferencesWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AC8525023A11F2F00479160 /* PreferencesWindowController.m */; };
 		0AC8525423A11F3700479160 /* PreferencesWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0AC8525223A11F3700479160 /* PreferencesWindowController.xib */; };
 		0AD4625B232711B000BE28D1 /* WelcomeWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AD4625A232711B000BE28D1 /* WelcomeWindowController.m */; };
@@ -124,6 +125,8 @@
 		0A58CD73237B4F4B00C2BDD0 /* CloneWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CloneWindowController.m; sourceTree = "<group>"; };
 		0A58CD76237B4F4B00C2BDD0 /* CloneWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CloneWindowController.h; sourceTree = "<group>"; };
 		0A58CD79237B4F9600C2BDD0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/CloneWindowController.xib; sourceTree = "<group>"; };
+		0AC3E01528B2E4F400309094 /* QuickViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QuickViewModel.m; sourceTree = "<group>"; };
+		0AC3E01828B2E4F400309094 /* QuickViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QuickViewModel.h; sourceTree = "<group>"; };
 		0AC8524D23A11F2F00479160 /* PreferencesWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreferencesWindowController.h; sourceTree = "<group>"; };
 		0AC8525023A11F2F00479160 /* PreferencesWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreferencesWindowController.m; sourceTree = "<group>"; };
 		0AC8525323A11F3700479160 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/PreferencesWindowController.xib; sourceTree = "<group>"; };
@@ -260,47 +263,49 @@
 		E2C338AD19F8562F00063D95 /* Application */ = {
 			isa = PBXGroup;
 			children = (
-				1D2DA2F923E9E99700691DEF /* GitUp.entitlements */,
-				E2C338B019F8562F00063D95 /* AppDelegate.h */,
-				E2C338B119F8562F00063D95 /* AppDelegate.m */,
-				E25EBCEA1AA3F8B700D3AF44 /* Application.xcassets */,
-				E2A5BE6C1A80E560008DD47F /* Common.h */,
-				E2C338B519F8562F00063D95 /* Document.h */,
-				E2C338B619F8562F00063D95 /* Document.m */,
-				E2C338B819F8562F00063D95 /* Document.xib */,
-				E21739F51A5080DD00EC6777 /* DocumentController.h */,
-				E21739F61A5080DD00EC6777 /* DocumentController.m */,
-				E2BDA0671AD47A2F00E69729 /* Help.plist */,
-				E2C338AF19F8562F00063D95 /* Info.plist */,
-				E2A5BE6E1A814970008DD47F /* Localizable.strings */,
-				0AE7F5ED2312C1B000B06050 /* InfoPlist.strings */,
-				E2C338B319F8562F00063D95 /* main.m */,
-				E2C338BD19F8562F00063D95 /* MainMenu.xib */,
-				A53C6D0A1E61A9CF0070387E /* FontSizeTransformer.h */,
-				A53C6D0B1E61A9CF0070387E /* FontSizeTransformer.m */,
-				E2C5672B1A6D98BC00ECFE07 /* WindowController.h */,
-				E2C5672C1A6D98BC00ECFE07 /* WindowController.m */,
-				31CD50E1203E2E2800360B3A /* ToolbarItemWrapperView.h */,
-				31CD50E2203E2E2800360B3A /* ToolbarItemWrapperView.m */,
-				0A0167682330CABD0069961E /* ServicesProvider.h */,
-				0A0167692330CABD0069961E /* ServicesProvider.m */,
 				0A0D211A23579887003A2B5F /* AboutWindowController.h */,
 				0A0D211723579887003A2B5F /* AboutWindowController.m */,
 				0A2BBEC9235F9B2400912B65 /* AboutWindowController.xib */,
+				E2C338B019F8562F00063D95 /* AppDelegate.h */,
+				E2C338B119F8562F00063D95 /* AppDelegate.m */,
+				E25EBCEA1AA3F8B700D3AF44 /* Application.xcassets */,
 				0A2F488B23683DC90072C6FB /* AuthenticationWindowController.h */,
 				0A2F488E23683DC90072C6FB /* AuthenticationWindowController.m */,
 				0A2F489023683DD60072C6FB /* AuthenticationWindowController.xib */,
 				0A58CD76237B4F4B00C2BDD0 /* CloneWindowController.h */,
 				0A58CD73237B4F4B00C2BDD0 /* CloneWindowController.m */,
 				0A58CD78237B4F9600C2BDD0 /* CloneWindowController.xib */,
+				E2A5BE6C1A80E560008DD47F /* Common.h */,
+				E2C338B519F8562F00063D95 /* Document.h */,
+				E2C338B619F8562F00063D95 /* Document.m */,
+				E2C338B819F8562F00063D95 /* Document.xib */,
+				E21739F51A5080DD00EC6777 /* DocumentController.h */,
+				E21739F61A5080DD00EC6777 /* DocumentController.m */,
+				A53C6D0A1E61A9CF0070387E /* FontSizeTransformer.h */,
+				A53C6D0B1E61A9CF0070387E /* FontSizeTransformer.m */,
+				1D2DA2F923E9E99700691DEF /* GitUp.entitlements */,
+				E2BDA0671AD47A2F00E69729 /* Help.plist */,
+				E2C338AF19F8562F00063D95 /* Info.plist */,
+				0AE7F5ED2312C1B000B06050 /* InfoPlist.strings */,
+				0A0C5AC923720BAE000D84A1 /* KeychainAccessor.h */,
+				0A0C5ACA23720BAE000D84A1 /* KeychainAccessor.m */,
+				E2A5BE6E1A814970008DD47F /* Localizable.strings */,
+				E2C338B319F8562F00063D95 /* main.m */,
+				E2C338BD19F8562F00063D95 /* MainMenu.xib */,
 				0AC8524D23A11F2F00479160 /* PreferencesWindowController.h */,
 				0AC8525023A11F2F00479160 /* PreferencesWindowController.m */,
 				0AC8525223A11F3700479160 /* PreferencesWindowController.xib */,
+				0AC3E01828B2E4F400309094 /* QuickViewModel.h */,
+				0AC3E01528B2E4F400309094 /* QuickViewModel.m */,
+				0A0167682330CABD0069961E /* ServicesProvider.h */,
+				0A0167692330CABD0069961E /* ServicesProvider.m */,
+				31CD50E1203E2E2800360B3A /* ToolbarItemWrapperView.h */,
+				31CD50E2203E2E2800360B3A /* ToolbarItemWrapperView.m */,
 				0AD46259232711B000BE28D1 /* WelcomeWindowController.h */,
 				0AD4625A232711B000BE28D1 /* WelcomeWindowController.m */,
 				0A3388BA2353BD630022528D /* WelcomeWindowController.xib */,
-				0A0C5AC923720BAE000D84A1 /* KeychainAccessor.h */,
-				0A0C5ACA23720BAE000D84A1 /* KeychainAccessor.m */,
+				E2C5672B1A6D98BC00ECFE07 /* WindowController.h */,
+				E2C5672C1A6D98BC00ECFE07 /* WindowController.m */,
 			);
 			path = Application;
 			sourceTree = "<group>";
@@ -484,6 +489,7 @@
 				0AC8525123A11F2F00479160 /* PreferencesWindowController.m in Sources */,
 				31CD50E3203E2E2800360B3A /* ToolbarItemWrapperView.m in Sources */,
 				0A2F488F23683DC90072C6FB /* AuthenticationWindowController.m in Sources */,
+				0AC3E01928B2E4F400309094 /* QuickViewModel.m in Sources */,
 				0A0C5ACB23720BAE000D84A1 /* KeychainAccessor.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -632,7 +638,10 @@
 				CODE_SIGN_ENTITLEMENTS = Application/GitUp.entitlements;
 				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/Third-Party";
 				INFOPLIST_FILE = Application/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
 				MARKETING_VERSION = 1.3.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "co.gitup.mac-debug";
 				PRODUCT_NAME = GitUp;
@@ -648,7 +657,10 @@
 				CODE_SIGN_ENTITLEMENTS = Application/GitUp.entitlements;
 				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/Third-Party";
 				INFOPLIST_FILE = Application/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
 				MARKETING_VERSION = 1.3.2;
 				PRODUCT_BUNDLE_IDENTIFIER = co.gitup.mac;
 				PRODUCT_NAME = GitUp;
