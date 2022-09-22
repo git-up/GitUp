@@ -338,6 +338,8 @@
 		E2F5C2831A81C53A00C30739 /* GCRepository+Reflog-Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = E2F5C2821A81C53A00C30739 /* GCRepository+Reflog-Tests.m */; };
 		E2FEED491AEAA6B500CBED80 /* GCCommitDatabase-Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = E2FEED481AEAA6B500CBED80 /* GCCommitDatabase-Tests.m */; };
 		E2FEED4A1AEAA75F00CBED80 /* GCCommitDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = E2FEED451AEAA6AD00CBED80 /* GCCommitDatabase.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		FE22513028DC40D00093E362 /* libgpgme in Frameworks */ = {isa = PBXBuildFile; productRef = FE22512F28DC40D00093E362 /* libgpgme */; };
+		FEA9874C28DDB8AD00D494A1 /* libgpgme in Frameworks */ = {isa = PBXBuildFile; productRef = FEA9874B28DDB8AD00D494A1 /* libgpgme */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -576,6 +578,7 @@
 				0A1DA51E265806140041E737 /* Security.framework in Frameworks */,
 				DBBEE655256B095000F96DAF /* libiconv.tbd in Frameworks */,
 				0A4881D726C7B4CF00289CF9 /* Libgit2Origin in Frameworks */,
+				FE22513028DC40D00093E362 /* libgpgme in Frameworks */,
 				DBBEE64D256B094000F96DAF /* libz.tbd in Frameworks */,
 				DBBEE638256B08D300F96DAF /* libsqlite3.xcframework in Frameworks */,
 			);
@@ -587,6 +590,7 @@
 			files = (
 				1DADC0DE25A25D5D008C2C35 /* libiconv.tbd in Frameworks */,
 				1DADC0DA25A25D54008C2C35 /* libsqlite3.xcframework in Frameworks */,
+				FEA9874C28DDB8AD00D494A1 /* libgpgme in Frameworks */,
 				1DC7FB2A28748D1200D2FD4C /* Libgit2Origin in Frameworks */,
 				1DADC0E225A25D63008C2C35 /* libz.tbd in Frameworks */,
 			);
@@ -1076,6 +1080,7 @@
 			name = "GitUpKit (macOS)";
 			packageProductDependencies = (
 				0A4881D626C7B4CF00289CF9 /* Libgit2Origin */,
+				FE22512F28DC40D00093E362 /* libgpgme */,
 			);
 			productName = GitUpKit;
 			productReference = E267E1A81B84D6C500BAB377 /* GitUpKit.framework */;
@@ -1095,6 +1100,7 @@
 			name = Tests;
 			packageProductDependencies = (
 				1DC7FB2928748D1200D2FD4C /* Libgit2Origin */,
+				FEA9874B28DDB8AD00D494A1 /* libgpgme */,
 			);
 			productName = GitUpTests;
 			productReference = E2C338C419F8562F00063D95 /* GitUpTests.xctest */;
@@ -1734,6 +1740,14 @@
 		1DC7FB2928748D1200D2FD4C /* Libgit2Origin */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Libgit2Origin;
+		};
+		FE22512F28DC40D00093E362 /* libgpgme */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = libgpgme;
+		};
+		FEA9874B28DDB8AD00D494A1 /* libgpgme */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = libgpgme;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
