@@ -365,6 +365,7 @@ cleanup:
                           message:(NSString*)message
                             error:(NSError**)error {
   GCCommit* commit = nil;
+  git_commit* newCommit = NULL;
   git_signature* signature = NULL;
   const char *gpgSignature = NULL;
 
@@ -376,23 +377,20 @@ cleanup:
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_signature_default, &signature, self.private);
 
   git_buf commitBuffer = GIT_BUF_INIT;
-  CALL_LIBGIT2_FUNCTION_GOTO(cleanupBuffer, git_commit_create_buffer, &commitBuffer, self.private, author ? author : signature, signature, NULL, GCCleanedUpCommitMessage(message).bytes, tree, count, parents);
+  CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_commit_create_buffer, &commitBuffer, self.private, author ? author : signature, signature, NULL, GCCleanedUpCommitMessage(message).bytes, tree, count, parents);
 
   if (shouldSign) {
     GCConfigOption* signingKeyOption = [self readConfigOptionForVariable:@"user.signingkey" error:nil];
     gpgSignature = [self gpgSig:commitBuffer.ptr keyId:signingKeyOption.value];
   }
 
-  CALL_LIBGIT2_FUNCTION_GOTO(cleanupBuffer, git_commit_create_with_signature, &oid, self.private, commitBuffer.ptr, gpgSignature, NULL);
+  CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_commit_create_with_signature, &oid, self.private, commitBuffer.ptr, gpgSignature, NULL);
 
-  git_commit* newCommit = NULL;
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_commit_lookup, &newCommit, self.private, &oid);
   commit = [[GCCommit alloc] initWithRepository:self commit:newCommit];
 
-cleanupBuffer:
-  git_buf_dispose(&commitBuffer);
-
 cleanup:
+  git_buf_dispose(&commitBuffer);
   git_signature_free(signature);
   return commit;
 }
@@ -477,22 +475,39 @@ static const git_oid* _CommitParentCallback_Commit(size_t idx, void* payload) {
                               error:(NSError**)error {
   git_commit* newCommit = NULL;
   git_signature* signature = NULL;
+  const char *gpgSignature = NULL;
+
   git_oid oid;
+
+  GCConfigOption* shouldSignOption = [self readConfigOptionForVariable:@"commit.gpgsign" error:nil];
+  BOOL shouldSign = [shouldSignOption.value isEqualToString:@"true"];
 
   if (updateCommitter) {
     CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_signature_default, &signature, self.private);
   }
 
-  CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_commit_create_from_callback, &oid, self.private, NULL,
+  git_buf commitBuffer = GIT_BUF_INIT;
+  CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_commit_create_buffer_for_parents_cb, &commitBuffer, self.private,
                              git_commit_author(commit),
                              updateCommitter ? signature : git_commit_committer(commit),
-                             message ? NULL : git_commit_message_encoding(commit), message ? GCCleanedUpCommitMessage(message).bytes : git_commit_message(commit),
+                             message ? NULL : git_commit_message_encoding(commit),
+                             message ? GCCleanedUpCommitMessage(message).bytes : git_commit_message(commit),
                              git_tree_id(tree),
-                             parents ? _CommitParentCallback_Parents : _CommitParentCallback_Commit, parents ? (__bridge void*)parents : (void*)commit);
+                             parents ? _CommitParentCallback_Parents : _CommitParentCallback_Commit, parents ? (__bridge void*)parents : (void*)commit,
+                             true);
+
+  if (shouldSign) {
+    GCConfigOption* signingKeyOption = [self readConfigOptionForVariable:@"user.signingkey" error:nil];
+    gpgSignature = [self gpgSig:commitBuffer.ptr keyId:signingKeyOption.value];
+  }
+
+  CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_commit_create_with_signature, &oid, self.private, commitBuffer.ptr, gpgSignature, NULL);
+
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_commit_lookup, &newCommit, self.private, &oid);
   XLOG_DEBUG_CHECK(!git_oid_equal(git_commit_id(newCommit), git_commit_id(commit)));
 
 cleanup:
+  git_buf_dispose(&commitBuffer);
   git_signature_free(signature);
   return newCommit ? [[GCCommit alloc] initWithRepository:self commit:newCommit] : nil;
 }
