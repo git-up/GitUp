@@ -18,6 +18,7 @@
 #endif
 
 #import "GCPrivate.h"
+#import "GPGKeys.h"
 
 @implementation GCRepository (Bare)
 
@@ -365,17 +366,56 @@ cleanup:
                             error:(NSError**)error {
   GCCommit* commit = nil;
   git_signature* signature = NULL;
+  const char *gpgSignature = NULL;
 
   git_oid oid;
+
+  GCConfigOption* shouldSignOption = [self readConfigOptionForVariable:@"commit.gpgsign" error:nil];
+  BOOL shouldSign = [shouldSignOption.value isEqualToString:@"true"];
+
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_signature_default, &signature, self.private);
-  CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_commit_create, &oid, self.private, NULL, author ? author : signature, signature, NULL, GCCleanedUpCommitMessage(message).bytes, tree, count, parents);
+
+  git_buf commitBuffer = GIT_BUF_INIT;
+  CALL_LIBGIT2_FUNCTION_GOTO(cleanupBuffer, git_commit_create_buffer, &commitBuffer, self.private, author ? author : signature, signature, NULL, GCCleanedUpCommitMessage(message).bytes, tree, count, parents);
+
+  if (shouldSign) {
+    GCConfigOption* signingKeyOption = [self readConfigOptionForVariable:@"user.signingkey" error:nil];
+    gpgSignature = [self gpgSig:commitBuffer.ptr keyId:signingKeyOption.value];
+  }
+
+  CALL_LIBGIT2_FUNCTION_GOTO(cleanupBuffer, git_commit_create_with_signature, &oid, self.private, commitBuffer.ptr, gpgSignature, NULL);
+
   git_commit* newCommit = NULL;
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_commit_lookup, &newCommit, self.private, &oid);
   commit = [[GCCommit alloc] initWithRepository:self commit:newCommit];
 
+cleanupBuffer:
+  git_buf_dispose(&commitBuffer);
+
 cleanup:
   git_signature_free(signature);
   return commit;
+}
+
+-(const char*)gpgSig:(const char*)body keyId:(NSString*)keyId {
+  GPGKey *key = nil;
+
+  if (keyId.length > 0) {
+    key = [GPGKey secretKeyForId:keyId];
+  }
+
+  if (key == nil) {
+    key = [[GPGKey allSecretKeys] firstObject];
+  }
+
+  if (key == nil) {
+    return NULL;
+  }
+
+  NSString* plainToSign = [[NSString alloc] initWithCString:body encoding:NSUTF8StringEncoding];
+  NSString* signature = [key signSignature:plainToSign];
+
+  return [signature UTF8String];
 }
 
 - (GCCommit*)createCommitFromIndex:(git_index*)index

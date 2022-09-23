@@ -338,6 +338,18 @@
 		E2F5C2831A81C53A00C30739 /* GCRepository+Reflog-Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = E2F5C2821A81C53A00C30739 /* GCRepository+Reflog-Tests.m */; };
 		E2FEED491AEAA6B500CBED80 /* GCCommitDatabase-Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = E2FEED481AEAA6B500CBED80 /* GCCommitDatabase-Tests.m */; };
 		E2FEED4A1AEAA75F00CBED80 /* GCCommitDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = E2FEED451AEAA6AD00CBED80 /* GCCommitDatabase.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		E69C1DFF217867DB0080117C /* GPGKeys.h in Headers */ = {isa = PBXBuildFile; fileRef = E69C1DFD217867DA0080117C /* GPGKeys.h */; };
+		E69C1E00217867DB0080117C /* GPGKeys.h in Headers */ = {isa = PBXBuildFile; fileRef = E69C1DFD217867DA0080117C /* GPGKeys.h */; };
+		E69C1E01217867DB0080117C /* GPGKeys.m in Sources */ = {isa = PBXBuildFile; fileRef = E69C1DFE217867DA0080117C /* GPGKeys.m */; };
+		E69C1E02217867DB0080117C /* GPGKeys.m in Sources */ = {isa = PBXBuildFile; fileRef = E69C1DFE217867DA0080117C /* GPGKeys.m */; };
+		E69C1E0C217893580080117C /* GPGContext.h in Headers */ = {isa = PBXBuildFile; fileRef = E69C1E0A217893580080117C /* GPGContext.h */; };
+		E69C1E0D217893580080117C /* GPGContext.h in Headers */ = {isa = PBXBuildFile; fileRef = E69C1E0A217893580080117C /* GPGContext.h */; };
+		E69C1E0E217893580080117C /* GPGContext.m in Sources */ = {isa = PBXBuildFile; fileRef = E69C1E0B217893580080117C /* GPGContext.m */; };
+		E69C1E0F217893580080117C /* GPGContext.m in Sources */ = {isa = PBXBuildFile; fileRef = E69C1E0B217893580080117C /* GPGContext.m */; };
+		E69C1E11217894AE0080117C /* GPGContext+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = E69C1E10217894AE0080117C /* GPGContext+Private.h */; };
+		E69C1E12217894AE0080117C /* GPGContext+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = E69C1E10217894AE0080117C /* GPGContext+Private.h */; };
+		E69C1E132178AC3E0080117C /* GPGKeys.m in Sources */ = {isa = PBXBuildFile; fileRef = E69C1DFE217867DA0080117C /* GPGKeys.m */; };
+		E69C1E142178AC400080117C /* GPGContext.m in Sources */ = {isa = PBXBuildFile; fileRef = E69C1E0B217893580080117C /* GPGContext.m */; };
 		FE22513028DC40D00093E362 /* libgpgme in Frameworks */ = {isa = PBXBuildFile; productRef = FE22512F28DC40D00093E362 /* libgpgme */; };
 		FEA9874C28DDB8AD00D494A1 /* libgpgme in Frameworks */ = {isa = PBXBuildFile; productRef = FEA9874B28DDB8AD00D494A1 /* libgpgme */; };
 /* End PBXBuildFile section */
@@ -558,6 +570,11 @@
 		E2FEED441AEAA6AD00CBED80 /* GCCommitDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCCommitDatabase.h; sourceTree = "<group>"; };
 		E2FEED451AEAA6AD00CBED80 /* GCCommitDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCCommitDatabase.m; sourceTree = "<group>"; };
 		E2FEED481AEAA6B500CBED80 /* GCCommitDatabase-Tests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GCCommitDatabase-Tests.m"; sourceTree = "<group>"; };
+		E69C1DFD217867DA0080117C /* GPGKeys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPGKeys.h; sourceTree = "<group>"; };
+		E69C1DFE217867DA0080117C /* GPGKeys.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPGKeys.m; sourceTree = "<group>"; };
+		E69C1E0A217893580080117C /* GPGContext.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GPGContext.h; sourceTree = "<group>"; };
+		E69C1E0B217893580080117C /* GPGContext.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GPGContext.m; sourceTree = "<group>"; };
+		E69C1E10217894AE0080117C /* GPGContext+Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GPGContext+Private.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -829,6 +846,11 @@
 				E2C3AA5919FF0B0600BA89F3 /* GCRepository+Bare.h */,
 				E2C3AA5A19FF0B0600BA89F3 /* GCRepository+Bare.m */,
 				E24509021A9A50F3003E602D /* GCRepository+Config-Tests.m */,
+				E69C1DFD217867DA0080117C /* GPGKeys.h */,
+				E69C1DFE217867DA0080117C /* GPGKeys.m */,
+				E69C1E0A217893580080117C /* GPGContext.h */,
+				E69C1E10217894AE0080117C /* GPGContext+Private.h */,
+				E69C1E0B217893580080117C /* GPGContext.m */,
 				E24508FE1A9A50EA003E602D /* GCRepository+Config.h */,
 				E24508FF1A9A50EA003E602D /* GCRepository+Config.m */,
 				E259C2DC1A64FDD00079616B /* GCRepository+HEAD-Tests.m */,
@@ -936,6 +958,7 @@
 				E21753571B91626C00BE234A /* GCRepository+Mock.h in Headers */,
 				E21753581B91626C00BE234A /* GCRepository+Reflog.h in Headers */,
 				E21753591B91626C00BE234A /* GCRepository+Reset.h in Headers */,
+				E69C1E12217894AE0080117C /* GPGContext+Private.h in Headers */,
 				E217535A1B91626C00BE234A /* GCRepository+Status.h in Headers */,
 				E217535B1B91626C00BE234A /* GCSnapshot.h in Headers */,
 				E217535C1B91626C00BE234A /* GCSQLiteRepository.h in Headers */,
@@ -954,6 +977,8 @@
 				E2B9879B1B9172470097629D /* GILayer.h in Headers */,
 				E2B9879C1B9172470097629D /* GILine.h in Headers */,
 				E2B9879D1B9172470097629D /* GINode.h in Headers */,
+				E69C1E0D217893580080117C /* GPGContext.h in Headers */,
+				E69C1E00217867DB0080117C /* GPGKeys.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -992,6 +1017,7 @@
 				E267E1CD1B84D80500BAB377 /* GCRepository+Mock.h in Headers */,
 				E267E1CE1B84D80500BAB377 /* GCRepository+Reflog.h in Headers */,
 				E267E1CF1B84D80500BAB377 /* GCRepository+Reset.h in Headers */,
+				E69C1E11217894AE0080117C /* GPGContext+Private.h in Headers */,
 				E267E1D01B84D80500BAB377 /* GCRepository+Status.h in Headers */,
 				E267E1F01B84D85500BAB377 /* GCHistory+Rewrite.h in Headers */,
 				E267E1F11B84D85500BAB377 /* GCRepository+Index.h in Headers */,
@@ -1016,6 +1042,7 @@
 				E267E2251B84DBE700BAB377 /* GIModalView.h in Headers */,
 				E267E2261B84DBE700BAB377 /* GIViewController.h in Headers */,
 				E267E2271B84DBE700BAB377 /* GIViewController+Utilities.h in Headers */,
+				E69C1E0C217893580080117C /* GPGContext.h in Headers */,
 				E267E2281B84DBE700BAB377 /* GIWindowController.h in Headers */,
 				E267E2361B84DC3900BAB377 /* GICommitListViewController.h in Headers */,
 				E267E2371B84DC3900BAB377 /* GIDiffContentsViewController.h in Headers */,
@@ -1030,6 +1057,7 @@
 				1D615D81286BEDC600FFF7E7 /* XLFacilityMacros.h in Headers */,
 				E267E2501B84DC7D00BAB377 /* GICommitViewController.h in Headers */,
 				DBDFBC0F22B61135003EEC6C /* NSBundle+GitUpKit.h in Headers */,
+				E69C1DFF217867DB0080117C /* GPGKeys.h in Headers */,
 				E267E2511B84DC7D00BAB377 /* GIConfigViewController.h in Headers */,
 				E267E2521B84DC7D00BAB377 /* GIConflictResolverViewController.h in Headers */,
 				E267E2531B84DC7D00BAB377 /* GIDiffViewController.h in Headers */,
@@ -1255,7 +1283,9 @@
 				E2B987921B9171D20097629D /* GILayer.m in Sources */,
 				E2B987931B9171D20097629D /* GILine.m in Sources */,
 				E2B987941B9171D20097629D /* GINode.m in Sources */,
+				E69C1E02217867DB0080117C /* GPGKeys.m in Sources */,
 				E2B987951B9171D20097629D /* GIPrivate.m in Sources */,
+				E69C1E0F217893580080117C /* GPGContext.m in Sources */,
 				DBDFBC1222B61135003EEC6C /* NSBundle+GitUpKit.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1270,6 +1300,7 @@
 				E267E1D41B84D83100BAB377 /* GCDiff.m in Sources */,
 				E267E1D51B84D83100BAB377 /* GCFoundation.m in Sources */,
 				E267E1D61B84D83100BAB377 /* GCFunctions.m in Sources */,
+				E69C1E01217867DB0080117C /* GPGKeys.m in Sources */,
 				E267E1D71B84D83100BAB377 /* GCHistory.m in Sources */,
 				E267E1D81B84D83100BAB377 /* GCIndex.m in Sources */,
 				E267E1D91B84D83100BAB377 /* GCLiveRepository.m in Sources */,
@@ -1323,6 +1354,7 @@
 				E267E2341B84DC2600BAB377 /* GISnapshotListViewController.m in Sources */,
 				E267E2351B84DC2600BAB377 /* GIUnifiedReflogViewController.m in Sources */,
 				E267E2591B84DCA100BAB377 /* GIAdvancedCommitViewController.m in Sources */,
+				E69C1E0E217893580080117C /* GPGContext.m in Sources */,
 				E267E25A1B84DCA100BAB377 /* GICommitRewriterViewController.m in Sources */,
 				E267E25B1B84DCA100BAB377 /* GICommitSplitterViewController.m in Sources */,
 				E267E25C1B84DCA100BAB377 /* GICommitViewController.m in Sources */,
@@ -1404,7 +1436,9 @@
 				E299D00F1A7206E7005035F7 /* GCSQLiteRepository-Tests.m in Sources */,
 				E2790D431ACB1B1100965A98 /* GCFoundation.m in Sources */,
 				E20EB08C19FC75CA0031A075 /* GCRepository+Reset.m in Sources */,
+				E69C1E142178AC400080117C /* GPGContext.m in Sources */,
 				E259C2D31A64F9FF0079616B /* GCHistory-Tests.m in Sources */,
+				E69C1E132178AC3E0080117C /* GPGKeys.m in Sources */,
 				E27E43061A74A96000D04ED1 /* GILayer.m in Sources */,
 				E2C338F219F85C8600063D95 /* GCRemote.m in Sources */,
 				E21739F41A4FE39E00EC6777 /* GCFunctions.m in Sources */,
