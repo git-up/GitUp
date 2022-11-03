@@ -85,7 +85,7 @@ static BOOL _CompareSerializedReferences(GCSerializedReference* serializedRefere
 
 - (id)initWithReference:(git_reference*)reference resolvedObject:(git_object*)object {
   if ((self = [super init])) {
-    _name = [_NSDataFromCString(git_reference_name(reference)) copy];
+    _name = _NSDataFromCString(git_reference_name(reference));
     _type = git_reference_type(reference);
     switch (_type) {
       case GIT_REF_OID: {
@@ -95,7 +95,7 @@ static BOOL _CompareSerializedReferences(GCSerializedReference* serializedRefere
       }
 
       case GIT_REF_SYMBOLIC: {
-        _symbol = [_NSDataFromCString(git_reference_symbolic_target(reference)) copy];
+        _symbol = _NSDataFromCString(git_reference_symbolic_target(reference));
         XLOG_DEBUG_CHECK(_symbol.length);
         break;
       }
@@ -133,7 +133,7 @@ static BOOL _CompareSerializedReferences(GCSerializedReference* serializedRefere
 
 - (id)initWithCoder:(NSCoder*)decoder {
   if ((self = [super init])) {
-    _name = [[decoder decodeObjectOfClass:[NSData class] forKey:@"name"] copy];
+    _name = [decoder decodeObjectOfClass:[NSData class] forKey:@"name"];
     XLOG_DEBUG_CHECK(_name);
     _type = [decoder decodeIntForKey:@"type"];
     XLOG_DEBUG_CHECK((_type == GIT_REF_OID) || (_type == GIT_REF_SYMBOLIC));
@@ -146,7 +146,7 @@ static BOOL _CompareSerializedReferences(GCSerializedReference* serializedRefere
       XLOG_DEBUG_UNREACHABLE();
     }
 
-    _symbol = [[decoder decodeObjectOfClass:[NSData class] forKey:@"symbol"] copy];
+    _symbol = [decoder decodeObjectOfClass:[NSData class] forKey:@"symbol"];
 
     _resolvedType = [decoder decodeIntForKey:@"resolved_type"];
 

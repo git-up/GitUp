@@ -40,12 +40,12 @@ static inline GCCommit* _LoadCommit(GCRepository* repository, const git_oid* oid
 
     git_oid_cpy(&_fromOID, git_reflog_entry_id_old(entry));
     if (!git_oid_iszero(&_fromOID)) {
-      _fromSHA1 = [GCGitOIDToSHA1(&_fromOID) copy];
+      _fromSHA1 = GCGitOIDToSHA1(&_fromOID);
       _fromCommit = _LoadCommit(_repository, &_fromOID);
     }
     git_oid_cpy(&_toOID, git_reflog_entry_id_new(entry));
     if (!git_oid_iszero(&_toOID)) {
-      _toSHA1 = [GCGitOIDToSHA1(&_toOID) copy];
+      _toSHA1 = GCGitOIDToSHA1(&_toOID);
       _toCommit = _LoadCommit(_repository, &_toOID);
     } else {
       XLOG_DEBUG_UNREACHABLE();
