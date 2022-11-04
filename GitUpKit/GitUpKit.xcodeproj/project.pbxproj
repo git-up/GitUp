@@ -209,7 +209,7 @@
 		E267E2151B84DB6E00BAB377 /* GIBranch.m in Sources */ = {isa = PBXBuildFile; fileRef = E2D4DEAE1A4D592000B6AF66 /* GIBranch.m */; };
 		E267E2161B84DB6E00BAB377 /* GIDiffView.m in Sources */ = {isa = PBXBuildFile; fileRef = E2891AB51AE1684A00E58C77 /* GIDiffView.m */; };
 		E267E2171B84DB6E00BAB377 /* GIFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = E2B1BF321A85923800A999DF /* GIFunctions.m */; };
-		E267E2181B84DB6E00BAB377 /* GIGraph.m in Sources */ = {isa = PBXBuildFile; fileRef = E2D4DEA11A4D562300B6AF66 /* GIGraph.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		E267E2181B84DB6E00BAB377 /* GIGraph.m in Sources */ = {isa = PBXBuildFile; fileRef = E2D4DEA11A4D562300B6AF66 /* GIGraph.m */; };
 		E267E2191B84DB6E00BAB377 /* GIGraphView.m in Sources */ = {isa = PBXBuildFile; fileRef = E2D4DEA31A4D562300B6AF66 /* GIGraphView.m */; };
 		E267E21A1B84DB6E00BAB377 /* GILayer.m in Sources */ = {isa = PBXBuildFile; fileRef = E2D4DEB11A4D599200B6AF66 /* GILayer.m */; };
 		E267E21B1B84DB6E00BAB377 /* GILine.m in Sources */ = {isa = PBXBuildFile; fileRef = E2D4DEAB1A4D587800B6AF66 /* GILine.m */; };
@@ -310,7 +310,7 @@
 		E2B1BF361A85C5ED00A999DF /* GIFunctions-Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = E2B1BF351A85C5ED00A999DF /* GIFunctions-Tests.m */; };
 		E2B9878F1B9171D20097629D /* GIBranch.m in Sources */ = {isa = PBXBuildFile; fileRef = E2D4DEAE1A4D592000B6AF66 /* GIBranch.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		E2B987901B9171D20097629D /* GIFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = E2B1BF321A85923800A999DF /* GIFunctions.m */; };
-		E2B987911B9171D20097629D /* GIGraph.m in Sources */ = {isa = PBXBuildFile; fileRef = E2D4DEA11A4D562300B6AF66 /* GIGraph.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		E2B987911B9171D20097629D /* GIGraph.m in Sources */ = {isa = PBXBuildFile; fileRef = E2D4DEA11A4D562300B6AF66 /* GIGraph.m */; };
 		E2B987921B9171D20097629D /* GILayer.m in Sources */ = {isa = PBXBuildFile; fileRef = E2D4DEB11A4D599200B6AF66 /* GILayer.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		E2B987931B9171D20097629D /* GILine.m in Sources */ = {isa = PBXBuildFile; fileRef = E2D4DEAB1A4D587800B6AF66 /* GILine.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		E2B987941B9171D20097629D /* GINode.m in Sources */ = {isa = PBXBuildFile; fileRef = E2D4DEA71A4D57AA00B6AF66 /* GINode.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
