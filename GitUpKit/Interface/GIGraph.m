@@ -24,13 +24,16 @@
 #define COMMIT_SKIPPED(c) skipped[c.autoIncrementID]
 #define MAP_COMMIT_TO_NODE(c) _mapping[c.autoIncrementID]
 
+@interface GIGraph ()
+@property NSMutableArray *branches;
+@property NSMutableArray *layers;
+@property NSMutableArray *lines;
+@property NSMutableArray *nodes;
+@property NSMutableArray *nodesWithReferences;
+@end
+
 @implementation GIGraph {
   GINode* __unsafe_unretained* _mapping;
-  CFMutableArrayRef _branches;
-  CFMutableArrayRef _layers;
-  CFMutableArrayRef _lines;
-  CFMutableArrayRef _nodes;
-  CFMutableArrayRef _nodesWithReferences;
 }
 
 - (instancetype)initWithHistory:(GCHistory*)history options:(GIGraphOptions)options {
@@ -38,12 +41,11 @@
     _history = history;
     _options = options;
 
-    CFArrayCallBacks callbacks = {0, NULL, NULL, NULL, NULL};
-    _branches = CFArrayCreateMutable(kCFAllocatorDefault, 0, &callbacks);
-    _layers = CFArrayCreateMutable(kCFAllocatorDefault, 0, &callbacks);
-    _lines = CFArrayCreateMutable(kCFAllocatorDefault, 0, &callbacks);
-    _nodes = CFArrayCreateMutable(kCFAllocatorDefault, 0, &callbacks);
-    _nodesWithReferences = CFArrayCreateMutable(kCFAllocatorDefault, 0, NULL);
+    self.branches = [NSMutableArray array];
+    self.layers = [NSMutableArray array];
+    self.lines = [NSMutableArray array];
+    self.nodes = [NSMutableArray array];
+    self.nodesWithReferences = [NSMutableArray array];
     _mapping = (GINode *__unsafe_unretained*)calloc(_history.nextAutoIncrementID, sizeof(GINode*));
 
     [self _generateGraph];
@@ -64,37 +66,12 @@
 
 - (void)dealloc {
   free(_mapping);
-  CFRelease(_nodesWithReferences);
-  CFRelease(_nodes);
-  CFRelease(_lines);
-  CFRelease(_layers);
-  CFRelease(_branches);
 
   _history = nil;
 }
 
-- (NSArray*)branches {
-  return (__bridge NSArray*)_branches;
-}
-
-- (NSArray*)layers {
-  return (__bridge NSArray*)_layers;
-}
-
-- (NSArray*)lines {
-  return (__bridge NSArray*)_lines;
-}
-
-- (NSArray*)nodes {
-  return (__bridge NSArray*)_nodes;
-}
-
-- (NSArray*)nodesWithReferences {
-  return (__bridge NSArray*)_nodesWithReferences;
-}
-
 - (BOOL)isEmpty {
-  return !CFArrayGetCount(_layers);
+  return self.layers.count == 0;
 }
 
 - (void)_generateGraph {
@@ -312,19 +289,19 @@
   }
 
   // Create initial layer made of tips
-  GILayer* layer = [[GILayer alloc] initWithIndex:CFArrayGetCount(_layers)];
+  GILayer* layer = [[GILayer alloc] initWithIndex:self.layers.count];
   @autoreleasepool {
     for (GCHistoryCommit* commit in tipsArray) {
       // Create new branch
       GIBranch* branch = [[GIBranch alloc] init];
-      CFArrayAppendValue(_branches, (__bridge const void *)(branch));
+      [(NSMutableArray *)self.branches addObject:branch];
 #ifdef __clang_analyzer__
       [branch release];  // Release is actually handled by CFArray which doesn't retain
 #endif
 
       // Create new line
       GILine* line = [[GILine alloc] initWithBranch:branch];
-      CFArrayAppendValue(_lines, (__bridge const void *)(line));
+      [(NSMutableArray *)self.lines addObject:line];
       branch.mainLine = line;
       [layer addLine:line];
 #ifdef __clang_analyzer__
@@ -356,12 +333,12 @@
         node = [[GINode alloc] initWithLayer:layer primaryLine:line commit:commit dummy:YES alternateCommit:nil];
         ++_numberOfDummyNodes;
       }
-      CFArrayAppendValue(_nodes, (__bridge const void *)(node));
+      [(NSMutableArray *)self.nodes addObject:node];
       [layer addNode:node];
       [line addNode:node];
     }
   }
-  CFArrayAppendValue(_layers, (__bridge const void *)(layer));
+  [(NSMutableArray *)self.layers addObject:layer];
 #ifdef __clang_analyzer__
   [layer release];
 #endif
@@ -371,7 +348,7 @@
   while (1) {
     @autoreleasepool {
       // Create a new empty layer
-      layer = [[GILayer alloc] initWithIndex:CFArrayGetCount(_layers)];
+      layer = [[GILayer alloc] initWithIndex:self.layers.count];
 
       // Iterate over nodes from previous layer
       for (GINode* previousNode in previousLayer.nodes) {
@@ -400,7 +377,7 @@
             node = [[GINode alloc] initWithLayer:layer primaryLine:line commit:commit dummy:YES alternateCommit:alternateCommit];
             ++_numberOfDummyNodes;
           }
-          CFArrayAppendValue(_nodes, (__bridge const void *)(node));
+          [(NSMutableArray *)self.nodes addObject:node];
           [layer addNode:node];
           [line addNode:node];
 
@@ -431,7 +408,7 @@
             GILine* parentLine = line;
             if (index) {  // Start a new line if not the first parent
               GILine* newLine = [[GILine alloc] initWithBranch:line.branch];
-              CFArrayAppendValue(_lines, (__bridge const void *)(newLine));
+              [(NSMutableArray *)self.lines addObject:newLine];
 #ifdef __clang_analyzer__
               [newLine release];
 #endif
@@ -452,7 +429,7 @@
 
           // Cache node if it has references
           if (commit.hasReferences) {
-            CFArrayAppendValue(_nodesWithReferences, (__bridge const void *)(previousNode));
+            [(NSMutableArray *)self.nodesWithReferences addObject:previousNode];
           }
         }
       }
@@ -476,7 +453,7 @@
 #endif
 
       // Save new layer
-      CFArrayAppendValue(_layers, (__bridge const void *)(layer));
+      [(NSMutableArray *)self.layers addObject:layer];
 #ifdef __clang_analyzer__
       [layer release];
 #endif
@@ -484,7 +461,6 @@
     }
   }
 
-cleanup:
   if (skipped) {
     free(skipped);
   }
@@ -496,9 +472,9 @@ cleanup:
 
 - (void)_computeNodePositions {
   CGFloat maxX = 0.0;
-  for (CFIndex i = 0, count = CFArrayGetCount(_layers); i < count; ++i) {
-    GILayer* layer = CFArrayGetValueAtIndex(_layers, i);
-
+  for (CFIndex i = 0, count = self.layers.count; i < count; ++i) {
+    GILayer* layer = self.layers[i];
+    
     CGFloat lastX = 0.0;
     NSUInteger index = 0;
     for (GINode* node in layer.nodes) {
@@ -520,7 +496,7 @@ cleanup:
 
     layer.y = layer.index;
   }
-  _size = CGSizeMake(maxX, CFArrayGetCount(_layers) - 1);
+  _size = CGSizeMake(maxX, self.layers.count - 1);
 }
 
 #if __GI_HAS_APPKIT__
@@ -545,8 +521,8 @@ cleanup:
   CFRelease(dictionary);
 #else
   NSUInteger index = 0;
-  for (CFIndex i = 0, count = CFArrayGetCount(_lines); i < count; ++i) {
-    GILine* line = CFArrayGetValueAtIndex(_lines, i);
+  for (CFIndex i = 0, count = self.lines.count; i < count; ++i) {
+    GILine* line = self.lines[i];
     NSColor* color;
     do {
       color = colors[index];
@@ -565,8 +541,8 @@ cleanup:
 
 - (void)_validateTopology {
   // Validate nodes - TODO: Find a way to validate "alternateCommit"
-  for (CFIndex i = 0, count = CFArrayGetCount(_nodes); i < count; ++i) {
-    GINode* node = CFArrayGetValueAtIndex(_nodes, i);
+  for (CFIndex i = 0, count = self.nodes.count; i < count; ++i) {
+    GINode* node = self.nodes[i];
     XLOG_DEBUG_CHECK(node.layer);
     XLOG_DEBUG_CHECK(node.primaryLine);
     XLOG_DEBUG_CHECK(node.commit);
@@ -574,8 +550,8 @@ cleanup:
   }
 
   // Validate lines
-  for (CFIndex i = 0, count = CFArrayGetCount(_lines); i < count; ++i) {
-    GILine* line = CFArrayGetValueAtIndex(_lines, i);
+  for (CFIndex i = 0, count = self.lines.count; i < count; ++i) {
+    GILine* line = self.lines[i];
     XLOG_DEBUG_CHECK(line.branch);
     NSArray* nodes = line.nodes;
     XLOG_DEBUG_CHECK(nodes.count >= 1);
@@ -594,15 +570,15 @@ cleanup:
   }
 
   // Validate branches
-  for (CFIndex i = 0, count = CFArrayGetCount(_branches); i < count; ++i) {
-    GIBranch* branch = CFArrayGetValueAtIndex(_branches, i);
+  for (CFIndex i = 0, count = self.branches.count; i < count; ++i) {
+    GIBranch* branch = self.branches[i];
     XLOG_DEBUG_CHECK(branch.mainLine);
     XLOG_DEBUG_CHECK(branch.mainLine.branch == branch);
   }
 
   // Validate layers - TODO: Find a way to validate lines in layers
-  for (CFIndex i = 0, count = CFArrayGetCount(_layers); i < count; ++i) {
-    GILayer* layer = CFArrayGetValueAtIndex(_layers, i);
+  for (CFIndex i = 0, count = self.layers.count; i < count; ++i) {
+    GILayer* layer = self.layers[i];
     XLOG_DEBUG_CHECK(layer.index == (NSUInteger)i);
     XLOG_DEBUG_CHECK(layer.nodes.count >= 1);
     XLOG_DEBUG_CHECK([[NSSet setWithArray:layer.lines] count] == layer.lines.count);
@@ -617,9 +593,9 @@ cleanup:
   }
 
   // Make sure all commits have a non-dummy node associated and that there are no orphan non-dummy nodes
-  NSMutableSet* orphanNodes = [NSMutableSet setWithCapacity:CFArrayGetCount(_nodes)];
-  for (CFIndex i = 0, count = CFArrayGetCount(_nodes); i < count; ++i) {
-    GINode* node = CFArrayGetValueAtIndex(_nodes, i);
+  NSMutableSet* orphanNodes = [NSMutableSet setWithCapacity:self.nodes.count];
+  for (CFIndex i = 0, count = self.nodes.count; i < count; ++i) {
+    GINode* node = self.nodes[i];
     if (!node.dummy) {
       [orphanNodes addObject:node];
     }
@@ -635,24 +611,24 @@ cleanup:
   XLOG_DEBUG_CHECK(orphanNodes.count == 0);
 
   // Make sure global node list matches all line nodes
-  NSMutableSet* lineNodes = [NSMutableSet setWithCapacity:CFArrayGetCount(_nodes)];
-  for (CFIndex i = 0, count = CFArrayGetCount(_lines); i < count; ++i) {
-    GILine* line = CFArrayGetValueAtIndex(_lines, i);
+  NSMutableSet* lineNodes = [NSMutableSet setWithCapacity:self.nodes.count];
+  for (CFIndex i = 0, count = self.lines.count; i < count; ++i) {
+    GILine* line = self.lines[i];
     [lineNodes addObjectsFromArray:line.nodes];
   }
-  XLOG_DEBUG_CHECK([lineNodes isEqualToSet:[NSSet setWithArray:(__bridge NSArray*)_nodes]]);
+  XLOG_DEBUG_CHECK([lineNodes isEqualToSet:[NSSet setWithArray:self.nodes]]);
 
   // Make sure global node list matches all layer nodes
-  NSMutableSet* layerNodes = [NSMutableSet setWithCapacity:CFArrayGetCount(_nodes)];
-  for (CFIndex i = 0, count = CFArrayGetCount(_layers); i < count; ++i) {
-    GILayer* layer = CFArrayGetValueAtIndex(_layers, i);
+  NSMutableSet* layerNodes = [NSMutableSet setWithCapacity:self.nodes.count];
+  for (CFIndex i = 0, count = self.layers.count; i < count; ++i) {
+    GILayer* layer = self.layers[i];
     [layerNodes addObjectsFromArray:layer.nodes];
   }
-  XLOG_DEBUG_CHECK([layerNodes isEqualToSet:[NSSet setWithArray:(__bridge NSArray*)_nodes]]);
+  XLOG_DEBUG_CHECK([layerNodes isEqualToSet:[NSSet setWithArray:self.nodes]]);
 
   // Make sure all lines are a hierarchy of nodes and end with a non-dummy node
-  for (CFIndex i = 0, count = CFArrayGetCount(_lines); i < count; ++i) {
-    GILine* line = CFArrayGetValueAtIndex(_lines, i);
+  for (CFIndex i = 0, count = self.lines.count; i < count; ++i) {
+    GILine* line = self.lines[i];
     NSArray* nodes = line.nodes;
     NSUInteger index = 0;
     while ([nodes[index] isDummy] && (index < nodes.count - 1)) {
@@ -673,8 +649,8 @@ cleanup:
 
 - (void)_validateStyle {
   // Make sure there are no duplicate node positions
-  for (CFIndex i = 0, count = CFArrayGetCount(_layers); i < count; ++i) {
-    GILayer* layer = CFArrayGetValueAtIndex(_layers, i);
+  for (CFIndex i = 0, count = self.layers.count; i < count; ++i) {
+    GILayer* layer = self.layers[i];
     NSMutableSet* set = [NSMutableSet set];
     for (GINode* node in layer.nodes) {
       [set addObject:@(node.x)];
@@ -696,8 +672,8 @@ cleanup:
   }
 
   // Make sure all lines have a color and their nodes are laid out upwards
-  for (CFIndex i = 0, count = CFArrayGetCount(_lines); i < count; ++i) {
-    GILine* line = CFArrayGetValueAtIndex(_lines, i);
+  for (CFIndex i = 0, count = self.lines.count; i < count; ++i) {
+    GILine* line = self.lines[i];
 #if __GI_HAS_APPKIT__
     XLOG_DEBUG_CHECK(line.color);
 #endif
@@ -739,14 +715,14 @@ cleanup:
   GC_POINTER_LIST_ALLOCATE(tempRow, 32);
 
   __block CFIndex index = node.layer.index;
-  CFIndex maxIndex = CFArrayGetCount(_layers);
+  CFIndex maxIndex = self.layers.count;
   GC_POINTER_LIST_APPEND(row, (__bridge void *)(node));
   while (1) {
     ++index;
     if (index == maxIndex) {
       break;
     }
-    GILayer* layer = CFArrayGetValueAtIndex(_layers, index);
+    GILayer* layer = self.layers[index];
     if (beginBlock) {
       BOOL stop = NO;
       beginBlock(layer, &stop);
@@ -789,8 +765,8 @@ cleanup:
 
 - (NSString*)description {
   NSMutableString* description = [[NSMutableString alloc] initWithString:[super description]];
-  for (CFIndex i = 0, count = CFArrayGetCount(_layers); i < count; ++i) {
-    GILayer* layer = CFArrayGetValueAtIndex(_layers, i);
+  for (CFIndex i = 0, count = self.layers.count; i < count; ++i) {
+    GILayer* layer = self.layers[i];
     [description appendFormat:@"\nLayer %lu", (unsigned long)layer.index];
     for (GINode* node in layer.nodes) {
       [description appendFormat:@"\n [%c] %@ \"%@\" (%@)", node.dummy ? ' ' : 'X', node.commit.shortSHA1, node.commit.summary, node.alternateCommit.shortSHA1];
