@@ -78,7 +78,7 @@
   XCTAssertNotNil([repository createCommitFromHEADWithMessage:@"0" error:NULL]);
 
   // Add submodule
-  NSString* output = [self runGitCLTWithRepository:self.repository command:@"submodule", @"add", path, @"submodule", nil];
+  NSString* output = [self runGitCLTWithRepository:self.repository command:@"-c", @"protocol.file.allow=always", @"submodule", @"add", path, @"submodule", nil];
   XCTAssertNotNil(output);
 
   // Check status
@@ -206,14 +206,14 @@
   // Create wrapper repo
   GCRepository* repo2 = [self createLocalRepositoryAtPath:path2 bare:NO];
   XCTAssertNotNil(repo2);
-  output = [self runGitCLTWithRepository:repo2 command:@"submodule", @"add", path1, @"repo1", nil];
+  output = [self runGitCLTWithRepository:repo2 command:@"-c", @"protocol.file.allow=always", @"submodule", @"add", path1, @"repo1", nil];
   XCTAssertNotNil(output);
   XCTAssertNotNil([repo2 createCommitFromHEADWithMessage:@"Added submodule" error:NULL]);
 
   // Wrap the wrapper repo
-  output = [self runGitCLTWithRepository:self.repository command:@"submodule", @"add", path2, @"repo2", nil];
+  output = [self runGitCLTWithRepository:self.repository command:@"-c", @"protocol.file.allow=always", @"submodule", @"add", path2, @"repo2", nil];
   XCTAssertNotNil(output);
-  output = [self runGitCLTWithRepository:self.repository command:@"submodule", @"update", @"--init", @"--recursive", nil];
+  output = [self runGitCLTWithRepository:self.repository command:@"-c", @"protocol.file.allow=always", @"submodule", @"update", @"--init", @"--recursive", nil];
   XCTAssertNotNil(output);
   GCCommit* commit1 = [self.repository createCommitFromHEADWithMessage:@"Added submodule" error:NULL];
   XCTAssertNotNil(commit1);
@@ -269,7 +269,7 @@
   XCTAssertNotNil([repo createMockCommitHierarchyFromNotation:@"m0 - m1 - m2<master>" force:NO error:NULL]);
 
   // Add submodule and commit
-  output = [self runGitCLTWithRepository:self.repository command:@"submodule", @"add", path, @"repo", nil];
+  output = [self runGitCLTWithRepository:self.repository command:@"-c", @"protocol.file.allow=always", @"submodule", @"add", path, @"repo", nil];
   XCTAssertNotNil(output);
   output = [self runGitCLTWithRepository:self.repository command:@"submodule", @"update", @"--init", nil];
   XCTAssertNotNil(output);
