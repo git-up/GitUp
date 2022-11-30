@@ -707,7 +707,6 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
   NSMutableArray* leaves = history.leaves;
   NSMutableArray* addedCommits = nil;
   NSMutableArray* removedCommits = nil;
-  NSDictionary* config = nil;
 
   // Reset output arguments
   if (outReferencesDidChange) {
@@ -721,9 +720,8 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
   }
 
   // Load local config
-  if (snapshot) {
-    config = snapshot.config;
-  } else {
+  if (!snapshot) {
+    NSDictionary* config = nil;
     NSArray* options = [self readConfigForLevel:kGCConfigLevel_Local error:error];
     if (options == nil) {
       goto cleanup;

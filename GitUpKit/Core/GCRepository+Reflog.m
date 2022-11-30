@@ -13,10 +13,6 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#if __has_feature(objc_arc)
-#error This file requires MRC
-#endif
-
 #import "GCPrivate.h"
 
 @implementation GCReflogEntry {
@@ -44,12 +40,12 @@ static inline GCCommit* _LoadCommit(GCRepository* repository, const git_oid* oid
 
     git_oid_cpy(&_fromOID, git_reflog_entry_id_old(entry));
     if (!git_oid_iszero(&_fromOID)) {
-      _fromSHA1 = [GCGitOIDToSHA1(&_fromOID) retain];
+      _fromSHA1 = GCGitOIDToSHA1(&_fromOID);
       _fromCommit = _LoadCommit(_repository, &_fromOID);
     }
     git_oid_cpy(&_toOID, git_reflog_entry_id_new(entry));
     if (!git_oid_iszero(&_toOID)) {
-      _toSHA1 = [GCGitOIDToSHA1(&_toOID) retain];
+      _toSHA1 = GCGitOIDToSHA1(&_toOID);
       _toCommit = _LoadCommit(_repository, &_toOID);
     } else {
       XLOG_DEBUG_UNREACHABLE();
@@ -63,20 +59,6 @@ static inline GCCommit* _LoadCommit(GCRepository* repository, const git_oid* oid
     _messages = [[NSMutableArray alloc] init];
   }
   return self;
-}
-
-- (void)dealloc {
-  [_fromSHA1 release];
-  [_fromCommit release];
-  [_toSHA1 release];
-  [_toCommit release];
-  [_committerName release];
-  [_committerEmail release];
-
-  [_references release];
-  [_messages release];
-
-  [super dealloc];
 }
 
 - (const git_oid*)fromOID {
@@ -198,13 +180,13 @@ static inline BOOL _EqualEntries(GCReflogEntry* entry1, GCReflogEntry* entry2) {
 }
 
 static Boolean _EntryEqualCallBack(const void* value1, const void* value2) {
-  GCReflogEntry* entry1 = (GCReflogEntry*)value1;
-  GCReflogEntry* entry2 = (GCReflogEntry*)value2;
+  GCReflogEntry* entry1 = (__bridge GCReflogEntry*)value1;
+  GCReflogEntry* entry2 = (__bridge GCReflogEntry*)value2;
   return _EqualEntries(entry1, entry2);
 }
 
 static CFHashCode _EntryHashCallBack(const void* value) {
-  GCReflogEntry* entry = (GCReflogEntry*)value;
+  GCReflogEntry* entry = (__bridge GCReflogEntry*)value;
   return *((CFHashCode*)&entry->_fromOID);
 }
 
@@ -238,13 +220,12 @@ static CFHashCode _EntryHashCallBack(const void* value) {
         GCReflogEntry* reflogEntry = [[GCReflogEntry alloc] initWithRepository:self entry:entry];
         [reflogEntry addReference:reference withMessage:git_reflog_entry_message(entry)];
         [entries addObject:reflogEntry];
-        [reflogEntry release];
       }
     }
     git_reflog_free(reflog);
     [entries sortUsingSelector:@selector(reverseTimeCompare:)];
   }
-  return [entries autorelease];
+  return entries;
 }
 
 - (NSArray*)loadAllReflogEntries:(NSError**)error {
@@ -283,11 +264,11 @@ static CFHashCode _EntryHashCallBack(const void* value) {
                                                      [entries addObject:reflogEntry];
                                                      CFSetAddValue(cache, (const void*)reflogEntry);
                                                    }
-                                                   [reflogEntry release];
+                                                   reflogEntry = nil;
                                                  }
                                                }
 
-                                               [reference release];
+                                               reference = nil;
                                                git_reflog_free(reflog);
                                              } else {
                                                git_reference_free(rawReference);
@@ -296,11 +277,11 @@ static CFHashCode _EntryHashCallBack(const void* value) {
                                            }];
   CFRelease(cache);
   if (!success) {
-    [entries release];
+    entries = nil;
     return nil;
   }
   [entries sortUsingSelector:@selector(reverseTimeCompare:)];
-  return [entries autorelease];
+  return entries;
 }
 
 @end
