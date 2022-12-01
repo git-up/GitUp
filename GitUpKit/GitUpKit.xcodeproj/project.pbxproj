@@ -180,10 +180,10 @@
 		E267E1E21B84D83100BAB377 /* GCRepository+Config.m in Sources */ = {isa = PBXBuildFile; fileRef = E24508FF1A9A50EA003E602D /* GCRepository+Config.m */; };
 		E267E1E31B84D83100BAB377 /* GCRepository+HEAD.m in Sources */ = {isa = PBXBuildFile; fileRef = E27F9B731A549097009C9B3D /* GCRepository+HEAD.m */; };
 		E267E1E41B84D83100BAB377 /* GCRepository+Mock.m in Sources */ = {isa = PBXBuildFile; fileRef = E299D0121A749C26005035F7 /* GCRepository+Mock.m */; };
-		E267E1E51B84D83100BAB377 /* GCRepository+Reflog.m in Sources */ = {isa = PBXBuildFile; fileRef = E27B6D651A84451900D05452 /* GCRepository+Reflog.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		E267E1E51B84D83100BAB377 /* GCRepository+Reflog.m in Sources */ = {isa = PBXBuildFile; fileRef = E27B6D651A84451900D05452 /* GCRepository+Reflog.m */; };
 		E267E1E61B84D83100BAB377 /* GCRepository+Reset.m in Sources */ = {isa = PBXBuildFile; fileRef = E20EB08A19FC75CA0031A075 /* GCRepository+Reset.m */; };
 		E267E1E71B84D83100BAB377 /* GCRepository+Status.m in Sources */ = {isa = PBXBuildFile; fileRef = E20EB08E19FC76160031A075 /* GCRepository+Status.m */; };
-		E267E1E81B84D83100BAB377 /* GCSnapshot.m in Sources */ = {isa = PBXBuildFile; fileRef = E2F5C27D1A8171C900C30739 /* GCSnapshot.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		E267E1E81B84D83100BAB377 /* GCSnapshot.m in Sources */ = {isa = PBXBuildFile; fileRef = E2F5C27D1A8171C900C30739 /* GCSnapshot.m */; };
 		E267E1E91B84D83100BAB377 /* GCSQLiteRepository.m in Sources */ = {isa = PBXBuildFile; fileRef = E299D00A1A71F0E9005035F7 /* GCSQLiteRepository.m */; };
 		E267E1EA1B84D83100BAB377 /* GCStash.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C338E719F85C8600063D95 /* GCStash.m */; };
 		E267E1EB1B84D83100BAB377 /* GCSubmodule.m in Sources */ = {isa = PBXBuildFile; fileRef = E21739FD1A51FA6200EC6777 /* GCSubmodule.m */; };
@@ -210,10 +210,10 @@
 		E267E2161B84DB6E00BAB377 /* GIDiffView.m in Sources */ = {isa = PBXBuildFile; fileRef = E2891AB51AE1684A00E58C77 /* GIDiffView.m */; };
 		E267E2171B84DB6E00BAB377 /* GIFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = E2B1BF321A85923800A999DF /* GIFunctions.m */; };
 		E267E2181B84DB6E00BAB377 /* GIGraph.m in Sources */ = {isa = PBXBuildFile; fileRef = E2D4DEA11A4D562300B6AF66 /* GIGraph.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		E267E2191B84DB6E00BAB377 /* GIGraphView.m in Sources */ = {isa = PBXBuildFile; fileRef = E2D4DEA31A4D562300B6AF66 /* GIGraphView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		E267E2191B84DB6E00BAB377 /* GIGraphView.m in Sources */ = {isa = PBXBuildFile; fileRef = E2D4DEA31A4D562300B6AF66 /* GIGraphView.m */; };
 		E267E21A1B84DB6E00BAB377 /* GILayer.m in Sources */ = {isa = PBXBuildFile; fileRef = E2D4DEB11A4D599200B6AF66 /* GILayer.m */; };
 		E267E21B1B84DB6E00BAB377 /* GILine.m in Sources */ = {isa = PBXBuildFile; fileRef = E2D4DEAB1A4D587800B6AF66 /* GILine.m */; };
-		E267E21C1B84DB6E00BAB377 /* GINode.m in Sources */ = {isa = PBXBuildFile; fileRef = E2D4DEA71A4D57AA00B6AF66 /* GINode.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		E267E21C1B84DB6E00BAB377 /* GINode.m in Sources */ = {isa = PBXBuildFile; fileRef = E2D4DEA71A4D57AA00B6AF66 /* GINode.m */; };
 		E267E21D1B84DB6E00BAB377 /* GIPrivate.m in Sources */ = {isa = PBXBuildFile; fileRef = E21A88F21A9471B300255AC3 /* GIPrivate.m */; };
 		E267E21E1B84DB6E00BAB377 /* GISplitDiffView.m in Sources */ = {isa = PBXBuildFile; fileRef = E2891AB21AE15BB600E58C77 /* GISplitDiffView.m */; };
 		E267E21F1B84DB6E00BAB377 /* GIUnifiedDiffView.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C9FF871AA510170051B2AE /* GIUnifiedDiffView.m */; };

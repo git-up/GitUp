@@ -604,7 +604,9 @@
     [arguments addObject:[NSString stringWithFormat:@"-t2=%@", ancestorTitle]];
     [arguments addObject:[NSString stringWithFormat:@"-t3=%@", theirTitle]];
     [arguments addObject:ourPath];
-    [arguments addObject:ancestorPath];
+    if (ancestorPath) {
+      [arguments addObject:ancestorPath];
+    }
     [arguments addObject:theirPath];
     [self _runDiffMergeToolWithArguments:arguments];
   } else {
