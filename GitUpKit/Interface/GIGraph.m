@@ -436,7 +436,6 @@
 
       // If new layer is empty, we're done
       if (layer.nodes.count == 0) {
-        layer = nil;
         break;
       }
 
@@ -466,8 +465,6 @@
   }
   GC_POINTER_LIST_FREE(newSkipList);
   GC_POINTER_LIST_FREE(skipList);
-  upstreamTips = nil;
-  tips = nil;
 }
 
 - (void)_computeNodePositions {
