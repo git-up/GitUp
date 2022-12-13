@@ -13,6 +13,10 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+#if __has_feature(objc_arc)
+#error This file requires MRC
+#endif
+
 #import "GIPrivate.h"
 
 @implementation GILine {
@@ -30,11 +34,16 @@
 }
 
 - (void)dealloc {
+#if __GI_HAS_APPKIT__
+  [_color release];
+#endif
   CFRelease(_nodes);
+
+  [super dealloc];
 }
 
 - (NSArray*)nodes {
-  return (__bridge NSArray*)_nodes;
+  return (NSArray*)_nodes;
 }
 
 - (void)addNode:(GINode*)node {

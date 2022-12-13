@@ -13,6 +13,10 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+#if __has_feature(objc_arc)
+#error This file requires MRC
+#endif
+
 #import <sqlite3.h>
 
 #import "GCPrivate.h"
@@ -364,6 +368,7 @@ static int _CaseInsensitiveUTF8Compare(void* context, int length1, const void* b
     _options = options;
 
     if (![self _initializeDatabase:path error:error]) {
+      [self release];
       return nil;
     }
 
@@ -372,27 +377,32 @@ static int _CaseInsensitiveUTF8Compare(void* context, int length1, const void* b
       NSInteger currentVersion = [self _readVersion];
       if (currentVersion == version) {
         if (![self _checkReady:error]) {
+          [self release];
           return nil;
         }
       } else {
         if (_options & kGCCommitDatabaseOptions_QueryOnly) {
           GC_SET_GENERIC_ERROR(@"Database is query-only");
+          [self release];
           return nil;
         }
         sqlite3_close(_database);
         _database = NULL;
         XLOG_WARNING(@"Commit database for \"%@\" has an incompatible version (%li) and must be regenerated", _repository.repositoryPath, (long)currentVersion);
         if (![[NSFileManager defaultManager] removeItemAtPath:path error:error] || ![self _initializeDatabase:path error:error] || ![self _initializeSchema:version error:error]) {
+          [self release];
           return nil;
         }
       }
     } else {
       if (![self _initializeSchema:version error:error]) {
+        [self release];
         return nil;
       }
     }
 
     if (![self _initializeStatements:error]) {
+      [self release];
       return nil;
     }
   }
@@ -407,6 +417,10 @@ static int _CaseInsensitiveUTF8Compare(void* context, int length1, const void* b
     free(_statements);
   }
   sqlite3_close(_database);
+
+  [_databasePath release];
+
+  [super dealloc];
 }
 
 #if DEBUG
@@ -889,6 +903,10 @@ static BOOL _ProcessDiff(git_repository* repo, git_commit* commit, git_commit* p
   success = YES;
 
 cleanup:
+  [deletedWords release];
+  [addedWords release];
+  [deletedLines release];
+  [addedLines release];
   git_commit_free(mainParent);
   GC_LIST_FOR_LOOP_POINTER(newRow, itemPtr) {
     git_commit_free(itemPtr->commit);
@@ -1172,6 +1190,7 @@ cleanup:
       CHECK_LIBGIT2_FUNCTION_CALL(goto cleanup, status, == GIT_OK);
       GCCommit* commit = [[GCCommit alloc] initWithRepository:_repository commit:rawCommit];
       [results addObject:commit];
+      [commit release];
     }
   }
   CALL_SQLITE_FUNCTION_GOTO(cleanup, sqlite3_reset, statements[kStatement_SearchCommits]);
