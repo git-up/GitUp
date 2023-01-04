@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AvailableLibraries</key>
+	<array>
+		<dict>
+			<key>HeadersPath</key>
+			<string>Headers</string>
+			<key>LibraryIdentifier</key>
+			<string>macos-arm64_x86_64</string>
+			<key>LibraryPath</key>
+			<string>libgpgme.a</string>
+			<key>SupportedArchitectures</key>
+			<array>
+				<string>arm64</string>
+				<string>x86_64</string>
+			</array>
+			<key>SupportedPlatform</key>
+			<string>macos</string>
+		</dict>
+	</array>
+	<key>CFBundlePackageType</key>
+	<string>XFWK</string>
+	<key>GPGMeVersion</key>
+	<string>gpgme-1.18.0</string>
+	<key>LibAssuanVersion</key>
+	<string>libassuan-2.5.5</string>
+	<key>LibGPGErrorVersion</key>
+	<string>gpgrt-1.45</string>
+	<key>XCFrameworkFormatVersion</key>
+	<string>1.0</string>
+</dict>
+</plist>

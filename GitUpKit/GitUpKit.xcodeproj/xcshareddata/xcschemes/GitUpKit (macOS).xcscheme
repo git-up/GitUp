@@ -27,7 +27,8 @@
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "NO"
-      enableAddressSanitizer = "YES">
+      enableAddressSanitizer = "YES"
+      region = "US">
       <AdditionalOptions>
          <AdditionalOption
             key = "NSZombieEnabled"

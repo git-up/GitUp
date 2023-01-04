@@ -12,6 +12,7 @@ let librariesPath = "."
 let libssh2Path = "\(librariesPath)/libssh2.xcframework"
 let libsslPath = "\(librariesPath)/libssl.xcframework"
 let libcryptoPath = "\(librariesPath)/libcrypto.xcframework"
+let libgpgmePath = "libgpgme.xcframework"
 
 enum FeaturesExtractor {
     private struct Define: CustomStringConvertible {
@@ -79,6 +80,9 @@ let package = Package(
         ),
         .library(name: "ntlmclient",
                  targets: ["ntlmclient"]
+        ),
+        .library(name: "libgpgme",
+                 targets: ["libgpgme"]
         ),
     ],
     dependencies: [
@@ -208,5 +212,6 @@ let package = Package(
         .binaryTarget(name: "libssh2", path: libssh2Path),
         .binaryTarget(name: "libssl", path: libsslPath),
         .binaryTarget(name: "libcrypto", path: libcryptoPath),
+        .binaryTarget(name: "libgpgme", path: libgpgmePath),
     ]
 )

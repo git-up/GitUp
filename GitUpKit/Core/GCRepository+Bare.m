@@ -18,6 +18,7 @@
 #endif
 
 #import "GCPrivate.h"
+#import "GPGKeys.h"
 
 @implementation GCRepository (Bare)
 
@@ -364,18 +365,55 @@ cleanup:
                           message:(NSString*)message
                             error:(NSError**)error {
   GCCommit* commit = nil;
+  git_commit* newCommit = NULL;
   git_signature* signature = NULL;
+  const char *gpgSignature = NULL;
 
   git_oid oid;
+
+  GCConfigOption* shouldSignOption = [self readConfigOptionForVariable:@"commit.gpgsign" error:nil];
+  BOOL shouldSign = [shouldSignOption.value isEqualToString:@"true"];
+
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_signature_default, &signature, self.private);
-  CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_commit_create, &oid, self.private, NULL, author ? author : signature, signature, NULL, GCCleanedUpCommitMessage(message).bytes, tree, count, parents);
-  git_commit* newCommit = NULL;
+
+  git_buf commitBuffer = GIT_BUF_INIT;
+  CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_commit_create_buffer, &commitBuffer, self.private, author ? author : signature, signature, NULL, GCCleanedUpCommitMessage(message).bytes, tree, count, parents);
+
+  if (shouldSign) {
+    GCConfigOption* signingKeyOption = [self readConfigOptionForVariable:@"user.signingkey" error:nil];
+    gpgSignature = [self gpgSig:commitBuffer.ptr keyId:signingKeyOption.value];
+  }
+
+  CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_commit_create_with_signature, &oid, self.private, commitBuffer.ptr, gpgSignature, NULL);
+
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_commit_lookup, &newCommit, self.private, &oid);
   commit = [[GCCommit alloc] initWithRepository:self commit:newCommit];
 
 cleanup:
+  git_buf_dispose(&commitBuffer);
   git_signature_free(signature);
   return commit;
+}
+
+-(const char*)gpgSig:(const char*)body keyId:(NSString*)keyId {
+  GPGKey *key = nil;
+
+  if (keyId.length > 0) {
+    key = [GPGKey secretKeyForId:keyId];
+  }
+
+  if (key == nil) {
+    key = [[GPGKey allSecretKeys] firstObject];
+  }
+
+  if (key == nil) {
+    return NULL;
+  }
+
+  NSString* plainToSign = [[NSString alloc] initWithCString:body encoding:NSUTF8StringEncoding];
+  NSString* signature = [key signSignature:plainToSign];
+
+  return [signature UTF8String];
 }
 
 - (GCCommit*)createCommitFromIndex:(git_index*)index
@@ -437,22 +475,39 @@ static const git_oid* _CommitParentCallback_Commit(size_t idx, void* payload) {
                               error:(NSError**)error {
   git_commit* newCommit = NULL;
   git_signature* signature = NULL;
+  const char *gpgSignature = NULL;
+
   git_oid oid;
+
+  GCConfigOption* shouldSignOption = [self readConfigOptionForVariable:@"commit.gpgsign" error:nil];
+  BOOL shouldSign = [shouldSignOption.value isEqualToString:@"true"];
 
   if (updateCommitter) {
     CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_signature_default, &signature, self.private);
   }
 
-  CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_commit_create_from_callback, &oid, self.private, NULL,
+  git_buf commitBuffer = GIT_BUF_INIT;
+  CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_commit_create_buffer_for_parents_cb, &commitBuffer, self.private,
                              git_commit_author(commit),
                              updateCommitter ? signature : git_commit_committer(commit),
-                             message ? NULL : git_commit_message_encoding(commit), message ? GCCleanedUpCommitMessage(message).bytes : git_commit_message(commit),
+                             message ? NULL : git_commit_message_encoding(commit),
+                             message ? GCCleanedUpCommitMessage(message).bytes : git_commit_message(commit),
                              git_tree_id(tree),
-                             parents ? _CommitParentCallback_Parents : _CommitParentCallback_Commit, parents ? (__bridge void*)parents : (void*)commit);
+                             parents ? _CommitParentCallback_Parents : _CommitParentCallback_Commit, parents ? (__bridge void*)parents : (void*)commit,
+                             true);
+
+  if (shouldSign) {
+    GCConfigOption* signingKeyOption = [self readConfigOptionForVariable:@"user.signingkey" error:nil];
+    gpgSignature = [self gpgSig:commitBuffer.ptr keyId:signingKeyOption.value];
+  }
+
+  CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_commit_create_with_signature, &oid, self.private, commitBuffer.ptr, gpgSignature, NULL);
+
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_commit_lookup, &newCommit, self.private, &oid);
   XLOG_DEBUG_CHECK(!git_oid_equal(git_commit_id(newCommit), git_commit_id(commit)));
 
 cleanup:
+  git_buf_dispose(&commitBuffer);
   git_signature_free(signature);
   return newCommit ? [[GCCommit alloc] initWithRepository:self commit:newCommit] : nil;
 }
