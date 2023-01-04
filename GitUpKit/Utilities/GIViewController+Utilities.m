@@ -203,13 +203,12 @@
       success = YES;
       for (NSString* path in paths) {
         if (commit && [self.repository checkTreeForCommit:commit containsFile:path error:NULL]) {
-          if (![self.repository safeDeleteFileIfExists:path error:error] && [self.repository checkoutFileFromIndex:path error:error]) {
-            return NO;
-          }
+          success = [self.repository safeDeleteFileIfExists:path error:error] && [self.repository checkoutFileFromIndex:path error:error];
         } else {
-          if (![self.repository safeDeleteFileIfExists:path error:error]) {
-            return NO;
-          }
+          success = [self.repository safeDeleteFile:path error:error];
+        }
+        if (!success) {
+          return NO;
         }
       }
     }
