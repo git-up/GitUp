@@ -13,6 +13,7 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+#import <AppKit/NSEvent.h>
 #import <Foundation/Foundation.h>
 
 typedef NS_ENUM(unsigned short, GIKeyCode) {
@@ -29,3 +30,5 @@ typedef NS_ENUM(unsigned short, GIKeyCode) {
   kGIKeyCode_Return = 0x24,
   kGIKeyCode_Delete = 0x33
 };
+
+static const long kGIKeyModifiersAll = NSEventModifierFlagShift | NSEventModifierFlagControl | NSEventModifierFlagCommand | NSEventModifierFlagOption;
