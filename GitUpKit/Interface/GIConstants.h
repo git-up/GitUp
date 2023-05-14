@@ -31,4 +31,4 @@ typedef NS_ENUM(unsigned short, GIKeyCode) {
   kGIKeyCode_Delete = 0x33
 };
 
-static const long kGIKeyModifiersAll = NSEventModifierFlagShift | NSEventModifierFlagControl | NSEventModifierFlagCommand | NSEventModifierFlagOption;
+static const NSEventModifierFlags kGIKeyModifiersAll = NSEventModifierFlagShift | NSEventModifierFlagControl | NSEventModifierFlagCommand | NSEventModifierFlagOption;

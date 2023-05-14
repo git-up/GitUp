@@ -321,7 +321,7 @@
   }
 
   // Navigate beteween stated and unstaged files list by up/down arrows
-  long modifiers = event.modifierFlags & kGIKeyModifiersAll;
+  NSEventModifierFlags modifiers = event.modifierFlags & kGIKeyModifiersAll;
   if (controller == _workdirFilesViewController && !modifiers && event.keyCode == kGIKeyCode_Down) {
     bool onlyLastFileSelected = (controller.selectedDeltas.count == 1) && (controller.selectedDelta == controller.deltas.lastObject);
     bool hasIndexFiles = _indexFilesViewController.deltas.count > 0;
