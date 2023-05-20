@@ -209,7 +209,13 @@ NSString* GCNameFromHostingService(GCHostingService service) {
           }
         } else {
           if (![self addFileInWorkingDirectory:delta.canonicalPath toIndex:index error:error]) {
-            return NO;
+            BOOL wasJustTryingToStageADeletedConflictingFile =
+              delta.change == kGCFileDiffChange_Conflicted
+              && [[*error localizedDescription] isEqualToString:@"No such file or directory"];
+            
+            if (!wasJustTryingToStageADeletedConflictingFile) {
+              return NO;
+            }
           }
         }
         break;
