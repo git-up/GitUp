@@ -526,6 +526,10 @@ cleanup:
 }
 
 - (BOOL)checkoutFilesToWorkingDirectory:(NSArray<NSString*>*)paths fromIndex:(GCIndex*)index error:(NSError**)error {
+	if ([paths count] == 0) {
+		return YES;
+	}
+	
   git_checkout_options options = GIT_CHECKOUT_OPTIONS_INIT;
   options.checkout_strategy = GIT_CHECKOUT_FORCE | GIT_CHECKOUT_DONT_UPDATE_INDEX;  // There's no reason to update the index
   options.paths.count = paths.count;
