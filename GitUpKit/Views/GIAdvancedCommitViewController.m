@@ -309,6 +309,7 @@
 }
 
 - (BOOL)diffFilesViewController:(GIDiffFilesViewController*)controller handleKeyDownEvent:(NSEvent*)event {
+  // Stage/Unstage files by Return/Delete
   if (!(event.modifierFlags & NSEventModifierFlagDeviceIndependentFlagsMask)) {
     if (event.keyCode == kGIKeyCode_Return) {
       [self _diffFilesViewControllerDidPressReturn:controller];
@@ -319,6 +320,27 @@
     }
   }
 
+  // Navigate beteween stated and unstaged files list by up/down arrows
+  NSEventModifierFlags modifiers = event.modifierFlags & kGIKeyModifiersAll;
+  if (controller == _workdirFilesViewController && !modifiers && event.keyCode == kGIKeyCode_Down) {
+    bool onlyLastFileSelected = (controller.selectedDeltas.count == 1) && (controller.selectedDelta == controller.deltas.lastObject);
+    bool hasIndexFiles = _indexFilesViewController.deltas.count > 0;
+    if (onlyLastFileSelected && hasIndexFiles) {
+      // move focus to next controller
+      [[controller.view window] selectNextKeyView:_workdirFilesViewController.view];
+      return YES;
+    }
+  } else if (controller == _indexFilesViewController && !modifiers && event.keyCode == kGIKeyCode_Up) {
+    bool onlyFirstFileSelected = (controller.selectedDeltas.count == 1) && (controller.selectedDelta == controller.deltas.firstObject);
+    bool hasWorkdirFiles =_workdirFilesViewController.deltas.count > 0;
+    if (onlyFirstFileSelected && hasWorkdirFiles) {
+      // move focus to previous controller
+      [[controller.view window] selectPreviousKeyView:_workdirFilesViewController.view];
+      return YES;
+    }
+  }
+
+  // Perform contextual action on a file
   if (controller == _workdirFilesViewController) {
     return [self handleKeyDownEvent:event forSelectedDeltas:_workdirFilesViewController.selectedDeltas withConflicts:_indexConflicts allowOpen:YES];
   } else if (controller == _indexFilesViewController) {
