@@ -31,7 +31,7 @@ Getting Started
 ## Download:
 
 - Latest release on GitHub: https://github.com/git-up/GitUp/releases
-- Homebrew (Not mantained by GitUp developers): `brew install homebrew/cask/gitup` (Note: There is already a formula called gitup, so the full name must be specified!)
+- Homebrew (Not maintained by GitUp developers): `brew install homebrew/cask/gitup` (Note: There is already a formula called gitup, so the full name must be specified!)
 
 **Read the [docs](https://github.com/git-up/GitUp/wiki) and use [GitHub Issues](https://github.com/git-up/GitUp/issues) for support & feedback.**
 
