@@ -21,12 +21,6 @@
 
 @implementation ServicesProvider
 
-#pragma mark - Handle Errors
-- (void)presentError:(NSError* __autoreleasing*)error {
-  if (error && *error) {
-    [[NSDocumentController sharedDocumentController] presentError:*error];
-  }
-}
 #pragma mark - Accessors
 - (AppDelegate*)appDelegate {
   return [AppDelegate sharedDelegate];
@@ -77,7 +71,9 @@
     [self.appDelegate _openRepositoryWithURL:url withCloneMode:kCloneMode_None windowModeID:NSNotFound];
   } else {
     // item is not a valid git repository.
-    [self presentError:error];
+    if (error && *error) {
+      [[NSDocumentController sharedDocumentController] presentError:*error];
+    }
   }
 }
 
