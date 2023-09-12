@@ -247,7 +247,9 @@
 
 - (void)smartCheckoutSelectedCommit {
   GCHistoryCommit* commit = [self selectedCommit];
-  [self.repository smartCheckoutCommit:commit window:self.view.window];
+  if (commit) {
+    [self.repository smartCheckoutCommit:commit window:self.view.window];
+  }
 }
 
 - (void)keyDown:(NSEvent*)event {

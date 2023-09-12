@@ -13,6 +13,10 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+#if __has_feature(objc_arc)
+#error This file requires MRC
+#endif
+
 #import "GIPrivate.h"
 
 @implementation GIBranch

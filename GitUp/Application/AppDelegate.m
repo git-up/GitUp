@@ -73,7 +73,6 @@
 
 - (void)didChangeReleaseChannel:(BOOL)didChange {
   if (didChange) {
-    _manualCheck = NO;
     [_updater checkForUpdatesInBackground];
   }
 }
@@ -532,6 +531,7 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
 }
 
 - (void)updater:(SUUpdater*)updater didFindValidUpdate:(SUAppcastItem*)item {
+  _manualCheck = NO;
   NSString* channel = [[NSUserDefaults standardUserDefaults] stringForKey:kUserDefaultsKey_ReleaseChannel];
   XLOG_INFO(@"Did find app update on channel '%@' for version %@", channel, item.versionString);
 }
@@ -540,6 +540,7 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
   NSString* channel = [[NSUserDefaults standardUserDefaults] stringForKey:kUserDefaultsKey_ReleaseChannel];
   XLOG_VERBOSE(@"App is up-to-date at version %@ on channel '%@'", [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"], channel);
   if (_manualCheck) {
+    _manualCheck = NO;
     NSAlert* alert = [[NSAlert alloc] init];
     alert.messageText = NSLocalizedString(@"GitUp is already up-to-date!", nil);
     [alert addButtonWithTitle:NSLocalizedString(@"OK", nil)];

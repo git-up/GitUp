@@ -523,7 +523,7 @@ static BOOL _SetBranchDefaultUpstream(git_repository* repository, git_remote* re
   if (success) {
     success = [self _pushToRemote:remote refspecs:(const char**)GC_POINTER_LIST_ROOT(buffers) count:GC_POINTER_LIST_COUNT(buffers) error:error];
   }
-  GC_POINTER_LIST_FOR_LOOP_NO_BRIDGE(buffers, char*, buffer) {
+  GC_POINTER_LIST_FOR_LOOP(buffers, char*, buffer) {
     free(buffer);
   }
   GC_POINTER_LIST_FREE(buffers);

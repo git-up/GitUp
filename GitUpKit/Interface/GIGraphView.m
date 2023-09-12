@@ -13,6 +13,10 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+#if __has_feature(objc_arc)
+#error This file requires MRC
+#endif
+
 #import <objc/runtime.h>
 
 #import "GIPrivate.h"
@@ -118,8 +122,10 @@ static const void* _associatedObjectDataKey = &_associatedObjectDataKey;
   [[NSNotificationCenter defaultCenter] removeObserver:self name:NSWindowDidResignKeyNotification object:nil];
   [[NSNotificationCenter defaultCenter] removeObserver:self name:NSWindowDidBecomeKeyNotification object:nil];
 
-  _graph = nil;
-  _dateFormatter = nil;
+  [_graph release];
+  [_dateFormatter release];
+
+  [super dealloc];
 }
 
 #pragma mark - Subclassing
@@ -198,7 +204,8 @@ static const void* _associatedObjectDataKey = &_associatedObjectDataKey;
 - (void)setGraph:(GIGraph*)graph {
   if (graph != _graph) {
     _selectedNode = nil;
-    _graph = graph;
+    [_graph autorelease];
+    _graph = [graph retain];
 
     [self _updateView];
 
@@ -895,7 +902,7 @@ static inline CGFloat _SquareDistanceFromPointToLine(CGFloat x0, CGFloat y0, CGF
   if (recompute) {
     data = [[NSData alloc] initWithBytesNoCopy:pointList length:(pointCount * sizeof(CGPoint)) freeWhenDone:YES];
     objc_setAssociatedObject(line, _associatedObjectDataKey, data, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-    data = nil;
+    [data release];
   }
 }
 
@@ -906,13 +913,13 @@ static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, CGPoint
     multilineTitleAttributes = [[NSMutableDictionary alloc] init];
 
     CTFontRef titleFont = CTFontCreateUIFontForLanguage(kCTFontUIFontSystem, 13.0, CFSTR("en-US"));
-    multilineTitleAttributes[NSFontAttributeName] = (__bridge id)titleFont;
+    multilineTitleAttributes[NSFontAttributeName] = (id)titleFont;
     CFRelease(titleFont);
 
     NSMutableParagraphStyle* style = [[NSMutableParagraphStyle alloc] init];
     style.lineHeightMultiple = 0.85;
     multilineTitleAttributes[NSParagraphStyleAttributeName] = style;
-    style = nil;
+    [style release];
   }
   multilineTitleAttributes[NSForegroundColorAttributeName] = [color shadowWithLevel:0.2];
   // Cache bold font and calculate darker color for building multiline string
@@ -929,49 +936,49 @@ static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, CGPoint
   for (GCHistoryLocalBranch* localBranch in branch.localBranches) {
     NSString* branchName = localBranch.name;
     NSRange branchNameRange = NSMakeRange(multilineTitle.length, branchName.length);
-    _AppendAttributedString((__bridge CFMutableAttributedStringRef)multilineTitle, [NSString stringWithFormat:@"%@\n", branchName], multilineTitleAttributes);
-    [multilineTitle addAttribute:NSFontAttributeName value:(__bridge id)boldFont range:branchNameRange];
+    _AppendAttributedString((CFMutableAttributedStringRef)multilineTitle, [NSString stringWithFormat:@"%@\n", branchName], multilineTitleAttributes);
+    [multilineTitle addAttribute:NSFontAttributeName value:(id)boldFont range:branchNameRange];
     [multilineTitle addAttribute:NSForegroundColorAttributeName value:darkColor range:branchNameRange];
 
     GCBranch* upstream = localBranch.upstream;
     if (upstream) {
-      _AppendAttributedString((__bridge CFMutableAttributedStringRef)multilineTitle, [NSString stringWithFormat:@"⬅ %@\n", upstream.name], multilineTitleAttributes);
+      _AppendAttributedString((CFMutableAttributedStringRef)multilineTitle, [NSString stringWithFormat:@"⬅ %@\n", upstream.name], multilineTitleAttributes);
 
       NSString* upstreamName = [upstream isKindOfClass:GCRemoteBranch.class] ? [(GCRemoteBranch*)upstream branchName] : upstream.name;
       NSRange upstreamNameRange = NSMakeRange(multilineTitle.length - upstreamName.length - 1, upstreamName.length);  // -1 to exclude '\n'
       [multilineTitle addAttribute:NSForegroundColorAttributeName value:darkColor range:upstreamNameRange];
     }
 
-    _AppendAttributedString((__bridge CFMutableAttributedStringRef)multilineTitle, @"\n", nil);
+    _AppendAttributedString((CFMutableAttributedStringRef)multilineTitle, @"\n", nil);
   }
 
   for (GCHistoryRemoteBranch* remoteBranch in branch.remoteBranches) {
     NSString* branchName = remoteBranch.branchName;
-    _AppendAttributedString((__bridge CFMutableAttributedStringRef)multilineTitle, [NSString stringWithFormat:@"%@\n", remoteBranch.name], multilineTitleAttributes);
+    _AppendAttributedString((CFMutableAttributedStringRef)multilineTitle, [NSString stringWithFormat:@"%@\n", remoteBranch.name], multilineTitleAttributes);
     NSRange branchNameRange = NSMakeRange(multilineTitle.length - branchName.length - 1, branchName.length);  // -1 to exclude '\n'
-    [multilineTitle addAttribute:NSFontAttributeName value:(__bridge id)boldFont range:branchNameRange];
+    [multilineTitle addAttribute:NSFontAttributeName value:(id)boldFont range:branchNameRange];
     [multilineTitle addAttribute:NSForegroundColorAttributeName value:darkColor range:branchNameRange];
   }
 
   if (branch.remoteBranches.count) {
-    _AppendAttributedString((__bridge CFMutableAttributedStringRef)multilineTitle, @"\n", nil);
+    _AppendAttributedString((CFMutableAttributedStringRef)multilineTitle, @"\n", nil);
   }
 
   for (GCHistoryTag* tag in branch.tags) {
     NSString* tagName = tag.name;
-    _AppendAttributedString((__bridge CFMutableAttributedStringRef)multilineTitle, [NSString stringWithFormat:@"[%@]\n", tagName], multilineTitleAttributes);
+    _AppendAttributedString((CFMutableAttributedStringRef)multilineTitle, [NSString stringWithFormat:@"[%@]\n", tagName], multilineTitleAttributes);
     NSRange tagNameRange = NSMakeRange(multilineTitle.length - tagName.length - 2, tagName.length);  // -2 to exclude char ']' plus '\n'
-    [multilineTitle addAttribute:NSFontAttributeName value:(__bridge id)boldFont range:tagNameRange];
+    [multilineTitle addAttribute:NSFontAttributeName value:(id)boldFont range:tagNameRange];
     [multilineTitle addAttribute:NSForegroundColorAttributeName value:darkColor range:tagNameRange];
   }
 
   if (branch.tags.count) {
-    _AppendAttributedString((__bridge CFMutableAttributedStringRef)multilineTitle, @"\n", nil);
+    _AppendAttributedString((CFMutableAttributedStringRef)multilineTitle, @"\n", nil);
   }
 
   [multilineTitle endEditing];
   if (multilineTitle.length == 0) {
-    multilineTitle = nil;
+    [multilineTitle release];
     return;  // This should only happen if we have a detached HEAD with no other references pointing to the commit
   }
 
@@ -1080,7 +1087,7 @@ static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, CGPoint
   }
 
   // Clean up
-  multilineTitle = nil;
+  [multilineTitle release];
   CGPathRelease(path);
   CFRelease(ellipsisToken);
   CFRelease(ellipsis);
@@ -1220,7 +1227,7 @@ static void _DrawNodeLabels(CGContextRef context, CGFloat x, CGFloat y, GINode* 
   }
 
   // Clean up
-  label = nil;
+  [label release];
 }
 
 static void _DrawHead(CGContextRef context, CGFloat x, CGFloat y, BOOL isDetached, CGColorRef color, NSDictionary* attributes) {
@@ -1467,29 +1474,29 @@ static void _DrawSelectedNode(CGContextRef context, CGFloat x, CGFloat y, GINode
   static NSDictionary* tagAttributes = nil;
   if (tagAttributes == nil) {
     CTFontRef font = CTFontCreateUIFontForLanguage(kCTFontUIFontSystem, 11.0, CFSTR("en-US"));
-    tagAttributes = @{(id)kCTForegroundColorFromContextAttributeName : (id)kCFBooleanTrue,
-                      (id)kCTFontAttributeName : (__bridge id)font};
+    tagAttributes = [@{(id)kCTForegroundColorFromContextAttributeName : (id)kCFBooleanTrue,
+                       (id)kCTFontAttributeName : (id)font} retain];
     CFRelease(font);
   }
   static NSDictionary* branchAttributes = nil;
   if (branchAttributes == nil) {
     CTFontRef font = CTFontCreateUIFontForLanguage(kCTFontUIFontEmphasizedSystem, 11.0, CFSTR("en-US"));
-    branchAttributes = @{(id)kCTForegroundColorFromContextAttributeName : (id)kCFBooleanTrue,
-                         (id)kCTFontAttributeName : (__bridge id)font};
+    branchAttributes = [@{(id)kCTForegroundColorFromContextAttributeName : (id)kCFBooleanTrue,
+                          (id)kCTFontAttributeName : (id)font} retain];
     CFRelease(font);
   }
   static NSDictionary* selectedAttributes1 = nil;
   if (selectedAttributes1 == nil) {
     CTFontRef font = CTFontCreateUIFontForLanguage(kCTFontUIFontSystem, 10.0, CFSTR("en-US"));
-    selectedAttributes1 = @{(id)kCTForegroundColorFromContextAttributeName : (id)kCFBooleanTrue,
-                            (id)kCTFontAttributeName : (__bridge id)font};
+    selectedAttributes1 = [@{(id)kCTForegroundColorFromContextAttributeName : (id)kCFBooleanTrue,
+                             (id)kCTFontAttributeName : (id)font} retain];
     CFRelease(font);
   }
   static NSDictionary* selectedAttributes2 = nil;
   if (selectedAttributes2 == nil) {
     CTFontRef font = CTFontCreateUIFontForLanguage(kCTFontUIFontEmphasizedSystem, 10.0, CFSTR("en-US"));
-    selectedAttributes2 = @{(id)kCTForegroundColorFromContextAttributeName : (id)kCFBooleanTrue,
-                            (id)kCTFontAttributeName : (__bridge id)font};
+    selectedAttributes2 = [@{(id)kCTForegroundColorFromContextAttributeName : (id)kCFBooleanTrue,
+                             (id)kCTFontAttributeName : (id)font} retain];
     CFRelease(font);
   }
 
@@ -1719,7 +1726,7 @@ static void _DrawSelectedNode(CGContextRef context, CGFloat x, CGFloat y, GINode
   CGContextRestoreGState(context);
 
   // Clean up
-  lines = nil;
+  [lines release];
 }
 
 @end
