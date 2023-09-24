@@ -21,17 +21,12 @@
 
 @implementation GIColorView
 
-- (void)setBackgroundColor:(NSColor*)color {
-  _backgroundColor = color;
-
-  [self setNeedsDisplay:YES];
+- (BOOL)wantsUpdateLayer {
+  return YES;
 }
 
-- (void)drawRect:(NSRect)dirtyRect {
-  if (_backgroundColor) {
-    [_backgroundColor setFill];
-    NSRectFill(dirtyRect);
-  }
+- (void)updateLayer {
+  self.layer.backgroundColor = self.backgroundColor.CGColor;
 }
 
 @end
