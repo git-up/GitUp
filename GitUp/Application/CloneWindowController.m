@@ -68,7 +68,7 @@
     [self beforeRunInModal];
   }
   if ([NSApp runModalForWindow:self.window] && self.urlExists) {
-    NSURL* url = GCURLFromGitURL(self.urlTextField.stringValue);
+    NSURL* url = GCURLFromGitURL([self.urlTextField.stringValue stringByTrimmingCharactersInSet:NSCharacterSet.whitespaceCharacterSet]);
     if (url) {
       NSString* name = [url.path.lastPathComponent stringByDeletingPathExtension];
       NSSavePanel* savePanel = [NSSavePanel savePanel];
