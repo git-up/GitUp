@@ -1279,6 +1279,8 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
           handled = YES;
         } else if (_snapshotsView.superview) {
           [self toggleSnapshots:nil];
+          // Correct button toggle state if toggled by esc
+          [(NSButton *)_snapshotsItem.view setState:NSOffState];
           handled = YES;
         } else if (_reflogView.superview) {
           [self toggleReflog:nil];
