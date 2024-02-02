@@ -763,6 +763,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
     NSRect frame = _pullButton.frame;
     if (isBehind) {
       _pullButton.image = [NSImage imageNamed:@"icon_action_fetch_new"];
+      _pullButton.toolTip = NSLocalizedString(@"Local tip is behind - pull current branch from upstream", nil);
       _pullButton.frame = NSMakeRect(frame.origin.x + frame.size.width - 53, frame.origin.y, 53, frame.size.height);
     } else {
       _pullButton.image = [NSImage imageNamed:@"icon_action_fetch"];
