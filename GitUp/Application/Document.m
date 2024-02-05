@@ -1773,10 +1773,12 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 
 - (IBAction)toggleSnapshots:(id)sender {
   if (_snapshotsView.superview) {
+    [self setSnapshotToggleState:NSOffState];
     _mapViewController.previewHistory = nil;
     [self _removeSideView:_snapshotsView completion:NULL];
     [_mainWindow makeFirstResponder:_mapViewController.preferredFirstResponder];
   } else {
+    [self setSnapshotToggleState:NSOnState];
     [_mainWindow makeFirstResponder:nil];  // Force end-editing in search field to avoid close button remaining around
     [self _addSideView:_snapshotsView withIdentifier:kSideViewIdentifier_Snapshots completion:NULL];
     [_mainWindow makeFirstResponder:_snapshotListViewController.preferredFirstResponder];
