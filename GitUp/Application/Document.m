@@ -1783,6 +1783,16 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
   }
 }
 
+- (void)setSnapshotToggleState:(NSControlStateValue)state {
+  NSButton* button = (NSButton*)_snapshotsItem.view;
+  if (![button isKindOfClass:[NSButton class]]) {
+    XLOG_ERROR(@"This used to be a button, update this function if the layout has changed.");
+    return;
+  }
+  
+  [button setState:state];
+}
+
 - (IBAction)toggleReflog:(id)sender {
   if (_reflogView.superview) {
     _mapViewController.forceShowAllTips = NO;
