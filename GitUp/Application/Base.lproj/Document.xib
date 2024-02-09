@@ -278,7 +278,7 @@
                             <outlet property="secondaryControl" destination="khT-H7-lYh" id="3YC-ek-EN6"/>
                         </connections>
                     </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="B5339F67-DADA-4EB4-8EBA-79AA8C91CC9C" label="Snapshots" paletteLabel="Snapshots" image="clock.arrow.circlepath" catalog="system" sizingBehavior="auto" id="Aag-2S-fcP" customClass="GICustomToolbarItem">
+                    <toolbarItem implicitItemIdentifier="B5339F67-DADA-4EB4-8EBA-79AA8C91CC9C" label="Snapshots" toolTip="Snapshots pane" paletteLabel="Snapshots" image="clock.arrow.circlepath" catalog="system" sizingBehavior="auto" id="Aag-2S-fcP" customClass="GICustomToolbarItem">
                         <nil key="toolTip"/>
                         <button key="view" verticalHuggingPriority="750" id="9B3-Yw-IMy">
                             <rect key="frame" x="17" y="14" width="29" height="23"/>

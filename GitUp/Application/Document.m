@@ -1774,14 +1774,26 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 
 - (IBAction)toggleSnapshots:(id)sender {
   if (_snapshotsView.superview) {
+    [self setSnapshotToggleState:NSOffState];
     _mapViewController.previewHistory = nil;
     [self _removeSideView:_snapshotsView completion:NULL];
     [_mainWindow makeFirstResponder:_mapViewController.preferredFirstResponder];
   } else {
+    [self setSnapshotToggleState:NSOnState];
     [_mainWindow makeFirstResponder:nil];  // Force end-editing in search field to avoid close button remaining around
     [self _addSideView:_snapshotsView withIdentifier:kSideViewIdentifier_Snapshots completion:NULL];
     [_mainWindow makeFirstResponder:_snapshotListViewController.preferredFirstResponder];
   }
+}
+
+- (void)setSnapshotToggleState:(NSControlStateValue)state {
+  NSButton* button = (NSButton*)_snapshotsItem.view;
+  if (![button isKindOfClass:[NSButton class]]) {
+    XLOG_ERROR(@"This used to be a button, update this function if the layout has changed.");
+    return;
+  }
+  
+  [button setState:state];
 }
 
 - (IBAction)toggleReflog:(id)sender {
