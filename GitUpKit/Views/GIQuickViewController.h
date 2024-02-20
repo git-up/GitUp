@@ -16,7 +16,16 @@
 #import "GIViewController.h"
 
 @class GCHistoryCommit;
+@class GCCommit;
+@class GCDiffDelta;
+@class GCIndexConflict;
+@protocol GIQuickViewControllerDelegate
+- (void)quickViewWantsToShowSelectedCommitsList:(NSArray <GCHistoryCommit *> *)commitsList selectedCommit:(GCHistoryCommit *)commit;
+- (void)quickViewDidSelectCommit:(GCHistoryCommit *)commit commitsList:(NSArray <GCHistoryCommit *>*)commitsList;
+@end
 
 @interface GIQuickViewController : GIViewController
 @property(nonatomic, strong) GCHistoryCommit* commit;
+@property(nonatomic, weak) id <GIQuickViewControllerDelegate> delegate;
+@property(nonatomic, copy) void(^willShowContextualMenu)(NSMenu *menu, GCDiffDelta *delta, GCIndexConflict *conflict);
 @end

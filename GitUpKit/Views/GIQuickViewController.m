@@ -21,6 +21,7 @@
 #import "GIDiffContentsViewController.h"
 #import "GIDiffFilesViewController.h"
 #import "GIViewController+Utilities.h"
+#import "NSView+Embedding.h"
 
 #import "GIInterface.h"
 #import "XLFacilityMacros.h"
@@ -49,6 +50,7 @@
   GCDiff* _diff;
 }
 
+#pragma mark - Initialization
 - (instancetype)initWithRepository:(GCLiveRepository*)repository {
   if ((self = [super initWithRepository:repository])) {
     _dateFormatter = [[NSDateFormatter alloc] init];
@@ -62,6 +64,7 @@
   [[NSNotificationCenter defaultCenter] removeObserver:self name:NSSplitViewDidResizeSubviewsNotification object:nil];
 }
 
+#pragma mark - Compute sizes
 - (void)_recomputeInfoViewFrame {
   NSRect frame = _infoView.frame;
   NSSize size = [(NSTextFieldCell*)_messageTextField.cell cellSizeForBounds:NSMakeRect(0, 0, _messageTextField.frame.size.width, HUGE_VALF)];
@@ -75,26 +78,30 @@
   }
 }
 
+#pragma mark - View Lifecycle
 - (void)loadView {
   [super loadView];
 
   _diffContentsViewController = [[GIDiffContentsViewController alloc] initWithRepository:self.repository];
   _diffContentsViewController.delegate = self;
   _diffContentsViewController.emptyLabel = NSLocalizedString(@"No differences", nil);
-  [_contentsView replaceWithView:_diffContentsViewController.view];
 
   _diffFilesViewController = [[GIDiffFilesViewController alloc] initWithRepository:self.repository];
   _diffFilesViewController.delegate = self;
-  [_filesView replaceWithView:_diffFilesViewController.view];
 
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_splitViewDidResizeSubviews:) name:NSSplitViewDidResizeSubviewsNotification object:_mainSplitView];
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_splitViewDidResizeSubviews:) name:NSSplitViewDidResizeSubviewsNotification object:_infoSplitView];
+  
+  [_contentsView embedView:_diffContentsViewController.view];
+  [_filesView embedView:_diffFilesViewController.view];
 }
 
+#pragma mark - GIViewController
 - (void)viewDidFinishLiveResize {
   [self _recomputeInfoViewFrame];
 }
 
+#pragma mark - Message Utilities
 static inline void _AppendStringWithoutTrailingWhiteSpace(NSMutableString* string, NSString* append, NSRange range) {
   NSCharacterSet* set = [NSCharacterSet whitespaceCharacterSet];
   while (range.length) {
@@ -138,6 +145,7 @@ static NSString* _CleanUpCommitMessage(NSString* message) {
   return string;
 }
 
+#pragma mark - Accessors
 - (void)setCommit:(GCHistoryCommit*)commit {
   if (commit != _commit) {
     _commit = commit;
@@ -218,12 +226,15 @@ static NSString* _CleanUpCommitMessage(NSString* message) {
   } else {
     [menu addItemWithTitle:NSLocalizedString(@"Restore File to This Version…", nil) block:NULL];
   }
-
+  
+  if (self.willShowContextualMenu) {
+    self.willShowContextualMenu(menu, delta, conflict);
+  }
+  
   return menu;
 }
 
 #pragma mark - GIDiffFilesViewControllerDelegate
-
 - (void)diffFilesViewController:(GIDiffFilesViewController*)controller willSelectDelta:(GCDiffDelta*)delta {
   _disableFeedbackLoop = YES;
   [_diffContentsViewController setTopVisibleDelta:delta offset:0];

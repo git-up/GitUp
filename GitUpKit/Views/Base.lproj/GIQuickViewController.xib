@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16097.2"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -25,101 +25,101 @@
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
-        <view translatesAutoresizingMaskIntoConstraints="NO" id="Mge-gB-T5T" userLabel="Main View" customClass="GIView">
+        <view id="Mge-gB-T5T" userLabel="Main View" customClass="GIView">
             <rect key="frame" x="0.0" y="0.0" width="1000" height="500"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <splitView dividerStyle="thin" vertical="YES" id="pDr-8S-Qy7" customClass="GIDualSplitView">
+                <splitView fixedFrame="YES" dividerStyle="thin" vertical="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pDr-8S-Qy7" customClass="GIDualSplitView">
                     <rect key="frame" x="0.0" y="0.0" width="1000" height="500"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <subviews>
-                        <customView id="f4F-XR-AGz">
+                        <customView fixedFrame="YES" id="f4F-XR-AGz">
                             <rect key="frame" x="0.0" y="0.0" width="300" height="500"/>
                             <autoresizingMask key="autoresizingMask"/>
                             <subviews>
-                                <splitView dividerStyle="thin" id="byI-fn-H6A" customClass="GIDualSplitView">
+                                <splitView fixedFrame="YES" dividerStyle="thin" translatesAutoresizingMaskIntoConstraints="NO" id="byI-fn-H6A" customClass="GIDualSplitView">
                                     <rect key="frame" x="0.0" y="0.0" width="300" height="500"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
-                                        <customView id="l8A-EL-BfC">
+                                        <customView fixedFrame="YES" id="l8A-EL-BfC">
                                             <rect key="frame" x="0.0" y="0.0" width="300" height="307"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" horizontalScrollElasticity="none" id="A0F-jI-s4n">
+                                                <scrollView fixedFrame="YES" borderType="none" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" horizontalScrollElasticity="none" translatesAutoresizingMaskIntoConstraints="NO" id="A0F-jI-s4n">
                                                     <rect key="frame" x="0.0" y="0.0" width="300" height="307"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <clipView key="contentView" id="4Rs-yN-ao7">
                                                         <rect key="frame" x="0.0" y="0.0" width="300" height="307"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
-                                                            <view id="Bpc-ZA-3gm" customClass="GIFlippedView">
+                                                            <view fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Bpc-ZA-3gm" customClass="GIFlippedView">
                                                                 <rect key="frame" x="0.0" y="0.0" width="300" height="130"/>
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                                                 <subviews>
-                                                                    <customView id="aKy-Bi-5hY">
+                                                                    <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aKy-Bi-5hY">
                                                                         <rect key="frame" x="0.0" y="0.0" width="300" height="130"/>
                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                         <subviews>
-                                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="9bU-TV-AfR">
+                                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9bU-TV-AfR">
                                                                                 <rect key="frame" x="12" y="110" width="278" height="14"/>
                                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                                                 <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingTail" truncatesLastVisibleLine="YES" selectable="YES" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="left" title="&lt;SHA1&gt;" id="Tsu-dV-mjp">
-                                                                                    <font key="font" metaFont="toolTip"/>
+                                                                                    <font key="font" metaFont="message" size="11"/>
                                                                                     <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                                 </textFieldCell>
                                                                             </textField>
-                                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" setsMaxLayoutWidthAtFirstLayout="YES" id="CIg-ZV-lYt">
+                                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CIg-ZV-lYt">
                                                                                 <rect key="frame" x="12" y="84" width="278" height="14"/>
                                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                 <textFieldCell key="cell" controlSize="small" selectable="YES" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="left" title="&lt;MESSAGE&gt;" id="fqu-LQ-wKF">
-                                                                                    <font key="font" metaFont="toolTip"/>
+                                                                                    <font key="font" metaFont="message" size="11"/>
                                                                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                                 </textFieldCell>
                                                                             </textField>
-                                                                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" id="LRK-cU-aip">
+                                                                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LRK-cU-aip">
                                                                                 <rect key="frame" x="14" y="57" width="10" height="10"/>
                                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                                                 <imageCell key="cell" refusesFirstResponder="YES" alignment="left" image="icon_author" id="a14-H7-Quo"/>
                                                                             </imageView>
-                                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="Men-K8-VwT">
+                                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Men-K8-VwT">
                                                                                 <rect key="frame" x="25" y="55" width="265" height="14"/>
                                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                                                                 <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingTail" truncatesLastVisibleLine="YES" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="left" title="&lt;AUTHOR NAME&gt;" id="11W-Hl-yV0">
-                                                                                    <font key="font" metaFont="toolTip"/>
+                                                                                    <font key="font" metaFont="message" size="11"/>
                                                                                     <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                                 </textFieldCell>
                                                                             </textField>
-                                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="NMY-tY-Mrh">
+                                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NMY-tY-Mrh">
                                                                                 <rect key="frame" x="25" y="41" width="265" height="14"/>
                                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                                                                 <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingTail" truncatesLastVisibleLine="YES" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="left" title="&lt;AUTHOR DATE&gt;" id="ESf-oA-sr2">
-                                                                                    <font key="font" metaFont="toolTip"/>
+                                                                                    <font key="font" metaFont="message" size="11"/>
                                                                                     <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                                 </textFieldCell>
                                                                             </textField>
-                                                                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" id="WZG-3V-AFB">
+                                                                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WZG-3V-AFB">
                                                                                 <rect key="frame" x="14" y="21" width="10" height="10"/>
                                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                                                 <imageCell key="cell" refusesFirstResponder="YES" alignment="left" image="icon_committer" id="BIg-uL-lng"/>
                                                                             </imageView>
-                                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="5Yv-8b-x0c">
+                                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5Yv-8b-x0c">
                                                                                 <rect key="frame" x="25" y="19" width="265" height="14"/>
                                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                                                                 <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingTail" truncatesLastVisibleLine="YES" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="left" title="&lt;COMMITTER NAME&gt;" id="4Tl-BB-pru">
-                                                                                    <font key="font" metaFont="toolTip"/>
+                                                                                    <font key="font" metaFont="message" size="11"/>
                                                                                     <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                                 </textFieldCell>
                                                                             </textField>
-                                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="p8J-vi-dDp">
+                                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="p8J-vi-dDp">
                                                                                 <rect key="frame" x="25" y="7" width="265" height="14"/>
                                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                                                                 <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingTail" truncatesLastVisibleLine="YES" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="left" title="&lt;COMMITTER DATE&gt;" id="Dbg-2h-APW">
-                                                                                    <font key="font" metaFont="toolTip"/>
+                                                                                    <font key="font" metaFont="message" size="11"/>
                                                                                     <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                                 </textFieldCell>
@@ -141,11 +141,11 @@
                                                 </scrollView>
                                             </subviews>
                                         </customView>
-                                        <customView id="9jQ-Hh-mZE">
+                                        <customView fixedFrame="YES" id="9jQ-Hh-mZE">
                                             <rect key="frame" x="0.0" y="308" width="300" height="192"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <customView id="T7C-Lf-raW">
+                                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="T7C-Lf-raW">
                                                     <rect key="frame" x="0.0" y="0.0" width="300" height="192"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 </customView>
@@ -167,11 +167,11 @@
                                 </splitView>
                             </subviews>
                         </customView>
-                        <customView id="sVe-NV-CuT">
+                        <customView fixedFrame="YES" id="sVe-NV-CuT">
                             <rect key="frame" x="301" y="0.0" width="699" height="500"/>
                             <autoresizingMask key="autoresizingMask"/>
                             <subviews>
-                                <customView id="gnd-mU-OFa">
+                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gnd-mU-OFa">
                                     <rect key="frame" x="0.0" y="0.0" width="699" height="500"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </customView>
@@ -192,6 +192,7 @@
                     </userDefinedRuntimeAttributes>
                 </splitView>
             </subviews>
+            <point key="canvasLocation" x="195" y="154"/>
         </view>
     </objects>
     <resources>

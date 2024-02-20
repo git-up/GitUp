@@ -27,6 +27,8 @@
 - (void)stageAllFiles;
 - (void)unstageAllFiles;
 
+- (void)getSelectedCommitsForFilesMatchingPaths:(NSArray <NSString *>*)paths result:(void(^)(NSArray *commits))result;
+
 - (void)stageSubmoduleAtPath:(NSString*)path;
 - (void)unstageSubmoduleAtPath:(NSString*)path;
 - (BOOL)discardSubmoduleAtPath:(NSString*)path resetIndex:(BOOL)resetIndex error:(NSError**)error;
