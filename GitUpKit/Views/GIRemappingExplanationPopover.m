@@ -44,10 +44,10 @@ static NSString* const GIRemappingExplanationShownUserDefaultKey = @"GIRemapping
     NSPopover *popover = [[NSPopover alloc] init];
     __weak NSPopover *weakPopover = popover;
     popover.contentViewController = [[GIRemappingExplanationViewController alloc] initWithDismissCallback: ^{
+      [defaults setBool:YES forKey:GIRemappingExplanationShownUserDefaultKey];
       [weakPopover close];
     }];
     [popover showRelativeToRect:positioningRect ofView:positioningView preferredEdge:NSRectEdgeMinY];
-    [defaults setBool:YES forKey:GIRemappingExplanationShownUserDefaultKey];
   }
 }
 
