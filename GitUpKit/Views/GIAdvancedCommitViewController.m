@@ -20,6 +20,7 @@
 #import "GIAdvancedCommitViewController.h"
 #import "GIDiffFilesViewController.h"
 #import "GIDiffContentsViewController.h"
+#import "GIRemappingExplanationPopover.h"
 #import "GIViewController+Utilities.h"
 
 #import "GIColorView.h"
@@ -87,6 +88,13 @@
 
   _workdirFilesViewController.selectedDelta = _workdirStatus.deltas.firstObject;
   _indexFilesViewController.selectedDelta = _indexStatus.deltas.firstObject;
+}
+
+- (void)viewDidAppear {
+  [super viewDidAppear];
+  
+  // Remove this logic in a year or so
+  [GIRemappingExplanationPopover showIfNecessaryRelativeToRect:NSZeroRect ofView:_commitButton preferredEdge:NSRectEdgeMinY];
 }
 
 - (void)viewDidDisappear {

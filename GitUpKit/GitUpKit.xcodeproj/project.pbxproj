@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -13,6 +13,9 @@
 		0AC8525A23A122C400479160 /* GILaunchServicesLocator.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AC8525823A122C400479160 /* GILaunchServicesLocator.m */; };
 		1D615D81286BEDC600FFF7E7 /* XLFacilityMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 1D615D7E286BE79200FFF7E7 /* XLFacilityMacros.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1D615D82286BEDCE00FFF7E7 /* XLFacilityMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 1D615D7E286BE79200FFF7E7 /* XLFacilityMacros.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		1D841F782B955C3800E4FCCC /* GIRemappingExplanationPopover.h in Headers */ = {isa = PBXBuildFile; fileRef = 1D841F752B955C3800E4FCCC /* GIRemappingExplanationPopover.h */; };
+		1D841F792B955C3800E4FCCC /* GIRemappingExplanationPopover.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D841F762B955C3800E4FCCC /* GIRemappingExplanationPopover.m */; };
+		1D841F7A2B955C3800E4FCCC /* GIRemappingExplanationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1D841F772B955C3800E4FCCC /* GIRemappingExplanationViewController.xib */; };
 		1DADC0DA25A25D54008C2C35 /* libsqlite3.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = DBBEE637256B08D300F96DAF /* libsqlite3.xcframework */; };
 		1DADC0DE25A25D5D008C2C35 /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = DBBEE654256B095000F96DAF /* libiconv.tbd */; };
 		1DADC0E225A25D63008C2C35 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = DBBEE64C256B094000F96DAF /* libz.tbd */; };
@@ -347,6 +350,9 @@
 		0AC8525823A122C400479160 /* GILaunchServicesLocator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GILaunchServicesLocator.m; sourceTree = "<group>"; };
 		0AD01C0B26D6A11C0068A02E /* Third-Party */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "Third-Party"; sourceTree = "<group>"; };
 		1D615D7E286BE79200FFF7E7 /* XLFacilityMacros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XLFacilityMacros.h; sourceTree = "<group>"; };
+		1D841F752B955C3800E4FCCC /* GIRemappingExplanationPopover.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GIRemappingExplanationPopover.h; sourceTree = "<group>"; };
+		1D841F762B955C3800E4FCCC /* GIRemappingExplanationPopover.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GIRemappingExplanationPopover.m; sourceTree = "<group>"; };
+		1D841F772B955C3800E4FCCC /* GIRemappingExplanationViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GIRemappingExplanationViewController.xib; sourceTree = "<group>"; };
 		1DF371CB22F5262300EF7BD9 /* GCLiveRepository+Utilities.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GCLiveRepository+Utilities.h"; sourceTree = "<group>"; };
 		1DF371CC22F5262300EF7BD9 /* GCLiveRepository+Utilities.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "GCLiveRepository+Utilities.m"; sourceTree = "<group>"; };
 		6D8E3F0A25D90E1300AAFC17 /* GIImageDiffView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GIImageDiffView.m; sourceTree = "<group>"; };
@@ -703,6 +709,9 @@
 				E22942031AC11F56000A83AF /* GIQuickViewController.h */,
 				E22942041AC11F56000A83AF /* GIQuickViewController.m */,
 				E22941F11AC11F56000A83AF /* GIQuickViewController.xib */,
+				1D841F752B955C3800E4FCCC /* GIRemappingExplanationPopover.h */,
+				1D841F762B955C3800E4FCCC /* GIRemappingExplanationPopover.m */,
+				1D841F772B955C3800E4FCCC /* GIRemappingExplanationViewController.xib */,
 				E22942051AC11F56000A83AF /* GISimpleCommitViewController.h */,
 				E22942061AC11F56000A83AF /* GISimpleCommitViewController.m */,
 				E22941F31AC11F56000A83AF /* GISimpleCommitViewController.xib */,
@@ -966,6 +975,7 @@
 				E267E1BA1B84D80500BAB377 /* GCBranch.h in Headers */,
 				E267E1BB1B84D80500BAB377 /* GCCommit.h in Headers */,
 				E267E1BC1B84D80500BAB377 /* GCCommitDatabase.h in Headers */,
+				1D841F782B955C3800E4FCCC /* GIRemappingExplanationPopover.h in Headers */,
 				E267E1BD1B84D80500BAB377 /* GCCore.h in Headers */,
 				E267E1BE1B84D80500BAB377 /* GCDiff.h in Headers */,
 				E267E2A61B84F02A00BAB377 /* GCError.h in Headers */,
@@ -1151,6 +1161,7 @@
 				E267E2201B84DBD600BAB377 /* Utilities.xcassets in Resources */,
 				DBDFBC0C22B610F1003EEC6C /* Interface.xcassets in Resources */,
 				E267E2211B84DBD900BAB377 /* GIWindowController.xib in Resources */,
+				1D841F7A2B955C3800E4FCCC /* GIRemappingExplanationViewController.xib in Resources */,
 				E267E23B1B84DC4B00BAB377 /* Components.xcassets in Resources */,
 				E267E23C1B84DC4B00BAB377 /* Reasons.strings in Resources */,
 				E267E23D1B84DC4B00BAB377 /* GICommitListViewController.xib in Resources */,
@@ -1311,6 +1322,7 @@
 				E267E22E1B84DBF800BAB377 /* GIViewController+Utilities.m in Sources */,
 				E267E22F1B84DBF800BAB377 /* GIWindowController.m in Sources */,
 				E267E2311B84DC2600BAB377 /* GICommitListViewController.m in Sources */,
+				1D841F792B955C3800E4FCCC /* GIRemappingExplanationPopover.m in Sources */,
 				E267E2321B84DC2600BAB377 /* GIDiffContentsViewController.m in Sources */,
 				E267E2331B84DC2600BAB377 /* GIDiffFilesViewController.m in Sources */,
 				1DF371CE22F5262300EF7BD9 /* GCLiveRepository+Utilities.m in Sources */,

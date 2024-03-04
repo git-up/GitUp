@@ -20,6 +20,7 @@
 #import "GISimpleCommitViewController.h"
 #import "GIDiffContentsViewController.h"
 #import "GIDiffFilesViewController.h"
+#import "GIRemappingExplanationPopover.h"
 #import "GIViewController+Utilities.h"
 
 #import "GIInterface.h"
@@ -65,6 +66,13 @@
   self.repository.statusMode = kGCLiveRepositoryStatusMode_Unified;
 
   [self _reloadContents];
+}
+
+- (void)viewDidAppear {
+  [super viewDidAppear];
+  
+  // Remove this logic in a year or so
+  [GIRemappingExplanationPopover showIfNecessaryRelativeToRect:NSZeroRect ofView:_commitButton preferredEdge:NSRectEdgeMinY];
 }
 
 - (void)viewDidDisappear {
