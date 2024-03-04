@@ -48,7 +48,7 @@
   XCTAssertEqualObjects([self.repository hostingURLForProject:&service error:NULL], [NSURL URLWithString:@"https://github.com/git-up/GitUp-Mac"]);
   XCTAssertEqual(service, kGCHostingService_GitHub);
 
-  XCTAssertTrue([self.repository writeConfigOptionForLevel:kGCConfigLevel_Local variable:@"remote.origin.url" withValue:@"ssh://git@bitbucket.org:gitup/test.git" error:NULL]);
+  XCTAssertTrue([self.repository writeConfigOptionForLevel:kGCConfigLevel_Local variable:@"remote.origin.url" withValue:@"git@bitbucket.org:gitup/test.git" error:NULL]);
   XCTAssertEqualObjects([self.repository hostingURLForProject:&service error:NULL], [NSURL URLWithString:@"https://bitbucket.org/gitup/test"]);
   XCTAssertEqual(service, kGCHostingService_BitBucket);
   XCTAssertTrue([self.repository writeConfigOptionForLevel:kGCConfigLevel_Local variable:@"remote.origin.url" withValue:@"https://user@bitbucket.org/gitup/test.git" error:NULL]);
