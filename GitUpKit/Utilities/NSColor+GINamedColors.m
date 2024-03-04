@@ -46,10 +46,10 @@
 }
 
 #define IMPLEMENT_NAMED_COLOR(__NAME__, __ASSET__) \
-  +(NSColor*)gitUp##__NAME__##Color {                                                       \
-    NSBundle* bundle = NSBundle.gitUpKitBundle;                                             \
-    return [NSColor colorNamed:@__ASSET__                                                   \
-                        bundle:bundle];                                                     \
+  +(NSColor*)gitUp##__NAME__##Color {              \
+    NSBundle* bundle = NSBundle.gitUpKitBundle;    \
+    return [NSColor colorNamed:@__ASSET__          \
+                        bundle:bundle];            \
   }
 
 IMPLEMENT_NAMED_COLOR(Separator, "separator")

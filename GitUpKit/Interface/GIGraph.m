@@ -26,11 +26,11 @@
 
 @implementation GIGraph {
   GINode* __unsafe_unretained* _mapping;
-  NSMutableArray *_branches;
-  NSMutableArray *_layers;
-  NSMutableArray *_lines;
-  NSMutableArray *_nodes;
-  NSMutableArray *_nodesWithReferences;
+  NSMutableArray* _branches;
+  NSMutableArray* _layers;
+  NSMutableArray* _lines;
+  NSMutableArray* _nodes;
+  NSMutableArray* _nodesWithReferences;
 }
 
 - (instancetype)initWithHistory:(GCHistory*)history options:(GIGraphOptions)options {
@@ -43,7 +43,7 @@
     _lines = [NSMutableArray array];
     _nodes = [NSMutableArray array];
     _nodesWithReferences = [NSMutableArray array];
-    _mapping = (GINode *__unsafe_unretained*)calloc(_history.nextAutoIncrementID, sizeof(GINode*));
+    _mapping = (GINode * __unsafe_unretained*)calloc(_history.nextAutoIncrementID, sizeof(GINode*));
 
     [self _generateGraph];
 #if DEBUG
@@ -128,7 +128,7 @@
       if ((commit.timeIntervalSinceReferenceDate < staleTime) && ![headCommit isEqualToCommit:commit]) {
         [tips removeObject:commit];
         if (commit.leaf && !COMMIT_SKIPPED(commit)) {
-          GC_POINTER_LIST_APPEND(skipList, (__bridge void *)(commit));
+          GC_POINTER_LIST_APPEND(skipList, (__bridge void*)(commit));
           COMMIT_SKIPPED(commit) = YES;
         }
       }
@@ -138,7 +138,7 @@
       if ((commit.timeIntervalSinceReferenceDate < staleTime) && ![headCommit isEqualToCommit:commit]) {
         [tips removeObject:commit];
         if (commit.leaf && !COMMIT_SKIPPED(commit)) {
-          GC_POINTER_LIST_APPEND(skipList, (__bridge void *)(commit));
+          GC_POINTER_LIST_APPEND(skipList, (__bridge void*)(commit));
           COMMIT_SKIPPED(commit) = YES;
         }
       }
@@ -153,7 +153,7 @@
         if (!commit.remoteBranches || (_options & kGIGraphOption_SkipStandaloneRemoteBranchTips)) {
           [tips removeObject:commit];
           if (!COMMIT_SKIPPED(commit)) {
-            GC_POINTER_LIST_APPEND(skipList, (__bridge void *)(commit));
+            GC_POINTER_LIST_APPEND(skipList, (__bridge void*)(commit));
             COMMIT_SKIPPED(commit) = YES;
           }
         }
@@ -170,7 +170,7 @@
           if (!(_options & kGIGraphOption_PreserveUpstreamRemoteBranchTips) || ![upstreamTips containsObject:commit]) {
             [tips removeObject:commit];
             if (commit.leaf && !COMMIT_SKIPPED(commit)) {
-              GC_POINTER_LIST_APPEND(skipList, (__bridge void *)(commit));
+              GC_POINTER_LIST_APPEND(skipList, (__bridge void*)(commit));
               COMMIT_SKIPPED(commit) = YES;
             }
           }
@@ -244,8 +244,8 @@
           // Skip commit if applicable
           if (skip) {
             XLOG_DEBUG_CHECK(!updateTips || ![tips containsObject:parent]);
-            XLOG_DEBUG_CHECK(!GC_POINTER_LIST_CONTAINS(newSkipList, (__bridge void *)(parent)));
-            GC_POINTER_LIST_APPEND(newSkipList, (__bridge void *)(parent));
+            XLOG_DEBUG_CHECK(!GC_POINTER_LIST_CONTAINS(newSkipList, (__bridge void*)(parent)));
+            GC_POINTER_LIST_APPEND(newSkipList, (__bridge void*)(parent));
             COMMIT_SKIPPED(parent) = YES;
           }
         }
@@ -454,7 +454,7 @@
   CGFloat maxX = 0.0;
   for (CFIndex i = 0, count = self.layers.count; i < count; ++i) {
     GILayer* layer = self.layers[i];
-    
+
     CGFloat lastX = 0.0;
     NSUInteger index = 0;
     for (GINode* node in layer.nodes) {
@@ -696,7 +696,7 @@
 
   __block CFIndex index = node.layer.index;
   CFIndex maxIndex = self.layers.count;
-  GC_POINTER_LIST_APPEND(row, (__bridge void *)(node));
+  GC_POINTER_LIST_APPEND(row, (__bridge void*)(node));
   while (1) {
     ++index;
     if (index == maxIndex) {
@@ -714,13 +714,13 @@
       for (NSUInteger i = 0, count = previousNode.parentCount; i < count; ++i) {
         GINode* parent = [previousNode parentAtIndex:i];
         XLOG_DEBUG_CHECK(parent.layer == layer);
-        if (!GC_POINTER_LIST_CONTAINS( tempRow, (__bridge void *)(parent) )) {
+        if (!GC_POINTER_LIST_CONTAINS(tempRow, (__bridge void*)(parent))) {
           BOOL stop = NO;
           nodeBlock(layer, parent, &stop);
           if (stop) {
             goto cleanup;
           }
-          GC_POINTER_LIST_APPEND( tempRow, (__bridge void *)(parent) );
+          GC_POINTER_LIST_APPEND(tempRow, (__bridge void*)(parent));
         }
       }
     }

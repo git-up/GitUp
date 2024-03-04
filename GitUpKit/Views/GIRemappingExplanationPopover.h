@@ -11,7 +11,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface GIRemappingExplanationPopover : NSObject
 
-+ (void)showIfNecessaryRelativeToRect:(NSRect)positioningRect ofView:(NSView *)positioningView preferredEdge:(NSRectEdge)preferredEdge;
++ (void)showIfNecessaryRelativeToRect:(NSRect)positioningRect ofView:(NSView*)positioningView preferredEdge:(NSRectEdge)preferredEdge;
 
 @end
 

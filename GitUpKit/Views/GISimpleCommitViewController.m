@@ -70,7 +70,7 @@
 
 - (void)viewDidAppear {
   [super viewDidAppear];
-  
+
   // Remove this logic in a year or so
   [GIRemappingExplanationPopover showIfNecessaryRelativeToRect:NSZeroRect ofView:_commitButton preferredEdge:NSRectEdgeMinY];
 }

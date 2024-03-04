@@ -46,7 +46,7 @@ static inline void __GCItemListInitialize(GCItemList* list, size_t initialCapaci
 
 #define GC_LIST_CAPACITY(name) name.capacity
 
-#define GC_LIST_ITEM_POINTER(name, index) (name.items + (index)*name.size)
+#define GC_LIST_ITEM_POINTER(name, index) (name.items + (index) * name.size)
 
 static inline void __GCItemListAppend(GCItemList* list, const void* itemPointer) {
   if (list->count == list->capacity) {
@@ -178,13 +178,12 @@ static inline BOOL __GCPointerListContains(GCPointerList* list, void* pointer) {
 #define GC_POINTER_LIST_CONTAINS(name, pointer) __GCPointerListContains(&name, pointer)
 
 #define GC_POINTER_LIST_FOR_LOOP_NO_BRIDGE(name, type, variable) \
-  type variable = (type)GC_POINTER_LIST_GET(name, 0);                \
+  type variable = (type)GC_POINTER_LIST_GET(name, 0);            \
   for (size_t __##variable = 0; (__##variable < name.count) && (variable = (type)GC_POINTER_LIST_GET(name, __##variable), 1); ++__##variable)
 
-#define GC_POINTER_LIST_FOR_LOOP(name, type, variable) \
-  type variable = (__bridge type)GC_POINTER_LIST_GET(name, 0);                \
+#define GC_POINTER_LIST_FOR_LOOP(name, type, variable)         \
+  type variable = (__bridge type)GC_POINTER_LIST_GET(name, 0); \
   for (size_t __##variable = 0; (__##variable < name.count) && (variable = (__bridge type)GC_POINTER_LIST_GET(name, __##variable), 1); ++__##variable)
-
 
 #define GC_POINTER_LIST_REVERSE_FOR_LOOP(name, type, variable)                   \
   type variable = name.count ? GC_POINTER_LIST_GET(name, name.count - 1) : NULL; \

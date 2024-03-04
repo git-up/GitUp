@@ -9,12 +9,11 @@
 
 static NSString* const GIRemappingExplanationShownUserDefaultKey = @"GIRemappingExplanationShownUserDefaultKey";
 
-
 @interface GIRemappingExplanationViewController : NSViewController
 @end
 
 @interface GIRemappingExplanationViewController ()
-@property (nonatomic, copy) void (^dismissCallback)();
+@property(nonatomic, copy) void (^dismissCallback)();
 @end
 
 @implementation GIRemappingExplanationViewController
@@ -32,18 +31,17 @@ static NSString* const GIRemappingExplanationShownUserDefaultKey = @"GIRemapping
 
 @end
 
-
 @interface GIRemappingExplanationPopover ()
 @end
 
 @implementation GIRemappingExplanationPopover
 
-+ (void)showIfNecessaryRelativeToRect:(NSRect)positioningRect ofView:(NSView *)positioningView preferredEdge:(NSRectEdge)preferredEdge {
-  NSUserDefaults *defaults = NSUserDefaults.standardUserDefaults;
++ (void)showIfNecessaryRelativeToRect:(NSRect)positioningRect ofView:(NSView*)positioningView preferredEdge:(NSRectEdge)preferredEdge {
+  NSUserDefaults* defaults = NSUserDefaults.standardUserDefaults;
   if (![defaults boolForKey:GIRemappingExplanationShownUserDefaultKey]) {
-    NSPopover *popover = [[NSPopover alloc] init];
-    __weak NSPopover *weakPopover = popover;
-    popover.contentViewController = [[GIRemappingExplanationViewController alloc] initWithDismissCallback: ^{
+    NSPopover* popover = [[NSPopover alloc] init];
+    __weak NSPopover* weakPopover = popover;
+    popover.contentViewController = [[GIRemappingExplanationViewController alloc] initWithDismissCallback:^{
       [defaults setBool:YES forKey:GIRemappingExplanationShownUserDefaultKey];
       [weakPopover close];
     }];

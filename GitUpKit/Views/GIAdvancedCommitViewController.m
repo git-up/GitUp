@@ -92,7 +92,7 @@
 
 - (void)viewDidAppear {
   [super viewDidAppear];
-  
+
   // Remove this logic in a year or so
   [GIRemappingExplanationPopover showIfNecessaryRelativeToRect:NSZeroRect ofView:_commitButton preferredEdge:NSRectEdgeMinY];
 }
@@ -340,7 +340,7 @@
     }
   } else if (controller == _indexFilesViewController && !modifiers && event.keyCode == kGIKeyCode_Up) {
     bool onlyFirstFileSelected = (controller.selectedDeltas.count == 1) && (controller.selectedDelta == controller.deltas.firstObject);
-    bool hasWorkdirFiles =_workdirFilesViewController.deltas.count > 0;
+    bool hasWorkdirFiles = _workdirFilesViewController.deltas.count > 0;
     if (onlyFirstFileSelected && hasWorkdirFiles) {
       // move focus to previous controller
       [[controller.view window] selectPreviousKeyView:_workdirFilesViewController.view];

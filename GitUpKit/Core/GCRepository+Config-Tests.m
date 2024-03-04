@@ -48,7 +48,7 @@
 
   NSArray* config2 = [self.repository readAllConfigs:NULL];
   XCTAssertEqual(config2.count, 8);
-  NSUInteger index = [config2 indexOfObjectPassingTest:^BOOL(GCConfigOption *obj, NSUInteger idx, BOOL *stop) {
+  NSUInteger index = [config2 indexOfObjectPassingTest:^BOOL(GCConfigOption* obj, NSUInteger idx, BOOL* stop) {
     return [obj.variable isEqualToString:@"core.repositoryformatversion"];
   }];
   option = config2[index];

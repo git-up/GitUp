@@ -46,11 +46,7 @@ void GIComputeHighlightRanges(const char* deletedBytes, NSUInteger deletedCount,
       } else if (TEST_BITS(byte, 0b11111100)) {
         remaining = 6;
       } else {
-        do {
-//          NSCAssert(NO, @"Unreachable code executed in '%s': %s:%i", __FUNCTION__, __FILE__, (int)__LINE__);
-//            NSAssert(NO, );
-        } while (0);
-//        XLOG_DEBUG_CHECK(!(byte & (1 << 7)));
+        XLOG_DEBUG_CHECK(!(byte & (1 << 7)));
         remaining = 1;
       }
     }

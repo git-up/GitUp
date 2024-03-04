@@ -819,8 +819,8 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
             XLOG_DEBUG_CHECK(headBranch == nil);
             headBranch = (GCHistoryLocalBranch*)referenceObject;
           }
-          
-          int status = gitup_branch_upstream_name(&upstreamName, self.private, git_reference_name(reference));          
+
+          int status = gitup_branch_upstream_name(&upstreamName, self.private, git_reference_name(reference));
           if ((status != GIT_OK) && (status != GIT_ENOTFOUND)) {
             LOG_LIBGIT2_ERROR(status);  // Don't fail because of corrupted config
           }

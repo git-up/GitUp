@@ -72,8 +72,8 @@
 
 #define kScrollingInset kSpacingY
 
-#define CONVERT_X(x) (kSpacingX + (x)*kSpacingX)
-#define CONVERT_Y(y) (kSpacingY + (y)*kSpacingY)
+#define CONVERT_X(x) (kSpacingX + (x) * kSpacingX)
+#define CONVERT_Y(y) (kSpacingY + (y) * kSpacingY)
 #define SQUARE(x) ((x) * (x))
 #define SELECTED_NODE_BOUNDS(x, y) NSMakeRect(x - kSpacingX / 2, y - (kSelectedLabelMaxHeight / 2) - kSelectedBorderWidth, kSelectedLabelMaxWidth + kSpacingX / 2 + 40, kSelectedLabelMaxHeight + (kSelectedBorderWidth * 2))
 #define NODE_LABEL_BOUNDS(x, y) NSMakeRect(x - kSpacingX / 2, y - kSpacingY / 2, kNodeLabelMaxWidth + kSpacingX / 2 + 30, kNodeLabelMaxHeight + kSpacingY / 2)

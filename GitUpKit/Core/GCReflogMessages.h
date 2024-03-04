@@ -78,6 +78,6 @@
 #define kGCReflogMessageFormat_GitUp_SetTip @kGCReflogCustomPrefix @"set tip"
 #define kGCReflogMessageFormat_GitUp_MoveTip @kGCReflogCustomPrefix @"move tip"
 
-//#define kGCReflogMessageFormat_GitUp_HardReset @kGCReflogCustomPrefix @"hard reset for '%@'"
+// #define kGCReflogMessageFormat_GitUp_HardReset @kGCReflogCustomPrefix @"hard reset for '%@'"
 #define kGCReflogMessageFormat_GitUp_Undo @kGCReflogCustomPrefix @"undo '%@'"
 #define kGCReflogMessageFormat_GitUp_Redo @kGCReflogCustomPrefix @"redo '%@'"

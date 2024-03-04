@@ -213,7 +213,7 @@ static NSImage* _untrackedImage = nil;
   if (GC_FILE_MODE_IS_FILE(delta.oldFile.mode) || GC_FILE_MODE_IS_FILE(delta.newFile.mode)) {
     NSString* pathExtension = delta.canonicalPath.pathExtension;
     NSString* utType = (__bridge_transfer NSString*)UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (__bridge CFStringRef)pathExtension, kUTTypeData);
-    
+
     if (utType) {
       GIDiffFileProvider* provider = [[GIDiffFileProvider alloc] initWithFileType:utType delegate:self];
       provider.userInfo = delta;
