@@ -338,6 +338,7 @@
 				E2653D271A5B3298006A9871 /* Copy Frameworks */,
 				E21DCAF21B2538FB006424E8 /* Copy Tool */,
 				1D7D03E724528390002C1736 /* ShellScript */,
+				1DE5583E2B9D89BF006BA332 /* Xcode 15 Framework Patching */,
 			);
 			buildRules = (
 			);
@@ -455,6 +456,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Code sign sparkle app\nLOCATION=\"${BUILT_PRODUCTS_DIR}\"/\"${FRAMEWORKS_FOLDER_PATH}\"\n\n# By default, use the configured code signing identity for the project/target\nIDENTITY=\"${EXPANDED_CODE_SIGN_IDENTITY}\"\nif [ \"$IDENTITY\" == \"\" ]\nthen\n  # If a code signing identity is not specified, use ad hoc signing\n  IDENTITY=\"-\"\nfi\ncodesign --verbose --force --deep -o runtime --sign \"$IDENTITY\" \"$LOCATION/Sparkle.framework/Versions/A/Resources/AutoUpdate.app\"\ncodesign --verbose --force -o runtime --sign \"$IDENTITY\" \"$LOCATION/Sparkle.framework/Versions/A\"\n";
+		};
+		1DE5583E2B9D89BF006BA332 /* Xcode 15 Framework Patching */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 8;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Xcode 15 Framework Patching";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+			shellPath = /bin/sh;
+			shellScript = "# Information derived from https://stackoverflow.com/questions/77397157/mapbox-xcframework-ios-signature-couldn-t-be-copied-to-signatures-because-an-i\nif [ \"$XCODE_VERSION_MAJOR\" = \"1500\" ]; then\n  echo \"Remove signature files (Xcode 15 workaround)\"\n  find \"$BUILD_DIR/${CONFIGURATION}/libssl.xcframework-macos.signature\" -name \"*.signature\" -type f | xargs -r rm\n  find \"$BUILD_DIR/${CONFIGURATION}/libcrypto.xcframework-macos.signature\" -name \"*.signature\" -type f | xargs -r rm\n  find \"$BUILD_DIR/${CONFIGURATION}/libssh2.xcframework-macos.signature\" -name \"*.signature\" -type f | xargs -r rm\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -630,6 +649,7 @@
 				BUNDLE_VERSION = 0;
 				BUNDLE_VERSION_STRING = 1.1;
 				CODE_SIGN_ENTITLEMENTS = Application/GitUp.entitlements;
+				"DEVELOPMENT_TEAM[sdk=macosx*]" = "";
 				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/Third-Party";
 				INFOPLIST_FILE = Application/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -649,6 +669,7 @@
 				BUNDLE_VERSION = 0;
 				BUNDLE_VERSION_STRING = 1.1;
 				CODE_SIGN_ENTITLEMENTS = Application/GitUp.entitlements;
+				"DEVELOPMENT_TEAM[sdk=macosx*]" = "";
 				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/Third-Party";
 				INFOPLIST_FILE = Application/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
