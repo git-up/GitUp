@@ -36,7 +36,7 @@ static const void* _associatedObjectKey = &_associatedObjectKey;
 }
 
 - (GCRepository*)createLocalRepositoryAtPath:(NSString*)path bare:(BOOL)bare {
-  GCRepository* repo = [[GCRepository alloc] initWithNewLocalRepository:path bare:bare error:NULL];
+  GCRepository* repo = [[GCRepository alloc] initWithNewLocalRepository:path bare:bare defaultBranchName:@"master" error:NULL];
   XCTAssertNotNil(repo);
 
   NSString* configDirectory = [[NSTemporaryDirectory() stringByAppendingPathComponent:[[NSProcessInfo processInfo] globallyUniqueString]] stringByAppendingPathComponent:@"git"];

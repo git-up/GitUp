@@ -62,6 +62,7 @@ typedef NS_ENUM(NSUInteger, GCFileMode) {
 @property(nonatomic, readonly) GCRepositoryState state;  // Do NOT use on a bare repository
 - (instancetype)initWithExistingLocalRepository:(NSString*)path error:(NSError**)error;
 - (instancetype)initWithNewLocalRepository:(NSString*)path bare:(BOOL)bare error:(NSError**)error;  // git init {path}
+- (instancetype)initWithNewLocalRepository:(NSString*)path bare:(BOOL)bare defaultBranchName:(NSString*)defaultBranchName error:(NSError**)error;
 
 - (BOOL)cleanupState:(NSError**)error;  // Do NOT use on a bare repository
 
