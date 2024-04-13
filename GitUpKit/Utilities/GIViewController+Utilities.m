@@ -23,6 +23,7 @@
 #import "GCCore.h"
 #import "GCRepository+Index.h"
 #import "GCRepository+Utilities.h"
+#import "GCLiveRepository+Conflicts.h"
 #import "GIAppKit.h"
 #import "XLFacilityMacros.h"
 
@@ -622,7 +623,7 @@
   }
 }
 
-- (GCCommit*)resolveConflictsWithResolver:(id<GIMergeConflictResolver>)resolver
+- (GCCommit*)resolveConflictsWithResolver:(id<GCMergeConflictResolver>)resolver
                                     index:(GCIndex*)index
                                 ourCommit:(GCCommit*)ourCommit
                               theirCommit:(GCCommit*)theirCommit
@@ -643,53 +644,13 @@
     return nil;
   }
 
-  // Save HEAD
-  GCCommit* headCommit;
-  GCLocalBranch* headBranch;
-  if (![self.repository lookupHEADCurrentCommit:&headCommit branch:&headBranch error:error]) {
-    return nil;
-  }
-
-  // Detach HEAD to "ours" commit
-  if (![self.repository checkoutCommit:parentCommits[0] options:0 error:error]) {
-    return nil;
-  }
-
-  // Check out index with conflicts
-  if (![self.repository checkoutIndex:index withOptions:kGCCheckoutOption_UpdateSubmodulesRecursively error:error]) {
-    return nil;
-  }
-
-  // Have user resolve conflicts
-  BOOL resolved = [resolver resolveMergeConflictsWithOurCommit:ourCommit theirCommit:theirCommit];
-
-  // Unless user cancelled, create commit with "ours" and "theirs" parent commits (if applicable)
-  GCCommit* commit = nil;
-  if (resolved) {
-    if (![self.repository syncIndexWithWorkingDirectory:error]) {
-      return nil;
-    }
-    commit = [self.repository createCommitFromHEADAndOtherParent:(parentCommits.count > 1 ? parentCommits[1] : nil) withMessage:message error:error];
-    if (commit == nil) {
-      return nil;
-    }
-  }
-
-  // Restore HEAD
-  if ((headBranch && ![self.repository setHEADToReference:headBranch error:error]) || (!headBranch && ![self.repository setDetachedHEADToCommit:headCommit error:error])) {
-    return nil;
-  }
-  if (![self.repository forceCheckoutHEAD:YES error:error]) {
-    return nil;
-  }
-
-  // Check if user cancelled
-  if (!resolved) {
-    GC_SET_USER_CANCELLED_ERROR();
-    return nil;
-  }
-
-  return commit;
+  return [self.repository resolveConflictsWithResolver:resolver
+                                                 index:index
+                                             ourCommit:ourCommit
+                                           theirCommit:theirCommit
+                                         parentCommits:parentCommits
+                                               message:message
+                                                 error:error];
 }
 
 // Keep logic in sync with method below!
