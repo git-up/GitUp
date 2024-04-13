@@ -444,7 +444,7 @@ static int _CredentialsCallback(git_cred** cred, const char* url, const char* us
   GCRepository* repository = (__bridge GCRepository*)payload;
   if (allowed_types & GIT_CREDTYPE_SSH_KEY) {
 #if !TARGET_OS_IPHONE
-    if (!repository->_didTrySSHAgent) {
+    if (!repository->_didTrySSHAgent && getenv("SSH_AUTH_SOCK")) {
       repository->_didTrySSHAgent = YES;
       return git_cred_ssh_key_from_agent(cred, user);
     }
