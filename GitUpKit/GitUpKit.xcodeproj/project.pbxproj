@@ -48,6 +48,7 @@
 		DC040FCA2BCB21D000DF54D5 /* GCLiveRepository+Conflicts.m in Sources */ = {isa = PBXBuildFile; fileRef = DC040FC92BCB21D000DF54D5 /* GCLiveRepository+Conflicts.m */; };
 		DC040FCB2BCB21D000DF54D5 /* GCLiveRepository+Conflicts.h in Headers */ = {isa = PBXBuildFile; fileRef = DC040FC82BCB21D000DF54D5 /* GCLiveRepository+Conflicts.h */; };
 		DC040FCC2BCB22FC00DF54D5 /* GCLiveRepository+Conflicts.m in Sources */ = {isa = PBXBuildFile; fileRef = DC040FC92BCB21D000DF54D5 /* GCLiveRepository+Conflicts.m */; };
+		DC040FCD2BCB417A00DF54D5 /* GCLiveRepository+Conflicts.m in Sources */ = {isa = PBXBuildFile; fileRef = DC040FC92BCB21D000DF54D5 /* GCLiveRepository+Conflicts.m */; };
 		E200A3BA1B02DDA100C4E39D /* GCPrivate.m in Sources */ = {isa = PBXBuildFile; fileRef = E200A3B81B02DDA100C4E39D /* GCPrivate.m */; };
 		E20EB08C19FC75CA0031A075 /* GCRepository+Reset.m in Sources */ = {isa = PBXBuildFile; fileRef = E20EB08A19FC75CA0031A075 /* GCRepository+Reset.m */; };
 		E20EB09019FC76160031A075 /* GCRepository+Status.m in Sources */ = {isa = PBXBuildFile; fileRef = E20EB08E19FC76160031A075 /* GCRepository+Status.m */; };
@@ -1266,6 +1267,7 @@
 				E21753831B91635800BE234A /* GCRepository+Index.m in Sources */,
 				E21753841B91635800BE234A /* GCRepository+Utilities.m in Sources */,
 				E2B9878F1B9171D20097629D /* GIBranch.m in Sources */,
+				DC040FCD2BCB417A00DF54D5 /* GCLiveRepository+Conflicts.m in Sources */,
 				E2B987901B9171D20097629D /* GIFunctions.m in Sources */,
 				E2B987911B9171D20097629D /* GIGraph.m in Sources */,
 				E2B987921B9171D20097629D /* GILayer.m in Sources */,
