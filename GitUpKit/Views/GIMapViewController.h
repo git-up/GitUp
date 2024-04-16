@@ -15,6 +15,7 @@
 
 #import "GIViewController+Utilities.h"
 
+#import "GCLiveRepository+Conflicts.h"
 #import "GCRepository.h"
 
 @class GIMapViewController, GIGraph, GINode, GCHistory, GCHistoryCommit, GCCommit;

@@ -46,7 +46,7 @@
 		DBDFBC1D22B61290003EEC6C /* NSColor+GINamedColors.m in Sources */ = {isa = PBXBuildFile; fileRef = DBDFBC1B22B61290003EEC6C /* NSColor+GINamedColors.m */; };
 		DC040FC52BC9FECC00DF54D5 /* GCLiveRepository-Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = DC040FC42BC9FECC00DF54D5 /* GCLiveRepository-Tests.m */; };
 		DC040FCA2BCB21D000DF54D5 /* GCLiveRepository+Conflicts.m in Sources */ = {isa = PBXBuildFile; fileRef = DC040FC92BCB21D000DF54D5 /* GCLiveRepository+Conflicts.m */; };
-		DC040FCB2BCB21D000DF54D5 /* GCLiveRepository+Conflicts.h in Headers */ = {isa = PBXBuildFile; fileRef = DC040FC82BCB21D000DF54D5 /* GCLiveRepository+Conflicts.h */; };
+		DC040FCB2BCB21D000DF54D5 /* GCLiveRepository+Conflicts.h in Headers */ = {isa = PBXBuildFile; fileRef = DC040FC82BCB21D000DF54D5 /* GCLiveRepository+Conflicts.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DC040FCC2BCB22FC00DF54D5 /* GCLiveRepository+Conflicts.m in Sources */ = {isa = PBXBuildFile; fileRef = DC040FC92BCB21D000DF54D5 /* GCLiveRepository+Conflicts.m */; };
 		DC040FCD2BCB417A00DF54D5 /* GCLiveRepository+Conflicts.m in Sources */ = {isa = PBXBuildFile; fileRef = DC040FC92BCB21D000DF54D5 /* GCLiveRepository+Conflicts.m */; };
 		E200A3BA1B02DDA100C4E39D /* GCPrivate.m in Sources */ = {isa = PBXBuildFile; fileRef = E200A3B81B02DDA100C4E39D /* GCPrivate.m */; };
