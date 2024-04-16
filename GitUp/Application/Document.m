@@ -780,12 +780,18 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 }
 
 - (void)_didBecomeActive:(NSNotification*)notification {
-  [_repository notifyRepositoryChanged];  // Make sure we are up-to-date right now
+  /** 
+   async dispatch on the main queue so we don't block
+   NSApplicationDidBecomeActiveNotification while updating the repos
+   */
+  dispatch_async(dispatch_get_main_queue(), ^{
+    [_repository notifyRepositoryChanged];  // Make sure we are up-to-date right now
 
-  if (_repository.automaticSnapshotsEnabled) {
-    [_repository setUndoActionName:NSLocalizedString(@"External Changes", nil)];
-    _repository.automaticSnapshotsEnabled = NO;
-  }
+    if (_repository.automaticSnapshotsEnabled) {
+      [_repository setUndoActionName:NSLocalizedString(@"External Changes", nil)];
+      _repository.automaticSnapshotsEnabled = NO;
+    }
+  });
 }
 
 - (void)_didResignActive:(NSNotification*)notification {
