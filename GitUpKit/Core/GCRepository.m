@@ -159,11 +159,20 @@ static int _GitLFSApply(git_filter* self, void** payload, git_buf* to, const git
 }
 
 - (instancetype)initWithNewLocalRepository:(NSString*)path bare:(BOOL)bare error:(NSError**)error {
+  return [self initWithNewLocalRepository:path bare:bare defaultBranchName:nil error:error];
+}
+
+- (instancetype)initWithNewLocalRepository:(NSString*)path bare:(BOOL)bare defaultBranchName:(NSString*)defaultBranchName error:(NSError**)error {
   git_repository_init_options options = GIT_REPOSITORY_INIT_OPTIONS_INIT;
   options.flags = GIT_REPOSITORY_INIT_NO_REINIT | GIT_REPOSITORY_INIT_MKPATH;
   if (bare) {
     options.flags |= GIT_REPOSITORY_INIT_BARE;
   }
+
+  if (defaultBranchName) {
+    options.initial_head = defaultBranchName.UTF8String;
+  }
+
   git_repository* repository;
   CALL_LIBGIT2_FUNCTION_RETURN(nil, git_repository_init_ext, &repository, path.fileSystemRepresentation, &options);
   return [self initWithRepository:repository error:error];
