@@ -16,11 +16,9 @@
 #import "GIViewController.h"
 #import "GILaunchServicesLocator.h"
 
-@class GCCommit, GCIndex, GCDiffDelta, GCIndexConflict;
+@protocol GCMergeConflictResolver;
 
-@protocol GIMergeConflictResolver <NSObject>
-- (BOOL)resolveMergeConflictsWithOurCommit:(GCCommit*)ourCommit theirCommit:(GCCommit*)theirCommit;
-@end
+@class GCCommit, GCIndex, GCDiffDelta, GCIndexConflict, GCRepository;
 
 @interface GIViewController (Utilities)
 - (void)discardAllFiles;  // Prompts user
@@ -56,7 +54,7 @@
 - (void)resolveConflictInMergeTool:(GCIndexConflict*)conflict;
 - (void)markConflictAsResolved:(GCIndexConflict*)conflict;
 
-- (GCCommit*)resolveConflictsWithResolver:(id<GIMergeConflictResolver>)resolver
+- (GCCommit*)resolveConflictsWithResolver:(id<GCMergeConflictResolver>)resolver
                                     index:(GCIndex*)index
                                 ourCommit:(GCCommit*)ourCommit
                               theirCommit:(GCCommit*)theirCommit

@@ -18,7 +18,7 @@
 
 @class GICommitRewriterViewController, GCHistoryCommit;
 
-@protocol GICommitRewriterViewControllerDelegate <GICommitViewControllerDelegate, GIMergeConflictResolver>
+@protocol GICommitRewriterViewControllerDelegate <GICommitViewControllerDelegate, GCMergeConflictResolver>
 - (void)commitRewriterViewControllerShouldFinish:(GICommitRewriterViewController*)controller withMessage:(NSString*)message;
 - (void)commitRewriterViewControllerShouldCancel:(GICommitRewriterViewController*)controller;
 @end

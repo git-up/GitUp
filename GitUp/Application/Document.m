@@ -1532,7 +1532,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
   _resolvingConflicts = 1;
 }
 
-#pragma mark - GIMergeConflictResolver
+#pragma mark - GCMergeConflictResolver
 
 - (BOOL)resolveMergeConflictsWithOurCommit:(GCCommit*)ourCommit theirCommit:(GCCommit*)theirCommit {
   [self _enterResolveWithOurCommit:ourCommit theirCommit:theirCommit];

@@ -15,11 +15,12 @@
 
 #import "GIViewController+Utilities.h"
 
+#import "GCLiveRepository+Conflicts.h"
 #import "GCRepository.h"
 
 @class GIMapViewController, GIGraph, GINode, GCHistory, GCHistoryCommit, GCCommit;
 
-@protocol GIMapViewControllerDelegate <GIMergeConflictResolver>
+@protocol GIMapViewControllerDelegate <GCMergeConflictResolver>
 - (void)mapViewControllerDidReloadGraph:(GIMapViewController*)controller;
 - (void)mapViewControllerDidChangeSelection:(GIMapViewController*)controller;
 

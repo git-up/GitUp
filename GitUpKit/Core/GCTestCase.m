@@ -43,8 +43,8 @@ static const void* _associatedObjectKey = &_associatedObjectKey;
   XCTAssertTrue([[NSFileManager defaultManager] createDirectoryAtPath:configDirectory withIntermediateDirectories:YES attributes:nil error:NULL]);
   NSString* configPath = [configDirectory stringByAppendingPathComponent:@"config"];
   NSString* configString = @"[user]\n\
-	name = Bot\n\
-	email = bot@example.com\n\
+  name = Bot\n\
+  email = bot@example.com\n\
 ";
   XCTAssertTrue([configString writeToFile:configPath atomically:YES encoding:NSASCIIStringEncoding error:NULL]);
 
@@ -192,6 +192,43 @@ static const void* _associatedObjectKey = &_associatedObjectKey;
 @end
 
 @implementation GCEmptyRepositoryTests
+@end
+
+@implementation GCEmptyLiveRepositoryTestCase
+
+- (GCLiveRepository *)liveRepository {
+  return (GCLiveRepository *)self.repository;
+}
+
+- (GCRepository *)createLocalRepositoryAtPath:(NSString *)path bare:(BOOL)bare {
+  GCLiveRepository* repo = [[GCLiveRepository alloc] initWithNewLocalRepository:path bare:bare error:NULL];
+  XCTAssertNotNil(repo);
+
+  repo.delegate = self;
+
+  NSString* configDirectory = [[NSTemporaryDirectory() stringByAppendingPathComponent:[[NSProcessInfo processInfo] globallyUniqueString]] stringByAppendingPathComponent:@"git"];
+  XCTAssertTrue([[NSFileManager defaultManager] createDirectoryAtPath:configDirectory withIntermediateDirectories:YES attributes:nil error:NULL]);
+  NSString* configPath = [configDirectory stringByAppendingPathComponent:@"config"];
+  NSString* configString = @"[user]\n\
+  name = Bot\n\
+  email = bot@example.com\n\
+";
+  XCTAssertTrue([configString writeToFile:configPath atomically:YES encoding:NSASCIIStringEncoding error:NULL]);
+
+  git_config* config;
+  XCTAssertEqual(git_config_new(&config), GIT_OK);
+  if (!repo.bare) {
+    XCTAssertEqual(git_config_add_file_ondisk(config, [[repo.repositoryPath stringByAppendingPathComponent:@"config"] fileSystemRepresentation], GIT_CONFIG_LEVEL_LOCAL, repo.private, true), GIT_OK);
+  }
+  XCTAssertEqual(git_config_add_file_ondisk(config, configPath.fileSystemRepresentation, GIT_CONFIG_LEVEL_APP, repo.private, true), GIT_OK);
+  git_repository_set_config(repo.private, config);
+  git_config_free(config);
+
+  objc_setAssociatedObject(repo, _associatedObjectKey, [configDirectory stringByDeletingLastPathComponent], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+
+  return repo;
+}
+
 @end
 
 @implementation GCSingleCommitRepositoryTestCase

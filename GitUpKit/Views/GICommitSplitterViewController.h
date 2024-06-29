@@ -18,7 +18,7 @@
 
 @class GICommitSplitterViewController, GCHistoryCommit;
 
-@protocol GICommitSplitterViewControllerDelegate <GICommitViewControllerDelegate, GIMergeConflictResolver>
+@protocol GICommitSplitterViewControllerDelegate <GICommitViewControllerDelegate, GCMergeConflictResolver>
 - (void)commitSplitterViewControllerShouldFinish:(GICommitSplitterViewController*)controller withOldMessage:(NSString*)oldMessage newMessage:(NSString*)newMessage;
 - (void)commitSplitterViewControllerShouldCancel:(GICommitSplitterViewController*)controller;
 @end
