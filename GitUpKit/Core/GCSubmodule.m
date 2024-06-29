@@ -310,7 +310,23 @@ cleanup:
   if (submodules == nil) {
     return NO;
   }
+
+  NSArray<NSString *> *conflictPaths = @[];
+
+  git_index* index = [self reloadRepositoryIndex:error];
+
+  if (index && git_index_has_conflicts(index)) {
+    conflictPaths = [self checkConflicts:nil].allKeys;
+  }
+
+  git_index_free(index);
+
   for (GCSubmodule* submodule in submodules) {
+    if ([conflictPaths containsObject:submodule.path]) {
+      // conflict needs to be resolved first, will be handled elsewhere but we shouldn't return an error
+      continue;
+    }
+
     NSError* localError;
     if (![self updateSubmodule:submodule force:force error:&localError]) {
       if ([localError.domain isEqualToString:GCErrorDomain] && (localError.code == kGCErrorCode_NotFound)) {

@@ -32,6 +32,7 @@ typedef NS_OPTIONS(NSUInteger, GCCheckoutOptions) {
 - (BOOL)setDetachedHEADToCommit:(GCCommit*)commit error:(NSError**)error;  // git update-ref HEAD {commit}
 
 - (BOOL)moveHEADToCommit:(GCCommit*)commit reflogMessage:(NSString*)message error:(NSError**)error;  // git reset --soft {commit} (but with custom reflog message)
+- (BOOL)updateSubmoduleReferenceAtPath:(NSString *)submodulePath toCommitSHA1:(NSString *)commitSHA1 error:(NSError **)error;
 
 - (BOOL)checkoutCommit:(GCCommit*)commit options:(GCCheckoutOptions)options error:(NSError**)error;  // git checkout {commit}
 - (BOOL)checkoutLocalBranch:(GCLocalBranch*)branch options:(GCCheckoutOptions)options error:(NSError**)error;  // git checkout {branch}

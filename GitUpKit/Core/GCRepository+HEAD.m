@@ -221,6 +221,25 @@ cleanup:
   return YES;
 }
 
+- (BOOL)updateSubmoduleReferenceAtPath:(NSString*)submodulePath toCommitSHA1:(NSString*)commitSHA1 error:(NSError**)error {
+  GCSubmodule *submodule = [self lookupSubmoduleWithName:submodulePath error:error];
+  if (!submodule) {
+    return NO;
+  }
+
+  GCRepository *submoduleRepository = [[GCRepository alloc] initWithSubmodule:submodule error:error];
+  if (!submoduleRepository) {
+    return NO;
+  }
+
+  GCCommit *targetCommit = [submoduleRepository findCommitWithSHA1:commitSHA1 error:error];
+  if (!targetCommit) {
+    return NO;
+  }
+
+  return [submoduleRepository checkoutCommit:targetCommit options:kGCCheckoutOption_UpdateSubmodulesRecursively error:error];
+}
+
 // Because by default git_checkout_tree() assumes the baseline (i.e. expected content of workdir) is HEAD we must checkout first, then update HEAD
 - (BOOL)checkoutLocalBranch:(GCLocalBranch*)branch options:(GCCheckoutOptions)options error:(NSError**)error {
   GCCommit* tipCommit = [self lookupTipCommitForBranch:branch error:error];
