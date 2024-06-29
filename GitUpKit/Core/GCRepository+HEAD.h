@@ -17,7 +17,8 @@
 
 typedef NS_OPTIONS(NSUInteger, GCCheckoutOptions) {
   kGCCheckoutOption_Force = (1 << 0),
-  kGCCheckoutOption_UpdateSubmodulesRecursively = (1 << 1)
+  kGCCheckoutOption_UpdateSubmodulesRecursively = (1 << 1),
+  kGCCheckoutOption_RemoveUntrackedFiles = (1 << 2),
 };
 
 @interface GCRepository (HEAD)

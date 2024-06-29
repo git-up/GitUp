@@ -194,6 +194,11 @@ cleanup:
   git_tree* tree = NULL;
   git_checkout_options checkoutOptions = GIT_CHECKOUT_OPTIONS_INIT;
   checkoutOptions.checkout_strategy = options & kGCCheckoutOption_Force ? GIT_CHECKOUT_FORCE : GIT_CHECKOUT_SAFE;
+
+  if (options & kGCCheckoutOption_RemoveUntrackedFiles) {
+    checkoutOptions.checkout_strategy |= GIT_CHECKOUT_REMOVE_UNTRACKED;
+  }
+
   if (baseline) {
     CALL_LIBGIT2_FUNCTION_RETURN(NO, git_commit_tree, &tree, baseline.private);
     checkoutOptions.baseline = tree;

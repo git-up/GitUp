@@ -292,7 +292,7 @@ NSString* GCNameFromHostingService(GCHostingService service) {
   if (![self lookupHEADCurrentCommit:&headCommit branch:NULL error:error]) {
     return NO;
   }
-  GCCheckoutOptions options = kGCCheckoutOption_Force;
+  GCCheckoutOptions options = kGCCheckoutOption_Force | kGCCheckoutOption_RemoveUntrackedFiles;
   if (recursive) {
     options |= kGCCheckoutOption_UpdateSubmodulesRecursively;
   }
