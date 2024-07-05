@@ -21,6 +21,7 @@
 		0AC8525423A11F3700479160 /* PreferencesWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0AC8525223A11F3700479160 /* PreferencesWindowController.xib */; };
 		0AD4625B232711B000BE28D1 /* WelcomeWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AD4625A232711B000BE28D1 /* WelcomeWindowController.m */; };
 		0AE7F5F12312C1B000B06050 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0AE7F5ED2312C1B000B06050 /* InfoPlist.strings */; };
+		1DE066042C3781AF00540818 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = 1DE066032C3781AF00540818 /* Sparkle */; };
 		31CD50E3203E2E2800360B3A /* ToolbarItemWrapperView.m in Sources */ = {isa = PBXBuildFile; fileRef = 31CD50E2203E2E2800360B3A /* ToolbarItemWrapperView.m */; };
 		A53C6D0C1E61A9CF0070387E /* FontSizeTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = A53C6D0B1E61A9CF0070387E /* FontSizeTransformer.m */; };
 		DBBEE685256B0A0200F96DAF /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = DBBEE684256B0A0200F96DAF /* libiconv.tbd */; };
@@ -30,8 +31,6 @@
 		E21DCAF31B253919006424E8 /* gitup in Copy Tool */ = {isa = PBXBuildFile; fileRef = E21DCAE81B253847006424E8 /* gitup */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		E21DCAF51B254117006424E8 /* install.sh in Copy Tool */ = {isa = PBXBuildFile; fileRef = E21DCAF41B254112006424E8 /* install.sh */; };
 		E25EBCEB1AA3F8B700D3AF44 /* Application.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E25EBCEA1AA3F8B700D3AF44 /* Application.xcassets */; };
-		E2653D251A5B2FBD006A9871 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2653D241A5B2FBD006A9871 /* Sparkle.framework */; };
-		E267E1F31B84D93300BAB377 /* Sparkle.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = E2653D241A5B2FBD006A9871 /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E267E2741B84E42A00BAB377 /* Help.plist in Resources */ = {isa = PBXBuildFile; fileRef = E2BDA0671AD47A2F00E69729 /* Help.plist */; };
 		E28A16E51B87023200218332 /* GitUpKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E28A16E01B87021600218332 /* GitUpKit.framework */; };
 		E28A16E61B87023C00218332 /* GitUpKit.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = E28A16E01B87021600218332 /* GitUpKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -101,7 +100,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				E267E1F31B84D93300BAB377 /* Sparkle.framework in Copy Frameworks */,
 				E28A16E61B87023C00218332 /* GitUpKit.framework in Copy Frameworks */,
 			);
 			name = "Copy Frameworks";
@@ -183,7 +181,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E28A16E51B87023200218332 /* GitUpKit.framework in Frameworks */,
-				E2653D251A5B2FBD006A9871 /* Sparkle.framework in Frameworks */,
+				1DE066042C3781AF00540818 /* Sparkle in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -346,6 +344,9 @@
 				E21DCAF11B2538C5006424E8 /* PBXTargetDependency */,
 			);
 			name = Application;
+			packageProductDependencies = (
+				1DE066032C3781AF00540818 /* Sparkle */,
+			);
 			productName = GitUp;
 			productReference = E2C338AB19F8562F00063D95 /* GitUp.app */;
 			productType = "com.apple.product-type.application";
@@ -378,6 +379,9 @@
 				Base,
 			);
 			mainGroup = E2C338A219F8562F00063D95;
+			packageReferences = (
+				1DE066022C3781AF00540818 /* XCRemoteSwiftPackageReference "Sparkle" */,
+			);
 			productRefGroup = E2C338AC19F8562F00063D95 /* Products */;
 			projectDirPath = "";
 			projectReferences = (
@@ -473,7 +477,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "# Information derived from https://stackoverflow.com/questions/77397157/mapbox-xcframework-ios-signature-couldn-t-be-copied-to-signatures-because-an-i\nif [ \"$XCODE_VERSION_MAJOR\" = \"1500\" ]; then\n  echo \"Remove signature files (Xcode 15 workaround)\"\n  find \"$BUILD_DIR/${CONFIGURATION}/libssl.xcframework-macos.signature\" -name \"*.signature\" -type f | xargs -r rm\n  find \"$BUILD_DIR/${CONFIGURATION}/libcrypto.xcframework-macos.signature\" -name \"*.signature\" -type f | xargs -r rm\n  find \"$BUILD_DIR/${CONFIGURATION}/libssh2.xcframework-macos.signature\" -name \"*.signature\" -type f | xargs -r rm\nfi\n";
+			shellScript = "# Information derived from https://stackoverflow.com/questions/77397157/mapbox-xcframework-ios-signature-couldn-t-be-copied-to-signatures-because-an-i\nif [ \"$XCODE_VERSION_MAJOR\" = \"1500\" ]; then\n  echo \"Remove signature files (Xcode 15 workaround)\"\n  find \"$BUILD_DIR/${CONFIGURATION}/libssl.xcframework-macos.signature\" -name \"*.signature\" -type f | xargs -r rm\n  find \"$BUILD_DIR/${CONFIGURATION}/libcrypto.xcframework-macos.signature\" -name \"*.signature\" -type f | xargs -r rm\n  find \"$BUILD_DIR/${CONFIGURATION}/libssh2.xcframework-macos.signature\" -name \"*.signature\" -type f | xargs -r rm\n  find \"$BUILD_DIR/${CONFIGURATION}/Sparkle.xcframework-macos.signature\" -name \"*.signature\" -type f | xargs -r rm\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -714,10 +718,26 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+		1DE066022C3781AF00540818 /* XCRemoteSwiftPackageReference "Sparkle" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sparkle-project/Sparkle";
+			requirement = {
+				kind = exactVersion;
+				version = 1.27.3;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
 		0A4881DB26C7B98D00289CF9 /* Libgit2Origin */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Libgit2Origin;
+		};
+		1DE066032C3781AF00540818 /* Sparkle */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1DE066022C3781AF00540818 /* XCRemoteSwiftPackageReference "Sparkle" */;
+			productName = Sparkle;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
