@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" xmlns:dc="http://purl.org/dc/elements/1.1/" version="2.0">
+  <channel>
+    <title>GitUp</title>
+    <link>https://raw.githubusercontent.com/git-up/GitUp/master/appcasts/continuous/appcast.xml</link>
+    <item>
+      <enclosure url="https://github.com/git-up/GitUp/releases/download/b1050/GitUp.zip" sparkle:version="1050" sparkle:shortVersionString="1.4.1" sparkle:edSignature="rB8E7AFOnfuur3X9T7K5SUzXMPgo2SehFkgx0FodqLe68l6c8UZbcs6CXZfi44Uo7GsNUV1sre8msivFAaf3Bg==" length="8369426" type="application/zip"/>
+      <sparkle:minimumSystemVersion>10.13</sparkle:minimumSystemVersion>
+    </item>
+  </channel>
+</rss>

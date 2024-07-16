@@ -654,7 +654,6 @@
 				BUNDLE_VERSION_STRING = 1.1;
 				CODE_SIGN_ENTITLEMENTS = Application/GitUp.entitlements;
 				"DEVELOPMENT_TEAM[sdk=macosx*]" = "";
-				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/Third-Party";
 				INFOPLIST_FILE = Application/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -674,7 +673,6 @@
 				BUNDLE_VERSION_STRING = 1.1;
 				CODE_SIGN_ENTITLEMENTS = Application/GitUp.entitlements;
 				"DEVELOPMENT_TEAM[sdk=macosx*]" = "";
-				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/Third-Party";
 				INFOPLIST_FILE = Application/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

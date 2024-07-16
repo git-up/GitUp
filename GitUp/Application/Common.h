@@ -31,7 +31,7 @@
 #define kRepositoryUserInfoKey_MainWindowFrame @"MainWindowFrame"  // NSString
 #define kRepositoryUserInfoKey_IndexDiffs @"IndexDiffs"  // BOOL
 
-#define kURL_AppCast @"https://s3-us-west-2.amazonaws.com/gitup-builds/%@/appcast.xml"
+#define kURL_AppCast @"https://raw.githubusercontent.com/git-up/GitUp/master/appcasts/%@/appcast.xml"
 
 #define kURL_Issues @"https://github.com/git-up/GitUp/issues"
 #define kURL_Wiki @"https://github.com/git-up/GitUp/wiki"
