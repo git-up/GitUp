@@ -4,7 +4,7 @@
     <title>GitUp</title>
     <link>https://raw.githubusercontent.com/git-up/GitUp/master/appcasts/continuous/appcast.xml</link>
     <item>
-      <enclosure url="https://github.com/git-up/GitUp/releases/download/b1050/GitUp.zip" sparkle:version="1050" sparkle:shortVersionString="1.4.1" sparkle:edSignature="rB8E7AFOnfuur3X9T7K5SUzXMPgo2SehFkgx0FodqLe68l6c8UZbcs6CXZfi44Uo7GsNUV1sre8msivFAaf3Bg==" length="8369426" type="application/zip"/>
+      <enclosure url="https://github.com/git-up/GitUp/releases/download/b1050/GitUp.zip" sparkle:version="1052" sparkle:shortVersionString="1.4.1" sparkle:edSignature="rB8E7AFOnfuur3X9T7K5SUzXMPgo2SehFkgx0FodqLe68l6c8UZbcs6CXZfi44Uo7GsNUV1sre8msivFAaf3Bg==" length="8369426" type="application/zip"/>
       <sparkle:minimumSystemVersion>10.13</sparkle:minimumSystemVersion>
     </item>
   </channel>
