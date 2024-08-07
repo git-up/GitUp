@@ -1,0 +1,279 @@
+#include <LiquidCrystal.h>
+ 
+LiquidCrystal lcd(3,4,5,6,7,8);
+
+char NUM;
+
+const int m11=A5;
+const int m12=A4;
+const int m21=9;
+const int m22=10;
+const int m31=A1;
+const int m32=A0;
+const int m41=11;
+const int m42=12;
+//const int buzzer=13;
+const int relay=A3; 
+const int relay1=A2;
+
+
+const int trigPin = 2;
+const int echoPin = 13;
+long duration;
+int distanceCm, distanceInch;
+
+
+void setup() {
+  Serial.begin(9600);
+  lcd.begin(16, 2);
+  lcd.clear();
+ lcd.setCursor(0, 0);
+  lcd.print("SOLAR BASE GRASS ");
+   lcd.setCursor(0, 1);
+  lcd.print("    CUTTER        ");
+  pinMode(m11, OUTPUT);
+  pinMode(m12, OUTPUT);
+  pinMode(m21, OUTPUT);
+  pinMode(m22, OUTPUT);
+  pinMode(m31, OUTPUT);
+  pinMode(m32, OUTPUT);
+  pinMode(m41, OUTPUT);
+  pinMode(m42, OUTPUT);
+  pinMode(relay, OUTPUT);
+  pinMode(relay1, OUTPUT);
+
+
+  digitalWrite(m11,LOW);
+  digitalWrite(m12,LOW);
+  digitalWrite(m21,LOW);
+  digitalWrite(m22,LOW);
+  digitalWrite(m31,LOW);
+  digitalWrite(m32,LOW);
+  digitalWrite(m41,LOW);
+  digitalWrite(m42,LOW);
+  //digitalWrite(buzzer, LOW);
+  digitalWrite(relay, LOW);  
+  digitalWrite(relay1, LOW);
+  
+  pinMode(trigPin,OUTPUT);
+  pinMode(echoPin,INPUT);
+  
+   delay(2000);
+  
+}
+
+void loop() {
+
+digitalWrite(trigPin, LOW);
+delayMicroseconds(2);
+digitalWrite(trigPin, HIGH);
+delayMicroseconds(10);
+digitalWrite(trigPin, LOW);
+duration = pulseIn(echoPin, HIGH);
+distanceCm= duration*0.034/2;
+
+lcd.setCursor(11, 1);
+lcd.print("D:");
+        
+lcd.setCursor(13, 1);
+lcd.print(distanceCm);
+lcd.print("------");
+        
+        
+if(distanceCm<=10)
+  {  
+    delay(500);
+
+digitalWrite(trigPin, LOW);
+delayMicroseconds(2);
+digitalWrite(trigPin, HIGH);
+delayMicroseconds(10);
+digitalWrite(trigPin, LOW);
+duration = pulseIn(echoPin, HIGH);
+distanceCm= duration*0.034/2;
+
+lcd.setCursor(11, 1);
+lcd.print("D:");
+        
+lcd.setCursor(13, 1);
+lcd.print(distanceCm);
+lcd.print("------");
+    
+    if(distanceCm<=10)
+    {
+      digitalWrite(m11,LOW);
+      digitalWrite(m12,LOW);
+      digitalWrite(m21,LOW);
+      digitalWrite(m22,LOW);
+      digitalWrite(m31,LOW);
+      digitalWrite(m32,LOW);
+      digitalWrite(m41,LOW);
+      digitalWrite(m42,LOW);
+      lcd.setCursor(0, 0);
+        lcd.print(" OBSTACLE STOP           "); 
+  }
+  }
+ 
+  
+
+  if(Serial.available())
+  {
+    NUM= Serial.read();
+
+    if(NUM=='F')
+    {
+      
+      
+      Serial.print("FORWORD");
+      NUM='Z';
+         digitalWrite(m11,HIGH);
+        digitalWrite(m12,LOW);
+        digitalWrite(m21,HIGH);
+        digitalWrite(m22,LOW);
+        digitalWrite(m31,HIGH);
+        digitalWrite(m32,LOW);
+        digitalWrite(m41,HIGH);
+        digitalWrite(m42,LOW);
+      
+         
+       lcd.setCursor(0, 0);
+        lcd.print("     FORWORD           ");
+
+          delay(2000);
+    }
+    else if(NUM=='B')
+    {
+      Serial.print("BACKWORD");
+      NUM='Z';
+       
+
+
+       digitalWrite(m11,LOW);
+        digitalWrite(m12,HIGH);
+        digitalWrite(m21,LOW);
+        digitalWrite(m22,HIGH);
+        digitalWrite(m31,LOW);
+        digitalWrite(m32,HIGH);
+        digitalWrite(m41,LOW);
+        digitalWrite(m42,HIGH);
+         
+        
+        lcd.setCursor(0, 0);
+        lcd.print("     BACKWORD           ");
+         delay(2000);
+    }
+    else if(NUM=='R')
+    {
+      Serial.print("RIGHT");
+      NUM='Z';
+        digitalWrite(m11,HIGH);
+        digitalWrite(m12,LOW);
+
+         digitalWrite(m31,HIGH);
+        digitalWrite(m32,LOW);
+        
+        digitalWrite(m21,LOW);
+        digitalWrite(m22,HIGH);
+        
+       
+        
+        digitalWrite(m41,LOW);
+        digitalWrite(m42,HIGH);
+          
+        lcd.setCursor(0, 0);
+        lcd.print("     RIGHT          ");
+
+        delay(2000);
+    }
+    else if(NUM=='L')
+    {
+      Serial.print("LEFT");
+      NUM='Z';
+        digitalWrite(m11,LOW);
+        digitalWrite(m12,HIGH);
+
+         digitalWrite(m31,LOW);
+        digitalWrite(m32,HIGH);
+        
+        digitalWrite(m21,HIGH);
+        digitalWrite(m22,LOW);
+        
+       
+        
+        digitalWrite(m41,HIGH);
+        digitalWrite(m42,LOW);
+        
+        lcd.setCursor(0, 0);
+        lcd.print("       LEFT          ");
+          delay(2000);
+    }
+    else if(NUM=='S')
+    {
+      Serial.print("STOP");
+      NUM='Z';
+      digitalWrite(m11,LOW);
+      digitalWrite(m12,LOW);
+      digitalWrite(m21,LOW);
+      digitalWrite(m22,LOW);
+      digitalWrite(m31,LOW);
+      digitalWrite(m32,LOW);
+      digitalWrite(m41,LOW);
+      digitalWrite(m42,LOW);
+      
+      lcd.setCursor(0, 0);
+        lcd.print("     STOP           ");
+
+          delay(2000);
+    }
+    else if(NUM=='C')
+    {
+      Serial.print("CUTTER ON");
+      digitalWrite(relay, HIGH);
+      lcd.setCursor(0, 1);
+        lcd.print("    CUTTER ON          ");
+      NUM='Z';
+    }
+    else if(NUM=='D')
+    {
+      Serial.print("CUTTER OFF");
+      digitalWrite(relay, LOW);
+      lcd.setCursor(0, 1);
+        lcd.print("    CUTTER OFF          ");
+      NUM='Z';
+    }
+     else if(NUM=='b')
+    {
+      Serial.print("BUZZER ON");
+    //  digitalWrite(buzzer, HIGH);
+      lcd.setCursor(0, 1);
+        lcd.print("    BUZZER ON          ");
+      NUM='Z';
+    }
+    else if(NUM=='a')
+    {
+      Serial.print("BUZZER OFF");
+      //digitalWrite(buzzer, LOW);
+      lcd.setCursor(0, 1);
+        lcd.print("    BUZZER OFF          ");
+      NUM='Z';
+    }
+
+      else if(NUM=='E')
+    {
+      Serial.print("SPRY ON");
+      digitalWrite(relay1, HIGH);
+      lcd.setCursor(0, 1);
+        lcd.print("   SPRAY ON          ");
+      NUM='Z';
+    }
+    else if(NUM=='G')
+    {
+      Serial.print("SPRAY OFF");
+      digitalWrite(relay1, LOW);
+      lcd.setCursor(0, 1);
+        lcd.print("    SPRAY OFF          ");
+      NUM='Z';
+      
+    }
+    }
+  }
