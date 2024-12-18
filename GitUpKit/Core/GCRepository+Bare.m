@@ -75,7 +75,7 @@ static inline GCCommit* _CopyCommit(GCRepository* repository, git_commit* commit
     for (NSUInteger i = 0; i < count; ++i) {
       [array addObject:_CopyCommit(self, (git_commit*)parents[i])];
     }
-    commit = handler([[GCIndex alloc] initWithRepository:nil index:index], _CopyCommit(self, ourCommit), _CopyCommit(self, theirCommit), array, message, error);  // Doesn't make sense to specify a custom author on conflict anyway
+    commit = handler([[GCIndex alloc] initWithRepository:nil index:index], ourCommit ? _CopyCommit(self, ourCommit) : nil, _CopyCommit(self, theirCommit), array, message, error);  // Doesn't make sense to specify a custom author on conflict anyway
     index = NULL;  // Ownership has been transferred to GCIndex instance
   } else {
     commit = [self createCommitFromIndex:index withParents:parents count:count author:author message:message error:error];
@@ -95,12 +95,12 @@ cleanup:
                       message:(NSString*)message
               conflictHandler:(GCConflictHandler)handler
                         error:(NSError**)error {
-  const git_commit* parents[] = {againstCommit.private};
+  const git_commit** parents = (againstCommit != nil) ? (git_commit*[]) {againstCommit.private} : (git_commit*[]) {};
   return [self _mergeTheirCommit:pickCommit.private
                    intoOurCommit:againstCommit.private
               withAncestorCommit:ancestorCommit.private
                          parents:parents
-                           count:1
+                           count:(againstCommit != nil) ? 1 : 0
                           author:git_commit_author(pickCommit.private)
                          message:message
                  conflictHandler:handler
@@ -113,12 +113,12 @@ cleanup:
                   message:(NSString*)message
           conflictHandler:(GCConflictHandler)handler
                     error:(NSError**)error {
-  const git_commit* parents[] = {againstCommit.private};
+  const git_commit** parents = (againstCommit != nil) ? (git_commit*[]) {againstCommit.private} : (git_commit*[]) {};
   return [self _mergeTheirCommit:ancestorCommit.private
                    intoOurCommit:againstCommit.private
               withAncestorCommit:revertCommit.private
                          parents:parents
-                           count:1
+                           count:(againstCommit != nil) ? 1 : 0
                           author:NULL
                          message:message
                  conflictHandler:handler
