@@ -357,7 +357,7 @@ cleanup:
 - (BOOL)addLinesInWorkingDirectoryFile:(NSString*)path toIndex:(GCIndex*)index error:(NSError**)error usingFilter:(GCIndexLineFilter)filter {
   const char* filePath = GCGitPathFromFileSystemPath(path);
 
-  // If the file is already in the index, preserve the entry, otherwise create a new entry from the file metadata
+  // If the file is already in the index, mutate the entry, otherwise create a new entry from the file metadata
   git_index_entry entry;
   const git_index_entry* entryPtr = git_index_get_bypath(index.private, filePath, 0);
   if (entryPtr == NULL) {
@@ -366,6 +366,11 @@ cleanup:
     bzero(&entry, sizeof(git_index_entry));
     entry.path = filePath;
     git_index_entry__init_from_stat(&entry, &info, true);
+    entryPtr = &entry;
+  } else {
+    // Null out the entry's modification date: otherwise Git might assume the file is unchanged from the on-disk version, and produce incorrect diffs
+    bcopy(entryPtr, &entry, sizeof(git_index_entry));
+    entry.mtime = (git_index_time){.seconds = 0, .nanoseconds = 0};
     entryPtr = &entry;
   }
   NSMutableData* data = [[NSMutableData alloc] initWithCapacity:(1024 * 1024)];
@@ -453,7 +458,7 @@ cleanup:
 - (BOOL)resetLinesInFile:(NSString*)path index:(GCIndex*)index toCommit:(GCCommit*)commit error:(NSError**)error usingFilter:(GCIndexLineFilter)filter {
   const char* filePath = GCGitPathFromFileSystemPath(path);
 
-  // If the file is already in the index, preserve the entry, otherwise create a new entry from the file blob
+  // If the file is already in the index, mutate the entry, otherwise create a new entry from the file blob
   git_index_entry entry;
   const git_index_entry* entryPtr = git_index_get_bypath(index.private, filePath, 0);
   if (entryPtr == NULL) {
@@ -468,6 +473,11 @@ cleanup:
     entry.mode = git_tree_entry_filemode(treeEntry);
     entryPtr = &entry;
     git_tree_entry_free(treeEntry);
+  } else {
+    // Null out the entry's modification date: otherwise Git might assume the file is unchanged from the on-disk version, and produce incorrect diffs
+    bcopy(entryPtr, &entry, sizeof(git_index_entry));
+    entry.mtime = (git_index_time){.seconds = 0, .nanoseconds = 0};
+    entryPtr = &entry;
   }
   NSMutableData* data = [[NSMutableData alloc] initWithCapacity:(1024 * 1024)];
 
