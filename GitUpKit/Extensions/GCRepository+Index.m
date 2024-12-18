@@ -79,14 +79,16 @@
     shouldWriteRepository = YES;
   }
 
-  if (failed && shouldWriteRepository) {
-    if (shouldWriteRepository) {
+  if (shouldWriteRepository) {
+    if (failed) {
       [self writeRepositoryIndex:index error:NULL];
+      return NO;
     }
-    return NO;
+
+    return [self writeRepositoryIndex:index error:error];
   }
 
-  return [self writeRepositoryIndex:index error:error];
+  return !failed;
 }
 
 - (BOOL)resetFileInIndexToHEAD:(NSString*)path error:(NSError**)error {

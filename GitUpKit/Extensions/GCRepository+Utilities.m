@@ -205,11 +205,19 @@ NSString* GCNameFromHostingService(GCHostingService service) {
         if (delta.submodule) {
           GCSubmodule* submodule = [self lookupSubmoduleWithName:delta.canonicalPath error:error];
           if (!submodule || ![self addSubmoduleToRepositoryIndex:submodule error:error]) {
-            return NO;
+            if (![[*error localizedDescription] hasSuffix:@"' has not been added yet"]) {
+              return NO;
+            }
           }
         } else {
           if (![self addFileInWorkingDirectory:delta.canonicalPath toIndex:index error:error]) {
-            return NO;
+            BOOL wasJustTryingToStageADeletedConflictingFile =
+              delta.change == kGCFileDiffChange_Conflicted
+              && [[*error localizedDescription] isEqualToString:@"No such file or directory"];
+            
+            if (!wasJustTryingToStageADeletedConflictingFile) {
+              return NO;
+            }
           }
         }
         break;
