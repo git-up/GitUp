@@ -813,9 +813,18 @@ static inline CGFloat _SquareDistanceFromPointToLine(CGFloat x0, CGFloat y0, CGF
     pointList = newPointList;
     pointCount = newPointCount;
   }
-
+  
+  CGContextSaveGState(context);
+  CGContextSetLineWidth(context, line.branchMainLine && !line.virtual ? kMainLineWidth : kSubLineWidth);
+  CGContextSetLineJoin(context, kCGLineJoinRound);
+  if (line.virtual) {
+    const CGFloat pattern[] = {4, 2};
+    CGContextSetLineDash(context, 0, pattern, 2);
+  }
+  CGContextSetStrokeColorWithColor(context, line.color.CGColor);
+  
   // Draw line
-  CGContextBeginPath(context);
+  
   BOOL visible = NO;
   size_t i = 0;
   while (1) {
@@ -838,9 +847,11 @@ static inline CGFloat _SquareDistanceFromPointToLine(CGFloat x0, CGFloat y0, CGF
 
     // Draw line start
     if (!visible) {
+      CGContextBeginPath(context);
       CGContextMoveToPoint(context, x0, y0);
       CGContextAddLineToPoint(context, x1, y1);
-
+      CGContextStrokePath(context);
+      
       x0 = x1;
       y0 = y1;
       x1 = pointList[i + 2].x;
@@ -849,9 +860,11 @@ static inline CGFloat _SquareDistanceFromPointToLine(CGFloat x0, CGFloat y0, CGF
     }
 
     // Draw line segment
+    CGContextBeginPath(context);
     CGContextMoveToPoint(context, x0, y0);
     CGContextAddLineToPoint(context, x1, y1);
-
+    CGContextStrokePath(context);
+    
     // Check if exiting visible area
     if (y0 < minY) {
       i = pointCount - 3;
@@ -863,9 +876,12 @@ static inline CGFloat _SquareDistanceFromPointToLine(CGFloat x0, CGFloat y0, CGF
       y0 = y1;
       x1 = pointList[i + 2].x;
       y1 = pointList[i + 2].y;
+      
+      CGContextBeginPath(context);
       CGContextMoveToPoint(context, x0, y0);
       CGContextAddLineToPoint(context, x1, y1);
-
+      CGContextStrokePath(context);
+      
       visible = YES;
       break;  // We're done
     }
@@ -877,28 +893,19 @@ static inline CGFloat _SquareDistanceFromPointToLine(CGFloat x0, CGFloat y0, CGF
     y1 = pointList[i + 2].y;
     CGFloat x2 = pointList[i + 3].x;
     CGFloat y2 = pointList[i + 3].y;
+    CGContextBeginPath(context);
     CGContextMoveToPoint(context, x0, y0);
     CGContextAddQuadCurveToPoint(context, x1, y1, x2, y2);
-
+    CGContextStrokePath(context);
+    
     i += 3;
     visible = YES;
   }
-
-  BOOL shouldDraw = visible && [self needsToDrawRect:CGRectInset(CGContextGetPathBoundingBox(context), -kMainLineWidth, -kMainLineWidth)];
-  if (shouldDraw) {
-    XLOG_DEBUG_CHECK(!line.virtual || [[(GINode*)line.nodes[0] layer] index] == 0);
-    CGContextSaveGState(context);
-    CGContextSetLineWidth(context, line.branchMainLine && !line.virtual ? kMainLineWidth : kSubLineWidth);
-    CGContextSetLineJoin(context, kCGLineJoinRound);
-    if (line.virtual) {
-      const CGFloat pattern[] = {4, 2};
-      CGContextSetLineDash(context, 0, pattern, 2);
-    }
-    CGContextSetStrokeColorWithColor(context, line.color.CGColor);
-    CGContextStrokePath(context);
-    CGContextRestoreGState(context);
-  }
-
+  
+  XLOG_DEBUG_CHECK(!line.virtual || [[(GINode*)line.nodes[0] layer] index] == 0);
+  
+  CGContextRestoreGState(context);
+  
   if (recompute) {
     data = [[NSData alloc] initWithBytesNoCopy:pointList length:(pointCount * sizeof(CGPoint)) freeWhenDone:YES];
     objc_setAssociatedObject(line, _associatedObjectDataKey, data, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
