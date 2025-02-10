@@ -69,17 +69,17 @@
   }
 
   BOOL failed = NO;
-  BOOL shouldWriteRepository = NO;
+  BOOL needsToWriteIndex = NO;
   for (NSString* path in paths) {
     if (![self addFileInWorkingDirectory:path toIndex:index error:error] || (error && *error != nil)) {
       failed = YES;
-      break;
+      continue;
     }
 
-    shouldWriteRepository = YES;
+    needsToWriteIndex = YES;
   }
 
-  if (shouldWriteRepository) {
+  if (needsToWriteIndex) {
     if (failed) {
       [self writeRepositoryIndex:index error:NULL];
       return NO;
