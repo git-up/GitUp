@@ -1532,10 +1532,21 @@ static void _DrawSelectedNode(CGContextRef context, CGFloat x, CGFloat y, GINode
 
   // Draw all lines in the drawing area
   {
+    // LDD: See issue #1042 (Drawing in dark mode broke in macOS 15.2).
+    // Originally we used normal blends modes in dark mode as it looked better and was easy to see the overlaps.
+    // The bug that manifests with the normal blend mode is some lines don't draw or if they do they draw almost like narrow triangles.
+    // Given that the drawing code is just drawing lines with widths, I'm not sure how this can occur.
+    // Moreover, I'm not sure why changing the blend mode would have any effect in them appearing or not.
+    // Using multiply unfortunately changes the appearance of intersecting lines in dark mode to look less ideal.
+    // I should probably file a feedback with Apple (if I do, I should add the FB# here).
+    //
+    // I'm not 100% sure that the drawing code is bug free, but this code has worked fine unchanged for years.
+    // If I (or anyone else) ever gets time to debug this, I'd love to better understand why changing the blend mode does anything (other than affect the blend mode).
+    
     // Can’t multiply against a dark background.
-    if (!self.effectiveAppearance.matchesDarkAppearance) {
+//    if (!self.effectiveAppearance.matchesDarkAppearance) {
       CGContextSetBlendMode(context, kCGBlendModeMultiply);
-    }
+//    }
 
     [layers enumerateObjectsAtIndexes:indexes
                               options:0
