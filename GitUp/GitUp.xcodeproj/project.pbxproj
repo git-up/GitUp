@@ -477,7 +477,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "# Information derived from https://stackoverflow.com/questions/77397157/mapbox-xcframework-ios-signature-couldn-t-be-copied-to-signatures-because-an-i\nif [ \"$XCODE_VERSION_MAJOR\" = \"1500\" ]; then\n  echo \"Remove signature files (Xcode 15 workaround)\"\n  find \"$BUILD_DIR/${CONFIGURATION}/libssl.xcframework-macos.signature\" -name \"*.signature\" -type f | xargs -r rm\n  find \"$BUILD_DIR/${CONFIGURATION}/libcrypto.xcframework-macos.signature\" -name \"*.signature\" -type f | xargs -r rm\n  find \"$BUILD_DIR/${CONFIGURATION}/libssh2.xcframework-macos.signature\" -name \"*.signature\" -type f | xargs -r rm\n  find \"$BUILD_DIR/${CONFIGURATION}/Sparkle.xcframework-macos.signature\" -name \"*.signature\" -type f | xargs -r rm\nfi\n";
+			shellScript = "# Information derived from https://stackoverflow.com/questions/77397157/mapbox-xcframework-ios-signature-couldn-t-be-copied-to-signatures-because-an-i\nif [ \"$XCODE_VERSION_MAJOR\" -ge \"1500\" ]; then\n  echo \"Remove signature files (Xcode 15 workaround)\"\n  find \"$BUILD_DIR/${CONFIGURATION}/libssl.xcframework-macos.signature\" -name \"*.signature\" -type f | xargs -r rm\n  find \"$BUILD_DIR/${CONFIGURATION}/libcrypto.xcframework-macos.signature\" -name \"*.signature\" -type f | xargs -r rm\n  find \"$BUILD_DIR/${CONFIGURATION}/libssh2.xcframework-macos.signature\" -name \"*.signature\" -type f | xargs -r rm\n  find \"$BUILD_DIR/${CONFIGURATION}/Sparkle.xcframework-macos.signature\" -name \"*.signature\" -type f | xargs -r rm\nelse\n  echo \"No signature files to remove (Xcode version is less than 1500)\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
