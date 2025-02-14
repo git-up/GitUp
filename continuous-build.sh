@@ -41,22 +41,4 @@ ditto -c -k --keepParent "$PRODUCT_PATH" "$ARCHIVE_PATH"
 git tag -f "b$VERSION"
 git push -f origin "b$VERSION"
 
-##### Upload to S3 and update Appcast
-
-INFO_PLIST_PATH="$PRODUCT_PATH/Contents/Info.plist"
-VERSION_ID=`defaults read "$INFO_PLIST_PATH" "CFBundleVersion"`
-VERSION_STRING=`defaults read "$INFO_PLIST_PATH" "CFBundleShortVersionString"`
-MIN_OS=`defaults read "$INFO_PLIST_PATH" "LSMinimumSystemVersion"`
-
-BACKUP_ARCHIVE_NAME="$PRODUCT_NAME-$VERSION_ID.zip"
-APPCAST_URL="https://s3-us-west-2.amazonaws.com/gitup-builds/$CHANNEL/$APPCAST_NAME"
-ARCHIVE_URL="https://s3-us-west-2.amazonaws.com/gitup-builds/$CHANNEL/$ARCHIVE_NAME"
-BACKUP_ARCHIVE_URL="https://s3-us-west-2.amazonaws.com/gitup-builds/$CHANNEL/$BACKUP_ARCHIVE_NAME"
-APPCAST_PATH="GitUp/SparkleAppcast.xml"
-
-ARCHIVE_SIZE=`stat -f "%z" "$ARCHIVE_PATH"`
-
-EDITED_APPCAST_PATH="build/appcast.xml"
-perl -p -e "s|__APPCAST_TITLE__|$PRODUCT_NAME|g;s|__APPCAST_URL__|$APPCAST_URL|g;s|__VERSION_ID__|$VERSION_ID|g;s|__VERSION_STRING__|$VERSION_STRING|g;s|__ARCHIVE_URL__|$ARCHIVE_URL|g;s|__ARCHIVE_SIZE__|$ARCHIVE_SIZE|g;s|__MIN_OS__|$MIN_OS|g" "$APPCAST_PATH" > "$EDITED_APPCAST_PATH"
-
 osascript -e 'display notification "Successfully completed continuous build" with title "GitUp Script" sound name "Hero"'
