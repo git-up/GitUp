@@ -6,7 +6,7 @@
             <title>1.4.3</title>
             <pubDate>Fri, 14 Feb 2025 09:05:00 -0500</pubDate>
             <sparkle:minimumSystemVersion>10.13</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/git-up/GitUp/releases/download/b1052/GitUp.zip" sparkle:version="1052" sparkle:shortVersionString="1.4.3" length="8474746" type="application/zip" sparkle:edSignature="UH5D3T3//Vch19s9C8UKWYqz6KRgERt8DPTNutwcvzvaY9Zz7fuxTvYR0B7tYwn1B+VzmeHS+J3MH0n0sgHtBw=="/>
+            <enclosure url="https://github.com/git-up/GitUp/releases/download/b1052/GitUp.zip" sparkle:version="1052" sparkle:shortVersionString="1.4.3" length="8351710" type="application/zip" sparkle:edSignature="I5YaBZF3U3QFaACHQ/9EnsZgJLQXkA56ZkISQ6qMfQQEL7UcZxfPp9G34efK/KZ3vw7dZfuYTSit9d3h0jjGCA=="/>
         </item>
     </channel>
 </rss>
