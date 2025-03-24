@@ -83,6 +83,7 @@ let package = Package(
     dependencies: [
     ],
     targets: [
+        // Since we don't run libgit2's actual CMake build, we need to replicate its effects here: the files it includes, and the options it resolves
         .target(name: "Libgit2Origin",
                 dependencies: [
                     "libssh2", "libssl", "libcrypto", "llhttp", "ntlmclient"
@@ -90,10 +91,8 @@ let package = Package(
                 path: libgit2OriginPath,
                 exclude: [
                     // ./
-                    "xcode",
                     "ci",
                     "cmake",
-                    "deps",
                     "docs",
                     "examples",
                     "fuzzers",
@@ -108,43 +107,116 @@ let package = Package(
                     "README.md",
                     "SECURITY.md",
                     "update-xcode.sh",
-                    // ./src/
-                    "src/CMakeLists.txt",
-                    "src/features.h.in",
-                    // ./src/hash/sha1
-                    "src/hash/sha1/common_crypto.h",
-                    "src/hash/sha1/common_crypto.c",
-                    "src/hash/sha1/generic.h",
-                    "src/hash/sha1/generic.c",
-                    "src/hash/sha1/mbedtls.h",
-                    "src/hash/sha1/mbedtls.c",
-                    "src/hash/sha1/openssl.h",
-                    "src/hash/sha1/openssl.c",
-                    "src/hash/sha1/win32.h",
-                    "src/hash/sha1/win32.c",
-                    // ./src/hash/
-                    "src/hash/sha1.h",
                     
-                    // ./src/win32
-                    "src/win32",
+                    // ./deps/
+                    "deps/chromium-zlib",
+                    "deps/llhttp",
+                    "deps/ntlmclient",
+                    "deps/pcre",
+                    "deps/winhttp",
+                    // xdiff is the only dependency we're building as part of the Libgit2Origin target, because it seems to need access to some libgit2 files
+                    "deps/zlib",
+                    
+                    // ./deps/
+                    "deps/xdiff/CMakeLists.txt",
+                    
+                    // ./src/
+                    "src/cli",
+                    "src/CMakeLists.txt",
+                    "src/README.md",
+                    
+                    // ./src/libgit2/
+                    "src/libgit2/CMakeLists.txt",
+                    "src/libgit2/config.cmake.in",
+                    "src/libgit2/experimental.h.in",
+                    "src/libgit2/git2.rc",
+                    
+                    // ./src/util/
+                    "src/util/CMakeLists.txt",
+                    "src/util/git2_features.h.in",
+                    "src/util/win32",
+                    
+                    // ./src/util/hash/
+                    "src/util/hash/builtin.h",
+                    "src/util/hash/builtin.c",
+                    "src/util/hash/mbedtls.h",
+                    "src/util/hash/mbedtls.c",
+                    "src/util/hash/openssl.h",
+                    "src/util/hash/openssl.c",
+                    "src/util/hash/sha1dc/sha1.h",
+                    "src/util/hash/win32.h",
+                    "src/util/hash/win32.c",
                     
                     // ./include/git2/
                     "include/git2/stdint.h",
                     
                 ],
-                sources: ["src"],
+                sources: ["deps/xdiff", "src"],
                 resources: nil,
                 publicHeadersPath: "include",
                 cSettings: [
                     .headerSearchPath("src"),
+                    .headerSearchPath("src/libgit2"),
+                    .headerSearchPath("src/util"),
                     .headerSearchPath("deps/llhttp"),
                     .headerSearchPath("deps/ntlmclient"),
+                    .headerSearchPath("deps/xdiff"),
+                    
                     .define("HAVE_QSORT_R_BSD"),
                     .define("_FILE_OFFSET_BITS", to: "64"),
+                    .define("GIT_IO_POLL", to: "1"),
+                    .define("GIT_IO_SELECT", to: "1"),
                     .define("GIT_HTTPPARSER_BUILTIN", to: "1"),
+                    
+                    // Above we exclude git2_features.h.in, which is a template suppose to set feature flags.
+                    // So we need to 1. tell libgit2 the file isn't included and 2. manually set the flags here.
+                    .define("LIBGIT2_NO_FEATURES_H", to: "1"),
+                    
+                    .define("GIT_TRACE", to: "1"),
+                    .define("GIT_THREADS", to: "1"),
+                    .define("GIT_ARCH_64", to: "1"),
+                    .define("GIT_USE_ICONV", to: "1"),
+                    .define("GIT_USE_NSEC", to: "1"),
+                    .define("GIT_USE_STAT_MTIMESPEC", to: "1"),
+                    .define("GIT_USE_FUTIMENS", to: "1"),
+                    .define("GIT_REGEX_REGCOMP_L"),
+                    .define("GIT_NTLM", to: "1"),
+                    .define("GIT_HTTPS", to: "1"),
+                    .define("GIT_SECURE_TRANSPORT", to: "1"),
+                    .define("GIT_SHA1_COLLISIONDETECT", to: "1"),
+                    .define("GIT_SSH_MEMORY_CREDENTIALS", to: "1"),
+                    .define("GIT_SSH", to: "1"),
+                    
+                    // See libgit2/cmake/SelectRegex.cmake
+                    .define("GIT_REGEX_REGCOMP_L", to: "1"),
+                    
+                    // Options set when USE_SSH="libssh2" (default value is ON. exec uses OpenSSH, which supports SSH config files)
+                    // See libgit2/cmake/SelectSSH.cmake
+                    .define("USE_SSH", to: "libssh2"),
+                    .define("GIT_SSH", to: "1"),
+                    .define("GIT_SSH_LIBSSH2", to: "1"),
+                    
+                    // Options set when USE_HTTPS="ON" (default value)
+                    // See libgit2/cmake/SelectHTTPSBackend.cmake
+                    .define("USE_HTTPS", to: "SecureTransport"),
+                    
+                    // Options set when USE_SHA1="CollisionDetection" (default value)
+                    // See libgit2/cmake/SelectHashes.cmake, libgit2/src/util/CMakeLists.txt
+                    .define("USE_SHA1", to: "CollisionDetection"),
+                    .define("GIT_SHA1_COLLISIONDETECT", to: "1"),
                     .define("SHA1DC_NO_STANDARD_INCLUDES", to: "1"),
-                    .define("SHA1DC_CUSTOM_INCLUDE_SHA1_C", to: "\"common.h\""),
-                    .define("SHA1DC_CUSTOM_INCLUDE_UBC_CHECK_C", to: "\"common.h\""),
+                    .define("SHA1DC_CUSTOM_INCLUDE_SHA1_C", to: "\"git2_util.h\""),
+                    .define("SHA1DC_CUSTOM_INCLUDE_UBC_CHECK_C", to: "\"git2_util.h\""),
+                    
+                    // Options set when USE_SHA256="ON" (default value)
+                    // See libgit2/cmake/SelectHashes.cmake
+                    .define("USE_SHA256", to: "CommonCrypto"),
+                    .define("GIT_SHA256_COMMON_CRYPTO", to: "1"),
+                    
+                    // Options set when USE_THREADS="ON" (default value)
+                    // See libgit2/src/CMakeLists.txt
+                    .define("GIT_THREADS", to: "1"),
+                    
                 ] + FeaturesExtractor.extraLibgit2CSettings(),
                 cxxSettings: nil,
                 swiftSettings: nil,
@@ -186,7 +258,7 @@ let package = Package(
                     "ntlm.c",
                     "unicode_iconv.c",
                     "util.c",
-                    "crypt_commoncrypto.c"
+                    "crypt_commoncrypto.c"// maybe include
                 ],
                 resources: nil,
                 publicHeadersPath: ".",
