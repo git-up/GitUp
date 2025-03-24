@@ -5,7 +5,7 @@ import PackageDescription
 import Foundation
 
 let libgit2OriginPath = "./libgit2"
-let httpClientPath = "\(libgit2OriginPath)/deps/http-parser"
+let llhttpPath = "\(libgit2OriginPath)/deps/llhttp"
 let ntlmClientPath = "\(libgit2OriginPath)/deps/ntlmclient"
 
 let librariesPath = "."
@@ -73,8 +73,8 @@ let package = Package(
         .library(name: "Libgit2Origin",
                  targets: ["Libgit2Origin"]
         ),
-        .library(name: "http-client",
-                 targets: ["http-client"]
+        .library(name: "llhttp",
+                 targets: ["llhttp"]
         ),
         .library(name: "ntlmclient",
                  targets: ["ntlmclient"]
@@ -85,7 +85,7 @@ let package = Package(
     targets: [
         .target(name: "Libgit2Origin",
                 dependencies: [
-                    "libssh2", "libssl", "libcrypto", "http-client", "ntlmclient"
+                    "libssh2", "libssl", "libcrypto", "llhttp", "ntlmclient"
                 ],
                 path: libgit2OriginPath,
                 exclude: [
@@ -137,10 +137,11 @@ let package = Package(
                 publicHeadersPath: "include",
                 cSettings: [
                     .headerSearchPath("src"),
-                    .headerSearchPath("deps/http-parser"),
+                    .headerSearchPath("deps/llhttp"),
                     .headerSearchPath("deps/ntlmclient"),
                     .define("HAVE_QSORT_R_BSD"),
                     .define("_FILE_OFFSET_BITS", to: "64"),
+                    .define("GIT_HTTPPARSER_BUILTIN", to: "1"),
                     .define("SHA1DC_NO_STANDARD_INCLUDES", to: "1"),
                     .define("SHA1DC_CUSTOM_INCLUDE_SHA1_C", to: "\"common.h\""),
                     .define("SHA1DC_CUSTOM_INCLUDE_UBC_CHECK_C", to: "\"common.h\""),
@@ -155,12 +156,11 @@ let package = Package(
                 ]
         ),
         
-        .target(name: "http-client",
+        .target(name: "llhttp",
                 dependencies: [],
-                path: httpClientPath,
+                path: llhttpPath,
                 exclude: [
-                    "CMakeLists.txt",
-                    "COPYING"
+                    "CMakeLists.txt"
                 ],
                 sources: nil,
                 resources: nil,
