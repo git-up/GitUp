@@ -13,6 +13,10 @@ let libssh2Path = "\(librariesPath)/libssh2.xcframework"
 let libsslPath = "\(librariesPath)/libssl.xcframework"
 let libcryptoPath = "\(librariesPath)/libcrypto.xcframework"
 
+let silenceWarningsCSettings: [CSetting] = [ // to see libgit2 warnings, set to empty array
+    CSetting.unsafeFlags(["-w"])
+]
+
 enum FeaturesExtractor {
     private struct Define: CustomStringConvertible {
         let define: String
@@ -217,7 +221,9 @@ let package = Package(
                     // See libgit2/src/CMakeLists.txt
                     .define("GIT_THREADS", to: "1"),
                     
-                ] + FeaturesExtractor.extraLibgit2CSettings(),
+                ]
+                + FeaturesExtractor.extraLibgit2CSettings()
+                + silenceWarningsCSettings,
                 cxxSettings: nil,
                 swiftSettings: nil,
                 linkerSettings: [
@@ -237,7 +243,7 @@ let package = Package(
                 sources: nil,
                 resources: nil,
                 publicHeadersPath: ".",
-                cSettings: [],
+                cSettings: silenceWarningsCSettings,
                 cxxSettings: nil,
                 swiftSettings: nil,
                 linkerSettings: []
@@ -266,7 +272,8 @@ let package = Package(
                     .define("NTLM_STATIC", to: "1"),
                     .define("CRYPT_COMMONCRYPTO"),
                     .define("UNICODE_ICONV", to: "1")
-                ],
+                ]
+                + silenceWarningsCSettings,
                 cxxSettings: nil,
                 swiftSettings: nil,
                 linkerSettings: []
