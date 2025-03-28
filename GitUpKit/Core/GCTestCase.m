@@ -201,7 +201,7 @@ static const void* _associatedObjectKey = &_associatedObjectKey;
 }
 
 - (GCRepository *)createLocalRepositoryAtPath:(NSString *)path bare:(BOOL)bare {
-  GCLiveRepository* repo = [[GCLiveRepository alloc] initWithNewLocalRepository:path bare:bare error:NULL];
+  GCLiveRepository* repo = [[GCLiveRepository alloc] initWithNewLocalRepository:path bare:bare defaultBranchName:@"master" error:NULL];
   XCTAssertNotNil(repo);
 
   repo.delegate = self;
