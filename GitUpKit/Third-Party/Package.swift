@@ -86,7 +86,7 @@ let package = Package(
         // Since we don't run libgit2's actual CMake build, we need to replicate its effects here: the files it includes, and the options it resolves
         .target(name: "Libgit2Origin",
                 dependencies: [
-                    "libssh2", "libssl", "libcrypto", "llhttp", "ntlmclient"
+                    "libssl", "libcrypto", "llhttp", "ntlmclient"
                 ],
                 path: libgit2OriginPath,
                 exclude: [
@@ -190,11 +190,11 @@ let package = Package(
                     // See libgit2/cmake/SelectRegex.cmake
                     .define("GIT_REGEX_REGCOMP_L", to: "1"),
                     
-                    // Options set when USE_SSH="libssh2" (default value is ON. exec uses OpenSSH, which supports SSH config files)
+                    // Options set when USE_SSH="exec" (default value is ON. exec uses OpenSSH, which supports SSH config files)
                     // See libgit2/cmake/SelectSSH.cmake
-                    .define("USE_SSH", to: "libssh2"),
+                    .define("USE_SSH", to: "exec"),
                     .define("GIT_SSH", to: "1"),
-                    .define("GIT_SSH_LIBSSH2", to: "1"),
+                    .define("GIT_SSH_EXEC", to: "1"),
                     
                     // Options set when USE_HTTPS="ON" (default value)
                     // See libgit2/cmake/SelectHTTPSBackend.cmake
