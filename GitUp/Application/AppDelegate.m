@@ -104,6 +104,12 @@
 
 #pragma mark - Initialize
 + (void)initialize {
+  // Ignore when libgit2 writes on a closed pipe
+  // This signal() call causes libgit's closed pipe writes to fail with an EPIPE error, which libgit2 seems to handle correctly.
+  // Without this line, GitUp would instead immediately exit, with no crash log.
+  // libgit2 has what looks like a built-in solution (`disable_signals()`), but it doesn't seem to work for us.
+  signal(SIGPIPE, SIG_IGN);
+  
   NSDictionary* defaults = @{
     GICommitMessageViewUserDefaultKey_ShowInvisibleCharacters : @(YES),
     GICommitMessageViewUserDefaultKey_ShowMargins : @(YES),
