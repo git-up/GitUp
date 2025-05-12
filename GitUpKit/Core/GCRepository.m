@@ -556,7 +556,7 @@ static int _TransportMessageCallback(const char* str, int len, void* payload) {
 
 // Called when fetching only
 static int _FetchTransferProgressCallback(const git_transfer_progress* stats, void* payload) {
-  XLOG_DEBUG(@"Remote fetched %i / %i objects (%zu bytes)", stats->received_objects, stats->total_objects, stats->received_bytes);
+  XLOG_DEBUG(@"Remote fetched %u / %u objects (%zu bytes)", stats->received_objects, stats->total_objects, stats->received_bytes);
   GCRepository* repository = (__bridge GCRepository*)payload;
   if (repository->_hasFetchProgressDelegate) {
     float progress = roundf(100.0 * (float)(stats->received_objects + stats->indexed_objects) / (float)(2 * stats->total_objects));
@@ -586,13 +586,13 @@ static int _UpdateTipsCallback(const char* refname, const git_oid* a, const git_
 
 // Called when pushing only
 static int _PackbuilderProgressCallback(int stage, unsigned int current, unsigned int total, void* payload) {
-  XLOG_DEBUG(@"Remote packed %i / %i objects", current, total);
+  XLOG_DEBUG(@"Remote packed %u / %u objects", current, total);
   return GIT_OK;
 }
 
 // Called when pushing only
 static int _PushTransferProgressCallback(unsigned int current, unsigned int total, size_t bytes, void* payload) {
-  XLOG_DEBUG(@"Pushed %i / %i objects (%zu bytes)", current, total, bytes);
+  XLOG_DEBUG(@"Pushed %u / %u objects (%zu bytes)", current, total, bytes);
   GCRepository* repository = (__bridge GCRepository*)payload;
   if (repository->_hasPushProgressDelegate) {
     float progress = roundf(100.0 * (float)current / (float)total);
