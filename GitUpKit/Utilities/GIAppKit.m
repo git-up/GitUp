@@ -209,7 +209,7 @@ void GIPerformOnMainRunLoop(dispatch_block_t block) {
                           NSFontAttributeName : self.font
                         }]
                             .width;
-    CGContextRef context = [[NSGraphicsContext currentContext] graphicsPort];
+    CGContextRef context = [[NSGraphicsContext currentContext] CGContext];
 
     CGContextSaveGState(context);
 
@@ -259,45 +259,6 @@ void GIPerformOnMainRunLoop(dispatch_block_t block) {
 @end
 
 @implementation GITableCellView
-
-- (void)saveTextFieldColors {
-  if (@available(macOS 10.14, *)) {
-    // Handled fully automatically.
-    return;
-  }
-
-  for (NSView* view in self.subviews) {
-    if ([view isKindOfClass:[NSTextField class]]) {
-      objc_setAssociatedObject(view, _associatedObjectCommitKey, [(NSTextField*)view textColor], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-    }
-  }
-}
-
-- (void)awakeFromNib {
-  [super awakeFromNib];
-
-  [self saveTextFieldColors];
-}
-
-- (void)setBackgroundStyle:(NSBackgroundStyle)backgroundStyle {
-  [super setBackgroundStyle:backgroundStyle];
-
-  if (@available(macOS 10.14, *)) {
-    // Handled fully automatically.
-    return;
-  }
-
-  for (NSView* view in self.subviews) {
-    if ([view isKindOfClass:[NSTextField class]]) {
-      if (backgroundStyle == NSBackgroundStyleEmphasized) {
-        [(NSTextField*)view setTextColor:NSColor.alternateSelectedControlTextColor];
-      } else {
-        [(NSTextField*)view setTextColor:objc_getAssociatedObject(view, _associatedObjectCommitKey)];
-      }
-    }
-  }
-}
-
 @end
 
 @implementation GITableView
@@ -430,11 +391,7 @@ void GIPerformOnMainRunLoop(dispatch_block_t block) {
 @implementation NSAppearance (GIAppearance)
 
 - (BOOL)matchesDarkAppearance {
-  if (@available(macOS 10.14, *)) {
-    return [[self bestMatchFromAppearancesWithNames:@[ NSAppearanceNameAqua, NSAppearanceNameDarkAqua ]] isEqual:NSAppearanceNameDarkAqua];
-  } else {
-    return NO;
-  }
+  return [[self bestMatchFromAppearancesWithNames:@[ NSAppearanceNameAqua, NSAppearanceNameDarkAqua ]] isEqual:NSAppearanceNameDarkAqua];
 }
 
 @end

@@ -40,6 +40,8 @@ static inline GCConfigLevel _ConfigLevelFromLevel(git_config_level_t level) {
 #endif
     case GIT_CONFIG_HIGHEST_LEVEL:
       break;
+    case GIT_CONFIG_LEVEL_WORKTREE:
+      break;
   }
   XLOG_DEBUG_UNREACHABLE();
   return 0;

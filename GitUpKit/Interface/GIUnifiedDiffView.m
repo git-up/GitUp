@@ -248,7 +248,7 @@ typedef struct {
 
 - (void)drawRect:(NSRect)dirtyRect {
   NSRect bounds = self.bounds;
-  CGContextRef context = [[NSGraphicsContext currentContext] graphicsPort];
+  CGContextRef context = [[NSGraphicsContext currentContext] CGContext];
   CGContextSaveGState(context);
 
   [self updateLayoutForWidth:bounds.size.width];

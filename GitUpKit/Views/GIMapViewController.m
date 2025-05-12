@@ -346,7 +346,7 @@
           item = [[NSMenuItem alloc] initWithTitle:remoteBranch.name action:@selector(_configureUpstreamForLocalBranch:) keyEquivalent:@""];
           item.representedObject = @[ branch, remoteBranch ];
           if ([upstream isEqualToBranch:remoteBranch]) {
-            item.state = NSOnState;
+            item.state = NSControlStateValueOn;
           }
           [submenu addItem:item];
         }
@@ -361,7 +361,7 @@
             item = [[NSMenuItem alloc] initWithTitle:localBranch.name action:@selector(_configureUpstreamForLocalBranch:) keyEquivalent:@""];
             item.representedObject = @[ branch, localBranch ];
             if ([upstream isEqualToBranch:localBranch]) {
-              item.state = NSOnState;
+              item.state = NSControlStateValueOn;
             }
             [submenu addItem:item];
           }
@@ -607,28 +607,28 @@
   }
 
   if (item.action == @selector(toggleVirtualTips:)) {
-    [(NSMenuItem*)item setState:(_showsVirtualTips ? NSOnState : NSOffState)];
+    [(NSMenuItem*)item setState:(_showsVirtualTips ? NSControlStateValueOn : NSControlStateValueOff)];
     return YES;
   }
   if (item.action == @selector(toggleTagTips:)) {
-    [(NSMenuItem*)item setState:(_hidesTagTips && !_forceShowAllTips ? NSOffState : NSOnState)];
+    [(NSMenuItem*)item setState:(_hidesTagTips && !_forceShowAllTips ? NSControlStateValueOff : NSControlStateValueOn)];
     return !_forceShowAllTips;
   }
   if (item.action == @selector(toggleRemoteBranchTips:)) {
-    [(NSMenuItem*)item setState:(_hidesRemoteBranchTips && !_forceShowAllTips ? NSOffState : NSOnState)];
+    [(NSMenuItem*)item setState:(_hidesRemoteBranchTips && !_forceShowAllTips ? NSControlStateValueOff : NSControlStateValueOn)];
     return !_forceShowAllTips;
   }
   if (item.action == @selector(toggleStaleBranchTips:)) {
-    [(NSMenuItem*)item setState:(_hidesStaleBranchTips && !_forceShowAllTips ? NSOffState : NSOnState)];
+    [(NSMenuItem*)item setState:(_hidesStaleBranchTips && !_forceShowAllTips ? NSControlStateValueOff : NSControlStateValueOn)];
     return !_forceShowAllTips;
   }
 
   if (item.action == @selector(toggleTagLabels:)) {
-    [(NSMenuItem*)item setState:(_graphView.showsTagLabels ? NSOnState : NSOffState)];
+    [(NSMenuItem*)item setState:(_graphView.showsTagLabels ? NSControlStateValueOn : NSControlStateValueOff)];
     return YES;
   }
   if (item.action == @selector(toggleBranchLabels:)) {
-    [(NSMenuItem*)item setState:(_graphView.showsBranchLabels ? NSOnState : NSOffState)];
+    [(NSMenuItem*)item setState:(_graphView.showsBranchLabels ? NSControlStateValueOn : NSControlStateValueOff)];
     return YES;
   }
 
@@ -1010,7 +1010,7 @@
 - (IBAction)createBranchAtSelectedCommit:(id)sender {
   GCHistoryCommit* commit = self.graphView.selectedNode.commit;
   _createBranchTextField.stringValue = @"";
-  _createBranchButton.state = NSOnState;
+  _createBranchButton.state = NSControlStateValueOn;
   [self.windowController runModalView:_createBranchView
             withInitialFirstResponder:_createBranchTextField
                     completionHandler:^(BOOL success) {

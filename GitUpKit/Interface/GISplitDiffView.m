@@ -331,7 +331,7 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
   CGFloat lineStartX = textLineStartX();
   CGFloat lineNumberMargin = textLineNumberMargin();
 
-  CGContextRef context = [[NSGraphicsContext currentContext] graphicsPort];
+  CGContextRef context = [[NSGraphicsContext currentContext] CGContext];
   CGContextSaveGState(context);
 
   [self updateLayoutForWidth:bounds.size.width];

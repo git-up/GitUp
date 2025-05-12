@@ -115,7 +115,7 @@ NSString* const GIDiffContentsViewControllerUserDefaultKey_DiffViewMode = @"GIDi
 }
 
 - (void)drawRect:(NSRect)dirtyRect {
-  CGContextRef context = [[NSGraphicsContext currentContext] graphicsPort];
+  CGContextRef context = [[NSGraphicsContext currentContext] CGContext];
   NSRect bounds = self.bounds;
 
   CGContextSaveGState(context);

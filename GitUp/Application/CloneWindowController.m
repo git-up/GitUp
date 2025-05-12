@@ -47,7 +47,7 @@
 #pragma mark - Window Lifecycle
 - (void)beforeRunInModal {
   self.urlTextField.stringValue = self.url;
-  self.cloneRecursiveButton.state = NSOnState;
+  self.cloneRecursiveButton.state = NSControlStateValueOn;
 }
 
 - (void)windowDidLoad {

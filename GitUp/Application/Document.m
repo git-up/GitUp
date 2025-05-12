@@ -313,22 +313,10 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
     [navigateControl setWidth:kNavigateSegmentWidth forSegment:kNavigationAction_Previous];
   }
 
-  if (@available(macOS 10.14, *)) {
-    NSLayoutConstraint* searchFieldPreferredWidth = [_searchItem.searchField.widthAnchor constraintEqualToConstant:kSearchFieldCompactWidth];
-    searchFieldPreferredWidth.priority = NSLayoutPriorityDefaultHigh - 20;
-    NSLayoutConstraint* searchFieldMaxWidth = [_searchItem.searchField.widthAnchor constraintLessThanOrEqualToConstant:kSearchFieldExpandedWidth];
-    [NSLayoutConstraint activateConstraints:@[ searchFieldPreferredWidth, searchFieldMaxWidth ]];
-  } else {
-    _navigateItem.minSize = NSMakeSize(kNavigateMinWidth, _navigateItem.minSize.height);
-    _titleItem.maxSize = NSMakeSize(kTitleMaxWidth, _titleItem.maxSize.height);
-
-    // Text fields must be drawn on an opaque background pre-Mojave to avoid
-    // subpixel antialiasing issues during animation.
-    for (NSTextField* field in @[ _infoTextField1, _infoTextField2, _progressTextField ]) {
-      field.drawsBackground = YES;
-      field.backgroundColor = _mainWindow.backgroundColor;
-    }
-  }
+  NSLayoutConstraint* searchFieldPreferredWidth = [_searchItem.searchField.widthAnchor constraintEqualToConstant:kSearchFieldCompactWidth];
+  searchFieldPreferredWidth.priority = NSLayoutPriorityDefaultHigh - 20;
+  NSLayoutConstraint* searchFieldMaxWidth = [_searchItem.searchField.widthAnchor constraintLessThanOrEqualToConstant:kSearchFieldExpandedWidth];
+  [NSLayoutConstraint activateConstraints:@[ searchFieldPreferredWidth, searchFieldMaxWidth ]];
 
   _mapViewController = [[GIMapViewController alloc] initWithRepository:_repository];
   _mapViewController.delegate = self;
@@ -1628,7 +1616,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 
     WindowModeID windowModeID = _WindowModeIDFromString(_windowMode);
     [modeControl selectSegmentWithTag:windowModeID];
-    menuItem.state = menuItem.tag == windowModeID ? NSOnState : NSOffState;
+    menuItem.state = menuItem.tag == windowModeID ? NSControlStateValueOn : NSControlStateValueOff;
 
     return !_windowController.hasModalView;
   }
@@ -1667,7 +1655,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 }
 
 - (IBAction)resetHard:(id)sender {
-  _untrackedButton.state = NSOffState;
+  _untrackedButton.state = NSControlStateValueOff;
   NSAlert* alert = [[NSAlert alloc] init];
   alert.type = kGIAlertType_Stop;
   alert.messageText = NSLocalizedString(@"Are you sure you want to reset the index and working directory to the current checkout?", nil);
@@ -1780,12 +1768,12 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 
 - (IBAction)toggleSnapshots:(id)sender {
   if (_snapshotsView.superview) {
-    [self setSnapshotToggleState:NSOffState];
+    [self setSnapshotToggleState:NSControlStateValueOff];
     _mapViewController.previewHistory = nil;
     [self _removeSideView:_snapshotsView completion:NULL];
     [_mainWindow makeFirstResponder:_mapViewController.preferredFirstResponder];
   } else {
-    [self setSnapshotToggleState:NSOnState];
+    [self setSnapshotToggleState:NSControlStateValueOn];
     [_mainWindow makeFirstResponder:nil];  // Force end-editing in search field to avoid close button remaining around
     [self _addSideView:_snapshotsView withIdentifier:kSideViewIdentifier_Snapshots completion:NULL];
     [_mainWindow makeFirstResponder:_snapshotListViewController.preferredFirstResponder];

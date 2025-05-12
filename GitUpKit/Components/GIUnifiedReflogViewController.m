@@ -216,7 +216,6 @@ static NSString* _StringFromActions(GCReflogActions actions) {
   view.messageTextField.textColor = color;
   view.restoreButton.hidden = ![_tableView isRowSelected:row] || (view.mode > 0);
   view.restoreButton.enabled = (view.mode == 0);
-  [view saveTextFieldColors];
   return view;
 }
 

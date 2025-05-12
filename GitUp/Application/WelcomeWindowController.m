@@ -24,7 +24,7 @@
 #pragma mark - Setup
 - (void)setup {
   [self.imageView unregisterDraggedTypes];
-  [self registerForDraggedTypes:@[ NSURLPboardType ]];
+  [self registerForDraggedTypes:@[ NSPasteboardTypeURL ]];
 }
 
 - (void)awakeFromNib {

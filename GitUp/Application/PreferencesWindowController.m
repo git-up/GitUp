@@ -28,10 +28,8 @@ static NSString* const PreferencesWindowController_Identifier_General = @"genera
 
 @implementation PreferencesThemeService
 + (NSAppearanceName)appearanceNameWithTheme:(NSString*)theme {
-  if (@available(macOS 10.14, *)) {
-    if ([theme isEqualToString:PreferencesWindowController_Theme_Dark]) {
-      return NSAppearanceNameDarkAqua;
-    }
+  if ([theme isEqualToString:PreferencesWindowController_Theme_Dark]) {
+    return NSAppearanceNameDarkAqua;
   }
   if ([theme isEqualToString:PreferencesWindowController_Theme_SystemPreference]) {
     return nil;
@@ -44,9 +42,7 @@ static NSString* const PreferencesWindowController_Identifier_General = @"genera
 
 + (void)applyTheme:(NSString*)theme {
   NSAppearanceName name = [self appearanceNameWithTheme:theme];
-  if (@available(macOS 10.14, *)) {
-    NSApp.appearance = name != nil ? [NSAppearance appearanceNamed:name] : nil;
-  }
+  NSApp.appearance = name != nil ? [NSAppearance appearanceNamed:name] : nil;
   [NSUserDefaults.standardUserDefaults setObject:theme forKey:kUserDefaultsKey_Theme];
 }
 

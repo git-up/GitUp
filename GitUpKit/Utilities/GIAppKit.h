@@ -62,7 +62,6 @@ FOUNDATION_EXPORT void GIPerformOnMainRunLoop(dispatch_block_t block);
 
 @interface GITableCellView : NSTableCellView
 @property(nonatomic) NSInteger row;
-- (void)saveTextFieldColors;
 @end
 
 @interface GITableView : NSTableView
