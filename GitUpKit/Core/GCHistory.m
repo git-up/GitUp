@@ -901,19 +901,17 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
   // Configure commit tree walker to start from tips
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_revwalk_new, &walker, self.private);
   git_revwalk_sorting(walker, GIT_SORT_NONE);
+  git_revwalk_add_hide_block(walker, ^int(const git_oid *commit_id) {
+    return CFDictionaryContainsKey(lookup, commit_id);
+  });
   if (historyTips) {
     for (GCCommit* tip in tips) {
       if (![historyTips containsObject:tip]) {
         const git_oid* oid = git_commit_id(tip.private);
-        if (CFDictionaryContainsKey(lookup, oid)) {
-          CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_revwalk_hide, walker, oid);
-        } else {
+        if (!CFDictionaryContainsKey(lookup, oid)) {
           CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_revwalk_push, walker, oid);
         }
       }
-    }
-    for (GCCommit* historyTip in historyTips) {
-      CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_revwalk_hide, walker, git_commit_id(historyTip.private));
     }
   } else {
     for (GCCommit* tip in tips) {
@@ -929,9 +927,6 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
       break;
     }
     CHECK_LIBGIT2_FUNCTION_CALL(goto cleanup, status, == GIT_OK);
-    if (historyTips && CFDictionaryContainsKey(lookup, &oid)) {
-      continue;
-    }
     git_commit* walkCommit;
     CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_commit_lookup, &walkCommit, self.private, &oid);
     GCHistoryCommit* commit = [[GCHistoryCommit alloc] initWithRepository:self commit:walkCommit autoIncrementID:nextAutoIncrementID++];
