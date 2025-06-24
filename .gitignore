@@ -1,7 +1,52 @@
-.DS_Store
-xcuserdata
-project.xcworkspace
-build
+# Build artifacts
+bin/
+obj/
+*.dll
+*.exe
+*.pdb
+*.cache
+*.log
 
-# User-specific xcconfig files
-Xcode-Configurations/DEVELOPMENT_TEAM.xcconfig
+# Visual Studio specific files
+.vs/
+*.user
+*.suo
+*.csproj.user
+
+# Revit-specific files
+*.addin
+*.rfa
+*.rvt
+*.rte
+*.rft
+
+# NuGet packages
+packages/
+*.nupkg
+project.lock.json
+project.fragment.lock.json
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.old
+
+# OS generated files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Rider IDE specific files
+.idea/
+*.iml
+
+# Logs and debug files
+*.log
+*.tlog
+*.dmp
+
+# Other IDE-specific settings
+*.ipch
+*.VC.db
+
