@@ -1,0 +1,32 @@
+ <Card className="col-span-2">
+    <CardContent>
+      <h2 className="text-xl font-bold mb-4">Montaj Projeleri</h2>
+      <table className="w-full border-collapse">
+        <thead>
+          <tr>
+            <th className="border p-2 text-left">Proje</th>
+            <th className="border p-2">Müşteri</th>
+            <th className="border p-2">Kat</th>
+            <th className="border p-2">Durum</th>
+          </tr>
+        </thead>
+        <tbody>
+          {projects.map((p) => (
+            <tr key={p.id}>
+              <td className="border p-2">{p.name}</td>
+              <td className="border p-2">{p.customer}</td>
+              <td className="border p-2 text-center">{p.floors}</td>
+              <td className="border p-2">
+                <Progress value={p.status} className="w-full" />
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <div className="mt-4">
+        <Button onClick={() => alert("Yeni proje ekleme geliyor!")}>Yeni Proje Ekle</Button>
+      </div>
+    </CardContent>
+  </Card>
+</div>
+); }
