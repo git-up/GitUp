@@ -47,9 +47,7 @@
 
 #define kMaxProgressRefreshRate 10.0  // Hz
 
-#define kNavigateMinWidth 174.0
 #define kNavigateSegmentWidth 34.0
-#define kTitleMaxWidth HUGE_VALF
 #define kSearchFieldCompactWidth 180.0
 #define kSearchFieldExpandedWidth 238.0
 
@@ -64,7 +62,7 @@ typedef NS_ENUM(NSInteger, NavigationAction) {
 @property(nonatomic) IBOutlet GICustomToolbarItem* navigateItem;
 @property(nonatomic) IBOutlet GICustomToolbarItem* titleItem;
 @property(nonatomic) IBOutlet NSToolbarItem* snapshotsItem;
-@property(nonatomic) IBOutlet NSToolbarItem<GISearchToolbarItem>* searchItem;
+@property(nonatomic) IBOutlet NSSearchToolbarItem* searchItem;
 @end
 
 static NSDictionary* _helpPlist = nil;
@@ -300,18 +298,7 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
 
   NSSegmentedControl* modeControl = (NSSegmentedControl*)_navigateItem.primaryControl;
   NSSegmentedControl* navigateControl = (NSSegmentedControl*)_navigateItem.secondaryControl;
-  if (@available(macOS 11, *)) {
-    // Fully custom symbols not available before 11.0.
-    [modeControl setImage:[NSImage imageNamed:@"circle.2.line.diagonal"] forSegment:kWindowModeID_Map];
-  } else {
-    _mainWindow.titleVisibility = NSWindowTitleHidden;
-    [modeControl setWidth:kNavigateSegmentWidth forSegment:kWindowModeID_Map];
-    [modeControl setWidth:kNavigateSegmentWidth forSegment:kWindowModeID_Commit];
-    [modeControl setWidth:kNavigateSegmentWidth forSegment:kWindowModeID_Stashes];
-    [navigateControl setWidth:kNavigateSegmentWidth forSegment:kNavigationAction_Exit];
-    [navigateControl setWidth:kNavigateSegmentWidth forSegment:kNavigationAction_Next];
-    [navigateControl setWidth:kNavigateSegmentWidth forSegment:kNavigationAction_Previous];
-  }
+  [modeControl setImage:[NSImage imageNamed:@"circle.2.line.diagonal"] forSegment:kWindowModeID_Map];
 
   NSLayoutConstraint* searchFieldPreferredWidth = [_searchItem.searchField.widthAnchor constraintEqualToConstant:kSearchFieldCompactWidth];
   searchFieldPreferredWidth.priority = NSLayoutPriorityDefaultHigh - 20;
@@ -619,9 +606,7 @@ static inline NSString* _FormatCommitCount(NSNumberFormatter* formatter, NSUInte
   NSString* countText = [NSString stringWithFormat:NSLocalizedString(@"%@", nil), _FormatCommitCount(_numberFormatter, totalCount)];
   _titleItem.primaryControl.stringValue = _windowController.window.title;
   _titleItem.secondaryControl.stringValue = countText;
-  if (@available(macOS 11.0, *)) {
-    _windowController.window.subtitle = countText;
-  }
+  _windowController.window.subtitle = countText;
 }
 
 static NSString* _StringFromRepositoryState(GCRepositoryState state) {
@@ -1146,11 +1131,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 #pragma mark - NSToolbarDelegate
 
 - (NSArray*)toolbarDefaultItemIdentifiers:(NSToolbar*)toolbar {
-  if (@available(macOS 11, *)) {
-    return @[ _navigateItem.itemIdentifier, NSToolbarFlexibleSpaceItemIdentifier, _snapshotsItem.itemIdentifier, _searchItem.itemIdentifier ];
-  } else {
-    return @[ _navigateItem.itemIdentifier, NSToolbarSpaceItemIdentifier, _titleItem.itemIdentifier, NSToolbarFlexibleSpaceItemIdentifier, _snapshotsItem.itemIdentifier, _searchItem.itemIdentifier ];
-  }
+  return @[ _navigateItem.itemIdentifier, NSToolbarFlexibleSpaceItemIdentifier, _snapshotsItem.itemIdentifier, _searchItem.itemIdentifier ];
 }
 
 #pragma mark - NSTextFieldDelegate
@@ -1662,9 +1643,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
   alert.informativeText = NSLocalizedString(@"Any operation in progress (merge, rebase, etc...) will be aborted, and any uncommitted change, including in submodules, will be discarded.\n\nThis action cannot be undone.", nil);
   alert.accessoryView = _resetView;
   NSButton* reset = [alert addButtonWithTitle:NSLocalizedString(@"Reset", nil)];
-  if (@available(macOS 11, *)) {
-    reset.hasDestructiveAction = YES;
-  }
+  reset.hasDestructiveAction = YES;
   [alert addButtonWithTitle:NSLocalizedString(@"Cancel", nil)];
   [alert beginSheetModalForWindow:_mainWindow
                 completionHandler:^(NSInteger returnCode) {

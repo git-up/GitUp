@@ -1632,7 +1632,7 @@
 					"$(inherited)",
 					"$(SDKROOT)/usr/lib/system",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MACOSX_DEPLOYMENT_TARGET = 11.5;
 				PRODUCT_BUNDLE_IDENTIFIER = co.gitup.kit;
 				PRODUCT_NAME = GitUpKit;
 				SDKROOT = macosx;
@@ -1657,7 +1657,7 @@
 					"$(inherited)",
 					"$(SDKROOT)/usr/lib/system",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MACOSX_DEPLOYMENT_TARGET = 11.5;
 				PRODUCT_BUNDLE_IDENTIFIER = co.gitup.kit;
 				PRODUCT_NAME = GitUpKit;
 				SDKROOT = macosx;

@@ -303,11 +303,11 @@
 }
 
 - (void)openFileWithDefaultEditor:(NSString*)path {
-  [[NSWorkspace sharedWorkspace] openFile:[self.repository absolutePathForFile:path]];  // This will silently fail if the file doesn't exist in the working directory
+  [[NSWorkspace sharedWorkspace] openURL:[self.repository absoluteURLForFile:path]];  // This will silently fail if the file doesn't exist in the working directory
 }
 
 - (void)showFileInFinder:(NSString*)path {
-  [[NSWorkspace sharedWorkspace] activateFileViewerSelectingURLs:@[ [NSURL fileURLWithPath:[self.repository absolutePathForFile:path]] ]];
+  [[NSWorkspace sharedWorkspace] activateFileViewerSelectingURLs:@[ [self.repository absoluteURLForFile:path] ]];
 }
 
 - (void)openSubmoduleWithApp:(NSString*)path {

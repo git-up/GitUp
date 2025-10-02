@@ -235,9 +235,7 @@
     NSButton* defaultButton = [alert addButtonWithTitle:button];
     if (type == kGIAlertType_Danger) {
       defaultButton.keyEquivalent = @"";
-      if (@available(macOS 11, *)) {
-        defaultButton.hasDestructiveAction = YES;
-      }
+      defaultButton.hasDestructiveAction = YES;
     }
     [alert addButtonWithTitle:NSLocalizedString(@"Cancel", nil)];
     [self presentAlert:alert

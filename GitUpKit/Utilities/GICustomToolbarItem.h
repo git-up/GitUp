@@ -22,18 +22,3 @@
 @property(nonatomic, weak) IBOutlet NSControl* secondaryControl;
 + (void)validateAsUserInterfaceItem:(id)item;
 @end
-
-// The search toolbar item will respond to at least these methods, even
-// before macOS 11.
-@protocol GISearchToolbarItem <NSObject>
-@property(nonatomic, readonly) NSSearchField* searchField;
-- (void)beginSearchInteraction;
-@end
-
-// Use as the custom class for an `NSSearchToolbarItem` in a nib.
-// It is automatically decoded as `NSSearchToolbarItem` when available.
-@interface GISearchToolbarItem : GICustomToolbarItem <GISearchToolbarItem>
-@end
-
-@interface NSSearchToolbarItem (GICustomToolbarItem) <GISearchToolbarItem>
-@end

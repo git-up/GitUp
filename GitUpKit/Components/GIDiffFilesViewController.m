@@ -39,7 +39,6 @@ static const NSPasteboardType GIPasteboardTypeFileURL = @"public.file-url";
 @end
 
 /// Allows augmenting a file promise with custom intra-app data.
-API_AVAILABLE(macos(10.12))
 @interface GIDiffFileProvider : NSFilePromiseProvider
 @property(strong) id<NSPasteboardWriting> overridePasteboardWriter;
 @end
@@ -339,7 +338,7 @@ static NSImage* _untrackedImage = nil;
   }
 }
 
-- (NSString*)filePromiseProvider:(NSFilePromiseProvider*)filePromiseProvider fileNameForType:(NSString*)fileType API_AVAILABLE(macos(10.12)) {
+- (NSString*)filePromiseProvider:(NSFilePromiseProvider*)filePromiseProvider fileNameForType:(NSString*)fileType {
   GCDiffDelta* delta = filePromiseProvider.userInfo;
   NSString* SHA1 = [[self _SHA1ForDelta:delta] substringToIndex:7];
   NSString* basename = delta.canonicalPath.stringByDeletingPathExtension.lastPathComponent;
@@ -348,7 +347,7 @@ static NSImage* _untrackedImage = nil;
   return filename;
 }
 
-- (void)filePromiseProvider:(NSFilePromiseProvider*)filePromiseProvider writePromiseToURL:(NSURL*)url completionHandler:(void (^)(NSError* errorOrNil))completionHandler API_AVAILABLE(macos(10.12)) {
+- (void)filePromiseProvider:(NSFilePromiseProvider*)filePromiseProvider writePromiseToURL:(NSURL*)url completionHandler:(void (^)(NSError* errorOrNil))completionHandler {
   GCDiffDelta* delta = filePromiseProvider.userInfo;
   NSString* SHA1 = [self _SHA1ForDelta:delta];
   NSError* error;

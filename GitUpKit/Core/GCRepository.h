@@ -68,6 +68,7 @@ typedef NS_ENUM(NSUInteger, GCFileMode) {
 
 - (BOOL)checkPathNotIgnored:(NSString*)path error:(NSError**)error;
 
+- (NSURL*)absoluteURLForFile:(NSString*)path;
 - (NSString*)absolutePathForFile:(NSString*)path;
 
 - (BOOL)safeDeleteFile:(NSString*)path error:(NSError**)error;  // Moves file to Trash (OS X only)

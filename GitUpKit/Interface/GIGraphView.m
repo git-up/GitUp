@@ -1375,9 +1375,9 @@ static void _DrawSelectedNode(CGContextRef context, CGFloat x, CGFloat y, GINode
   // Draw label
 
   if (isFirstResponder) {
-    CGContextSetFillColorWithColor(context, [[NSColor alternateSelectedControlColor] CGColor]);  // NSTableView focused highlight color
+    CGContextSetFillColorWithColor(context, NSColor.selectedContentBackgroundColor.CGColor);  // NSTableView focused highlight color
   } else {
-    CGContextSetFillColorWithColor(context, [[NSColor secondarySelectedControlColor] CGColor]);  // NSTableView unfocused highlight color
+    CGContextSetFillColorWithColor(context, NSColor.unemphasizedSelectedContentBackgroundColor.CGColor);  // NSTableView unfocused highlight color
   }
   CGContextAddPath(context, labelPath);
   CGContextFillPath(context);

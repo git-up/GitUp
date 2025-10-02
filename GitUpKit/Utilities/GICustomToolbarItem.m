@@ -15,10 +15,6 @@
 
 #import "GICustomToolbarItem.h"
 
-API_AVAILABLE(macos(11))
-@interface GINSSearchToolbarItem : NSSearchToolbarItem
-@end
-
 @implementation GICustomToolbarItem
 
 - (void)setEnabled:(BOOL)enabled {
@@ -47,39 +43,6 @@ API_AVAILABLE(macos(11))
   } else {
     [sender setEnabled:YES];
   }
-}
-
-@end
-
-// MARK: -
-
-@implementation GISearchToolbarItem
-
-+ (id)allocWithZone:(NSZone*)zone {
-  if (@available(macOS 11, *)) {
-    return (id)[GINSSearchToolbarItem allocWithZone:zone];
-  } else {
-    return [super allocWithZone:zone];
-  }
-}
-
-- (NSSearchField*)searchField {
-  if (![self.view isKindOfClass:NSSearchField.self]) return nil;
-  return (NSSearchField*)self.view;
-}
-
-- (void)beginSearchInteraction {
-  [self.searchField selectText:nil];
-}
-
-@end
-
-// MARK: -
-
-@implementation GINSSearchToolbarItem
-
-- (void)validate {
-  [GICustomToolbarItem validateAsUserInterfaceItem:self];
 }
 
 @end

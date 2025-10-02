@@ -357,7 +357,7 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
   if (_lines.count) {
     drawHorizontalSeparator(0.5);
 
-    NSColor* selectedColor = self.window.keyWindow && (self.window.firstResponder == self) ? [NSColor selectedControlColor] : [NSColor secondarySelectedControlColor];
+    NSColor* selectedColor = self.window.keyWindow && (self.window.firstResponder == self) ? NSColor.selectedControlColor : NSColor.unemphasizedSelectedContentBackgroundColor;
     CGContextSetTextMatrix(context, CGAffineTransformIdentity);
     NSUInteger count = _lines.count;
     NSUInteger start = MIN(MAX(count - (dirtyRect.origin.y + dirtyRect.size.height - kTextBottomPadding) / self.lineHeight, 0), count);

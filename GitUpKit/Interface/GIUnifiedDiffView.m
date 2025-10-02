@@ -277,7 +277,7 @@ typedef struct {
   if (_frame) {
     drawHorizontalSeparator(0.5);
 
-    NSColor* selectedColor = self.window.keyWindow && (self.window.firstResponder == self) ? [NSColor selectedControlColor] : [NSColor secondarySelectedControlColor];
+    NSColor* selectedColor = self.window.keyWindow && (self.window.firstResponder == self) ? NSColor.selectedControlColor : NSColor.unemphasizedSelectedContentBackgroundColor;
     CGContextSetTextMatrix(context, CGAffineTransformIdentity);
     CFArrayRef lines = CTFrameGetLines(_frame);
     CFIndex count = CFArrayGetCount(lines);

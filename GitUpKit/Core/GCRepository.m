@@ -263,6 +263,11 @@ static int _ReferenceForEachCallback(const char* refname, void* payload) {
   return YES;
 }
 
+- (NSURL*)absoluteURLForFile:(NSString*)path {
+  NSString* absolutePath = [self absolutePathForFile:path];
+  return [NSURL fileURLWithPath:absolutePath];
+}
+
 - (NSString*)absolutePathForFile:(NSString*)path {
   XLOG_CHECK(_workingDirectoryPath && path.length);
   return [_workingDirectoryPath stringByAppendingPathComponent:path];
