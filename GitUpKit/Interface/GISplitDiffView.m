@@ -108,6 +108,7 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
 @implementation GISplitDiffView {
   NSMutableArray* _lines;
   NSSize _size;
+  CGFloat _layoutFontSize;
 
   BOOL _rightSelection;
   NSMutableIndexSet* _selectedLines;
@@ -125,6 +126,7 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
 
   _lines = [[NSMutableArray alloc] initWithCapacity:1024];
   _selectedLines = [[NSMutableIndexSet alloc] init];
+  _layoutFontSize = GIFontSize();
 }
 
 - (BOOL)isEmpty {
@@ -138,7 +140,9 @@ typedef NS_ENUM(NSUInteger, SelectionMode) {
 }
 
 - (CGFloat)updateLayoutForWidth:(CGFloat)width {
-  if (self.patch && (NSInteger)width != (NSInteger)_size.width) {
+  CGFloat fontSize = GIFontSize();
+  if (self.patch && (((NSInteger)width != (NSInteger)_size.width) || (fontSize != _layoutFontSize))) {
+    _layoutFontSize = fontSize;
     [_lines removeAllObjects];
 
     CGFloat lineWidth = floor((width - 2 * textLineNumberMargin() - 2 * textInsetLeft() - 2 * textInsetRight()) / 2);
