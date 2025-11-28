@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Plagas y Tratamientos</title>
+
+  <style>
+    :root{
+      --bg:#f6f7fb;
+      --card:#ffffff;
+      --accent:#2f8f6f;
+      --muted:#6b6f76;
+      --dark:#1a1a1a;
+    }
+
+    body{
+      margin:0;
+      font-family: "Poppins", sans-serif;
+      background:var(--bg);
+      color:var(--dark);
+    }
+
+    /* HEADER */
+    header{
+      background:var(--accent);
+      padding:12px 20px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      color:#fff;
+    }
+
+    header h1{
+      font-size:20px;
+      margin:0;
+    }
+
+    nav a{
+      color:white;
+      margin-left:12px;
+      text-decoration:none;
+      font-size:14px;
+      font-weight:500;
+    }
+
+    nav a:hover{
+      text-decoration:underline;
+    }
+
+    /* CONTENEDOR */
+    .section{
+      padding:40px 20px;
+      max-width:900px;
+      margin:auto;
+    }
+
+    .card{
+      background:var(--card);
+      padding:25px;
+      border-radius:12px;
+      box-shadow:0 2px 8px rgba(0,0,0,.07);
+      margin-bottom:25px;
+    }
+
+    .card h2{
+      margin-top:0;
+      color:var(--accent);
+    }
+
+    /* BOTÓN DE IA */
+    .btn-ia{
+      display:inline-block;
+      padding:12px 22px;
+      background:var(--accent);
+      color:white;
+      text-decoration:none;
+      border-radius:10px;
+      font-weight:600;
+      transition:.2s;
+      margin-top:15px;
+    }
+
+    .btn-ia:hover{
+      background:#25795c;
+    }
+
+    footer{
+      text-align:center;
+      padding:25px;
+      background:#e9eee9;
+      margin-top:40px;
+      font-size:14px;
+      color:var(--muted);
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>Plagas y Tratamientos</h1>
+  <nav>
+    <a href="#plagas">Plagas</a>
+    <a href="#tratamientos">Tratamientos</a>
+    <a href="#acerca">Acerca de</a>
+    <a href="#contacto">Contacto</a>
+  </nav>
+</header>
+
+<!-- SECCIÓN PLAGAS -->
+<section id="plagas" class="section">
+  <div class="card">
+    <h2>Plagas Comunes</h2>
+    <p>Aquí encontrarás información sobre las plagas más comunes que afectan hogares, negocios y áreas verdes.</p>
+
+    <ul>
+      <li>Mosquitos</li>
+      <li>Cucarachas</li>
+      <li>Hormigas</li>
+      <li>Termitas</li>
+      <li>Ratas y Ratones</li>
+    </ul>
+
+  </div>
+</section>
+
+<!-- SECCIÓN TRATAMIENTOS -->
+<section id="tratamientos" class="section">
+  <div class="card">
+    <h2>Tratamientos Disponibles</h2>
+
+    <ul>
+      <li><strong>Control de cucarachas:</strong> Gel, trampas, aspersión y nebulización.</li>
+      <li><strong>Control de hormigas:</strong> Cebos y barreras químicas.</li>
+      <li><strong>Manejo de termitas:</strong> Cebos subterráneos y barreras protectoras.</li>
+      <li><strong>Control de roedores:</strong> Trampas, cebos y sellado de accesos.</li>
+      <li><strong>Fumigación general:</strong> Tratamiento integral para interiores y exteriores.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ACERCA DE -->
+<section id="acerca" class="section">
+  <div class="card">
+    <h2>Acerca de Nosotros</h2>
+    <p>Somos una empresa dedicada al control profesional de plagas, con años de experiencia y personal capacitado. Nuestro objetivo es brindar seguridad, higiene y tranquilidad a hogares, negocios y espacios públicos.</p>
+  </div>
+</section>
+
+<!-- CONTACTO -->
+<section id="contacto" class="section">
+  <div class="card">
+    <h2>Contacto</h2>
+    <p><strong>Teléfono:</strong> 55 1234 5678</p>
+    <p><strong>WhatsApp:</strong> 55 9876 5432</p>
+    <p><strong>Correo:</strong> contacto@plagastratamientos.com</p>
+    <p><strong>Horario:</strong> Lunes a Sábado – 8:00 a 18:00</p>
+  </div>
+</section>
+
+<!-- IA HASTA ABAJO -->
+<section class="section">
+  <div class="card">
+    <h2>Asistente Inteligente</h2>
+    <p>Consulta a nuestra inteligencia artificial para obtener ayuda inmediata sobre plagas, tratamientos y recomendaciones.</p>
+
+    <a class="btn-ia" href="https://www.stack-ai.com/chat/68f5c3c17b537cb11f276e6f-0vt2al5Osnkbv3b99EZi8a" target="_blank">
+      Hablar con la IA
+    </a>
+  </div>
+</section>
+
+<footer>
+  © 2025 Servicio Profesional de Plagas — Todos los derechos reservados
+</footer>
+
+</body>
+</html>
