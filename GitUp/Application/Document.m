@@ -296,10 +296,6 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
     [_mainWindow setFrameFromString:frameString];
   }
 
-  NSSegmentedControl* modeControl = (NSSegmentedControl*)_navigateItem.primaryControl;
-  NSSegmentedControl* navigateControl = (NSSegmentedControl*)_navigateItem.secondaryControl;
-  [modeControl setImage:[NSImage imageNamed:@"circle.2.line.diagonal"] forSegment:kWindowModeID_Map];
-
   NSLayoutConstraint* searchFieldPreferredWidth = [_searchItem.searchField.widthAnchor constraintEqualToConstant:kSearchFieldCompactWidth];
   searchFieldPreferredWidth.priority = NSLayoutPriorityDefaultHigh - 20;
   NSLayoutConstraint* searchFieldMaxWidth = [_searchItem.searchField.widthAnchor constraintLessThanOrEqualToConstant:kSearchFieldExpandedWidth];
@@ -750,6 +746,31 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 // NSToolbar automatic validation fires very often and at unpredictable times so we just do everything by hand
 - (void)_updateToolBar {
   [_mainWindow.toolbar validateVisibleItems];
+  
+  NSSegmentedControl *segmentedControl = self.modeAndNavigationSegmentedControl;
+  NSString *windowMode = self.windowMode;
+  WindowModeID windowModeID = _WindowModeIDFromString(windowMode);
+  if (_WindowModeIsPrimary(windowMode)) {
+    [segmentedControl setImage:[NSImage imageNamed:@"circle.2.line.diagonal"] forSegment:kWindowModeID_Map];
+    [segmentedControl setImage:[NSImage imageWithSystemSymbolName:@"square.and.pencil" accessibilityDescription:nil] forSegment:kWindowModeID_Commit];
+    [segmentedControl setImage:[NSImage imageWithSystemSymbolName:@"line.horizontal.3" accessibilityDescription:nil] forSegment:kWindowModeID_Stashes];
+    [segmentedControl setEnabled:YES forSegment:kWindowModeID_Map];
+    [segmentedControl setEnabled:YES forSegment:kWindowModeID_Commit];
+    [segmentedControl setEnabled:YES forSegment:kWindowModeID_Stashes];
+    segmentedControl.trackingMode = NSSegmentSwitchTrackingSelectOne;
+    [segmentedControl setSelectedSegment:windowModeID];
+    segmentedControl.action = @selector(switchMode:);
+  } else {
+    [segmentedControl setImage:[NSImage imageWithSystemSymbolName:@"arrow.down.forward.and.arrow.up.backward" accessibilityDescription: nil] forSegment:kNavigationAction_Exit];
+    [segmentedControl setImage:[NSImage imageWithSystemSymbolName:@"chevron.up" accessibilityDescription:nil] forSegment:kNavigationAction_Next];
+    [segmentedControl setImage:[NSImage imageWithSystemSymbolName:@"chevron.down" accessibilityDescription:nil] forSegment:kNavigationAction_Previous];
+    segmentedControl.trackingMode = NSSegmentSwitchTrackingMomentary;
+    segmentedControl.action = @selector(navigate:);
+  }
+}
+
+- (NSSegmentedControl *)modeAndNavigationSegmentedControl {
+  return (NSSegmentedControl *)self.navigateItem.primaryControl;
 }
 
 - (void)_didBecomeActive:(NSNotification*)notification {
@@ -828,7 +849,8 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 }
 
 - (BOOL)setWindowModeID:(WindowModeID)modeID {
-  if (!_mainWindow.attachedSheet && !_navigateItem.primaryControl.hidden && _navigateItem.primaryControl.enabled) {
+  // LDD: Removed `&& _navigateItem.primaryControl.enabled`
+  if (!_mainWindow.attachedSheet) {
     [self _setWindowMode:_WindowModeStringFromID(modeID)];
     return YES;
   }
@@ -1588,14 +1610,9 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
   if (item.action == @selector(switchMode:)) {
     NSSegmentedControl* modeControl = [(id<NSObject>)item isKindOfClass:NSSegmentedControl.self] ? (NSSegmentedControl*)item : nil;
     NSMenuItem* menuItem = [(id<NSObject>)item isKindOfClass:NSMenuItem.self] ? (NSMenuItem*)item : nil;
-    BOOL isIncompatibleMode = !_WindowModeIsPrimary(_windowMode);
-
-    modeControl.hidden = isIncompatibleMode;
-    if (isIncompatibleMode) {
-      return NO;
-    }
 
     WindowModeID windowModeID = _WindowModeIDFromString(_windowMode);
+    [modeControl setEnabled:YES forSegment:kWindowModeID_Map];
     [modeControl selectSegmentWithTag:windowModeID];
     menuItem.state = menuItem.tag == windowModeID ? NSControlStateValueOn : NSControlStateValueOff;
 
@@ -1603,13 +1620,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
   }
 
   if (item.action == @selector(navigate:)) {
-    NSSegmentedControl* navigateControl = (NSSegmentedControl*)item;
-    BOOL isIncompatibleMode = _WindowModeIsPrimary(_windowMode);
-
-    navigateControl.hidden = isIncompatibleMode;
-    if (isIncompatibleMode) {
-      return NO;
-    }
+    NSSegmentedControl* navigateControl = [(id<NSObject>)item isKindOfClass:NSSegmentedControl.self] ? (NSSegmentedControl*)item : nil;
 
     [navigateControl setEnabled:[_windowMode isEqualToString:kWindowModeString_Map_QuickView] || [_windowMode isEqualToString:kWindowModeString_Map_Diff] || [_windowMode isEqualToString:kWindowModeString_Map_Config] forSegment:kNavigationAction_Exit];
     [navigateControl setEnabled:[_windowMode isEqualToString:kWindowModeString_Map_QuickView] && [self _hasNextQuickView] forSegment:kNavigationAction_Next];
