@@ -17,6 +17,7 @@
 #pragma clang diagnostic ignored "-Wobjc-interface-ivars"
 #pragma clang diagnostic pop
 #import <Sparkle/Sparkle.h>
+#import <UserNotifications/UserNotifications.h>
 
 #import <GitUpKit/GitUpKit.h>
 #import <GitUpKit/XLFacilityMacros.h>
@@ -41,7 +42,7 @@
 #define kToolName @"gitup"
 #define kToolInstallPath @"/usr/local/bin/" kToolName
 
-@interface AppDelegate () <NSUserNotificationCenterDelegate, SUUpdaterDelegate>
+@interface AppDelegate () <UNUserNotificationCenterDelegate, SUUpdaterDelegate, NSMenuItemValidation>
 @property(nonatomic, strong) AboutWindowController* aboutWindowController;
 @property(nonatomic, strong) CloneWindowController* cloneWindowController;
 @property(nonatomic, strong) PreferencesWindowController* preferencesWindowController;
@@ -177,18 +178,20 @@
 }
 
 - (void)_showNotificationWithTitle:(NSString*)title action:(SEL)action message:(NSString*)format, ... NS_FORMAT_FUNCTION(3, 4) {
-  NSUserNotification* notification = [[NSUserNotification alloc] init];
-  if (action) {
-    notification.userInfo = @{kNotificationUserInfoKey_Action : NSStringFromSelector(action)};
-  }
-  notification.title = title;
-  va_list arguments;
-  va_start(arguments, format);
-  NSString* string = [[NSString alloc] initWithFormat:format arguments:arguments];
-  va_end(arguments);
-  notification.informativeText = string;
+    va_list arguments;
+    va_start(arguments, format);
+    NSString *string = [[NSString alloc] initWithFormat:format arguments:arguments];
+    va_end(arguments);
 
-  [[NSUserNotificationCenter defaultUserNotificationCenter] deliverNotification:notification];
+    UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
+    content.title = title;
+    content.body = string;
+    if (action) {
+      content.userInfo = @{kNotificationUserInfoKey_Action : NSStringFromSelector(action)};
+    }
+
+    UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:[[NSUUID UUID] UUIDString] content:content trigger:nil];
+    [[UNUserNotificationCenter currentNotificationCenter] addNotificationRequest:request withCompletionHandler:nil];
 }
 
 #pragma mark - NSApplicationDelegate
@@ -216,7 +219,15 @@
   [GILaunchServicesLocator setup];
 
   // Initialize user notification center
-  [[NSUserNotificationCenter defaultUserNotificationCenter] setDelegate:self];
+  UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+  [center setDelegate:self];
+  
+  [center requestAuthorizationWithOptions:(UNAuthorizationOptionAlert | UNAuthorizationOptionSound | UNAuthorizationOptionBadge)
+    completionHandler:^(BOOL granted, NSError * _Nullable error) {
+      if (!granted) {
+        XLOG_INFO(@"User denied notification permissions");
+      }
+    }];
 
   // Register finder context menu services.
   [NSApplication sharedApplication].servicesProvider = [ServicesProvider new];
@@ -354,7 +365,7 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
   return @{};
 }
 
-#pragma mark - Actions
+#pragma mark - NSMenuItemValidation
 
 - (BOOL)validateMenuItem:(NSMenuItem*)menuItem {
   if (menuItem.action == @selector(checkForUpdates:)) {
@@ -362,6 +373,8 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
   }
   return YES;
 }
+
+#pragma mark - Actions
 
 - (IBAction)openDocument:(id)sender {
   [[NSDocumentController sharedDocumentController] openDocument:sender];
@@ -516,19 +529,6 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
   }
 }
 
-#pragma mark - NSUserNotificationCenterDelegate
-
-- (BOOL)userNotificationCenter:(NSUserNotificationCenter*)center shouldPresentNotification:(NSUserNotification*)notification {
-  return YES;
-}
-
-- (void)userNotificationCenter:(NSUserNotificationCenter*)center didActivateNotification:(NSUserNotification*)notification {
-  NSString* action = notification.userInfo[kNotificationUserInfoKey_Action];
-  if (action) {
-    [NSApp sendAction:NSSelectorFromString(action) to:self from:nil];
-  }
-}
-
 #pragma mark - SUUpdaterDelegate
 
 - (NSString*)feedURLStringForUpdater:(SUUpdater*)updater {
@@ -571,6 +571,18 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
   [self _showNotificationWithTitle:NSLocalizedString(@"Update Available", nil)
                             action:NULL
                            message:NSLocalizedString(@"Relaunch GitUp to update to version %@ (%@).", nil), item.displayVersionString, item.versionString];
+}
+
+#pragma mark - UNUserNotificationCenterDelegate
+
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void(^)(void))completionHandler {
+  NSString *action = response.notification.request.content.userInfo[kNotificationUserInfoKey_Action];
+  if (action) {
+    [NSApp sendAction:NSSelectorFromString(action) to:self from:nil];
+  }
+  if (completionHandler) {
+    completionHandler();
+  }
 }
 
 @end
