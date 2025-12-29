@@ -176,6 +176,16 @@
     XCTAssertEqual(addedRange.location, 3);
     XCTAssertEqual(addedRange.length, 2);
   }
+  {
+    // Fix for issue #2740
+    const char* before = "中文命名.md";
+    const char* after = "中文命名1.md";
+    GIComputeHighlightRanges(before, strlen(before), [[NSString stringWithUTF8String:before] length], &deletedRange, after, strlen(after), [[NSString stringWithUTF8String:after] length], &addedRange);
+    XCTAssertEqual(deletedRange.location, 4);
+    XCTAssertEqual(deletedRange.length, 0);
+    XCTAssertEqual(addedRange.location, 4);
+    XCTAssertEqual(addedRange.length, 1);
+  }
 }
 
 @end
