@@ -35,16 +35,16 @@ void GIComputeHighlightRanges(const char* deletedBytes, NSUInteger deletedCount,
     }
     if (remaining == 0) {
       unsigned char byte = *(unsigned char*)deletedMin;
-      if (TEST_BITS(byte, 0b11000000)) {
-        remaining = 2;
-      } else if (TEST_BITS(byte, 0b11100000)) {
-        remaining = 3;
-      } else if (TEST_BITS(byte, 0b11110000)) {
-        remaining = 4;
+      if (TEST_BITS(byte, 0b11111100)) {
+        remaining = 6;
       } else if (TEST_BITS(byte, 0b11111000)) {
         remaining = 5;
-      } else if (TEST_BITS(byte, 0b11111100)) {
-        remaining = 6;
+      } else if (TEST_BITS(byte, 0b11110000)) {
+        remaining = 4;
+      } else if (TEST_BITS(byte, 0b11100000)) {
+        remaining = 3;
+      } else if (TEST_BITS(byte, 0b11000000)) {
+        remaining = 2;
       } else {
         XLOG_DEBUG_CHECK(!(byte & (1 << 7)));
         remaining = 1;
