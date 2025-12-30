@@ -1,4 +1,4 @@
-[![Build Status](https://github.com/git-up/GitUp/actions/workflows/test.yml/badge.svg)](https://github.com/git-up/GitUp/actions/workflows/test.yml)
+[![Build Status](https://github.com/git-up/GitUp/actions/workflows/test.yml/badge.svg?branch=master)](https://github.com/git-up/GitUp/actions/workflows/test.yml?query=branch%3Amaster)
 
 GitUp
 =====
