@@ -551,7 +551,7 @@ static inline NSString* _StringFromFileMode(GCFileMode mode) {
           break;
       }
       if (data.conflict.ancestorFileMode == kGCFileMode_Commit) {
-        // Submodule conflict
+        //  Submodule conflict
         GISubmoduleConflictDiffCellView* view = [_tableView makeViewWithIdentifier:@"submodule_conflict" owner:self];
         view.statusTextField.stringValue = [NSString stringWithFormat:NSLocalizedString(@"This submodule has conflicts (%@)", nil), status];
         view.oursTextField.stringValue = data.conflict.ourBlobSHA1;
@@ -758,7 +758,7 @@ static inline NSString* _StringFromFileMode(GCFileMode mode) {
 
 - (IBAction)chooseOurs:(id)sender {
   GIDiffContentData* data = (__bridge GIDiffContentData*)(void*)[(NSButton*)sender tag];
-  NSError *error;
+  NSError* error;
 
   [self.repository updateSubmoduleReferenceAtPath:data.conflict.path toCommitSHA1:data.conflict.ourBlobSHA1 error:&error];
 
@@ -773,8 +773,7 @@ static inline NSString* _StringFromFileMode(GCFileMode mode) {
 
 - (IBAction)chooseTheirs:(id)sender {
   GIDiffContentData* data = (__bridge GIDiffContentData*)(void*)[(NSButton*)sender tag];
-  NSError *error;
-
+  NSError* error;
 
   [self.repository updateSubmoduleReferenceAtPath:data.conflict.path toCommitSHA1:data.conflict.theirBlobSHA1 error:&error];
 

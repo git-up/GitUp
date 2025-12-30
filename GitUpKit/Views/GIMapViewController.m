@@ -295,7 +295,7 @@
     for (GCHistoryLocalBranch* branch in node.commit.localBranches) {
       GCBranch* upstream = branch.upstream;
       NSMenu* menu = [[NSMenu alloc] init];
-      
+
       item = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"Copy Name", nil) action:@selector(_copyBranchName:) keyEquivalent:@""];
       item.representedObject = branch;
       [menu addItem:item];
@@ -424,11 +424,11 @@
           break;
         }
       }
-      
+
       item = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"Copy Name", nil) action:@selector(_copyBranchName:) keyEquivalent:@""];
       item.representedObject = branch;
       [menu addItem:item];
-      
+
       if (!found) {
         item = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"Checkout New Tracking Local Branch", nil) action:@selector(_checkoutRemoteBranch:) keyEquivalent:@""];
         item.representedObject = branch;

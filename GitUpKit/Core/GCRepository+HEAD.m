@@ -222,17 +222,17 @@ cleanup:
 }
 
 - (BOOL)updateSubmoduleReferenceAtPath:(NSString*)submodulePath toCommitSHA1:(NSString*)commitSHA1 error:(NSError**)error {
-  GCSubmodule *submodule = [self lookupSubmoduleWithName:submodulePath error:error];
+  GCSubmodule* submodule = [self lookupSubmoduleWithName:submodulePath error:error];
   if (!submodule) {
     return NO;
   }
 
-  GCRepository *submoduleRepository = [[GCRepository alloc] initWithSubmodule:submodule error:error];
+  GCRepository* submoduleRepository = [[GCRepository alloc] initWithSubmodule:submodule error:error];
   if (!submoduleRepository) {
     return NO;
   }
 
-  GCCommit *targetCommit = [submoduleRepository findCommitWithSHA1:commitSHA1 error:error];
+  GCCommit* targetCommit = [submoduleRepository findCommitWithSHA1:commitSHA1 error:error];
   if (!targetCommit) {
     return NO;
   }

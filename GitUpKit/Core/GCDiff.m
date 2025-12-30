@@ -358,22 +358,22 @@ static inline BOOL _EqualDeltas(const git_diff_delta* delta1, const git_diff_del
     // Remove superfluous "untracked" deltas for conflicting submodules
     // Needed when the input _deltas looks like this:
     // 1: [Conflicted] "submodule"
-    // 2: [Untracked] "submodule/"
+    //  2: [Untracked] "submodule/"
     // Which happens every time there's a submodule entry that's a conflict
-    NSMutableArray<GCDiffDelta *> *deltasToFilterOut = [NSMutableArray array];
+    NSMutableArray<GCDiffDelta*>* deltasToFilterOut = [NSMutableArray array];
     for (GCDiffDelta* delta in _deltas) {
       if (delta.change == kGCFileDiffChange_Conflicted && delta.isSubmodule) {
-        // see if there's a superfluous untracked diff for that submodule and remove it
-        NSString *pathWithTrailingSlash = [NSString stringWithFormat:@"%@/", delta.canonicalPath];
+        //  see if there's a superfluous untracked diff for that submodule and remove it
+        NSString* pathWithTrailingSlash = [NSString stringWithFormat:@"%@/", delta.canonicalPath];
         for (GCDiffDelta* delta in _deltas) {
           if (delta.isSubmodule && [delta.canonicalPath isEqualToString:pathWithTrailingSlash]) {
             [deltasToFilterOut addObject:delta];
-            break; // there's only one so we can break out early if we've found it
+            break;  //  there's only one so we can break out early if we've found it
           }
         }
       }
     }
-    
+
     [_deltas removeObjectsInArray:deltasToFilterOut];
   }
 }

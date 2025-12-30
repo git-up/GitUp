@@ -49,7 +49,7 @@
 - (void)assertContentsOfFileAtPath:(NSString*)path equalsString:(NSString*)string;
 @end
 
-@interface GCEmptyLiveRepositoryTestCase : GCEmptyRepositoryTestCase<GCLiveRepositoryDelegate>
+@interface GCEmptyLiveRepositoryTestCase : GCEmptyRepositoryTestCase <GCLiveRepositoryDelegate>
 @property(nonatomic, readonly) GCLiveRepository* liveRepository;
 @end
 

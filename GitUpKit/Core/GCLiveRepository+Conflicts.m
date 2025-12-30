@@ -19,8 +19,6 @@
                             parentCommits:(NSArray*)parentCommits
                                   message:(NSString*)message
                                     error:(NSError**)error {
-
-
   // Save HEAD
   GCCommit* headCommit;
   GCLocalBranch* headBranch;

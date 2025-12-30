@@ -95,7 +95,7 @@ cleanup:
                       message:(NSString*)message
               conflictHandler:(GCConflictHandler)handler
                         error:(NSError**)error {
-  const git_commit** parents = (againstCommit != nil) ? (git_commit*[]) {againstCommit.private} : (git_commit*[]) {};
+  const git_commit** parents = (againstCommit != nil) ? (git_commit*[]){againstCommit.private} : (git_commit*[]){};
   return [self _mergeTheirCommit:pickCommit.private
                    intoOurCommit:againstCommit.private
               withAncestorCommit:ancestorCommit.private
@@ -113,7 +113,7 @@ cleanup:
                   message:(NSString*)message
           conflictHandler:(GCConflictHandler)handler
                     error:(NSError**)error {
-  const git_commit** parents = (againstCommit != nil) ? (git_commit*[]) {againstCommit.private} : (git_commit*[]) {};
+  const git_commit** parents = (againstCommit != nil) ? (git_commit*[]){againstCommit.private} : (git_commit*[]){};
   return [self _mergeTheirCommit:ancestorCommit.private
                    intoOurCommit:againstCommit.private
               withAncestorCommit:revertCommit.private

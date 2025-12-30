@@ -32,7 +32,7 @@ static const void* _associatedObjectKey = &_associatedObjectKey;
   [super setUp];
 
   // Figure out if running via GitHub Actions. This runner value is the user used by GitHub Actions.
-  _botMode = [NSProcessInfo.processInfo.environment[@"USER"] isEqualToString: @"runner"];
+  _botMode = [NSProcessInfo.processInfo.environment[@"USER"] isEqualToString:@"runner"];
 }
 
 - (GCRepository*)createLocalRepositoryAtPath:(NSString*)path bare:(BOOL)bare {
@@ -196,11 +196,11 @@ static const void* _associatedObjectKey = &_associatedObjectKey;
 
 @implementation GCEmptyLiveRepositoryTestCase
 
-- (GCLiveRepository *)liveRepository {
-  return (GCLiveRepository *)self.repository;
+- (GCLiveRepository*)liveRepository {
+  return (GCLiveRepository*)self.repository;
 }
 
-- (GCRepository *)createLocalRepositoryAtPath:(NSString *)path bare:(BOOL)bare {
+- (GCRepository*)createLocalRepositoryAtPath:(NSString*)path bare:(BOOL)bare {
   GCLiveRepository* repo = [[GCLiveRepository alloc] initWithNewLocalRepository:path bare:bare defaultBranchName:@"master" error:NULL];
   XCTAssertNotNil(repo);
 

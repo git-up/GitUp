@@ -311,7 +311,7 @@ cleanup:
     return NO;
   }
 
-  NSArray<NSString *> *conflictPaths = @[];
+  NSArray<NSString*>* conflictPaths = @[];
 
   git_index* index = [self reloadRepositoryIndex:error];
 

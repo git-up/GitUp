@@ -302,7 +302,7 @@ cleanup:
 }
 
 // This function adapts to handle submodules by directly using the commit OID and setting the correct file mode for submodules.
-- (BOOL)_addSubmoduleEntry:(const git_index_entry*)entry toIndex:(git_index*)index withCommitOid:(const git_oid *)commitOid error:(NSError**)error {
+- (BOOL)_addSubmoduleEntry:(const git_index_entry*)entry toIndex:(git_index*)index withCommitOid:(const git_oid*)commitOid error:(NSError**)error {
   git_index_entry copyEntry;
   bcopy(entry, &copyEntry, sizeof(git_index_entry));
   git_oid_cpy(&copyEntry.id, commitOid);
@@ -328,17 +328,17 @@ cleanup:
   git_index_entry__init_from_stat(&entry, &info, true);
 
   if (entry.mode == GIT_FILEMODE_COMMIT) {
-    GCSubmodule *submodule = [self lookupSubmoduleWithName:path error:error];
+    GCSubmodule* submodule = [self lookupSubmoduleWithName:path error:error];
     if (!submodule) {
       return NO;
     }
 
-    GCRepository *submoduleRepository = [[GCRepository alloc] initWithSubmodule:submodule error:error];
+    GCRepository* submoduleRepository = [[GCRepository alloc] initWithSubmodule:submodule error:error];
     if (!submoduleRepository) {
       return NO;
     }
 
-    GCCommit *headCommit;
+    GCCommit* headCommit;
     if (![submoduleRepository lookupHEADCurrentCommit:&headCommit branch:NULL error:error]) {
       return NO;
     }
@@ -536,10 +536,10 @@ cleanup:
 }
 
 - (BOOL)checkoutFilesToWorkingDirectory:(NSArray<NSString*>*)paths fromIndex:(GCIndex*)index error:(NSError**)error {
-	if ([paths count] == 0) {
-		return YES;
-	}
-	
+  if ([paths count] == 0) {
+    return YES;
+  }
+
   git_checkout_options options = GIT_CHECKOUT_OPTIONS_INIT;
   options.checkout_strategy = GIT_CHECKOUT_FORCE | GIT_CHECKOUT_DONT_UPDATE_INDEX;  // There's no reason to update the index
   options.paths.count = paths.count;

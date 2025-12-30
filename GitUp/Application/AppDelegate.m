@@ -110,7 +110,7 @@
   // Without this line, GitUp would instead immediately exit, with no crash log.
   // libgit2 has what looks like a built-in solution (`disable_signals()`), but it doesn't seem to work for us.
   signal(SIGPIPE, SIG_IGN);
-  
+
   NSDictionary* defaults = @{
     GICommitMessageViewUserDefaultKey_ShowInvisibleCharacters : @(YES),
     GICommitMessageViewUserDefaultKey_ShowMargins : @(YES),
@@ -178,20 +178,20 @@
 }
 
 - (void)_showNotificationWithTitle:(NSString*)title action:(SEL)action message:(NSString*)format, ... NS_FORMAT_FUNCTION(3, 4) {
-    va_list arguments;
-    va_start(arguments, format);
-    NSString *string = [[NSString alloc] initWithFormat:format arguments:arguments];
-    va_end(arguments);
+  va_list arguments;
+  va_start(arguments, format);
+  NSString* string = [[NSString alloc] initWithFormat:format arguments:arguments];
+  va_end(arguments);
 
-    UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
-    content.title = title;
-    content.body = string;
-    if (action) {
-      content.userInfo = @{kNotificationUserInfoKey_Action : NSStringFromSelector(action)};
-    }
+  UNMutableNotificationContent* content = [[UNMutableNotificationContent alloc] init];
+  content.title = title;
+  content.body = string;
+  if (action) {
+    content.userInfo = @{kNotificationUserInfoKey_Action : NSStringFromSelector(action)};
+  }
 
-    UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:[[NSUUID UUID] UUIDString] content:content trigger:nil];
-    [[UNUserNotificationCenter currentNotificationCenter] addNotificationRequest:request withCompletionHandler:nil];
+  UNNotificationRequest* request = [UNNotificationRequest requestWithIdentifier:[[NSUUID UUID] UUIDString] content:content trigger:nil];
+  [[UNUserNotificationCenter currentNotificationCenter] addNotificationRequest:request withCompletionHandler:nil];
 }
 
 #pragma mark - NSApplicationDelegate
@@ -219,15 +219,15 @@
   [GILaunchServicesLocator setup];
 
   // Initialize user notification center
-  UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+  UNUserNotificationCenter* center = [UNUserNotificationCenter currentNotificationCenter];
   [center setDelegate:self];
-  
+
   [center requestAuthorizationWithOptions:(UNAuthorizationOptionAlert | UNAuthorizationOptionSound | UNAuthorizationOptionBadge)
-    completionHandler:^(BOOL granted, NSError * _Nullable error) {
-      if (!granted) {
-        XLOG_INFO(@"User denied notification permissions");
-      }
-    }];
+                        completionHandler:^(BOOL granted, NSError* _Nullable error) {
+                          if (!granted) {
+                            XLOG_INFO(@"User denied notification permissions");
+                          }
+                        }];
 
   // Register finder context menu services.
   [NSApplication sharedApplication].servicesProvider = [ServicesProvider new];
@@ -575,8 +575,8 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
 
 #pragma mark - UNUserNotificationCenterDelegate
 
-- (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void(^)(void))completionHandler {
-  NSString *action = response.notification.request.content.userInfo[kNotificationUserInfoKey_Action];
+- (void)userNotificationCenter:(UNUserNotificationCenter*)center didReceiveNotificationResponse:(UNNotificationResponse*)response withCompletionHandler:(void (^)(void))completionHandler {
+  NSString* action = response.notification.request.content.userInfo[kNotificationUserInfoKey_Action];
   if (action) {
     [NSApp sendAction:NSSelectorFromString(action) to:self from:nil];
   }

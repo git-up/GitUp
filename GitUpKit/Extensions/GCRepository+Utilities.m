@@ -206,7 +206,7 @@ NSString* GCNameFromHostingService(GCHostingService service) {
           GCSubmodule* submodule = [self lookupSubmoduleWithName:delta.canonicalPath error:error];
           if (!submodule || ![self addSubmoduleToRepositoryIndex:submodule error:error]) {
             BOOL wasJustTryingToStageAnUntrackedSubmodule = error && [[*error localizedDescription] hasSuffix:@"' has not been added yet"];
-            
+
             if (!wasJustTryingToStageAnUntrackedSubmodule) {
               return NO;
             }
@@ -214,9 +214,8 @@ NSString* GCNameFromHostingService(GCHostingService service) {
         } else {
           if (![self addFileInWorkingDirectory:delta.canonicalPath toIndex:index error:error]) {
             BOOL wasJustTryingToStageADeletedConflictingFile =
-              delta.change == kGCFileDiffChange_Conflicted
-              && (error && [[*error localizedDescription] isEqualToString:@"No such file or directory"]);
-            
+                delta.change == kGCFileDiffChange_Conflicted && (error && [[*error localizedDescription] isEqualToString:@"No such file or directory"]);
+
             if (!wasJustTryingToStageADeletedConflictingFile) {
               return NO;
             }

@@ -459,8 +459,7 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
   // Keep generating commit rows following parents (respectively children)
   if (GC_POINTER_LIST_COUNT(previousRow)) {
     __block BOOL success = NO;
-    BOOL(^commitBlock)
-    (GCHistoryCommit*) = ^(GCHistoryCommit* commit) {
+    BOOL (^commitBlock)(GCHistoryCommit*) = ^(GCHistoryCommit* commit) {
       XLOG_DEBUG_CHECK(!COMMIT_IS_PROCESSED(commit));
       BOOL ready = YES;
 
@@ -775,8 +774,7 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
   }
 
   // Find all other tips
-  BOOL(^enumerateBlock)
-  (git_reference*) = ^(git_reference* reference) {
+  BOOL (^enumerateBlock)(git_reference*) = ^(git_reference* reference) {
     GCReference* referenceObject = nil;
     if (git_reference_type(reference) != GIT_REF_SYMBOLIC) {  // Skip symbolic refs like "remote/origin/HEAD"
       git_commit* commit = NULL;
@@ -901,7 +899,7 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
   // Configure commit tree walker to start from tips
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_revwalk_new, &walker, self.private);
   git_revwalk_sorting(walker, GIT_SORT_NONE);
-  git_revwalk_add_hide_block(walker, ^int(const git_oid *commit_id) {
+  git_revwalk_add_hide_block(walker, ^int(const git_oid* commit_id) {
     return CFDictionaryContainsKey(lookup, commit_id);
   });
   if (historyTips) {
