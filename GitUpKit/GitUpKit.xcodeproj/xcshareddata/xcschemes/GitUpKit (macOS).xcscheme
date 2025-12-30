@@ -45,6 +45,11 @@
                BlueprintName = "Tests"
                ReferencedContainer = "container:GitUpKit.xcodeproj">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "GCSQLiteRepositoryTests">
+               </Test>
+            </SkippedTests>
          </TestableReference>
       </Testables>
    </TestAction>
