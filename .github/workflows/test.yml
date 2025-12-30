@@ -31,8 +31,6 @@ jobs:
 
       - name: Run GitUpKit (macOS) tests
         working-directory: GitUpKit
-        env:
-          IS_GITHUB_ACTION: true
         run: |
           xcodebuild test \
             -scheme "GitUpKit (macOS)" \

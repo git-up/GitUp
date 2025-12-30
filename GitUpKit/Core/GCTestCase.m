@@ -31,9 +31,8 @@ static const void* _associatedObjectKey = &_associatedObjectKey;
 - (void)setUp {
   [super setUp];
 
-  // Figure out if running via GitHub Actions
-  _botMode = NSProcessInfo.processInfo.environment[@"IS_GITHUB_ACTION"] != nil;
-  NSLog(@"Running in %@ mode, %@ | %@", self.botMode ? @"bot" : @"normal", NSProcessInfo.processInfo.environment, NSProcessInfo.processInfo.arguments);
+  // Figure out if running via GitHub Actions. This runner value is the user used by GitHub Actions.
+  _botMode = [NSProcessInfo.processInfo.environment[@"USER"] isEqualToString: @"runner"];
 }
 
 - (GCRepository*)createLocalRepositoryAtPath:(NSString*)path bare:(BOOL)bare {
