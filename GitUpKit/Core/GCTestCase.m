@@ -33,6 +33,7 @@ static const void* _associatedObjectKey = &_associatedObjectKey;
 
   // Figure out if running via GitHub Actions
   _botMode = NSProcessInfo.processInfo.environment[@"IS_GITHUB_ACTION"] != nil;
+  NSLog(@"Running in %@ mode, %@ | %@", self.botMode ? @"bot" : @"normal", NSProcessInfo.processInfo.environment, NSProcessInfo.processInfo.arguments);
 }
 
 - (GCRepository*)createLocalRepositoryAtPath:(NSString*)path bare:(BOOL)bare {
