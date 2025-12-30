@@ -27,24 +27,10 @@ jobs:
       - name: Show Xcode version
         run: xcodebuild -version
 
-      - name: Install xcpretty
-        run: gem install xcpretty
-
       - name: Run GitUpKit (macOS) tests
         working-directory: GitUpKit
         run: |
-          set -o pipefail
           xcodebuild test \
             -scheme "GitUpKit (macOS)" \
-            -destination "platform=macOS" \
-            -resultBundlePath TestResults \
-            2>&1 | xcpretty --color
-
-      - name: Upload test results
-        uses: actions/upload-artifact@v4
-        if: failure()
-        with:
-          name: test-results
-          path: GitUpKit/TestResults
-          retention-days: 7
+            -destination "platform=macOS"
 
