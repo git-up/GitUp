@@ -1,4 +1,4 @@
-name: Build GitUp
+name: GitUp
 
 on:
   push:
