@@ -1,3 +1,4 @@
+[![GitUp](https://github.com/git-up/GitUp/actions/workflows/build.yml/badge.svg)](https://github.com/git-up/GitUp/actions/workflows/build.yml)
 [![GitUpKit Tests](https://github.com/git-up/GitUp/actions/workflows/test.yml/badge.svg)](https://github.com/git-up/GitUp/actions/workflows/test.yml)
 
 GitUp
