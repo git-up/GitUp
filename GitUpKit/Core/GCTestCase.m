@@ -31,8 +31,8 @@ static const void* _associatedObjectKey = &_associatedObjectKey;
 - (void)setUp {
   [super setUp];
 
-  // Figure out if running as Xcode Server bot or GitHub Actions
-  _botMode = [NSUserName() isEqualToString:@"_xcsbuildd"] || getenv("GITHUB_ACTIONS");
+  // Figure out if running as Xcode Server bot or CI
+  _botMode = [NSUserName() isEqualToString:@"_xcsbuildd"] || (getenv("CI") != NULL);
 }
 
 - (GCRepository*)createLocalRepositoryAtPath:(NSString*)path bare:(BOOL)bare {
