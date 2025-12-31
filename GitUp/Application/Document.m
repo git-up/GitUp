@@ -48,7 +48,7 @@
 #define kMaxProgressRefreshRate 10.0  // Hz
 
 #define kNavigateSegmentWidth 34.0
-#define kSearchFieldCompactWidth 180.0
+#define kSearchFieldCompactWidth 190.0
 #define kSearchFieldExpandedWidth 238.0
 
 typedef NS_ENUM(NSInteger, NavigationAction) {

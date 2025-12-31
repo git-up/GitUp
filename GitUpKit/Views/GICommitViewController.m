@@ -103,6 +103,12 @@
   }
 }
 
+- (void)viewDidLoad {
+  [super viewDidLoad];
+
+  self.infoTextField.maximumNumberOfLines = 2;
+}
+
 // TODO: Live update these fields
 - (void)viewWillAppear {
   [super viewWillAppear];

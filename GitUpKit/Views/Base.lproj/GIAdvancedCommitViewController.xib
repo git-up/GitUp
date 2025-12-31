@@ -230,9 +230,9 @@
                                 <customView translatesAutoresizingMaskIntoConstraints="NO" id="RWR-dc-6SK">
                                     <rect key="frame" x="0.0" y="0.0" width="1000" height="48"/>
                                     <subviews>
-                                        <textField focusRingType="none" horizontalHuggingPriority="249" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="H0U-9x-3Cl">
+                                        <textField focusRingType="none" horizontalHuggingPriority="249" verticalHuggingPriority="750" horizontalCompressionResistancePriority="749" translatesAutoresizingMaskIntoConstraints="NO" id="H0U-9x-3Cl">
                                             <rect key="frame" x="119" y="17" width="622" height="14"/>
-                                            <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingTail" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="center" title="&lt;INFO&gt;" id="dbO-mu-br6">
+                                            <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingTail" truncatesLastVisibleLine="YES" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="center" title="&lt;INFO&gt;" id="dbO-mu-br6">
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
