@@ -105,8 +105,22 @@ static NSImage* _untrackedImage = nil;
 
 - (void)setDeltas:(NSArray*)deltas usingConflicts:(NSDictionary*)conflicts {
   if ((deltas != _deltas) || (conflicts != _conflicts)) {
-    _deltas = [deltas copy];
     _conflicts = [conflicts copy];
+    // Sort deltas with conflicts first
+    if (deltas && conflicts.count) {
+      _deltas = [deltas sortedArrayUsingComparator:^NSComparisonResult(GCDiffDelta* delta1, GCDiffDelta* delta2) {
+        BOOL hasConflict1 = (conflicts[delta1.canonicalPath] != nil);
+        BOOL hasConflict2 = (conflicts[delta2.canonicalPath] != nil);
+        if (hasConflict1 && !hasConflict2) {
+          return NSOrderedAscending;
+        } else if (!hasConflict1 && hasConflict2) {
+          return NSOrderedDescending;
+        }
+        return NSOrderedSame;
+      }];
+    } else {
+      _deltas = [deltas copy];
+    }
     [self _reloadDeltas];
   }
 }
