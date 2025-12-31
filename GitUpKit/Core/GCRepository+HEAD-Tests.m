@@ -36,7 +36,6 @@
 
 @end
 
-// TODO: Test -checkoutFileToWorkingDirectory:fromCommit:skipIndex:error:
 @implementation GCMultipleCommitsRepositoryTests (GCRepository_HEAD)
 
 // -checkoutIndex:withOptions:error: is tested in GCRepository+Bare
@@ -110,6 +109,89 @@
   XCTAssertTrue([self.repository checkClean:0 error:NULL]);
   XCTAssertTrue([self.repository moveHEADToCommit:self.commit2 reflogMessage:nil error:NULL]);
   XCTAssertFalse([self.repository checkClean:0 error:NULL]);
+}
+
+- (void)testCheckoutFileToWorkingDirectory {
+  // Working directory should have content from commit3 (master)
+  [self assertContentsOfFileAtPath:@"hello_world.txt" equalsString:@"Hola Mundo!\n"];
+
+  // Checkout file from commit1 (earlier version)
+  XCTAssertTrue([self.repository checkoutFileToWorkingDirectory:@"hello_world.txt" fromCommit:self.commit1 skipIndex:YES error:NULL]);
+  [self assertContentsOfFileAtPath:@"hello_world.txt" equalsString:@"Bonjour Monde!\n"];
+
+  // Checkout file from initialCommit
+  XCTAssertTrue([self.repository checkoutFileToWorkingDirectory:@"hello_world.txt" fromCommit:self.initialCommit skipIndex:YES error:NULL]);
+  [self assertContentsOfFileAtPath:@"hello_world.txt" equalsString:@"Hello World!\n"];
+
+  // Checkout file from commit2
+  XCTAssertTrue([self.repository checkoutFileToWorkingDirectory:@"hello_world.txt" fromCommit:self.commit2 skipIndex:YES error:NULL]);
+  [self assertContentsOfFileAtPath:@"hello_world.txt" equalsString:@"Gutentag Welt!\n"];
+}
+
+- (void)testLookupParentsForCommit {
+  // Test parent of commit1 is initialCommit
+  NSArray* parentsOfCommit1 = [self.repository lookupParentsForCommit:self.commit1 error:NULL];
+  XCTAssertEqual(parentsOfCommit1.count, 1);
+  XCTAssertEqualObjects(parentsOfCommit1.firstObject, self.initialCommit);
+
+  // Test parent of commit2 is commit1
+  NSArray* parentsOfCommit2 = [self.repository lookupParentsForCommit:self.commit2 error:NULL];
+  XCTAssertEqual(parentsOfCommit2.count, 1);
+  XCTAssertEqualObjects(parentsOfCommit2.firstObject, self.commit1);
+
+  // Test parent of commit3 is commit2
+  NSArray* parentsOfCommit3 = [self.repository lookupParentsForCommit:self.commit3 error:NULL];
+  XCTAssertEqual(parentsOfCommit3.count, 1);
+  XCTAssertEqualObjects(parentsOfCommit3.firstObject, self.commit2);
+
+  // Test parent of commitA is initialCommit (branched from there)
+  NSArray* parentsOfCommitA = [self.repository lookupParentsForCommit:self.commitA error:NULL];
+  XCTAssertEqual(parentsOfCommitA.count, 1);
+  XCTAssertEqualObjects(parentsOfCommitA.firstObject, self.initialCommit);
+
+  // Test parent of initialCommit is empty (root commit)
+  NSArray* parentsOfInitial = [self.repository lookupParentsForCommit:self.initialCommit error:NULL];
+  XCTAssertEqual(parentsOfInitial.count, 0);
+}
+
+- (void)testCheckTreeForCommitContainsFile {
+  // hello_world.txt should exist in all commits
+  XCTAssertNotNil([self.repository checkTreeForCommit:self.initialCommit containsFile:@"hello_world.txt" error:NULL]);
+  XCTAssertNotNil([self.repository checkTreeForCommit:self.commit1 containsFile:@"hello_world.txt" error:NULL]);
+  XCTAssertNotNil([self.repository checkTreeForCommit:self.commit2 containsFile:@"hello_world.txt" error:NULL]);
+  XCTAssertNotNil([self.repository checkTreeForCommit:self.commit3 containsFile:@"hello_world.txt" error:NULL]);
+  XCTAssertNotNil([self.repository checkTreeForCommit:self.commitA containsFile:@"hello_world.txt" error:NULL]);
+
+  // A non-existent file should return nil
+  XCTAssertNil([self.repository checkTreeForCommit:self.commit1 containsFile:@"nonexistent.txt" error:NULL]);
+}
+
+- (void)testRestoreFileToParentVersion {
+  // Create a new file in a new commit
+  GCCommit* addCommit = [self makeCommitWithUpdatedFileAtPath:@"new_file.txt" string:@"New Content\n" message:@"Add new file"];
+  XCTAssertNotNil(addCommit);
+  [self assertContentsOfFileAtPath:@"new_file.txt" equalsString:@"New Content\n"];
+
+  // Verify the file exists in addCommit
+  XCTAssertNotNil([self.repository checkTreeForCommit:addCommit containsFile:@"new_file.txt" error:NULL]);
+
+  // Verify the file doesn't exist in commit3 (before addCommit)
+  XCTAssertNil([self.repository checkTreeForCommit:self.commit3 containsFile:@"new_file.txt" error:NULL]);
+
+  // Make another commit modifying the file
+  GCCommit* modifyCommit = [self makeCommitWithUpdatedFileAtPath:@"new_file.txt" string:@"Modified Content\n" message:@"Modify file"];
+  XCTAssertNotNil(modifyCommit);
+  [self assertContentsOfFileAtPath:@"new_file.txt" equalsString:@"Modified Content\n"];
+
+  // Restore file to version before modifyCommit (should get addCommit's version)
+  NSArray* parentsOfModify = [self.repository lookupParentsForCommit:modifyCommit error:NULL];
+  GCCommit* parentCommit = parentsOfModify.firstObject;
+  XCTAssertNotNil(parentCommit);
+  XCTAssertEqualObjects(parentCommit, addCommit);
+
+  // Checkout file from parent commit
+  XCTAssertTrue([self.repository checkoutFileToWorkingDirectory:@"new_file.txt" fromCommit:parentCommit skipIndex:YES error:NULL]);
+  [self assertContentsOfFileAtPath:@"new_file.txt" equalsString:@"New Content\n"];
 }
 
 @end

@@ -290,7 +290,7 @@
 - (void)restoreFile:(NSString*)path toCommit:(GCCommit*)commit {
   [self confirmUserActionWithAlertType:kGIAlertType_Stop
                                  title:[NSString stringWithFormat:NSLocalizedString(@"Are you sure you want to restore the file \"%@\" to the version from this commit?", nil), path.lastPathComponent]
-                               message:NSLocalizedString(@"Any local changes will be overwritten. This action cannot be undone.", nil)
+                               message:NSLocalizedString(@"Any local changes to this file will be overwritten. This action cannot be undone.", nil)
                                 button:NSLocalizedString(@"Restore", nil)
              suppressionUserDefaultKey:nil
                                  block:^{
@@ -300,6 +300,60 @@
                                    }
                                    [self.repository notifyWorkingDirectoryChanged];
                                  }];
+}
+
+- (void)restoreFile:(NSString*)path toBeforeCommit:(GCCommit*)commit {
+  NSError* lookupError;
+  NSArray* parents = [self.repository lookupParentsForCommit:commit error:&lookupError];
+  GCCommit* parentCommit = parents.firstObject;
+
+  if (parentCommit) {
+    // Check if the file existed in the parent commit
+    NSString* sha1 = [self.repository checkTreeForCommit:parentCommit containsFile:path error:NULL];
+    if (sha1) {
+      // File existed in parent - restore to that version
+      [self confirmUserActionWithAlertType:kGIAlertType_Stop
+                                     title:[NSString stringWithFormat:NSLocalizedString(@"Are you sure you want to restore the file \"%@\" to the version before this commit?", nil), path.lastPathComponent]
+                                   message:NSLocalizedString(@"Any local changes to this file will be overwritten. This action cannot be undone.", nil)
+                                    button:NSLocalizedString(@"Restore", nil)
+                 suppressionUserDefaultKey:nil
+                                     block:^{
+                                       NSError* error;
+                                       if (![self.repository safeDeleteFileIfExists:path error:&error] || ![self.repository checkoutFileToWorkingDirectory:path fromCommit:parentCommit skipIndex:YES error:&error]) {
+                                         [self presentError:error];
+                                       }
+                                       [self.repository notifyWorkingDirectoryChanged];
+                                     }];
+    } else {
+      // File didn't exist in parent - it was added in this commit, so delete it
+      [self confirmUserActionWithAlertType:kGIAlertType_Stop
+                                     title:[NSString stringWithFormat:NSLocalizedString(@"Are you sure you want to delete the file \"%@\"?", nil), path.lastPathComponent]
+                                   message:NSLocalizedString(@"The file did not exist before this commit. Any local changes to this file will be lost. This action cannot be undone.", nil)
+                                    button:NSLocalizedString(@"Delete", nil)
+                 suppressionUserDefaultKey:nil
+                                     block:^{
+                                       NSError* error;
+                                       if (![self.repository safeDeleteFileIfExists:path error:&error]) {
+                                         [self presentError:error];
+                                       }
+                                       [self.repository notifyWorkingDirectoryChanged];
+                                     }];
+    }
+  } else {
+    // No parent commit (root commit) - file was added in this commit, so delete it
+    [self confirmUserActionWithAlertType:kGIAlertType_Stop
+                                   title:[NSString stringWithFormat:NSLocalizedString(@"Are you sure you want to delete the file \"%@\"?", nil), path.lastPathComponent]
+                                 message:NSLocalizedString(@"The file did not exist before this commit. Any local changes to this file will be lost. This action cannot be undone.", nil)
+                                  button:NSLocalizedString(@"Delete", nil)
+               suppressionUserDefaultKey:nil
+                                   block:^{
+                                     NSError* error;
+                                     if (![self.repository safeDeleteFileIfExists:path error:&error]) {
+                                       [self presentError:error];
+                                     }
+                                     [self.repository notifyWorkingDirectoryChanged];
+                                   }];
+  }
 }
 
 - (void)openFileWithDefaultEditor:(NSString*)path {

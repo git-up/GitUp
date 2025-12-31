@@ -46,6 +46,7 @@
 - (void)deleteUntrackedFile:(NSString*)path;  // Prompts user
 
 - (void)restoreFile:(NSString*)path toCommit:(GCCommit*)commit;  // Prompts user
+- (void)restoreFile:(NSString*)path toBeforeCommit:(GCCommit*)commit;  // Prompts user
 
 - (void)showFileInFinder:(NSString*)path;
 - (void)openFileWithDefaultEditor:(NSString*)path;

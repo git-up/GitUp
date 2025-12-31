@@ -219,6 +219,15 @@ static NSString* _CleanUpCommitMessage(NSString* message) {
     [menu addItemWithTitle:NSLocalizedString(@"Restore File to This Version…", nil) block:NULL];
   }
 
+  if (GC_FILE_MODE_IS_FILE(delta.oldFile.mode) || GC_FILE_MODE_IS_FILE(delta.newFile.mode)) {
+    [menu addItemWithTitle:NSLocalizedString(@"Restore File to Previous Version…", nil)
+                     block:^{
+                       [self restoreFile:delta.canonicalPath toBeforeCommit:_commit];
+                     }];
+  } else {
+    [menu addItemWithTitle:NSLocalizedString(@"Restore File to Previous Version…", nil) block:NULL];
+  }
+
   return menu;
 }
 
