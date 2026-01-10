@@ -83,11 +83,13 @@
                                                                         <action selector="stageAll:" target="-2" id="2S1-Ki-xaa"/>
                                                                     </connections>
                                                                 </button>
-                                                                <customView translatesAutoresizingMaskIntoConstraints="NO" id="EEr-wZ-rpO" customClass="GIColorView">
-                                                                    <rect key="frame" x="0.0" y="44" width="300" height="34"/>
+                                                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EEr-wZ-rpO" customClass="GIColorView">
+                                                                    <rect key="frame" x="0.0" y="215" width="300" height="34"/>
+                                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                                     <subviews>
-                                                                        <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="GEC-hP-IwB">
+                                                                        <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GEC-hP-IwB">
                                                                             <rect key="frame" x="8" y="10" width="122" height="16"/>
+                                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                             <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingTail" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="left" title="Working Directory" id="fB8-dk-yEW">
                                                                                 <font key="font" metaFont="systemBold"/>
                                                                                 <color key="textColor" name="alternateSelectedControlTextColor" catalog="System" colorSpace="catalog"/>
@@ -95,12 +97,6 @@
                                                                             </textFieldCell>
                                                                         </textField>
                                                                     </subviews>
-                                                                    <constraints>
-                                                                        <constraint firstAttribute="bottom" secondItem="GEC-hP-IwB" secondAttribute="bottom" constant="10" id="6Qa-Q8-5f3"/>
-                                                                        <constraint firstItem="GEC-hP-IwB" firstAttribute="leading" secondItem="EEr-wZ-rpO" secondAttribute="leading" constant="10" id="b3C-xg-197"/>
-                                                                        <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="GEC-hP-IwB" secondAttribute="trailing" constant="20" symbolic="YES" id="wrE-b0-dik"/>
-                                                                        <constraint firstItem="GEC-hP-IwB" firstAttribute="top" secondItem="EEr-wZ-rpO" secondAttribute="top" constant="8" id="zQJ-64-JCa"/>
-                                                                    </constraints>
                                                                 </customView>
                                                             </subviews>
                                                             <constraints>
@@ -109,16 +105,13 @@
                                                                 <constraint firstItem="nf2-5l-LHg" firstAttribute="width" secondItem="4zE-Zk-8sX" secondAttribute="width" id="67d-rD-wjC"/>
                                                                 <constraint firstItem="qxb-gR-CFd" firstAttribute="leading" secondItem="WHS-6x-fR7" secondAttribute="leading" id="LMN-ZX-G8N"/>
                                                                 <constraint firstAttribute="trailing" secondItem="nf2-5l-LHg" secondAttribute="trailing" constant="12" id="Onj-UA-p4D"/>
-                                                                <constraint firstItem="EEr-wZ-rpO" firstAttribute="leading" secondItem="WHS-6x-fR7" secondAttribute="leading" id="RUa-99-I6o"/>
                                                                 <constraint firstItem="4zE-Zk-8sX" firstAttribute="top" secondItem="qxb-gR-CFd" secondAttribute="bottom" constant="12" id="XCM-cx-Q9H"/>
-                                                                <constraint firstAttribute="trailing" secondItem="EEr-wZ-rpO" secondAttribute="trailing" id="Xnr-QZ-J4s"/>
                                                                 <constraint firstItem="nf2-5l-LHg" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="4zE-Zk-8sX" secondAttribute="trailing" constant="12" symbolic="YES" id="eMw-lX-F4C"/>
-                                                                <constraint firstItem="EEr-wZ-rpO" firstAttribute="top" secondItem="WHS-6x-fR7" secondAttribute="top" id="m9q-Ki-BpL"/>
                                                                 <constraint firstAttribute="bottom" secondItem="4zE-Zk-8sX" secondAttribute="bottom" constant="12" id="qCx-UQ-J9X"/>
                                                                 <constraint firstItem="4zE-Zk-8sX" firstAttribute="leading" secondItem="WHS-6x-fR7" secondAttribute="leading" constant="12" id="uGe-qH-e40"/>
                                                             </constraints>
                                                         </customView>
-                                                        <customView misplaced="YES" id="1t4-og-I2D">
+                                                        <customView fixedFrame="YES" id="1t4-og-I2D">
                                                             <rect key="frame" x="0.0" y="250" width="300" height="202"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
@@ -126,11 +119,13 @@
                                                                     <rect key="frame" x="0.0" y="0.0" width="300" height="169"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                 </customView>
-                                                                <customView misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0zR-9s-ty2" customClass="GIColorView">
+                                                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0zR-9s-ty2" customClass="GIColorView">
                                                                     <rect key="frame" x="0.0" y="169" width="300" height="33"/>
+                                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                                     <subviews>
-                                                                        <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="hEs-Hp-dbT">
+                                                                        <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hEs-Hp-dbT">
                                                                             <rect key="frame" x="8" y="9" width="40" height="16"/>
+                                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                             <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingTail" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="left" title="Index" id="UV4-jc-9yJ">
                                                                                 <font key="font" metaFont="systemBold"/>
                                                                                 <color key="textColor" name="alternateSelectedControlTextColor" catalog="System" colorSpace="catalog"/>
@@ -138,19 +133,8 @@
                                                                             </textFieldCell>
                                                                         </textField>
                                                                     </subviews>
-                                                                    <constraints>
-                                                                        <constraint firstItem="hEs-Hp-dbT" firstAttribute="leading" secondItem="0zR-9s-ty2" secondAttribute="leading" constant="10" id="GyW-DW-a6a"/>
-                                                                        <constraint firstItem="hEs-Hp-dbT" firstAttribute="top" secondItem="0zR-9s-ty2" secondAttribute="top" constant="8" id="PN1-Zk-NKt"/>
-                                                                        <constraint firstAttribute="bottom" secondItem="hEs-Hp-dbT" secondAttribute="bottom" constant="9" id="SaN-6K-MVk"/>
-                                                                        <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="hEs-Hp-dbT" secondAttribute="trailing" constant="20" symbolic="YES" id="xOC-Xc-eg0"/>
-                                                                    </constraints>
                                                                 </customView>
                                                             </subviews>
-                                                            <constraints>
-                                                                <constraint firstItem="0zR-9s-ty2" firstAttribute="top" secondItem="1t4-og-I2D" secondAttribute="top" id="69g-wR-mJ6"/>
-                                                                <constraint firstAttribute="trailing" secondItem="0zR-9s-ty2" secondAttribute="trailing" id="FlR-2x-LZT"/>
-                                                                <constraint firstItem="0zR-9s-ty2" firstAttribute="leading" secondItem="1t4-og-I2D" secondAttribute="leading" id="f4J-Cy-6er"/>
-                                                            </constraints>
                                                         </customView>
                                                     </subviews>
                                                     <holdingPriorities>
@@ -198,18 +182,19 @@
                             <rect key="frame" x="0.0" y="453" width="1000" height="147"/>
                             <autoresizingMask key="autoresizingMask"/>
                             <subviews>
-                                <scrollView focusRingType="exterior" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JJQ-Rg-cUm">
-                                    <rect key="frame" x="12" y="48" width="976" height="427"/>
+                                <scrollView focusRingType="exterior" fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JJQ-Rg-cUm">
+                                    <rect key="frame" x="12" y="48" width="976" height="90"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <clipView key="contentView" drawsBackground="NO" id="MSi-0x-dun">
-                                        <rect key="frame" x="1" y="1" width="974" height="425"/>
+                                        <rect key="frame" x="1" y="1" width="974" height="88"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <subviews>
                                             <textView importsGraphics="NO" richText="NO" verticallyResizable="YES" findStyle="panel" allowsUndo="YES" smartInsertDelete="YES" id="ZGk-oR-MNP" customClass="GICommitMessageView">
-                                                <rect key="frame" x="0.0" y="40" width="974" height="425"/>
+                                                <rect key="frame" x="0.0" y="40" width="974" height="88"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                <size key="minSize" width="974" height="425"/>
+                                                <size key="minSize" width="974" height="88"/>
                                                 <size key="maxSize" width="10000000" height="10000000"/>
                                                 <color key="insertionPointColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                 <connections>
@@ -223,7 +208,7 @@
                                         <autoresizingMask key="autoresizingMask"/>
                                     </scroller>
                                     <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="QYF-cC-yoX">
-                                        <rect key="frame" x="958" y="1" width="17" height="425"/>
+                                        <rect key="frame" x="958" y="1" width="17" height="84"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                     </scroller>
                                 </scrollView>
@@ -306,11 +291,7 @@ DQ
                             </subviews>
                             <constraints>
                                 <constraint firstItem="RWR-dc-6SK" firstAttribute="leading" secondItem="yf9-6S-SRZ" secondAttribute="leading" id="6EJ-CM-0fK"/>
-                                <constraint firstAttribute="trailing" secondItem="JJQ-Rg-cUm" secondAttribute="trailing" constant="12" id="8c1-ar-2lH"/>
                                 <constraint firstAttribute="bottom" secondItem="RWR-dc-6SK" secondAttribute="bottom" id="SxH-pr-wjP"/>
-                                <constraint firstItem="RWR-dc-6SK" firstAttribute="top" secondItem="JJQ-Rg-cUm" secondAttribute="bottom" id="VfG-af-SQj"/>
-                                <constraint firstItem="JJQ-Rg-cUm" firstAttribute="top" secondItem="yf9-6S-SRZ" secondAttribute="top" constant="12" id="fdq-4A-Ed7"/>
-                                <constraint firstItem="JJQ-Rg-cUm" firstAttribute="leading" secondItem="yf9-6S-SRZ" secondAttribute="leading" constant="12" id="qMQ-yA-bml"/>
                                 <constraint firstAttribute="trailing" secondItem="RWR-dc-6SK" secondAttribute="trailing" id="xq5-Vh-Nzf"/>
                             </constraints>
                         </customView>

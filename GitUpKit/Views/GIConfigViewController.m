@@ -251,17 +251,6 @@ static NSMutableDictionary* _patternHelp = nil;
   return view;
 }
 
-- (CGFloat)tableView:(NSTableView*)tableView heightOfRow:(NSInteger)row {
-  GCConfigOption* option = _config[row];
-  _cachedCellView.frame = NSMakeRect(0, 0, [_tableView.tableColumns[0] width], 1000);
-  NSTextField* textField = _cachedCellView.helpTextField;
-  NSRect frame = textField.frame;
-  textField.attributedStringValue = [[NSAttributedString alloc] initWithString:[self.class helpForVariable:option.variable] attributes:_helpAttributes];
-  NSSize size = [textField.cell cellSizeForBounds:NSMakeRect(0, 0, frame.size.width, HUGE_VALF)];
-  CGFloat delta = ceilf(size.height) - frame.size.height;
-  return _cachedCellView.frame.size.height + delta;
-}
-
 - (void)tableViewSelectionDidChange:(NSNotification*)notification {
   NSInteger row = _tableView.selectedRow;
   _editButton.enabled = (row >= 0);

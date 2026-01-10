@@ -144,8 +144,8 @@ DQ
                                                 <action selector="applyStash:" target="-2" id="307-iv-B8n"/>
                                             </connections>
                                         </button>
-                                        <stackView distribution="fill" orientation="horizontal" alignment="top" spacing="3" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sQB-eV-ghe">
-                                            <rect key="frame" x="12" y="12" width="78" height="24"/>
+                                        <stackView distribution="fill" orientation="horizontal" alignment="top" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sQB-eV-ghe">
+                                            <rect key="frame" x="12" y="12" width="79" height="24"/>
                                             <subviews>
                                                 <button toolTip="Save new stash" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="OrZ-IL-bI8">
                                                     <rect key="frame" x="0.0" y="0.0" width="38" height="24"/>
@@ -159,7 +159,7 @@ DQ
                                                     </connections>
                                                 </button>
                                                 <button toolTip="Delete selected stash" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Nb7-TT-Jjt">
-                                                    <rect key="frame" x="41" y="0.0" width="37" height="24"/>
+                                                    <rect key="frame" x="42" y="0.0" width="37" height="24"/>
                                                     <buttonCell key="cell" type="push" bezelStyle="rounded" image="NSRemoveTemplate" imagePosition="only" alignment="center" borderStyle="border" inset="2" id="REa-ay-zbm">
                                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                         <font key="font" metaFont="system"/>
