@@ -53,14 +53,14 @@
                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES"/>
                                         <prototypeCellViews>
                                             <tableCellView id="NwX-eD-TxR" customClass="GIConfigCellView">
-                                                <rect key="frame" x="0.0" y="0.0" width="1000" height="62"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="1000" height="60"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
-                                                    <stackView distribution="fill" orientation="horizontal" alignment="centerY" spacing="25" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PGG-Ln-zSu">
-                                                        <rect key="frame" x="12" y="12" width="976" height="38"/>
+                                                    <stackView distribution="fill" orientation="horizontal" alignment="centerY" spacing="25" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="500" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PGG-Ln-zSu">
+                                                        <rect key="frame" x="12" y="12" width="976" height="36"/>
                                                         <subviews>
                                                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="vZK-ii-fJx">
-                                                                <rect key="frame" x="-2" y="11" width="64" height="16"/>
+                                                                <rect key="frame" x="-2" y="10" width="64" height="16"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="60" id="D7B-fW-lzH"/>
                                                                 </constraints>
@@ -71,7 +71,7 @@
                                                                 </textFieldCell>
                                                             </textField>
                                                             <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zmt-27-Ewi">
-                                                                <rect key="frame" x="85" y="1" width="891" height="36"/>
+                                                                <rect key="frame" x="85" y="0.0" width="891" height="36"/>
                                                                 <subviews>
                                                                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Kgc-QS-TeT">
                                                                         <rect key="frame" x="-2" y="22" width="64" height="14"/>

@@ -125,15 +125,6 @@ static NSMutableDictionary* _patternHelp = nil;
   [self _reloadConfig];
 }
 
-- (void)viewDidResize {
-  if (self.viewVisible && !self.liveResizing) {
-    [NSAnimationContext beginGrouping];
-    [[NSAnimationContext currentContext] setDuration:0.0];  // Prevent animations in case the view is actually not on screen yet (e.g. in a hidden tab)
-    [_tableView noteHeightOfRowsWithIndexesChanged:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, _config.count)]];
-    [NSAnimationContext endGrouping];
-  }
-}
-
 - (void)repositoryDidChange {
   if (self.viewVisible) {
     [self _reloadConfig];
@@ -146,10 +137,6 @@ static NSMutableDictionary* _patternHelp = nil;
   _config = nil;
   _set = nil;
   [_tableView reloadData];
-}
-
-- (void)viewDidFinishLiveResize {
-  [_tableView noteHeightOfRowsWithIndexesChanged:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, _config.count)]];
 }
 
 - (BOOL)_selectOptionWithLevel:(GCConfigLevel)level variable:(NSString*)variable {
