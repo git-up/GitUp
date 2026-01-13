@@ -638,13 +638,13 @@ DQ
             <constraints>
                 <constraint firstItem="Ukh-fa-YMw" firstAttribute="leading" secondItem="qvM-yB-KWz" secondAttribute="leading" constant="20" symbolic="YES" id="7MW-zC-Dts"/>
                 <constraint firstAttribute="bottom" secondItem="Blj-1M-JJm" secondAttribute="bottom" constant="20" symbolic="YES" id="7u0-CY-XiX"/>
+                <constraint firstItem="Blj-1M-JJm" firstAttribute="top" secondItem="MtR-30-oY5" secondAttribute="bottom" constant="17" id="DHd-cH-X4R"/>
                 <constraint firstItem="Ukh-fa-YMw" firstAttribute="top" secondItem="qvM-yB-KWz" secondAttribute="top" constant="15" id="Hdk-9J-088"/>
                 <constraint firstAttribute="trailing" secondItem="Ukh-fa-YMw" secondAttribute="trailing" constant="20" symbolic="YES" id="Ids-vH-xmr"/>
                 <constraint firstAttribute="trailing" secondItem="MtR-30-oY5" secondAttribute="trailing" constant="20" symbolic="YES" id="a9Q-w8-OdR"/>
                 <constraint firstItem="MtR-30-oY5" firstAttribute="leading" secondItem="qvM-yB-KWz" secondAttribute="leading" constant="20" symbolic="YES" id="qxN-lt-4M8"/>
                 <constraint firstItem="MtR-30-oY5" firstAttribute="top" secondItem="Ukh-fa-YMw" secondAttribute="bottom" constant="8" symbolic="YES" id="swo-m3-ggB"/>
                 <constraint firstAttribute="trailing" secondItem="Blj-1M-JJm" secondAttribute="trailing" constant="20" symbolic="YES" id="tBY-vp-7lx"/>
-                <constraint firstItem="Blj-1M-JJm" firstAttribute="top" secondItem="leL-YY-uqs" secondAttribute="bottom" constant="18" id="vA7-eT-1d0"/>
             </constraints>
             <point key="canvasLocation" x="472" y="1770.5"/>
         </customView>
