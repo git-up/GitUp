@@ -217,28 +217,6 @@
   return nil;
 }
 
-- (CGFloat)tableView:(NSTableView*)tableView heightOfRow:(NSInteger)row {
-  id result = _results[row];
-
-  if ([result isKindOfClass:[GCCommit class]]) {
-    GCCommit* commit = result;
-    _cachedCommitCellView.frame = NSMakeRect(0, 0, [_tableView.tableColumns[0] width], 1000);
-    NSTextField* textField = _cachedCommitCellView.summaryTextField;
-    NSRect frame = textField.frame;
-    textField.stringValue = commit.summary;
-    NSSize size = [textField.cell cellSizeForBounds:NSMakeRect(0, 0, frame.size.width, HUGE_VALF)];
-    CGFloat delta = ceilf(size.height) - frame.size.height;
-    return _cachedCommitCellView.frame.size.height + delta;
-  }
-
-  if ([result isKindOfClass:[GCReference class]]) {
-    return _referenceCellHeight;
-  }
-
-  XLOG_DEBUG_UNREACHABLE();
-  return _tableView.rowHeight;
-}
-
 - (void)tableViewSelectionDidChange:(NSNotification*)notification {
   if ([_delegate respondsToSelector:@selector(commitListViewControllerDidChangeSelection:)]) {
     [_delegate commitListViewControllerDidChangeSelection:self];

@@ -910,9 +910,14 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
     XLOG_DEBUG_UNREACHABLE();
   }
   if (showHelp) {
+    NSWindow *window = _mainTabView.window;
+    CGRect frame = window.frame;
+    CGRect layoutRect = window.contentLayoutRect;
+    CGFloat toolbarHeight = frame.size.height - layoutRect.size.height;
+    
     NSRect contentBounds = _contentView.bounds;
     _helpView.hidden = NO;
-    _mainTabView.frame = NSMakeRect(contentBounds.origin.x, contentBounds.origin.y, contentBounds.size.width, contentBounds.size.height - _helpView.frame.size.height);
+    _mainTabView.frame = NSMakeRect(contentBounds.origin.x, contentBounds.origin.y, contentBounds.size.width, contentBounds.size.height - _helpView.frame.size.height - toolbarHeight);
   } else if (!_helpView.hidden) {
     _mainTabView.frame = _contentView.bounds;
     _helpView.hidden = YES;

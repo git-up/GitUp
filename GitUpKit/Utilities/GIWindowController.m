@@ -230,33 +230,32 @@ static void _TimerCallBack(CFRunLoopTimerRef timer, void* info) {
   }
 
   if (_overlayView.superview == nil) {
-    NSRect bounds = [self.window.contentView bounds];
+    NSRect bounds = self.window.contentLayoutRect;
     NSRect frame = _overlayView.frame;
     _overlayView.frame = NSMakeRect(0, bounds.size.height - frame.size.height, bounds.size.width, frame.size.height);
+    _overlayView.alphaValue = 0;
     [self.window.contentView addSubview:_overlayView];  // Must be above everything else
-    _overlayView.hidden = YES;
     [CATransaction flush];
 
     _overlayTextField.stringValue = message;
-    [NSAnimationContext beginGrouping];
-    [[NSAnimationContext currentContext] setDuration:kOverlayAnimationInDuration];
-    [[NSAnimationContext currentContext] setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut]];
-    [_overlayView.animator setHidden:NO];
-    [NSAnimationContext endGrouping];
-  } else {
-    [NSAnimationContext beginGrouping];
-    [[NSAnimationContext currentContext] setDuration:kOverlayAnimationInDuration];
-    [[NSAnimationContext currentContext] setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn]];
-    [[NSAnimationContext currentContext] setCompletionHandler:^{
-      _overlayTextField.stringValue = message;
-      [NSAnimationContext beginGrouping];
-      [[NSAnimationContext currentContext] setDuration:kOverlayAnimationInDuration];
-      [[NSAnimationContext currentContext] setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut]];
-      [_overlayTextField.animator setAlphaValue:1.0];
-      [NSAnimationContext endGrouping];
+    [NSAnimationContext runAnimationGroup:^(NSAnimationContext * _Nonnull context) {
+      context.duration = kOverlayAnimationInDuration;
+      context.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
+      _overlayView.animator.alphaValue = 1;
     }];
-    [_overlayTextField.animator setAlphaValue:0.0];
-    [NSAnimationContext endGrouping];
+  } else {
+    [NSAnimationContext runAnimationGroup:^(NSAnimationContext * _Nonnull context) {
+      context.duration = kOverlayAnimationInDuration;
+      context.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];
+      _overlayTextField.animator.alphaValue = 0.0;
+    } completionHandler:^{
+      _overlayTextField.stringValue = message;
+      [NSAnimationContext runAnimationGroup:^(NSAnimationContext * _Nonnull context) {
+        context.duration = kOverlayAnimationInDuration;
+        context.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
+        _overlayTextField.animator.alphaValue = 1.0;
+      }];
+    }];
   }
 
   CFRunLoopTimerSetNextFireDate(_overlayTimer, CFAbsoluteTimeGetCurrent() + _overlayDelay);
@@ -264,17 +263,13 @@ static void _TimerCallBack(CFRunLoopTimerRef timer, void* info) {
 
 - (void)hideOverlay {
   if (_overlayView.superview) {
-    NSRect frame = _overlayView.frame;
-    NSRect newFrame = NSOffsetRect(frame, 0, frame.size.height);
-
-    [NSAnimationContext beginGrouping];
-    [[NSAnimationContext currentContext] setDuration:kOverlayAnimationOutDuration];
-    [[NSAnimationContext currentContext] setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut]];
-    [[NSAnimationContext currentContext] setCompletionHandler:^{
+    [NSAnimationContext runAnimationGroup:^(NSAnimationContext * _Nonnull context) {
+      context.duration = kOverlayAnimationOutDuration;
+      context.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
+      _overlayView.animator.alphaValue = 0;
+    } completionHandler:^{
       [_overlayView removeFromSuperview];
     }];
-    [_overlayView.animator setFrame:newFrame];
-    [NSAnimationContext endGrouping];
 
     CFRunLoopTimerSetNextFireDate(_overlayTimer, HUGE_VALF);
   } else {

@@ -55,19 +55,19 @@
                 <outlet property="window" destination="xOd-HO-29H" id="JIz-fz-R2o"/>
             </connections>
         </customObject>
-        <window title="Window" separatorStyle="line" allowsToolTipsWhenApplicationIsInactive="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="xOd-HO-29H" userLabel="Main Window" customClass="GIWindow">
-            <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
+        <window title="Window" separatorStyle="line" allowsToolTipsWhenApplicationIsInactive="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" toolbarStyle="unified" id="xOd-HO-29H" userLabel="Main Window" customClass="GIWindow">
+            <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" fullSizeContentView="YES"/>
             <windowCollectionBehavior key="collectionBehavior" fullScreenPrimary="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="253" y="204" width="1000" height="500"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1728" height="1084"/>
-            <value key="minSize" type="size" width="800" height="400"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1410"/>
+            <value key="minSize" type="size" width="800" height="490"/>
             <view key="contentView" id="gIp-Ho-8D9">
                 <rect key="frame" x="0.0" y="0.0" width="1000" height="500"/>
                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 <subviews>
                     <customView hidden="YES" appearanceType="aqua" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Zjf-1c-7Wk" customClass="GIColorView">
-                        <rect key="frame" x="0.0" y="450" width="1000" height="50"/>
+                        <rect key="frame" x="0.0" y="400" width="1000" height="50"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <subviews>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hTO-MR-3XZ">
@@ -132,49 +132,49 @@
                             </tabViewItem>
                             <tabViewItem label="QuickView" identifier="quickview" id="lZZ-Pi-ftk">
                                 <view key="view" id="oyq-DX-wtX">
-                                    <rect key="frame" x="0.0" y="0.0" width="1000" height="500"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="1000" height="531"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Diff" identifier="diff" id="Zf6-Lu-ykr">
                                 <view key="view" id="WCe-UI-kea">
-                                    <rect key="frame" x="0.0" y="0.0" width="1000" height="500"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="1000" height="531"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Rewrite" identifier="rewrite" id="2rq-Yc-FZg" userLabel="Rewrite">
                                 <view key="view" id="0Om-In-WCJ">
-                                    <rect key="frame" x="0.0" y="0.0" width="1000" height="500"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="1000" height="531"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Split" identifier="split" id="Ix2-LZ-4Bu" userLabel="Split">
                                 <view key="view" id="eld-gQ-vK9">
-                                    <rect key="frame" x="0.0" y="0.0" width="1000" height="500"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="1000" height="531"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Resolve" identifier="resolve" id="GZi-Cj-7Lj" userLabel="Resolve">
                                 <view key="view" id="qfF-Zh-xYt">
-                                    <rect key="frame" x="0.0" y="0.0" width="1000" height="500"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="1000" height="531"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Commit" identifier="commit" id="nIS-m1-wSa">
                                 <view key="view" id="s88-QZ-O0i">
-                                    <rect key="frame" x="0.0" y="0.0" width="1000" height="500"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="1000" height="531"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Stashes" identifier="stashes" id="2be-V6-QZz">
                                 <view key="view" id="t1Z-eK-4g6">
-                                    <rect key="frame" x="0.0" y="0.0" width="1000" height="500"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="1000" height="531"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Config" identifier="config" id="UEe-IZ-19Z">
                                 <view key="view" id="mhf-LA-IQ4">
-                                    <rect key="frame" x="0.0" y="0.0" width="1000" height="500"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="1000" height="531"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
                             </tabViewItem>
@@ -737,7 +737,7 @@ Adjust settings in Show menu</string>
             <windowStyleMask key="styleMask" titled="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="131" y="158" width="450" height="173"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1728" height="1084"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1410"/>
             <view key="contentView" id="l4r-5b-f0f">
                 <rect key="frame" x="0.0" y="0.0" width="450" height="173"/>
                 <autoresizingMask key="autoresizingMask"/>
