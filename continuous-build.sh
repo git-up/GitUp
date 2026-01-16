@@ -23,7 +23,7 @@ ARCHIVE_PATH="build/$ARCHIVE_NAME"
 
 ##### Notarize zip file
 
-ditto -c -k --keepParent "$PRODUCT_PATH" "$ARCHIVE_PATH"
+ditto -c -k --keepParent --norsrc --noextattr "$PRODUCT_PATH" "$ARCHIVE_PATH"
 
 # "PersonalNotary" is the profile name assigned from `notarytool store-credentials`
 xcrun notarytool submit $ARCHIVE_PATH --keychain-profile "PersonalNotary" --wait
@@ -34,7 +34,7 @@ echo "Notarization has completed"
 
 xcrun stapler staple "$PRODUCT_PATH"
 
-ditto -c -k --keepParent "$PRODUCT_PATH" "$ARCHIVE_PATH"
+ditto -c -k --keepParent --norsrc --noextattr "$PRODUCT_PATH" "$ARCHIVE_PATH"
 
 ##### Tag build
 
