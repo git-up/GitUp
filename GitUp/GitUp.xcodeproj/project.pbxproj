@@ -335,6 +335,7 @@
 				E2C338A919F8562F00063D95 /* Resources */,
 				E2653D271A5B3298006A9871 /* Copy Frameworks */,
 				E21DCAF21B2538FB006424E8 /* Copy Tool */,
+				1D7D03E724528390002C1736 /* Sparkle Code Sign */,
 				1DE5583E2B9D89BF006BA332 /* Xcode 15 Framework Patching */,
 			);
 			buildRules = (
@@ -443,6 +444,24 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		1D7D03E724528390002C1736 /* Sparkle Code Sign */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Sparkle Code Sign";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Code sign sparkle app\nLOCATION=\"${BUILT_PRODUCTS_DIR}\"/\"${FRAMEWORKS_FOLDER_PATH}\"\n\n# By default, use the configured code signing identity for the project/target\nIDENTITY=\"${EXPANDED_CODE_SIGN_IDENTITY}\"\nif [ \"$IDENTITY\" == \"\" ]\nthen\n  # If a code signing identity is not specified, use ad hoc signing\n  IDENTITY=\"-\"\nfi\n\n# Sparkle Code Signing https://sparkle-project.org/documentation/sandboxing/#code-signing\ncodesign -f -s \"$IDENTITY\" -o runtime \"$LOCATION/Sparkle.framework/Versions/B/XPCServices/Installer.xpc\"\n\n# For Sparkle versions >= 2.6\ncodesign -f -s \"$IDENTITY\" -o runtime --preserve-metadata=entitlements \"$LOCATION/Sparkle.framework/Versions/B/XPCServices/Downloader.xpc\"\n\ncodesign -f -s \"$IDENTITY\" -o runtime \"$LOCATION/Sparkle.framework/Versions/B/Autoupdate\"\ncodesign -f -s \"$IDENTITY\" -o runtime \"$LOCATION/Sparkle.framework/Versions/B/Updater.app\"\n\ncodesign -f -s \"$IDENTITY\" -o runtime \"$LOCATION/Sparkle.framework\"\n";
+		};
 		1DE5583E2B9D89BF006BA332 /* Xcode 15 Framework Patching */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 8;
