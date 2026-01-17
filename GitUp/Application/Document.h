@@ -32,6 +32,7 @@ typedef NS_ENUM(NSInteger, WindowModeID) {
 @property(nonatomic, strong) IBOutlet NSView* contentView;
 
 @property(nonatomic, weak) IBOutlet NSView* helpView;
+@property(nonatomic, strong) IBOutlet NSLayoutConstraint* helpViewToTabViewConstraint;
 @property(nonatomic, weak) IBOutlet NSTextField* helpTextField;
 @property(nonatomic, weak) IBOutlet NSButton* helpContinueButton;
 @property(nonatomic, weak) IBOutlet NSButton* helpDismissButton;

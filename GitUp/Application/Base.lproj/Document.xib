@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24506"/>
+        <capability name="NSView safe area layout guides" minToolsVersion="12.0"/>
         <capability name="Search Toolbar Item" minToolsVersion="12.0" minSystemVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -17,6 +18,7 @@
                 <outlet property="helpOpenButton" destination="cA6-Ht-e3Z" id="GWb-T7-oe0"/>
                 <outlet property="helpTextField" destination="hTO-MR-3XZ" id="x1j-wP-MJw"/>
                 <outlet property="helpView" destination="Zjf-1c-7Wk" id="V4P-Tc-ofE"/>
+                <outlet property="helpViewToTabViewConstraint" destination="LZl-0T-rYC" id="5vI-sR-jdT"/>
                 <outlet property="hiddenWarningView" destination="4K3-nK-X1O" id="und-Lh-TE7"/>
                 <outlet property="indexDiffsButton" destination="8hM-1U-Hhn" id="iu9-J3-Muk"/>
                 <outlet property="infoTextField1" destination="cbp-6y-jbG" id="kuD-M7-wz2"/>
@@ -59,16 +61,14 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" fullSizeContentView="YES"/>
             <windowCollectionBehavior key="collectionBehavior" fullScreenPrimary="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="253" y="204" width="1000" height="500"/>
+            <rect key="contentRect" x="253" y="204" width="612" height="365"/>
             <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1410"/>
             <value key="minSize" type="size" width="800" height="490"/>
-            <view key="contentView" id="gIp-Ho-8D9">
-                <rect key="frame" x="0.0" y="0.0" width="1000" height="500"/>
-                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <view key="contentView" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gIp-Ho-8D9">
+                <rect key="frame" x="0.0" y="0.0" width="612" height="365"/>
                 <subviews>
-                    <customView hidden="YES" appearanceType="aqua" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Zjf-1c-7Wk" customClass="GIColorView">
-                        <rect key="frame" x="0.0" y="400" width="1000" height="50"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                    <customView hidden="YES" appearanceType="aqua" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Zjf-1c-7Wk" customClass="GIColorView">
+                        <rect key="frame" x="0.0" y="211" width="612" height="50"/>
                         <subviews>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hTO-MR-3XZ">
                                 <rect key="frame" x="8" y="8" width="818" height="31"/>
@@ -80,7 +80,7 @@
                                 </textFieldCell>
                             </textField>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="W0y-nq-maS">
-                                <rect key="frame" x="910" y="16" width="80" height="17"/>
+                                <rect key="frame" x="522" y="16" width="80" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="roundRect" title="Continue" bezelStyle="roundedRect" alignment="center" controlSize="small" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="3Bn-bb-IAI">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -91,7 +91,7 @@
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="etB-ce-0PB">
-                                <rect key="frame" x="832" y="16" width="60" height="17"/>
+                                <rect key="frame" x="444" y="16" width="60" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="roundRect" title="Got It!" bezelStyle="roundedRect" alignment="center" controlSize="small" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="U4W-Zh-R2B">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -102,7 +102,7 @@
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cA6-Ht-e3Z">
-                                <rect key="frame" x="900" y="16" width="90" height="17"/>
+                                <rect key="frame" x="512" y="16" width="90" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="roundRect" title="Learn More…" bezelStyle="roundedRect" alignment="center" controlSize="small" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ux0-pi-0du">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -113,20 +113,22 @@
                                 </connections>
                             </button>
                         </subviews>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="50" id="1ZV-wN-Zgh"/>
+                        </constraints>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="color" keyPath="backgroundColor">
                                 <color key="value" red="1" green="0.87657738947652419" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                             </userDefinedRuntimeAttribute>
                         </userDefinedRuntimeAttributes>
                     </customView>
-                    <tabView fixedFrame="YES" drawsBackground="NO" allowsTruncatedLabels="NO" type="noTabsNoBorder" translatesAutoresizingMaskIntoConstraints="NO" id="8LX-i4-RBG">
-                        <rect key="frame" x="0.0" y="0.0" width="1000" height="500"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                    <tabView ambiguous="YES" drawsBackground="NO" allowsTruncatedLabels="NO" type="noTabsNoBorder" translatesAutoresizingMaskIntoConstraints="NO" id="8LX-i4-RBG">
+                        <rect key="frame" x="0.0" y="0.0" width="612" height="365"/>
                         <font key="font" metaFont="system"/>
                         <tabViewItems>
                             <tabViewItem label="Map" identifier="map" id="N3S-ZN-7aj">
-                                <view key="view" id="KTA-UW-CKM">
-                                    <rect key="frame" x="0.0" y="0.0" width="1000" height="500"/>
+                                <view key="view" ambiguous="YES" id="KTA-UW-CKM">
+                                    <rect key="frame" x="0.0" y="0.0" width="612" height="365"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
                             </tabViewItem>
@@ -181,6 +183,18 @@
                         </tabViewItems>
                     </tabView>
                 </subviews>
+                <constraints>
+                    <constraint firstItem="87c-pF-02X" firstAttribute="top" secondItem="Zjf-1c-7Wk" secondAttribute="top" id="D2d-qL-deh"/>
+                    <constraint firstItem="8LX-i4-RBG" firstAttribute="trailing" secondItem="87c-pF-02X" secondAttribute="trailing" id="GCZ-r5-980"/>
+                    <constraint firstItem="8LX-i4-RBG" firstAttribute="top" secondItem="Zjf-1c-7Wk" secondAttribute="bottom" id="LZl-0T-rYC"/>
+                    <constraint firstItem="Zjf-1c-7Wk" firstAttribute="trailing" secondItem="87c-pF-02X" secondAttribute="trailing" id="M7t-0p-HEb"/>
+                    <constraint firstItem="8LX-i4-RBG" firstAttribute="top" secondItem="gIp-Ho-8D9" secondAttribute="top" priority="999" id="anM-q1-lzo"/>
+                    <constraint firstItem="8LX-i4-RBG" firstAttribute="leading" secondItem="87c-pF-02X" secondAttribute="leading" id="cyW-aG-PlQ"/>
+                    <constraint firstItem="Zjf-1c-7Wk" firstAttribute="leading" secondItem="87c-pF-02X" secondAttribute="leading" id="fLu-3d-miy"/>
+                    <constraint firstItem="8LX-i4-RBG" firstAttribute="bottom" secondItem="87c-pF-02X" secondAttribute="bottom" id="seL-8w-yF7"/>
+                </constraints>
+                <viewLayoutGuide key="safeArea" id="87c-pF-02X"/>
+                <viewLayoutGuide key="layoutMargins" id="TtR-dW-CBE"/>
             </view>
             <toolbar key="toolbar" implicitIdentifier="42EAA8AB-C985-49E8-81F5-068903B112A9" centeredItem="zlv-TE-Jdd" autosavesConfiguration="NO" allowsUserCustomization="NO" showsBaselineSeparator="NO" displayMode="iconOnly" sizeMode="regular" id="eX2-uf-7aH">
                 <allowedToolbarItems>
@@ -280,7 +294,7 @@
                     <outlet property="delegate" destination="-2" id="YNn-Pj-uPM"/>
                 </connections>
             </toolbar>
-            <point key="canvasLocation" x="-175" y="59"/>
+            <point key="canvasLocation" x="-113" y="-62"/>
         </window>
         <customView id="p3q-Tt-mR8" userLabel="Map View">
             <rect key="frame" x="0.0" y="0.0" width="1000" height="518"/>
