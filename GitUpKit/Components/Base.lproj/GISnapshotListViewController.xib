@@ -18,9 +18,8 @@
             <rect key="frame" x="0.0" y="0.0" width="310" height="500"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <scrollView fixedFrame="YES" borderType="none" autohidesScrollers="YES" horizontalLineScroll="67" horizontalPageScroll="10" verticalLineScroll="67" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" horizontalScrollElasticity="none" translatesAutoresizingMaskIntoConstraints="NO" id="AJL-NY-aX0">
+                <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="67" horizontalPageScroll="10" verticalLineScroll="67" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" horizontalScrollElasticity="none" translatesAutoresizingMaskIntoConstraints="NO" id="AJL-NY-aX0">
                     <rect key="frame" x="0.0" y="0.0" width="310" height="500"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <clipView key="contentView" id="rt3-aj-SED">
                         <rect key="frame" x="0.0" y="0.0" width="310" height="500"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -144,6 +143,12 @@
                     </scroller>
                 </scrollView>
             </subviews>
+            <constraints>
+                <constraint firstItem="AJL-NY-aX0" firstAttribute="leading" secondItem="Mge-gB-T5T" secondAttribute="leading" id="28t-5C-WgL"/>
+                <constraint firstAttribute="trailing" secondItem="AJL-NY-aX0" secondAttribute="trailing" id="Y4j-om-Xln"/>
+                <constraint firstItem="AJL-NY-aX0" firstAttribute="top" secondItem="Mge-gB-T5T" secondAttribute="top" id="uI5-T2-fNs"/>
+                <constraint firstAttribute="bottom" secondItem="AJL-NY-aX0" secondAttribute="bottom" id="uxQ-8B-RE3"/>
+            </constraints>
             <point key="canvasLocation" x="40" y="536"/>
         </view>
     </objects>

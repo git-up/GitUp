@@ -300,6 +300,8 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
   searchFieldPreferredWidth.priority = NSLayoutPriorityDefaultHigh - 20;
   NSLayoutConstraint* searchFieldMaxWidth = [_searchItem.searchField.widthAnchor constraintLessThanOrEqualToConstant:kSearchFieldExpandedWidth];
   [NSLayoutConstraint activateConstraints:@[ searchFieldPreferredWidth, searchFieldMaxWidth ]];
+  
+  _helpViewToTabViewConstraint.active = NO;
 
   _mapViewController = [[GIMapViewController alloc] initWithRepository:_repository];
   _mapViewController.delegate = self;

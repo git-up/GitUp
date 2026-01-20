@@ -61,14 +61,14 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" fullSizeContentView="YES"/>
             <windowCollectionBehavior key="collectionBehavior" fullScreenPrimary="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="253" y="204" width="612" height="365"/>
+            <rect key="contentRect" x="253" y="204" width="800" height="561"/>
             <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1410"/>
             <value key="minSize" type="size" width="800" height="490"/>
             <view key="contentView" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gIp-Ho-8D9">
-                <rect key="frame" x="0.0" y="0.0" width="612" height="365"/>
+                <rect key="frame" x="0.0" y="0.0" width="800" height="561"/>
                 <subviews>
                     <customView hidden="YES" appearanceType="aqua" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Zjf-1c-7Wk" customClass="GIColorView">
-                        <rect key="frame" x="0.0" y="211" width="612" height="50"/>
+                        <rect key="frame" x="0.0" y="407" width="612" height="50"/>
                         <subviews>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hTO-MR-3XZ">
                                 <rect key="frame" x="8" y="8" width="818" height="31"/>
@@ -123,7 +123,7 @@
                         </userDefinedRuntimeAttributes>
                     </customView>
                     <tabView ambiguous="YES" drawsBackground="NO" allowsTruncatedLabels="NO" type="noTabsNoBorder" translatesAutoresizingMaskIntoConstraints="NO" id="8LX-i4-RBG">
-                        <rect key="frame" x="0.0" y="0.0" width="612" height="365"/>
+                        <rect key="frame" x="0.0" y="196" width="612" height="365"/>
                         <font key="font" metaFont="system"/>
                         <tabViewItems>
                             <tabViewItem label="Map" identifier="map" id="N3S-ZN-7aj">
@@ -294,7 +294,7 @@
                     <outlet property="delegate" destination="-2" id="YNn-Pj-uPM"/>
                 </connections>
             </toolbar>
-            <point key="canvasLocation" x="-113" y="-62"/>
+            <point key="canvasLocation" x="289" y="167.5"/>
         </window>
         <customView id="p3q-Tt-mR8" userLabel="Map View">
             <rect key="frame" x="0.0" y="0.0" width="1000" height="518"/>
@@ -628,11 +628,9 @@ Adjust settings in Show menu</string>
             <rect key="frame" x="0.0" y="0.0" width="261" height="500"/>
             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" heightSizable="YES"/>
             <subviews>
-                <customView translatesAutoresizingMaskIntoConstraints="NO" id="8Xd-B3-3KB">
+                <customView id="8Xd-B3-3KB">
                     <rect key="frame" x="1" y="41" width="260" height="459"/>
-                    <constraints>
-                        <constraint firstAttribute="width" constant="260" id="HV6-eG-eeh"/>
-                    </constraints>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 </customView>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="rOD-bh-eJs">
                     <rect key="frame" x="87" y="8" width="88" height="24"/>
@@ -656,16 +654,13 @@ Adjust settings in Show menu</string>
             </subviews>
             <constraints>
                 <constraint firstItem="BaD-c2-XFv" firstAttribute="top" secondItem="pJT-Vs-rsm" secondAttribute="top" id="9Z0-jG-S1Y"/>
-                <constraint firstItem="8Xd-B3-3KB" firstAttribute="leading" secondItem="BaD-c2-XFv" secondAttribute="trailing" id="DKb-fF-pZH"/>
                 <constraint firstAttribute="bottom" secondItem="rOD-bh-eJs" secondAttribute="bottom" constant="8" id="Kef-A5-dmC"/>
                 <constraint firstAttribute="trailing" secondItem="Usm-DE-GWR" secondAttribute="trailing" id="Nr7-rh-mHc"/>
                 <constraint firstAttribute="bottom" secondItem="BaD-c2-XFv" secondAttribute="bottom" id="OKP-CZ-VT6"/>
+                <constraint firstItem="BaD-c2-XFv" firstAttribute="leading" secondItem="pJT-Vs-rsm" secondAttribute="leading" id="Stt-SV-dVv"/>
                 <constraint firstItem="rOD-bh-eJs" firstAttribute="centerX" secondItem="pJT-Vs-rsm" secondAttribute="centerX" id="cQi-wF-BIq"/>
-                <constraint firstItem="8Xd-B3-3KB" firstAttribute="top" secondItem="pJT-Vs-rsm" secondAttribute="top" id="dbY-vm-VV3"/>
                 <constraint firstItem="rOD-bh-eJs" firstAttribute="top" secondItem="Usm-DE-GWR" secondAttribute="bottom" constant="8" id="eYx-Rn-O7K"/>
                 <constraint firstItem="Usm-DE-GWR" firstAttribute="leading" secondItem="pJT-Vs-rsm" secondAttribute="leading" constant="1" id="f13-aO-zM1"/>
-                <constraint firstAttribute="trailing" secondItem="8Xd-B3-3KB" secondAttribute="trailing" id="hBn-cA-XXH"/>
-                <constraint firstItem="Usm-DE-GWR" firstAttribute="top" secondItem="8Xd-B3-3KB" secondAttribute="bottom" id="yaf-NF-Avr"/>
             </constraints>
             <point key="canvasLocation" x="-526" y="650"/>
         </customView>
