@@ -195,7 +195,12 @@ static inline NSComparisonResult _TimeCompare(GCCommit* commit1, GCCommit* commi
   NSMutableArray* array = [[NSMutableArray alloc] init];
   for (unsigned int i = 0, count = git_commit_parentcount(commit.private); i < count; ++i) {
     git_commit* gitCommit;
-    CALL_LIBGIT2_FUNCTION_RETURN(nil, git_commit_parent, &gitCommit, commit.private, i);
+    int status = git_commit_parent(&gitCommit, commit.private, i);
+    if (status == GIT_ENOTFOUND) {
+      XLOG_WARNING(@"Missing parent commit for %s in repository \"%@\"", git_oid_tostr_s(git_commit_id(commit.private)), self.repositoryPath);
+      continue;
+    }
+    CHECK_LIBGIT2_FUNCTION_CALL(return nil, status, == GIT_OK);
     GCCommit* parentCommit = [[GCCommit alloc] initWithRepository:self commit:gitCommit];
     [array addObject:parentCommit];
   }
