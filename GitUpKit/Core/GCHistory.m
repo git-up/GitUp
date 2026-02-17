@@ -924,9 +924,18 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
     if (status == GIT_ITEROVER) {
       break;
     }
+    if (status == GIT_ENOTFOUND) {
+      XLOG_WARNING(@"Missing commit encountered while walking history in \"%@\"", self.repositoryPath);
+      continue;
+    }
     CHECK_LIBGIT2_FUNCTION_CALL(goto cleanup, status, == GIT_OK);
     git_commit* walkCommit;
-    CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_commit_lookup, &walkCommit, self.private, &oid);
+    status = git_commit_lookup(&walkCommit, self.private, &oid);
+    if (status == GIT_ENOTFOUND) {
+      XLOG_WARNING(@"Missing commit %s from repository \"%@\"", git_oid_tostr_s(&oid), self.repositoryPath);
+      continue;
+    }
+    CHECK_LIBGIT2_FUNCTION_CALL(goto cleanup, status, == GIT_OK);
     GCHistoryCommit* commit = [[GCHistoryCommit alloc] initWithRepository:self commit:walkCommit autoIncrementID:nextAutoIncrementID++];
     [commits addObject:commit];
     [commit release];
@@ -1224,6 +1233,11 @@ cleanup:
             for (unsigned int i = 0, count = git_commit_parentcount(commit); i < count; ++i) {
               git_commit* parentCommit;
               status = git_commit_parent(&parentCommit, commit, i);
+              if (status == GIT_ENOTFOUND) {
+                XLOG_WARNING(@"Missing parent commit for %s in repository \"%@\"", git_oid_tostr_s(&oid), self.repositoryPath);
+                status = GIT_ITEROVER;
+                break;
+              }
               if (status == GIT_OK) {
                 git_tree* parentTree;
                 status = git_commit_tree(&parentTree, parentCommit);
@@ -1265,7 +1279,13 @@ cleanup:
           git_tree_free(tree);
         }
         git_commit_free(commit);
+      } else if (status == GIT_ENOTFOUND) {
+        XLOG_WARNING(@"Missing commit %s from repository \"%@\"", git_oid_tostr_s(&oid), self.repositoryPath);
+        status = GIT_OK;
       }
+    } else if (status == GIT_ENOTFOUND) {
+      XLOG_WARNING(@"Missing commit encountered while walking file history in \"%@\"", self.repositoryPath);
+      status = GIT_OK;
     }
     if (status == GIT_ITEROVER) {
       break;
