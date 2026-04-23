@@ -560,9 +560,6 @@ cleanup:
                                    git_diff* diff2;
                                    diffOptions->flags |= GIT_DIFF_UPDATE_INDEX;
                                    status = git_diff_index_to_workdir(&diff2, self.private, index.private, diffOptions);
-                                   if (status == GIT_ELOCKED) {
-                                     status = GIT_OK;  // Passing GIT_DIFF_UPDATE_INDEX means git_diff_index_to_workdir() may attempt to write the index and this could fail if it is currently locked by another process but that's OK to ignore this failure
-                                   }
                                    if (status == GIT_OK) {
                                      status = git_diff_merge(*outDiff, diff2);
                                      if (status != GIT_OK) {
@@ -599,11 +596,7 @@ cleanup:
                        error:error
                        block:^int(git_diff** outDiff, git_diff_options* diffOptions) {
                          diffOptions->flags |= GIT_DIFF_UPDATE_INDEX;
-                         int status = git_diff_index_to_workdir(outDiff, self.private, index.private, diffOptions);
-                         if (status == GIT_ELOCKED) {
-                           status = GIT_OK;  // Passing GIT_DIFF_UPDATE_INDEX means git_diff_index_to_workdir() will attempt to write the index even if there are no changes and this could fail if it is currently locked by another process
-                         }
-                         return status;
+                         return git_diff_index_to_workdir(outDiff, self.private, index.private, diffOptions);
                        }];
 }
 
