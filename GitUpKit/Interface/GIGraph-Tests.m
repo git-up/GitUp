@@ -23,10 +23,61 @@
 #define kNotationSeparator @"##### NOTATION #####\n\n"
 #define kGraphSeparator @"##### GRAPH #####\n\n"
 
-@interface GIGraphTests : XCTestCase
+@interface GIGraphTests : GCTestCase
 @end
 
 @implementation GIGraphTests
+
+- (NSString*)_runGitWithRepository:(GCRepository*)repository arguments:(NSArray*)arguments environment:(NSDictionary*)environment {
+  GCTask* task = [[GCTask alloc] initWithExecutablePath:@"/usr/bin/git"];
+  task.currentDirectoryPath = repository.workingDirectoryPath;
+  task.additionalEnvironment = environment;
+  NSData* data;
+  BOOL success = [task runWithArguments:arguments stdin:nil stdout:&data stderr:NULL exitStatus:NULL error:NULL];
+  XCTAssertTrue(success);
+  return [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+}
+
+- (void)_makeEmptyCommitInRepository:(GCRepository*)repository message:(NSString*)message date:(NSString*)date {
+  NSDictionary* environment = @{@"GIT_AUTHOR_DATE" : date, @"GIT_COMMITTER_DATE" : date};
+  [self _runGitWithRepository:repository
+                    arguments:@[ @"-c", @"user.name=Bot", @"-c", @"user.email=bot@example.com", @"commit", @"--allow-empty", @"-m", message ]
+                   environment:environment];
+}
+
+- (void)testVirtualTipDoesNotOwnSharedHistory {
+  NSString* path = [NSTemporaryDirectory() stringByAppendingPathComponent:[[NSProcessInfo processInfo] globallyUniqueString]];
+  GCRepository* repository = [self createLocalRepositoryAtPath:path bare:NO];
+
+  [self _makeEmptyCommitInRepository:repository message:@"root" date:@"2001-01-01T00:00:00 +0000"];
+  [self _makeEmptyCommitInRepository:repository message:@"join" date:@"2001-01-01T00:30:00 +0000"];
+  [self _runGitWithRepository:repository arguments:@[ @"branch", @"topic" ] environment:nil];
+  [self _makeEmptyCommitInRepository:repository message:@"leaf" date:@"2001-01-01T00:10:00 +0000"];
+
+  GCHistory* history = [repository loadHistoryUsingSorting:kGCHistorySorting_None error:NULL];
+  XCTAssertNotNil(history);
+  GIGraph* graph = [[GIGraph alloc] initWithHistory:history options:kGIGraphOption_ShowVirtualTips];
+  XCTAssertNotNil(graph);
+
+  GCHistoryCommit* joinCommit = [history mockCommitWithName:@"join"];
+  XCTAssertNotNil(joinCommit);
+  GINode* joinNode = [graph nodeForCommit:joinCommit];
+  XCTAssertNotNil(joinNode);
+  XCTAssertFalse(joinNode.primaryLine.virtual);
+
+  GIBranch* virtualBranch = nil;
+  for (GIBranch* branch in graph.branches) {
+    if (branch.tipNode.dummy && (branch.tipNode.commit == joinCommit)) {
+      virtualBranch = branch;
+      break;
+    }
+  }
+  XCTAssertNotNil(virtualBranch);
+  XCTAssertTrue(virtualBranch.mainLine.virtual);
+  XCTAssertEqualObjects(virtualBranch.mainLine.nodes.lastObject, joinNode);
+
+  [self destroyLocalRepository:repository];
+}
 
 + (NSArray*)testInvocations {
   NSMutableArray* array = [NSMutableArray arrayWithArray:[super testInvocations]];

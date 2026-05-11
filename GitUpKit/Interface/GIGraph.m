@@ -338,40 +338,39 @@
       // Create a new empty layer
       layer = [[GILayer alloc] initWithIndex:self.layers.count];
 
-      // Iterate over nodes from previous layer
-      for (GINode* previousNode in previousLayer.nodes) {
-        GINode* (^nodeBlock)(GILine*, GCHistoryCommit*, GCHistoryCommit*) = ^(GILine* line, GCHistoryCommit* commit, GCHistoryCommit* alternateCommit) {
-          XLOG_DEBUG_CHECK(!MAP_COMMIT_TO_NODE(commit));
+      GINode* (^nodeBlock)(GILine*, GCHistoryCommit*, GCHistoryCommit*) = ^(GILine* line, GCHistoryCommit* commit, GCHistoryCommit* alternateCommit) {
+        XLOG_DEBUG_CHECK(!MAP_COMMIT_TO_NODE(commit));
 
-          // Check if this commit is "ready" to be a node i.e. all its children have non-dummy nodes associated (but not on the current layer)
-          BOOL ready = YES;
-          for (GCHistoryCommit* child in commit.children) {
-            if (skipped && COMMIT_SKIPPED(child)) {
-              continue;
-            }
-            GINode* node = MAP_COMMIT_TO_NODE(child);
-            ready = node && (node.layer != layer);
-            if (!ready) {
-              break;
-            }
+        // Check if this commit is "ready" to be a node i.e. all its children have non-dummy nodes associated (but not on the current layer)
+        BOOL ready = YES;
+        for (GCHistoryCommit* child in commit.children) {
+          if (skipped && COMMIT_SKIPPED(child)) {
+            continue;
           }
-
-          // Create new node (dummy if the commit is not ready)
-          GINode* node;
-          if (ready) {
-            node = [[GINode alloc] initWithLayer:layer primaryLine:line commit:commit dummy:NO alternateCommit:nil];
-            MAP_COMMIT_TO_NODE(commit) = node;  // Associate node with commit
-          } else {
-            node = [[GINode alloc] initWithLayer:layer primaryLine:line commit:commit dummy:YES alternateCommit:alternateCommit];
-            ++_numberOfDummyNodes;
+          GINode* node = MAP_COMMIT_TO_NODE(child);
+          ready = node && (node.layer != layer);
+          if (!ready) {
+            break;
           }
-          [_nodes addObject:node];
-          [layer addNode:node];
-          [line addNode:node];
+        }
 
-          return node;
-        };
+        // Create new node (dummy if the commit is not ready)
+        GINode* node;
+        if (ready) {
+          node = [[GINode alloc] initWithLayer:layer primaryLine:line commit:commit dummy:NO alternateCommit:nil];
+          MAP_COMMIT_TO_NODE(commit) = node;  // Associate node with commit
+        } else {
+          node = [[GINode alloc] initWithLayer:layer primaryLine:line commit:commit dummy:YES alternateCommit:alternateCommit];
+          ++_numberOfDummyNodes;
+        }
+        [_nodes addObject:node];
+        [layer addNode:node];
+        [line addNode:node];
 
+        return node;
+      };
+
+      void (^processPreviousNode)(GINode*) = ^(GINode* previousNode) {
         // If the previous node is a dummy one reprocess its commit
         GCHistoryCommit* commit = previousNode.commit;
         GILine* line = previousNode.primaryLine;
@@ -417,6 +416,20 @@
           if (commit.hasReferences) {
             [_nodesWithReferences addObject:previousNode];
           }
+        }
+      };
+
+      // Prefer real history paths over virtual branch tips when both reach the
+      // same commit on this layer. Otherwise a virtual tip can claim the
+      // commit's primary line and render the whole ancestry as dashed.
+      for (GINode* previousNode in previousLayer.nodes) {
+        if (!previousNode.dummy) {
+          processPreviousNode(previousNode);
+        }
+      }
+      for (GINode* previousNode in previousLayer.nodes) {
+        if (previousNode.dummy) {
+          processPreviousNode(previousNode);
         }
       }
 
