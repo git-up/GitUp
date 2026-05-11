@@ -688,10 +688,10 @@ static inline CGFloat _SquareDistanceFromPointToLine(CGFloat x0, CGFloat y0, CGF
     newPointList[newPointCount].x = pointList[0].x;
     newPointList[newPointCount].y = pointList[0].y;
     ++newPointCount;
-    CGFloat x0 = 0.0;
-    CGFloat y0 = 0.0;
-    CGFloat x1 = 0.0;
-    CGFloat y1 = 0.0;
+    CGFloat x0 = pointList[0].x;
+    CGFloat y0 = pointList[0].y;
+    CGFloat x1 = pointList[0].x;
+    CGFloat y1 = pointList[0].y;
     for (size_t i = 1; i < pointCount - 1; ++i) {
 #if __SHIFT_CORNERS__
       CGFloat previousX = pointList[i - 1].x;
