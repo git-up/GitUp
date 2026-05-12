@@ -423,12 +423,12 @@
       // same commit on this layer. Otherwise a virtual tip can claim the
       // commit's primary line and render the whole ancestry as dashed.
       for (GINode* previousNode in previousLayer.nodes) {
-        if (!previousNode.dummy) {
+        if (!previousNode.primaryLine.virtual) {
           processPreviousNode(previousNode);
         }
       }
       for (GINode* previousNode in previousLayer.nodes) {
-        if (previousNode.dummy) {
+        if (previousNode.primaryLine.virtual) {
           processPreviousNode(previousNode);
         }
       }
