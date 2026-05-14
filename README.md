@@ -1,7 +1,7 @@
 [![GitUp](https://github.com/git-up/GitUp/actions/workflows/build.yml/badge.svg)](https://github.com/git-up/GitUp/actions/workflows/build.yml)
 [![GitUpKit Tests](https://github.com/git-up/GitUp/actions/workflows/test.yml/badge.svg)](https://github.com/git-up/GitUp/actions/workflows/test.yml)
 
-GitUp
+<img src="Assets/Icons/AppIcon.svg" width="64px" height="64px" align=center> GitUp
 =====
 
 **Work quickly, safely, and without headaches. The Git interface you've been missing all your life has finally arrived.**
