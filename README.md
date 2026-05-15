@@ -1,7 +1,7 @@
 [![GitUp](https://github.com/git-up/GitUp/actions/workflows/build.yml/badge.svg)](https://github.com/git-up/GitUp/actions/workflows/build.yml)
 [![GitUpKit Tests](https://github.com/git-up/GitUp/actions/workflows/test.yml/badge.svg)](https://github.com/git-up/GitUp/actions/workflows/test.yml)
 
-GitUp
+<img src="Assets/Icons/AppIcon.svg" width="64px" height="64px" align=center> GitUp
 =====
 
 **Work quickly, safely, and without headaches. The Git interface you've been missing all your life has finally arrived.**
@@ -21,6 +21,9 @@ With GitUp, you get a truly efficient Git client for Mac:
 - Features that don’t even exist natively in Git like a **visual commit splitter** or a **unified reflog browser**,
 - **Instant search across the entire repo** including diff contents, 
 - A **ridiculously fast UI**, often faster than the command line.
+
+In addition, GitUp’s core and main UI elements are available as an open-source framework, [GitUpKit](#gitupkit). You can use it to build your very own Git GUI! GitUpKit has already enabled the creation of some unique apps:
+- <img src="https://retcon.app/images/app-icon-32@3x.png" width="32px" height="32px" align=center> [**Retcon**](https://retcon.app/)**,** a Git client that makes rewriting history fast and flexible
 
 *GitUp was created by [@swisspol](https://github.com/swisspol) in late 2014 as a bet to reinvent the way developers interact with Git. After several months of work, it was made available in pre-release early 2015 and reached the [top of Hacker News](https://news.ycombinator.com/item?id=9653978) along with being [featured by Product Hunt](http://www.producthunt.com/tech/gitup-1) and [Daring Fireball](http://daringfireball.net/linked/2015/06/04/gitup). 30,000 lines of code later, GitUp reached 1.0 mid-August 2015 and was released open source as a gift to the developer community.*
 
