@@ -55,6 +55,34 @@
   XCTAssertTrue([[NSFileManager defaultManager] removeItemAtPath:path error:NULL]);
 }
 
+- (void)testRepositoryURLContainingURL {
+  NSString* parentPath = [NSTemporaryDirectory() stringByAppendingPathComponent:[[NSProcessInfo processInfo] globallyUniqueString]];
+  XCTAssertTrue([[NSFileManager defaultManager] createDirectoryAtPath:parentPath withIntermediateDirectories:NO attributes:nil error:NULL]);
+
+  NSString* repositoryPath = [parentPath stringByAppendingPathComponent:@"repository"];
+  GCRepository* repository = [self createLocalRepositoryAtPath:repositoryPath bare:NO];
+  NSURL* expectedURL = [NSURL fileURLWithPath:repository.workingDirectoryPath];
+
+  NSError* error = nil;
+  NSURL* sameDirectoryURL = [GCRepository repositoryURLContainingURL:expectedURL error:&error];
+  XCTAssertEqualObjects(sameDirectoryURL.path.stringByStandardizingPath, expectedURL.path.stringByStandardizingPath);
+  XCTAssertNil(error);
+
+  NSString* subdirectoryPath = [repository.workingDirectoryPath stringByAppendingPathComponent:@"subdirectory"];
+  XCTAssertTrue([[NSFileManager defaultManager] createDirectoryAtPath:subdirectoryPath withIntermediateDirectories:NO attributes:nil error:NULL]);
+  error = nil;
+  NSURL* subdirectoryURL = [GCRepository repositoryURLContainingURL:[NSURL fileURLWithPath:subdirectoryPath] error:&error];
+  XCTAssertEqualObjects(subdirectoryURL.path.stringByStandardizingPath, expectedURL.path.stringByStandardizingPath);
+  XCTAssertNil(error);
+
+  error = nil;
+  XCTAssertNil([GCRepository repositoryURLContainingURL:[NSURL fileURLWithPath:parentPath] error:&error]);
+  XCTAssertEqual(error.code, kGCErrorCode_NotFound);
+
+  [self destroyLocalRepository:repository];
+  XCTAssertTrue([[NSFileManager defaultManager] removeItemAtPath:parentPath error:NULL]);
+}
+
 @end
 
 @implementation GCEmptyRepositoryTests (GCRepository)
