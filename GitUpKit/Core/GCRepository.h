@@ -52,6 +52,8 @@ typedef NS_ENUM(NSUInteger, GCFileMode) {
 @end
 
 @interface GCRepository : NSObject
+/// Walks up the file system to find the repository the given URL is contained in. Returns nil and sets the error if no repository is found.
++ (NSURL *)repositoryURLContainingURL:(NSURL *)url error:(NSError **)error;
 @property(nonatomic, weak) id<GCRepositoryDelegate> delegate;
 @property(nonatomic, readonly) NSString* repositoryPath;
 @property(nonatomic, readonly) NSString* workingDirectoryPath;  // nil for a bare repository

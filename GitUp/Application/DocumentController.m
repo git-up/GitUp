@@ -31,6 +31,18 @@
   [super beginOpenPanel:openPanel forTypes:inTypes completionHandler:completionHandler];
 }
 
+- (void)openDocumentWithContentsOfURL:(NSURL *)url display:(BOOL)displayDocument completionHandler:(void (^)(NSDocument *_Nullable, BOOL, NSError *_Nullable))completionHandler {
+  NSError *error;
+  NSURL *repositoryURL = [GCRepository repositoryURLContainingURL:url error:&error];
+
+  if (repositoryURL) {
+    [super openDocumentWithContentsOfURL:repositoryURL display:displayDocument completionHandler:completionHandler];
+  } else {
+    // Document already handles the URL not being a repository so just reuse that failure handling.
+    [super openDocumentWithContentsOfURL:url display:displayDocument completionHandler:completionHandler];
+  }
+}
+
 - (NSError*)willPresentError:(NSError*)error {
   NSError* underlyingError = [error.userInfo objectForKey:NSUnderlyingErrorKey];
   if ([underlyingError.domain isEqualToString:GCErrorDomain]) {

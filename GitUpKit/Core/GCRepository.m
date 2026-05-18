@@ -133,6 +133,35 @@ static int _GitLFSApply(git_filter* self, void** payload, git_buf* to, const git
 #endif
 }
 
++ (NSURL *)repositoryURLContainingURL:(NSURL *)url error:(NSError *__autoreleasing *)error {
+  NSParameterAssert(url.isFileURL);
+
+  git_buf repoBuffer = {0};
+
+  int result = git_repository_discover(&repoBuffer, GCGitPathFromFileSystemPath(url.path), false, NULL);
+  if (result == GIT_OK) {
+    NSString* repoPath = [[NSString alloc] initWithBytes:repoBuffer.ptr length:repoBuffer.size encoding:NSUTF8StringEncoding];
+    NSURL* repoURL = [NSURL fileURLWithPath:repoPath];
+    git_buf_dispose(&repoBuffer);
+
+    // Need to trim the .git from the path, otherwise it works but the document title is .git.
+
+    if ([repoURL.lastPathComponent isEqualToString:@".git"]) {
+      return [repoURL URLByDeletingLastPathComponent];
+    } else {
+      XLOG_WARNING(@"Discovered repository URL not ending in .git: “%@”", repoURL.path);
+      return repoURL;
+    }
+  }
+
+  if (result == GIT_ENOTFOUND) {
+    GC_SET_ERROR(kGCErrorCode_NotFound, @"No repository found");
+  } else {
+    GC_SET_GENERIC_ERROR(@"Error %d", result);
+  }
+  return nil;
+}
+
 - (instancetype)initWithRepository:(git_repository*)repository error:(NSError**)error {
   if ((self = [super init])) {
     _private = repository;
