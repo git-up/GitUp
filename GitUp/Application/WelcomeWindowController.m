@@ -41,7 +41,11 @@
 - (void)drawRect:(NSRect)dirtyRect {
   if (self.receivingDrag) {
     [NSColor.selectedControlColor set];
-    NSBezierPath* path = [NSBezierPath bezierPathWithRoundedRect:self.bounds xRadius:10 yRadius:10];
+    CGFloat radius = 10;
+    if (@available(macOS 26, *)) {
+      radius = 16;
+    }
+    NSBezierPath* path = [NSBezierPath bezierPathWithRoundedRect:self.bounds xRadius:radius yRadius:radius];
     path.lineWidth = 5;
     [path stroke];
   }
@@ -99,8 +103,6 @@
 
 #pragma mark - Setup
 - (void)setup {
-  self.opaque = NO;
-  self.backgroundColor = [NSColor clearColor];
   self.movableByWindowBackground = YES;
 }
 
