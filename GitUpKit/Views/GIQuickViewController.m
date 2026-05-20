@@ -26,7 +26,6 @@
 #import "XLFacilityMacros.h"
 
 @interface GIQuickViewController () <GIDiffContentsViewControllerDelegate, GIDiffFilesViewControllerDelegate>
-@property(nonatomic, weak) IBOutlet NSView* infoView;
 @property(nonatomic, weak) IBOutlet NSScrollView* infoScrollView;
 @property(nonatomic, weak) IBOutlet NSTextField* sha1TextField;
 @property(nonatomic, weak) IBOutlet NSTextField* messageTextField;
@@ -62,19 +61,6 @@
   [[NSNotificationCenter defaultCenter] removeObserver:self name:NSSplitViewDidResizeSubviewsNotification object:nil];
 }
 
-- (void)_recomputeInfoViewFrame {
-  NSRect frame = _infoView.frame;
-  NSSize size = [(NSTextFieldCell*)_messageTextField.cell cellSizeForBounds:NSMakeRect(0, 0, _messageTextField.frame.size.width, HUGE_VALF)];
-  CGFloat delta = ceil(size.height) - _messageTextField.frame.size.height;
-  _infoView.frame = NSMakeRect(0, 0, frame.size.width, frame.size.height + delta);
-}
-
-- (void)_splitViewDidResizeSubviews:(NSNotification*)notification {
-  if (!self.liveResizing) {
-    [self _recomputeInfoViewFrame];
-  }
-}
-
 - (void)loadView {
   [super loadView];
 
@@ -86,13 +72,6 @@
   _diffFilesViewController = [[GIDiffFilesViewController alloc] initWithRepository:self.repository];
   _diffFilesViewController.delegate = self;
   [_filesView replaceWithView:_diffFilesViewController.view];
-
-  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_splitViewDidResizeSubviews:) name:NSSplitViewDidResizeSubviewsNotification object:_mainSplitView];
-  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_splitViewDidResizeSubviews:) name:NSSplitViewDidResizeSubviewsNotification object:_infoSplitView];
-}
-
-- (void)viewDidFinishLiveResize {
-  [self _recomputeInfoViewFrame];
 }
 
 static inline void _AppendStringWithoutTrailingWhiteSpace(NSMutableString* string, NSString* append, NSRange range) {
@@ -143,7 +122,6 @@ static NSString* _CleanUpCommitMessage(NSString* message) {
     _commit = commit;
     if (_commit) {
       _messageTextField.stringValue = _CleanUpCommitMessage(_commit.message);
-      [self _recomputeInfoViewFrame];
 
       _sha1TextField.stringValue = _commit.SHA1;
 
