@@ -21,6 +21,40 @@
 #import <GitUpKit/GCRepository+Utilities.h>
 #import <GitUpKit/GCRepository+Index.h>
 
+static NSString* _CommitSignature(GCCommit* commit) {
+  git_buf buffer = {0};
+  int status = git_commit_header_field(&buffer, commit.private, "gpgsig");
+  if (status != GIT_OK) {
+    git_buf_free(&buffer);
+    return nil;
+  }
+  NSString* signature = [[NSString alloc] initWithBytes:buffer.ptr length:buffer.size encoding:NSUTF8StringEncoding];
+  git_buf_free(&buffer);
+  return signature;
+}
+
+static BOOL _ConfigureSSHSigningWithKeyPath(GCRepository* repository, NSString* keyPath) {
+  return [repository writeConfigOptionForLevel:kGCConfigLevel_Local variable:@"commit.gpgsign" withValue:@"true" error:NULL] &&
+         [repository writeConfigOptionForLevel:kGCConfigLevel_Local
+                                      variable:@"gpg.format"
+                                     withValue:@"ssh"
+                                         error:NULL] &&
+         [repository writeConfigOptionForLevel:kGCConfigLevel_Local
+                                      variable:@"user.signingkey"
+                                     withValue:keyPath
+                                         error:NULL];
+}
+
+static NSString* _CreateFakeSSHSigner(NSString* directory, int exitStatus) {
+  NSString* path = [directory stringByAppendingPathComponent:[[NSProcessInfo processInfo] globallyUniqueString]];
+  NSString* contents = exitStatus == 0 ? @"#!/bin/sh\ncat >/dev/null\nprintf '%s\\n' '-----BEGIN SSH SIGNATURE-----' 'fake-signature' '-----END SSH SIGNATURE-----'\n"
+                                      : [NSString stringWithFormat:@"#!/bin/sh\ncat >/dev/null\necho signer failed >&2\nexit %i\n", exitStatus];
+  return ([contents writeToFile:path atomically:YES encoding:NSUTF8StringEncoding error:NULL] &&
+          [[NSFileManager defaultManager] setAttributes:@{NSFilePosixPermissions : @(0755)} ofItemAtPath:path error:NULL])
+             ? path
+             : nil;
+}
+
 @implementation GCEmptyRepositoryTests (GCRepository_HEAD)
 
 - (void)testUnbornHEAD {
@@ -32,6 +66,69 @@
 
   // Check unborn again
   XCTAssertFalse(self.repository.HEADUnborn);
+}
+
+- (void)testUnsignedCommitWhenSigningDisabledOrUnsupported {
+  [self updateFileAtPath:@"unsigned.txt" withString:@"unsigned\n"];
+  XCTAssertTrue([self.repository addFileToIndex:@"unsigned.txt" error:NULL]);
+  GCCommit* unsignedCommit = [self.repository createCommitFromHEADWithMessage:@"Unsigned" error:NULL];
+  XCTAssertNotNil(unsignedCommit);
+  XCTAssertNil(_CommitSignature(unsignedCommit));
+
+  XCTAssertTrue([self.repository writeConfigOptionForLevel:kGCConfigLevel_Local variable:@"commit.gpgsign" withValue:@"true" error:NULL]);
+  XCTAssertTrue([self.repository writeConfigOptionForLevel:kGCConfigLevel_Local variable:@"gpg.format" withValue:@"openpgp" error:NULL]);
+  [self updateFileAtPath:@"openpgp.txt" withString:@"openpgp\n"];
+  XCTAssertTrue([self.repository addFileToIndex:@"openpgp.txt" error:NULL]);
+  GCCommit* openPGPCommit = [self.repository createCommitFromHEADWithMessage:@"OpenPGP config remains unsigned" error:NULL];
+  XCTAssertNotNil(openPGPCommit);
+  XCTAssertNil(_CommitSignature(openPGPCommit));
+}
+
+- (void)testSSHSigningRequiresKey {
+  XCTAssertTrue([self.repository writeConfigOptionForLevel:kGCConfigLevel_Local variable:@"commit.gpgsign" withValue:@"true" error:NULL]);
+  XCTAssertTrue([self.repository writeConfigOptionForLevel:kGCConfigLevel_Local variable:@"gpg.format" withValue:@"ssh" error:NULL]);
+  [self updateFileAtPath:@"missing-key.txt" withString:@"missing key\n"];
+  XCTAssertTrue([self.repository addFileToIndex:@"missing-key.txt" error:NULL]);
+  NSError* error;
+  XCTAssertNil([self.repository createCommitFromHEADWithMessage:@"Missing key" error:&error]);
+  XCTAssertTrue([error.localizedDescription containsString:@"user.signingkey"]);
+}
+
+- (void)testSSHSigningSupportsInlineKeyAndDefaultKeyCommand {
+  NSString* signer = _CreateFakeSSHSigner(self.temporaryPath, 0);
+  XCTAssertNotNil(signer);
+  XCTAssertTrue([self.repository writeConfigOptionForLevel:kGCConfigLevel_Local variable:@"commit.gpgsign" withValue:@"true" error:NULL]);
+  XCTAssertTrue([self.repository writeConfigOptionForLevel:kGCConfigLevel_Local variable:@"gpg.format" withValue:@"ssh" error:NULL]);
+  XCTAssertTrue([self.repository writeConfigOptionForLevel:kGCConfigLevel_Local variable:@"gpg.ssh.program" withValue:signer error:NULL]);
+
+  XCTAssertTrue([self.repository writeConfigOptionForLevel:kGCConfigLevel_Local variable:@"user.signingkey" withValue:@"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFakeInlineKey test@example.com" error:NULL]);
+  [self updateFileAtPath:@"inline-key.txt" withString:@"inline key\n"];
+  XCTAssertTrue([self.repository addFileToIndex:@"inline-key.txt" error:NULL]);
+  GCCommit* inlineCommit = [self.repository createCommitFromHEADWithMessage:@"Inline key" error:NULL];
+  XCTAssertNotNil(inlineCommit);
+  XCTAssertTrue([_CommitSignature(inlineCommit) containsString:@"BEGIN SSH SIGNATURE"]);
+
+  XCTAssertTrue([self.repository writeConfigOptionForLevel:kGCConfigLevel_Local variable:@"user.signingkey" withValue:nil error:NULL]);
+  XCTAssertTrue([self.repository writeConfigOptionForLevel:kGCConfigLevel_Local variable:@"gpg.ssh.defaultKeyCommand" withValue:@"printf 'key::ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDefaultCommandKey test@example.com\\n'" error:NULL]);
+  [self updateFileAtPath:@"default-key-command.txt" withString:@"default key command\n"];
+  XCTAssertTrue([self.repository addFileToIndex:@"default-key-command.txt" error:NULL]);
+  GCCommit* defaultCommandCommit = [self.repository createCommitFromHEADWithMessage:@"Default key command" error:NULL];
+  XCTAssertNotNil(defaultCommandCommit);
+  XCTAssertTrue([_CommitSignature(defaultCommandCommit) containsString:@"BEGIN SSH SIGNATURE"]);
+}
+
+- (void)testSSHSignerFailureFailsCommit {
+  NSString* signer = _CreateFakeSSHSigner(self.temporaryPath, 7);
+  XCTAssertNotNil(signer);
+  XCTAssertTrue([self.repository writeConfigOptionForLevel:kGCConfigLevel_Local variable:@"commit.gpgsign" withValue:@"true" error:NULL]);
+  XCTAssertTrue([self.repository writeConfigOptionForLevel:kGCConfigLevel_Local variable:@"gpg.format" withValue:@"ssh" error:NULL]);
+  XCTAssertTrue([self.repository writeConfigOptionForLevel:kGCConfigLevel_Local variable:@"gpg.ssh.program" withValue:signer error:NULL]);
+  XCTAssertTrue([self.repository writeConfigOptionForLevel:kGCConfigLevel_Local variable:@"user.signingkey" withValue:@"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFailingSignerKey test@example.com" error:NULL]);
+  [self updateFileAtPath:@"failing-signer.txt" withString:@"failing signer\n"];
+  XCTAssertTrue([self.repository addFileToIndex:@"failing-signer.txt" error:NULL]);
+  NSError* error;
+  XCTAssertNil([self.repository createCommitFromHEADWithMessage:@"Failing signer" error:&error]);
+  XCTAssertTrue([error.localizedDescription containsString:@"non-zero status"]);
 }
 
 @end
@@ -109,6 +206,39 @@
   XCTAssertTrue([self.repository checkClean:0 error:NULL]);
   XCTAssertTrue([self.repository moveHEADToCommit:self.commit2 reflogMessage:nil error:NULL]);
   XCTAssertFalse([self.repository checkClean:0 error:NULL]);
+}
+
+- (void)testSSHSignsUserFacingCommits {
+  NSString* keyPath = [self.temporaryPath stringByAppendingPathComponent:@"signing_key"];
+  GCTask* keygen = [[GCTask alloc] initWithExecutablePath:@"/usr/bin/ssh-keygen"];
+  int status;
+  NSArray* keygenArguments = @[ @"-t", @"ed25519", @"-f", keyPath, @"-N", @"", @"-q" ];
+  BOOL keygenSuccess = [keygen runWithArguments:keygenArguments stdin:nil stdout:NULL stderr:NULL exitStatus:&status error:NULL];
+  XCTAssertTrue(keygenSuccess);
+  XCTAssertEqual(status, 0);
+  XCTAssertTrue(_ConfigureSSHSigningWithKeyPath(self.repository, keyPath));
+
+  GCCommit* emptyCommit = [self.repository createCommitFromHEADWithMessage:@"Signed empty" error:NULL];
+  XCTAssertNotNil(emptyCommit);
+  XCTAssertTrue([_CommitSignature(emptyCommit) containsString:@"BEGIN SSH SIGNATURE"]);
+
+  GCCommit* mergeCommit = [self.repository createCommitFromHEADAndOtherParent:self.commitA withMessage:@"Signed merge" error:NULL];
+  XCTAssertNotNil(mergeCommit);
+  XCTAssertTrue([_CommitSignature(mergeCommit) containsString:@"BEGIN SSH SIGNATURE"]);
+
+  [self updateFileAtPath:@"hello_world.txt" withString:@"SIGNED AMEND\n"];
+  XCTAssertTrue([self.repository addFileToIndex:@"hello_world.txt" error:NULL]);
+  GCCommit* amendCommit = [self.repository createCommitByAmendingHEADWithMessage:@"Signed amend" error:NULL];
+  XCTAssertNotNil(amendCommit);
+  XCTAssertTrue([_CommitSignature(amendCommit) containsString:@"BEGIN SSH SIGNATURE"]);
+
+  NSString* publicKey = [NSString stringWithContentsOfFile:[keyPath stringByAppendingString:@".pub"] encoding:NSUTF8StringEncoding error:NULL];
+  NSString* allowedSignersPath = [self.temporaryPath stringByAppendingPathComponent:@"allowed_signers"];
+  NSString* allowedSigners = [NSString stringWithFormat:@"bot@example.com %@", publicKey];
+  XCTAssertTrue([allowedSigners writeToFile:allowedSignersPath atomically:YES encoding:NSUTF8StringEncoding error:NULL]);
+  NSString* allowedSignersConfig = [NSString stringWithFormat:@"gpg.ssh.allowedSignersFile=%@", allowedSignersPath];
+  NSString* verifyOutput = [self runGitCLTWithRepository:self.repository command:@"-c", allowedSignersConfig, @"verify-commit", amendCommit.SHA1, nil];
+  XCTAssertNotNil(verifyOutput);
 }
 
 - (void)testCheckoutFileToWorkingDirectory {
