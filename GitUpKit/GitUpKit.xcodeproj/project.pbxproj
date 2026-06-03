@@ -105,6 +105,7 @@
 		E21753671B91634C00BE234A /* GCCommit.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C338DE19F85C8600063D95 /* GCCommit.m */; };
 		E21753681B91634C00BE234A /* GCCommitDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = E2FEED451AEAA6AD00CBED80 /* GCCommitDatabase.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		E21753691B91634C00BE234A /* GCDiff.m in Sources */ = {isa = PBXBuildFile; fileRef = E2B14B5D1A8A764400003E64 /* GCDiff.m */; };
+		E217536E1B91634C00BE234A /* GCCommitSigning.m in Sources */ = {isa = PBXBuildFile; fileRef = E21753651B91634C00BE234A /* GCCommitSigning.m */; };
 		E217536A1B91634C00BE234A /* GCFoundation.m in Sources */ = {isa = PBXBuildFile; fileRef = E2790D411ACB1B1100965A98 /* GCFoundation.m */; };
 		E217536B1B91634C00BE234A /* GCFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = E21739F21A4FE39E00EC6777 /* GCFunctions.m */; };
 		E217536C1B91634C00BE234A /* GCHistory.m in Sources */ = {isa = PBXBuildFile; fileRef = E20F10F21A043E2100076AAC /* GCHistory.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -185,6 +186,7 @@
 		E267E1D21B84D83100BAB377 /* GCCommit.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C338DE19F85C8600063D95 /* GCCommit.m */; };
 		E267E1D31B84D83100BAB377 /* GCCommitDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = E2FEED451AEAA6AD00CBED80 /* GCCommitDatabase.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		E267E1D41B84D83100BAB377 /* GCDiff.m in Sources */ = {isa = PBXBuildFile; fileRef = E2B14B5D1A8A764400003E64 /* GCDiff.m */; };
+		E267E1DE1B84D83100BAB377 /* GCCommitSigning.m in Sources */ = {isa = PBXBuildFile; fileRef = E21753651B91634C00BE234A /* GCCommitSigning.m */; };
 		E267E1D51B84D83100BAB377 /* GCFoundation.m in Sources */ = {isa = PBXBuildFile; fileRef = E2790D411ACB1B1100965A98 /* GCFoundation.m */; };
 		E267E1D61B84D83100BAB377 /* GCFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = E21739F21A4FE39E00EC6777 /* GCFunctions.m */; };
 		E267E1D71B84D83100BAB377 /* GCHistory.m in Sources */ = {isa = PBXBuildFile; fileRef = E20F10F21A043E2100076AAC /* GCHistory.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -348,6 +350,7 @@
 		E2C338F019F85C8600063D95 /* GCReference.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C338E119F85C8600063D95 /* GCReference.m */; };
 		E2C338F219F85C8600063D95 /* GCRemote.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C338E319F85C8600063D95 /* GCRemote.m */; };
 		E2C338F419F85C8600063D95 /* GCRepository.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C338E519F85C8600063D95 /* GCRepository.m */; };
+		E2C338F519F85C8600063D95 /* GCCommitSigning.m in Sources */ = {isa = PBXBuildFile; fileRef = E21753651B91634C00BE234A /* GCCommitSigning.m */; };
 		E2C338F619F85C8600063D95 /* GCStash.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C338E719F85C8600063D95 /* GCStash.m */; };
 		E2C338F819F85C8600063D95 /* GCTag.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C338E919F85C8600063D95 /* GCTag.m */; };
 		E2C3AA5C19FF0B0600BA89F3 /* GCRepository+Bare.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C3AA5A19FF0B0600BA89F3 /* GCRepository+Bare.m */; };
@@ -408,6 +411,7 @@
 		E2146C911A58D83100F4550B /* GCReflogMessages.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GCReflogMessages.h; sourceTree = "<group>"; };
 		E21739F11A4FE39E00EC6777 /* GCFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCFunctions.h; sourceTree = "<group>"; };
 		E21739F21A4FE39E00EC6777 /* GCFunctions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCFunctions.m; sourceTree = "<group>"; };
+		E21753651B91634C00BE234A /* GCCommitSigning.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCCommitSigning.m; sourceTree = "<group>"; };
 		E21739FC1A51FA6200EC6777 /* GCSubmodule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCSubmodule.h; sourceTree = "<group>"; };
 		E21739FD1A51FA6200EC6777 /* GCSubmodule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCSubmodule.m; sourceTree = "<group>"; };
 		E217531B1B91613300BE234A /* GitUpKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = GitUpKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -831,6 +835,7 @@
 				E259C2E41A6624DC0079616B /* GCCommit-Tests.m */,
 				E2C338DD19F85C8600063D95 /* GCCommit.h */,
 				E2C338DE19F85C8600063D95 /* GCCommit.m */,
+				E21753651B91634C00BE234A /* GCCommitSigning.m */,
 				E2FEED441AEAA6AD00CBED80 /* GCCommitDatabase.h */,
 				E2FEED451AEAA6AD00CBED80 /* GCCommitDatabase.m */,
 				E2FEED481AEAA6B500CBED80 /* GCCommitDatabase-Tests.m */,
@@ -1266,6 +1271,7 @@
 				E21753671B91634C00BE234A /* GCCommit.m in Sources */,
 				E21753681B91634C00BE234A /* GCCommitDatabase.m in Sources */,
 				E21753691B91634C00BE234A /* GCDiff.m in Sources */,
+				E217536E1B91634C00BE234A /* GCCommitSigning.m in Sources */,
 				E217536A1B91634C00BE234A /* GCFoundation.m in Sources */,
 				E217536B1B91634C00BE234A /* GCFunctions.m in Sources */,
 				E217536C1B91634C00BE234A /* GCHistory.m in Sources */,
@@ -1312,6 +1318,7 @@
 				E267E1D21B84D83100BAB377 /* GCCommit.m in Sources */,
 				E267E1D31B84D83100BAB377 /* GCCommitDatabase.m in Sources */,
 				E267E1D41B84D83100BAB377 /* GCDiff.m in Sources */,
+				E267E1DE1B84D83100BAB377 /* GCCommitSigning.m in Sources */,
 				E267E1D51B84D83100BAB377 /* GCFoundation.m in Sources */,
 				E267E1D61B84D83100BAB377 /* GCFunctions.m in Sources */,
 				E267E1D71B84D83100BAB377 /* GCHistory.m in Sources */,
@@ -1406,6 +1413,7 @@
 				E2790D4A1ACF12E200965A98 /* GCRepository+Index.m in Sources */,
 				DC040FC52BC9FECC00DF54D5 /* GCLiveRepository-Tests.m in Sources */,
 				E27E43021A74A94700D04ED1 /* GIGraph-Tests.m in Sources */,
+				E2C338F519F85C8600063D95 /* GCCommitSigning.m in Sources */,
 				E259C2C71A64C9980079616B /* GCRepository-Tests.m in Sources */,
 				E24509031A9A50F3003E602D /* GCRepository+Config-Tests.m in Sources */,
 				E2B1BF361A85C5ED00A999DF /* GIFunctions-Tests.m in Sources */,
