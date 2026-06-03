@@ -130,7 +130,6 @@ cleanup:
     goto cleanup;
   }
 
-  // The signing helper creates a commit object from an explicit libgit2 parent list; this array covers both normal and merge commits.
   parents[0] = headCommit;
   parents[1] = parent.private;
   commit = _CreateCommitFromIndex(self, index, parents, (headCommit ? (parent ? 2 : 1) : 0), NULL, message, error);
@@ -168,9 +167,6 @@ cleanup:
   git_reference* headReference = NULL;
   git_commit* headCommit = NULL;
   git_index* index = NULL;
-  git_tree* tree = NULL;
-  git_commit** parentCommits = NULL;
-  unsigned int parentCount = 0;
   NSString* reflogMessage;
 
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_repository_head, &headReference, self.private);  // Returns a direct reference or GIT_EUNBORNBRANCH
@@ -182,22 +178,7 @@ cleanup:
     goto cleanup;
   }
 
-  git_oid oid;
-  CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_index_write_tree_to, &oid, index, self.private);
-  CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_tree_lookup, &tree, self.private, &oid);
-  parentCount = git_commit_parentcount(headCommit);
-  if (parentCount) {
-    parentCommits = (git_commit**)calloc(parentCount, sizeof(git_commit*));
-    if (!parentCommits) {
-      GC_SET_GENERIC_ERROR(@"Unable to allocate commit parent list");
-      goto cleanup;
-    }
-    for (unsigned int i = 0; i < parentCount; ++i) {
-      CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_commit_parent, &parentCommits[i], headCommit, i);
-    }
-  }
-  // Amending preserves HEAD's original parents while creating a new commit object, so keep these parent commits alive through signing.
-  commit = GCCreateCommitFromTreeWithOptionalSignature(self, tree, (const git_commit**)parentCommits, parentCount, git_commit_author(headCommit), message, error);
+  commit = GCCreateCommitFromCommitWithIndexAndOptionalSignature(self, headCommit, index, message, error);
   if (commit == nil) {
     goto cleanup;
   }
@@ -213,13 +194,6 @@ cleanup:
   success = YES;
 
 cleanup:
-  if (parentCommits) {
-    for (unsigned int i = 0, count = headCommit ? git_commit_parentcount(headCommit) : 0; i < count; ++i) {
-      git_commit_free(parentCommits[i]);
-    }
-    free(parentCommits);
-  }
-  git_tree_free(tree);
   git_index_free(index);
   git_commit_free(headCommit);
   git_reference_free(headReference);

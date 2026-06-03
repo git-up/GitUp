@@ -119,6 +119,7 @@ extern BOOL GCGitOIDFromSHA1(NSString* sha1, git_oid* oid, NSError** error);
 extern BOOL GCGitOIDFromSHA1Prefix(NSString* prefix, git_oid* oid, NSError** error);
 extern NSData* GCCleanedUpCommitMessage(NSString* message);
 extern GCCommit* GCCreateCommitFromTreeWithOptionalSignature(GCRepository* repository, git_tree* tree, const git_commit** parents, NSUInteger count, const git_signature* author, NSString* message, NSError** error);
+extern GCCommit* GCCreateCommitFromCommitWithIndexAndOptionalSignature(GCRepository* repository, git_commit* commit, git_index* index, NSString* message, NSError** error);
 extern NSString* GCUserFromSignature(const git_signature* signature);
 extern const void* GCOIDCopyCallBack(CFAllocatorRef allocator, const void* value);
 extern Boolean GCOIDEqualCallBack(const void* value1, const void* value2);

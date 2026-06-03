@@ -238,6 +238,7 @@ GCCommit* GCCreateCommitFromTreeWithOptionalSignature(GCRepository* repository, 
   git_signature* signature = NULL;
   git_commit* newCommit = NULL;
   NSData* cleanedMessage = nil;
+  const char* cleanedMessageBytes = NULL;
 #if !TARGET_OS_IPHONE
   git_buf commitBuffer = {0};
   NSData* commitData = nil;
@@ -249,13 +250,14 @@ GCCommit* GCCreateCommitFromTreeWithOptionalSignature(GCRepository* repository, 
   CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_signature_default, &signature, repository.private);
   authorSignature = author ?: signature;
   cleanedMessage = GCCleanedUpCommitMessage(message);
+  cleanedMessageBytes = (const char*)cleanedMessage.bytes;
 #if !TARGET_OS_IPHONE
   if (!_ShouldSSHSignCommit(repository, &shouldSign, error)) {
     goto cleanup;
   }
 
   if (shouldSign) {
-    CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_commit_create_buffer, &commitBuffer, repository.private, authorSignature, signature, NULL, cleanedMessage.bytes, tree, count, parents);
+    CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_commit_create_buffer, &commitBuffer, repository.private, authorSignature, signature, NULL, cleanedMessageBytes, tree, count, parents);
     commitData = [[NSData alloc] initWithBytes:commitBuffer.ptr length:commitBuffer.size];
     sshSignature = _SSHSignatureForCommitBuffer(repository, commitData, error);
     if (!sshSignature) {
@@ -264,7 +266,7 @@ GCCommit* GCCreateCommitFromTreeWithOptionalSignature(GCRepository* repository, 
     CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_commit_create_with_signature, &oid, repository.private, commitBuffer.ptr, sshSignature.UTF8String, "gpgsig");
   } else {
 #endif
-    CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_commit_create, &oid, repository.private, NULL, authorSignature, signature, NULL, cleanedMessage.bytes, tree, count, parents);
+    CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_commit_create, &oid, repository.private, NULL, authorSignature, signature, NULL, cleanedMessageBytes, tree, count, parents);
 #if !TARGET_OS_IPHONE
   }
 #endif
@@ -278,5 +280,42 @@ cleanup:
   git_buf_free(&commitBuffer);
 #endif
   git_signature_free(signature);
+  return commit;
+}
+
+GCCommit* GCCreateCommitFromCommitWithIndexAndOptionalSignature(GCRepository* repository, git_commit* amendedCommit, git_index* index, NSString* message, NSError** error) {
+  GCCommit* commit = nil;
+  git_tree* tree = NULL;
+  git_commit** parentCommits = NULL;
+  unsigned int parentCount = 0;
+  const git_commit** parents = NULL;
+
+  git_oid oid;
+  CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_index_write_tree_to, &oid, index, repository.private);
+  CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_tree_lookup, &tree, repository.private, &oid);
+
+  parentCount = git_commit_parentcount(amendedCommit);
+  if (parentCount) {
+    parentCommits = (git_commit**)calloc(parentCount, sizeof(git_commit*));
+    if (!parentCommits) {
+      GC_SET_GENERIC_ERROR(@"Unable to allocate commit parent list");
+      goto cleanup;
+    }
+    for (unsigned int i = 0; i < parentCount; ++i) {
+      CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_commit_parent, &parentCommits[i], amendedCommit, i);
+    }
+  }
+  parents = (const git_commit**)parentCommits;
+
+  commit = GCCreateCommitFromTreeWithOptionalSignature(repository, tree, parents, parentCount, git_commit_author(amendedCommit), message, error);
+
+cleanup:
+  if (parentCommits) {
+    for (unsigned int i = 0; i < parentCount; ++i) {
+      git_commit_free(parentCommits[i]);
+    }
+    free(parentCommits);
+  }
+  git_tree_free(tree);
   return commit;
 }
