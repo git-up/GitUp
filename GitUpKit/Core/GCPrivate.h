@@ -262,6 +262,9 @@ extern int git_submodule_foreach_block(git_repository* repo, int (^block)(git_su
 - (void)setRemoteCallbacks:(git_remote_callbacks*)callbacks;
 - (NSData*)exportBlobWithOID:(const git_oid*)oid error:(NSError**)error;
 - (BOOL)exportBlobWithOID:(const git_oid*)oid toPath:(NSString*)path error:(NSError**)error;
+#if !TARGET_OS_IPHONE
+- (NSString*)getPATHUsingShell:(NSString*)shell error:(NSError**)error;
+#endif
 @end
 
 @interface GCHistory ()
