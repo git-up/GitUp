@@ -130,6 +130,7 @@ cleanup:
     goto cleanup;
   }
 
+  // The signing helper creates a commit object from an explicit libgit2 parent list; this array covers both normal and merge commits.
   parents[0] = headCommit;
   parents[1] = parent.private;
   commit = _CreateCommitFromIndex(self, index, parents, (headCommit ? (parent ? 2 : 1) : 0), NULL, message, error);
@@ -195,6 +196,7 @@ cleanup:
       CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_commit_parent, &parentCommits[i], headCommit, i);
     }
   }
+  // Amending preserves HEAD's original parents while creating a new commit object, so keep these parent commits alive through signing.
   commit = GCCreateCommitFromTreeWithOptionalSignature(self, tree, (const git_commit**)parentCommits, parentCount, git_commit_author(headCommit), message, error);
   if (commit == nil) {
     goto cleanup;
