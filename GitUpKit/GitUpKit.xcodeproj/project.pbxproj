@@ -7,8 +7,24 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0A0B000126D8010000BEEF00 /* libgit2.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A0B001126D8010000BEEF00 /* libgit2.xcframework */; };
+		0A0B000226D8010000BEEF00 /* libssh2.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A0B001226D8010000BEEF00 /* libssh2.xcframework */; };
+		0A0B000326D8010000BEEF00 /* libssl.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A0B001326D8010000BEEF00 /* libssl.xcframework */; };
+		0A0B000426D8010000BEEF00 /* libcrypto.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A0B001426D8010000BEEF00 /* libcrypto.xcframework */; };
+		0A0B000526D8010000BEEF00 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A0B001526D8010000BEEF00 /* CoreFoundation.framework */; };
+		0A0B000626D8010000BEEF00 /* libgit2.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A0B001126D8010000BEEF00 /* libgit2.xcframework */; };
+		0A0B000726D8010000BEEF00 /* libssh2.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A0B001226D8010000BEEF00 /* libssh2.xcframework */; };
+		0A0B000826D8010000BEEF00 /* libssl.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A0B001326D8010000BEEF00 /* libssl.xcframework */; };
+		0A0B000926D8010000BEEF00 /* libcrypto.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A0B001426D8010000BEEF00 /* libcrypto.xcframework */; };
+		0A0B000A26D8010000BEEF00 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A0B001526D8010000BEEF00 /* CoreFoundation.framework */; };
+		0A0B000B26D8010000BEEF00 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A1DA51D265806140041E737 /* Security.framework */; };
+		0A0B000C26D8010000BEEF00 /* libgit2.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A0B001126D8010000BEEF00 /* libgit2.xcframework */; };
+		0A0B000D26D8010000BEEF00 /* libssh2.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A0B001226D8010000BEEF00 /* libssh2.xcframework */; };
+		0A0B000E26D8010000BEEF00 /* libssl.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A0B001326D8010000BEEF00 /* libssl.xcframework */; };
+		0A0B000F26D8010000BEEF00 /* libcrypto.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A0B001426D8010000BEEF00 /* libcrypto.xcframework */; };
+		0A0B001026D8010000BEEF00 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A0B001526D8010000BEEF00 /* CoreFoundation.framework */; };
+		0A0B001626D8010000BEEF00 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A1DA51D265806140041E737 /* Security.framework */; };
 		0A1DA51E265806140041E737 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A1DA51D265806140041E737 /* Security.framework */; };
-		0A4881D726C7B4CF00289CF9 /* Libgit2Origin in Frameworks */ = {isa = PBXBuildFile; productRef = 0A4881D626C7B4CF00289CF9 /* Libgit2Origin */; };
 		0AC8525923A122C400479160 /* GILaunchServicesLocator.h in Headers */ = {isa = PBXBuildFile; fileRef = 0AC8525723A122C400479160 /* GILaunchServicesLocator.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0AC8525A23A122C400479160 /* GILaunchServicesLocator.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AC8525823A122C400479160 /* GILaunchServicesLocator.m */; };
 		1D615D81286BEDC600FFF7E7 /* XLFacilityMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 1D615D7E286BE79200FFF7E7 /* XLFacilityMacros.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -19,7 +35,6 @@
 		1DADC0DA25A25D54008C2C35 /* libsqlite3.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = DBBEE637256B08D300F96DAF /* libsqlite3.xcframework */; };
 		1DADC0DE25A25D5D008C2C35 /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = DBBEE654256B095000F96DAF /* libiconv.tbd */; };
 		1DADC0E225A25D63008C2C35 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = DBBEE64C256B094000F96DAF /* libz.tbd */; };
-		1DC7FB2A28748D1200D2FD4C /* Libgit2Origin in Frameworks */ = {isa = PBXBuildFile; productRef = 1DC7FB2928748D1200D2FD4C /* Libgit2Origin */; };
 		1DF371CD22F5262300EF7BD9 /* GCLiveRepository+Utilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 1DF371CB22F5262300EF7BD9 /* GCLiveRepository+Utilities.h */; };
 		1DF371CE22F5262300EF7BD9 /* GCLiveRepository+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DF371CC22F5262300EF7BD9 /* GCLiveRepository+Utilities.m */; };
 		6D8E3F0B25D90E1300AAFC17 /* GIImageDiffView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D8E3F0A25D90E1300AAFC17 /* GIImageDiffView.m */; };
@@ -349,6 +364,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0A0B001126D8010000BEEF00 /* libgit2.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = libgit2.xcframework; path = "Third-Party/libgit2.xcframework"; sourceTree = "<group>"; };
+		0A0B001226D8010000BEEF00 /* libssh2.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = libssh2.xcframework; path = "Third-Party/libssh2.xcframework"; sourceTree = "<group>"; };
+		0A0B001326D8010000BEEF00 /* libssl.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = libssl.xcframework; path = "Third-Party/libssl.xcframework"; sourceTree = "<group>"; };
+		0A0B001426D8010000BEEF00 /* libcrypto.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = libcrypto.xcframework; path = "Third-Party/libcrypto.xcframework"; sourceTree = "<group>"; };
+		0A0B001526D8010000BEEF00 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		0A1DA512265805C30041E737 /* libcommonCrypto.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libcommonCrypto.tbd; path = usr/lib/system/libcommonCrypto.tbd; sourceTree = SDKROOT; };
 		0A1DA51D265806140041E737 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		0AC8525723A122C400479160 /* GILaunchServicesLocator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GILaunchServicesLocator.h; sourceTree = "<group>"; };
@@ -577,6 +597,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0A0B000B26D8010000BEEF00 /* Security.framework in Frameworks */,
+				0A0B000A26D8010000BEEF00 /* CoreFoundation.framework in Frameworks */,
+				0A0B000626D8010000BEEF00 /* libgit2.xcframework in Frameworks */,
+				0A0B000726D8010000BEEF00 /* libssh2.xcframework in Frameworks */,
+				0A0B000826D8010000BEEF00 /* libssl.xcframework in Frameworks */,
+				0A0B000926D8010000BEEF00 /* libcrypto.xcframework in Frameworks */,
 				DBBEE674256B09B500F96DAF /* libiconv.tbd in Frameworks */,
 				DBBEE66A256B099300F96DAF /* libsqlite3.xcframework in Frameworks */,
 				DBBEE675256B09B500F96DAF /* libz.tbd in Frameworks */,
@@ -588,8 +614,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				0A1DA51E265806140041E737 /* Security.framework in Frameworks */,
+				0A0B000526D8010000BEEF00 /* CoreFoundation.framework in Frameworks */,
+				0A0B000126D8010000BEEF00 /* libgit2.xcframework in Frameworks */,
+				0A0B000226D8010000BEEF00 /* libssh2.xcframework in Frameworks */,
+				0A0B000326D8010000BEEF00 /* libssl.xcframework in Frameworks */,
+				0A0B000426D8010000BEEF00 /* libcrypto.xcframework in Frameworks */,
 				DBBEE655256B095000F96DAF /* libiconv.tbd in Frameworks */,
-				0A4881D726C7B4CF00289CF9 /* Libgit2Origin in Frameworks */,
 				DBBEE64D256B094000F96DAF /* libz.tbd in Frameworks */,
 				DBBEE638256B08D300F96DAF /* libsqlite3.xcframework in Frameworks */,
 			);
@@ -599,9 +629,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0A0B001626D8010000BEEF00 /* Security.framework in Frameworks */,
+				0A0B001026D8010000BEEF00 /* CoreFoundation.framework in Frameworks */,
+				0A0B000C26D8010000BEEF00 /* libgit2.xcframework in Frameworks */,
+				0A0B000D26D8010000BEEF00 /* libssh2.xcframework in Frameworks */,
+				0A0B000E26D8010000BEEF00 /* libssl.xcframework in Frameworks */,
+				0A0B000F26D8010000BEEF00 /* libcrypto.xcframework in Frameworks */,
 				1DADC0DE25A25D5D008C2C35 /* libiconv.tbd in Frameworks */,
 				1DADC0DA25A25D54008C2C35 /* libsqlite3.xcframework in Frameworks */,
-				1DC7FB2A28748D1200D2FD4C /* Libgit2Origin in Frameworks */,
 				1DADC0E225A25D63008C2C35 /* libz.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -620,9 +655,14 @@
 		DBBFFF4E2567370900AE139C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0A0B001526D8010000BEEF00 /* CoreFoundation.framework */,
 				0A1DA51D265806140041E737 /* Security.framework */,
 				0A1DA512265805C30041E737 /* libcommonCrypto.tbd */,
+				0A0B001426D8010000BEEF00 /* libcrypto.xcframework */,
+				0A0B001126D8010000BEEF00 /* libgit2.xcframework */,
 				DBBEE654256B095000F96DAF /* libiconv.tbd */,
+				0A0B001226D8010000BEEF00 /* libssh2.xcframework */,
+				0A0B001326D8010000BEEF00 /* libssl.xcframework */,
 				DBBEE637256B08D300F96DAF /* libsqlite3.xcframework */,
 				DBBEE64C256B094000F96DAF /* libz.tbd */,
 			);
@@ -1096,9 +1136,6 @@
 			dependencies = (
 			);
 			name = "GitUpKit (macOS)";
-			packageProductDependencies = (
-				0A4881D626C7B4CF00289CF9 /* Libgit2Origin */,
-			);
 			productName = GitUpKit;
 			productReference = E267E1A81B84D6C500BAB377 /* GitUpKit.framework */;
 			productType = "com.apple.product-type.framework";
@@ -1115,9 +1152,6 @@
 			dependencies = (
 			);
 			name = Tests;
-			packageProductDependencies = (
-				1DC7FB2928748D1200D2FD4C /* Libgit2Origin */,
-			);
 			productName = GitUpTests;
 			productReference = E2C338C419F8562F00063D95 /* GitUpTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -1756,16 +1790,6 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCSwiftPackageProductDependency section */
-		0A4881D626C7B4CF00289CF9 /* Libgit2Origin */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Libgit2Origin;
-		};
-		1DC7FB2928748D1200D2FD4C /* Libgit2Origin */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Libgit2Origin;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = E2C338A319F8562F00063D95 /* Project object */;
 }
