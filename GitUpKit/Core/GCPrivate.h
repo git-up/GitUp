@@ -29,7 +29,7 @@
 #import <git2/sys/repository.h>
 #pragma clang diagnostic pop
 
-#import "GCCore.h"
+#import <GitUpKit/GCCore.h>
 
 #import "XLFacilityMacros.h"
 

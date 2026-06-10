@@ -5,7 +5,7 @@
 //  Created by Dmitry Lobanov on 08.10.2019.
 //
 
-#import "GILaunchServicesLocator.h"
+#import <GitUpKit/GILaunchServicesLocator.h>
 #import "XLFacilityMacros.h"
 
 // Settings

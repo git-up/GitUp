@@ -14,7 +14,7 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #import "GCTestCase.h"
-#import "GCOrderedSet.h"
+#import <GitUpKit/GCOrderedSet.h>
 
 @implementation GCMultipleCommitsRepositoryTests (GCOrderedSetTests)
 

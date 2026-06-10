@@ -13,8 +13,8 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#import "GCObject.h"
-#import "GCRepository.h"
+#import <GitUpKit/GCObject.h>
+#import <GitUpKit/GCRepository.h>
 
 @interface GCCommit : GCObject
 @property(nonatomic, readonly) NSString* message;

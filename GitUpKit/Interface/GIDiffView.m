@@ -18,7 +18,7 @@
 #endif
 
 #import "GIPrivate.h"
-#import "GIAppKit.h"
+#import <GitUpKit/GIAppKit.h>
 
 #define kTextLineHeightPadding 3
 #define kTextLineDescentAdjustment 1

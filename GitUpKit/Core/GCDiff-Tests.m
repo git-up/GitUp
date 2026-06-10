@@ -18,7 +18,7 @@
 #endif
 
 #import "GCTestCase.h"
-#import "GCRepository+Index.h"
+#import <GitUpKit/GCRepository+Index.h>
 
 @implementation GCSingleCommitRepositoryTests (GCRepository_Diffs)
 

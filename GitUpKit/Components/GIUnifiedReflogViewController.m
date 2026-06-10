@@ -17,9 +17,9 @@
 #error This file requires ARC
 #endif
 
-#import "GIUnifiedReflogViewController.h"
+#import <GitUpKit/GIUnifiedReflogViewController.h>
 
-#import "GIInterface.h"
+#import <GitUpKit/GIInterface.h>
 #import "XLFacilityMacros.h"
 
 @interface GIUnifiedReflogViewController () <NSTableViewDataSource>

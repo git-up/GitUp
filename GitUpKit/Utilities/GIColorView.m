@@ -17,7 +17,7 @@
 #error This file requires ARC
 #endif
 
-#import "GIColorView.h"
+#import <GitUpKit/GIColorView.h>
 
 @implementation GIColorView
 

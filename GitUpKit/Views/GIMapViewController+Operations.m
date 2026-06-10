@@ -17,11 +17,11 @@
 #error This file requires ARC
 #endif
 
-#import "GIMapViewController+Operations.h"
+#import <GitUpKit/GIMapViewController+Operations.h>
 
-#import "GIWindowController.h"
-#import "GCRepository+Utilities.h"
-#import "GCHistory+Rewrite.h"
+#import <GitUpKit/GIWindowController.h>
+#import <GitUpKit/GCRepository+Utilities.h>
+#import <GitUpKit/GCHistory+Rewrite.h>
 #import "XLFacilityMacros.h"
 
 #define kUserDefaultsPrefix @"GIMapViewController_"

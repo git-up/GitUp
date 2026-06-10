@@ -13,10 +13,10 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#import "GCRepository+Status.h"
-#import "GCHistory.h"
-#import "GCSnapshot.h"
-#import "GCCommitDatabase.h"
+#import <GitUpKit/GCRepository+Status.h>
+#import <GitUpKit/GCHistory.h>
+#import <GitUpKit/GCSnapshot.h>
+#import <GitUpKit/GCCommitDatabase.h>
 
 typedef NS_ENUM(NSUInteger, GCLiveRepositoryStatusMode) {
   kGCLiveRepositoryStatusMode_Disabled = 0,

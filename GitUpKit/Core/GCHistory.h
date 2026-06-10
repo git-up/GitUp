@@ -13,10 +13,10 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#import "GCRepository.h"
-#import "GCCommit.h"
-#import "GCTag.h"
-#import "GCBranch.h"
+#import <GitUpKit/GCRepository.h>
+#import <GitUpKit/GCCommit.h>
+#import <GitUpKit/GCTag.h>
+#import <GitUpKit/GCBranch.h>
 
 typedef NS_ENUM(NSUInteger, GCHistorySorting) {
   kGCHistorySorting_None = 0,

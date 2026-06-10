@@ -18,7 +18,7 @@
 #endif
 
 #import "GCTestCase.h"
-#import "GCRepository+Index.h"
+#import <GitUpKit/GCRepository+Index.h>
 
 // TODO: Test stash file list and content diff
 @implementation GCSingleCommitRepositoryTests (GCStash)

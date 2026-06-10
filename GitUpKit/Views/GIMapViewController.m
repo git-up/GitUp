@@ -17,13 +17,13 @@
 #error This file requires ARC
 #endif
 
-#import "GIMapViewController+Operations.h"
+#import <GitUpKit/GIMapViewController+Operations.h>
 
-#import "GIWindowController.h"
-#import "GIInterface.h"
-#import "GCLiveRepository+Utilities.h"
-#import "GCRepository+Utilities.h"
-#import "GCHistory+Rewrite.h"
+#import <GitUpKit/GIWindowController.h>
+#import <GitUpKit/GIInterface.h>
+#import <GitUpKit/GCLiveRepository+Utilities.h>
+#import <GitUpKit/GCRepository+Utilities.h>
+#import <GitUpKit/GCHistory+Rewrite.h>
 #import "XLFacilityMacros.h"
 #import "NSBundle+GitUpKit.h"
 

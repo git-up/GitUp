@@ -17,7 +17,7 @@
 #error This file requires ARC
 #endif
 
-#import "GCRepository+Index.h"
+#import <GitUpKit/GCRepository+Index.h>
 
 #import "XLFacilityMacros.h"
 

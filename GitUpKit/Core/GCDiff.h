@@ -13,7 +13,7 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#import "GCRepository.h"
+#import <GitUpKit/GCRepository.h>
 
 typedef NS_ENUM(NSUInteger, GCDiffType) {
   kGCDiffType_WorkingDirectoryWithCommit = 0,

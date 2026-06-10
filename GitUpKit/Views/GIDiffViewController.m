@@ -17,11 +17,11 @@
 #error This file requires ARC
 #endif
 
-#import "GIDiffViewController.h"
-#import "GIDiffContentsViewController.h"
-#import "GIDiffFilesViewController.h"
+#import <GitUpKit/GIDiffViewController.h>
+#import <GitUpKit/GIDiffContentsViewController.h>
+#import <GitUpKit/GIDiffFilesViewController.h>
 
-#import "GIInterface.h"
+#import <GitUpKit/GIInterface.h>
 #import "XLFacilityMacros.h"
 
 @interface GIDiffViewController () <GIDiffContentsViewControllerDelegate, GIDiffFilesViewControllerDelegate>
