@@ -19,7 +19,7 @@
 
 #import <objc/runtime.h>
 
-#import <GitUpKit/GCTestCase.h>
+#import "GCTestCase.h"
 #import <GitUpKit/GCRepository+Index.h>
 
 #define kGitCLTPath @"/usr/bin/git"

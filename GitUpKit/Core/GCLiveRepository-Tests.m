@@ -6,7 +6,7 @@
 //
 
 #import <XCTest/XCTest.h>
-#import <GitUpKit/GCTestCase.h>
+#import "GCTestCase.h"
 #import <GitUpKit/GCHistory+Rewrite.h>
 #import <GitUpKit/GCRepository+Index.h>
 #import <GitUpKit/GCLiveRepository+Conflicts.h>

@@ -17,7 +17,7 @@
 #error This file requires ARC
 #endif
 
-#import <GitUpKit/GCTestCase.h>
+#import "GCTestCase.h"
 #import <GitUpKit/GCRepository+Index.h>
 
 @implementation GCSingleCommitRepositoryTests (GCRepository_Index)

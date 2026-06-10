@@ -17,7 +17,7 @@
 #error This file requires ARC
 #endif
 
-#import <GitUpKit/GCTestCase.h>
+#import "GCTestCase.h"
 
 // We only test resetting to commit since resetting to HEAD or tag is the same implementation codepath
 @implementation GCSingleCommitRepositoryTests (GCRepository_Reset)

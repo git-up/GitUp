@@ -17,7 +17,7 @@
 #error This file requires ARC
 #endif
 
-#import <GitUpKit/GCTestCase.h>
+#import "GCTestCase.h"
 
 @implementation GCTests (GCRepository)
 
