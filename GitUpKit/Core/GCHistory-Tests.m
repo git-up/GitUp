@@ -17,8 +17,8 @@
 #error This file requires ARC
 #endif
 
-#import "GCTestCase.h"
-#import "GCRepository+Index.h"
+#import <GitUpKit/GCTestCase.h>
+#import <GitUpKit/GCRepository+Index.h>
 
 @implementation GCSQLiteRepositoryTests (GCHistory)
 

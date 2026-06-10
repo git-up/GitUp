@@ -17,15 +17,15 @@
 #error This file requires ARC
 #endif
 
-#import "GIAdvancedCommitViewController.h"
-#import "GIDiffFilesViewController.h"
-#import "GIDiffContentsViewController.h"
-#import "GIRemappingExplanationPopover.h"
-#import "GIViewController+Utilities.h"
+#import <GitUpKit/GIAdvancedCommitViewController.h>
+#import <GitUpKit/GIDiffFilesViewController.h>
+#import <GitUpKit/GIDiffContentsViewController.h>
+#import <GitUpKit/GIRemappingExplanationPopover.h>
+#import <GitUpKit/GIViewController+Utilities.h>
 
-#import "GIColorView.h"
-#import "GIInterface.h"
-#import "GIWindowController.h"
+#import <GitUpKit/GIColorView.h>
+#import <GitUpKit/GIInterface.h>
+#import <GitUpKit/GIWindowController.h>
 #import "XLFacilityMacros.h"
 
 @interface GIAdvancedCommitViewController () <GIDiffFilesViewControllerDelegate, GIDiffContentsViewControllerDelegate>

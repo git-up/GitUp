@@ -5,10 +5,10 @@
 //  Created by Felix Lapalme on 2024-04-13.
 //
 
-#import "GCLiveRepository+Conflicts.h"
+#import <GitUpKit/GCLiveRepository+Conflicts.h>
 
-#import "GCRepository+Utilities.h"
-#import "GCRepository+HEAD.h"
+#import <GitUpKit/GCRepository+Utilities.h>
+#import <GitUpKit/GCRepository+HEAD.h>
 
 @implementation GCLiveRepository (Conflicts)
 

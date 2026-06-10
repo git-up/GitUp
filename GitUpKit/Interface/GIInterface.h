@@ -23,21 +23,21 @@
 #endif
 #endif
 
-#import "GCCore.h"
+#import <GitUpKit/GCCore.h>
 
-#import "GIBranch.h"
-#import "GIConstants.h"
-#import "GIFunctions.h"
-#import "GIGraph.h"
-#import "GILayer.h"
-#import "GILine.h"
-#import "GINode.h"
+#import <GitUpKit/GIBranch.h>
+#import <GitUpKit/GIConstants.h>
+#import <GitUpKit/GIFunctions.h>
+#import <GitUpKit/GIGraph.h>
+#import <GitUpKit/GILayer.h>
+#import <GitUpKit/GILine.h>
+#import <GitUpKit/GINode.h>
 
 #if __GI_HAS_APPKIT__
-#import "GIDiffView.h"
-#import "GIGraphView.h"
-#import "GISplitDiffView.h"
-#import "GIUnifiedDiffView.h"
-#import "NSColor+GINamedColors.h"
-#import "GIImageDiffView.h"
+#import <GitUpKit/GIDiffView.h>
+#import <GitUpKit/GIGraphView.h>
+#import <GitUpKit/GISplitDiffView.h>
+#import <GitUpKit/GIUnifiedDiffView.h>
+#import <GitUpKit/NSColor+GINamedColors.h>
+#import <GitUpKit/GIImageDiffView.h>
 #endif

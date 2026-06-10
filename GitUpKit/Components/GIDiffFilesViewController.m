@@ -17,9 +17,9 @@
 #error This file requires ARC
 #endif
 
-#import "GIDiffFilesViewController.h"
+#import <GitUpKit/GIDiffFilesViewController.h>
 
-#import "GIInterface.h"
+#import <GitUpKit/GIInterface.h>
 #import "XLFacilityMacros.h"
 
 static const NSPasteboardType GIPasteboardTypeFileRowIndex = @"co.gitup.mac.file-row-index";

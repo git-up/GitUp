@@ -17,11 +17,11 @@
 #error This file requires ARC
 #endif
 
-#import "GIStashListViewController.h"
-#import "GIDiffContentsViewController.h"
-#import "GIWindowController.h"
+#import <GitUpKit/GIStashListViewController.h>
+#import <GitUpKit/GIDiffContentsViewController.h>
+#import <GitUpKit/GIWindowController.h>
 
-#import "GIInterface.h"
+#import <GitUpKit/GIInterface.h>
 #import "XLFacilityMacros.h"
 
 #define kUserDefaultsPrefix @"GIStashListViewController_"

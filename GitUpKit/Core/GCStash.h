@@ -13,7 +13,7 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#import "GCCommit.h"
+#import <GitUpKit/GCCommit.h>
 
 @interface GCStash : GCCommit
 @property(nonatomic, readonly) GCCommit* baseCommit;

@@ -17,7 +17,7 @@
 #error This file requires ARC
 #endif
 
-#import "GILinkButton.h"
+#import <GitUpKit/GILinkButton.h>
 
 @implementation GILinkButton {
   BOOL _highlighted;

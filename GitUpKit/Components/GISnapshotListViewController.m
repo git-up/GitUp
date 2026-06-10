@@ -17,11 +17,11 @@
 #error This file requires ARC
 #endif
 
-#import "GISnapshotListViewController.h"
-#import "GIWindowController.h"
+#import <GitUpKit/GISnapshotListViewController.h>
+#import <GitUpKit/GIWindowController.h>
 
-#import "GIInterface.h"
-#import "GCRepository+Utilities.h"
+#import <GitUpKit/GIInterface.h>
+#import <GitUpKit/GCRepository+Utilities.h>
 #import "XLFacilityMacros.h"
 
 @interface GISnapshotListViewController () <NSTableViewDataSource>

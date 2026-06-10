@@ -19,8 +19,8 @@
 
 #import <objc/runtime.h>
 
-#import "GIAppKit.h"
-#import "GIConstants.h"
+#import <GitUpKit/GIAppKit.h>
+#import <GitUpKit/GIConstants.h>
 #import "NSColor+GINamedColors.h"
 
 #import "XLFacilityMacros.h"

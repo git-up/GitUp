@@ -5,7 +5,7 @@
 //  Created by Lucas Derraugh on 3/3/24.
 //
 
-#import "GIRemappingExplanationPopover.h"
+#import <GitUpKit/GIRemappingExplanationPopover.h>
 
 static NSString* const GIRemappingExplanationShownUserDefaultKey = @"GIRemappingExplanationShownUserDefaultKey";
 

@@ -19,13 +19,13 @@
 
 #import <QuartzCore/QuartzCore.h>
 
-#import "GIWindowController.h"
-#import "GIModalView.h"
-#import "GIColorView.h"
-#import "GIConstants.h"
+#import <GitUpKit/GIWindowController.h>
+#import <GitUpKit/GIModalView.h>
+#import <GitUpKit/GIColorView.h>
+#import <GitUpKit/GIConstants.h>
 
 #import "XLFacilityMacros.h"
-#import "GIGraphView.h"
+#import <GitUpKit/GIGraphView.h>
 
 #define kOverlayAnimationInDuration 0.2  // seconds
 #define kOverlayAnimationOutDuration 0.15  // seconds

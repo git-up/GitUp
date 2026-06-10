@@ -17,10 +17,10 @@
 #error This file requires ARC
 #endif
 
-#import "GIConfigViewController.h"
-#import "GIWindowController.h"
+#import <GitUpKit/GIConfigViewController.h>
+#import <GitUpKit/GIWindowController.h>
 
-#import "GIInterface.h"
+#import <GitUpKit/GIInterface.h>
 #import "XLFacilityMacros.h"
 
 @interface GIConfigViewController () <NSTableViewDataSource>

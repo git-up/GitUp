@@ -17,10 +17,10 @@
 #error This file requires ARC
 #endif
 
-#import "GICommitListViewController.h"
+#import <GitUpKit/GICommitListViewController.h>
 
-#import "GCLiveRepository+Utilities.h"
-#import "GIInterface.h"
+#import <GitUpKit/GCLiveRepository+Utilities.h>
+#import <GitUpKit/GIInterface.h>
 #import "XLFacilityMacros.h"
 
 @interface GICommitListViewController () <NSTableViewDataSource>

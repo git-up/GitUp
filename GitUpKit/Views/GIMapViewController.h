@@ -13,10 +13,10 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#import "GIViewController+Utilities.h"
+#import <GitUpKit/GIViewController+Utilities.h>
 
-#import "GCLiveRepository+Conflicts.h"
-#import "GCRepository.h"
+#import <GitUpKit/GCLiveRepository+Conflicts.h>
+#import <GitUpKit/GCRepository.h>
 
 @class GIMapViewController, GIGraph, GINode, GCHistory, GCHistoryCommit, GCCommit;
 

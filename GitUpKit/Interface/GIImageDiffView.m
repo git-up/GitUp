@@ -3,7 +3,7 @@
 #endif
 
 #import "GIPrivate.h"
-#import "GILaunchServicesLocator.h"
+#import <GitUpKit/GILaunchServicesLocator.h>
 #import <QuartzCore/CATransaction.h>
 #import <ImageIO/ImageIO.h>
 

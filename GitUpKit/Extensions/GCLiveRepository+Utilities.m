@@ -5,7 +5,7 @@
 //  Created by Lucas Derraugh on 8/2/19.
 //
 
-#import "GCLiveRepository+Utilities.h"
+#import <GitUpKit/GCLiveRepository+Utilities.h>
 
 @implementation GCLiveRepository (Utilities)
 

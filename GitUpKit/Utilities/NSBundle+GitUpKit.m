@@ -14,7 +14,7 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #import "NSBundle+GitUpKit.h"
-#import "GIBranch.h"  // just any class included on all platforms
+#import <GitUpKit/GIBranch.h>  // just any class included on all platforms
 
 @implementation NSBundle (GitUpKit)
 

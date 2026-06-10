@@ -14,7 +14,7 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #import <XCTest/XCTest.h>
-#import "GCFoundation.h"
+#import <GitUpKit/GCFoundation.h>
 
 @interface GCFoundation_Tests : XCTestCase
 

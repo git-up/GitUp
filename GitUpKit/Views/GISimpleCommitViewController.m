@@ -17,14 +17,14 @@
 #error This file requires ARC
 #endif
 
-#import "GISimpleCommitViewController.h"
-#import "GIDiffContentsViewController.h"
-#import "GIDiffFilesViewController.h"
-#import "GIRemappingExplanationPopover.h"
-#import "GIViewController+Utilities.h"
+#import <GitUpKit/GISimpleCommitViewController.h>
+#import <GitUpKit/GIDiffContentsViewController.h>
+#import <GitUpKit/GIDiffFilesViewController.h>
+#import <GitUpKit/GIRemappingExplanationPopover.h>
+#import <GitUpKit/GIViewController+Utilities.h>
 
-#import "GIInterface.h"
-#import "GCRepository+Utilities.h"
+#import <GitUpKit/GIInterface.h>
+#import <GitUpKit/GCRepository+Utilities.h>
 #import "XLFacilityMacros.h"
 
 @interface GISimpleCommitViewController () <GIDiffContentsViewControllerDelegate, GIDiffFilesViewControllerDelegate>

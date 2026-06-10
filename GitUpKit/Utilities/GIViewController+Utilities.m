@@ -17,14 +17,14 @@
 #error This file requires ARC
 #endif
 
-#import "GIViewController+Utilities.h"
-#import "GIWindowController.h"
+#import <GitUpKit/GIViewController+Utilities.h>
+#import <GitUpKit/GIWindowController.h>
 
-#import "GCCore.h"
-#import "GCRepository+Index.h"
-#import "GCRepository+Utilities.h"
-#import "GCLiveRepository+Conflicts.h"
-#import "GIAppKit.h"
+#import <GitUpKit/GCCore.h>
+#import <GitUpKit/GCRepository+Index.h>
+#import <GitUpKit/GCRepository+Utilities.h>
+#import <GitUpKit/GCLiveRepository+Conflicts.h>
+#import <GitUpKit/GIAppKit.h>
 #import "XLFacilityMacros.h"
 
 #define kOpenDiffPath @"/usr/bin/opendiff"

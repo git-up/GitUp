@@ -18,7 +18,7 @@
 #endif
 
 #import "GIPrivate.h"
-#import "GIAppKit.h"
+#import <GitUpKit/GIAppKit.h>
 
 #define kTextBottomPadding 0
 

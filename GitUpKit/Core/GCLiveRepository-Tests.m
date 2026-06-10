@@ -6,11 +6,11 @@
 //
 
 #import <XCTest/XCTest.h>
-#import "GCTestCase.h"
-#import "GCHistory+Rewrite.h"
-#import "GCRepository+Index.h"
-#import "GCLiveRepository+Conflicts.h"
-#import "GIViewController+Utilities.h"
+#import <GitUpKit/GCTestCase.h>
+#import <GitUpKit/GCHistory+Rewrite.h>
+#import <GitUpKit/GCRepository+Index.h>
+#import <GitUpKit/GCLiveRepository+Conflicts.h>
+#import <GitUpKit/GIViewController+Utilities.h>
 
 // block based object that conforms to GCMergeConflictResolver
 @interface GCBlockConflictResolver : NSObject <GCMergeConflictResolver>

@@ -17,15 +17,15 @@
 #error This file requires ARC
 #endif
 
-#import "GICommitSplitterViewController.h"
-#import "GIDiffFilesViewController.h"
-#import "GIDiffContentsViewController.h"
+#import <GitUpKit/GICommitSplitterViewController.h>
+#import <GitUpKit/GIDiffFilesViewController.h>
+#import <GitUpKit/GIDiffContentsViewController.h>
 
-#import "GCCore.h"
-#import "GIColorView.h"
-#import "GIInterface.h"
-#import "GCHistory+Rewrite.h"
-#import "GIWindowController.h"
+#import <GitUpKit/GCCore.h>
+#import <GitUpKit/GIColorView.h>
+#import <GitUpKit/GIInterface.h>
+#import <GitUpKit/GCHistory+Rewrite.h>
+#import <GitUpKit/GIWindowController.h>
 #import "XLFacilityMacros.h"
 
 #define kGCDefaultMaxDiffContextLines 3

@@ -13,7 +13,7 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#import "GCDiff.h"
+#import <GitUpKit/GCDiff.h>
 
 // The cases "Both Deleted", "Added by Us" and "Added by Them" are not possible in practice as they are automatically resolved by the trivial merge machinery
 // http://permalink.gmane.org/gmane.comp.version-control.git/245661

@@ -19,8 +19,8 @@
 
 #import <objc/runtime.h>
 
-#import "GCRepository+Utilities.h"
-#import "GCRepository+Index.h"
+#import <GitUpKit/GCRepository+Utilities.h>
+#import <GitUpKit/GCRepository+Index.h>
 
 #import "XLFacilityMacros.h"
 

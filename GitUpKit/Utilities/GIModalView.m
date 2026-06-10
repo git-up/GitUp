@@ -20,7 +20,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import <sys/sysctl.h>
 
-#import "GIModalView.h"
+#import <GitUpKit/GIModalView.h>
 
 #import "XLFacilityMacros.h"
 #import "NSColor+GINamedColors.h"

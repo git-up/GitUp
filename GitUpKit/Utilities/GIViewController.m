@@ -19,10 +19,10 @@
 
 #import <objc/runtime.h>
 
-#import "GIViewController.h"
-#import "GIWindowController.h"
+#import <GitUpKit/GIViewController.h>
+#import <GitUpKit/GIWindowController.h>
 
-#import "GIInterface.h"
+#import <GitUpKit/GIInterface.h>
 #import "XLFacilityMacros.h"
 
 @interface GIView ()

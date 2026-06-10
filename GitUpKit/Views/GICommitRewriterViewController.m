@@ -17,14 +17,14 @@
 #error This file requires ARC
 #endif
 
-#import "GICommitRewriterViewController.h"
-#import "GIDiffContentsViewController.h"
-#import "GIDiffFilesViewController.h"
-#import "GIWindowController.h"
+#import <GitUpKit/GICommitRewriterViewController.h>
+#import <GitUpKit/GIDiffContentsViewController.h>
+#import <GitUpKit/GIDiffFilesViewController.h>
+#import <GitUpKit/GIWindowController.h>
 
-#import "GIInterface.h"
-#import "GCRepository+Utilities.h"
-#import "GCHistory+Rewrite.h"
+#import <GitUpKit/GIInterface.h>
+#import <GitUpKit/GCRepository+Utilities.h>
+#import <GitUpKit/GCHistory+Rewrite.h>
 #import "XLFacilityMacros.h"
 
 @interface GICommitRewriterViewController () <GIDiffContentsViewControllerDelegate, GIDiffFilesViewControllerDelegate>

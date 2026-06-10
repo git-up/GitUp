@@ -17,9 +17,9 @@
 #error This file requires ARC
 #endif
 
-#import "GCTestCase.h"
-#import "GCHistory+Rewrite.h"
-#import "GCRepository+Utilities.h"
+#import <GitUpKit/GCTestCase.h>
+#import <GitUpKit/GCHistory+Rewrite.h>
+#import <GitUpKit/GCRepository+Utilities.h>
 
 // TODO: Test updating detached HEAD and references
 @implementation GCSingleCommitRepositoryTests (GCHistory_Rewrite)

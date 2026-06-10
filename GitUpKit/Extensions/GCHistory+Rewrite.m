@@ -17,7 +17,7 @@
 #error This file requires ARC
 #endif
 
-#import "GCHistory+Rewrite.h"
+#import <GitUpKit/GCHistory+Rewrite.h>
 
 #import "XLFacilityMacros.h"
 

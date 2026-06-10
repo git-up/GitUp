@@ -17,7 +17,7 @@
 #error This file requires ARC
 #endif
 
-#import "GCTestCase.h"
+#import <GitUpKit/GCTestCase.h>
 #import "GIPrivate.h"
 
 #define kNotationSeparator @"##### NOTATION #####\n\n"

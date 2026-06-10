@@ -17,9 +17,9 @@
 #error This file requires ARC
 #endif
 
-#import "GICommitViewController.h"
+#import <GitUpKit/GICommitViewController.h>
 
-#import "GIInterface.h"
+#import <GitUpKit/GIInterface.h>
 #import "XLFacilityMacros.h"
 
 @implementation GICommitViewController {
