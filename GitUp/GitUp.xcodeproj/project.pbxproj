@@ -15,7 +15,6 @@
 		0A2F489223683DD60072C6FB /* AuthenticationWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A2F489023683DD60072C6FB /* AuthenticationWindowController.xib */; };
 		0A3388BC2353BD630022528D /* WelcomeWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A3388BA2353BD630022528D /* WelcomeWindowController.xib */; };
 		0A0C000126D8020000BEEF00 /* libgit2.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A0C001126D8020000BEEF00 /* libgit2.xcframework */; };
-		0A0C000226D8020000BEEF00 /* libssh2.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A0C001226D8020000BEEF00 /* libssh2.xcframework */; };
 		0A0C000326D8020000BEEF00 /* libssl.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A0C001326D8020000BEEF00 /* libssl.xcframework */; };
 		0A0C000426D8020000BEEF00 /* libcrypto.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A0C001426D8020000BEEF00 /* libcrypto.xcframework */; };
 		0A0C000526D8020000BEEF00 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A0C001526D8020000BEEF00 /* Security.framework */; };
@@ -134,7 +133,6 @@
 		0AD4625A232711B000BE28D1 /* WelcomeWindowController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WelcomeWindowController.m; sourceTree = "<group>"; };
 		0AE7F5EE2312C1B000B06050 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		0A0C001126D8020000BEEF00 /* libgit2.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = libgit2.xcframework; path = "../GitUpKit/Third-Party/libgit2.xcframework"; sourceTree = SOURCE_ROOT; };
-		0A0C001226D8020000BEEF00 /* libssh2.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = libssh2.xcframework; path = "../GitUpKit/Third-Party/libssh2.xcframework"; sourceTree = SOURCE_ROOT; };
 		0A0C001326D8020000BEEF00 /* libssl.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = libssl.xcframework; path = "../GitUpKit/Third-Party/libssl.xcframework"; sourceTree = SOURCE_ROOT; };
 		0A0C001426D8020000BEEF00 /* libcrypto.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = libcrypto.xcframework; path = "../GitUpKit/Third-Party/libcrypto.xcframework"; sourceTree = SOURCE_ROOT; };
 		0A0C001526D8020000BEEF00 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
@@ -184,7 +182,6 @@
 				0A0C000526D8020000BEEF00 /* Security.framework in Frameworks */,
 				0A0C000626D8020000BEEF00 /* CoreFoundation.framework in Frameworks */,
 				0A0C000126D8020000BEEF00 /* libgit2.xcframework in Frameworks */,
-				0A0C000226D8020000BEEF00 /* libssh2.xcframework in Frameworks */,
 				0A0C000326D8020000BEEF00 /* libssl.xcframework in Frameworks */,
 				0A0C000426D8020000BEEF00 /* libcrypto.xcframework in Frameworks */,
 				DBBEE685256B0A0200F96DAF /* libiconv.tbd in Frameworks */,
@@ -212,7 +209,6 @@
 				0A0C001426D8020000BEEF00 /* libcrypto.xcframework */,
 				0A0C001126D8020000BEEF00 /* libgit2.xcframework */,
 				DBBEE684256B0A0200F96DAF /* libiconv.tbd */,
-				0A0C001226D8020000BEEF00 /* libssh2.xcframework */,
 				0A0C001326D8020000BEEF00 /* libssl.xcframework */,
 				DBBEE687256B0A0A00F96DAF /* libz.tbd */,
 				0A0C001526D8020000BEEF00 /* Security.framework */,
@@ -497,7 +493,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "# Information derived from https://stackoverflow.com/questions/77397157/mapbox-xcframework-ios-signature-couldn-t-be-copied-to-signatures-because-an-i\nif [ \"$XCODE_VERSION_MAJOR\" -ge \"1500\" ]; then\n  echo \"Remove signature files (Xcode 15 workaround)\"\n  find \"$BUILD_DIR/${CONFIGURATION}/libssl.xcframework-macos.signature\" -name \"*.signature\" -type f | xargs -r rm\n  find \"$BUILD_DIR/${CONFIGURATION}/libcrypto.xcframework-macos.signature\" -name \"*.signature\" -type f | xargs -r rm\n  find \"$BUILD_DIR/${CONFIGURATION}/libssh2.xcframework-macos.signature\" -name \"*.signature\" -type f | xargs -r rm\n  find \"$BUILD_DIR/${CONFIGURATION}/Sparkle.xcframework-macos.signature\" -name \"*.signature\" -type f | xargs -r rm\nelse\n  echo \"No signature files to remove (Xcode version is less than 1500)\"\nfi\n";
+			shellScript = "# Information derived from https://stackoverflow.com/questions/77397157/mapbox-xcframework-ios-signature-couldn-t-be-copied-to-signatures-because-an-i\nif [ \"$XCODE_VERSION_MAJOR\" -ge \"1500\" ]; then\n  echo \"Remove signature files (Xcode 15 workaround)\"\n  find \"$BUILD_DIR/${CONFIGURATION}/libssl.xcframework-macos.signature\" -name \"*.signature\" -type f | xargs -r rm\n  find \"$BUILD_DIR/${CONFIGURATION}/libcrypto.xcframework-macos.signature\" -name \"*.signature\" -type f | xargs -r rm\n  find \"$BUILD_DIR/${CONFIGURATION}/Sparkle.xcframework-macos.signature\" -name \"*.signature\" -type f | xargs -r rm\nelse\n  echo \"No signature files to remove (Xcode version is less than 1500)\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

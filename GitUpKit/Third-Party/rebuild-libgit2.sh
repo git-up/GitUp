@@ -20,9 +20,6 @@ function build_arch_library() {
     exit 1
   fi
 
-  local LIBSSH2_PREFIX="$DIRNAME/libssh2.xcframework/$XCFRAMEWORK_SUBDIR"
-  local LIBSSL_PREFIX="$DIRNAME/libssl.xcframework/$XCFRAMEWORK_SUBDIR"
-  local LIBCRYPTO_PREFIX="$DIRNAME/libcrypto.xcframework/$XCFRAMEWORK_SUBDIR"
   local SDKROOT="`xcrun --sdk "$PLATFORM" --show-sdk-path`"
   local DEPLOYMENT_TARGET="$IOS_VERSION_MIN"
   local REGEX_BACKEND="builtin"
@@ -45,17 +42,13 @@ function build_arch_library() {
     -DBUILD_CLI=OFF \
     -DBUILD_EXAMPLES=OFF \
     -DBUILD_FUZZERS=OFF \
-    -DUSE_SSH=libssh2 \
+    -DUSE_SSH=exec \
     -DUSE_HTTPS=SecureTransport \
     -DUSE_SHA1=CollisionDetection \
     -DUSE_SHA256=CommonCrypto \
     -DREGEX_BACKEND="$REGEX_BACKEND" \
     -DUSE_HTTP_PARSER=builtin \
-    -DPKG_CONFIG_EXECUTABLE=/usr/bin/false \
-    -DLIBSSH2_INCLUDE_DIR="$LIBSSH2_PREFIX/Headers" \
-    -DLIBSSH2_LIBRARY="$LIBSSH2_PREFIX/libssh2.a" \
-    -DHAVE_LIBSSH2_MEMORY_CREDENTIALS=1 \
-    -DCMAKE_REQUIRED_LIBRARIES="$LIBSSH2_PREFIX/libssh2.a;$LIBSSL_PREFIX/libssl.a;$LIBCRYPTO_PREFIX/libcrypto.a;z"
+    -DPKG_CONFIG_EXECUTABLE=/usr/bin/false
 
   cmake --build "$BUILD_DIR" --target install --config Release
 }

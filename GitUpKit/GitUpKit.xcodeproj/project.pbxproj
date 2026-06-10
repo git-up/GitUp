@@ -8,18 +8,15 @@
 
 /* Begin PBXBuildFile section */
 		0A0B000126D8010000BEEF00 /* libgit2.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A0B001126D8010000BEEF00 /* libgit2.xcframework */; };
-		0A0B000226D8010000BEEF00 /* libssh2.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A0B001226D8010000BEEF00 /* libssh2.xcframework */; };
 		0A0B000326D8010000BEEF00 /* libssl.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A0B001326D8010000BEEF00 /* libssl.xcframework */; };
 		0A0B000426D8010000BEEF00 /* libcrypto.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A0B001426D8010000BEEF00 /* libcrypto.xcframework */; };
 		0A0B000526D8010000BEEF00 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A0B001526D8010000BEEF00 /* CoreFoundation.framework */; };
 		0A0B000626D8010000BEEF00 /* libgit2.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A0B001126D8010000BEEF00 /* libgit2.xcframework */; };
-		0A0B000726D8010000BEEF00 /* libssh2.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A0B001226D8010000BEEF00 /* libssh2.xcframework */; };
 		0A0B000826D8010000BEEF00 /* libssl.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A0B001326D8010000BEEF00 /* libssl.xcframework */; };
 		0A0B000926D8010000BEEF00 /* libcrypto.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A0B001426D8010000BEEF00 /* libcrypto.xcframework */; };
 		0A0B000A26D8010000BEEF00 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A0B001526D8010000BEEF00 /* CoreFoundation.framework */; };
 		0A0B000B26D8010000BEEF00 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A1DA51D265806140041E737 /* Security.framework */; };
 		0A0B000C26D8010000BEEF00 /* libgit2.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A0B001126D8010000BEEF00 /* libgit2.xcframework */; };
-		0A0B000D26D8010000BEEF00 /* libssh2.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A0B001226D8010000BEEF00 /* libssh2.xcframework */; };
 		0A0B000E26D8010000BEEF00 /* libssl.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A0B001326D8010000BEEF00 /* libssl.xcframework */; };
 		0A0B000F26D8010000BEEF00 /* libcrypto.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A0B001426D8010000BEEF00 /* libcrypto.xcframework */; };
 		0A0B001026D8010000BEEF00 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A0B001526D8010000BEEF00 /* CoreFoundation.framework */; };
@@ -365,7 +362,6 @@
 
 /* Begin PBXFileReference section */
 		0A0B001126D8010000BEEF00 /* libgit2.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = libgit2.xcframework; path = "Third-Party/libgit2.xcframework"; sourceTree = "<group>"; };
-		0A0B001226D8010000BEEF00 /* libssh2.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = libssh2.xcframework; path = "Third-Party/libssh2.xcframework"; sourceTree = "<group>"; };
 		0A0B001326D8010000BEEF00 /* libssl.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = libssl.xcframework; path = "Third-Party/libssl.xcframework"; sourceTree = "<group>"; };
 		0A0B001426D8010000BEEF00 /* libcrypto.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = libcrypto.xcframework; path = "Third-Party/libcrypto.xcframework"; sourceTree = "<group>"; };
 		0A0B001526D8010000BEEF00 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
@@ -600,7 +596,6 @@
 				0A0B000B26D8010000BEEF00 /* Security.framework in Frameworks */,
 				0A0B000A26D8010000BEEF00 /* CoreFoundation.framework in Frameworks */,
 				0A0B000626D8010000BEEF00 /* libgit2.xcframework in Frameworks */,
-				0A0B000726D8010000BEEF00 /* libssh2.xcframework in Frameworks */,
 				0A0B000826D8010000BEEF00 /* libssl.xcframework in Frameworks */,
 				0A0B000926D8010000BEEF00 /* libcrypto.xcframework in Frameworks */,
 				DBBEE674256B09B500F96DAF /* libiconv.tbd in Frameworks */,
@@ -616,7 +611,6 @@
 				0A1DA51E265806140041E737 /* Security.framework in Frameworks */,
 				0A0B000526D8010000BEEF00 /* CoreFoundation.framework in Frameworks */,
 				0A0B000126D8010000BEEF00 /* libgit2.xcframework in Frameworks */,
-				0A0B000226D8010000BEEF00 /* libssh2.xcframework in Frameworks */,
 				0A0B000326D8010000BEEF00 /* libssl.xcframework in Frameworks */,
 				0A0B000426D8010000BEEF00 /* libcrypto.xcframework in Frameworks */,
 				DBBEE655256B095000F96DAF /* libiconv.tbd in Frameworks */,
@@ -632,7 +626,6 @@
 				0A0B001626D8010000BEEF00 /* Security.framework in Frameworks */,
 				0A0B001026D8010000BEEF00 /* CoreFoundation.framework in Frameworks */,
 				0A0B000C26D8010000BEEF00 /* libgit2.xcframework in Frameworks */,
-				0A0B000D26D8010000BEEF00 /* libssh2.xcframework in Frameworks */,
 				0A0B000E26D8010000BEEF00 /* libssl.xcframework in Frameworks */,
 				0A0B000F26D8010000BEEF00 /* libcrypto.xcframework in Frameworks */,
 				1DADC0DE25A25D5D008C2C35 /* libiconv.tbd in Frameworks */,
@@ -661,7 +654,6 @@
 				0A0B001426D8010000BEEF00 /* libcrypto.xcframework */,
 				0A0B001126D8010000BEEF00 /* libgit2.xcframework */,
 				DBBEE654256B095000F96DAF /* libiconv.tbd */,
-				0A0B001226D8010000BEEF00 /* libssh2.xcframework */,
 				0A0B001326D8010000BEEF00 /* libssl.xcframework */,
 				DBBEE637256B08D300F96DAF /* libsqlite3.xcframework */,
 				DBBEE64C256B094000F96DAF /* libz.tbd */,

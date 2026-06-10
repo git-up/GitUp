@@ -18,7 +18,6 @@
 #endif
 
 #import <TargetConditionals.h>
-#import <libssh2.h>
 #import <pthread.h>
 #if !TARGET_OS_IPHONE
 #import <git2/sys/filter.h>
@@ -119,7 +118,6 @@ static int _GitLFSApply(git_filter* self, void** payload, git_buf* to, const git
   assert(git_libgit2_features() & GIT_FEATURE_HTTPS);
   assert(git_libgit2_features() & GIT_FEATURE_SSH);
   assert(git_libgit2_init() >= 1);
-  assert(libssh2_init(0) == 0);  // We can't have libgit2 using libssh2_session_init() and in turn calling this function on an arbitrary thread later on
 
 #if !TARGET_OS_IPHONE
   struct stat info;
