@@ -784,16 +784,23 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
         git_object* object;
         int status = git_object_lookup(&object, self.private, &oid, GIT_OBJ_ANY);
         if (status == GIT_OK) {
-          if (git_object_type(object) == GIT_OBJ_COMMIT) {
+          git_object_t type = git_object_type(object);
+          if (type == GIT_OBJ_COMMIT) {
             commit = (git_commit*)object;
             object = NULL;
-          } else if (git_object_type(object) == GIT_OBJ_TAG) {
+          } else if (type == GIT_OBJ_TAG) {
             status = git_object_peel((git_object**)&commit, object, GIT_OBJ_COMMIT);
             if (status == GIT_OK) {
               tag = (git_tag*)object;
             } else {
               git_object_free(object);
             }
+          } else if (type == GIT_OBJ_TREE) {
+            XLOG_DEBUG(@"Ignoring reference \"%s\" pointing to non-commit object type %d in \"%@\"",
+                         git_reference_name(reference),
+                         git_object_type(object),
+                         self.repositoryPath);
+            git_object_free(object);
           } else {
             XLOG_DEBUG_UNREACHABLE();
             git_object_free(object);

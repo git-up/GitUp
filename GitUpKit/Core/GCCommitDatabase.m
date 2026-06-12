@@ -1054,11 +1054,18 @@ cleanup:
                                             git_commit* commit = NULL;
                                             int status = git_object_lookup(&object, _repository.private, oid, GIT_OBJ_ANY);
                                             if (status == GIT_OK) {
-                                              if (git_object_type(object) == GIT_OBJ_COMMIT) {
+                                              git_object_t type = git_object_type(object);
+                                              if (type == GIT_OBJ_COMMIT) {
                                                 commit = (git_commit*)object;
                                                 object = NULL;
-                                              } else if (git_object_type(object) == GIT_OBJ_TAG) {
+                                              } else if (type == GIT_OBJ_TAG) {
                                                 status = git_object_peel((git_object**)&commit, object, GIT_OBJ_COMMIT);
+                                              } else if (type == GIT_OBJ_TREE) {
+                                                XLOG_DEBUG(@"Ignoring reference \"%s\" pointing to non-commit object type %d in \"%@\"",
+                                                           git_reference_name(reference),
+                                                           git_object_type(object),
+                                                           self.repository.repositoryPath);
+                                                status = GIT_EUSER;
                                               } else {
                                                 XLOG_DEBUG_UNREACHABLE();
                                                 status = GIT_EUSER;
