@@ -128,16 +128,7 @@ static void _TimerCallBack(CFRunLoopTimerRef timer, void* info) {
   for (size_t i = 0; i < numEvents; ++i) {
     const char* path = ((const char**)eventPaths)[i];
     if (eventFlags[i] & kFSEventStreamEventFlagMustScanSubDirs) {
-      // Apple docs: "Your application must rescan not just the directory given in the event,
-      // but all its children, recursively." This flag fires when the kernel event queue overflows
-      // (e.g. during rapid multi-file changes like git checkout). We must not ignore it.
-      XLOG_WARNING(@"Received event stream request to rescan \"%s\"", path);
-      if (stream == _gitDirectoryStream) {
-        _gitDirectoryChanged = YES;
-      } else {
-        _workingDirectoryChanged = YES;
-      }
-      CFRunLoopTimerSetNextFireDate(_updateTimer, CFAbsoluteTimeGetCurrent() + kUpdateLatency);
+      XLOG_WARNING(@"Ignoring event stream request to rescan \"%s\"", path);  // Note that this directory path can be missing the trailing slash
 
     } else {  // Documentation says "eventFlags" should be 0x0 for regular events but that's not the case on OS X 10.10 at least
 
