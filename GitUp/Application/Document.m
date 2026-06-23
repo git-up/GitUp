@@ -1616,7 +1616,8 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
     [modeControl selectSegmentWithTag:windowModeID];
     menuItem.state = menuItem.tag == windowModeID ? NSControlStateValueOn : NSControlStateValueOff;
 
-    return !_windowController.hasModalView;
+    BOOL canSwitchMode = ![_windowMode isEqualToString:kWindowModeString_Map_QuickView];
+    return canSwitchMode && !_windowController.hasModalView;
   }
 
   if (item.action == @selector(navigate:)) {
@@ -1669,6 +1670,10 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 }
 
 - (IBAction)switchMode:(id)sender {
+  if ([_windowMode isEqualToString:kWindowModeString_Map_QuickView]) {
+    NSBeep();
+    return;
+  }
   if ([sender isKindOfClass:[NSMenuItem class]]) {
     [self _setWindowMode:_WindowModeStringFromID([(NSMenuItem*)sender tag])];
   } else {
