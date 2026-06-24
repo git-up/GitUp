@@ -118,6 +118,8 @@ extern NSString* GCGitOIDToSHA1(const git_oid* oid);
 extern BOOL GCGitOIDFromSHA1(NSString* sha1, git_oid* oid, NSError** error);
 extern BOOL GCGitOIDFromSHA1Prefix(NSString* prefix, git_oid* oid, NSError** error);
 extern NSData* GCCleanedUpCommitMessage(NSString* message);
+extern GCCommit* GCCreateCommitFromTreeWithOptionalSignature(GCRepository* repository, git_tree* tree, const git_commit** parents, NSUInteger count, const git_signature* author, NSString* message, NSError** error);
+extern GCCommit* GCCreateCommitFromCommitWithIndexAndOptionalSignature(GCRepository* repository, git_commit* commit, git_index* index, NSString* message, NSError** error);
 extern NSString* GCUserFromSignature(const git_signature* signature);
 extern const void* GCOIDCopyCallBack(CFAllocatorRef allocator, const void* value);
 extern Boolean GCOIDEqualCallBack(const void* value1, const void* value2);
@@ -262,6 +264,9 @@ extern int git_submodule_foreach_block(git_repository* repo, int (^block)(git_su
 - (void)setRemoteCallbacks:(git_remote_callbacks*)callbacks;
 - (NSData*)exportBlobWithOID:(const git_oid*)oid error:(NSError**)error;
 - (BOOL)exportBlobWithOID:(const git_oid*)oid toPath:(NSString*)path error:(NSError**)error;
+#if !TARGET_OS_IPHONE
+- (NSString*)getPATHUsingShell:(NSString*)shell error:(NSError**)error;
+#endif
 @end
 
 @interface GCHistory ()
