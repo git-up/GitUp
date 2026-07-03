@@ -39,7 +39,19 @@
 #if !TARGET_OS_IPHONE
 
 - (BOOL)moveItemAtPathToTrash:(NSString*)path error:(NSError**)error {
-  return [self trashItemAtURL:[NSURL fileURLWithPath:path] resultingItemURL:NULL error:error];
+  NSString* trashPath = [NSSearchPathForDirectoriesInDomains(NSTrashDirectory, NSUserDomainMask, YES) firstObject];
+  if (!trashPath) {
+    GC_SET_GENERIC_ERROR(@"Unable to find Trash");
+    return NO;
+  }
+  NSString* extension = path.pathExtension;
+  NSString* name = [path.lastPathComponent stringByDeletingPathExtension];
+  NSString* destinationPath = [trashPath stringByAppendingPathComponent:[name stringByAppendingPathExtension:extension]];
+  NSUInteger counter = 0;
+  while ([self fileExistsAtPath:destinationPath followLastSymlink:NO]) {
+    destinationPath = [trashPath stringByAppendingPathComponent:[[NSString stringWithFormat:@"%@ (%lu)", name, ++counter] stringByAppendingPathExtension:extension]];
+  }
+  return [self moveItemAtPath:path toPath:destinationPath error:error];
 }
 
 #endif
