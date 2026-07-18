@@ -19,6 +19,20 @@
 
 #import "GCPrivate.h"
 
+static GCCommit* _CreateCommitFromIndex(GCRepository* repository, git_index* index, const git_commit** parents, NSUInteger count, const git_signature* author, NSString* message, NSError** error) {
+  GCCommit* commit = nil;
+  git_tree* tree = NULL;
+
+  git_oid oid;
+  CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_index_write_tree_to, &oid, index, repository.private);
+  CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_tree_lookup, &tree, repository.private, &oid);
+  commit = GCCreateCommitFromTreeWithOptionalSignature(repository, tree, parents, count, author, message, error);
+
+cleanup:
+  git_tree_free(tree);
+  return commit;
+}
+
 @implementation GCRepository (HEAD)
 
 #pragma mark - HEAD Manipulation
@@ -98,6 +112,7 @@
   git_reference* headReference = NULL;
   git_commit* headCommit = NULL;
   git_index* index = NULL;
+  const git_commit* parents[2] = {NULL, NULL};
   NSString* reflogMessage;
 
   int status = git_repository_head(&headReference, self.private);  // Returns a direct reference or GIT_EUNBORNBRANCH
@@ -115,8 +130,9 @@
     goto cleanup;
   }
 
-  const git_commit* parents[2] = {headCommit, parent.private};
-  commit = [self createCommitFromIndex:index withParents:parents count:(headCommit ? (parent ? 2 : 1) : 0)author:NULL message:message error:error];
+  parents[0] = headCommit;
+  parents[1] = parent.private;
+  commit = _CreateCommitFromIndex(self, index, parents, (headCommit ? (parent ? 2 : 1) : 0), NULL, message, error);
   if (commit == nil) {
     goto cleanup;
   }
@@ -162,7 +178,7 @@ cleanup:
     goto cleanup;
   }
 
-  commit = [self createCommitFromCommit:headCommit withIndex:index updatedMessage:message updatedParents:nil updateCommitter:YES error:error];
+  commit = GCCreateCommitFromCommitWithIndexAndOptionalSignature(self, headCommit, index, message, error);
   if (commit == nil) {
     goto cleanup;
   }
