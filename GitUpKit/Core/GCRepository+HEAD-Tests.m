@@ -194,4 +194,37 @@
   [self assertContentsOfFileAtPath:@"new_file.txt" equalsString:@"New Content\n"];
 }
 
+// Regression test for issue #2713: checking out a branch that is already checked out in another
+// worktree must fail *without* mutating the working directory or index. Previously the target tree
+// was written to disk before the (failing) HEAD move, leaving staged "revert" debris behind.
+- (void)testCheckoutBranchCheckedOutInLinkedWorktree {
+  // We start on master with a clean working directory.
+  [self assertContentsOfFileAtPath:@"hello_world.txt" equalsString:@"Hola Mundo!\n"];
+  XCTAssertTrue([self.repository checkClean:0 error:NULL]);
+
+  // Check out the topic branch in a linked worktree so it becomes off-limits in this one.
+  NSString* worktreePath = [NSTemporaryDirectory() stringByAppendingPathComponent:[[NSProcessInfo processInfo] globallyUniqueString]];
+  NSString* worktreeOutput = [self runGitCLTWithRepository:self.repository command:@"worktree", @"add", worktreePath, @"topic", nil];
+  XCTAssertNotNil(worktreeOutput);  // nil means git exited non-zero, i.e. the worktree wasn't created
+
+  // Switching to that same branch here must fail...
+  NSError* error;
+  XCTAssertFalse([self.repository checkoutLocalBranch:self.topicBranch options:0 error:&error]);
+  XCTAssertNotNil(error);
+
+  // ...and must leave the working directory, index, and HEAD exactly as they were.
+  XCTAssertTrue([self.repository checkClean:0 error:NULL]);
+  [self assertContentsOfFileAtPath:@"hello_world.txt" equalsString:@"Hola Mundo!\n"];
+  GCLocalBranch* branch;
+  GCCommit* head = [self.repository lookupHEAD:&branch error:NULL];
+  XCTAssertEqualObjects(head, self.commit3);
+  XCTAssertEqualObjects(branch, self.masterBranch);
+
+  // Re-checking-out the branch already at this HEAD must still be allowed.
+  XCTAssertTrue([self.repository checkoutLocalBranch:self.masterBranch options:kGCCheckoutOption_Force error:NULL]);
+
+  // Clean up the linked worktree.
+  [[NSFileManager defaultManager] removeItemAtPath:worktreePath error:NULL];
+}
+
 @end
