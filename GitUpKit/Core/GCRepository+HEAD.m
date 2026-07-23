@@ -242,6 +242,16 @@ cleanup:
 
 // Because by default git_checkout_tree() assumes the baseline (i.e. expected content of workdir) is HEAD we must checkout first, then update HEAD
 - (BOOL)checkoutLocalBranch:(GCLocalBranch*)branch options:(GCCheckoutOptions)options error:(NSError**)error {
+  // Bail out *before* touching the working directory if the branch is checked out in another worktree.
+  // Otherwise _checkoutTreeForCommit: below writes the target tree into the index and working directory, then
+  // setHEADToReference: fails (git_repository_set_head() refuses to point at a branch that is the HEAD of a
+  // linked worktree), leaving those changes behind with no rollback. See issue #2713. git mirrors this check
+  // by only rejecting a *different* branch, so allow re-checking-out the branch that is already this HEAD.
+  git_reference* branchReference = branch.private;
+  if (git_reference_is_branch(branchReference) && !git_branch_is_head(branchReference) && git_branch_is_checked_out(branchReference)) {
+    GC_SET_GENERIC_ERROR(@"Branch '%@' is already checked out in another worktree", branch.name);
+    return NO;
+  }
   GCCommit* tipCommit = [self lookupTipCommitForBranch:branch error:error];
   if (!tipCommit || ![self _checkoutTreeForCommit:tipCommit withBaseline:nil options:options error:error] || ![self setHEADToReference:branch error:error]) {
     return NO;
