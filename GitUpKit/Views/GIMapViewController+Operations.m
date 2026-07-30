@@ -26,6 +26,7 @@
 
 #define kUserDefaultsPrefix @"GIMapViewController_"
 #define kUserDefaultsKey_SkipPushTagWarning kUserDefaultsPrefix "SkipPushTagWarning"
+#define kUserDefaultsKey_SkipPushCurrentCommitTagsWarning kUserDefaultsPrefix "SkipPushCurrentCommitTagsWarning"
 #define kUserDefaultsKey_SkipFetchRemoteBranchWarning kUserDefaultsPrefix "SkipFetchRemoteBranchWarning"
 #define kUserDefaultsKey_SkipPullBranchWarning kUserDefaultsPrefix "SkipPullBranchWarning"
 #define kUserDefaultsKey_SkipPushBranchWarning kUserDefaultsPrefix "SkipPushBranchWarning"
@@ -982,7 +983,7 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
                                  title:[NSString stringWithFormat:NSLocalizedString(@"Are you sure you want to push the current commit tags (%@) to all remotes?", nil), names]
                                message:NSLocalizedString(@"This action cannot be undone.", nil)
                                 button:NSLocalizedString(@"Push Tags", nil)
-             suppressionUserDefaultKey:kUserDefaultsKey_SkipPushTagWarning
+             suppressionUserDefaultKey:kUserDefaultsKey_SkipPushCurrentCommitTagsWarning
                                  block:^{
                                    NSError* localError;
                                    NSArray* remotes = [self.repository listRemotes:&localError];
