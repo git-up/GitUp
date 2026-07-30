@@ -59,6 +59,7 @@
 - (void)pushAllLocalBranchesToAllRemotes;
 - (void)pushTag:(GCHistoryTag*)tag toRemote:(GCRemote*)remote;
 - (void)pushAllTagsToAllRemotes;
+- (void)pushTagsToAllRemotes:(NSArray*)tags;
 
 - (void)pullLocalBranchFromUpstream:(GCHistoryLocalBranch*)branch;
 @end

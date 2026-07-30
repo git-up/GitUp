@@ -55,4 +55,5 @@
 - (IBAction)pushAllTags:(id)sender;
 - (IBAction)pullCurrentBranch:(id)sender;
 - (IBAction)pushCurrentBranch:(id)sender;
+- (IBAction)pushCurrentCommitTags:(id)sender;
 @end

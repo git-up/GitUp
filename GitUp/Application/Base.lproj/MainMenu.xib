@@ -292,6 +292,12 @@
                                     <action selector="pushCurrentBranch:" target="-1" id="eva-SW-zIe"/>
                                 </connections>
                             </menuItem>
+                            <menuItem title="Push Current Commit Tags" keyEquivalent="t" id="pCt-Tg-itm">
+                                <modifierMask key="keyEquivalentModifierMask" control="YES" shift="YES" command="YES"/>
+                                <connections>
+                                    <action selector="pushCurrentCommitTags:" target="-1" id="pCt-Tg-act"/>
+                                </connections>
+                            </menuItem>
                             <menuItem isSeparatorItem="YES" id="lof-CG-6Ri"/>
                             <menuItem title="Push All Branches…" id="XAj-bb-A2L">
                                 <modifierMask key="keyEquivalentModifierMask"/>

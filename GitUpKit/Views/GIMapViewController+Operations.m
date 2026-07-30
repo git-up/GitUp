@@ -971,6 +971,52 @@ static inline GIAlertType _AlertTypeForDangerousRemoteOperations() {
   }
 }
 
+// IMPORTANT: See comment above regarding tags being force-pushed
+- (void)pushTagsToAllRemotes:(NSArray*)tags {
+  if (!tags.count) {
+    return;
+  }
+
+  NSString* names = [[tags valueForKey:@"name"] componentsJoinedByString:@", "];
+  [self confirmUserActionWithAlertType:kGIAlertType_Caution
+                                 title:[NSString stringWithFormat:NSLocalizedString(@"Are you sure you want to push the current commit tags (%@) to all remotes?", nil), names]
+                               message:NSLocalizedString(@"This action cannot be undone.", nil)
+                                button:NSLocalizedString(@"Push Tags", nil)
+             suppressionUserDefaultKey:kUserDefaultsKey_SkipPushTagWarning
+                                 block:^{
+                                   NSError* localError;
+                                   NSArray* remotes = [self.repository listRemotes:&localError];
+                                   if (remotes == nil) {
+                                     [self presentError:localError];
+                                     return;
+                                   }
+                                   if (!remotes.count) {
+                                     [self.windowController showOverlayWithStyle:kGIOverlayStyle_Warning message:NSLocalizedString(@"There are no remotes to push to!", nil)];
+                                     return;
+                                   }
+
+                                   [self.repository performOperationInBackgroundWithReason:nil
+                                       argument:nil
+                                       usingOperationBlock:^BOOL(GCRepository* repository, NSError** error) {
+                                         for (GCRemote* remote in remotes) {
+                                           for (GCTag* tag in tags) {
+                                             if (![repository pushTag:tag toRemote:remote force:YES error:error]) {
+                                               return NO;
+                                             }
+                                           }
+                                         }
+                                         return YES;
+                                       }
+                                       completionBlock:^(BOOL success, NSError* error) {
+                                         if (success) {
+                                           [self.windowController showOverlayWithStyle:kGIOverlayStyle_Informational message:NSLocalizedString(@"The current commit tags were pushed to all remotes successfully!", nil)];
+                                         } else {
+                                           [self presentError:error];
+                                         }
+                                       }];
+                                 }];
+}
+
 #pragma mark - Remote Delete
 
 - (void)_deleteRemoteBranchFromRemote:(GCHistoryRemoteBranch*)branch {
