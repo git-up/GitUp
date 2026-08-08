@@ -33,6 +33,11 @@ extern "C" {
 
 NSError* GCNewError(NSInteger code, NSString* message);
 
+// Returns "baseMessage" unchanged when "transportMessages" is nil/empty/whitespace, otherwise returns
+// "<baseMessage>\n<trimmed transportMessages>". Used to surface the remote's explanatory sideband text
+// (delivered via the libgit2 sideband_progress callback) alongside the generic transport error message.
+NSString* GCMessageByAppendingTransportMessages(NSString* baseMessage, NSString* transportMessages);
+
 const char* GCGitPathFromFileSystemPath(NSString* string);
 NSString* GCFileSystemPathFromGitPath(const char* string);
 

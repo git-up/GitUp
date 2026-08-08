@@ -177,7 +177,7 @@ cleanup:
   if (status != GIT_OK) {
     LOG_LIBGIT2_ERROR(status);
     if (error) {
-      *error = GCNewError(status, [NSString stringWithFormat:@"Failed connecting to \"%s\" remote: %@", git_remote_name(remote), GetLastGitErrorMessage()]);  // We can't use CALL_LIBGIT2_FUNCTION_GOTO() as we need to customize the error message
+      *error = GCNewError(status, [NSString stringWithFormat:@"Failed connecting to \"%s\" remote: %@", git_remote_name(remote), GCMessageByAppendingTransportMessages(GetLastGitErrorMessage(), self->_lastTransportMessages)]);  // We can't use CALL_LIBGIT2_FUNCTION_GOTO() as we need to customize the error message
     }
     goto cleanup;
   }
@@ -186,7 +186,14 @@ cleanup:
     if (direction == GIT_DIRECTION_FETCH) {
       git_fetch_options options = GIT_FETCH_OPTIONS_INIT;
       options.callbacks = callbacks;
-      CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_remote_download, remote, &array, &options);  // Passing NULL or 0 refspecs is equivalent to using the built-in "fetch" refspecs of the remote (typically "+refs/heads/*:refs/remotes/{REMOTE_NAME}/*")
+      status = git_remote_download(remote, &array, &options);  // Passing NULL or 0 refspecs is equivalent to using the built-in "fetch" refspecs of the remote (typically "+refs/heads/*:refs/remotes/{REMOTE_NAME}/*")
+      if (status != GIT_OK) {
+        LOG_LIBGIT2_ERROR(status);
+        if (error) {
+          *error = GCNewError(status, GCMessageByAppendingTransportMessages(GetLastGitErrorMessage(), self->_lastTransportMessages));
+        }
+        goto cleanup;
+      }
 
       /*
        When fetching:
@@ -215,7 +222,14 @@ cleanup:
     } else {
       git_push_options options = GIT_PUSH_OPTIONS_INIT;
       options.callbacks = callbacks;
-      CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_remote_upload, remote, &array, &options);  // Passing NULL or 0 refspecs is equivalent to using the built-in "push" refspecs of the remote (typically none)
+      status = git_remote_upload(remote, &array, &options);  // Passing NULL or 0 refspecs is equivalent to using the built-in "push" refspecs of the remote (typically none)
+      if (status != GIT_OK) {
+        LOG_LIBGIT2_ERROR(status);
+        if (error) {
+          *error = GCNewError(status, GCMessageByAppendingTransportMessages(GetLastGitErrorMessage(), self->_lastTransportMessages));
+        }
+        goto cleanup;
+      }
 
       /*
        When pushing:

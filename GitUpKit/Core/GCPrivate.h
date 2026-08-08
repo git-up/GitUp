@@ -245,7 +245,10 @@ extern int git_submodule_foreach_block(git_repository* repo, int (^block)(git_su
 - (BOOL)isEqualToIndexConflict:(GCIndexConflict*)conflict;
 @end
 
-@interface GCRepository ()
+@interface GCRepository () {
+@private
+  NSMutableString* _lastTransportMessages;  // Remote sideband messages accumulated during a transfer; reset before each transfer in -setRemoteCallbacks:
+}
 @property(nonatomic, readonly) git_repository* private NS_RETURNS_INNER_POINTER;
 @property(nonatomic, readonly) NSUInteger lastUpdatedTips;  // Reset before fetching and updated during fetching
 - (instancetype)initWithRepository:(git_repository*)repository error:(NSError**)error;
