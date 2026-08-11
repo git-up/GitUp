@@ -1860,7 +1860,14 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
                  }];
     }
 
-    [_mainWindow makeFirstResponder:_mapViewController.preferredFirstResponder];
+    // Keep key focus in the search field when the query is cleared by editing
+    // (e.g. holding the delete key) instead of transferring it to the map view.
+    // Otherwise the still-pressed delete keystroke is forwarded to the map view
+    // and deletes the selected commit (issue #991). Explicit dismissal via
+    // -closeSearch: still returns focus to the map view.
+    if (![_searchItem.searchField.currentEditor isEqual:[_mainWindow firstResponder]]) {
+      [_mainWindow makeFirstResponder:_mapViewController.preferredFirstResponder];
+    }
   }
 }
 
@@ -1871,6 +1878,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 - (IBAction)closeSearch:(id)sender {
   _searchItem.searchField.stringValue = @"";
   [self performSearch:nil];
+  [_mainWindow makeFirstResponder:_mapViewController.preferredFirstResponder];
 }
 
 - (IBAction)navigate:(NSSegmentedControl*)sender {
