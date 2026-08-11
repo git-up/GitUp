@@ -354,7 +354,11 @@ static int _ReferenceForEachCallback(const char* refname, void* payload) {
       hooksPath = [self.workingDirectoryPath stringByAppendingPathComponent:hooksPath];
     }
   } else {
-    hooksPath = [self.repositoryPath stringByAppendingPathComponent:@"hooks"];
+    // Hooks live in the repository's common directory, which is shared by all
+    // linked worktrees. self.repositoryPath is the per-worktree git directory,
+    // which for a linked worktree never contains a hooks directory, so looking
+    // it up there made hooks silently unavailable in worktrees (issue #1053).
+    hooksPath = [_MakeDirectoryPath(git_repository_commondir(_private)) stringByAppendingPathComponent:@"hooks"];
   }
   NSString* path = [hooksPath stringByAppendingPathComponent:name];
   return [[NSFileManager defaultManager] isExecutableFileAtPath:path] ? path : nil;
