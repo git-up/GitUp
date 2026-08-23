@@ -587,8 +587,9 @@ Adjust settings in Show menu</string>
             <rect key="frame" x="0.0" y="0.0" width="261" height="500"/>
             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" heightSizable="YES"/>
             <subviews>
-                <customView translatesAutoresizingMaskIntoConstraints="NO" id="4Od-pU-cwC">
+                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4Od-pU-cwC">
                     <rect key="frame" x="1" y="41" width="260" height="459"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 </customView>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="6Ni-2N-Ux7">
                     <rect key="frame" x="87" y="8" width="88" height="24"/>
@@ -615,11 +616,7 @@ Adjust settings in Show menu</string>
                 <constraint firstItem="i5t-9R-reS" firstAttribute="top" secondItem="Yj4-Sl-8P8" secondAttribute="top" id="17E-Yc-ykJ"/>
                 <constraint firstItem="lo1-B5-5pc" firstAttribute="leading" secondItem="Yj4-Sl-8P8" secondAttribute="leading" constant="1" id="68y-Dq-5of"/>
                 <constraint firstAttribute="bottom" secondItem="6Ni-2N-Ux7" secondAttribute="bottom" constant="8" id="6X2-ja-KdS"/>
-                <constraint firstItem="lo1-B5-5pc" firstAttribute="top" secondItem="4Od-pU-cwC" secondAttribute="bottom" id="9Cd-rc-ddU"/>
-                <constraint firstItem="4Od-pU-cwC" firstAttribute="top" secondItem="Yj4-Sl-8P8" secondAttribute="top" id="9rq-NU-81I"/>
                 <constraint firstAttribute="trailing" secondItem="lo1-B5-5pc" secondAttribute="trailing" id="JzC-RQ-pZI"/>
-                <constraint firstAttribute="trailing" secondItem="4Od-pU-cwC" secondAttribute="trailing" id="LaF-h1-es8"/>
-                <constraint firstItem="4Od-pU-cwC" firstAttribute="leading" secondItem="i5t-9R-reS" secondAttribute="trailing" id="Usw-84-2Bs"/>
                 <constraint firstItem="6Ni-2N-Ux7" firstAttribute="centerX" secondItem="Yj4-Sl-8P8" secondAttribute="centerX" id="bB7-0W-muz"/>
                 <constraint firstItem="i5t-9R-reS" firstAttribute="leading" secondItem="Yj4-Sl-8P8" secondAttribute="leading" id="gjG-2j-dHm"/>
                 <constraint firstItem="6Ni-2N-Ux7" firstAttribute="top" secondItem="lo1-B5-5pc" secondAttribute="bottom" constant="8" id="rRh-Bf-daK"/>
