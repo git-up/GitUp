@@ -56,7 +56,7 @@ typedef NS_ENUM(NSInteger, NavigationAction) {
   kNavigationAction_Previous
 };
 
-@interface Document () <NSToolbarDelegate, NSTextFieldDelegate, GCLiveRepositoryDelegate, GIWindowControllerDelegate, GIMapViewControllerDelegate, GISnapshotListViewControllerDelegate, GIUnifiedReflogViewControllerDelegate, GICommitListViewControllerDelegate, GICommitRewriterViewControllerDelegate, GICommitSplitterViewControllerDelegate, GIConflictResolverViewControllerDelegate>
+@interface Document () <NSToolbarDelegate, NSTextFieldDelegate, NSSearchFieldDelegate, GCLiveRepositoryDelegate, GIWindowControllerDelegate, GIMapViewControllerDelegate, GISnapshotListViewControllerDelegate, GIUnifiedReflogViewControllerDelegate, GICommitListViewControllerDelegate, GICommitRewriterViewControllerDelegate, GICommitSplitterViewControllerDelegate, GIConflictResolverViewControllerDelegate>
 @property(nonatomic, strong) AuthenticationWindowController* authenticationWindowController;
 @property(nonatomic) IBOutlet GICustomToolbarItem* navigateItem;
 @property(nonatomic) IBOutlet GICustomToolbarItem* titleItem;
@@ -295,10 +295,12 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
     [_mainWindow setFrameFromString:frameString];
   }
 
+  NSSearchField *searchField = _searchItem.searchField;
   NSLayoutConstraint* searchFieldPreferredWidth = [_searchItem.searchField.widthAnchor constraintEqualToConstant:kSearchFieldCompactWidth];
   searchFieldPreferredWidth.priority = NSLayoutPriorityDefaultHigh - 20;
   NSLayoutConstraint* searchFieldMaxWidth = [_searchItem.searchField.widthAnchor constraintLessThanOrEqualToConstant:kSearchFieldExpandedWidth];
   [NSLayoutConstraint activateConstraints:@[ searchFieldPreferredWidth, searchFieldMaxWidth ]];
+  _searchItem.searchField.delegate = self;
   
   _helpViewToTabViewConstraint.active = NO;
 
@@ -1175,6 +1177,10 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
       return YES;
     }
   }
+  if (control == _searchItem.searchField && commandSelector == @selector(cancelOperation:)) {
+    [self closeSearch:nil];
+    return YES;
+  }
   return NO;
 }
 
@@ -1859,8 +1865,6 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
                    _searchResultsViewController.results = nil;
                  }];
     }
-
-    [_mainWindow makeFirstResponder:_mapViewController.preferredFirstResponder];
   }
 }
 
@@ -1871,6 +1875,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 - (IBAction)closeSearch:(id)sender {
   _searchItem.searchField.stringValue = @"";
   [self performSearch:nil];
+  [_mainWindow makeFirstResponder:_mapViewController.preferredFirstResponder];
 }
 
 - (IBAction)navigate:(NSSegmentedControl*)sender {
