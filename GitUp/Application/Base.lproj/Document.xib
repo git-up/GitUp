@@ -539,14 +539,12 @@ Adjust settings in Show menu</string>
             <point key="canvasLocation" x="262" y="1407"/>
         </customView>
         <customView id="eCQ-B2-xMC" userLabel="Tags View">
-            <rect key="frame" x="0.0" y="0.0" width="262" height="500"/>
+            <rect key="frame" x="0.0" y="0.0" width="261" height="500"/>
             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" heightSizable="YES"/>
             <subviews>
-                <customView translatesAutoresizingMaskIntoConstraints="NO" id="TAF-BH-RXj">
-                    <rect key="frame" x="2" y="41" width="260" height="459"/>
-                    <constraints>
-                        <constraint firstAttribute="width" constant="260" id="fLS-0C-Tie"/>
-                    </constraints>
+                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TAF-BH-RXj">
+                    <rect key="frame" x="1" y="41" width="260" height="459"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 </customView>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bvP-z4-n9x">
                     <rect key="frame" x="87" y="8" width="88" height="24"/>
@@ -562,24 +560,21 @@ Adjust settings in Show menu</string>
                     </connections>
                 </button>
                 <box horizontalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="gbn-Tx-Mt6">
-                    <rect key="frame" x="-1" y="0.0" width="5" height="500"/>
+                    <rect key="frame" x="-2" y="0.0" width="5" height="500"/>
                 </box>
                 <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="IFu-ad-WoU">
-                    <rect key="frame" x="1" y="38" width="261" height="5"/>
+                    <rect key="frame" x="1" y="38" width="260" height="5"/>
                 </box>
             </subviews>
             <constraints>
                 <constraint firstItem="bvP-z4-n9x" firstAttribute="top" secondItem="IFu-ad-WoU" secondAttribute="bottom" constant="8" id="1Yf-OP-R6o"/>
-                <constraint firstItem="TAF-BH-RXj" firstAttribute="leading" secondItem="gbn-Tx-Mt6" secondAttribute="trailing" id="1yx-qH-lCy"/>
                 <constraint firstAttribute="trailing" secondItem="IFu-ad-WoU" secondAttribute="trailing" id="J5o-zt-sWe"/>
                 <constraint firstItem="bvP-z4-n9x" firstAttribute="centerX" secondItem="eCQ-B2-xMC" secondAttribute="centerX" id="Kwr-d8-kwD"/>
+                <constraint firstItem="gbn-Tx-Mt6" firstAttribute="leading" secondItem="eCQ-B2-xMC" secondAttribute="leading" id="K7w-Yr-BgQ"/>
                 <constraint firstItem="gbn-Tx-Mt6" firstAttribute="top" secondItem="eCQ-B2-xMC" secondAttribute="top" id="OZ3-sP-h7u"/>
                 <constraint firstItem="IFu-ad-WoU" firstAttribute="leading" secondItem="eCQ-B2-xMC" secondAttribute="leading" constant="1" id="Qfc-dH-EiK"/>
                 <constraint firstAttribute="bottom" secondItem="bvP-z4-n9x" secondAttribute="bottom" constant="8" id="Www-hP-W40"/>
-                <constraint firstItem="IFu-ad-WoU" firstAttribute="top" secondItem="TAF-BH-RXj" secondAttribute="bottom" id="dU1-t3-1Hr"/>
                 <constraint firstAttribute="bottom" secondItem="gbn-Tx-Mt6" secondAttribute="bottom" id="hFO-5X-njp"/>
-                <constraint firstAttribute="trailing" secondItem="TAF-BH-RXj" secondAttribute="trailing" id="ogz-v2-np3"/>
-                <constraint firstItem="TAF-BH-RXj" firstAttribute="top" secondItem="eCQ-B2-xMC" secondAttribute="top" id="wUf-rg-VCI"/>
             </constraints>
             <point key="canvasLocation" x="-192.5" y="650"/>
         </customView>
@@ -587,8 +582,9 @@ Adjust settings in Show menu</string>
             <rect key="frame" x="0.0" y="0.0" width="261" height="500"/>
             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" heightSizable="YES"/>
             <subviews>
-                <customView translatesAutoresizingMaskIntoConstraints="NO" id="4Od-pU-cwC">
+                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4Od-pU-cwC">
                     <rect key="frame" x="1" y="41" width="260" height="459"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 </customView>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="6Ni-2N-Ux7">
                     <rect key="frame" x="87" y="8" width="88" height="24"/>
@@ -615,11 +611,7 @@ Adjust settings in Show menu</string>
                 <constraint firstItem="i5t-9R-reS" firstAttribute="top" secondItem="Yj4-Sl-8P8" secondAttribute="top" id="17E-Yc-ykJ"/>
                 <constraint firstItem="lo1-B5-5pc" firstAttribute="leading" secondItem="Yj4-Sl-8P8" secondAttribute="leading" constant="1" id="68y-Dq-5of"/>
                 <constraint firstAttribute="bottom" secondItem="6Ni-2N-Ux7" secondAttribute="bottom" constant="8" id="6X2-ja-KdS"/>
-                <constraint firstItem="lo1-B5-5pc" firstAttribute="top" secondItem="4Od-pU-cwC" secondAttribute="bottom" id="9Cd-rc-ddU"/>
-                <constraint firstItem="4Od-pU-cwC" firstAttribute="top" secondItem="Yj4-Sl-8P8" secondAttribute="top" id="9rq-NU-81I"/>
                 <constraint firstAttribute="trailing" secondItem="lo1-B5-5pc" secondAttribute="trailing" id="JzC-RQ-pZI"/>
-                <constraint firstAttribute="trailing" secondItem="4Od-pU-cwC" secondAttribute="trailing" id="LaF-h1-es8"/>
-                <constraint firstItem="4Od-pU-cwC" firstAttribute="leading" secondItem="i5t-9R-reS" secondAttribute="trailing" id="Usw-84-2Bs"/>
                 <constraint firstItem="6Ni-2N-Ux7" firstAttribute="centerX" secondItem="Yj4-Sl-8P8" secondAttribute="centerX" id="bB7-0W-muz"/>
                 <constraint firstItem="i5t-9R-reS" firstAttribute="leading" secondItem="Yj4-Sl-8P8" secondAttribute="leading" id="gjG-2j-dHm"/>
                 <constraint firstItem="6Ni-2N-Ux7" firstAttribute="top" secondItem="lo1-B5-5pc" secondAttribute="bottom" constant="8" id="rRh-Bf-daK"/>
