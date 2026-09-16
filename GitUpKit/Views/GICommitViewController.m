@@ -24,6 +24,10 @@
 
 @implementation GICommitViewController {
   NSString* _headCommitMessage;
+  NSUInteger _prepareCommitMessageHookGeneration;
+  BOOL _prepareCommitMessageHookRunning;
+  NSError* _prepareCommitMessageHookError;
+  NSString* _automaticallyPreparedCommitMessage;
 }
 
 #if DEBUG
@@ -103,6 +107,95 @@
   }
 }
 
+- (NSArray*)_prepareCommitMessageHookArgumentsWithMessagePath:(NSString*)path amendCommitSHA1:(NSString*)sha1 {
+  if (_amendButton.state) {
+    return sha1 ? @[ path, @"commit", sha1 ] : @[ path, @"commit" ];
+  }
+  if (self.repository.state == kGCRepositoryState_Merge) {
+    return @[ path, @"merge" ];
+  }
+  return @[ path ];
+}
+
+- (NSString*)_messageByInsertingPreparedMessage:(NSString*)preparedMessage beforeMessage:(NSString*)message {
+  if (!preparedMessage.length || [preparedMessage isEqualToString:message]) {
+    return message;
+  }
+  if (!message.length) {
+    return preparedMessage;
+  }
+  if ([preparedMessage hasSuffix:@"\n"] || [message hasPrefix:@"\n"]) {
+    return [preparedMessage stringByAppendingString:message];
+  }
+  return [preparedMessage stringByAppendingFormat:@"\n%@", message];
+}
+
+- (void)_applyPreparedCommitMessage:(NSString*)preparedMessage replacingInitialMessage:(NSString*)initialMessage {
+  NSString* currentMessage = _messageTextView.string;
+  NSString* message;
+  BOOL replacesInitialMessage = [currentMessage isEqualToString:initialMessage];
+  if (replacesInitialMessage) {
+    message = preparedMessage;
+  } else if (initialMessage.length && [currentMessage hasPrefix:initialMessage]) {
+    NSString* userMessage = [currentMessage substringFromIndex:initialMessage.length];
+    message = [self _messageByInsertingPreparedMessage:preparedMessage beforeMessage:userMessage];
+  } else {
+    message = [self _messageByInsertingPreparedMessage:preparedMessage beforeMessage:currentMessage];
+  }
+  _messageTextView.string = message;
+  _automaticallyPreparedCommitMessage = replacesInitialMessage ? message : nil;
+}
+
+- (void)_cancelPrepareCommitMessageHook {
+  ++_prepareCommitMessageHookGeneration;
+  _prepareCommitMessageHookRunning = NO;
+  _prepareCommitMessageHookError = nil;
+  _automaticallyPreparedCommitMessage = nil;
+}
+
+- (void)_runPrepareCommitMessageHookWithInitialMessage:(NSString*)initialMessage {
+  if (![self.repository pathForHookWithName:@"prepare-commit-msg"]) {
+    return;
+  }
+
+  NSUInteger generation = ++_prepareCommitMessageHookGeneration;
+  _prepareCommitMessageHookRunning = YES;
+  _prepareCommitMessageHookError = nil;
+  _automaticallyPreparedCommitMessage = nil;
+
+  NSString* repositoryPath = self.repository.repositoryPath;
+  NSString* messagePath = [repositoryPath stringByAppendingPathComponent:@"COMMIT_EDITMSG"];
+  NSString* sha1 = nil;
+  if (_amendButton.state) {
+    GCCommit* headCommit = nil;
+    [self.repository lookupHEADCurrentCommit:&headCommit branch:NULL error:NULL];
+    sha1 = headCommit.SHA1;
+  }
+  NSArray* arguments = [self _prepareCommitMessageHookArgumentsWithMessagePath:messagePath amendCommitSHA1:sha1];
+
+  dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    NSError* error = nil;
+    NSString* preparedMessage = nil;
+    GCRepository* repository = [[GCRepository alloc] initWithExistingLocalRepository:repositoryPath error:&error];
+    if (repository && [initialMessage writeToFile:messagePath atomically:YES encoding:NSUTF8StringEncoding error:&error] && [repository runHookWithName:@"prepare-commit-msg" arguments:arguments standardInput:nil error:&error]) {
+      preparedMessage = [[NSString alloc] initWithContentsOfFile:messagePath encoding:NSUTF8StringEncoding error:&error];
+    }
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+      if (generation != _prepareCommitMessageHookGeneration) {
+        return;
+      }
+      _prepareCommitMessageHookRunning = NO;
+      _prepareCommitMessageHookError = error;
+      if (preparedMessage) {
+        [self _applyPreparedCommitMessage:preparedMessage replacingInitialMessage:initialMessage];
+      } else if (error) {
+        [self presentError:error];
+      }
+    });
+  });
+}
+
 - (void)viewDidLoad {
   [super viewDidLoad];
 
@@ -127,8 +220,11 @@
     }
 
     _messageTextView.string = message;
+    _automaticallyPreparedCommitMessage = nil;
     [_messageTextView.undoManager removeAllActions];
     [_messageTextView selectAll:nil];
+
+    [self _runPrepareCommitMessageHookWithInitialMessage:message];
   }
 
   [self _updateInterface];
@@ -137,6 +233,7 @@
 - (void)viewDidDisappear {
   [super viewDidDisappear];
 
+  [self _cancelPrepareCommitMessageHook];
   _headCommitMessage = nil;
 }
 
@@ -154,15 +251,20 @@
   [_otherMessageTextView.undoManager removeAllActions];
 
   _amendButton.state = NSControlStateValueOff;
+  _automaticallyPreparedCommitMessage = nil;
 
   [_delegate commitViewController:self didCreateCommit:commit];
 }
 
 - (IBAction)toggleAmend:(id)sender {
-  if (_amendButton.state && (_messageTextView.string.length == 0)) {
+  BOOL shouldReplaceMessage = (_messageTextView.string.length == 0) || [_messageTextView.string isEqualToString:_automaticallyPreparedCommitMessage];
+  if (_amendButton.state && shouldReplaceMessage) {
     _messageTextView.string = _headCommitMessage;
     [_messageTextView.undoManager removeAllActions];
     [_messageTextView selectAll:nil];
+    [self _runPrepareCommitMessageHookWithInitialMessage:_headCommitMessage];
+  } else {
+    [self _cancelPrepareCommitMessageHook];
   }
 }
 
@@ -173,14 +275,23 @@
 - (void)createCommitFromHEADWithMessage:(NSString*)message {
   NSError* error;
 
+  if (_prepareCommitMessageHookRunning) {
+    [self presentAlertWithType:kGIAlertType_Caution title:NSLocalizedString(@"The prepare-commit-msg hook is still running", nil) message:NSLocalizedString(@"Please wait for it to finish before committing.", nil)];
+    return;
+  }
+  if (_prepareCommitMessageHookError) {
+    [self presentError:_prepareCommitMessageHookError];
+    return;
+  }
+
   if (![self.repository runHookWithName:@"pre-commit" arguments:nil standardInput:nil error:&error]) {
     [self presentError:error];
     return;
   }
 
-  NSString* hook = [self.repository pathForHookWithName:@"commit-msg"];
-  if (hook) {
-    NSString* path = [NSTemporaryDirectory() stringByAppendingPathComponent:[[NSProcessInfo processInfo] globallyUniqueString]];
+  NSString* commitMsgHookPath = [self.repository pathForHookWithName:@"commit-msg"];
+  if (commitMsgHookPath) {
+    NSString* path = [self.repository.repositoryPath stringByAppendingPathComponent:@"COMMIT_EDITMSG"];
     if (![message writeToFile:path atomically:YES encoding:NSUTF8StringEncoding error:&error]) {
       [self presentError:error];
       return;
@@ -194,7 +305,6 @@
       [self presentError:error];
       return;
     }
-    [[NSFileManager defaultManager] removeItemAtPath:path error:NULL];
   }
 
   GCCommit* newCommit;
