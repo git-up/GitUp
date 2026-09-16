@@ -118,9 +118,9 @@
 - (void)_reload {
   CGFloat offset;
   GCDiffDelta* topDelta = [_diffContentsViewController topVisibleDelta:&offset];
-  NSArray* selectedDeltasNew = _filesViewControllerNew.selectedDeltas;
+  NSArray* selectedDeltasNew = _newActive ? _filesViewControllerNew.selectedDeltas : @[];
   NSUInteger selectedRowNew = selectedDeltasNew.count ? [_diffNew.deltas indexOfObjectIdenticalTo:selectedDeltasNew.firstObject] : NSNotFound;
-  NSArray* selectedDeltasOld = _filesViewControllerOld.selectedDeltas;
+  NSArray* selectedDeltasOld = _newActive ? @[] : _filesViewControllerOld.selectedDeltas;
   NSUInteger selectedRowOld = selectedDeltasOld.count ? [_diffOld.deltas indexOfObjectIdenticalTo:selectedDeltasOld.firstObject] : NSNotFound;
 
   NSError* error;
@@ -165,9 +165,7 @@
                                                            : [self.repository copyFile:delta.canonicalPath fromOtherIndex:_indexNew toIndex:_indexOld error:&error];
   if (success) {
     [self _reload];
-    _disableFeedback = YES;
-    _filesViewControllerOld.selectedDelta = delta;
-    _disableFeedback = NO;
+    [self _selectTransferredDeltas:@[ delta ] fromFilesViewController:_filesViewControllerNew];
   } else {
     [self presentError:error];
   }
@@ -184,9 +182,7 @@
     }
   }
   [self _reload];
-  _disableFeedback = YES;
-  _filesViewControllerOld.selectedDeltas = deltas;
-  _disableFeedback = NO;
+  [self _selectTransferredDeltas:deltas fromFilesViewController:_filesViewControllerNew];
   if (!_filesViewControllerNew.deltas.count) {
     _newActive = NO;
     [self.view.window makeFirstResponder:_filesViewControllerOld.preferredFirstResponder];
@@ -224,9 +220,6 @@
   }
   if (success) {
     [self _reload];
-    _disableFeedback = YES;
-    _filesViewControllerNew.selectedDelta = delta;
-    _disableFeedback = NO;
   } else {
     [self presentError:error];
   }
@@ -236,9 +229,7 @@
   NSError* error;
   if ([self.repository resetFile:delta.canonicalPath inIndex:_indexOld toCommit:_parentCommit error:&error]) {
     [self _reload];
-    _disableFeedback = YES;
-    _filesViewControllerNew.selectedDelta = delta;
-    _disableFeedback = NO;
+    [self _selectTransferredDeltas:@[ delta ] fromFilesViewController:_filesViewControllerOld];
   } else {
     [self presentError:error];
   }
@@ -253,9 +244,7 @@
     }
   }
   [self _reload];
-  _disableFeedback = YES;
-  _filesViewControllerNew.selectedDeltas = deltas;
-  _disableFeedback = NO;
+  [self _selectTransferredDeltas:deltas fromFilesViewController:_filesViewControllerOld];
   if (!_filesViewControllerOld.deltas.count) {
     _newActive = YES;
     [self.view.window makeFirstResponder:_filesViewControllerNew.preferredFirstResponder];
@@ -278,9 +267,6 @@
                               return NO;
                             }]) {
     [self _reload];
-    _disableFeedback = YES;
-    _filesViewControllerNew.selectedDelta = delta;
-    _disableFeedback = NO;
   } else {
     [self presentError:error];
   }
@@ -300,6 +286,7 @@
   _parentCommit = commit.parents.firstObject;  // Use mainline
   _indexNew = indexNew;
   _indexOld = indexOld;
+  _newActive = NO;
   return YES;
 }
 
@@ -360,12 +347,31 @@ cleanup:
 
 #pragma mark - GIDiffFilesViewControllerDelegate
 
+- (void)_clearOtherFilesSelection:(GIDiffFilesViewController*)controller {
+  GIDiffFilesViewController* otherController = controller == _filesViewControllerOld ? _filesViewControllerNew : _filesViewControllerOld;
+  if (!otherController.selectedDeltas.count) {
+    return;
+  }
+  // Clearing the other list sends its own selection notification synchronously.
+  BOOL disabledFeedback = _disableFeedback;
+  _disableFeedback = YES;
+  otherController.selectedDeltas = @[];
+  _disableFeedback = disabledFeedback;
+}
+
+- (void)diffFilesViewController:(GIDiffFilesViewController*)controller willSelectDelta:(GCDiffDelta*)delta {
+  if (!_disableFeedback) {
+    [self _clearOtherFilesSelection:controller];
+  }
+}
+
 - (void)diffFilesViewControllerDidBecomeFirstResponder:(GIDiffFilesViewController*)controller {
   [self diffFilesViewControllerDidChangeSelection:controller];
 }
 
 - (void)diffFilesViewControllerDidChangeSelection:(GIDiffFilesViewController*)controller {
   if (!_disableFeedback) {
+    [self _clearOtherFilesSelection:controller];
     if (controller == _filesViewControllerNew) {
       [_diffContentsViewController setDeltas:_filesViewControllerNew.selectedDeltas usingConflicts:nil];
       _newActive = YES;
@@ -375,6 +381,17 @@ cleanup:
     } else {
       XLOG_DEBUG_UNREACHABLE();
     }
+  }
+}
+
+- (void)_selectTransferredDeltas:(NSArray*)deltas fromFilesViewController:(GIDiffFilesViewController*)sourceController {
+  // Keep the next selection in the source list while it still has files. Only
+  // select the transferred files in the destination when the source is empty.
+  if (!sourceController.deltas.count) {
+    GIDiffFilesViewController* destinationController = sourceController == _filesViewControllerOld ? _filesViewControllerNew : _filesViewControllerOld;
+    [self _clearOtherFilesSelection:destinationController];
+    destinationController.selectedDeltas = deltas;
+    [self diffFilesViewControllerDidChangeSelection:destinationController];
   }
 }
 
@@ -435,12 +452,13 @@ cleanup:
 #pragma mark - GIDiffContentsViewControllerDelegate
 
 - (void)_diffContentsViewControllerDidPressReturn:(GIDiffContentsViewController*)controller {
+  GIDiffFilesViewController* sourceController = _newActive ? _filesViewControllerNew : _filesViewControllerOld;
   NSMutableArray* deltas = [[NSMutableArray alloc] init];
   for (GCDiffDelta* delta in _diffContentsViewController.deltas) {
     NSIndexSet* oldLines;
     NSIndexSet* newLines;
     if ([_diffContentsViewController getSelectedLinesForDelta:delta oldLines:&oldLines newLines:&newLines]) {
-      if (_newActive) {
+      if (sourceController == _filesViewControllerNew) {
         [self _copyFileLinesFromIndexNewToIndexOld:delta oldLines:oldLines newLines:newLines];
       } else {
         [self _copyFileLinesFromIndexOldToIndexNew:delta oldLines:oldLines newLines:newLines];
@@ -448,15 +466,10 @@ cleanup:
       [deltas addObject:delta];
     }
   }
-  _disableFeedback = YES;
-  if (_newActive) {
-    _filesViewControllerNew.selectedDeltas = deltas;
+  if (sourceController.deltas.count) {
+    sourceController.selectedDeltas = deltas;
   } else {
-    _filesViewControllerOld.selectedDeltas = deltas;
-  }
-  _disableFeedback = NO;
-  if ((!_newActive && !_filesViewControllerOld.deltas.count) || (_newActive && !_filesViewControllerNew.deltas.count)) {
-    _newActive = !_newActive;
+    [self _selectTransferredDeltas:deltas fromFilesViewController:sourceController];
   }
   [self.view.window makeFirstResponder:(_newActive ? _filesViewControllerNew.preferredFirstResponder : _filesViewControllerOld.preferredFirstResponder)];
 }
@@ -488,12 +501,14 @@ cleanup:
   if (_newActive) {
     if ([_diffContentsViewController getSelectedLinesForDelta:delta oldLines:&oldLines newLines:&newLines]) {
       [self _copyFileLinesFromIndexNewToIndexOld:delta oldLines:oldLines newLines:newLines];
+      [self _selectTransferredDeltas:@[ delta ] fromFilesViewController:_filesViewControllerNew];
     } else {
       [self _copyFileFromIndexNewToIndexOld:delta];
     }
   } else {
     if ([_diffContentsViewController getSelectedLinesForDelta:delta oldLines:&oldLines newLines:&newLines]) {
       [self _copyFileLinesFromIndexOldToIndexNew:delta oldLines:oldLines newLines:newLines];
+      [self _selectTransferredDeltas:@[ delta ] fromFilesViewController:_filesViewControllerOld];
     } else {
       [self _copyFileFromIndexOldToIndexNew:delta];
     }

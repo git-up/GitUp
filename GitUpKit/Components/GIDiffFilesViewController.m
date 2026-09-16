@@ -46,16 +46,41 @@ static const NSPasteboardType GIPasteboardTypeFileURL = @"public.file-url";
 @implementation GIFileCellView
 @end
 
-@implementation GIFilesTableView
+@implementation GIFilesTableView {
+  NSEvent* _pendingFocusEvent;
+}
+
+- (void)_notifyDidBecomeFirstResponder {
+  if ([_controller.delegate respondsToSelector:@selector(diffFilesViewControllerDidBecomeFirstResponder:)]) {
+    [_controller.delegate diffFilesViewControllerDidBecomeFirstResponder:_controller];
+  }
+}
 
 - (BOOL)becomeFirstResponder {
   if (![super becomeFirstResponder]) {
     return NO;
   }
-  if ([_controller.delegate respondsToSelector:@selector(diffFilesViewControllerDidBecomeFirstResponder:)]) {
-    [_controller.delegate diffFilesViewControllerDidBecomeFirstResponder:_controller];
+  _pendingFocusEvent = nil;
+  NSEvent* event = NSApp.currentEvent;
+  if ((event.type == NSEventTypeLeftMouseDown) && (event.window == self.window) && NSMouseInRect([self convertPoint:event.locationInWindow fromView:nil], self.visibleRect, self.isFlipped)) {
+    // The window can give us focus before -mouseDown: updates the selection.
+    // Wait for that click to finish so the delegate doesn't display the old selection.
+    _pendingFocusEvent = event;
+  } else {
+    [self _notifyDidBecomeFirstResponder];
   }
   return YES;
+}
+
+- (void)mouseDown:(NSEvent*)event {
+  [super mouseDown:event];
+  if (_pendingFocusEvent == event) {
+    _pendingFocusEvent = nil;
+    // Notify even if the click kept the same selection, but not if it moved focus away.
+    if (self.window.firstResponder == self) {
+      [self _notifyDidBecomeFirstResponder];
+    }
+  }
 }
 
 - (void)keyDown:(NSEvent*)event {
@@ -174,7 +199,9 @@ static NSImage* _untrackedImage = nil;
   }];
 
   [_tableView selectRowIndexes:indexes byExtendingSelection:NO];
-  [_tableView scrollRowToVisible:indexes.firstIndex];
+  if (indexes.count) {
+    [_tableView scrollRowToVisible:indexes.firstIndex];
+  }
 }
 
 #pragma mark - Actions
