@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="24506" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="25098" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24506"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="25098"/>
+        <capability name="NSView safe area layout guides" minToolsVersion="12.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -26,26 +27,22 @@
             <rect key="frame" x="0.0" y="0.0" width="1000" height="500"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eJw-Ro-RO2">
-                    <rect key="frame" x="0.0" y="470" width="1000" height="30"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                <customView translatesAutoresizingMaskIntoConstraints="NO" id="eJw-Ro-RO2">
+                    <rect key="frame" x="0.0" y="420" width="1000" height="28"/>
                     <subviews>
-                        <box verticalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="9kw-yf-Rw7">
+                        <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="9kw-yf-Rw7">
                             <rect key="frame" x="0.0" y="-2" width="1000" height="5"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                         </box>
-                        <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZXE-Q8-0tE">
-                            <rect key="frame" x="13" y="8" width="114" height="16"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ZXE-Q8-0tE">
+                            <rect key="frame" x="13" y="7" width="110" height="15"/>
                             <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingTail" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="right" title="Splitting Commit:" id="MLR-4B-XXd">
                                 <font key="font" metaFont="systemBold" size="12"/>
                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                             </textFieldCell>
                         </textField>
-                        <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="otg-FV-eFd">
-                            <rect key="frame" x="127" y="8" width="855" height="16"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                        <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="otg-FV-eFd">
+                            <rect key="frame" x="127" y="7" width="855" height="15"/>
                             <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingTail" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="left" title="&lt;TITLE&gt;" id="2Ta-mo-RyA">
                                 <font key="font" metaFont="cellTitle"/>
                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -53,13 +50,23 @@
                             </textFieldCell>
                         </textField>
                     </subviews>
+                    <constraints>
+                        <constraint firstAttribute="trailing" secondItem="9kw-yf-Rw7" secondAttribute="trailing" id="5cf-wQ-APE"/>
+                        <constraint firstItem="otg-FV-eFd" firstAttribute="leading" secondItem="ZXE-Q8-0tE" secondAttribute="trailing" constant="8" symbolic="YES" id="8QH-Ao-dEH"/>
+                        <constraint firstItem="ZXE-Q8-0tE" firstAttribute="top" secondItem="eJw-Ro-RO2" secondAttribute="top" constant="6" id="Cz2-Yd-AV3"/>
+                        <constraint firstItem="ZXE-Q8-0tE" firstAttribute="leading" secondItem="eJw-Ro-RO2" secondAttribute="leading" constant="15" id="Le8-ET-ofN"/>
+                        <constraint firstItem="9kw-yf-Rw7" firstAttribute="leading" secondItem="eJw-Ro-RO2" secondAttribute="leading" id="Z8a-lP-hJZ"/>
+                        <constraint firstAttribute="trailing" secondItem="otg-FV-eFd" secondAttribute="trailing" constant="20" symbolic="YES" id="gyy-k8-dtG"/>
+                        <constraint firstItem="9kw-yf-Rw7" firstAttribute="top" secondItem="ZXE-Q8-0tE" secondAttribute="bottom" constant="6" id="iE3-I7-d4E"/>
+                        <constraint firstAttribute="bottom" secondItem="9kw-yf-Rw7" secondAttribute="bottom" id="jt0-Ds-NlL"/>
+                        <constraint firstItem="otg-FV-eFd" firstAttribute="firstBaseline" secondItem="ZXE-Q8-0tE" secondAttribute="firstBaseline" id="ukq-ba-fJR"/>
+                    </constraints>
                 </customView>
-                <splitView fixedFrame="YES" dividerStyle="thin" vertical="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GbO-qM-CQw" customClass="GIDualSplitView">
-                    <rect key="frame" x="0.0" y="0.0" width="1000" height="470"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                <splitView dividerStyle="thin" vertical="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GbO-qM-CQw" customClass="GIDualSplitView">
+                    <rect key="frame" x="0.0" y="0.0" width="1000" height="420"/>
                     <subviews>
                         <customView fixedFrame="YES" id="hef-Ad-4nX">
-                            <rect key="frame" x="0.0" y="0.0" width="300" height="470"/>
+                            <rect key="frame" x="0.0" y="0.0" width="300" height="420"/>
                             <autoresizingMask key="autoresizingMask"/>
                             <subviews>
                                 <box verticalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="GiE-tn-bRu">
@@ -67,15 +74,15 @@
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 </box>
                                 <splitView fixedFrame="YES" dividerStyle="thin" translatesAutoresizingMaskIntoConstraints="NO" id="e6i-iT-slV" customClass="GIDualSplitView">
-                                    <rect key="frame" x="0.0" y="46" width="300" height="424"/>
+                                    <rect key="frame" x="0.0" y="46" width="300" height="374"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <customView fixedFrame="YES" id="ots-w9-o6k">
-                                            <rect key="frame" x="0.0" y="0.0" width="300" height="211"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="300" height="186"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="i0X-9n-k1u" customClass="GIColorView">
-                                                    <rect key="frame" x="0.0" y="177" width="300" height="34"/>
+                                                    <rect key="frame" x="0.0" y="152" width="300" height="34"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                     <subviews>
                                                         <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Zg3-mt-YHc">
@@ -90,17 +97,17 @@
                                                     </subviews>
                                                 </customView>
                                                 <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IfV-FZ-t0W">
-                                                    <rect key="frame" x="0.0" y="0.0" width="300" height="177"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="300" height="152"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 </customView>
                                             </subviews>
                                         </customView>
                                         <customView fixedFrame="YES" id="VtZ-UX-sFq">
-                                            <rect key="frame" x="0.0" y="212" width="300" height="212"/>
+                                            <rect key="frame" x="0.0" y="187" width="300" height="187"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7j5-Pz-Pse" customClass="GIColorView">
-                                                    <rect key="frame" x="0.0" y="178" width="300" height="34"/>
+                                                    <rect key="frame" x="0.0" y="153" width="300" height="34"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                     <subviews>
                                                         <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JBE-2n-Fmz">
@@ -115,7 +122,7 @@
                                                     </subviews>
                                                 </customView>
                                                 <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Scn-lW-rL0">
-                                                    <rect key="frame" x="0.0" y="0.0" width="300" height="178"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="300" height="153"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 </customView>
                                             </subviews>
@@ -166,11 +173,11 @@ DQ
                             </subviews>
                         </customView>
                         <customView fixedFrame="YES" id="XQf-N4-jx3">
-                            <rect key="frame" x="301" y="0.0" width="699" height="470"/>
+                            <rect key="frame" x="301" y="0.0" width="699" height="420"/>
                             <autoresizingMask key="autoresizingMask"/>
                             <subviews>
                                 <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="weo-in-1Ld">
-                                    <rect key="frame" x="0.0" y="0.0" width="699" height="470"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="699" height="420"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </customView>
                             </subviews>
@@ -190,6 +197,18 @@ DQ
                     </userDefinedRuntimeAttributes>
                 </splitView>
             </subviews>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="eJw-Ro-RO2" secondAttribute="trailing" id="3wR-tG-TeY"/>
+                <constraint firstItem="eJw-Ro-RO2" firstAttribute="top" secondItem="zIE-eG-ojf" secondAttribute="top" id="RLJ-Fi-axu"/>
+                <constraint firstItem="GbO-qM-CQw" firstAttribute="trailing" secondItem="zIE-eG-ojf" secondAttribute="trailing" id="ffA-dF-LYv"/>
+                <constraint firstItem="eJw-Ro-RO2" firstAttribute="leading" secondItem="ncJ-cE-u00" secondAttribute="leading" id="gnj-fM-FgR"/>
+                <constraint firstItem="GbO-qM-CQw" firstAttribute="leading" secondItem="zIE-eG-ojf" secondAttribute="leading" id="jgj-cb-yix"/>
+                <constraint firstItem="GbO-qM-CQw" firstAttribute="top" secondItem="eJw-Ro-RO2" secondAttribute="bottom" id="nQl-4z-YfB"/>
+                <constraint firstItem="GbO-qM-CQw" firstAttribute="top" secondItem="eJw-Ro-RO2" secondAttribute="bottom" id="qGy-wz-K8C"/>
+                <constraint firstItem="GbO-qM-CQw" firstAttribute="bottom" secondItem="zIE-eG-ojf" secondAttribute="bottom" id="z2c-rx-YnZ"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="zIE-eG-ojf"/>
+            <viewLayoutGuide key="layoutMargins" id="HK0-VH-5LS"/>
             <point key="canvasLocation" x="552" y="309"/>
         </view>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
@@ -212,7 +231,7 @@ DQ
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <clipView key="contentView" drawsBackground="NO" id="iv1-rd-iqv">
                         <rect key="frame" x="1" y="1" width="548" height="98"/>
-                        <autoresizingMask key="autoresizingMask"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textView importsGraphics="NO" richText="NO" verticallyResizable="YES" findStyle="panel" allowsUndo="YES" smartInsertDelete="YES" id="Bd9-d7-YLd" customClass="GICommitMessageView">
                                 <rect key="frame" x="0.0" y="0.0" width="548" height="98"/>
@@ -251,7 +270,7 @@ DQ
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <clipView key="contentView" drawsBackground="NO" id="sKA-Dg-4u7">
                         <rect key="frame" x="1" y="1" width="548" height="98"/>
-                        <autoresizingMask key="autoresizingMask"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textView importsGraphics="NO" richText="NO" verticallyResizable="YES" findStyle="panel" allowsUndo="YES" smartInsertDelete="YES" id="C9q-53-7wr" customClass="GICommitMessageView">
                                 <rect key="frame" x="0.0" y="0.0" width="548" height="98"/>
