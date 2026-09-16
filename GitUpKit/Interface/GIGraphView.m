@@ -568,11 +568,21 @@ static const void* _associatedObjectDataKey = &_associatedObjectDataKey;
 
 #pragma mark - Drawing
 
+static GINode* _FirstRealNode(GILine* line) {
+  for (GINode* node in line.nodes) {
+    if (!node.dummy) {
+      return node;
+    }
+  }
+  return nil;
+}
+
 static void _DrawNode(GINode* node, CGContextRef context, CGFloat x, CGFloat y) {
   BOOL onBranchMainLine = node.primaryLine.branchMainLine;
   NSUInteger childrenCount = node.commit.children.count;
   NSUInteger parentCount = node.commit.parents.count;
-  if ((childrenCount > 1) || (parentCount > 1)) {
+  BOOL terminatesVirtualTip = node.primaryLine.virtual && (node == _FirstRealNode(node.primaryLine));
+  if ((childrenCount > 1) || (parentCount > 1) || terminatesVirtualTip) {
     CGColorRef color = onBranchMainLine ? node.primaryLine.color.CGColor : [[NSColor darkGrayColor] CGColor];
     CGFloat diameter = onBranchMainLine ? kMainLineNodeLargeDiameter : kSubNodeDiameter;
     diameter -= 1;  // TODO: Why is this needed?
@@ -622,6 +632,111 @@ static void _DrawRootNode(GINode* node, CGContextRef context, CGFloat x, CGFloat
 // Return square distance from P1 to (P0, P2) line
 static inline CGFloat _SquareDistanceFromPointToLine(CGFloat x0, CGFloat y0, CGFloat x1, CGFloat y1, CGFloat x2, CGFloat y2) {
   return SQUARE(x1 * (y2 - y0) - y1 * (x2 - x0) + x2 * y0 - y2 * x0) / (SQUARE(y2 - y0) + SQUARE(x2 - x0));
+}
+
+static void _StrokeLinePath(GILine* line, CGContextRef context, CGPathRef path, CGFloat width, BOOL dashed) {
+  CGContextSaveGState(context);
+  if (path) {
+    CGContextAddPath(context, path);
+  }
+  CGContextSetLineWidth(context, width);
+  CGContextSetLineJoin(context, kCGLineJoinRound);
+  if (dashed) {
+    const CGFloat dashPattern[] = {4, 2};
+    CGContextSetLineDash(context, 0, dashPattern, 2);
+  } else {
+    CGContextSetLineDash(context, 0, NULL, 0);
+  }
+  CGContextSetStrokeColorWithColor(context, line.color.CGColor);
+  CGContextStrokePath(context);
+  CGContextRestoreGState(context);
+}
+
+static CGPoint _InterpolatePoint(CGPoint start, CGPoint end, CGFloat parameter) {
+  return CGPointMake(start.x + (end.x - start.x) * parameter, start.y + (end.y - start.y) * parameter);
+}
+
+static void _AddLineSegmentToPath(CGMutablePathRef path, CGPoint start, CGPoint end) {
+  CGPathMoveToPoint(path, NULL, start.x, start.y);
+  CGPathAddLineToPoint(path, NULL, end.x, end.y);
+}
+
+static void _AddQuadraticCurveSegmentToPath(CGMutablePathRef path, CGPoint start, CGPoint control, CGPoint end) {
+  CGPathMoveToPoint(path, NULL, start.x, start.y);
+  CGPathAddQuadCurveToPoint(path, NULL, control.x, control.y, end.x, end.y);
+}
+
+static CGFloat _QuadraticCurveParameterForY(CGPoint start, CGPoint control, CGPoint end, CGFloat y) {
+  XLOG_DEBUG_CHECK((start.y < y && y < end.y) || (end.y < y && y < start.y));
+  CGFloat lowerBound = 0;
+  CGFloat upperBound = 1;
+  BOOL increasingY = start.y < end.y;
+  for (NSUInteger i = 0; i < 32; ++i) {
+    CGFloat parameter = (lowerBound + upperBound) / 2;
+    CGFloat complement = 1 - parameter;
+    CGFloat curveY = complement * complement * start.y + 2 * complement * parameter * control.y + parameter * parameter * end.y;
+    if ((curveY < y) == increasingY) {
+      lowerBound = parameter;
+    } else {
+      upperBound = parameter;
+    }
+  }
+  return (lowerBound + upperBound) / 2;
+}
+
+static void _SplitLinePath(CGPathRef sourcePath, CGFloat transitionY, CGMutablePathRef solidPath, CGMutablePathRef dashedPath) {
+  __block CGPoint currentPoint = CGPointZero;
+  CGPathApplyWithBlock(sourcePath, ^(const CGPathElement* element) {
+    if (element->type == kCGPathElementMoveToPoint) {
+      currentPoint = element->points[0];
+      return;
+    }
+
+    CGPoint start = currentPoint;
+    CGPoint end;
+    if (element->type == kCGPathElementAddLineToPoint) {
+      end = element->points[0];
+      if ((start.y <= transitionY) && (end.y <= transitionY)) {
+        _AddLineSegmentToPath(solidPath, start, end);
+      } else if ((start.y >= transitionY) && (end.y >= transitionY)) {
+        _AddLineSegmentToPath(dashedPath, start, end);
+      } else {
+        CGFloat parameter = (transitionY - start.y) / (end.y - start.y);
+        CGPoint intersection = _InterpolatePoint(start, end, parameter);
+        if (start.y > transitionY) {
+          _AddLineSegmentToPath(dashedPath, start, intersection);
+          _AddLineSegmentToPath(solidPath, intersection, end);
+        } else {
+          _AddLineSegmentToPath(solidPath, start, intersection);
+          _AddLineSegmentToPath(dashedPath, intersection, end);
+        }
+      }
+    } else if (element->type == kCGPathElementAddQuadCurveToPoint) {
+      CGPoint control = element->points[0];
+      end = element->points[1];
+      if ((start.y <= transitionY) && (end.y <= transitionY)) {
+        _AddQuadraticCurveSegmentToPath(solidPath, start, control, end);
+      } else if ((start.y >= transitionY) && (end.y >= transitionY)) {
+        _AddQuadraticCurveSegmentToPath(dashedPath, start, control, end);
+      } else {
+        CGFloat parameter = _QuadraticCurveParameterForY(start, control, end, transitionY);
+        CGPoint startControl = _InterpolatePoint(start, control, parameter);
+        CGPoint endControl = _InterpolatePoint(control, end, parameter);
+        CGPoint intersection = _InterpolatePoint(startControl, endControl, parameter);
+        if (start.y > transitionY) {
+          _AddQuadraticCurveSegmentToPath(dashedPath, start, startControl, intersection);
+          _AddQuadraticCurveSegmentToPath(solidPath, intersection, endControl, end);
+        } else {
+          _AddQuadraticCurveSegmentToPath(solidPath, start, startControl, intersection);
+          _AddQuadraticCurveSegmentToPath(dashedPath, intersection, endControl, end);
+        }
+      }
+    } else {
+      XLOG_DEBUG_CHECK(NO);
+      return;
+    }
+    currentPoint = end;
+  });
 }
 
 - (void)drawLine:(GILine*)line inContext:(CGContextRef)context clampedToRect:(CGRect)dirtyRect {
@@ -887,16 +1002,29 @@ static inline CGFloat _SquareDistanceFromPointToLine(CGFloat x0, CGFloat y0, CGF
   BOOL shouldDraw = visible && [self needsToDrawRect:CGRectInset(CGContextGetPathBoundingBox(context), -kMainLineWidth, -kMainLineWidth)];
   if (shouldDraw) {
     XLOG_DEBUG_CHECK(!line.virtual || [[(GINode*)line.nodes[0] layer] index] == 0);
-    CGContextSaveGState(context);
-    CGContextSetLineWidth(context, line.branchMainLine && !line.virtual ? kMainLineWidth : kSubLineWidth);
-    CGContextSetLineJoin(context, kCGLineJoinRound);
     if (line.virtual) {
-      const CGFloat pattern[] = {4, 2};
-      CGContextSetLineDash(context, 0, pattern, 2);
+      // A virtual line can be the tip of a real branch; only its dummy prefix is dashed
+      GINode* firstRealNode = _FirstRealNode(line);
+      XLOG_DEBUG_CHECK(firstRealNode);
+
+      CGPathRef path = CGContextCopyPath(context);
+      CGContextBeginPath(context);
+      CGMutablePathRef solidPath = CGPathCreateMutable();
+      CGMutablePathRef dashedPath = CGPathCreateMutable();
+      CGFloat transitionY = CONVERT_Y(offset - firstRealNode.layer.y);
+      _SplitLinePath(path, transitionY, solidPath, dashedPath);
+      if (!CGPathIsEmpty(solidPath)) {
+        _StrokeLinePath(line, context, solidPath, line.branchMainLine ? kMainLineWidth : kSubLineWidth, NO);
+      }
+      if (!CGPathIsEmpty(dashedPath)) {
+        _StrokeLinePath(line, context, dashedPath, kSubLineWidth, YES);
+      }
+      CGPathRelease(solidPath);
+      CGPathRelease(dashedPath);
+      CGPathRelease(path);
+    } else {
+      _StrokeLinePath(line, context, NULL, line.branchMainLine ? kMainLineWidth : kSubLineWidth, NO);
     }
-    CGContextSetStrokeColorWithColor(context, line.color.CGColor);
-    CGContextStrokePath(context);
-    CGContextRestoreGState(context);
   }
 
   if (recompute) {
