@@ -247,4 +247,41 @@
   XCTAssertEqual(self.repository.state, kGCRepositoryState_None);
 }
 
+// Regression test for issue #1053: hooks are shared from the repository's common
+// directory, so they must be discoverable from a linked worktree. Previously
+// -pathForHookWithName: looked up the default hooks directory in the per-worktree
+// git directory, which never contains a hooks directory, so hooks were silently
+// unavailable in worktrees.
+- (void)testPathForHookWithName_FoundFromLinkedWorktree {
+  // Create a linked worktree checked out on the topic branch.
+  NSString* worktreePath = [NSTemporaryDirectory() stringByAppendingPathComponent:[[NSProcessInfo processInfo] globallyUniqueString]];
+  NSString* output = [self runGitCLTWithRepository:self.repository command:@"worktree", @"add", worktreePath, @"topic", nil];
+  XCTAssertNotNil(output);  // nil means git exited non-zero, i.e. the worktree wasn't created
+
+  // Open the linked worktree as its own repository.
+  GCRepository* worktreeRepository = [[GCRepository alloc] initWithExistingLocalRepository:worktreePath error:NULL];
+  XCTAssertNotNil(worktreeRepository);
+
+  NSString* hookName = @"pre-commit";
+
+  // A linked worktree's git directory is separate from the common directory and
+  // must not contain the hook.
+  NSString* worktreeHookPath = [[worktreeRepository.repositoryPath stringByAppendingPathComponent:@"hooks"] stringByAppendingPathComponent:hookName];
+  XCTAssertFalse([[NSFileManager defaultManager] fileExistsAtPath:worktreeHookPath]);
+
+  // Install the hook in the main repository's common hooks directory, which is
+  // shared with all linked worktrees.
+  NSString* commonHookPath = [[self.repository.repositoryPath stringByAppendingPathComponent:@"hooks"] stringByAppendingPathComponent:hookName];
+  [[NSFileManager defaultManager] createDirectoryAtPath:[commonHookPath stringByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:NULL error:NULL];
+  XCTAssertTrue([[NSFileManager defaultManager] createFileAtPath:commonHookPath
+                                                        contents:[@"#!/bin/sh\nexit 0\n" dataUsingEncoding:NSUTF8StringEncoding]
+                                                      attributes:@{NSFilePosixPermissions : @0o755}]);
+
+  // The worktree must resolve the hook from the shared common directory.
+  XCTAssertEqualObjects([worktreeRepository pathForHookWithName:hookName], commonHookPath);
+
+  worktreeRepository = nil;
+  [[NSFileManager defaultManager] removeItemAtPath:worktreePath error:NULL];
+}
+
 @end
