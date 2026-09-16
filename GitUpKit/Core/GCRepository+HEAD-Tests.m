@@ -18,6 +18,7 @@
 #endif
 
 #import "GCTestCase.h"
+#import "GCCommitSigningTestHelpers.h"
 #import <GitUpKit/GCRepository+Utilities.h>
 #import <GitUpKit/GCRepository+Index.h>
 
@@ -109,6 +110,39 @@
   XCTAssertTrue([self.repository checkClean:0 error:NULL]);
   XCTAssertTrue([self.repository moveHEADToCommit:self.commit2 reflogMessage:nil error:NULL]);
   XCTAssertFalse([self.repository checkClean:0 error:NULL]);
+}
+
+- (void)testSSHSignsUserFacingCommits {
+  NSString* keyPath = [self.temporaryPath stringByAppendingPathComponent:@"signing_key"];
+  GCTask* keygen = [[GCTask alloc] initWithExecutablePath:@"/usr/bin/ssh-keygen"];
+  int status;
+  NSArray* keygenArguments = @[ @"-t", @"ed25519", @"-f", keyPath, @"-N", @"", @"-q" ];
+  BOOL keygenSuccess = [keygen runWithArguments:keygenArguments stdin:nil stdout:NULL stderr:NULL exitStatus:&status error:NULL];
+  XCTAssertTrue(keygenSuccess);
+  XCTAssertEqual(status, 0);
+  XCTAssertTrue(GCConfigureSSHSigningWithKeyPath(self.repository, keyPath));
+
+  GCCommit* emptyCommit = [self.repository createCommitFromHEADWithMessage:@"Signed empty" error:NULL];
+  XCTAssertNotNil(emptyCommit);
+  XCTAssertTrue(GCCommitHasSSHSignature(emptyCommit));
+
+  GCCommit* mergeCommit = [self.repository createCommitFromHEADAndOtherParent:self.commitA withMessage:@"Signed merge" error:NULL];
+  XCTAssertNotNil(mergeCommit);
+  XCTAssertTrue(GCCommitHasSSHSignature(mergeCommit));
+
+  [self updateFileAtPath:@"hello_world.txt" withString:@"SIGNED AMEND\n"];
+  XCTAssertTrue([self.repository addFileToIndex:@"hello_world.txt" error:NULL]);
+  GCCommit* amendCommit = [self.repository createCommitByAmendingHEADWithMessage:@"Signed amend" error:NULL];
+  XCTAssertNotNil(amendCommit);
+  XCTAssertTrue(GCCommitHasSSHSignature(amendCommit));
+
+  NSString* publicKey = [NSString stringWithContentsOfFile:[keyPath stringByAppendingString:@".pub"] encoding:NSUTF8StringEncoding error:NULL];
+  NSString* allowedSignersPath = [self.temporaryPath stringByAppendingPathComponent:@"allowed_signers"];
+  NSString* allowedSigners = [NSString stringWithFormat:@"bot@example.com %@", publicKey];
+  XCTAssertTrue([allowedSigners writeToFile:allowedSignersPath atomically:YES encoding:NSUTF8StringEncoding error:NULL]);
+  NSString* allowedSignersConfig = [NSString stringWithFormat:@"gpg.ssh.allowedSignersFile=%@", allowedSignersPath];
+  NSString* verifyOutput = [self runGitCLTWithRepository:self.repository command:@"-c", allowedSignersConfig, @"verify-commit", amendCommit.SHA1, nil];
+  XCTAssertNotNil(verifyOutput);
 }
 
 - (void)testCheckoutFileToWorkingDirectory {
