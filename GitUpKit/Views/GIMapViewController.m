@@ -638,6 +638,10 @@
   if (item.action == @selector(pushCurrentBranch:)) {
     return !editingDisabled && self.repository.history.HEADBranch;
   }
+  if (item.action == @selector(pushCurrentCommitTags:)) {
+    GCHistoryCommit* currentCommit = _graphView.selectedCommit ?: self.repository.history.HEADCommit;
+    return !editingDisabled && currentCommit.tags.count > 0;
+  }
 
   GCHistoryCommit* commit = _graphView.selectedCommit;
   if (commit == nil) {
@@ -791,6 +795,11 @@
       [self presentError:error];
     }
   }
+}
+
+- (IBAction)pushCurrentCommitTags:(id)sender {
+  GCHistoryCommit* commit = _graphView.selectedCommit ?: self.repository.history.HEADCommit;
+  [self pushTagsToAllRemotes:commit.tags];
 }
 
 #pragma mark - Contextual Menu Actions
