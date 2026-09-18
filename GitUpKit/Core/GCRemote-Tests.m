@@ -18,6 +18,7 @@
 #endif
 
 #import "GCTestCase.h"
+#import <GitUpKit/GCFunctions.h>
 
 @implementation GCSingleCommitRepositoryTests (GCRemote)
 
@@ -268,6 +269,43 @@
 
   // Destroy bare local repo
   [self destroyLocalRepository:bare];
+}
+
+@end
+
+@interface GCErrorMessagesTests : XCTestCase
+@end
+
+// Issue #818: a failed push/fetch must surface the remote's explanatory sideband message alongside the
+// generic libgit2 transport error (e.g. "remote: Write access to repository not granted." instead of only
+// "unexpected HTTP status code: 403"). GCMessageByAppendingTransportMessages is the pure, deterministic
+// helper that combines them; these cases exercise it directly with no repository and no network.
+@implementation GCErrorMessagesTests
+
+- (void)testTransportMessageCombining_includesSidebandWhenPresent {
+  NSString* baseMessage = @"unexpected HTTP status code: 403";
+  NSString* transportMessages = @"remote: Write access to repository not granted.\n";
+  NSString* message = GCMessageByAppendingTransportMessages(baseMessage, transportMessages);
+  XCTAssertEqualObjects(message, @"unexpected HTTP status code: 403\nremote: Write access to repository not granted.");
+  XCTAssertTrue([message containsString:@"unexpected HTTP status code: 403"]);
+  XCTAssertTrue([message containsString:@"remote: Write access to repository not granted."]);
+}
+
+- (void)testTransportMessageCombining_unchangedWhenEmpty {
+  NSString* baseMessage = @"unexpected HTTP status code: 403";
+  XCTAssertEqualObjects(GCMessageByAppendingTransportMessages(baseMessage, nil), baseMessage);
+  XCTAssertEqualObjects(GCMessageByAppendingTransportMessages(baseMessage, @""), baseMessage);
+  XCTAssertEqualObjects(GCMessageByAppendingTransportMessages(baseMessage, @"   "), baseMessage);
+}
+
+- (void)testTransportMessageCombining_trimsWhitespace {
+  NSString* baseMessage = @"unexpected HTTP status code: 403";
+  // Trailing newlines and whitespace on the sideband are trimmed before appending.
+  NSString* message = GCMessageByAppendingTransportMessages(baseMessage, @"remote: Write access to repository not granted.\n\n");
+  XCTAssertFalse([message containsString:@"granted.\n\n"]);
+  XCTAssertTrue([message hasSuffix:@"remote: Write access to repository not granted."]);
+  // When the sideband is only whitespace after trimming, nothing is appended (no stray newline).
+  XCTAssertEqualObjects(GCMessageByAppendingTransportMessages(baseMessage, @"   \n  "), baseMessage);
 }
 
 @end
