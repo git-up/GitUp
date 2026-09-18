@@ -3,12 +3,12 @@
     <channel>
         <title>GitUp</title>
         <item>
-            <title>1.5.0</title>
-            <pubDate>Thu, 02 Jul 2026 21:00:00 -0500</pubDate>
-            <sparkle:version>1058</sparkle:version>
-            <sparkle:shortVersionString>1.5.0</sparkle:shortVersionString>
+            <title>1.6.0</title>
+            <pubDate>Thu, 17 Sep 2026 21:00:00 -0500</pubDate>
+            <sparkle:version>1059</sparkle:version>
+            <sparkle:shortVersionString>1.6.0</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>12.4</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/git-up/GitUp/releases/download/b1058/GitUp.zip" length="4789559" type="application/octet-stream" sparkle:edSignature="a2JAnAX2+yn/UsbjTXErDpXANiGKXgG2Xnc3B20+tXKU+SU3SZ6UpMfG9ZY4+vxF56SZy4e4huYyQKBF47OrBA=="/>
+            <enclosure url="https://github.com/git-up/GitUp/releases/download/b1059/GitUp.zip" length="4797982" type="application/octet-stream" sparkle:edSignature="kp9XnCrXpC6FcT+8tBBrpgYjzzoeddWP3g7AgC/R3wg1drY8/3QnkzkO5In6KxETIPaxNOmmUq2f4X2yq5rdDg=="/>
         </item>
     </channel>
 </rss>
