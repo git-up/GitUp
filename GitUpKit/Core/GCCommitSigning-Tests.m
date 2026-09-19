@@ -58,6 +58,40 @@ static NSString* _CreateFakeSSHSigner(NSString* directory, int exitStatus) {
   return _WriteExecutable(path, contents) ? path : nil;
 }
 
+// Stands in for gpg(1) or gpgsm(1): swallows the commit buffer on stdin, records the arguments
+// it was passed, then writes an armored block on stdout and GnuPG's status output on stderr.
+static NSString* _CreateFakeGPGSigner(NSString* directory, NSString* armorLabel, BOOL reportSignatureCreated, int exitStatus, NSString* argumentsPath) {
+  NSString* path = [directory stringByAppendingPathComponent:[[NSProcessInfo processInfo] globallyUniqueString]];
+  NSMutableArray* lines = [NSMutableArray arrayWithObjects:@"#!/bin/sh", @"/bin/cat >/dev/null", nil];
+
+  if (argumentsPath) {
+    [lines addObject:[NSString stringWithFormat:@"printf '%%s\\n' \"$@\" > '%@'", argumentsPath]];
+  }
+  if (reportSignatureCreated) {
+    [lines addObject:@"echo '[GNUPG:] SIG_CREATED D 1 8 00 1700000000 0123456789ABCDEF' >&2"];
+  }
+  if (exitStatus == 0) {
+    [lines addObject:[NSString stringWithFormat:@"printf '%%s\\n' '-----BEGIN %@-----' 'fake-signature' '-----END %@-----'", armorLabel, armorLabel]];
+  } else {
+    [lines addObject:@"echo signer failed >&2"];
+    [lines addObject:[NSString stringWithFormat:@"exit %i", exitStatus]];
+  }
+  [lines addObject:@""];
+
+  return _WriteExecutable(path, [lines componentsJoinedByString:@"\n"]) ? path : nil;
+}
+
+static NSArray* _RecordedArguments(NSString* path) {
+  NSString* contents = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:NULL];
+  NSMutableArray* arguments = [[NSMutableArray alloc] init];
+  for (NSString* line in [contents componentsSeparatedByString:@"\n"]) {
+    if (line.length) {
+      [arguments addObject:line];
+    }
+  }
+  return arguments;
+}
+
 static GCCommit* _CreateCommitFromRepositoryIndex(GCRepository* repository, NSString* message, NSError** error) {
   GCCommit* commit = nil;
   git_index* index = NULL;
@@ -87,7 +121,7 @@ cleanup:
 
 @implementation GCEmptyRepositoryTests (GCCommitSigning)
 
-- (void)testCommitSigningLeavesCommitsUnsignedWhenDisabledOrUnsupported {
+- (void)testCommitSigningLeavesCommitsUnsignedWhenDisabled {
   [self updateFileAtPath:@"unsigned.txt" withString:@"unsigned\n"];
   XCTAssertTrue([self.repository addFileToIndex:@"unsigned.txt" error:NULL]);
 
@@ -95,14 +129,118 @@ cleanup:
   XCTAssertNotNil(unsignedCommit);
   XCTAssertNil(GCCommitSignature(unsignedCommit));
 
-  XCTAssertTrue(_WriteLocalConfigOption(self.repository, @"commit.gpgsign", @"true"));
+  // Configuring a format without turning signing on must not sign either.
   XCTAssertTrue(_WriteLocalConfigOption(self.repository, @"gpg.format", @"openpgp"));
+  [self updateFileAtPath:@"format-only.txt" withString:@"format only\n"];
+  XCTAssertTrue([self.repository addFileToIndex:@"format-only.txt" error:NULL]);
+
+  GCCommit* formatOnlyCommit = _CreateCommitFromRepositoryIndex(self.repository, @"Format without gpgsign", NULL);
+  XCTAssertNotNil(formatOnlyCommit);
+  XCTAssertNil(GCCommitSignature(formatOnlyCommit));
+}
+
+- (void)testCommitSigningRejectsUnknownFormat {
+  XCTAssertTrue(_WriteLocalConfigOption(self.repository, @"commit.gpgsign", @"true"));
+  XCTAssertTrue(_WriteLocalConfigOption(self.repository, @"gpg.format", @"pgp"));
+  [self updateFileAtPath:@"unknown-format.txt" withString:@"unknown format\n"];
+  XCTAssertTrue([self.repository addFileToIndex:@"unknown-format.txt" error:NULL]);
+
+  NSError* error;
+  XCTAssertNil(_CreateCommitFromRepositoryIndex(self.repository, @"Unknown format", &error));
+  XCTAssertTrue([error.localizedDescription containsString:@"gpg.format"]);
+}
+
+- (void)testCommitSigningSignsWithOpenPGPByDefault {
+  NSString* argumentsPath = [self.temporaryPath stringByAppendingPathComponent:@"openpgp-arguments"];
+  NSString* signer = _CreateFakeGPGSigner(self.temporaryPath, @"PGP SIGNATURE", YES, 0, argumentsPath);
+
+  XCTAssertNotNil(signer);
+  XCTAssertTrue(_WriteLocalConfigOption(self.repository, @"commit.gpgsign", @"true"));
+  XCTAssertTrue(_WriteLocalConfigOption(self.repository, @"gpg.program", signer));
   [self updateFileAtPath:@"openpgp.txt" withString:@"openpgp\n"];
   XCTAssertTrue([self.repository addFileToIndex:@"openpgp.txt" error:NULL]);
 
-  GCCommit* openPGPCommit = _CreateCommitFromRepositoryIndex(self.repository, @"OpenPGP config remains unsigned", NULL);
-  XCTAssertNotNil(openPGPCommit);
-  XCTAssertNil(GCCommitSignature(openPGPCommit));
+  // "gpg.format" is left unset, so this covers OpenPGP being the default format as well.
+  GCCommit* commit = _CreateCommitFromRepositoryIndex(self.repository, @"OpenPGP", NULL);
+  XCTAssertNotNil(commit);
+  XCTAssertTrue(GCCommitHasOpenPGPSignature(commit));
+
+  // With no "user.signingkey", Git hands GnuPG the committer identity rather than
+  // letting GnuPG fall back to whichever key it considers its own default.
+  XCTAssertEqualObjects(_RecordedArguments(argumentsPath), (@[ @"--status-fd=2", @"-bsau", @"Bot <bot@example.com>" ]));
+}
+
+- (void)testCommitSigningPrefersOpenPGPProgramAndConfiguredSigningKey {
+  NSString* argumentsPath = [self.temporaryPath stringByAppendingPathComponent:@"openpgp-program-arguments"];
+  NSString* legacyProgram = _CreateFakeGPGSigner(self.temporaryPath, @"PGP SIGNATURE", YES, 7, nil);
+  NSString* openPGPProgram = _CreateFakeGPGSigner(self.temporaryPath, @"PGP SIGNATURE", YES, 0, argumentsPath);
+
+  XCTAssertNotNil(legacyProgram);
+  XCTAssertNotNil(openPGPProgram);
+  XCTAssertTrue(_WriteLocalConfigOption(self.repository, @"commit.gpgsign", @"true"));
+  XCTAssertTrue(_WriteLocalConfigOption(self.repository, @"gpg.format", @"openpgp"));
+  // "gpg.program" is the legacy synonym, so the more specific variable has to win.
+  XCTAssertTrue(_WriteLocalConfigOption(self.repository, @"gpg.program", legacyProgram));
+  XCTAssertTrue(_WriteLocalConfigOption(self.repository, @"gpg.openpgp.program", openPGPProgram));
+  XCTAssertTrue(_WriteLocalConfigOption(self.repository, @"user.signingkey", @"0123456789ABCDEF"));
+  [self updateFileAtPath:@"openpgp-program.txt" withString:@"openpgp program\n"];
+  XCTAssertTrue([self.repository addFileToIndex:@"openpgp-program.txt" error:NULL]);
+
+  GCCommit* commit = _CreateCommitFromRepositoryIndex(self.repository, @"OpenPGP program", NULL);
+  XCTAssertNotNil(commit);
+  XCTAssertTrue(GCCommitHasOpenPGPSignature(commit));
+  XCTAssertEqualObjects(_RecordedArguments(argumentsPath), (@[ @"--status-fd=2", @"-bsau", @"0123456789ABCDEF" ]));
+}
+
+- (void)testCommitSigningSupportsX509Format {
+  NSString* openPGPProgram = _CreateFakeGPGSigner(self.temporaryPath, @"PGP SIGNATURE", YES, 0, nil);
+  NSString* x509Program = _CreateFakeGPGSigner(self.temporaryPath, @"SIGNED MESSAGE", YES, 0, nil);
+
+  XCTAssertNotNil(openPGPProgram);
+  XCTAssertNotNil(x509Program);
+  XCTAssertTrue(_WriteLocalConfigOption(self.repository, @"commit.gpgsign", @"true"));
+  XCTAssertTrue(_WriteLocalConfigOption(self.repository, @"gpg.format", @"x509"));
+  // Unlike "gpg.openpgp.program", "gpg.program" must not apply to X.509.
+  XCTAssertTrue(_WriteLocalConfigOption(self.repository, @"gpg.program", openPGPProgram));
+  XCTAssertTrue(_WriteLocalConfigOption(self.repository, @"gpg.x509.program", x509Program));
+  [self updateFileAtPath:@"x509.txt" withString:@"x509\n"];
+  XCTAssertTrue([self.repository addFileToIndex:@"x509.txt" error:NULL]);
+
+  GCCommit* commit = _CreateCommitFromRepositoryIndex(self.repository, @"X.509", NULL);
+  XCTAssertNotNil(commit);
+  XCTAssertTrue([GCCommitSignature(commit) containsString:@"BEGIN SIGNED MESSAGE"]);
+}
+
+// GnuPG can exit successfully without having produced a signature, which is why Git asks
+// for its machine-readable status instead of trusting the exit code alone.
+- (void)testCommitSigningFailsWhenGPGReportsNoCreatedSignature {
+  NSString* signer = _CreateFakeGPGSigner(self.temporaryPath, @"PGP SIGNATURE", NO, 0, nil);
+
+  XCTAssertNotNil(signer);
+  XCTAssertTrue(_WriteLocalConfigOption(self.repository, @"commit.gpgsign", @"true"));
+  XCTAssertTrue(_WriteLocalConfigOption(self.repository, @"gpg.format", @"openpgp"));
+  XCTAssertTrue(_WriteLocalConfigOption(self.repository, @"gpg.program", signer));
+  [self updateFileAtPath:@"silent-signer.txt" withString:@"silent signer\n"];
+  XCTAssertTrue([self.repository addFileToIndex:@"silent-signer.txt" error:NULL]);
+
+  NSError* error;
+  XCTAssertNil(_CreateCommitFromRepositoryIndex(self.repository, @"Silent signer", &error));
+  XCTAssertTrue([error.localizedDescription containsString:@"did not report a created signature"]);
+}
+
+- (void)testCommitSigningFailsOnGPGFailure {
+  NSString* signer = _CreateFakeGPGSigner(self.temporaryPath, @"PGP SIGNATURE", YES, 5, nil);
+
+  XCTAssertNotNil(signer);
+  XCTAssertTrue(_WriteLocalConfigOption(self.repository, @"commit.gpgsign", @"true"));
+  XCTAssertTrue(_WriteLocalConfigOption(self.repository, @"gpg.format", @"openpgp"));
+  XCTAssertTrue(_WriteLocalConfigOption(self.repository, @"gpg.program", signer));
+  [self updateFileAtPath:@"failing-gpg.txt" withString:@"failing gpg\n"];
+  XCTAssertTrue([self.repository addFileToIndex:@"failing-gpg.txt" error:NULL]);
+
+  NSError* error;
+  XCTAssertNil(_CreateCommitFromRepositoryIndex(self.repository, @"Failing GPG", &error));
+  XCTAssertTrue([error.localizedDescription containsString:@"non-zero status"]);
 }
 
 - (void)testCommitSigningRequiresSSHKey {

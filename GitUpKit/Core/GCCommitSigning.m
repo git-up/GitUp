@@ -21,6 +21,13 @@
 
 #if !TARGET_OS_IPHONE
 
+typedef NS_ENUM(NSUInteger, GCCommitSigningFormat) {
+  kGCCommitSigningFormat_None = 0,
+  kGCCommitSigningFormat_OpenPGP,
+  kGCCommitSigningFormat_X509,
+  kGCCommitSigningFormat_SSH
+};
+
 static NSString* _StringFromTaskOutput(NSData* data) {
   return [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 }
@@ -64,25 +71,29 @@ cleanup:
   return success;
 }
 
-static BOOL _ShouldSSHSignCommit(GCRepository* repository, BOOL* shouldSign, NSError** error) {
+static BOOL _CommitSigningFormat(GCRepository* repository, GCCommitSigningFormat* signingFormat, NSError** error) {
   BOOL gpgSign = NO;
   if (!_ReadConfigBool(repository, "commit.gpgsign", &gpgSign, error)) {
     return NO;
   }
   if (!gpgSign) {
-    *shouldSign = NO;
+    *signingFormat = kGCCommitSigningFormat_None;
     return YES;
   }
 
   NSString* format = [[repository readConfigOptionForVariable:@"gpg.format" error:NULL] value];
-  if (!format.length || ([format caseInsensitiveCompare:@"ssh"] != NSOrderedSame)) {
-    // Only SSH commit signing is currently supported.
-    // Preserve existing GitUp behavior for OpenPGP/X.509 configs by creating an unsigned commit.
-    *shouldSign = NO;
-    return YES;
+  if (!format.length || ([format caseInsensitiveCompare:@"openpgp"] == NSOrderedSame)) {
+    *signingFormat = kGCCommitSigningFormat_OpenPGP;  // Same default as Git.
+  } else if ([format caseInsensitiveCompare:@"x509"] == NSOrderedSame) {
+    *signingFormat = kGCCommitSigningFormat_X509;
+  } else if ([format caseInsensitiveCompare:@"ssh"] == NSOrderedSame) {
+    *signingFormat = kGCCommitSigningFormat_SSH;
+  } else {
+    // Refuse rather than silently producing an unsigned commit, which is what Git does too.
+    GC_SET_GENERIC_ERROR(@"Invalid value for \"gpg.format\": %@", format);
+    return NO;
   }
 
-  *shouldSign = YES;
   return YES;
 }
 
@@ -219,6 +230,76 @@ static NSString* _SSHSignatureForCommitBuffer(GCRepository* repository, NSData* 
   return signature;
 }
 
+static NSString* _GPGProgram(GCRepository* repository, GCCommitSigningFormat format) {
+  NSString* program;
+
+  if (format == kGCCommitSigningFormat_X509) {
+    program = [[repository readConfigOptionForVariable:@"gpg.x509.program" error:NULL] value];
+    return program.length ? program.stringByExpandingTildeInPath : @"gpgsm";
+  }
+
+  program = [[repository readConfigOptionForVariable:@"gpg.openpgp.program" error:NULL] value];
+  if (!program.length) {
+    // "gpg.program" is Git's legacy synonym for "gpg.openpgp.program" and deliberately
+    // does not apply to the X.509 format.
+    program = [[repository readConfigOptionForVariable:@"gpg.program" error:NULL] value];
+  }
+  return program.length ? program.stringByExpandingTildeInPath : @"gpg";
+}
+
+static NSString* _GPGSigningKey(GCRepository* repository, const git_signature* committer) {
+  NSString* key = [[[repository readConfigOptionForVariable:@"user.signingkey" error:NULL] value] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+  if (key.length) {
+    return key;
+  }
+  // Git falls back to the committer identity so GnuPG picks the key matching it rather
+  // than whichever key GnuPG happens to consider its own default.
+  return [NSString stringWithFormat:@"%s <%s>", committer->name, committer->email];
+}
+
+static NSString* _GPGSignatureForCommitBuffer(GCRepository* repository, NSData* commitBuffer, GCCommitSigningFormat format, const git_signature* committer, NSError** error) {
+  NSString* path = _CommitSigningPATH(repository, error);
+  if (!path) {
+    return nil;
+  }
+
+  GCTask* task = _TaskWithPATH(repository, @"/usr/bin/env", path);
+  int status;
+  NSData* stdoutData;
+  NSData* stderrData;
+  NSArray* arguments = @[ _GPGProgram(repository, format), @"--status-fd=2", @"-bsau", _GPGSigningKey(repository, committer) ];
+  if (![task runWithArguments:arguments stdin:commitBuffer stdout:&stdoutData stderr:&stderrData exitStatus:&status error:error]) {
+    return nil;
+  }
+  if (status != 0) {
+    if (error) {
+      *error = _TaskFailureError(@"GPG commit signer", status, stdoutData, stderrData);
+    }
+    return nil;
+  }
+
+  // "--status-fd=2" interleaves GnuPG's machine-readable status with stderr. It is the only
+  // way to tell a real signature apart from a GnuPG that exited successfully without making one.
+  NSString* statusOutput = [[NSString alloc] initWithData:stderrData encoding:NSUTF8StringEncoding];
+  if (![statusOutput containsString:@"[GNUPG:] SIG_CREATED "]) {
+    if (error) {
+      NSString* output = _StringFromTaskOutput(stderrData.length ? stderrData : stdoutData);
+      NSString* reason = output.length ? [NSString stringWithFormat:@": %@", output] : @"";
+      *error = GCNewError(kGCErrorCode_Generic, [NSString stringWithFormat:@"GPG commit signer did not report a created signature%@", reason]);
+    }
+    return nil;
+  }
+
+  NSString* signature = _StringFromTaskOutput(stdoutData);
+  if (!signature.length) {
+    if (error) {
+      *error = GCNewError(kGCErrorCode_Generic, @"GPG commit signer did not return a signature");
+    }
+    return nil;
+  }
+  return signature;
+}
+
 #endif
 
 GCCommit* GCCreateCommitFromTreeWithOptionalSignature(GCRepository* repository, git_tree* tree, const git_commit** parents, NSUInteger count, const git_signature* author, NSString* message, NSError** error) {
@@ -231,8 +312,8 @@ GCCommit* GCCreateCommitFromTreeWithOptionalSignature(GCRepository* repository, 
 #if !TARGET_OS_IPHONE
   git_buf commitBuffer = {0};
   NSData* commitData = nil;
-  NSString* sshSignature = nil;
-  BOOL shouldSign = NO;
+  NSString* commitSignature = nil;
+  GCCommitSigningFormat signingFormat = kGCCommitSigningFormat_None;
 #endif
 
   git_oid oid;
@@ -241,18 +322,23 @@ GCCommit* GCCreateCommitFromTreeWithOptionalSignature(GCRepository* repository, 
   cleanedMessage = GCCleanedUpCommitMessage(message);
   cleanedMessageBytes = (const char*)cleanedMessage.bytes;
 #if !TARGET_OS_IPHONE
-  if (!_ShouldSSHSignCommit(repository, &shouldSign, error)) {
+  if (!_CommitSigningFormat(repository, &signingFormat, error)) {
     goto cleanup;
   }
 
-  if (shouldSign) {
+  if (signingFormat != kGCCommitSigningFormat_None) {
     CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_commit_create_buffer, &commitBuffer, repository.private, authorSignature, signature, NULL, cleanedMessageBytes, tree, count, parents);
     commitData = [[NSData alloc] initWithBytes:commitBuffer.ptr length:commitBuffer.size];
-    sshSignature = _SSHSignatureForCommitBuffer(repository, commitData, error);
-    if (!sshSignature) {
+    if (signingFormat == kGCCommitSigningFormat_SSH) {
+      commitSignature = _SSHSignatureForCommitBuffer(repository, commitData, error);
+    } else {
+      commitSignature = _GPGSignatureForCommitBuffer(repository, commitData, signingFormat, signature, error);
+    }
+    if (!commitSignature) {
       goto cleanup;
     }
-    CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_commit_create_with_signature, &oid, repository.private, commitBuffer.ptr, sshSignature.UTF8String, "gpgsig");
+    // Git writes every signing format into the "gpgsig" header, OpenPGP and X.509 included.
+    CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_commit_create_with_signature, &oid, repository.private, commitBuffer.ptr, commitSignature.UTF8String, "gpgsig");
   } else {
 #endif
     CALL_LIBGIT2_FUNCTION_GOTO(cleanup, git_commit_create, &oid, repository.private, NULL, authorSignature, signature, NULL, cleanedMessageBytes, tree, count, parents);
