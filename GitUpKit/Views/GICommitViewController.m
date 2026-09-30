@@ -26,7 +26,6 @@
   NSString* _headCommitMessage;
   NSUInteger _prepareCommitMessageHookGeneration;
   BOOL _prepareCommitMessageHookRunning;
-  NSError* _prepareCommitMessageHookError;
   NSString* _automaticallyPreparedCommitMessage;
 }
 
@@ -149,7 +148,6 @@
 - (void)_cancelPrepareCommitMessageHook {
   ++_prepareCommitMessageHookGeneration;
   _prepareCommitMessageHookRunning = NO;
-  _prepareCommitMessageHookError = nil;
   _automaticallyPreparedCommitMessage = nil;
 }
 
@@ -160,7 +158,6 @@
 
   NSUInteger generation = ++_prepareCommitMessageHookGeneration;
   _prepareCommitMessageHookRunning = YES;
-  _prepareCommitMessageHookError = nil;
   _automaticallyPreparedCommitMessage = nil;
 
   NSString* repositoryPath = self.repository.repositoryPath;
@@ -186,7 +183,6 @@
         return;
       }
       _prepareCommitMessageHookRunning = NO;
-      _prepareCommitMessageHookError = error;
       if (preparedMessage) {
         [self _applyPreparedCommitMessage:preparedMessage replacingInitialMessage:initialMessage];
       } else if (error) {
@@ -277,10 +273,6 @@
 
   if (_prepareCommitMessageHookRunning) {
     [self presentAlertWithType:kGIAlertType_Caution title:NSLocalizedString(@"The prepare-commit-msg hook is still running", nil) message:NSLocalizedString(@"Please wait for it to finish before committing.", nil)];
-    return;
-  }
-  if (_prepareCommitMessageHookError) {
-    [self presentError:_prepareCommitMessageHookError];
     return;
   }
 
