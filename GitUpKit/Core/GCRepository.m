@@ -584,9 +584,17 @@ static int _CredentialsCallback(git_cred** cred, const char* url, const char* us
   return GIT_PASSTHROUGH;
 }
 
-// Called when fetching only
+// Called when fetching or pushing
 static int _TransportMessageCallback(const char* str, int len, void* payload) {
-  XLOG_VERBOSE(@"Remote transport message: %@", [[[NSString alloc] initWithBytes:str length:len encoding:NSUTF8StringEncoding] stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]]);
+  NSString* message = [[[NSString alloc] initWithBytes:str length:len encoding:NSUTF8StringEncoding] stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
+  XLOG_VERBOSE(@"Remote transport message: %@", message);
+  if (message.length) {
+    GCRepository* repository = (__bridge GCRepository*)payload;
+    if (repository->_lastTransportMessages.length) {
+      [repository->_lastTransportMessages appendString:@"\n"];
+    }
+    [repository->_lastTransportMessages appendString:message];
+  }
   return GIT_OK;
 }
 
@@ -723,6 +731,7 @@ static int _PushNegotiationCallback(git_remote* remote, const git_push_update** 
   _lastPushProgress = -1.0;
 
   _lastUpdatedTips = 0;
+  _lastTransportMessages = [[NSMutableString alloc] init];  // Reset accumulated sideband text for this transfer
 }
 
 - (NSData*)exportBlobWithOID:(const git_oid*)oid error:(NSError**)error {

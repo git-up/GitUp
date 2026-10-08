@@ -31,6 +31,14 @@ NSError* GCNewError(NSInteger code, NSString* message) {
                          userInfo:@{NSLocalizedDescriptionKey : message}];
 }
 
+NSString* GCMessageByAppendingTransportMessages(NSString* baseMessage, NSString* transportMessages) {
+  NSString* trimmedMessages = [transportMessages stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+  if (trimmedMessages.length == 0) {
+    return baseMessage;
+  }
+  return [NSString stringWithFormat:@"%@\n%@", baseMessage, trimmedMessages];
+}
+
 NSError* GCNewPosixError(int code, NSString* message) {
   return [NSError errorWithDomain:NSPOSIXErrorDomain
                              code:code
