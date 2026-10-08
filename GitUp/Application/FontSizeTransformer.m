@@ -21,8 +21,8 @@ static NSArray* sizes;
 @implementation FontSizeTransformer
 
 + (void)initialize {
-  // Match the system font picker
-  sizes = @[ @9, @10, @11, @12, @13, @14, @18, @24 ];
+  // Every point size from 9 to 24 so the text size can be fine-tuned
+  sizes = @[ @9, @10, @11, @12, @13, @14, @15, @16, @17, @18, @19, @20, @21, @22, @23, @24 ];
 }
 
 + (Class)transformedValueClass {
