@@ -26,6 +26,7 @@
 #define kUserDefaultsKey_DiffWhitespaceMode @"DiffWhitespaceMode"  // NSUInteger
 #define kUserDefaultsKey_ShowWelcomeWindow @"ShowWelcomeWindow"  // BOOL
 #define kUserDefaultsKey_Theme @"Theme"  // NSString
+#define kUserDefaultsKey_AppIcon @"AppIcon"  // NSString
 
 #define kRepositoryUserInfoKey_SkipSubmoduleCheck @"SkipSubmoduleCheck"  // BOOL
 #define kRepositoryUserInfoKey_MainWindowFrame @"MainWindowFrame"  // NSString
