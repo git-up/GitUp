@@ -123,6 +123,7 @@
     kUserDefaultsKey_ShowWelcomeWindow : @(YES),
     kUserDefaultsKey_AskSetUpstreamOnPush : @(YES),
     kUserDefaultsKey_Theme : PreferencesWindowController_Theme_SystemPreference,
+    kUserDefaultsKey_AppIcon : PreferencesWindowController_AppIcon_Pink,
   };
   [[NSUserDefaults standardUserDefaults] registerDefaults:defaults];
 }
@@ -286,6 +287,9 @@
 
   // Load theme preference
   [PreferencesThemeService applySelectedTheme];
+
+  // Load app icon preference
+  [PreferencesAppIconService applySelectedAppIcon];
 
 #if __ENABLE_SUDDEN_TERMINATION__
   // Enable sudden termination

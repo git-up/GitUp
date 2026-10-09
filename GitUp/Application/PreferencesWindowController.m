@@ -5,6 +5,8 @@
 //  Created by Dmitry Lobanov on 08.10.2019.
 //
 
+#import <GitUpKit/XLFacilityMacros.h>
+
 #import "PreferencesWindowController.h"
 #import "Common.h"
 
@@ -17,6 +19,10 @@ NSString* const PreferencesWindowController_ReleaseChannel_Continuous = @"contin
 NSString* const PreferencesWindowController_Theme_SystemPreference = @"systemTheme";
 NSString* const PreferencesWindowController_Theme_Light = @"lightTheme";
 NSString* const PreferencesWindowController_Theme_Dark = @"darkTheme";
+
+#pragma mark - Preferences / App Icons
+NSString* const PreferencesWindowController_AppIcon_Pink = @"pinkIcon";
+NSString* const PreferencesWindowController_AppIcon_White = @"whiteIcon";
 
 #pragma mark - Preferences / Item Identifiers
 static NSString* const PreferencesWindowController_Identifier_General = @"general";
@@ -55,11 +61,72 @@ static NSString* const PreferencesWindowController_Identifier_General = @"genera
 }
 @end
 
+@interface PreferencesAppIconService ()
++ (BOOL)isDefaultAppIcon:(NSString*)appIcon;
++ (BOOL)bundleHasCustomIcon;
++ (void)updateBundleIcon:(NSString*)appIcon;
++ (void)updateDockIcon:(NSString*)appIcon;
+@end
+
+@implementation PreferencesAppIconService
++ (NSString*)selectedAppIcon {
+  return [NSUserDefaults.standardUserDefaults stringForKey:kUserDefaultsKey_AppIcon];
+}
+
++ (NSImage*)imageForAppIcon:(NSString*)appIcon {
+  if ([appIcon isEqualToString:PreferencesWindowController_AppIcon_White]) {
+    return [NSImage imageNamed:@"AppIconWhite"];
+  }
+  return [NSImage imageNamed:@"AppIcon"];
+}
+
++ (BOOL)isDefaultAppIcon:(NSString*)appIcon {
+  return ![appIcon isEqualToString:PreferencesWindowController_AppIcon_White];
+}
+
++ (BOOL)bundleHasCustomIcon {
+  // NSWorkspace stores the custom icon of a folder in an "Icon\r" file inside it
+  NSString* iconPath = [NSBundle.mainBundle.bundlePath stringByAppendingPathComponent:@"Icon\r"];
+  return [NSFileManager.defaultManager fileExistsAtPath:iconPath];
+}
+
++ (void)updateBundleIcon:(NSString*)appIcon {
+  NSString* bundlePath = NSBundle.mainBundle.bundlePath;
+  NSImage* image = [self isDefaultAppIcon:appIcon] ? nil : [self imageForAppIcon:appIcon];
+  if (![NSWorkspace.sharedWorkspace setIcon:image forFile:bundlePath options:(NSWorkspaceIconCreationOptions)0]) {
+    XLOG_WARNING(@"Failed updating icon of app bundle at \"%@\"", bundlePath);
+  }
+}
+
++ (void)updateDockIcon:(NSString*)appIcon {
+  NSApp.applicationIconImage = [self isDefaultAppIcon:appIcon] ? nil : [self imageForAppIcon:appIcon];
+}
+
++ (void)applyAppIcon:(NSString*)appIcon {
+  [NSUserDefaults.standardUserDefaults setObject:appIcon forKey:kUserDefaultsKey_AppIcon];
+  [self updateBundleIcon:appIcon];
+  [self updateDockIcon:appIcon];
+}
+
++ (void)applySelectedAppIcon {
+  NSString* appIcon = self.selectedAppIcon;
+  // Updating the app replaces its bundle and drops the custom icon, so restore it if it doesn't match the selection
+  if (self.bundleHasCustomIcon == [self isDefaultAppIcon:appIcon]) {
+    [self updateBundleIcon:appIcon];
+  }
+  [self updateDockIcon:appIcon];
+}
+@end
+
 @interface PreferencesWindowController ()
 @property(nonatomic, weak) IBOutlet NSToolbar* preferencesToolbar;
 @property(nonatomic, weak) IBOutlet NSTabView* preferencesTabView;
 @property(nonatomic, weak) IBOutlet NSPopUpButton* channelPopUpButton;
 @property(nonatomic, weak) IBOutlet NSPopUpButton* themePopUpButton;
+@property(nonatomic, weak) IBOutlet NSButton* pinkAppIconButton;
+@property(nonatomic, weak) IBOutlet NSButton* whiteAppIconButton;
+@property(nonatomic, weak) IBOutlet NSBox* pinkAppIconSelectionBox;
+@property(nonatomic, weak) IBOutlet NSBox* whiteAppIconSelectionBox;
 @end
 
 @implementation PreferencesWindowController
@@ -84,6 +151,12 @@ static NSString* const PreferencesWindowController_Identifier_General = @"genera
     PreferencesWindowController_Theme_Dark
   ];
 
+  self.pinkAppIconButton.image = [PreferencesAppIconService imageForAppIcon:PreferencesWindowController_AppIcon_Pink];
+  self.whiteAppIconButton.image = [PreferencesAppIconService imageForAppIcon:PreferencesWindowController_AppIcon_White];
+  // VoiceOver treats the icon buttons as radio buttons so it can announce which one is selected
+  self.pinkAppIconButton.accessibilityRole = NSAccessibilityRadioButtonRole;
+  self.whiteAppIconButton.accessibilityRole = NSAccessibilityRadioButtonRole;
+
   self.selectedItemIdentifier = PreferencesWindowController_Identifier_General;
 
   [self loadUserDefaults];
@@ -94,6 +167,7 @@ static NSString* const PreferencesWindowController_Identifier_General = @"genera
   self.selectedTheme = theme;
   NSString* channel = [NSUserDefaults.standardUserDefaults stringForKey:kUserDefaultsKey_ReleaseChannel];
   self.selectedChannel = channel;
+  self.selectedAppIcon = [PreferencesAppIconService selectedAppIcon];
 }
 
 - (void)showWindow:(id)sender {
@@ -155,6 +229,20 @@ static NSString* const PreferencesWindowController_Identifier_General = @"genera
   return self.themePopUpButton.selectedItem.representedObject;
 }
 
+#pragma mark - App Icon Buttons
+- (void)setSelectedAppIcon:(NSString*)selectedAppIcon {
+  // The selected icon is outlined by its selection box
+  BOOL isWhite = [selectedAppIcon isEqualToString:PreferencesWindowController_AppIcon_White];
+  self.pinkAppIconSelectionBox.transparent = isWhite;
+  self.whiteAppIconSelectionBox.transparent = !isWhite;
+  self.pinkAppIconButton.accessibilityValue = @(!isWhite);
+  self.whiteAppIconButton.accessibilityValue = @(isWhite);
+}
+
+- (NSString*)selectedAppIcon {
+  return self.whiteAppIconSelectionBox.transparent ? PreferencesWindowController_AppIcon_Pink : PreferencesWindowController_AppIcon_White;
+}
+
 #pragma mark - Selection
 - (void)setSelectedItemIdentifier:(NSString*)selectedItemIdentifier {
   self.preferencesToolbar.selectedItemIdentifier = selectedItemIdentifier;
@@ -187,6 +275,16 @@ static NSString* const PreferencesWindowController_Identifier_General = @"genera
 - (IBAction)changeTheme:(id)sender {
   NSString* theme = self.selectedTheme;
   [PreferencesThemeService applyTheme:theme];
+}
+
+#pragma mark - Actions / Change App Icon
+- (IBAction)changeAppIcon:(id)sender {
+  BOOL isWhite = (sender == self.whiteAppIconButton);
+  NSString* appIcon = isWhite ? PreferencesWindowController_AppIcon_White : PreferencesWindowController_AppIcon_Pink;
+  self.selectedAppIcon = appIcon;
+  if (![appIcon isEqualToString:[PreferencesAppIconService selectedAppIcon]]) {
+    [PreferencesAppIconService applyAppIcon:appIcon];
+  }
 }
 
 #pragma mark - Actions / Change Release Channel
