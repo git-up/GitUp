@@ -179,6 +179,8 @@ static void _TimerCallBack(CFRunLoopTimerRef timer, void* info) {
   if ((self = [super initWithWindow:window])) {
     [[NSBundle bundleForClass:[GIWindowController class]] loadNibNamed:@"GIWindowController" owner:self topLevelObjects:NULL];
     XLOG_DEBUG_CHECK(_overlayView);
+    _overlayView.translatesAutoresizingMaskIntoConstraints = NO;
+    [_overlayView.heightAnchor constraintEqualToConstant:_overlayView.frame.size.height].active = YES;
 
     _area = [[NSTrackingArea alloc] initWithRect:NSZeroRect options:(NSTrackingInVisibleRect | NSTrackingActiveAlways | NSTrackingMouseEnteredAndExited) owner:self userInfo:nil];
     [_overlayView addTrackingArea:_area];
@@ -230,11 +232,15 @@ static void _TimerCallBack(CFRunLoopTimerRef timer, void* info) {
   }
 
   if (_overlayView.superview == nil) {
-    NSRect bounds = self.window.contentLayoutRect;
-    NSRect frame = _overlayView.frame;
-    _overlayView.frame = NSMakeRect(0, bounds.size.height - frame.size.height, bounds.size.width, frame.size.height);
+    NSView* contentView = self.window.contentView;
     _overlayView.alphaValue = 0;
-    [self.window.contentView addSubview:_overlayView];  // Must be above everything else
+    [contentView addSubview:_overlayView];  // Must be above everything else
+    [NSLayoutConstraint activateConstraints:@[
+      [_overlayView.topAnchor constraintEqualToAnchor:contentView.safeAreaLayoutGuide.topAnchor],  // Follows the titlebar as the tab bar appears or disappears
+      [_overlayView.leadingAnchor constraintEqualToAnchor:contentView.leadingAnchor],
+      [_overlayView.trailingAnchor constraintEqualToAnchor:contentView.trailingAnchor]
+    ]];
+    [contentView layoutSubtreeIfNeeded];
     [CATransaction flush];
 
     _overlayTextField.stringValue = message;

@@ -47,6 +47,7 @@
 @property(nonatomic, strong) CloneWindowController* cloneWindowController;
 @property(nonatomic, strong) PreferencesWindowController* preferencesWindowController;
 @property(nonatomic, strong) WelcomeWindowController* welcomeWindowController;
+@property(nonatomic, weak) IBOutlet NSMenuItem* openInNewTabMenuItem;
 @end
 
 @implementation AppDelegate {
@@ -175,6 +176,12 @@
 
 - (void)handleDocumentCountChanged {
   [self.welcomeWindowController handleDocumentCountChanged];
+
+  // Only offer "Open in New Tab…" as the Option alternate of "Open…" when there is a repository window to add a tab to
+  // (AppKit still swaps in hidden alternates, so the item must also stop being one)
+  BOOL hasDocuments = ([[NSDocumentController sharedDocumentController] documents].count > 0);
+  _openInNewTabMenuItem.hidden = !hasDocuments;
+  _openInNewTabMenuItem.alternate = hasDocuments;
 }
 
 - (void)_showNotificationWithTitle:(NSString*)title action:(SEL)action message:(NSString*)format, ... NS_FORMAT_FUNCTION(3, 4) {
@@ -379,6 +386,16 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
 
 - (IBAction)openDocument:(id)sender {
   [[NSDocumentController sharedDocumentController] openDocument:sender];
+}
+
+- (IBAction)openDocumentInNewTab:(id)sender {
+  NSDocumentController* controller = [NSDocumentController sharedDocumentController];
+  [controller beginOpenPanelWithCompletionHandler:^(NSArray<NSURL*>* urls) {
+    BOOL inTab = (controller.documents.count > 0);  // Fall back to a new window if the last repository window was closed in the meantime
+    for (NSURL* url in urls) {
+      [self _openRepositoryWithURL:url inTab:inTab withCloneMode:kCloneMode_None windowModeID:NSNotFound];
+    }
+  }];
 }
 
 - (IBAction)viewWiki:(id)sender {
