@@ -153,6 +153,9 @@ static NSString* const PreferencesWindowController_Identifier_General = @"genera
 
   self.pinkAppIconButton.image = [PreferencesAppIconService imageForAppIcon:PreferencesWindowController_AppIcon_Pink];
   self.whiteAppIconButton.image = [PreferencesAppIconService imageForAppIcon:PreferencesWindowController_AppIcon_White];
+  // VoiceOver treats the icon buttons as radio buttons so it can announce which one is selected
+  self.pinkAppIconButton.accessibilityRole = NSAccessibilityRadioButtonRole;
+  self.whiteAppIconButton.accessibilityRole = NSAccessibilityRadioButtonRole;
 
   self.selectedItemIdentifier = PreferencesWindowController_Identifier_General;
 
@@ -232,6 +235,8 @@ static NSString* const PreferencesWindowController_Identifier_General = @"genera
   BOOL isWhite = [selectedAppIcon isEqualToString:PreferencesWindowController_AppIcon_White];
   self.pinkAppIconSelectionBox.transparent = isWhite;
   self.whiteAppIconSelectionBox.transparent = !isWhite;
+  self.pinkAppIconButton.accessibilityValue = @(!isWhite);
+  self.whiteAppIconButton.accessibilityValue = @(isWhite);
 }
 
 - (NSString*)selectedAppIcon {
