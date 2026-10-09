@@ -102,6 +102,12 @@
                                     <action selector="openDocument:" target="-1" id="FlH-np-HFe"/>
                                 </connections>
                             </menuItem>
+                            <menuItem title="Open in New Tab…" alternate="YES" keyEquivalent="o" id="T4b-oP-nNw">
+                                <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
+                                <connections>
+                                    <action selector="openDocumentInNewTab:" target="-1" id="T4b-oP-aCt"/>
+                                </connections>
+                            </menuItem>
                             <menuItem title="Open Recent" id="H69-uH-spF">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="Open Recent" systemMenu="recentDocuments" id="YgH-RV-NQr">

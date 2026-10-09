@@ -372,6 +372,11 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
   if (menuItem.action == @selector(checkForUpdates:)) {
     return _updaterController.updater.canCheckForUpdates;
   }
+  if (menuItem.action == @selector(openDocumentInNewTab:)) {
+    // Hiding the alternate makes AppKit keep showing "Open…" when Option is pressed
+    menuItem.hidden = ([[NSDocumentController sharedDocumentController] documents].count == 0);
+    return YES;
+  }
   return YES;
 }
 
@@ -379,6 +384,16 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
 
 - (IBAction)openDocument:(id)sender {
   [[NSDocumentController sharedDocumentController] openDocument:sender];
+}
+
+- (IBAction)openDocumentInNewTab:(id)sender {
+  NSDocumentController* controller = [NSDocumentController sharedDocumentController];
+  [controller beginOpenPanelWithCompletionHandler:^(NSArray<NSURL*>* urls) {
+    BOOL inTab = (controller.documents.count > 0);  // Fall back to a new window if the last repository window was closed in the meantime
+    for (NSURL* url in urls) {
+      [self _openRepositoryWithURL:url inTab:inTab withCloneMode:kCloneMode_None windowModeID:NSNotFound];
+    }
+  }];
 }
 
 - (IBAction)viewWiki:(id)sender {
