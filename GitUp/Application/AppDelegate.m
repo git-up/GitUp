@@ -47,6 +47,7 @@
 @property(nonatomic, strong) CloneWindowController* cloneWindowController;
 @property(nonatomic, strong) PreferencesWindowController* preferencesWindowController;
 @property(nonatomic, strong) WelcomeWindowController* welcomeWindowController;
+@property(nonatomic, weak) IBOutlet NSMenuItem* openInNewTabMenuItem;
 @end
 
 @implementation AppDelegate {
@@ -175,6 +176,12 @@
 
 - (void)handleDocumentCountChanged {
   [self.welcomeWindowController handleDocumentCountChanged];
+
+  // Only offer "Open in New Tab…" as the Option alternate of "Open…" when there is a repository window to add a tab to
+  // (AppKit still swaps in hidden alternates, so the item must also stop being one)
+  BOOL hasDocuments = ([[NSDocumentController sharedDocumentController] documents].count > 0);
+  _openInNewTabMenuItem.hidden = !hasDocuments;
+  _openInNewTabMenuItem.alternate = hasDocuments;
 }
 
 - (void)_showNotificationWithTitle:(NSString*)title action:(SEL)action message:(NSString*)format, ... NS_FORMAT_FUNCTION(3, 4) {
@@ -371,11 +378,6 @@ static CFDataRef _MessagePortCallBack(CFMessagePortRef local, SInt32 msgid, CFDa
 - (BOOL)validateMenuItem:(NSMenuItem*)menuItem {
   if (menuItem.action == @selector(checkForUpdates:)) {
     return _updaterController.updater.canCheckForUpdates;
-  }
-  if (menuItem.action == @selector(openDocumentInNewTab:)) {
-    // Hiding the alternate makes AppKit keep showing "Open…" when Option is pressed
-    menuItem.hidden = ([[NSDocumentController sharedDocumentController] documents].count == 0);
-    return YES;
   }
   return YES;
 }
