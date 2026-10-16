@@ -36,6 +36,10 @@ BOOL GCCommitHasSSHSignature(GCCommit* commit) {
   return [GCCommitSignature(commit) containsString:@"BEGIN SSH SIGNATURE"];
 }
 
+BOOL GCCommitHasOpenPGPSignature(GCCommit* commit) {
+  return [GCCommitSignature(commit) containsString:@"BEGIN PGP SIGNATURE"];
+}
+
 BOOL GCConfigureSSHSigningWithKeyPath(GCRepository* repository, NSString* keyPath) {
   return [repository writeConfigOptionForLevel:kGCConfigLevel_Local variable:@"commit.gpgsign" withValue:@"true" error:NULL] &&
          [repository writeConfigOptionForLevel:kGCConfigLevel_Local
