@@ -194,6 +194,54 @@
   return YES;
 }
 
+#pragma mark - Worktrees
+
+// Detached HEADs are ignored since the same commit can be checked out in any number of worktrees
+static void _AddCheckedOutBranchForWorktree(git_repository* repository, NSMutableDictionary* paths) {
+  const char* workdir = git_repository_workdir(repository);
+  git_reference* headReference;
+  if (workdir && (git_reference_lookup(&headReference, repository, kHEADReferenceFullName) == GIT_OK)) {
+    if (git_reference_type(headReference) == GIT_REF_SYMBOLIC) {
+      [paths setObject:GCFileSystemPathFromGitPath(workdir).stringByResolvingSymlinksInPath forKey:[NSString stringWithUTF8String:git_reference_symbolic_target(headReference)]];
+    }
+    git_reference_free(headReference);
+  }
+}
+
+- (NSDictionary*)lookupWorktreePathsForCheckedOutBranches:(NSError**)error {
+  NSMutableDictionary* paths = [[NSMutableDictionary alloc] init];
+
+  // The main worktree is not listed by git_worktree_list() and only needs to be opened from a linked worktree
+  if (git_repository_is_worktree(self.private)) {
+    git_repository* mainRepository;
+    CALL_LIBGIT2_FUNCTION_RETURN(nil, git_repository_open, &mainRepository, git_repository_commondir(self.private));
+    _AddCheckedOutBranchForWorktree(mainRepository, paths);
+    git_repository_free(mainRepository);
+  }
+
+  git_strarray names;
+  CALL_LIBGIT2_FUNCTION_RETURN(nil, git_worktree_list, &names, self.private);
+  for (size_t i = 0; i < names.count; ++i) {
+    git_worktree* worktree;
+    if (git_worktree_lookup(&worktree, self.private, names.strings[i]) == GIT_OK) {
+      git_repository* worktreeRepository;
+      if ((git_worktree_validate(worktree) == GIT_OK) && (git_repository_open_from_worktree(&worktreeRepository, worktree) == GIT_OK)) {  // Skip worktrees whose directory was deleted without "git worktree prune"
+        _AddCheckedOutBranchForWorktree(worktreeRepository, paths);
+        git_repository_free(worktreeRepository);
+      }
+      git_worktree_free(worktree);
+    }
+  }
+  git_strarray_free(&names);
+
+  // A linked worktree lists itself so leave out the branch checked out in this repository
+  NSString* workingDirectoryPath = self.workingDirectoryPath.stringByResolvingSymlinksInPath;
+  if (workingDirectoryPath) {
+    [paths removeObjectsForKeys:[paths allKeysForObject:workingDirectoryPath]];
+  }
+  return paths;
+}
+
 @end
 
 @implementation GCRepository (GCBranch_Private)

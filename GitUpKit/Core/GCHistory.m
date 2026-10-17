@@ -188,9 +188,17 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
 @interface GCHistoryLocalBranch ()
 @property(nonatomic, weak) GCHistoryCommit* tipCommit;
 @property(nonatomic, weak) GCBranch* upstream;
+@property(nonatomic, copy) NSString* worktreePath;
 @end
 
 @implementation GCHistoryLocalBranch
+
+- (void)dealloc {
+  [_worktreePath release];
+
+  [super dealloc];
+}
+
 @end
 
 @interface GCHistoryRemoteBranch ()
@@ -731,6 +739,16 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
     }
   }
 
+  // Find branches checked out in other worktrees
+  NSDictionary* worktreePaths = nil;
+  if (!snapshot) {
+    NSError* worktreeError;
+    worktreePaths = [self lookupWorktreePathsForCheckedOutBranches:&worktreeError];
+    if (worktreePaths == nil) {
+      XLOG_WARNING(@"Failed looking up worktrees of \"%@\": %@", self.repositoryPath, worktreeError);  // Don't fail because of broken worktrees
+    }
+  }
+
   // Initialize MD5
   CC_MD5_CTX md5Context;
   CC_MD5_CTX* md5ContextPtr = &md5Context;  // Required for use within block
@@ -814,6 +832,7 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
         GCCommit* referenceCommit = [[GCCommit alloc] initWithRepository:self commit:commit];
         GCTagAnnotation* referenceAnnotation = tag ? [[GCTagAnnotation alloc] initWithRepository:self tag:tag] : nil;
         git_buf upstreamName = {0};
+        NSString* worktreePath = nil;
         if (git_reference_is_tag(reference)) {
           referenceObject = [[GCHistoryTag alloc] initWithRepository:self reference:reference];
           [tags addObject:referenceObject];
@@ -829,6 +848,9 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
           if ((status != GIT_OK) && (status != GIT_ENOTFOUND)) {
             LOG_LIBGIT2_ERROR(status);  // Don't fail because of corrupted config
           }
+
+          worktreePath = [worktreePaths objectForKey:referenceObject.fullName];
+          ((GCHistoryLocalBranch*)referenceObject).worktreePath = worktreePath;
         } else if (git_reference_is_remote(reference)) {
           referenceObject = [[GCHistoryRemoteBranch alloc] initWithRepository:self reference:reference];
           [remoteBranches addObject:referenceObject];
@@ -847,6 +869,10 @@ static const void* _associatedObjectUpstreamNameKey = &_associatedObjectUpstream
           CC_MD5_Update(md5ContextPtr, git_commit_id(commit), sizeof(git_oid));
           if (upstreamName.ptr) {
             CC_MD5_Update(md5ContextPtr, upstreamName.ptr, (CC_LONG)upstreamName.size);
+          }
+          if (worktreePath) {
+            const char* worktreePathString = worktreePath.fileSystemRepresentation;
+            CC_MD5_Update(md5ContextPtr, worktreePathString, (CC_LONG)strlen(worktreePathString));
           }
         }
         git_buf_free(&upstreamName);

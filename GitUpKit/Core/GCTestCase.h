@@ -31,6 +31,7 @@
 - (void)assertGitCLTOutputEqualsString:(NSString*)string withRepository:(GCRepository*)repository command:(NSString*)command, ... NS_REQUIRES_NIL_TERMINATION;
 - (void)assertGitCLTOutputContainsString:(NSString*)string withRepository:(GCRepository*)repository command:(NSString*)command, ... NS_REQUIRES_NIL_TERMINATION;
 - (void)assertGitCLTOutputEndsWithString:(NSString*)string withRepository:(GCRepository*)repository command:(NSString*)command, ... NS_REQUIRES_NIL_TERMINATION;
+- (NSString*)temporaryWorktreePathWithName:(NSString*)name;  // Unique path free of symlinks whose parent directory is removed when the test ends
 @end
 
 @interface GCTests : GCTestCase

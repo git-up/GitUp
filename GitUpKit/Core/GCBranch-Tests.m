@@ -79,4 +79,59 @@
   [self destroyLocalRepository:bare];
 }
 
+// A branch checked out in a linked worktree is reported with the directory of that worktree
+- (void)testWorktreePathsMapBranchCheckedOutInLinkedWorktreeToItsDirectory {
+  NSString* worktreePath = [self temporaryWorktreePathWithName:@"IOS-7533"];
+  XCTAssertNotNil(([self runGitCLTWithRepository:self.repository command:@"worktree", @"add", worktreePath, @"topic", nil]));
+
+  NSDictionary* paths = [self.repository lookupWorktreePathsForCheckedOutBranches:NULL];
+
+  NSDictionary* expectedPaths = @{@"refs/heads/topic" : worktreePath};
+  XCTAssertEqualObjects(paths, expectedPaths);
+}
+
+// Seen from a linked worktree, the branches of the main worktree and of other linked worktrees are taken while its own branch is not
+- (void)testWorktreePathsFromLinkedWorktreeListOtherWorktreesButNotItself {
+  XCTAssertNotNil([self.repository createLocalBranchFromCommit:self.commit1 withName:@"other" force:NO error:NULL]);
+  NSString* worktreePath = [self temporaryWorktreePathWithName:@"IOS-7533"];
+  XCTAssertNotNil(([self runGitCLTWithRepository:self.repository command:@"worktree", @"add", worktreePath, @"topic", nil]));
+  NSString* otherWorktreePath = [self temporaryWorktreePathWithName:@"IOS-7600"];
+  XCTAssertNotNil(([self runGitCLTWithRepository:self.repository command:@"worktree", @"add", otherWorktreePath, @"other", nil]));
+  GCRepository* worktreeRepository = [[GCRepository alloc] initWithExistingLocalRepository:worktreePath error:NULL];
+  XCTAssertNotNil(worktreeRepository);
+
+  NSDictionary* paths = [worktreeRepository lookupWorktreePathsForCheckedOutBranches:NULL];
+
+  NSDictionary* expectedPaths = @{
+    @"refs/heads/master" : [self.temporaryPath stringByResolvingSymlinksInPath],
+    @"refs/heads/other" : otherWorktreePath
+  };
+  XCTAssertEqualObjects(paths, expectedPaths);
+}
+
+// Only branches are marked: a worktree with a detached HEAD on a commit takes no branch
+- (void)testWorktreePathsSkipWorktreeWithDetachedHEAD {
+  NSString* worktreePath = [self temporaryWorktreePathWithName:@"IOS-7533"];
+  XCTAssertNotNil(([self runGitCLTWithRepository:self.repository command:@"worktree", @"add", @"--detach", worktreePath, @"topic", nil]));
+
+  NSDictionary* paths = [self.repository lookupWorktreePathsForCheckedOutBranches:NULL];
+
+  XCTAssertEqualObjects(paths, @{});
+}
+
+// A worktree whose directory disappeared without "git worktree prune" no longer takes its branch and doesn't hide the other worktrees
+- (void)testWorktreePathsSkipWorktreeWhoseDirectoryWasDeleted {
+  NSString* deletedWorktreePath = [self temporaryWorktreePathWithName:@"IOS-7533"];
+  XCTAssertNotNil(([self runGitCLTWithRepository:self.repository command:@"worktree", @"add", deletedWorktreePath, @"topic", nil]));
+  XCTAssertTrue([[NSFileManager defaultManager] removeItemAtPath:deletedWorktreePath error:NULL]);
+  XCTAssertNotNil([self.repository createLocalBranchFromCommit:self.commit1 withName:@"other" force:NO error:NULL]);
+  NSString* worktreePath = [self temporaryWorktreePathWithName:@"IOS-7600"];
+  XCTAssertNotNil(([self runGitCLTWithRepository:self.repository command:@"worktree", @"add", worktreePath, @"other", nil]));
+
+  NSDictionary* paths = [self.repository lookupWorktreePathsForCheckedOutBranches:NULL];
+
+  NSDictionary* expectedPaths = @{@"refs/heads/other" : worktreePath};
+  XCTAssertEqualObjects(paths, expectedPaths);
+}
+
 @end

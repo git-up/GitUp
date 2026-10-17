@@ -70,6 +70,8 @@
 
 #define kMaxBranchTitleWidth 250
 
+#define kWorktreeSymbol @"\u29C9"  // Marks local branches checked out in another worktree
+
 #define kScrollingInset kSpacingY
 
 #define CONVERT_X(x) (kSpacingX + (x) * kSpacingX)
@@ -1077,6 +1079,14 @@ static void _DrawBranchTitle(CGContextRef context, CGFloat x, CGFloat y, CGPoint
       [multilineTitle addAttribute:NSForegroundColorAttributeName value:darkColor range:upstreamNameRange];
     }
 
+    NSString* worktreePath = localBranch.worktreePath;
+    if (worktreePath) {
+      NSString* worktreeName = worktreePath.lastPathComponent;
+      _AppendAttributedString((CFMutableAttributedStringRef)multilineTitle, [NSString stringWithFormat:@"%@ worktree: %@\n", kWorktreeSymbol, worktreeName], multilineTitleAttributes);
+      NSRange worktreeNameRange = NSMakeRange(multilineTitle.length - worktreeName.length - 1, worktreeName.length);  // -1 to exclude '\n'
+      [multilineTitle addAttribute:NSForegroundColorAttributeName value:darkColor range:worktreeNameRange];
+    }
+
     _AppendAttributedString((CFMutableAttributedStringRef)multilineTitle, @"\n", nil);
   }
 
@@ -1255,6 +1265,9 @@ static void _DrawNodeLabels(CGContextRef context, CGFloat x, CGFloat y, GINode* 
         [label appendString:@", "];
       }
       [label appendString:branch.name];
+      if (branch.worktreePath) {
+        [label appendFormat:@" %@", kWorktreeSymbol];
+      }
       ++index;
     }
     for (GCHistoryRemoteBranch* branch in commit.remoteBranches) {
@@ -1428,11 +1441,14 @@ static void _DrawSelectedNode(CGContextRef context, CGFloat x, CGFloat y, GINode
     if (commit.localBranches.count) {
       _AppendAttributedString(string, @"\nLocal Branches: ", attributes2);
       NSUInteger index = 0;
-      for (GCHistoryTag* branch in commit.localBranches) {
+      for (GCHistoryLocalBranch* branch in commit.localBranches) {
         if (index > 0) {
           _AppendAttributedString(string, @", ", attributes1);
         }
         _AppendAttributedString(string, branch.name, attributes1);
+        if (branch.worktreePath) {
+          _AppendAttributedString(string, [NSString stringWithFormat:@" %@", kWorktreeSymbol], attributes1);
+        }
         ++index;
       }
     }

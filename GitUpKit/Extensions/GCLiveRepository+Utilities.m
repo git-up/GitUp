@@ -67,8 +67,40 @@
   }
 }
 
+// Git doesn't allow checking out the same branch in several worktrees so offer to go to the worktree that has it instead
+- (void)_presentAlertForBranch:(GCHistoryLocalBranch*)branch checkedOutInWorktreeAtPath:(NSString*)path window:(NSWindow*)window {
+  NSAlert* alert = [[NSAlert alloc] init];
+  alert.messageText = [NSString stringWithFormat:NSLocalizedString(@"The branch \"%@\" is already checked out in another worktree", nil), branch.name];
+  alert.informativeText = [NSString stringWithFormat:NSLocalizedString(@"A branch can only be checked out in one worktree at a time. This one is checked out in \"%@\".", nil), path.stringByAbbreviatingWithTildeInPath];
+  [alert addButtonWithTitle:NSLocalizedString(@"Open Worktree", nil)];
+  [alert addButtonWithTitle:NSLocalizedString(@"Show in Finder", nil)];
+  [alert addButtonWithTitle:NSLocalizedString(@"Cancel", nil)];
+  alert.type = kGIAlertType_Note;
+  [alert beginSheetModalForWindow:window
+                completionHandler:^(NSModalResponse returnCode) {
+                  NSURL* url = [NSURL fileURLWithPath:path isDirectory:YES];
+                  if (returnCode == NSAlertFirstButtonReturn) {
+                    [[NSDocumentController sharedDocumentController] openDocumentWithContentsOfURL:url
+                                                                                           display:YES
+                                                                                 completionHandler:^(NSDocument* document, BOOL documentWasAlreadyOpen, NSError* openError) {
+                                                                                   if (!document) {
+                                                                                     [[NSDocumentController sharedDocumentController] presentError:openError];
+                                                                                   }
+                                                                                 }];
+                  } else if (returnCode == NSAlertSecondButtonReturn) {
+                    [[NSWorkspace sharedWorkspace] activateFileViewerSelectingURLs:@[ url ]];
+                  }
+                }];
+}
+
 // This will preemptively abort on conflicts in workdir or index so there's no need to require a clean repo
 - (void)_checkoutLocalBranch:(GCHistoryLocalBranch*)branch window:(NSWindow*)window {
+  NSString* worktreePath = [[self lookupWorktreePathsForCheckedOutBranches:NULL] objectForKey:branch.fullName];  // Don't rely on the history as changes in linked worktrees are not always observed
+  if (worktreePath) {
+    [self _presentAlertForBranch:branch checkedOutInWorktreeAtPath:worktreePath window:window];
+    return;
+  }
+
   NSError* error;
   [self setUndoActionName:[NSString stringWithFormat:NSLocalizedString(@"Checkout Branch \"%@\"", nil), branch.name]];
   if (![self performOperationWithReason:@"checkout_branch"

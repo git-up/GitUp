@@ -219,3 +219,49 @@
 }
 
 @end
+
+@implementation GCMultipleCommitsRepositoryTests (GCLiveRepository)
+
+// Adds the worktree from this process because live repositories ignore file system events of their own process, so only changes made by other processes get observed
+- (BOOL)addWorktreeFromThisProcessAtPath:(NSString*)path branchName:(NSString*)branchName {
+  if (![[NSFileManager defaultManager] createDirectoryAtPath:path.stringByDeletingLastPathComponent withIntermediateDirectories:YES attributes:nil error:NULL]) {
+    return NO;
+  }
+  git_reference* reference;
+  if (git_reference_lookup(&reference, self.repository.private, [@"refs/heads/" stringByAppendingString:branchName].UTF8String) != GIT_OK) {
+    return NO;
+  }
+  git_worktree_add_options options = GIT_WORKTREE_ADD_OPTIONS_INIT;
+  options.ref = reference;
+  git_worktree* worktree;
+  int status = git_worktree_add(&worktree, self.repository.private, path.lastPathComponent.UTF8String, path.fileSystemRepresentation, &options);
+  git_reference_free(reference);
+  if (status != GIT_OK) {
+    return NO;
+  }
+  git_worktree_free(worktree);
+  return YES;
+}
+
+// Removing one of several linked worktrees only changes ".git/worktrees/*" and the open repository must still drop the mark from the freed branch
+- (void)testLiveHistoryUnmarksBranchWhenItsLinkedWorktreeIsRemoved {
+  XCTAssertNotNil([self.repository createLocalBranchFromCommit:self.commit1 withName:@"other" force:NO error:NULL]);
+  NSString* worktreePath = [self temporaryWorktreePathWithName:@"IOS-7533"];
+  XCTAssertTrue([self addWorktreeFromThisProcessAtPath:worktreePath branchName:@"topic"]);
+  NSString* removedWorktreePath = [self temporaryWorktreePathWithName:@"IOS-7600"];
+  XCTAssertTrue([self addWorktreeFromThisProcessAtPath:removedWorktreePath branchName:@"other"]);
+
+  GCLiveRepository* liveRepository = [[GCLiveRepository alloc] initWithExistingLocalRepository:self.repository.workingDirectoryPath error:NULL];
+  XCTAssertNotNil(liveRepository);
+  XCTAssertEqualObjects([liveRepository.history historyLocalBranchWithName:@"other"].worktreePath, removedWorktreePath);
+  XCTNSNotificationExpectation* historyUpdated = [[XCTNSNotificationExpectation alloc] initWithName:GCLiveRepositoryHistoryDidUpdateNotification object:liveRepository];
+  historyUpdated.expectationDescription = @"History of the open repository is updated after a linked worktree is removed";
+
+  XCTAssertNotNil(([self runGitCLTWithRepository:self.repository command:@"worktree", @"remove", removedWorktreePath, nil]));
+  [self waitForExpectations:@[ historyUpdated ] timeout:10];
+
+  XCTAssertNil([liveRepository.history historyLocalBranchWithName:@"other"].worktreePath);
+  XCTAssertEqualObjects([liveRepository.history historyLocalBranchWithName:@"topic"].worktreePath, worktreePath);
+}
+
+@end

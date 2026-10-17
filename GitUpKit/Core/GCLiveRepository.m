@@ -64,6 +64,7 @@ static _Atomic int32_t _allocatedCount = ATOMIC_VAR_INIT(0);
   int _gitDirectory;
   FSEventStreamRef _gitDirectoryStream;
   BOOL _gitDirectoryChanged;
+  BOOL _worktreesChanged;
   FSEventStreamRef _workingDirectoryStream;
   BOOL _workingDirectoryChanged;
   CFRunLoopTimerRef _updateTimer;  // Can't use a NSTimer because of retain-cycle
@@ -109,8 +110,12 @@ static _Atomic int32_t _allocatedCount = ATOMIC_VAR_INIT(0);
 - (void)_timer:(CFRunLoopTimerRef)timer {
   if (timer == _updateTimer) {
     [self _notifyWorkingDirectoryChanged:_workingDirectoryChanged gitDirectoryChanged:_gitDirectoryChanged];
+    if (_worktreesChanged && !_gitDirectoryChanged) {  // A git directory change already reloads the history
+      [self _notifyWorktreesChanged];
+    }
     _workingDirectoryChanged = NO;
     _gitDirectoryChanged = NO;
+    _worktreesChanged = NO;
   } else if (timer == _snapshotsTimer) {
     [self _saveAutomaticSnapshotIfPending];
   } else {
@@ -135,12 +140,28 @@ static void _TimerCallBack(CFRunLoopTimerRef timer, void* info) {
       const char* gitDirectoryPath = git_repository_path(self.private);
       size_t length = strlen(gitDirectoryPath);
       XLOG_DEBUG_CHECK(gitDirectoryPath[length - 1] == '/');
+      const char* commonDirectoryPath = git_repository_commondir(self.private);
+      size_t commonLength = strlen(commonDirectoryPath);
+      XLOG_DEBUG_CHECK(commonDirectoryPath[commonLength - 1] == '/');
       if (stream == _gitDirectoryStream) {
         if (!strncmp(path, gitDirectoryPath, length)) {
           const char* subPath = &path[length];
           if (!subPath[0] || !strncmp(subPath, "refs/", 5) || !strncmp(subPath, "logs/", 5)) {  // We only care about ".git/", ".git/refs/*" and ".git/logs/*"
             XLOG_DEBUG(@"Processed file system event for '%s'", path);
             _gitDirectoryChanged = YES;
+            CFRunLoopTimerSetNextFireDate(_updateTimer, CFAbsoluteTimeGetCurrent() + kUpdateLatency);
+          } else if (!strncmp(subPath, "worktrees/", 10)) {  // We also care about ".git/worktrees/*" to know which branches are checked out in linked worktrees
+            XLOG_DEBUG(@"Processed file system event for '%s'", path);
+            _worktreesChanged = YES;
+            CFRunLoopTimerSetNextFireDate(_updateTimer, CFAbsoluteTimeGetCurrent() + kUpdateLatency);
+          } else {
+            XLOG_DEBUG(@"Dropped file system event for '%s'", path);
+          }
+        } else if (!strncmp(path, commonDirectoryPath, commonLength)) {  // Only reached for linked worktrees as the common git directory is the git directory otherwise
+          const char* subPath = &path[commonLength];
+          if (!subPath[0] || !strncmp(subPath, "worktrees/", 10)) {  // We only care about the HEAD of the main worktree and ".git/worktrees/*" to know which branches are checked out in the other worktrees
+            XLOG_DEBUG(@"Processed file system event for '%s'", path);
+            _worktreesChanged = YES;
             CFRunLoopTimerSetNextFireDate(_updateTimer, CFAbsoluteTimeGetCurrent() + kUpdateLatency);
           } else {
             XLOG_DEBUG(@"Dropped file system event for '%s'", path);
@@ -222,10 +243,14 @@ static void _StreamCallback(ConstFSEventStreamRef streamRef, void* clientCallBac
     _updateTimer = CFRunLoopTimerCreate(kCFAllocatorDefault, HUGE_VALF, HUGE_VALF, 0, 0, _TimerCallBack, &context);
     CFRunLoopAddTimer(CFRunLoopGetMain(), _updateTimer, kCFRunLoopCommonModes);
 
+    NSArray* paths = @[ path ];
+    if (git_repository_is_worktree(self.private)) {  // The HEAD of the main worktree and the git directories of the other linked worktrees are in the common git directory
+      paths = @[ path, GCFileSystemPathFromGitPath(git_repository_commondir(self.private)) ];
+    }
     FSEventStreamContext streamContext = {0, (__bridge void*)self, NULL, NULL, NULL};
     _gitDirectoryStream = FSEventStreamCreate(kCFAllocatorDefault, _StreamCallback, &streamContext,
-                                              (__bridge CFArrayRef) @[ path ], kFSEventStreamEventIdSinceNow,
-                                              kFSLatency, kFSEventStreamCreateFlagIgnoreSelf);  // This opens the path
+                                              (__bridge CFArrayRef)paths, kFSEventStreamEventIdSinceNow,
+                                              kFSLatency, kFSEventStreamCreateFlagIgnoreSelf);  // This opens the paths
     if (_gitDirectoryStream == NULL) {
       XLOG_ERROR(@"Failed creating event stream at \"%@\"", path);
       return nil;
@@ -298,6 +323,15 @@ static void _StreamCallback(ConstFSEventStreamRef streamRef, void* clientCallBac
       [self.delegate repositoryDidChange:self];
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:GCLiveRepositoryDidChangeNotification object:self];
+  }
+}
+
+// Linked worktrees only affect which branches are checked out in them so there's no need for a full update
+- (void)_notifyWorktreesChanged {
+  if (_historyUpdatesSuspended > 0) {
+    _historyUpdatePending = YES;
+  } else {
+    [self _updateHistory];
   }
 }
 

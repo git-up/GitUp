@@ -45,6 +45,7 @@ typedef NS_ENUM(NSUInteger, GCHistorySorting) {
 @interface GCHistoryLocalBranch : GCLocalBranch
 @property(nonatomic, weak, readonly) GCHistoryCommit* tipCommit;  // Cached at time of last history update and DOES NOT automatically update (use -lookupTipCommitForBranch:error: instead)
 @property(nonatomic, weak, readonly) GCBranch* upstream;  // Cached at time of last history update and DOES NOT automatically update (use -lookupUpstreamForLocalBranch:error: instead) - Will be a GCHistoryLocalBranch or GCHistoryRemoteBranch
+@property(nonatomic, readonly) NSString* worktreePath;  // Cached at time of last history update and DOES NOT automatically update (use -lookupWorktreePathsForCheckedOutBranches: instead) - Working directory of the other worktree this branch is checked out in or nil
 @end
 
 @interface GCHistoryRemoteBranch : GCRemoteBranch

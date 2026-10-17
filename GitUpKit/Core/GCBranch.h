@@ -55,4 +55,6 @@
 - (GCBranch*)lookupUpstreamForLocalBranch:(GCLocalBranch*)branch error:(NSError**)error;
 - (BOOL)setUpstream:(GCBranch*)upstreamBranch forLocalBranch:(GCLocalBranch*)branchBranch error:(NSError**)error;  // git branch -u {remote}/{branch} {branch}
 - (BOOL)unsetUpstreamForLocalBranch:(GCLocalBranch*)branchBranch error:(NSError**)error;  // git branch --unset-upstream {branch}
+
+- (NSDictionary*)lookupWorktreePathsForCheckedOutBranches:(NSError**)error;  // git worktree list - Maps full names of branches checked out in *other* worktrees (main or linked) to their working directory paths
 @end

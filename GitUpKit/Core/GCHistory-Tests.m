@@ -481,3 +481,18 @@
 }
 
 @end
+
+@implementation GCMultipleCommitsRepositoryTests (GCHistory)
+
+// The graph marks a branch from its history object so the worktree that has the branch must be known there
+- (void)testHistoryKnowsWorktreeOfBranchCheckedOutInLinkedWorktree {
+  NSString* worktreePath = [self temporaryWorktreePathWithName:@"IOS-7533"];
+  XCTAssertNotNil(([self runGitCLTWithRepository:self.repository command:@"worktree", @"add", worktreePath, @"topic", nil]));
+
+  GCHistory* history = [self.repository loadHistoryUsingSorting:kGCHistorySorting_None error:NULL];
+
+  XCTAssertNotNil(history);
+  XCTAssertEqualObjects([history historyLocalBranchWithName:@"topic"].worktreePath, worktreePath);
+}
+
+@end

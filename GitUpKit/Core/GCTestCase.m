@@ -121,6 +121,14 @@ static const void* _associatedObjectKey = &_associatedObjectKey;
   XCTAssertTrue([result hasSuffix:string]);
 }
 
+- (NSString*)temporaryWorktreePathWithName:(NSString*)name {
+  NSString* directory = [[NSTemporaryDirectory() stringByResolvingSymlinksInPath] stringByAppendingPathComponent:[[NSProcessInfo processInfo] globallyUniqueString]];
+  [self addTeardownBlock:^{
+    [[NSFileManager defaultManager] removeItemAtPath:directory error:NULL];
+  }];
+  return [directory stringByAppendingPathComponent:name];
+}
+
 @end
 
 @implementation GCTests
