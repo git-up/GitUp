@@ -34,6 +34,7 @@
 		1DADC0E225A25D63008C2C35 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = DBBEE64C256B094000F96DAF /* libz.tbd */; };
 		1DF371CD22F5262300EF7BD9 /* GCLiveRepository+Utilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 1DF371CB22F5262300EF7BD9 /* GCLiveRepository+Utilities.h */; };
 		1DF371CE22F5262300EF7BD9 /* GCLiveRepository+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DF371CC22F5262300EF7BD9 /* GCLiveRepository+Utilities.m */; };
+		447CD596AEDB4B7794B35C28 /* GIAppKit.m in Sources */ = {isa = PBXBuildFile; fileRef = E22941D41AC11E31000A83AF /* GIAppKit.m */; };
 		6D8E3F0B25D90E1300AAFC17 /* GIImageDiffView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D8E3F0A25D90E1300AAFC17 /* GIImageDiffView.m */; };
 		6D8E3F1025D90E3400AAFC17 /* GIImageDiffView.h in Headers */ = {isa = PBXBuildFile; fileRef = 6D8E3F0F25D90E3400AAFC17 /* GIImageDiffView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		743BF1841B871C0200E1CA49 /* GCOrderedSet.h in Headers */ = {isa = PBXBuildFile; fileRef = 74EDB5D01B84D4C400F00E79 /* GCOrderedSet.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -61,6 +62,7 @@
 		DC040FCB2BCB21D000DF54D5 /* GCLiveRepository+Conflicts.h in Headers */ = {isa = PBXBuildFile; fileRef = DC040FC82BCB21D000DF54D5 /* GCLiveRepository+Conflicts.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DC040FCC2BCB22FC00DF54D5 /* GCLiveRepository+Conflicts.m in Sources */ = {isa = PBXBuildFile; fileRef = DC040FC92BCB21D000DF54D5 /* GCLiveRepository+Conflicts.m */; };
 		DC040FCD2BCB417A00DF54D5 /* GCLiveRepository+Conflicts.m in Sources */ = {isa = PBXBuildFile; fileRef = DC040FC92BCB21D000DF54D5 /* GCLiveRepository+Conflicts.m */; };
+		DC7BB8520B0E4EFD995AF4EF /* GCLiveRepository+Utilities-Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3713F8DD4AE14FA9A3083EEE /* GCLiveRepository+Utilities-Tests.m */; };
 		E200A3BA1B02DDA100C4E39D /* GCPrivate.m in Sources */ = {isa = PBXBuildFile; fileRef = E200A3B81B02DDA100C4E39D /* GCPrivate.m */; };
 		E20EB08C19FC75CA0031A075 /* GCRepository+Reset.m in Sources */ = {isa = PBXBuildFile; fileRef = E20EB08A19FC75CA0031A075 /* GCRepository+Reset.m */; };
 		E20EB09019FC76160031A075 /* GCRepository+Status.m in Sources */ = {isa = PBXBuildFile; fileRef = E20EB08E19FC76160031A075 /* GCRepository+Status.m */; };
@@ -363,6 +365,7 @@
 		E2F5C2831A81C53A00C30739 /* GCRepository+Reflog-Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = E2F5C2821A81C53A00C30739 /* GCRepository+Reflog-Tests.m */; };
 		E2FEED491AEAA6B500CBED80 /* GCCommitDatabase-Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = E2FEED481AEAA6B500CBED80 /* GCCommitDatabase-Tests.m */; };
 		E2FEED4A1AEAA75F00CBED80 /* GCCommitDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = E2FEED451AEAA6AD00CBED80 /* GCCommitDatabase.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		EC48BBACE0324E4EB1CF506A /* GCLiveRepository+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DF371CC22F5262300EF7BD9 /* GCLiveRepository+Utilities.m */; settings = {COMPILER_FLAGS = "-I$(SRCROOT)/Extensions/TestHeaders"; }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -381,6 +384,7 @@
 		1D841F772B955C3800E4FCCC /* GIRemappingExplanationViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GIRemappingExplanationViewController.xib; sourceTree = "<group>"; };
 		1DF371CB22F5262300EF7BD9 /* GCLiveRepository+Utilities.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GCLiveRepository+Utilities.h"; sourceTree = "<group>"; };
 		1DF371CC22F5262300EF7BD9 /* GCLiveRepository+Utilities.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "GCLiveRepository+Utilities.m"; sourceTree = "<group>"; };
+		3713F8DD4AE14FA9A3083EEE /* GCLiveRepository+Utilities-Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "GCLiveRepository+Utilities-Tests.m"; sourceTree = "<group>"; };
 		6D8E3F0A25D90E1300AAFC17 /* GIImageDiffView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GIImageDiffView.m; sourceTree = "<group>"; };
 		6D8E3F0F25D90E3400AAFC17 /* GIImageDiffView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GIImageDiffView.h; sourceTree = "<group>"; };
 		74EDB5D01B84D4C400F00E79 /* GCOrderedSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCOrderedSet.h; sourceTree = "<group>"; };
@@ -783,6 +787,7 @@
 				E259C2D61A64FAEA0079616B /* GCRepository+Utilities-Tests.m */,
 				E218A58C1A56706600DFF1DF /* GCRepository+Utilities.h */,
 				E218A58D1A56706600DFF1DF /* GCRepository+Utilities.m */,
+				3713F8DD4AE14FA9A3083EEE /* GCLiveRepository+Utilities-Tests.m */,
 				1DF371CB22F5262300EF7BD9 /* GCLiveRepository+Utilities.h */,
 				1DF371CC22F5262300EF7BD9 /* GCLiveRepository+Utilities.m */,
 			);
@@ -1474,6 +1479,9 @@
 				E27E43061A74A96000D04ED1 /* GILayer.m in Sources */,
 				E2C338F219F85C8600063D95 /* GCRemote.m in Sources */,
 				E21739F41A4FE39E00EC6777 /* GCFunctions.m in Sources */,
+				EC48BBACE0324E4EB1CF506A /* GCLiveRepository+Utilities.m in Sources */,
+				447CD596AEDB4B7794B35C28 /* GIAppKit.m in Sources */,
+				DC7BB8520B0E4EFD995AF4EF /* GCLiveRepository+Utilities-Tests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
