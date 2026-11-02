@@ -284,4 +284,134 @@
   [[NSFileManager defaultManager] removeItemAtPath:worktreePath error:NULL];
 }
 
+// The git-lfs tool used to be expected at /usr/local/bin/git-lfs only, so LFS files were
+// silently left unfiltered when it was installed elsewhere e.g. /opt/homebrew/bin (issue #805).
+- (void)testFindExecutableInPATH {
+  NSFileManager* fileManager = [NSFileManager defaultManager];
+  NSString* root = [NSTemporaryDirectory() stringByAppendingPathComponent:[[NSProcessInfo processInfo] globallyUniqueString]];
+  NSString* emptyDirectory = [root stringByAppendingPathComponent:@"empty"];
+  NSString* firstDirectory = [root stringByAppendingPathComponent:@"first"];
+  NSString* secondDirectory = [root stringByAppendingPathComponent:@"second"];
+  NSString* fallbackDirectory = [root stringByAppendingPathComponent:@"fallback"];
+  for (NSString* directory in @[ emptyDirectory, firstDirectory, secondDirectory, fallbackDirectory ]) {
+    XCTAssertTrue([fileManager createDirectoryAtPath:directory withIntermediateDirectories:YES attributes:nil error:NULL]);
+  }
+  NSData* script = [@"#!/bin/sh\nexit 0\n" dataUsingEncoding:NSUTF8StringEncoding];
+  NSString* firstPath = [firstDirectory stringByAppendingPathComponent:@"git-lfs"];
+  NSString* secondPath = [secondDirectory stringByAppendingPathComponent:@"git-lfs"];
+  NSString* fallbackPath = [fallbackDirectory stringByAppendingPathComponent:@"git-lfs"];
+  XCTAssertTrue([fileManager createFileAtPath:secondPath contents:script attributes:@{NSFilePosixPermissions : @0o755}]);
+  XCTAssertTrue([fileManager createFileAtPath:fallbackPath contents:script attributes:@{NSFilePosixPermissions : @0o755}]);
+
+  // Found in PATH, skipping empty components and directories without the tool
+  NSString* PATH = [NSString stringWithFormat:@"::%@:%@:%@", emptyDirectory, firstDirectory, secondDirectory];
+  XCTAssertEqualObjects(GCFindExecutableInPATH(@"git-lfs", PATH, @[ fallbackDirectory ]), secondPath);
+
+  // PATH order wins over later PATH entries and fallbacks
+  XCTAssertTrue([fileManager createFileAtPath:firstPath contents:script attributes:@{NSFilePosixPermissions : @0o755}]);
+  XCTAssertEqualObjects(GCFindExecutableInPATH(@"git-lfs", PATH, @[ fallbackDirectory ]), firstPath);
+
+  // Non-executable files are ignored
+  XCTAssertTrue([fileManager setAttributes:@{NSFilePosixPermissions : @0o644} ofItemAtPath:firstPath error:NULL]);
+  XCTAssertEqualObjects(GCFindExecutableInPATH(@"git-lfs", PATH, @[ fallbackDirectory ]), secondPath);
+
+  // Falls back to the extra directories when not in PATH, or when PATH couldn't be determined
+  XCTAssertEqualObjects(GCFindExecutableInPATH(@"git-lfs", emptyDirectory, @[ fallbackDirectory ]), fallbackPath);
+  XCTAssertEqualObjects(GCFindExecutableInPATH(@"git-lfs", nil, @[ fallbackDirectory ]), fallbackPath);
+
+  // Not found anywhere
+  XCTAssertNil(GCFindExecutableInPATH(@"git-lfs", emptyDirectory, @[]));
+  XCTAssertNil(GCFindExecutableInPATH(@"git-lfs", nil, @[ emptyDirectory ]));
+
+  // Directories with the tool's name are ignored
+  XCTAssertTrue([fileManager createDirectoryAtPath:[emptyDirectory stringByAppendingPathComponent:@"git-lfs"] withIntermediateDirectories:NO attributes:nil error:NULL]);
+  XCTAssertEqualObjects(GCFindExecutableInPATH(@"git-lfs", emptyDirectory, @[ fallbackDirectory ]), fallbackPath);
+
+  XCTAssertTrue([fileManager removeItemAtPath:root error:NULL]);
+}
+
+// Smoke test with the real git-lfs tool
+- (void)testGitLFSCleanFilter {
+  NSString* shell = NSProcessInfo.processInfo.environment[@"SHELL"] ?: @"/bin/sh";
+  NSString* PATH = [self.repository getPATHUsingShell:shell error:NULL];
+  if (!GCFindExecutableInPATH(@"git-lfs", PATH, GCDefaultExecutableDirectories())) {
+    XCTSkip(@"git-lfs is not installed");
+  }
+
+  [self updateFileAtPath:@".gitattributes" withString:@"*.bin filter=lfs diff=lfs merge=lfs -text\n"];
+  [self updateFileAtPath:@"large.bin" withString:@"Hello LFS\n"];
+
+  GCIndex* index = [self.repository readRepositoryIndex:NULL];
+  XCTAssertNotNil(index);
+  XCTAssertTrue([self.repository addFileInWorkingDirectory:@"large.bin" toIndex:index error:NULL]);
+  NSData* data = [self.repository readContentsForFile:@"large.bin" inIndex:index error:NULL];
+  NSString* contents = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+  XCTAssertTrue([contents hasPrefix:@"version https://git-lfs.github.com/spec/v1\n"], @"%@", contents);
+}
+
+// Smoke test with the real git-lfs tool: many files go through the same long-running filter process,
+// including content spanning several protocol packets, without falling back to executing git-lfs per file
+- (void)testGitLFSFilterRoundTrip {
+  NSString* shell = NSProcessInfo.processInfo.environment[@"SHELL"] ?: @"/bin/sh";
+  NSString* PATH = [self.repository getPATHUsingShell:shell error:NULL];
+  if (!GCFindExecutableInPATH(@"git-lfs", PATH, GCDefaultExecutableDirectories())) {
+    XCTSkip(@"git-lfs is not installed");
+  }
+
+  [self updateFileAtPath:@".gitattributes" withString:@"*.bin filter=lfs diff=lfs merge=lfs -text\n"];
+  NSMutableDictionary* files = [[NSMutableDictionary alloc] init];
+  for (int i = 0; i < 20; ++i) {
+    files[[NSString stringWithFormat:@"file-%i.bin", i]] = [@"" stringByPaddingToLength:(i * 10000 + 1) withString:[NSString stringWithFormat:@"Hello LFS %i\n", i] startingAtIndex:0];
+  }
+  NSUInteger launchCount = GCLFSFilterProcessLaunchCount();
+  NSUInteger taskCount = GCLFSFilterTaskCount();
+  GCIndex* index = [self.repository readRepositoryIndex:NULL];
+  XCTAssertNotNil(index);
+  for (NSString* path in files) {
+    [self updateFileAtPath:path withString:files[path]];
+    XCTAssertTrue([self.repository addFileInWorkingDirectory:path toIndex:index error:NULL]);
+    NSString* contents = [[NSString alloc] initWithData:[self.repository readContentsForFile:path inIndex:index error:NULL] encoding:NSUTF8StringEncoding];
+    XCTAssertTrue([contents hasPrefix:@"version https://git-lfs.github.com/spec/v1\n"], @"%@", contents);
+  }
+
+  for (NSString* path in files) {
+    [self deleteFileAtPath:path];
+    XCTAssertTrue([self.repository checkoutFileToWorkingDirectory:path fromIndex:index error:NULL]);
+    [self assertContentsOfFileAtPath:path equalsString:files[path]];
+  }
+  XCTAssertEqual(GCLFSFilterProcessLaunchCount() - launchCount, 1);
+  XCTAssertEqual(GCLFSFilterTaskCount() - taskCount, 0);
+}
+
+// Smoke test with the real git-lfs tool: the reason it reports on stderr ends up in the error
+- (void)testGitLFSFilterError {
+  NSString* shell = NSProcessInfo.processInfo.environment[@"SHELL"] ?: @"/bin/sh";
+  NSString* PATH = [self.repository getPATHUsingShell:shell error:NULL];
+  if (!GCFindExecutableInPATH(@"git-lfs", PATH, GCDefaultExecutableDirectories())) {
+    XCTSkip(@"git-lfs is not installed");
+  }
+
+  // Stage a pointer to an LFS object that doesn't exist locally, and there is no remote to download it from
+  NSString* pointer = [NSString stringWithFormat:@"version https://git-lfs.github.com/spec/v1\noid sha256:%@\nsize 12\n", [@"" stringByPaddingToLength:64 withString:@"a" startingAtIndex:0]];
+  [self updateFileAtPath:@"missing.bin" withString:pointer];
+  GCIndex* index = [self.repository readRepositoryIndex:NULL];
+  XCTAssertNotNil(index);
+  XCTAssertTrue([self.repository addFileInWorkingDirectory:@"missing.bin" toIndex:index error:NULL]);
+  [self updateFileAtPath:@".gitattributes" withString:@"*.bin filter=lfs diff=lfs merge=lfs -text\n"];
+  [self deleteFileAtPath:@"missing.bin"];
+
+  NSUInteger taskCount = GCLFSFilterTaskCount();
+  NSError* error;
+  XCTAssertFalse([self.repository checkoutFileToWorkingDirectory:@"missing.bin" fromIndex:index error:&error]);
+  XCTAssertTrue([error.localizedDescription containsString:@"git-lfs filter process failed: "], @"%@", error);
+  XCTAssertTrue([error.localizedDescription containsString:@"missing.bin"], @"%@", error);
+
+  // git-lfs exits after such a failure so the next file gets a new process
+  NSUInteger launchCount = GCLFSFilterProcessLaunchCount();
+  [self updateFileAtPath:@"present.bin" withString:@"Hello LFS\n"];
+  XCTAssertTrue([self.repository addFileInWorkingDirectory:@"present.bin" toIndex:index error:NULL]);
+  XCTAssertEqual(GCLFSFilterProcessLaunchCount() - launchCount, 1);
+  XCTAssertEqual(GCLFSFilterTaskCount() - taskCount, 0);
+}
+
 @end

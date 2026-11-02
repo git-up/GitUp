@@ -146,6 +146,11 @@ extern int git_submodule_foreach_block(git_repository* repo, int (^block)(git_su
 - (BOOL)runWithArguments:(NSArray*)arguments stdin:(NSData*)stdin stdout:(NSData**)stdout stderr:(NSData**)stderr exitStatus:(int*)exitStatus error:(NSError**)error;  // Returns NO if "exitStatus" is NULL and executable exits with a non-zero status
 @end
 
+extern NSArray<NSString*>* GCDefaultExecutableDirectories(void);  // Homebrew (Apple Silicon and Intel) and MacPorts
+extern NSString* GCFindExecutableInPATH(NSString* name, NSString* PATH, NSArray<NSString*>* fallbackDirectories);  // Returns nil if not found
+extern NSUInteger GCLFSFilterProcessLaunchCount(void);  // Number of "git-lfs filter-process" processes launched so far
+extern NSUInteger GCLFSFilterTaskCount(void);  // Number of files filtered by executing git-lfs for that file only
+
 #endif
 
 @interface GCObject () {

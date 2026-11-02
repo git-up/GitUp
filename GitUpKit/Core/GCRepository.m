@@ -21,14 +21,9 @@
 #import <pthread.h>
 #if !TARGET_OS_IPHONE
 #import <git2/sys/filter.h>
-#import <sys/stat.h>
 #endif
 
 #import "GCPrivate.h"
-
-#if !TARGET_OS_IPHONE
-static const char* _GitLFSPath = "/usr/local/bin/git-lfs";
-#endif
 
 static inline BOOL _IsDirectoryWritable(const char* path) {
   int status = access(path, W_OK);
@@ -56,40 +51,564 @@ static inline NSString* _MakeDirectoryPath(const char* path) {
 
 #if !TARGET_OS_IPHONE
 
+static NSString* _GetPATHUsingShell(NSString* shell, NSError** error) {
+  GCTask* task = [[GCTask alloc] initWithExecutablePath:shell];
+  NSData* data;
+  // `-l` is not supported with `-c` in all shells (tcsh), so try without.
+  // Some shells use quoting of $PATH to trigger POSIX compatibility behavior (fish).
+  // Not all shells support `-n` on `echo`.
+  if (![task runWithArguments:@[ @"-l", @"-c", @"echo \"$PATH\"" ] stdin:NULL stdout:&data stderr:NULL exitStatus:NULL error:error] && ![task runWithArguments:@[ @"-c", @"echo \"$PATH\"" ] stdin:NULL stdout:&data stderr:NULL exitStatus:NULL error:error]) {
+    return nil;
+  }
+  return [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
+}
+
+NSArray<NSString*>* GCDefaultExecutableDirectories(void) {
+  return @[ @"/opt/homebrew/bin", @"/usr/local/bin", @"/opt/local/bin" ];
+}
+
+NSString* GCFindExecutableInPATH(NSString* name, NSString* PATH, NSArray<NSString*>* fallbackDirectories) {
+  NSMutableArray* directories = [[NSMutableArray alloc] init];
+  for (NSString* directory in [PATH componentsSeparatedByString:@":"]) {
+    if (directory.length) {
+      [directories addObject:directory];
+    }
+  }
+  [directories addObjectsFromArray:fallbackDirectories];
+  NSFileManager* fileManager = [NSFileManager defaultManager];
+  for (NSString* directory in directories) {
+    NSString* path = [directory stringByAppendingPathComponent:name];
+    BOOL isDirectory;
+    if ([fileManager fileExistsAtPath:path isDirectory:&isDirectory] && !isDirectory && [fileManager isExecutableFileAtPath:path]) {
+      return path;
+    }
+  }
+  return nil;
+}
+
+// GUI apps don't inherit the user's shell PATH, so git-lfs is looked up in the login shell PATH first
+// and then in the usual install locations.
+// This is resolved lazily the first time a file with the "lfs" filter attribute is processed.
+static NSString* _GitLFSExecutablePath(NSString** outPATH) {
+  static NSString* executablePath = nil;
+  static NSString* PATH = nil;
+  static dispatch_once_t onceToken;
+  dispatch_once(&onceToken, ^{
+    @autoreleasepool {
+      PATH = _GetPATHUsingShell(NSProcessInfo.processInfo.environment[@"SHELL"], NULL) ?: _GetPATHUsingShell(@"/bin/sh", NULL);
+      executablePath = GCFindExecutableInPATH(@"git-lfs", PATH, GCDefaultExecutableDirectories());
+      if (executablePath) {
+        XLOG_VERBOSE(@"Using git-lfs tool at \"%@\"", executablePath);
+      } else {
+        XLOG_WARNING(@"git-lfs tool not found");
+      }
+    }
+  });
+  if (outPATH) {
+    *outPATH = PATH;
+  }
+  return executablePath;
+}
+
+// Leave LFS files untouched (i.e. as pointer files) if git-lfs is not installed
+static int _GitLFSCheck(git_filter* self, void** payload, const git_filter_source* src, const char** attr_values) {
+  return _GitLFSExecutablePath(NULL) ? 0 : GIT_PASSTHROUGH;
+}
+
+#define kLFSFilterProcessIdleTimeout 10.0
+#define kPacketMaxDataLength 65516
+#define kStandardErrorMaxLength 16384
+
+typedef NS_ENUM(NSUInteger, GCFilterProcessResult) {
+  kGCFilterProcessResult_Success = 0,
+  kGCFilterProcessResult_Error,  // The filter couldn't process the file
+  kGCFilterProcessResult_Broken  // Communicating with the filter process failed before it accepted the request
+};
+
+// Executing "git-lfs clean" or "git-lfs smudge" costs ~200ms per file as git-lfs runs several git commands on startup,
+// which adds up to minutes when checking out hundreds of LFS files. So like the git command line, use a single
+// long-running "git-lfs filter-process" per working directory instead, talking the long-running filter protocol
+// version 2 (see "Long Running Filter Process" in gitattributes(5)), and terminate it once idle.
+@interface GCLFSFilterProcess : NSObject
+@property(nonatomic) NSUInteger useCount;
+@property(nonatomic, readonly, getter=isRunning) BOOL running;
+- (instancetype)initWithExecutablePath:(NSString*)executablePath PATH:(NSString*)PATH workingDirectory:(NSString*)workingDirectory handshakeFailed:(BOOL*)handshakeFailed;
+- (GCFilterProcessResult)runCommand:(NSString*)command pathname:(const char*)pathname input:(const git_buf*)input output:(git_buf*)output errorOutput:(NSString**)errorOutput;  // "errorOutput" is set to what the process wrote to stderr on kGCFilterProcessResult_Error
+- (void)terminate;
+@end
+
+// Reads whatever is available from the non-blocking "fd" and returns NO once it reaches EOF
+static BOOL _DrainStandardError(int fd, NSMutableData* data) {
+  char buffer[4096];
+  while (1) {
+    ssize_t count = read(fd, buffer, sizeof(buffer));
+    if (count > 0) {
+      if (data.length < kStandardErrorMaxLength) {
+        [data appendBytes:buffer length:MIN((NSUInteger)count, kStandardErrorMaxLength - data.length)];
+      }
+    } else if ((count < 0) && (errno == EINTR)) {
+      continue;
+    } else {
+      return (count < 0) && (errno == EAGAIN);
+    }
+  }
+}
+
+@implementation GCLFSFilterProcess {
+  NSTask* _task;
+  NSPipe* _inPipe;
+  NSPipe* _outPipe;
+  NSPipe* _errorPipe;
+  int _writeFD;
+  int _readFD;
+  int _errorFD;
+  dispatch_queue_t _errorQueue;
+  dispatch_source_t _errorSource;
+  NSMutableData* _errorData;
+}
+
+- (instancetype)initWithExecutablePath:(NSString*)executablePath PATH:(NSString*)PATH workingDirectory:(NSString*)workingDirectory handshakeFailed:(BOOL*)handshakeFailed {
+  if ((self = [super init])) {
+    _inPipe = [[NSPipe alloc] init];
+    _outPipe = [[NSPipe alloc] init];
+    _errorPipe = [[NSPipe alloc] init];
+    _task = [[NSTask alloc] init];
+    _task.executableURL = [NSURL fileURLWithPath:executablePath];
+    _task.arguments = @[ @"filter-process" ];
+    _task.currentDirectoryURL = [NSURL fileURLWithPath:workingDirectory isDirectory:YES];
+    if (PATH) {
+      NSMutableDictionary* environment = [[NSMutableDictionary alloc] initWithDictionary:[[NSProcessInfo processInfo] environment]];
+      environment[@"PATH"] = PATH;  // git-lfs runs git itself so use the same PATH as the command line
+      _task.environment = environment;
+    }
+    _task.standardInput = _inPipe;
+    _task.standardOutput = _outPipe;
+    _task.standardError = _errorPipe;
+    NSError* error;
+    if (![_task launchAndReturnError:&error]) {
+      XLOG_ERROR(@"Failed launching git-lfs filter process: %@", error);
+      return nil;
+    }
+    _writeFD = _inPipe.fileHandleForWriting.fileDescriptor;
+    _readFD = _outPipe.fileHandleForReading.fileDescriptor;
+    fcntl(_writeFD, F_SETNOSIGPIPE, 1);  // Get EPIPE instead of a SIGPIPE if the process exits
+
+    // git-lfs reports why a file failed on stderr, which is drained continuously so the pipe can't fill up and block it
+    _errorFD = _errorPipe.fileHandleForReading.fileDescriptor;
+    fcntl(_errorFD, F_SETFL, fcntl(_errorFD, F_GETFL) | O_NONBLOCK);
+    _errorData = [[NSMutableData alloc] init];
+    _errorQueue = dispatch_queue_create("co.gitup.lfs-filter-process.stderr", DISPATCH_QUEUE_SERIAL);
+    _errorSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_READ, _errorFD, 0, _errorQueue);
+    int errorFD = _errorFD;
+    NSMutableData* errorData = _errorData;
+    NSFileHandle* errorHandle = _errorPipe.fileHandleForReading;
+    __weak dispatch_source_t weakSource = _errorSource;
+    dispatch_source_set_event_handler(_errorSource, ^{
+      if (!_DrainStandardError(errorFD, errorData)) {
+        dispatch_source_cancel(weakSource);
+      }
+    });
+    dispatch_source_set_cancel_handler(_errorSource, ^{
+      [errorHandle closeFile];
+    });
+    dispatch_resume(_errorSource);
+
+    NSArray* lines;
+    if (![self _writeTextPacket:@"git-filter-client"] || ![self _writeTextPacket:@"version=2"] || ![self _writeFlushPacket] ||
+        !(lines = [self _readTextPacketList]) || ![lines containsObject:@"git-filter-server"] || ![lines containsObject:@"version=2"] ||
+        ![self _writeTextPacket:@"capability=clean"] || ![self _writeTextPacket:@"capability=smudge"] || ![self _writeFlushPacket] ||
+        !(lines = [self _readTextPacketList]) || ![lines containsObject:@"capability=clean"] || ![lines containsObject:@"capability=smudge"]) {
+      XLOG_ERROR(@"Failed handshake with git-lfs filter process: %@", [self _takeStandardError]);
+      [self terminate];
+      *handshakeFailed = YES;
+      return nil;
+    }
+  }
+  return self;
+}
+
+- (void)dealloc {
+  [self terminate];
+}
+
+- (BOOL)isRunning {
+  return _inPipe != nil;
+}
+
+// Closing stdin makes the process exit on its own
+- (void)terminate {
+  if (_inPipe) {
+    [_inPipe.fileHandleForWriting closeFile];
+    [_outPipe.fileHandleForReading closeFile];
+    _inPipe = nil;
+    _outPipe = nil;
+  }
+  if (_errorSource) {
+    dispatch_source_cancel(_errorSource);  // Closes the pipe once the source is done with it
+    _errorSource = nil;
+  }
+}
+
+// Returns what the process wrote to stderr since the last call: git-lfs writes it before replying with the
+// status, so everything about the last request is already in the pipe even if the source hasn't read it yet
+- (NSString*)_takeStandardError {
+  if (!_errorQueue) {
+    return nil;
+  }
+  __block NSString* string;
+  dispatch_source_t source = _errorSource;
+  dispatch_sync(_errorQueue, ^{
+    if (source && !dispatch_source_testcancel(source)) {
+      _DrainStandardError(_errorFD, _errorData);
+    }
+    string = [[[NSString alloc] initWithData:_errorData encoding:NSUTF8StringEncoding] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    _errorData.length = 0;
+  });
+  return string;
+}
+
+- (BOOL)_writeBytes:(const void*)bytes length:(size_t)length {
+  while (length > 0) {
+    ssize_t count = write(_writeFD, bytes, length);
+    if (count < 0) {
+      if (errno == EINTR) {
+        continue;
+      }
+      return NO;
+    }
+    bytes = (const char*)bytes + count;
+    length -= count;
+  }
+  return YES;
+}
+
+- (BOOL)_readBytes:(void*)bytes length:(size_t)length {
+  while (length > 0) {
+    ssize_t count = read(_readFD, bytes, length);
+    if (count < 0) {
+      if (errno == EINTR) {
+        continue;
+      }
+      return NO;
+    }
+    if (count == 0) {  // EOF
+      return NO;
+    }
+    bytes = (char*)bytes + count;
+    length -= count;
+  }
+  return YES;
+}
+
+- (BOOL)_writePacket:(const void*)bytes length:(size_t)length {
+  XLOG_DEBUG_CHECK((length > 0) && (length <= kPacketMaxDataLength));
+  char header[5];
+  snprintf(header, sizeof(header), "%04zx", length + 4);
+  return [self _writeBytes:header length:4] && [self _writeBytes:bytes length:length];
+}
+
+- (BOOL)_writeFlushPacket {
+  return [self _writeBytes:"0000" length:4];
+}
+
+- (BOOL)_writeTextPacket:(NSString*)text {
+  NSData* data = [[text stringByAppendingString:@"\n"] dataUsingEncoding:NSUTF8StringEncoding];
+  return [self _writePacket:data.bytes length:data.length];
+}
+
+// Returns -1 on error, 0 for a flush packet or the length of the data read into "buffer" which must be at least kPacketMaxDataLength long
+- (ssize_t)_readPacket:(char*)buffer {
+  char header[5] = {0};
+  if (![self _readBytes:header length:4]) {
+    return -1;
+  }
+  char* end;
+  unsigned long length = strtoul(header, &end, 16);
+  if ((end != header + 4) || ((length > 0) && (length < 4)) || (length > kPacketMaxDataLength + 4)) {
+    XLOG_ERROR(@"Invalid packet from git-lfs filter process");
+    return -1;
+  }
+  if (length == 0) {
+    return 0;
+  }
+  length -= 4;
+  if (![self _readBytes:buffer length:length]) {
+    return -1;
+  }
+  return length;
+}
+
+// Returns nil on error
+- (NSArray*)_readTextPacketList {
+  NSMutableArray* lines = [[NSMutableArray alloc] init];
+  char buffer[kPacketMaxDataLength];
+  while (1) {
+    ssize_t length = [self _readPacket:buffer];
+    if (length < 0) {
+      return nil;
+    }
+    if (length == 0) {
+      break;
+    }
+    if (buffer[length - 1] == '\n') {
+      --length;
+    }
+    NSString* line = [[NSString alloc] initWithBytes:buffer length:length encoding:NSUTF8StringEncoding];
+    if (line) {
+      [lines addObject:line];
+    }
+  }
+  return lines;
+}
+
+// Returns the last status in the list or the empty string if there is none
+static NSString* _StatusFromTextPacketList(NSArray* lines) {
+  NSString* status = @"";
+  for (NSString* line in lines) {
+    if ([line hasPrefix:@"status="]) {
+      status = [line substringFromIndex:7];
+    }
+  }
+  return status;
+}
+
+- (GCFilterProcessResult)runCommand:(NSString*)command pathname:(const char*)pathname input:(const git_buf*)input output:(git_buf*)output errorOutput:(NSString**)errorOutput {
+  if (!_inPipe) {
+    return kGCFilterProcessResult_Broken;
+  }
+  [self _takeStandardError];  // Discard anything left over from previous requests
+  NSArray* lines;
+  NSString* status;
+  char* buffer;
+  NSMutableData* data;
+
+  NSMutableData* pathnameData = [[NSMutableData alloc] initWithBytes:"pathname=" length:9];
+  [pathnameData appendBytes:pathname length:strlen(pathname)];
+  [pathnameData appendBytes:"\n" length:1];
+  if (pathnameData.length > kPacketMaxDataLength) {
+    return kGCFilterProcessResult_Broken;
+  }
+  if (![self _writeTextPacket:[@"command=" stringByAppendingString:command]] || ![self _writePacket:pathnameData.bytes length:pathnameData.length] || ![self _writeFlushPacket]) {
+    goto broken;
+  }
+  for (size_t offset = 0; offset < input->size; offset += kPacketMaxDataLength) {
+    if (![self _writePacket:(input->ptr + offset) length:MIN(input->size - offset, kPacketMaxDataLength)]) {
+      goto broken;
+    }
+  }
+  if (![self _writeFlushPacket]) {
+    goto broken;
+  }
+
+  lines = [self _readTextPacketList];
+  if (!lines) {
+    goto broken;
+  }
+  status = _StatusFromTextPacketList(lines);
+  if (![status isEqualToString:@"success"]) {
+    if (![status isEqualToString:@"error"] && ![status isEqualToString:@"abort"]) {
+      goto broken;
+    }
+    *errorOutput = [self _takeStandardError];
+    XLOG_ERROR(@"git-lfs filter process failed to %@ \"%s\" (%@): %@", command, pathname, status, *errorOutput);
+    return kGCFilterProcessResult_Error;
+  }
+
+  buffer = (char*)malloc(kPacketMaxDataLength);
+  data = [[NSMutableData alloc] init];
+  while (1) {
+    ssize_t length = [self _readPacket:buffer];
+    if (length < 0) {
+      free(buffer);
+      goto failed;
+    }
+    if (length == 0) {
+      free(buffer);
+      break;
+    }
+    [data appendBytes:buffer length:length];
+  }
+
+  lines = [self _readTextPacketList];  // An empty list means the status is unchanged
+  if (!lines) {
+    goto failed;
+  }
+  status = _StatusFromTextPacketList(lines);
+  if (status.length && ![status isEqualToString:@"success"]) {
+    *errorOutput = [self _takeStandardError];
+    XLOG_ERROR(@"git-lfs filter process failed to %@ \"%s\" (%@): %@", command, pathname, status, *errorOutput);
+    return kGCFilterProcessResult_Error;
+  }
+  if (git_buf_set(output, data.bytes, data.length) < 0) {  // TODO: Avoid copying data
+    return kGCFilterProcessResult_Error;
+  }
+  return kGCFilterProcessResult_Success;
+
+broken:
+  XLOG_ERROR(@"Lost communication with git-lfs filter process");
+  [self terminate];
+  return kGCFilterProcessResult_Broken;
+
+failed:  // git-lfs exits after accepting a request it can't complete e.g. when downloading the file fails, so retrying wouldn't help
+  *errorOutput = [self _takeStandardError];
+  XLOG_ERROR(@"git-lfs filter process exited while trying to %@ \"%s\": %@", command, pathname, *errorOutput);
+  [self terminate];
+  return kGCFilterProcessResult_Error;
+}
+
+@end
+
+static NSMutableDictionary<NSString*, GCLFSFilterProcess*>* _lfsFilterProcesses = nil;  // Idle processes keyed by working directory
+static BOOL _lfsFilterProcessUnsupported = NO;  // git-lfs versions before 2.0 don't support "filter-process"
+static NSUInteger _lfsFilterProcessLaunchCount = 0;
+static NSUInteger _lfsFilterTaskCount = 0;
+
+NSUInteger GCLFSFilterProcessLaunchCount(void) {
+  @synchronized([GCLFSFilterProcess class]) {
+    return _lfsFilterProcessLaunchCount;
+  }
+}
+
+NSUInteger GCLFSFilterTaskCount(void) {
+  @synchronized([GCLFSFilterProcess class]) {
+    return _lfsFilterTaskCount;
+  }
+}
+
+// Takes an idle process out of the cache so concurrent filtering in the same working directory gets its own process
+static GCLFSFilterProcess* _CheckOutLFSFilterProcess(NSString* executablePath, NSString* PATH, NSString* workingDirectory, BOOL* reused) {
+  GCLFSFilterProcess* process;
+  @synchronized([GCLFSFilterProcess class]) {
+    if (_lfsFilterProcessUnsupported) {
+      return nil;
+    }
+    process = _lfsFilterProcesses[workingDirectory];
+    [_lfsFilterProcesses removeObjectForKey:workingDirectory];
+  }
+  *reused = process != nil;
+  if (!process) {
+    BOOL handshakeFailed = NO;
+    process = [[GCLFSFilterProcess alloc] initWithExecutablePath:executablePath PATH:PATH workingDirectory:workingDirectory handshakeFailed:&handshakeFailed];
+    @synchronized([GCLFSFilterProcess class]) {
+      if (process) {
+        _lfsFilterProcessLaunchCount += 1;
+      } else if (handshakeFailed) {
+        _lfsFilterProcessUnsupported = YES;
+      }
+    }
+  }
+  return process;
+}
+
+static void _CheckInLFSFilterProcess(GCLFSFilterProcess* process, NSString* workingDirectory) {
+  NSUInteger useCount;
+  @synchronized([GCLFSFilterProcess class]) {
+    useCount = ++process.useCount;
+    if (!_lfsFilterProcesses) {
+      _lfsFilterProcesses = [[NSMutableDictionary alloc] init];
+    }
+    if (_lfsFilterProcesses[workingDirectory]) {  // Another thread already checked in a process for this working directory
+      [process terminate];
+      return;
+    }
+    _lfsFilterProcesses[workingDirectory] = process;
+  }
+  dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(kLFSFilterProcessIdleTimeout * NSEC_PER_SEC)), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    @synchronized([GCLFSFilterProcess class]) {
+      if ((_lfsFilterProcesses[workingDirectory] == process) && (process.useCount == useCount)) {
+        [_lfsFilterProcesses removeObjectForKey:workingDirectory];
+        [process terminate];
+      }
+    }
+  });
+}
+
+static NSString* _FilterErrorMessage(NSString* message, NSString* errorOutput) {
+  return errorOutput.length ? [NSString stringWithFormat:@"%@: %@", message, errorOutput] : message;
+}
+
+// Fallback executing git-lfs for this file only
+static int _GitLFSApplyWithTask(NSString* executablePath, NSString* PATH, NSString* workingDirectory, NSString* command, const git_buf* from, git_buf* to, const git_filter_source* src) {
+  @synchronized([GCLFSFilterProcess class]) {
+    _lfsFilterTaskCount += 1;
+  }
+  GCTask* task = [[GCTask alloc] initWithExecutablePath:executablePath];
+  task.currentDirectoryPath = workingDirectory;
+  if (PATH) {
+    task.additionalEnvironment = @{@"PATH" : PATH};  // git-lfs runs git itself so use the same PATH as the command line
+  }
+  int status;
+  NSData* stdinData = [[NSData alloc] initWithBytesNoCopy:from->ptr length:from->size freeWhenDone:NO];
+  NSData* stdoutData;
+  NSData* stderrData;
+  if (![task runWithArguments:@[ command, @"--", GCFileSystemPathFromGitPath(git_filter_source_path(src)) ] stdin:stdinData stdout:&stdoutData stderr:&stderrData exitStatus:&status error:NULL]) {
+    XLOG_ERROR(@"git-lfs tool failed executing");
+    giterr_set_str(GITERR_FILTER, "git-lfs tool failed executing");
+    return -1;
+  }
+  if (status != 0) {
+    NSString* errorOutput = [[[NSString alloc] initWithData:stderrData encoding:NSUTF8StringEncoding] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    XLOG_ERROR(@"git-lfs tool exited with non-zero status (%i): %@", status, errorOutput);
+    giterr_set_str(GITERR_FILTER, _FilterErrorMessage(@"git-lfs tool exited with non-zero status", errorOutput).UTF8String);
+    return -1;
+  }
+  if (git_buf_set(to, stdoutData.bytes, stdoutData.length) < 0) {  // TODO: Avoid copying data
+    return -1;
+  }
+  return 0;
+}
+
 static int _GitLFSApply(git_filter* self, void** payload, git_buf* to, const git_buf* from, const git_filter_source* src) {
   if (from->size > 0) {
     @autoreleasepool {
       CFAbsoluteTime time = CFAbsoluteTimeGetCurrent();
-      NSMutableArray* arguments = [[NSMutableArray alloc] init];
+      NSString* command;
       if (git_filter_source_mode(src) == GIT_FILTER_SMUDGE) {  // ODB -> Worktree
-        [arguments addObject:@"smudge"];
+        command = @"smudge";
       } else if (git_filter_source_mode(src) == GIT_FILTER_CLEAN) {  // Worktree -> ODB
-        [arguments addObject:@"clean"];
+        command = @"clean";
       } else {
         XLOG_DEBUG_UNREACHABLE();
         return -1;
       }
-      [arguments addObject:@"--"];
-      [arguments addObject:GCFileSystemPathFromGitPath(git_filter_source_path(src))];
-      GCTask* task = [[GCTask alloc] initWithExecutablePath:[NSString stringWithUTF8String:_GitLFSPath]];
-      task.currentDirectoryPath = _MakeDirectoryPath(git_repository_workdir(git_filter_source_repo(src)));
-      int status;
-      NSData* stdinData = [[NSData alloc] initWithBytesNoCopy:from->ptr length:from->size freeWhenDone:NO];
-      NSData* stdoutData;
-      if (![task runWithArguments:arguments stdin:stdinData stdout:&stdoutData stderr:NULL exitStatus:&status error:NULL]) {
-        XLOG_ERROR(@"git-lfs tool failed executing");
-        giterr_set_str(GITERR_FILTER, "git-lfs tool failed executing");
+      NSString* PATH;
+      NSString* executablePath = _GitLFSExecutablePath(&PATH);
+      if (!executablePath) {
+        return GIT_PASSTHROUGH;
+      }
+      NSString* workingDirectory = _MakeDirectoryPath(git_repository_workdir(git_filter_source_repo(src)));
+      if (!workingDirectory) {
+        XLOG_DEBUG_UNREACHABLE();
         return -1;
       }
-      XLOG_VERBOSE(@"Executed git-lfs tool in %.3f seconds", CFAbsoluteTimeGetCurrent() - time);
-      if (status != 0) {
-        XLOG_ERROR(@"git-lfs tool exited with non-zero status (%i)", status);
-        giterr_set_str(GITERR_FILTER, "git-lfs tool exited with non-zero status");
-        return -1;
+
+      // An idle process may have exited in the meantime (e.g. if the working directory was deleted) so retry with a new one
+      BOOL reused = YES;
+      while (reused) {
+        GCLFSFilterProcess* process = _CheckOutLFSFilterProcess(executablePath, PATH, workingDirectory, &reused);
+        if (!process) {
+          break;
+        }
+        NSString* errorOutput = nil;
+        GCFilterProcessResult result = [process runCommand:command pathname:git_filter_source_path(src) input:from output:to errorOutput:&errorOutput];
+        if (process.running) {
+          _CheckInLFSFilterProcess(process, workingDirectory);
+        }
+        if (result == kGCFilterProcessResult_Error) {
+          giterr_set_str(GITERR_FILTER, _FilterErrorMessage(@"git-lfs filter process failed", errorOutput).UTF8String);
+          return -1;
+        }
+        if (result == kGCFilterProcessResult_Success) {
+          XLOG_VERBOSE(@"Executed git-lfs filter process in %.3f seconds", CFAbsoluteTimeGetCurrent() - time);
+          return 0;
+        }
       }
-      if (git_buf_set(to, stdoutData.bytes, stdoutData.length) < 0) {  // TODO: Avoid copying data
-        return -1;
+
+      int status = _GitLFSApplyWithTask(executablePath, PATH, workingDirectory, command, from, to, src);
+      if (status == 0) {
+        XLOG_VERBOSE(@"Executed git-lfs tool in %.3f seconds", CFAbsoluteTimeGetCurrent() - time);
       }
+      return status;
     }
   }
   return 0;
@@ -120,14 +639,12 @@ static int _GitLFSApply(git_filter* self, void** payload, git_buf* to, const git
   assert(git_libgit2_init() >= 1);
 
 #if !TARGET_OS_IPHONE
-  struct stat info;
-  if (lstat(_GitLFSPath, &info) == 0) {
-    git_filter* filter = calloc(1, sizeof(git_filter));
-    filter->version = GIT_FILTER_VERSION;
-    filter->attributes = "filter=lfs";
-    filter->apply = _GitLFSApply;
-    assert(git_filter_register("lfs", filter, -1) == 0);  // Priority must be lower than CRLF and IDENT built-in filters
-  }
+  git_filter* filter = calloc(1, sizeof(git_filter));
+  filter->version = GIT_FILTER_VERSION;
+  filter->attributes = "filter=lfs";
+  filter->check = _GitLFSCheck;
+  filter->apply = _GitLFSApply;
+  assert(git_filter_register("lfs", filter, -1) == 0);  // Priority must be lower than CRLF and IDENT built-in filters
 #endif
 }
 
@@ -365,15 +882,7 @@ static int _ReferenceForEachCallback(const char* refname, void* payload) {
 }
 
 - (NSString*)getPATHUsingShell:(NSString*)shell error:(NSError**)error {
-  GCTask* task = [[GCTask alloc] initWithExecutablePath:shell];
-  NSData* data;
-  // `-l` is not supported with `-c` in all shells (tcsh), so try without.
-  // Some shells use quoting of $PATH to trigger POSIX compatibility behavior (fish).
-  // Not all shells support `-n` on `echo`.
-  if (![task runWithArguments:@[ @"-l", @"-c", @"echo \"$PATH\"" ] stdin:NULL stdout:&data stderr:NULL exitStatus:NULL error:error] && ![task runWithArguments:@[ @"-c", @"echo \"$PATH\"" ] stdin:NULL stdout:&data stderr:NULL exitStatus:NULL error:error]) {
-    return nil;
-  }
-  return [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
+  return _GetPATHUsingShell(shell, error);
 }
 
 - (BOOL)runHookWithName:(NSString*)name arguments:(NSArray*)arguments standardInput:(NSString*)standardInput error:(NSError**)error {
