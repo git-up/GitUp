@@ -349,4 +349,34 @@
   XCTAssertTrue([contents hasPrefix:@"version https://git-lfs.github.com/spec/v1\n"], @"%@", contents);
 }
 
+// Smoke test with the real git-lfs tool: many files go through the same long-running filter process,
+// including content spanning several protocol packets
+- (void)testGitLFSFilterRoundTrip {
+  NSString* shell = NSProcessInfo.processInfo.environment[@"SHELL"] ?: @"/bin/sh";
+  NSString* PATH = [self.repository getPATHUsingShell:shell error:NULL];
+  if (!GCFindExecutableInPATH(@"git-lfs", PATH, GCDefaultExecutableDirectories())) {
+    XCTSkip(@"git-lfs is not installed");
+  }
+
+  [self updateFileAtPath:@".gitattributes" withString:@"*.bin filter=lfs diff=lfs merge=lfs -text\n"];
+  NSMutableDictionary* files = [[NSMutableDictionary alloc] init];
+  for (int i = 0; i < 20; ++i) {
+    files[[NSString stringWithFormat:@"file-%i.bin", i]] = [@"" stringByPaddingToLength:(i * 10000 + 1) withString:[NSString stringWithFormat:@"Hello LFS %i\n", i] startingAtIndex:0];
+  }
+  GCIndex* index = [self.repository readRepositoryIndex:NULL];
+  XCTAssertNotNil(index);
+  for (NSString* path in files) {
+    [self updateFileAtPath:path withString:files[path]];
+    XCTAssertTrue([self.repository addFileInWorkingDirectory:path toIndex:index error:NULL]);
+    NSString* contents = [[NSString alloc] initWithData:[self.repository readContentsForFile:path inIndex:index error:NULL] encoding:NSUTF8StringEncoding];
+    XCTAssertTrue([contents hasPrefix:@"version https://git-lfs.github.com/spec/v1\n"], @"%@", contents);
+  }
+
+  for (NSString* path in files) {
+    [self deleteFileAtPath:path];
+    XCTAssertTrue([self.repository checkoutFileToWorkingDirectory:path fromIndex:index error:NULL]);
+    [self assertContentsOfFileAtPath:path equalsString:files[path]];
+  }
+}
+
 @end
