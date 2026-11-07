@@ -158,6 +158,7 @@ extern int git_path_make_relative(git_buf* path, const char* parent);  // SPI
     goto cleanup;
   }
   repository.delegate = self.delegate;
+  repository.credentialHelperMode = self.credentialHelperMode;
   remote = [repository lookupRemoteWithName:@"origin" error:error];
   if (remote == nil) {
     goto cleanup;
@@ -196,6 +197,7 @@ cleanup:
       return NO;
     }
     repository.delegate = self.delegate;
+    repository.credentialHelperMode = self.credentialHelperMode;
     if (![repository initializeAllSubmodules:recursive error:error]) {
       return NO;
     }
