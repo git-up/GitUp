@@ -40,6 +40,12 @@ typedef NS_ENUM(NSUInteger, GCFileMode) {
 #define GC_FILE_MODE_IS_FILE(m) (((m) == kGCFileMode_Blob) || ((m) == kGCFileMode_BlobExecutable) || ((m) == kGCFileMode_Link))
 #define GC_FILE_MODE_IS_SUBMODULE(m) (((m) == kGCFileMode_Tree) || ((m) == kGCFileMode_Commit))
 
+typedef NS_ENUM(NSUInteger, GCCredentialHelperMode) {
+  kGCCredentialHelperMode_Disabled = 0,  // Never run the Git credential helpers (default)
+  kGCCredentialHelperMode_NonInteractive,  // Run the helpers but forbid them from prompting the user (e.g. for automatic remote checks)
+  kGCCredentialHelperMode_Interactive  // Run the helpers and let them prompt the user if they need to (e.g. Git Credential Manager)
+};
+
 @class GCRepository;
 
 @protocol GCRepositoryDelegate <NSObject>
@@ -55,6 +61,7 @@ typedef NS_ENUM(NSUInteger, GCFileMode) {
 /// Walks up the file system to find the repository the given URL is contained in. Returns nil and sets the error if no repository is found.
 + (NSURL *)repositoryURLContainingURL:(NSURL *)url error:(NSError **)error;
 @property(nonatomic, weak) id<GCRepositoryDelegate> delegate;
+@property(nonatomic) GCCredentialHelperMode credentialHelperMode;  // Whether HTTPS transfers consult the Git credential helpers configured through "credential.helper" before asking the delegate (macOS only)
 @property(nonatomic, readonly) NSString* repositoryPath;
 @property(nonatomic, readonly) NSString* workingDirectoryPath;  // nil for a bare repository
 @property(nonatomic, readonly, getter=isReadOnly) BOOL readOnly;
@@ -84,7 +91,7 @@ typedef NS_ENUM(NSUInteger, GCFileMode) {
 - (BOOL)runHookWithName:(NSString*)name arguments:(NSArray*)arguments standardInput:(NSString*)standardInput error:(NSError**)error;  // Silently ignores non-existing hooks
 
 // Git credential helpers as configured through "credential.helper" - See git-credential(1)
-- (BOOL)fillCredentialsForURL:(NSURL*)url user:(NSString*)user username:(NSString**)username password:(NSString**)password error:(NSError**)error;  // "git credential fill" - Returns NO if no helper provided credentials
+- (BOOL)fillCredentialsForURL:(NSURL*)url user:(NSString*)user allowInteraction:(BOOL)allowInteraction username:(NSString**)username password:(NSString**)password error:(NSError**)error;  // "git credential fill" - Returns NO if no helper provided credentials
 - (BOOL)approveCredentialsForURL:(NSURL*)url username:(NSString*)username password:(NSString*)password error:(NSError**)error;  // "git credential approve"
 - (BOOL)rejectCredentialsForURL:(NSURL*)url username:(NSString*)username password:(NSString*)password error:(NSError**)error;  // "git credential reject"
 #endif
