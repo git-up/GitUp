@@ -82,5 +82,10 @@ typedef NS_ENUM(NSUInteger, GCFileMode) {
 #if !TARGET_OS_IPHONE
 - (NSString*)pathForHookWithName:(NSString*)name;  // Returns nil if hook doesn't exist
 - (BOOL)runHookWithName:(NSString*)name arguments:(NSArray*)arguments standardInput:(NSString*)standardInput error:(NSError**)error;  // Silently ignores non-existing hooks
+
+// Git credential helpers as configured through "credential.helper" - See git-credential(1)
+- (BOOL)fillCredentialsForURL:(NSURL*)url user:(NSString*)user username:(NSString**)username password:(NSString**)password error:(NSError**)error;  // "git credential fill" - Returns NO if no helper provided credentials
+- (BOOL)approveCredentialsForURL:(NSURL*)url username:(NSString*)username password:(NSString*)password error:(NSError**)error;  // "git credential approve"
+- (BOOL)rejectCredentialsForURL:(NSURL*)url username:(NSString*)username password:(NSString*)password error:(NSError**)error;  // "git credential reject"
 #endif
 @end

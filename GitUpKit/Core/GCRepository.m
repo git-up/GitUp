@@ -376,14 +376,22 @@ static int _ReferenceForEachCallback(const char* refname, void* payload) {
   return [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
 }
 
-- (BOOL)runHookWithName:(NSString*)name arguments:(NSArray*)arguments standardInput:(NSString*)standardInput error:(NSError**)error {
-  NSString* path = [self pathForHookWithName:name];
-  if (path) {
-    static NSString* cachedPATH = nil;
+// Resolve the user's PATH through their login shell (once per process) so that tools installed outside /usr/bin are found
+- (NSString*)_userPATH:(NSError**)error {
+  static NSString* cachedPATH = nil;
+  @synchronized([GCRepository class]) {
     if (cachedPATH == nil) {
       cachedPATH = [self getPATHUsingShell:NSProcessInfo.processInfo.environment[@"SHELL"] error:error] ?: [self getPATHUsingShell:@"/bin/sh" error:error];
       XLOG_DEBUG_CHECK(cachedPATH);
     }
+    return cachedPATH;
+  }
+}
+
+- (BOOL)runHookWithName:(NSString*)name arguments:(NSArray*)arguments standardInput:(NSString*)standardInput error:(NSError**)error {
+  NSString* path = [self pathForHookWithName:name];
+  if (path) {
+    NSString* cachedPATH = [self _userPATH:error];
 
     CFAbsoluteTime time = CFAbsoluteTimeGetCurrent();
     GCTask* task = [[GCTask alloc] initWithExecutablePath:path];
@@ -412,6 +420,114 @@ static int _ReferenceForEachCallback(const char* refname, void* payload) {
     }
   }
   return YES;
+}
+
+#pragma mark - Credential Helpers
+
+// Serialize a credential description in the format expected by "git credential" - See git-credential(1) "INPUT/OUTPUT FORMAT"
+static BOOL _AppendCredentialAttribute(NSMutableString* string, NSString* key, NSString* value) {
+  if (!value.length) {
+    return YES;  // Nothing to add
+  }
+  if ([value rangeOfCharacterFromSet:[NSCharacterSet characterSetWithCharactersInString:@"\n\0"]].location != NSNotFound) {
+    return NO;  // Attribute values can't contain newlines or NULs
+  }
+  [string appendFormat:@"%@=%@\n", key, value];
+  return YES;
+}
+
+static NSData* _CredentialDescriptionData(NSURL* url, NSString* username, NSString* password) {
+  NSURLComponents* components = [NSURLComponents componentsWithURL:url resolvingAgainstBaseURL:NO];
+  components.user = nil;  // Passed separately as "username" below
+  components.password = nil;
+  components.query = nil;
+  components.fragment = nil;
+  NSString* urlString = components.URL.absoluteString;
+  if (!urlString.length) {
+    return nil;
+  }
+  NSMutableString* string = [[NSMutableString alloc] init];
+  if (!_AppendCredentialAttribute(string, @"url", urlString) || !_AppendCredentialAttribute(string, @"username", username) || !_AppendCredentialAttribute(string, @"password", password)) {
+    return nil;
+  }
+  [string appendString:@"\n"];  // Blank line terminates the description
+  return [string dataUsingEncoding:NSUTF8StringEncoding];
+}
+
+- (BOOL)_runCredentialCommand:(NSString*)command url:(NSURL*)url username:(NSString*)username password:(NSString*)password output:(NSData**)output error:(NSError**)error {
+  NSData* input = _CredentialDescriptionData(url, username, password);
+  if (input == nil) {
+    GC_SET_GENERIC_ERROR(@"Unable to describe credentials for \"%@\"", url);
+    return NO;
+  }
+  NSString* path = [self _userPATH:NULL] ?: NSProcessInfo.processInfo.environment[@"PATH"];
+  if (!path.length) {
+    path = @"/usr/bin:/bin:/usr/sbin:/sbin";
+  }
+
+  CFAbsoluteTime time = CFAbsoluteTimeGetCurrent();
+  GCTask* task = [[GCTask alloc] initWithExecutablePath:@"/usr/bin/env"];  // Use the user's "git" rather than hardcoding /usr/bin/git
+  task.currentDirectoryPath = self.workingDirectoryPath ?: self.repositoryPath;  // So that repository-local configuration applies
+  task.additionalEnvironment = @{
+    @"PATH" : path,
+    @"GIT_TERMINAL_PROMPT" : @"0"  // Never block waiting on a terminal that doesn't exist
+  };
+  task.executionTimeOut = 120.0;  // Helpers may legitimately prompt the user (e.g. Git Credential Manager), but never hang forever
+  int status;
+  NSData* stdoutData;
+  NSData* stderrData;
+  if (![task runWithArguments:@[ @"git", @"credential", command ] stdin:input stdout:&stdoutData stderr:&stderrData exitStatus:&status error:error]) {
+    return NO;
+  }
+  XLOG_VERBOSE(@"Executed 'git credential %@' in %.3f seconds", command, CFAbsoluteTimeGetCurrent() - time);
+  if (status != 0) {
+    NSString* string = [[[NSString alloc] initWithData:(stderrData.length ? stderrData : stdoutData) encoding:NSUTF8StringEncoding] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    GC_SET_GENERIC_ERROR(@"'git credential %@' exited with non-zero status (%i)%@%@", command, status, string.length ? @": " : @"", string ?: @"");
+    return NO;
+  }
+  if (output) {
+    *output = stdoutData;
+  }
+  return YES;
+}
+
+- (BOOL)fillCredentialsForURL:(NSURL*)url user:(NSString*)user username:(NSString**)username password:(NSString**)password error:(NSError**)error {
+  NSData* output;
+  if (![self _runCredentialCommand:@"fill" url:url username:(url.user.length ? url.user : user) password:nil output:&output error:error]) {
+    return NO;
+  }
+  NSString* string = [[NSString alloc] initWithData:output encoding:NSUTF8StringEncoding];
+  NSString* outUsername = nil;
+  NSString* outPassword = nil;
+  for (NSString* line in [string componentsSeparatedByString:@"\n"]) {
+    NSRange range = [line rangeOfString:@"="];
+    if (range.location == NSNotFound) {
+      continue;
+    }
+    NSString* key = [line substringToIndex:range.location];
+    NSString* value = [line substringFromIndex:(range.location + 1)];
+    if ([key isEqualToString:@"username"]) {
+      outUsername = value;
+    } else if ([key isEqualToString:@"password"]) {
+      outPassword = value;
+    }
+  }
+  if (!outUsername.length || !outPassword.length) {
+    GC_SET_GENERIC_ERROR(@"No credential helper provided credentials for \"%@\"", url);
+    return NO;
+  }
+  XLOG_VERBOSE(@"Obtained credentials for \"%@\" from Git credential helper", url);
+  *username = outUsername;
+  *password = outPassword;
+  return YES;
+}
+
+- (BOOL)approveCredentialsForURL:(NSURL*)url username:(NSString*)username password:(NSString*)password error:(NSError**)error {
+  return [self _runCredentialCommand:@"approve" url:url username:username password:password output:NULL error:error];
+}
+
+- (BOOL)rejectCredentialsForURL:(NSURL*)url username:(NSString*)username password:(NSString*)password error:(NSError**)error {
+  return [self _runCredentialCommand:@"reject" url:url username:username password:password output:NULL error:error];
 }
 
 #endif

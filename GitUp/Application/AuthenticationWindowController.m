@@ -11,7 +11,9 @@
 #import "KeychainAccessor.h"
 
 @interface AuthenticationWindowControllerModel : NSObject
+@property(nonatomic, assign) BOOL useCredentialHelper;
 @property(nonatomic, assign) BOOL useKeychain;
+@property(nonatomic, assign) BOOL credentialsFromHelper;  // Current credentials were provided by a Git credential helper
 @property(nonatomic, copy) NSURL* url;
 @property(nonatomic, copy) NSString* name;
 @property(nonatomic, copy) NSString* password;
@@ -23,11 +25,16 @@
 - (BOOL)isValid {
   return self.url && self.name && self.password;
 }
+- (void)unsetUseCredentialHelper {
+  self.useCredentialHelper = NO;
+}
 - (void)unsetUseKeychain {
   self.useKeychain = NO;
 }
 - (void)willStartTransfer {
+  self.useCredentialHelper = YES;
   self.useKeychain = YES;
+  self.credentialsFromHelper = NO;
   self.url = nil;
   self.name = nil;
   self.password = nil;
@@ -37,6 +44,7 @@
     BOOL shouldPassModel = success && self.isValid;
     onResult(shouldPassModel ? self : nil);
   }
+  self.credentialsFromHelper = NO;
   self.url = nil;
   self.name = nil;
   self.password = nil;
@@ -105,6 +113,36 @@
 }
 
 - (BOOL)repository:(GCRepository*)repository requiresPlainTextAuthenticationForURL:(NSURL*)url user:(NSString*)user username:(NSString**)username password:(NSString**)password {
+  // Being asked again after a helper provided credentials means the remote rejected them: let the helpers know and fall through to the other sources
+  if (self.model.credentialsFromHelper && self.model.isValid) {
+    NSError* error;
+    if (![repository rejectCredentialsForURL:self.model.url username:self.model.name password:self.model.password error:&error]) {
+      XLOG_WARNING(@"Failed rejecting credentials with Git credential helpers: %@", error.localizedDescription);
+    }
+    self.model.credentialsFromHelper = NO;
+    self.model.url = nil;
+    self.model.name = nil;
+    self.model.password = nil;
+  }
+
+  // Try the credential helpers configured in Git first (e.g. "gh auth git-credential", "osxkeychain" or Git Credential Manager)
+  if (self.model.useCredentialHelper) {
+    [self.model unsetUseCredentialHelper];
+    NSString* helperUsername = nil;
+    NSString* helperPassword = nil;
+    NSError* error;
+    if ([repository fillCredentialsForURL:url user:user username:&helperUsername password:&helperPassword error:&error]) {
+      self.model.url = url;
+      self.model.name = helperUsername;
+      self.model.password = helperPassword;
+      self.model.credentialsFromHelper = YES;
+      *username = helperUsername;
+      *password = helperPassword;
+      return YES;
+    }
+    XLOG_VERBOSE(@"Git credential helpers did not provide credentials for \"%@\": %@", url, error.localizedDescription);
+  }
+
   if (self.model.useKeychain) {
     [self.model unsetUseKeychain];
     if ([KeychainAccessor loadPlainTextAuthenticationFormKeychainForURL:url user:user username:username password:password allowInteraction:YES]) {
@@ -142,7 +180,16 @@
   [self.model didFinishTransferWithURL:url
                                success:success
                               onResult:^(AuthenticationWindowControllerModel* model) {
-                                if (model) {
+                                if (!model) {
+                                  return;
+                                }
+                                if (model.credentialsFromHelper) {
+                                  // Let the helpers cache the credentials, like Git itself does, instead of duplicating them in the Keychain
+                                  NSError* error;
+                                  if (![repository approveCredentialsForURL:model.url username:model.name password:model.password error:&error]) {
+                                    XLOG_WARNING(@"Failed approving credentials with Git credential helpers: %@", error.localizedDescription);
+                                  }
+                                } else {
                                   [KeychainAccessor savePlainTextAuthenticationToKeychainForURL:url username:model.name password:model.password];
                                 }
                               }];

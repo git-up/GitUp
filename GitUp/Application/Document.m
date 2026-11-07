@@ -1913,6 +1913,9 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
 }
 
 + (BOOL)repository:(GCRepository*)repository requiresPlainTextAuthenticationForURL:(NSURL*)url user:(NSString*)user username:(NSString**)username password:(NSString**)password {
+  if ([repository fillCredentialsForURL:url user:user username:username password:password error:NULL]) {  // Non-interactive thanks to GIT_TERMINAL_PROMPT=0
+    return YES;
+  }
   return [KeychainAccessor loadPlainTextAuthenticationFormKeychainForURL:url user:user username:username password:password allowInteraction:NO];
 }
 

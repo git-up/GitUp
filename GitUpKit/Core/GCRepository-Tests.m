@@ -105,6 +105,61 @@
   XCTAssertFalse([[GCRepository alloc] initWithNewLocalRepository:self.repository.workingDirectoryPath bare:NO error:NULL]);
 }
 
+- (void)testCredentialHelpers {
+  NSString* path = [NSTemporaryDirectory() stringByAppendingPathComponent:[[NSProcessInfo processInfo] globallyUniqueString]];
+  GCRepository* repository = [self createLocalRepositoryAtPath:path bare:NO];
+
+  // Create a fake credential helper that logs every invocation and answers "get" requests
+  NSString* helperDirectory = [NSTemporaryDirectory() stringByAppendingPathComponent:[[NSProcessInfo processInfo] globallyUniqueString]];
+  XCTAssertTrue([[NSFileManager defaultManager] createDirectoryAtPath:helperDirectory withIntermediateDirectories:YES attributes:nil error:NULL]);
+  NSString* logPath = [helperDirectory stringByAppendingPathComponent:@"log"];
+  NSString* helperPath = [helperDirectory stringByAppendingPathComponent:@"helper"];
+  NSString* helperScript = [NSString stringWithFormat:@"#!/bin/sh\n"
+                                                       "echo \"[$1]\" >> \"%@\"\n"
+                                                       "cat >> \"%@\"\n"
+                                                       "if [ \"$1\" = \"get\" ]; then\n"
+                                                       "  printf 'username=bot\\npassword=s3cret\\n'\n"
+                                                       "fi\n",
+                                                      logPath, logPath];
+  XCTAssertTrue([helperScript writeToFile:helperPath atomically:YES encoding:NSUTF8StringEncoding error:NULL]);
+  XCTAssertTrue([[NSFileManager defaultManager] setAttributes:@{NSFilePosixPermissions : @(0755)} ofItemAtPath:helperPath error:NULL]);
+
+  // No helper configured (reset inherited ones): no credentials
+  // Note: git only runs helpers as "git credential-<name>" unless given an absolute path or a "!" command
+  XCTAssertNotNil(([self runGitCLTWithRepository:repository command:@"config", @"--add", @"credential.helper", @"", nil]));  // Commas must be shielded from the macro
+  NSURL* url = [NSURL URLWithString:@"https://example.invalid/some/repo.git"];
+  NSString* username = nil;
+  NSString* password = nil;
+  NSError* error = nil;
+  XCTAssertFalse([repository fillCredentialsForURL:url user:nil username:&username password:&password error:&error]);
+  XCTAssertNotNil(error);
+  XCTAssertNil(username);
+  XCTAssertNil(password);
+
+  // Fake helper configured: fill, approve and reject
+  XCTAssertNotNil(([self runGitCLTWithRepository:repository command:@"config", @"--add", @"credential.helper", helperPath, nil]));
+  XCTAssertTrue([repository fillCredentialsForURL:url user:@"hint" username:&username password:&password error:&error]);
+  XCTAssertEqualObjects(username, @"bot");
+  XCTAssertEqualObjects(password, @"s3cret");
+  XCTAssertTrue([repository approveCredentialsForURL:url username:username password:password error:&error]);
+  XCTAssertTrue([repository rejectCredentialsForURL:url username:username password:password error:&error]);
+
+  NSString* log = [NSString stringWithContentsOfFile:logPath encoding:NSUTF8StringEncoding error:NULL];
+  XCTAssertNotNil(log);
+  NSArray* expectedEntries = @[
+    @"[get]\nprotocol=https\nhost=example.invalid\nusername=hint\n",
+    @"[store]\nprotocol=https\nhost=example.invalid\nusername=bot\npassword=s3cret\n",
+    @"[erase]\nprotocol=https\nhost=example.invalid\nusername=bot\npassword=s3cret\n"
+  ];
+  for (NSString* entry in expectedEntries) {
+    XCTAssertTrue([log containsString:entry], @"Missing \"%@\" in helper log:\n%@", entry, log);
+  }
+  XCTAssertFalse([log containsString:@"path="]);  // Stripped by git unless credential.useHttpPath is set
+
+  XCTAssertTrue([[NSFileManager defaultManager] removeItemAtPath:helperDirectory error:NULL]);
+  [self destroyLocalRepository:repository];
+}
+
 - (void)testPathForHookWithName {
   NSString* path = [NSTemporaryDirectory() stringByAppendingPathComponent:[[NSProcessInfo processInfo] globallyUniqueString]];
 
