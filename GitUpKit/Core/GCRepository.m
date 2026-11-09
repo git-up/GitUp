@@ -444,26 +444,22 @@ static BOOL _AppendCredentialAttribute(NSMutableString* string, NSString* key, N
   return YES;
 }
 
-// Serialize a credential query in the format expected by "git credential" - See git-credential(1) "INPUT/OUTPUT FORMAT"
-static NSData* _CredentialQueryData(NSURL* url, NSString* username) {
+// The "url" attribute of a credential description in the format expected by "git credential" - See git-credential(1) "INPUT/OUTPUT FORMAT"
+static NSString* _CredentialURLAttribute(NSURL* url) {
   if (!url.scheme.length || !url.host.length) {
     return nil;  // Not something credentials can be looked up for - Also covers nil, which NSURLComponents refuses with an exception
   }
   NSURLComponents* components = [NSURLComponents componentsWithURL:url resolvingAgainstBaseURL:NO];
-  components.user = nil;  // Passed separately as "username" below
+  components.user = nil;  // Passed separately as "username"
   components.password = nil;
   components.query = nil;
   components.fragment = nil;
   NSString* urlString = components.URL.absoluteString;
-  if (!urlString.length) {
-    return nil;
-  }
   NSMutableString* string = [[NSMutableString alloc] init];
-  if (!_AppendCredentialAttribute(string, @"url", urlString) || !_AppendCredentialAttribute(string, @"username", username)) {
+  if (!urlString.length || !_AppendCredentialAttribute(string, @"url", urlString)) {
     return nil;
   }
-  [string appendString:@"\n"];  // Blank line terminates the description
-  return [string dataUsingEncoding:NSUTF8StringEncoding];
+  return string;
 }
 
 - (BOOL)_runCredentialCommand:(NSString*)command input:(NSData*)input allowInteraction:(BOOL)allowInteraction output:(NSData**)output error:(NSError**)error {
@@ -516,13 +512,15 @@ static NSData* _CredentialQueryData(NSURL* url, NSString* username) {
 }
 
 - (BOOL)fillCredentialsForURL:(NSURL*)url user:(NSString*)user allowInteraction:(BOOL)allowInteraction username:(NSString**)username password:(NSString**)password description:(NSString**)description error:(NSError**)error {
-  NSData* input = _CredentialQueryData(url, (user.length ? user : url.user));
-  if (input == nil) {
+  NSString* urlAttribute = _CredentialURLAttribute(url);
+  NSMutableString* query = [urlAttribute mutableCopy];
+  if ((query == nil) || !_AppendCredentialAttribute(query, @"username", (user.length ? user : url.user))) {
     GC_SET_GENERIC_ERROR(@"Unable to describe credentials for \"%@\"", url);
     return NO;
   }
+  [query appendString:@"\n"];  // Blank line terminates the description
   NSData* output;
-  if (![self _runCredentialCommand:@"fill" input:input allowInteraction:allowInteraction output:&output error:error]) {
+  if (![self _runCredentialCommand:@"fill" input:[query dataUsingEncoding:NSUTF8StringEncoding] allowInteraction:allowInteraction output:&output error:error]) {
     return NO;
   }
   NSString* string = [[NSString alloc] initWithData:output encoding:NSUTF8StringEncoding];
@@ -553,12 +551,14 @@ static NSData* _CredentialQueryData(NSURL* url, NSString* username) {
     *password = outPassword;
   }
   if (description) {
-    *description = string;
+    // Keep the URL in front of Git's answer, whose attributes then take precedence: unless "credential.useHttpPath" is set the answer has no path anymore,
+    // but Git needs it again to find the helpers configured for that path when the outcome is reported
+    *description = [urlAttribute stringByAppendingString:string];
   }
   return YES;
 }
 
-// Hand the complete description back so the helpers also get the attributes they attached to the credentials (expiration date, refresh token, their own state...)
+// Hand the complete description back so the same helpers are selected and also get the attributes they attached to the credentials (expiration date, refresh token, their own state...)
 - (BOOL)_reportCredentialsWithDescription:(NSString*)description command:(NSString*)command error:(NSError**)error {
   NSString* string = [description stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
   if (!string.length || ([string rangeOfString:@"\0"].location != NSNotFound)) {

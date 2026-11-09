@@ -226,6 +226,25 @@ static NSUInteger _CountOccurrences(NSString* string, NSString* substring) {
   XCTAssertTrue([log hasPrefix:@"[erase] interactive=never\nprotocol=https\nhost=example.invalid\nusername=bot\npassword=s3cret\n"], @"%@", log);
   XCTAssertEqual([log containsString:@"password_expiry_utc=4102444800\n"], hasExpiry);
 
+  // A helper configured for a URL path only is told about the outcome too, although Git's answer doesn't include the path
+  XCTAssertNotNil(([self runGitCLTWithRepository:repository command:@"config", @"--unset-all", @"credential.helper", nil]));
+  XCTAssertNotNil(([self runGitCLTWithRepository:repository command:@"config", @"--add", @"credential.helper", @"", nil]));
+  NSString* helperPath = [helperDirectory stringByAppendingPathComponent:@"helper"];
+  XCTAssertNotNil(([self runGitCLTWithRepository:repository command:@"config", @"credential.https://example.invalid/scoped/repo.git.helper", helperPath, nil]));
+  XCTAssertFalse([repository fillCredentialsForURL:url user:nil allowInteraction:NO username:&username password:&password description:&description error:&error]);  // Other path
+  XCTAssertNil([self _takeCredentialHelperLog:helperDirectory]);
+  NSURL* scopedURL = [NSURL URLWithString:@"https://example.invalid/scoped/repo.git"];
+  XCTAssertTrue([repository fillCredentialsForURL:scopedURL user:nil allowInteraction:NO username:&username password:&password description:&description error:&error]);
+  XCTAssertEqualObjects(username, @"bot");
+  XCTAssertFalse([description containsString:@"path="]);
+  XCTAssertEqual(_CountOccurrences([self _takeCredentialHelperLog:helperDirectory], @"[get]"), 1);
+  XCTAssertTrue([repository approveCredentialsWithDescription:description error:&error]);
+  log = [self _takeCredentialHelperLog:helperDirectory];
+  XCTAssertTrue([log hasPrefix:@"[store] interactive=never\nprotocol=https\nhost=example.invalid\nusername=bot\npassword=s3cret\n"], @"%@", log);
+  XCTAssertTrue([repository rejectCredentialsWithDescription:description error:&error]);
+  log = [self _takeCredentialHelperLog:helperDirectory];
+  XCTAssertTrue([log hasPrefix:@"[erase] interactive=never\nprotocol=https\nhost=example.invalid\nusername=bot\npassword=s3cret\n"], @"%@", log);
+
   XCTAssertTrue([[NSFileManager defaultManager] removeItemAtPath:helperDirectory error:NULL]);
   [self destroyLocalRepository:repository];
 }

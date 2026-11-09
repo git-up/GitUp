@@ -93,8 +93,8 @@ typedef NS_ENUM(NSUInteger, GCCredentialHelperMode) {
 - (BOOL)runHookWithName:(NSString*)name arguments:(NSArray*)arguments standardInput:(NSString*)standardInput error:(NSError**)error;  // Silently ignores non-existing hooks
 
 // Git credential helpers as configured through "credential.helper" - See git-credential(1)
-// The "description" returned along with the credentials is Git's complete answer, which may carry more than the username and password (e.g. an expiration date or a refresh token):
-// it must be handed back unchanged once it's known whether the credentials work so the helpers can store or discard them
+// The "description" returned along with the credentials is the URL they are for followed by Git's complete answer, which may carry more than the username and password
+// (e.g. an expiration date or a refresh token): it must be handed back unchanged once it's known whether the credentials work so the same helpers can store or discard them
 - (BOOL)fillCredentialsForURL:(NSURL*)url user:(NSString*)user allowInteraction:(BOOL)allowInteraction username:(NSString**)username password:(NSString**)password description:(NSString**)description error:(NSError**)error;  // "git credential fill" - Returns NO if no helper provided credentials
 - (BOOL)approveCredentialsWithDescription:(NSString*)description error:(NSError**)error;  // "git credential approve" - The credentials were accepted
 - (BOOL)rejectCredentialsWithDescription:(NSString*)description error:(NSError**)error;  // "git credential reject" - The credentials were refused
