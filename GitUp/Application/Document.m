@@ -231,6 +231,7 @@ static void _CheckTimerCallBack(CFRunLoopTimerRef timer, void* info) {
       }
 #endif
       _repository.delegate = self;
+      _repository.credentialHelperMode = kGCCredentialHelperMode_Interactive;  // Consult the Git credential helpers (e.g. gh, osxkeychain, Git Credential Manager) before the Keychain and the login dialog
       _repository.undoManager = self.undoManager;
       _repository.snapshotsEnabled = YES;
       if ([NSApp isActive]) {
@@ -1925,6 +1926,7 @@ static NSString* _StringFromRepositoryState(GCRepositoryState state) {
       NSMutableDictionary* updatedReferences = [[NSMutableDictionary alloc] init];
       GCRepository* repository = [[GCRepository alloc] initWithExistingLocalRepository:path error:NULL];
       repository.delegate = (id<GCRepositoryDelegate>)self.class;  // Don't use self as we don't want to show progress UI nor authentication prompts
+      repository.credentialHelperMode = kGCCredentialHelperMode_NonInteractive;  // Same for Git credential helpers: they may not prompt during an automatic check
       for (GCRemote* remote in [repository listRemotes:NULL]) {
         @autoreleasepool {
           NSDictionary* added;

@@ -20,6 +20,7 @@
 #import <TargetConditionals.h>
 #import <pthread.h>
 #if !TARGET_OS_IPHONE
+#import <CommonCrypto/CommonDigest.h>
 #import <git2/sys/filter.h>
 #import <sys/stat.h>
 #endif
@@ -102,6 +103,9 @@ static int _GitLFSApply(git_filter* self, void** payload, git_buf* to, const git
   BOOL _didTrySSHAgent;
   NSMutableArray* _privateKeyList;
   NSUInteger _privateKeyIndex;
+  BOOL _didTryCredentialHelpers;
+  BOOL _didAskDelegateForCredentials;
+  NSString* _helperCredentials;  // Description of the credentials obtained from the Git credential helpers while they are in use for the current transfer
 #endif
 
   BOOL _hasFetchProgressDelegate;
@@ -376,14 +380,27 @@ static int _ReferenceForEachCallback(const char* refname, void* payload) {
   return [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
 }
 
+// Resolve the user's PATH through their login shell so that tools installed outside /usr/bin are found
+- (NSString*)getUserPATH:(NSError**)error {
+  return [self getPATHUsingShell:NSProcessInfo.processInfo.environment[@"SHELL"] error:error] ?: [self getPATHUsingShell:@"/bin/sh" error:error];
+}
+
+// Same but resolved only once per process
+- (NSString*)_cachedUserPATH:(NSError**)error {
+  static NSString* cachedPATH = nil;
+  @synchronized([GCRepository class]) {
+    if (cachedPATH == nil) {
+      cachedPATH = [self getUserPATH:error];
+      XLOG_DEBUG_CHECK(cachedPATH);
+    }
+    return cachedPATH;
+  }
+}
+
 - (BOOL)runHookWithName:(NSString*)name arguments:(NSArray*)arguments standardInput:(NSString*)standardInput error:(NSError**)error {
   NSString* path = [self pathForHookWithName:name];
   if (path) {
-    static NSString* cachedPATH = nil;
-    if (cachedPATH == nil) {
-      cachedPATH = [self getPATHUsingShell:NSProcessInfo.processInfo.environment[@"SHELL"] error:error] ?: [self getPATHUsingShell:@"/bin/sh" error:error];
-      XLOG_DEBUG_CHECK(cachedPATH);
-    }
+    NSString* cachedPATH = [self _cachedUserPATH:error];
 
     CFAbsoluteTime time = CFAbsoluteTimeGetCurrent();
     GCTask* task = [[GCTask alloc] initWithExecutablePath:path];
@@ -412,6 +429,202 @@ static int _ReferenceForEachCallback(const char* refname, void* payload) {
     }
   }
   return YES;
+}
+
+#pragma mark - Credential Helpers
+
+static BOOL _AppendCredentialAttribute(NSMutableString* string, NSString* key, NSString* value) {
+  if (value == nil) {
+    return YES;  // Nothing to add (an empty value is a legitimate attribute though)
+  }
+  if ([value rangeOfCharacterFromSet:[NSCharacterSet characterSetWithCharactersInString:@"\n\0"]].location != NSNotFound) {
+    return NO;  // Attribute values can't contain newlines or NULs
+  }
+  [string appendFormat:@"%@=%@\n", key, value];
+  return YES;
+}
+
+// The "url" attribute of a credential description in the format expected by "git credential" - See git-credential(1) "INPUT/OUTPUT FORMAT"
+static NSString* _CredentialURLAttribute(NSURL* url) {
+  if (!url.scheme.length || !url.host.length) {
+    return nil;  // Not something credentials can be looked up for - Also covers nil, which NSURLComponents refuses with an exception
+  }
+  NSURLComponents* components = [NSURLComponents componentsWithURL:url resolvingAgainstBaseURL:NO];
+  components.user = nil;  // Passed separately as "username"
+  components.password = nil;
+  components.query = nil;
+  components.fragment = nil;
+  NSString* urlString = components.URL.absoluteString;
+  NSMutableString* string = [[NSMutableString alloc] init];
+  if (!urlString.length || !_AppendCredentialAttribute(string, @"url", urlString)) {
+    return nil;
+  }
+  return string;
+}
+
+- (BOOL)_runCredentialCommand:(NSString*)command input:(NSData*)input allowInteraction:(BOOL)allowInteraction output:(NSData**)output error:(NSError**)error {
+  NSString* path = [self _cachedUserPATH:NULL] ?: NSProcessInfo.processInfo.environment[@"PATH"];
+  if (!path.length) {
+    path = @"/usr/bin:/bin:/usr/sbin:/sbin";
+  }
+
+  CFAbsoluteTime time = CFAbsoluteTimeGetCurrent();
+  GCTask* task = [[GCTask alloc] initWithExecutablePath:@"/usr/bin/env"];  // Use the user's "git" rather than hardcoding /usr/bin/git
+  task.currentDirectoryPath = self.workingDirectoryPath ?: self.repositoryPath;  // So that repository-local configuration applies
+  NSMutableDictionary* environment = [[NSMutableDictionary alloc] init];
+  environment[@"PATH"] = path;
+  // Git itself must never prompt, neither on a terminal that doesn't exist nor through an askpass program: the delegate is there for that
+  environment[@"GIT_TERMINAL_PROMPT"] = @"0";
+  environment[@"GIT_ASKPASS"] = @"/usr/bin/false";  // Takes precedence over "core.askPass" and SSH_ASKPASS
+  if (allowInteraction) {
+    task.executionTimeOut = 120.0;  // Helpers may legitimately prompt the user (e.g. Git Credential Manager), but never hang forever
+  } else {
+    // Also tell helpers that have their own UI to stay quiet
+    environment[@"GCM_INTERACTIVE"] = @"never";  // Git Credential Manager
+    environment[@"GIT_CONFIG_COUNT"] = @"1";  // Equivalent of "-c credential.interactive=false", also seen by helpers that read Git configuration
+    environment[@"GIT_CONFIG_KEY_0"] = @"credential.interactive";
+    environment[@"GIT_CONFIG_VALUE_0"] = @"false";
+    task.executionTimeOut = 30.0;
+  }
+  task.additionalEnvironment = environment;
+  int status;
+  NSData* stdoutData = nil;
+  NSData* stderrData = nil;
+  // Only capture the output when it matters: a helper leaving a background process behind (which can happen when storing) would keep these pipes open and stall the task until it times out
+  if (![task runWithArguments:@[ @"git", @"credential", command ] stdin:input stdout:(output ? &stdoutData : NULL) stderr:(output ? &stderrData : NULL) exitStatus:&status error:error]) {
+    return NO;
+  }
+  XLOG_VERBOSE(@"Executed 'git credential %@' in %.3f seconds", command, CFAbsoluteTimeGetCurrent() - time);
+  if (task.timedOut) {
+    GC_SET_GENERIC_ERROR(@"'git credential %@' timed out", command);
+    return NO;
+  }
+  if (status != 0) {
+    if (error) {
+      *error = GCNewErrorFromTaskFailure([NSString stringWithFormat:@"'git credential %@'", command], status, stdoutData, stderrData);
+    }
+    return NO;
+  }
+  if (output) {
+    *output = stdoutData;
+  }
+  return YES;
+}
+
+- (BOOL)fillCredentialsForURL:(NSURL*)url user:(NSString*)user allowInteraction:(BOOL)allowInteraction username:(NSString**)username password:(NSString**)password description:(NSString**)description error:(NSError**)error {
+  NSString* urlAttribute = _CredentialURLAttribute(url);
+  NSMutableString* query = [urlAttribute mutableCopy];
+  if ((query == nil) || !_AppendCredentialAttribute(query, @"username", (user.length ? user : url.user))) {
+    GC_SET_GENERIC_ERROR(@"Unable to describe credentials for \"%@\"", url);
+    return NO;
+  }
+  [query appendString:@"\n"];  // Blank line terminates the description
+  NSData* output;
+  if (![self _runCredentialCommand:@"fill" input:[query dataUsingEncoding:NSUTF8StringEncoding] allowInteraction:allowInteraction output:&output error:error]) {
+    return NO;
+  }
+  NSString* string = [[NSString alloc] initWithData:output encoding:NSUTF8StringEncoding];
+  NSString* outUsername = nil;
+  NSString* outPassword = nil;
+  for (NSString* line in [string componentsSeparatedByString:@"\n"]) {
+    NSRange range = [line rangeOfString:@"="];
+    if (range.location == NSNotFound) {
+      continue;
+    }
+    NSString* key = [line substringToIndex:range.location];
+    NSString* value = [line substringFromIndex:(range.location + 1)];
+    if ([key isEqualToString:@"username"]) {
+      outUsername = value;
+    } else if ([key isEqualToString:@"password"]) {
+      outPassword = value;
+    }
+  }
+  if ((outUsername == nil) || (outPassword == nil)) {  // Empty values are legitimate (e.g. a token passed as the username with an empty password)
+    GC_SET_GENERIC_ERROR(@"No credential helper provided credentials for \"%@\"", url);
+    return NO;
+  }
+  XLOG_VERBOSE(@"Obtained credentials for \"%@\" from Git credential helper", url);
+  if (username) {
+    *username = outUsername;
+  }
+  if (password) {
+    *password = outPassword;
+  }
+  if (description) {
+    // Keep the URL in front of Git's answer, whose attributes then take precedence: unless "credential.useHttpPath" is set the answer has no path anymore,
+    // but Git needs it again to find the helpers configured for that path when the outcome is reported
+    *description = [urlAttribute stringByAppendingString:string];
+  }
+  return YES;
+}
+
+// Hand the complete description back so the same helpers are selected and also get the attributes they attached to the credentials (expiration date, refresh token, their own state...)
+- (BOOL)_reportCredentialsWithDescription:(NSString*)description command:(NSString*)command error:(NSError**)error {
+  NSString* string = [description stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
+  if (!string.length || ([string rangeOfString:@"\0"].location != NSNotFound)) {
+    GC_SET_GENERIC_ERROR(@"Invalid credentials description");
+    return NO;
+  }
+  NSData* input = [[string stringByAppendingString:@"\n\n"] dataUsingEncoding:NSUTF8StringEncoding];  // Blank line terminates the description
+  return [self _runCredentialCommand:command input:input allowInteraction:NO output:NULL error:error];
+}
+
+- (BOOL)approveCredentialsWithDescription:(NSString*)description error:(NSError**)error {
+  return [self _reportCredentialsWithDescription:description command:@"approve" error:error];
+}
+
+- (BOOL)rejectCredentialsWithDescription:(NSString*)description error:(NSError**)error {
+  return [self _reportCredentialsWithDescription:description command:@"reject" error:error];
+}
+
+// Remember (by digest, not to keep secrets around) which credentials the helpers were already told are good.
+// Git approves after every successful operation and so do transfers initiated by the user, which also keeps helpers like "cache" from expiring credentials still in use,
+// but automatic transfers would start Git and every helper again after each check just to repeat it.
+static NSMutableSet* _ApprovedCredentialDigests(void) {
+  static NSMutableSet* set = nil;
+  static dispatch_once_t once;
+  dispatch_once(&once, ^{
+    set = [[NSMutableSet alloc] init];
+  });
+  return set;
+}
+
+static NSData* _CredentialsDigest(NSString* description) {
+  NSData* data = [description dataUsingEncoding:NSUTF8StringEncoding];
+  unsigned char digest[CC_SHA256_DIGEST_LENGTH];
+  CC_SHA256(data.bytes, (CC_LONG)data.length, digest);
+  return [NSData dataWithBytes:digest length:sizeof(digest)];
+}
+
+- (void)_approveHelperCredentials {
+  NSMutableSet* digests = _ApprovedCredentialDigests();
+  NSData* digest = _CredentialsDigest(_helperCredentials);
+  if (_credentialHelperMode == kGCCredentialHelperMode_NonInteractive) {
+    @synchronized(digests) {
+      if ([digests containsObject:digest]) {
+        return;
+      }
+    }
+  }
+  NSError* error;
+  if ([self approveCredentialsWithDescription:_helperCredentials error:&error]) {
+    @synchronized(digests) {
+      [digests addObject:digest];
+    }
+  } else {
+    XLOG_WARNING(@"Failed approving credentials with Git credential helpers: %@", error.localizedDescription);
+  }
+}
+
+- (void)_rejectHelperCredentials {
+  NSMutableSet* digests = _ApprovedCredentialDigests();
+  @synchronized(digests) {
+    [digests removeObject:_CredentialsDigest(_helperCredentials)];
+  }
+  NSError* error;
+  if (![self rejectCredentialsWithDescription:_helperCredentials error:&error]) {
+    XLOG_WARNING(@"Failed rejecting credentials with Git credential helpers: %@", error.localizedDescription);
+  }
 }
 
 #endif
@@ -461,6 +674,11 @@ static int _ReferenceForEachCallback(const char* refname, void* payload) {
 
 #pragma mark Remote Callbacks
 
+- (void)inheritRemoteSettingsFromRepository:(GCRepository*)repository {
+  self.delegate = repository.delegate;
+  self.credentialHelperMode = repository.credentialHelperMode;
+}
+
 - (void)willStartRemoteTransferWithURL:(NSURL*)url {
   if ([_delegate respondsToSelector:@selector(repository:willStartTransferWithURL:)]) {
     if ([NSThread isMainThread]) {
@@ -474,6 +692,14 @@ static int _ReferenceForEachCallback(const char* refname, void* payload) {
 }
 
 - (void)didFinishRemoteTransferWithURL:(NSURL*)url success:(BOOL)success {
+#if !TARGET_OS_IPHONE
+  if (_helperCredentials) {
+    if (success) {  // Let the helpers store the credentials like Git does - On failure Git only rejects credentials the server refused, which is handled when libgit2 asks for credentials again
+      [self _approveHelperCredentials];
+    }
+    _helperCredentials = nil;
+  }
+#endif
   if ([_delegate respondsToSelector:@selector(repository:didFinishTransferWithURL:success:)]) {
     if ([NSThread isMainThread]) {
       [_delegate repository:self didFinishTransferWithURL:url success:success];
@@ -484,6 +710,42 @@ static int _ReferenceForEachCallback(const char* refname, void* payload) {
     }
   }
 }
+
+#if !TARGET_OS_IPHONE
+
+// Ask the Git credential helpers, once per transfer - Runs on the transfer thread so the UI stays responsive while helpers work
+static BOOL _FillCredentialsUsingHelpers(GCRepository* repository, git_cred** cred, const char* url, const char* user) {
+  if ((repository.credentialHelperMode == kGCCredentialHelperMode_Disabled) || repository->_didTryCredentialHelpers) {
+    return NO;
+  }
+  NSURL* helperURL = url ? GCURLFromGitURL([NSString stringWithUTF8String:url]) : nil;
+  NSString* scheme = helperURL.scheme.lowercaseString;
+  if (![scheme isEqualToString:@"https"] && ![scheme isEqualToString:@"http"]) {
+    return NO;  // Like Git, don't involve the helpers in anything else e.g. password authentication over SSH - Also covers URLs that can't be parsed
+  }
+  repository->_didTryCredentialHelpers = YES;
+  NSString* username = nil;
+  NSString* password = nil;
+  NSString* description = nil;
+  NSError* error;
+  if (![repository fillCredentialsForURL:helperURL
+                                    user:(user ? [NSString stringWithUTF8String:user] : nil)
+                        allowInteraction:(repository.credentialHelperMode == kGCCredentialHelperMode_Interactive)
+                                username:&username
+                                password:&password
+                             description:&description
+                                   error:&error]) {
+    XLOG_VERBOSE(@"Git credential helpers did not provide credentials for \"%s\": %@", url, error.localizedDescription);
+    return NO;
+  }
+  if (git_cred_userpass_plaintext_new(cred, username.UTF8String, password.UTF8String) != GIT_OK) {
+    return NO;
+  }
+  repository->_helperCredentials = description;
+  return YES;
+}
+
+#endif
 
 static int _CredentialsCallback(git_cred** cred, const char* url, const char* user, unsigned int allowed_types, void* payload) {
   GCRepository* repository = (__bridge GCRepository*)payload;
@@ -556,7 +818,20 @@ static int _CredentialsCallback(git_cred** cred, const char* url, const char* us
     }
   }
   if (allowed_types & GIT_CREDTYPE_USERPASS_PLAINTEXT) {
-    if ([repository.delegate respondsToSelector:@selector(repository:requiresPlainTextAuthenticationForURL:user:username:password:)]) {  // Must use sync dispatch
+    BOOL hasDelegate = [repository.delegate respondsToSelector:@selector(repository:requiresPlainTextAuthenticationForURL:user:username:password:)];
+#if !TARGET_OS_IPHONE
+    if (repository->_helperCredentials) {  // Being asked again means the server refused what the helpers provided: tell them and move on
+      [repository _rejectHelperCredentials];
+      repository->_helperCredentials = nil;
+    }
+    // Helpers go first for transfers initiated by the user. Automatic ones ask the delegate first: a helper reading a Keychain item it didn't create
+    // (e.g. "osxkeychain" with a password saved by the application) makes macOS prompt the user, which nothing here can prevent.
+    BOOL helpersFirst = (repository.credentialHelperMode == kGCCredentialHelperMode_Interactive) || !hasDelegate || repository->_didAskDelegateForCredentials;
+    if (helpersFirst && _FillCredentialsUsingHelpers(repository, cred, url, user)) {
+      return GIT_OK;
+    }
+#endif
+    if (hasDelegate) {  // Must use sync dispatch
       __block NSString* username = nil;
       __block NSString* password = nil;
       __block BOOL success;
@@ -575,9 +850,17 @@ static int _CredentialsCallback(git_cred** cred, const char* url, const char* us
                                            password:&password];
         });
       }
+#if !TARGET_OS_IPHONE
+      repository->_didAskDelegateForCredentials = YES;
+#endif
       if (success) {
         return git_cred_userpass_plaintext_new(cred, username.UTF8String, password.UTF8String);
       }
+#if !TARGET_OS_IPHONE
+      if (_FillCredentialsUsingHelpers(repository, cred, url, user)) {  // Does nothing if the helpers were already asked
+        return GIT_OK;
+      }
+#endif
       return GIT_EUSER;
     }
   }
@@ -715,6 +998,9 @@ static int _PushNegotiationCallback(git_remote* remote, const git_push_update** 
   _didTrySSHAgent = NO;
   _privateKeyList = nil;
   _privateKeyIndex = 0;
+  _didTryCredentialHelpers = NO;
+  _didAskDelegateForCredentials = NO;
+  _helperCredentials = nil;
 #endif
 
   _hasFetchProgressDelegate = [_delegate respondsToSelector:@selector(repository:updateTransferProgress:transferredBytes:)];

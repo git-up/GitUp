@@ -19,6 +19,28 @@
 
 #import "GCTestCase.h"
 
+#import <git2/sys/credential.h>
+
+// Stands in for the application: counts the requests for credentials and answers with fixed ones, or declines
+@interface GCCredentialsTestDelegate : NSObject <GCRepositoryDelegate>
+@property(nonatomic) BOOL providesCredentials;
+@property(nonatomic) NSUInteger requestCount;
+@end
+
+@implementation GCCredentialsTestDelegate
+
+- (BOOL)repository:(GCRepository*)repository requiresPlainTextAuthenticationForURL:(NSURL*)url user:(NSString*)user username:(NSString**)username password:(NSString**)password {
+  _requestCount += 1;
+  if (!_providesCredentials) {
+    return NO;
+  }
+  *username = @"delegate";
+  *password = @"dialog";
+  return YES;
+}
+
+@end
+
 @implementation GCTests (GCRepository)
 
 - (void)testPrecompose {
@@ -103,6 +125,332 @@
 
   // Test re-initializing
   XCTAssertFalse([[GCRepository alloc] initWithNewLocalRepository:self.repository.workingDirectoryPath bare:NO error:NULL]);
+}
+
+// Installs a fake credential helper that logs every request it gets and answers "get" ones - Returns the directory holding the helper and its "log"
+- (NSString*)_installCredentialHelperInRepository:(GCRepository*)repository {
+  NSString* directory = [NSTemporaryDirectory() stringByAppendingPathComponent:[[NSProcessInfo processInfo] globallyUniqueString]];
+  XCTAssertTrue([[NSFileManager defaultManager] createDirectoryAtPath:directory withIntermediateDirectories:YES attributes:nil error:NULL]);
+  NSString* logPath = [directory stringByAppendingPathComponent:@"log"];
+  NSString* helperPath = [directory stringByAppendingPathComponent:@"helper"];
+  NSString* helperScript = [NSString stringWithFormat:@"#!/bin/sh\n"
+                                                       "echo \"[$1] interactive=${GCM_INTERACTIVE:-default}\" >> \"%@\"\n"
+                                                       "cat >> \"%@\"\n"
+                                                       "if [ \"$1\" = \"get\" ]; then\n"
+                                                       "  printf 'username=bot\\npassword=s3cret\\npassword_expiry_utc=4102444800\\n'\n"
+                                                       "fi\n",
+                                                      logPath, logPath];
+  XCTAssertTrue([helperScript writeToFile:helperPath atomically:YES encoding:NSUTF8StringEncoding error:NULL]);
+  XCTAssertTrue([[NSFileManager defaultManager] setAttributes:@{NSFilePosixPermissions : @(0755)} ofItemAtPath:helperPath error:NULL]);
+
+  // Isolate from the developer's own configuration: reset inherited helpers, never send "path=" nor use an askpass program
+  // Note: git only runs helpers as "git credential-<name>" unless given an absolute path or a "!" command
+  XCTAssertNotNil(([self runGitCLTWithRepository:repository command:@"config", @"--add", @"credential.helper", @"", nil]));  // Commas must be shielded from the macro
+  XCTAssertNotNil(([self runGitCLTWithRepository:repository command:@"config", @"--add", @"credential.helper", helperPath, nil]));
+  XCTAssertNotNil(([self runGitCLTWithRepository:repository command:@"config", @"credential.useHttpPath", @"false", nil]));
+  return directory;
+}
+
+// Returns what the fake credential helper logged since the last call, or nil if it wasn't run
+- (NSString*)_takeCredentialHelperLog:(NSString*)directory {
+  NSString* logPath = [directory stringByAppendingPathComponent:@"log"];
+  NSString* log = [NSString stringWithContentsOfFile:logPath encoding:NSUTF8StringEncoding error:NULL];
+  [[NSFileManager defaultManager] removeItemAtPath:logPath error:NULL];
+  return log;
+}
+
+static NSUInteger _CountOccurrences(NSString* string, NSString* substring) {
+  return string ? [string componentsSeparatedByString:substring].count - 1 : 0;
+}
+
+- (void)testCredentialHelpers {
+  NSString* path = [NSTemporaryDirectory() stringByAppendingPathComponent:[[NSProcessInfo processInfo] globallyUniqueString]];
+  GCRepository* repository = [self createLocalRepositoryAtPath:path bare:NO];
+
+  // No helper configured: no credentials
+  XCTAssertNotNil(([self runGitCLTWithRepository:repository command:@"config", @"--add", @"credential.helper", @"", nil]));
+  NSURL* url = [NSURL URLWithString:@"https://example.invalid/some/repo.git"];
+  NSString* username = nil;
+  NSString* password = nil;
+  NSString* description = nil;
+  NSError* error = nil;
+  XCTAssertFalse([repository fillCredentialsForURL:url user:nil allowInteraction:NO username:&username password:&password description:&description error:&error]);
+  XCTAssertNotNil(error);
+  XCTAssertNil(username);
+  XCTAssertNil(password);
+  XCTAssertNil(description);
+
+  // ...and Git must not fall back to asking by itself through an askpass program, even when the helpers are allowed to interact
+  NSString* askpassDirectory = [NSTemporaryDirectory() stringByAppendingPathComponent:[[NSProcessInfo processInfo] globallyUniqueString]];
+  XCTAssertTrue([[NSFileManager defaultManager] createDirectoryAtPath:askpassDirectory withIntermediateDirectories:YES attributes:nil error:NULL]);
+  NSString* askpassPath = [askpassDirectory stringByAppendingPathComponent:@"askpass"];
+  NSString* askpassMarkerPath = [askpassDirectory stringByAppendingPathComponent:@"asked"];
+  NSString* askpassScript = [NSString stringWithFormat:@"#!/bin/sh\ntouch \"%@\"\necho answer\n", askpassMarkerPath];
+  XCTAssertTrue([askpassScript writeToFile:askpassPath atomically:YES encoding:NSUTF8StringEncoding error:NULL]);
+  XCTAssertTrue([[NSFileManager defaultManager] setAttributes:@{NSFilePosixPermissions : @(0755)} ofItemAtPath:askpassPath error:NULL]);
+  XCTAssertNotNil(([self runGitCLTWithRepository:repository command:@"config", @"core.askPass", askpassPath, nil]));
+  XCTAssertFalse([repository fillCredentialsForURL:url user:nil allowInteraction:YES username:&username password:&password description:&description error:&error]);
+  XCTAssertFalse([repository fillCredentialsForURL:url user:nil allowInteraction:NO username:&username password:&password description:&description error:&error]);
+  XCTAssertFalse([[NSFileManager defaultManager] fileExistsAtPath:askpassMarkerPath]);
+  XCTAssertTrue([[NSFileManager defaultManager] removeItemAtPath:askpassDirectory error:NULL]);
+
+  // URLs credentials can't be described for are refused instead of raising
+  NSURL* nilURL = nil;
+  XCTAssertFalse([repository fillCredentialsForURL:nilURL user:nil allowInteraction:NO username:&username password:&password description:&description error:&error]);
+  XCTAssertFalse([repository fillCredentialsForURL:[NSURL fileURLWithPath:@"/some/repo.git"] user:nil allowInteraction:NO username:&username password:&password description:&description error:&error]);
+  XCTAssertFalse([repository approveCredentialsWithDescription:@"" error:&error]);
+
+  // Fake helper configured: fill in both modes
+  NSString* helperDirectory = [self _installCredentialHelperInRepository:repository];
+  XCTAssertTrue([repository fillCredentialsForURL:url user:@"hint" allowInteraction:NO username:&username password:&password description:&description error:&error]);
+  XCTAssertEqualObjects(username, @"bot");
+  XCTAssertEqualObjects(password, @"s3cret");
+  XCTAssertTrue([description containsString:@"host=example.invalid\n"]);
+  XCTAssertTrue([description containsString:@"password=s3cret\n"]);
+  NSString* log = [self _takeCredentialHelperLog:helperDirectory];
+  XCTAssertEqualObjects(log, @"[get] interactive=never\nprotocol=https\nhost=example.invalid\nusername=hint\n");  // Told not to prompt, and no "path=" as credential.useHttpPath is off
+  XCTAssertTrue([repository fillCredentialsForURL:url user:@"hint" allowInteraction:YES username:&username password:&password description:&description error:&error]);
+  XCTAssertEqualObjects(username, @"bot");
+  XCTAssertEqualObjects(password, @"s3cret");
+  log = [self _takeCredentialHelperLog:helperDirectory];
+  XCTAssertEqualObjects(log, @"[get] interactive=default\nprotocol=https\nhost=example.invalid\nusername=hint\n");
+
+  // Approve and reject hand the complete description back, including attributes other than the username and password
+  BOOL hasExpiry = [description containsString:@"password_expiry_utc=4102444800\n"];  // Only passed along by Git 2.40 and later
+  XCTAssertTrue([repository approveCredentialsWithDescription:description error:&error]);
+  log = [self _takeCredentialHelperLog:helperDirectory];
+  XCTAssertTrue([log hasPrefix:@"[store] interactive=never\nprotocol=https\nhost=example.invalid\nusername=bot\npassword=s3cret\n"], @"%@", log);
+  XCTAssertEqual([log containsString:@"password_expiry_utc=4102444800\n"], hasExpiry);
+  XCTAssertTrue([repository rejectCredentialsWithDescription:description error:&error]);
+  log = [self _takeCredentialHelperLog:helperDirectory];
+  XCTAssertTrue([log hasPrefix:@"[erase] interactive=never\nprotocol=https\nhost=example.invalid\nusername=bot\npassword=s3cret\n"], @"%@", log);
+  XCTAssertEqual([log containsString:@"password_expiry_utc=4102444800\n"], hasExpiry);
+
+  // A helper configured for a URL path only is told about the outcome too, although Git's answer doesn't include the path
+  XCTAssertNotNil(([self runGitCLTWithRepository:repository command:@"config", @"--unset-all", @"credential.helper", nil]));
+  XCTAssertNotNil(([self runGitCLTWithRepository:repository command:@"config", @"--add", @"credential.helper", @"", nil]));
+  NSString* helperPath = [helperDirectory stringByAppendingPathComponent:@"helper"];
+  XCTAssertNotNil(([self runGitCLTWithRepository:repository command:@"config", @"credential.https://example.invalid/scoped/repo.git.helper", helperPath, nil]));
+  XCTAssertFalse([repository fillCredentialsForURL:url user:nil allowInteraction:NO username:&username password:&password description:&description error:&error]);  // Other path
+  XCTAssertNil([self _takeCredentialHelperLog:helperDirectory]);
+  NSURL* scopedURL = [NSURL URLWithString:@"https://example.invalid/scoped/repo.git"];
+  XCTAssertTrue([repository fillCredentialsForURL:scopedURL user:nil allowInteraction:NO username:&username password:&password description:&description error:&error]);
+  XCTAssertEqualObjects(username, @"bot");
+  XCTAssertFalse([description containsString:@"path="]);
+  XCTAssertEqual(_CountOccurrences([self _takeCredentialHelperLog:helperDirectory], @"[get]"), 1);
+  XCTAssertTrue([repository approveCredentialsWithDescription:description error:&error]);
+  log = [self _takeCredentialHelperLog:helperDirectory];
+  XCTAssertTrue([log hasPrefix:@"[store] interactive=never\nprotocol=https\nhost=example.invalid\nusername=bot\npassword=s3cret\n"], @"%@", log);
+  XCTAssertTrue([repository rejectCredentialsWithDescription:description error:&error]);
+  log = [self _takeCredentialHelperLog:helperDirectory];
+  XCTAssertTrue([log hasPrefix:@"[erase] interactive=never\nprotocol=https\nhost=example.invalid\nusername=bot\npassword=s3cret\n"], @"%@", log);
+
+  XCTAssertTrue([[NSFileManager defaultManager] removeItemAtPath:helperDirectory error:NULL]);
+  [self destroyLocalRepository:repository];
+}
+
+// Ask for credentials the way libgit2 does during a transfer
+- (int)_requestCredentialsForURL:(NSString*)url withCallbacks:(git_remote_callbacks*)callbacks username:(NSString**)username password:(NSString**)password {
+  git_credential* credential = NULL;
+  int status = callbacks->credentials(&credential, url.UTF8String, NULL, GIT_CREDENTIAL_USERPASS_PLAINTEXT, callbacks->payload);
+  *username = nil;
+  *password = nil;
+  if (status == GIT_OK) {
+    git_credential_userpass_plaintext* plaintext = (git_credential_userpass_plaintext*)credential;
+    *username = [NSString stringWithUTF8String:plaintext->username];
+    *password = [NSString stringWithUTF8String:plaintext->password];
+    git_credential_free(credential);
+  }
+  return status;
+}
+
+- (void)testCredentialHelpersDuringTransfers {
+  NSString* path = [NSTemporaryDirectory() stringByAppendingPathComponent:[[NSProcessInfo processInfo] globallyUniqueString]];
+  GCRepository* repository = [self createLocalRepositoryAtPath:path bare:NO];
+  NSString* helperDirectory = [self _installCredentialHelperInRepository:repository];
+  GCCredentialsTestDelegate* delegate = [[GCCredentialsTestDelegate alloc] init];
+  delegate.providesCredentials = YES;
+  repository.delegate = delegate;
+  // Unique hosts as the credentials approved so far are remembered for the lifetime of the process
+  NSString* unique = [[NSUUID UUID].UUIDString lowercaseString];
+  NSString* url = [NSString stringWithFormat:@"https://%@.example.invalid/some/repo.git", unique];
+  NSString* automaticURL = [NSString stringWithFormat:@"https://automatic-%@.example.invalid/some/repo.git", unique];
+  git_remote_callbacks callbacks = GIT_REMOTE_CALLBACKS_INIT;
+  NSString* username;
+  NSString* password;
+  NSString* log;
+
+  // Disabled, which is the default: only the delegate is asked
+  XCTAssertEqual(repository.credentialHelperMode, kGCCredentialHelperMode_Disabled);
+  [repository setRemoteCallbacks:&callbacks];
+  XCTAssertEqual([self _requestCredentialsForURL:url withCallbacks:&callbacks username:&username password:&password], GIT_OK);
+  XCTAssertEqualObjects(username, @"delegate");
+  XCTAssertEqualObjects(password, @"dialog");
+  XCTAssertEqual(delegate.requestCount, 1);
+  [repository didFinishRemoteTransferWithURL:nil success:YES];
+  XCTAssertNil([self _takeCredentialHelperLog:helperDirectory]);
+
+  // Interactive: the helpers are asked first and their credentials approved once the transfer succeeds
+  repository.credentialHelperMode = kGCCredentialHelperMode_Interactive;
+  [repository setRemoteCallbacks:&callbacks];
+  XCTAssertEqual([self _requestCredentialsForURL:url withCallbacks:&callbacks username:&username password:&password], GIT_OK);
+  XCTAssertEqualObjects(username, @"bot");
+  XCTAssertEqualObjects(password, @"s3cret");
+  XCTAssertEqual(delegate.requestCount, 1);
+  [repository didFinishRemoteTransferWithURL:nil success:YES];
+  log = [self _takeCredentialHelperLog:helperDirectory];
+  XCTAssertEqual(_CountOccurrences(log, @"[get] interactive=default\n"), 1);
+  XCTAssertEqual(_CountOccurrences(log, @"[store]"), 1);
+  XCTAssertEqual(_CountOccurrences(log, @"[erase]"), 0);
+
+  // ...and approved again after each successful transfer, like Git does
+  [repository setRemoteCallbacks:&callbacks];
+  XCTAssertEqual([self _requestCredentialsForURL:url withCallbacks:&callbacks username:&username password:&password], GIT_OK);
+  [repository didFinishRemoteTransferWithURL:nil success:YES];
+  log = [self _takeCredentialHelperLog:helperDirectory];
+  XCTAssertEqual(_CountOccurrences(log, @"[store]"), 1);
+
+  // Being asked again means the credentials were refused: the helpers are told, not asked a second time, and the delegate takes over
+  [repository setRemoteCallbacks:&callbacks];
+  XCTAssertEqual([self _requestCredentialsForURL:url withCallbacks:&callbacks username:&username password:&password], GIT_OK);
+  XCTAssertEqualObjects(username, @"bot");
+  XCTAssertEqual([self _requestCredentialsForURL:url withCallbacks:&callbacks username:&username password:&password], GIT_OK);
+  XCTAssertEqualObjects(username, @"delegate");
+  XCTAssertEqual(delegate.requestCount, 2);
+  delegate.providesCredentials = NO;
+  XCTAssertEqual([self _requestCredentialsForURL:url withCallbacks:&callbacks username:&username password:&password], GIT_EUSER);
+  XCTAssertEqual(delegate.requestCount, 3);
+  [repository didFinishRemoteTransferWithURL:nil success:YES];  // Whatever worked in the end didn't come from the helpers
+  log = [self _takeCredentialHelperLog:helperDirectory];
+  XCTAssertEqual(_CountOccurrences(log, @"[get]"), 1);
+  XCTAssertEqual(_CountOccurrences(log, @"[erase]"), 1);
+  XCTAssertEqual(_CountOccurrences(log, @"[store]"), 0);
+  delegate.providesCredentials = YES;
+
+  // A transfer failing for another reason neither approves nor rejects
+  [repository setRemoteCallbacks:&callbacks];
+  XCTAssertEqual([self _requestCredentialsForURL:url withCallbacks:&callbacks username:&username password:&password], GIT_OK);
+  XCTAssertEqualObjects(username, @"bot");
+  [repository didFinishRemoteTransferWithURL:nil success:NO];
+  log = [self _takeCredentialHelperLog:helperDirectory];
+  XCTAssertEqual(_CountOccurrences(log, @"[get]"), 1);
+  XCTAssertEqual(_CountOccurrences(log, @"[store]"), 0);
+  XCTAssertEqual(_CountOccurrences(log, @"[erase]"), 0);
+
+  // Like Git, helpers aren't involved in password authentication over SSH
+  [repository setRemoteCallbacks:&callbacks];
+  XCTAssertEqual([self _requestCredentialsForURL:@"ssh://example.invalid/some/repo.git" withCallbacks:&callbacks username:&username password:&password], GIT_OK);
+  XCTAssertEqualObjects(username, @"delegate");
+  [repository didFinishRemoteTransferWithURL:nil success:YES];
+  XCTAssertNil([self _takeCredentialHelperLog:helperDirectory]);
+
+  // Non-interactive: the delegate is asked first and the helpers aren't run if it has credentials that work
+  repository.credentialHelperMode = kGCCredentialHelperMode_NonInteractive;
+  delegate.requestCount = 0;
+  [repository setRemoteCallbacks:&callbacks];
+  XCTAssertEqual([self _requestCredentialsForURL:automaticURL withCallbacks:&callbacks username:&username password:&password], GIT_OK);
+  XCTAssertEqualObjects(username, @"delegate");
+  [repository didFinishRemoteTransferWithURL:nil success:YES];
+  XCTAssertNil([self _takeCredentialHelperLog:helperDirectory]);
+
+  // ...the helpers come next if these are refused, and are told not to prompt
+  [repository setRemoteCallbacks:&callbacks];
+  XCTAssertEqual([self _requestCredentialsForURL:automaticURL withCallbacks:&callbacks username:&username password:&password], GIT_OK);
+  XCTAssertEqualObjects(username, @"delegate");
+  XCTAssertEqual([self _requestCredentialsForURL:automaticURL withCallbacks:&callbacks username:&username password:&password], GIT_OK);
+  XCTAssertEqualObjects(username, @"bot");
+  XCTAssertEqual(delegate.requestCount, 2);
+  [repository didFinishRemoteTransferWithURL:nil success:YES];
+  log = [self _takeCredentialHelperLog:helperDirectory];
+  XCTAssertEqual(_CountOccurrences(log, @"[get] interactive=never\n"), 1);
+  XCTAssertEqual(_CountOccurrences(log, @"[store] interactive=never\n"), 1);
+
+  // ...or if the delegate has none - This time the same credentials aren't approved again
+  delegate.providesCredentials = NO;
+  [repository setRemoteCallbacks:&callbacks];
+  XCTAssertEqual([self _requestCredentialsForURL:automaticURL withCallbacks:&callbacks username:&username password:&password], GIT_OK);
+  XCTAssertEqualObjects(username, @"bot");
+  [repository didFinishRemoteTransferWithURL:nil success:YES];
+  log = [self _takeCredentialHelperLog:helperDirectory];
+  XCTAssertEqual(_CountOccurrences(log, @"[get]"), 1);
+  XCTAssertEqual(_CountOccurrences(log, @"[store]"), 0);
+
+  // ...until they have been rejected in between
+  [repository setRemoteCallbacks:&callbacks];
+  XCTAssertEqual([self _requestCredentialsForURL:automaticURL withCallbacks:&callbacks username:&username password:&password], GIT_OK);
+  XCTAssertEqual([self _requestCredentialsForURL:automaticURL withCallbacks:&callbacks username:&username password:&password], GIT_EUSER);
+  [repository didFinishRemoteTransferWithURL:nil success:NO];
+  log = [self _takeCredentialHelperLog:helperDirectory];
+  XCTAssertEqual(_CountOccurrences(log, @"[erase]"), 1);
+  [repository setRemoteCallbacks:&callbacks];
+  XCTAssertEqual([self _requestCredentialsForURL:automaticURL withCallbacks:&callbacks username:&username password:&password], GIT_OK);
+  [repository didFinishRemoteTransferWithURL:nil success:YES];
+  log = [self _takeCredentialHelperLog:helperDirectory];
+  XCTAssertEqual(_CountOccurrences(log, @"[store]"), 1);
+
+  // Without a delegate the helpers are all there is
+  repository.delegate = nil;
+  [repository setRemoteCallbacks:&callbacks];
+  XCTAssertEqual([self _requestCredentialsForURL:automaticURL withCallbacks:&callbacks username:&username password:&password], GIT_OK);
+  XCTAssertEqualObjects(username, @"bot");
+  XCTAssertEqual([self _requestCredentialsForURL:automaticURL withCallbacks:&callbacks username:&username password:&password], GIT_PASSTHROUGH);
+  [repository didFinishRemoteTransferWithURL:nil success:NO];
+  [self _takeCredentialHelperLog:helperDirectory];
+
+  XCTAssertTrue([[NSFileManager defaultManager] removeItemAtPath:helperDirectory error:NULL]);
+  [self destroyLocalRepository:repository];
+}
+
+- (void)testInheritRemoteSettings {
+  NSString* path = [NSTemporaryDirectory() stringByAppendingPathComponent:[[NSProcessInfo processInfo] globallyUniqueString]];
+  GCRepository* repository = [self createLocalRepositoryAtPath:path bare:NO];
+  GCCredentialsTestDelegate* delegate = [[GCCredentialsTestDelegate alloc] init];
+  repository.delegate = delegate;
+  repository.credentialHelperMode = kGCCredentialHelperMode_Interactive;
+
+  GCRepository* other = [[GCRepository alloc] initWithExistingLocalRepository:path error:NULL];
+  XCTAssertNotNil(other);
+  XCTAssertNil(other.delegate);
+  XCTAssertEqual(other.credentialHelperMode, kGCCredentialHelperMode_Disabled);
+  [other inheritRemoteSettingsFromRepository:repository];
+  XCTAssertEqual(other.delegate, delegate);
+  XCTAssertEqual(other.credentialHelperMode, kGCCredentialHelperMode_Interactive);
+
+  [self destroyLocalRepository:repository];
+}
+
+// A timed out task must not keep waiting on a process it started that survived and still holds its pipes (e.g. a credential helper started by git)
+- (void)_testTaskTimeout {
+  GCTask* task = [[GCTask alloc] initWithExecutablePath:@"/bin/sh"];
+  task.executionTimeOut = 1.0;
+  int status = 0;
+  NSData* stdoutData;
+  NSData* stderrData;
+  CFAbsoluteTime time = CFAbsoluteTimeGetCurrent();
+  NSArray* arguments = @[ @"-c", @"(trap '' TERM INT; exec sleep 15) & wait" ];  // The background process ignores the signals ending the shell and holds on to its pipes
+  XCTAssertTrue([task runWithArguments:arguments stdin:nil stdout:&stdoutData stderr:&stderrData exitStatus:&status error:NULL]);
+  XCTAssertLessThan(CFAbsoluteTimeGetCurrent() - time, 10.0);
+  XCTAssertTrue(task.timedOut);
+  XCTAssertNotEqual(status, 0);
+
+  // Not timing out leaves everything as before
+  arguments = @[ @"-c", @"echo done" ];
+  XCTAssertTrue([task runWithArguments:arguments stdin:nil stdout:&stdoutData stderr:&stderrData exitStatus:&status error:NULL]);
+  XCTAssertFalse(task.timedOut);
+  XCTAssertEqual(status, 0);
+  XCTAssertEqualObjects([[NSString alloc] initWithData:stdoutData encoding:NSUTF8StringEncoding], @"done\n");
+}
+
+- (void)testTaskTimeout {
+  [self _testTaskTimeout];
+
+  // Same from a background thread, which is where transfers run
+  dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+  dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    [self _testTaskTimeout];
+    dispatch_semaphore_signal(semaphore);
+  });
+  XCTAssertEqual(dispatch_semaphore_wait(semaphore, dispatch_time(DISPATCH_TIME_NOW, 30 * NSEC_PER_SEC)), 0);
 }
 
 - (void)testPathForHookWithName {

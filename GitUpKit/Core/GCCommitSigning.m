@@ -29,12 +29,6 @@ static NSString* _RepositoryTaskDirectoryPath(GCRepository* repository) {
   return repository.workingDirectoryPath ?: repository.repositoryPath;
 }
 
-static NSError* _TaskFailureError(NSString* message, int status, NSData* stdoutData, NSData* stderrData) {
-  NSString* output = _StringFromTaskOutput(stderrData.length ? stderrData : stdoutData);
-  NSString* reason = output.length ? [NSString stringWithFormat:@": %@", output] : @"";
-  return GCNewError(kGCErrorCode_Generic, [NSString stringWithFormat:@"%@ exited with non-zero status (%i)%@", message, status, reason]);
-}
-
 static GCTask* _TaskWithPATH(GCRepository* repository, NSString* executablePath, NSString* path) {
   GCTask* task = [[GCTask alloc] initWithExecutablePath:executablePath];
   task.currentDirectoryPath = _RepositoryTaskDirectoryPath(repository);
@@ -87,8 +81,7 @@ static BOOL _ShouldSSHSignCommit(GCRepository* repository, BOOL* shouldSign, NSE
 }
 
 static NSString* _CommitSigningPATH(GCRepository* repository, NSError** error) {
-  NSString* shell = NSProcessInfo.processInfo.environment[@"SHELL"];
-  NSString* path = [repository getPATHUsingShell:shell error:error] ?: [repository getPATHUsingShell:@"/bin/sh" error:error];
+  NSString* path = [repository getUserPATH:error];  // Deliberately not cached: refreshed once per signing operation
   XLOG_DEBUG_CHECK(path);
   return path;
 }
@@ -107,7 +100,7 @@ static NSString* _SSHKeyFromDefaultKeyCommand(GCRepository* repository, NSString
   }
   if (status != 0) {
     if (error) {
-      *error = _TaskFailureError(@"SSH signing default key command", status, stdoutData, stderrData);
+      *error = GCNewErrorFromTaskFailure(@"SSH signing default key command", status, stdoutData, stderrData);
     }
     return nil;
   }
@@ -204,7 +197,7 @@ static NSString* _SSHSignatureForCommitBuffer(GCRepository* repository, NSData* 
   }
   if (status != 0) {
     if (error) {
-      *error = _TaskFailureError(@"SSH commit signer", status, stdoutData, stderrData);
+      *error = GCNewErrorFromTaskFailure(@"SSH commit signer", status, stdoutData, stderrData);
     }
     return nil;
   }

@@ -157,7 +157,7 @@ extern int git_path_make_relative(git_buf* path, const char* parent);  // SPI
   if (repository == nil) {
     goto cleanup;
   }
-  repository.delegate = self.delegate;
+  [repository inheritRemoteSettingsFromRepository:self];
   remote = [repository lookupRemoteWithName:@"origin" error:error];
   if (remote == nil) {
     goto cleanup;
@@ -195,7 +195,7 @@ cleanup:
     if (repository == nil) {
       return NO;
     }
-    repository.delegate = self.delegate;
+    [repository inheritRemoteSettingsFromRepository:self];
     if (![repository initializeAllSubmodules:recursive error:error]) {
       return NO;
     }
@@ -220,6 +220,7 @@ cleanup:
       if (repository == nil) {
         return NO;
       }
+      [repository inheritRemoteSettingsFromRepository:self];  // Nested submodules may need initializing too
       if (![repository initializeAllSubmodules:recursive error:error]) {
         return NO;
       }

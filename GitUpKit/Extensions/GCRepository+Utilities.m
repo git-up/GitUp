@@ -62,7 +62,7 @@ NSString* GCNameFromHostingService(GCHostingService service) {
     }
     for (GCSubmodule* submodule in submodules) {
       GCRepository* subRepository = [[GCRepository alloc] initWithSubmodule:submodule error:error];
-      subRepository.delegate = self.delegate;
+      [subRepository inheritRemoteSettingsFromRepository:self];
       if (subRepository == nil) {
         return NO;
       }
