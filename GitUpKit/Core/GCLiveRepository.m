@@ -841,8 +841,7 @@ static void _StreamCallback(ConstFSEventStreamRef streamRef, void* clientCallBac
     }
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
       GCRepository* repository = [[GCRepository alloc] initWithExistingLocalRepository:self.repositoryPath error:&error];
-      repository.delegate = self.delegate;
-      repository.credentialHelperMode = self.credentialHelperMode;
+      [repository inheritRemoteSettingsFromRepository:self];
       __block BOOL success = repository && operationBlock(repository, &error);
       dispatch_async(dispatch_get_main_queue(), ^{
         if (success) {

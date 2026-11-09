@@ -21,6 +21,12 @@
 
 #if !TARGET_OS_IPHONE
 
+NSError* GCNewErrorFromTaskFailure(NSString* message, int status, NSData* stdoutData, NSData* stderrData) {
+  NSString* output = [[[NSString alloc] initWithData:(stderrData.length ? stderrData : stdoutData) encoding:NSUTF8StringEncoding] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+  NSString* reason = output.length ? [NSString stringWithFormat:@": %@", output] : @"";
+  return GCNewError(kGCErrorCode_Generic, [NSString stringWithFormat:@"%@ exited with non-zero status (%i)%@", message, status, reason]);
+}
+
 @implementation GCTask {
   NSFileHandle* _outFileHandle;
   NSMutableData* _outData;
@@ -36,7 +42,8 @@
 }
 
 - (void)_timer:(NSTimer*)timer {
-  [(NSTask*)timer.userInfo terminate];
+  _timedOut = YES;
+  [(NSTask*)timer.userInfo terminate];  // This signals the whole process group i.e. also the processes started by the executable
   [(NSTask*)timer.userInfo interrupt];
 }
 
@@ -74,6 +81,7 @@
   NSPipe* errorPipe = nil;
   NSTimer* timer = nil;
 
+  _timedOut = NO;
   NSTask* task = [[NSTask alloc] init];
   task.launchPath = useSH ? @"/bin/sh" : _executablePath;
   NSMutableDictionary* environment = [[NSMutableDictionary alloc] initWithDictionary:[[NSProcessInfo processInfo] environment]];
@@ -140,9 +148,11 @@
     *stderr = _errorData;
   }
   [task waitUntilExit];
-  while (_outFileHandle || _errorFileHandle) {
+  while ((_outFileHandle || _errorFileHandle) && !_timedOut) {  // After a timeout don't wait on the pipes: a process started by the executable that survived (signals ignored, or left the process group) may hold them open
     CFRunLoopRunInMode(kCFRunLoopDefaultMode, 1.0, true);
   }
+  _outFileHandle = nil;
+  _errorFileHandle = nil;
   [[NSNotificationCenter defaultCenter] removeObserver:self name:NSFileHandleDataAvailableNotification object:nil];
   [timer invalidate];
   if (exitStatus) {

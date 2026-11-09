@@ -139,12 +139,15 @@ extern int git_submodule_foreach_block(git_repository* repo, int (^block)(git_su
 @interface GCTask : NSObject
 @property(nonatomic, readonly) NSString* executablePath;
 @property(nonatomic) NSTimeInterval executionTimeOut;  // Default is 0.0 i.e. no timeout
+@property(nonatomic, readonly) BOOL timedOut;  // Whether the last run was ended by the timeout
 @property(nonatomic, copy) NSDictionary* additionalEnvironment;
 @property(nonatomic, copy) NSString* currentDirectoryPath;
 @property(nonatomic) BOOL fallBackToDefaultInterpreter;
 - (instancetype)initWithExecutablePath:(NSString*)path;
 - (BOOL)runWithArguments:(NSArray*)arguments stdin:(NSData*)stdin stdout:(NSData**)stdout stderr:(NSData**)stderr exitStatus:(int*)exitStatus error:(NSError**)error;  // Returns NO if "exitStatus" is NULL and executable exits with a non-zero status
 @end
+
+extern NSError* GCNewErrorFromTaskFailure(NSString* message, int status, NSData* stdoutData, NSData* stderrData);  // "{message} exited with non-zero status ({status}): {stderr or stdout}"
 
 #endif
 
@@ -266,6 +269,7 @@ extern int git_submodule_foreach_block(git_repository* repo, int (^block)(git_su
 - (BOOL)exportBlobWithOID:(const git_oid*)oid toPath:(NSString*)path error:(NSError**)error;
 #if !TARGET_OS_IPHONE
 - (NSString*)getPATHUsingShell:(NSString*)shell error:(NSError**)error;
+- (NSString*)getUserPATH:(NSError**)error;  // PATH from the user's login shell, falling back to /bin/sh - Not cached
 #endif
 @end
 

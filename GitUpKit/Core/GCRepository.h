@@ -42,8 +42,8 @@ typedef NS_ENUM(NSUInteger, GCFileMode) {
 
 typedef NS_ENUM(NSUInteger, GCCredentialHelperMode) {
   kGCCredentialHelperMode_Disabled = 0,  // Never run the Git credential helpers (default)
-  kGCCredentialHelperMode_NonInteractive,  // Run the helpers but forbid them from prompting the user (e.g. for automatic remote checks)
-  kGCCredentialHelperMode_Interactive  // Run the helpers and let them prompt the user if they need to (e.g. Git Credential Manager)
+  kGCCredentialHelperMode_NonInteractive,  // For automatic transfers (e.g. remote checks): the delegate is asked first, then the helpers which are told not to prompt the user
+  kGCCredentialHelperMode_Interactive  // For transfers initiated by the user: the helpers are asked first and may prompt the user if they need to (e.g. Git Credential Manager), then the delegate
 };
 
 @class GCRepository;
@@ -61,7 +61,7 @@ typedef NS_ENUM(NSUInteger, GCCredentialHelperMode) {
 /// Walks up the file system to find the repository the given URL is contained in. Returns nil and sets the error if no repository is found.
 + (NSURL *)repositoryURLContainingURL:(NSURL *)url error:(NSError **)error;
 @property(nonatomic, weak) id<GCRepositoryDelegate> delegate;
-@property(nonatomic) GCCredentialHelperMode credentialHelperMode;  // Whether HTTPS transfers consult the Git credential helpers configured through "credential.helper" before asking the delegate (macOS only)
+@property(nonatomic) GCCredentialHelperMode credentialHelperMode;  // Whether HTTP(S) transfers consult the Git credential helpers configured through "credential.helper" in addition to the delegate (macOS only)
 @property(nonatomic, readonly) NSString* repositoryPath;
 @property(nonatomic, readonly) NSString* workingDirectoryPath;  // nil for a bare repository
 @property(nonatomic, readonly, getter=isReadOnly) BOOL readOnly;
@@ -72,6 +72,8 @@ typedef NS_ENUM(NSUInteger, GCCredentialHelperMode) {
 - (instancetype)initWithExistingLocalRepository:(NSString*)path error:(NSError**)error;
 - (instancetype)initWithNewLocalRepository:(NSString*)path bare:(BOOL)bare error:(NSError**)error;  // git init {path}
 - (instancetype)initWithNewLocalRepository:(NSString*)path bare:(BOOL)bare defaultBranchName:(NSString*)defaultBranchName error:(NSError**)error;
+
+- (void)inheritRemoteSettingsFromRepository:(GCRepository*)repository;  // Copies the delegate and credential helper mode - Use on repositories opened on behalf of another one e.g. its submodules
 
 - (BOOL)cleanupState:(NSError**)error;  // Do NOT use on a bare repository
 
@@ -91,8 +93,10 @@ typedef NS_ENUM(NSUInteger, GCCredentialHelperMode) {
 - (BOOL)runHookWithName:(NSString*)name arguments:(NSArray*)arguments standardInput:(NSString*)standardInput error:(NSError**)error;  // Silently ignores non-existing hooks
 
 // Git credential helpers as configured through "credential.helper" - See git-credential(1)
-- (BOOL)fillCredentialsForURL:(NSURL*)url user:(NSString*)user allowInteraction:(BOOL)allowInteraction username:(NSString**)username password:(NSString**)password error:(NSError**)error;  // "git credential fill" - Returns NO if no helper provided credentials
-- (BOOL)approveCredentialsForURL:(NSURL*)url username:(NSString*)username password:(NSString*)password error:(NSError**)error;  // "git credential approve"
-- (BOOL)rejectCredentialsForURL:(NSURL*)url username:(NSString*)username password:(NSString*)password error:(NSError**)error;  // "git credential reject"
+// The "description" returned along with the credentials is Git's complete answer, which may carry more than the username and password (e.g. an expiration date or a refresh token):
+// it must be handed back unchanged once it's known whether the credentials work so the helpers can store or discard them
+- (BOOL)fillCredentialsForURL:(NSURL*)url user:(NSString*)user allowInteraction:(BOOL)allowInteraction username:(NSString**)username password:(NSString**)password description:(NSString**)description error:(NSError**)error;  // "git credential fill" - Returns NO if no helper provided credentials
+- (BOOL)approveCredentialsWithDescription:(NSString*)description error:(NSError**)error;  // "git credential approve" - The credentials were accepted
+- (BOOL)rejectCredentialsWithDescription:(NSString*)description error:(NSError**)error;  // "git credential reject" - The credentials were refused
 #endif
 @end
